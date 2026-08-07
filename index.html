@@ -386,6 +386,19 @@
     font-size: 0.85rem;
     margin-bottom: 20px;
   }
+  .install-guide-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 4px auto 6px;
+    border-radius: 16px;
+    background: var(--bg-panel-soft);
+    border: 1px solid var(--line);
+    color: var(--forest);
+  }
+  .install-guide-icon svg { width: 30px; height: 30px; }
 
   .changelog { display: flex; flex-direction: column; gap: 16px; }
   .changelog__item { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
@@ -802,7 +815,14 @@
   <div class="modal__card">
     <label for="install-guide-toggle" class="modal__close" aria-label="閉じる">×</label>
     <h3 class="modal__title">ホーム画面に追加</h3>
-    <p class="modal__lead">Safariの共有ボタン（□に↑）をタップして、「ホーム画面に追加」を選んでください。</p>
+    <p class="modal__lead">Safari下部のこのボタンをタップして、<br>「ホーム画面に追加」を選んでください。</p>
+    <div class="install-guide-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12"/>
+        <path d="M8 7l4-4 4 4"/>
+        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
+      </svg>
+    </div>
   </div>
 </div>
 
