@@ -346,8 +346,7 @@
     padding: 24px;
   }
   #update-history-toggle:checked ~ #update-history-modal,
-  #android-preview-toggle:checked ~ #android-preview-modal,
-  #install-guide-toggle:checked ~ #install-guide-modal { opacity: 1; visibility: visible; }
+  #android-preview-toggle:checked ~ #android-preview-modal { opacity: 1; visibility: visible; }
   .modal__backdrop {
     position: absolute;
     inset: 0;
@@ -386,19 +385,12 @@
     font-size: 0.85rem;
     margin-bottom: 20px;
   }
-  .install-guide-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 64px;
-    height: 64px;
-    margin: 4px auto 6px;
-    border-radius: 16px;
-    background: var(--bg-panel-soft);
-    border: 1px solid var(--line);
-    color: var(--forest);
+  .footer-install-btn__icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
   }
-  .install-guide-icon svg { width: 30px; height: 30px; }
+  .footer-install-btn__icon svg { width: 100%; height: 100%; }
 
   .changelog { display: flex; flex-direction: column; gap: 16px; }
   .changelog__item { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
@@ -795,7 +787,6 @@
 <input type="checkbox" id="aitsu-modal-toggle" class="modal-toggle">
 <input type="checkbox" id="update-history-toggle" class="modal-toggle">
 <input type="checkbox" id="android-preview-toggle" class="modal-toggle">
-<input type="checkbox" id="install-guide-toggle" class="modal-toggle">
 
 <div id="aitsu-modal" class="aitsu-modal">
   <label for="aitsu-modal-toggle" class="aitsu-modal__backdrop" aria-label="閉じる"></label>
@@ -807,22 +798,6 @@
     <h3>あいつ</h3>
     <p>miitobowは、オープンソースキャラクター「あいつ」を応援・使用しています。</p>
     <a class="aitsu-modal__cta" href="https://yosooi.jp/aitsu/" target="_blank" rel="noopener">自分も使ってみる →</a>
-  </div>
-</div>
-
-<div id="install-guide-modal" class="modal">
-  <label for="install-guide-toggle" class="modal__backdrop" aria-label="閉じる"></label>
-  <div class="modal__card">
-    <label for="install-guide-toggle" class="modal__close" aria-label="閉じる">×</label>
-    <h3 class="modal__title">ホーム画面に追加</h3>
-    <p class="modal__lead">Safari下部のこのボタンをタップして、<br>「ホーム画面に追加」を選んでください。</p>
-    <div class="install-guide-icon" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 3v12"/>
-        <path d="M8 7l4-4 4 4"/>
-        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
-      </svg>
-    </div>
   </div>
 </div>
 
@@ -1172,10 +1147,12 @@
 
   if (isIOS) {
     btn.hidden = false;
-    btn.addEventListener('click', function () {
-      var toggle = document.getElementById('install-guide-toggle');
-      if (toggle) toggle.checked = true;
-    });
+    btn.insertAdjacentHTML('beforeend',
+      '<span class="footer-install-btn__icon" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>' +
+      '</svg></span>'
+    );
     return;
   }
 
