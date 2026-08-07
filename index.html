@@ -179,6 +179,12 @@
     color: #fff;
   }
   .btn-work:hover { transform: translateY(-2px); background: #46901f; }
+  .footer-install-btn {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    margin-top: 14px;
+  }
+  .footer-install-btn[hidden] { display: none; }
 
   .hero-figure {
     position: absolute;
@@ -340,7 +346,8 @@
     padding: 24px;
   }
   #update-history-toggle:checked ~ #update-history-modal,
-  #android-preview-toggle:checked ~ #android-preview-modal { opacity: 1; visibility: visible; }
+  #android-preview-toggle:checked ~ #android-preview-modal,
+  #install-guide-toggle:checked ~ #install-guide-modal { opacity: 1; visibility: visible; }
   .modal__backdrop {
     position: absolute;
     inset: 0;
@@ -775,6 +782,7 @@
 <input type="checkbox" id="aitsu-modal-toggle" class="modal-toggle">
 <input type="checkbox" id="update-history-toggle" class="modal-toggle">
 <input type="checkbox" id="android-preview-toggle" class="modal-toggle">
+<input type="checkbox" id="install-guide-toggle" class="modal-toggle">
 
 <div id="aitsu-modal" class="aitsu-modal">
   <label for="aitsu-modal-toggle" class="aitsu-modal__backdrop" aria-label="閉じる"></label>
@@ -786,6 +794,15 @@
     <h3>あいつ</h3>
     <p>miitobowは、オープンソースキャラクター「あいつ」を応援・使用しています。</p>
     <a class="aitsu-modal__cta" href="https://yosooi.jp/aitsu/" target="_blank" rel="noopener">自分も使ってみる →</a>
+  </div>
+</div>
+
+<div id="install-guide-modal" class="modal">
+  <label for="install-guide-toggle" class="modal__backdrop" aria-label="閉じる"></label>
+  <div class="modal__card">
+    <label for="install-guide-toggle" class="modal__close" aria-label="閉じる">×</label>
+    <h3 class="modal__title">ホーム画面に追加</h3>
+    <p class="modal__lead">Safariの共有ボタン（□に↑）をタップして、「ホーム画面に追加」を選んでください。</p>
   </div>
 </div>
 
@@ -1114,7 +1131,49 @@
         <a href="https://x.com/miitobow" target="_blank" rel="noopener">X</a>
       </nav>
     </div>
+    <button id="install-btn" class="btn btn-ghost footer-install-btn" type="button" hidden>ホームに追加</button>
     <p class="footer-note">© miitobow</p>
   </footer>
 
 </div>
+
+<script>
+(function () {
+  var btn = document.getElementById('install-btn');
+  if (!btn) return;
+
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+  if (isStandalone) return;
+
+  var ua = window.navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua)
+    || (ua.indexOf('Macintosh') !== -1 && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      var toggle = document.getElementById('install-guide-toggle');
+      if (toggle) toggle.checked = true;
+    });
+    return;
+  }
+
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    btn.hidden = false;
+  });
+  btn.addEventListener('click', function () {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function () {
+      deferredPrompt = null;
+    });
+  });
+  window.addEventListener('appinstalled', function () {
+    btn.hidden = true;
+  });
+})();
+</script>
