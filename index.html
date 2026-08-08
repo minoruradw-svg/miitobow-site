@@ -268,9 +268,11 @@
   /* ---------- Modal toggles (CSS-only checkbox hack — no URL hash, no scroll jump) ---------- */
   .modal-toggle { display: none; }
 
-  /* ---------- 背景デザイン切り替え（CSS-onlyトグル・背景のみ変更） ---------- */
-  #bg-toggle { display: none; }
-  body:has(#bg-toggle:checked) {
+  /* ---------- 背景デザイン切り替え（CSS-onlyピッカー・背景のみ変更） ---------- */
+  .bg-radio { display: none; }
+
+  body:has(#bg-aurora:checked),
+  .bg-swatch--aurora {
     background:
       radial-gradient(circle at 15% 25%, rgba(134,217,62,0.32), transparent 42%),
       radial-gradient(circle at 85% 15%, rgba(182,245,122,0.28), transparent 46%),
@@ -285,7 +287,51 @@
     50% { background-position: 100% 100%, 0% 100%, 60% 0%, 20% 20%, 0 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    body:has(#bg-toggle:checked) { animation: none; }
+    body:has(#bg-aurora:checked), .bg-swatch--aurora { animation: none; }
+  }
+  .bg-swatch--default { background: var(--bg); }
+
+  .bg-picker { position: relative; display: inline-block; }
+  .bg-picker__backdrop {
+    position: fixed; inset: 0; z-index: 39;
+    display: none;
+  }
+  .bg-picker:has(#bg-panel-toggle:checked) .bg-picker__backdrop { display: block; }
+  .bg-picker__panel {
+    position: absolute; top: calc(100% + 8px); left: 0;
+    z-index: 40;
+    background: var(--bg-panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 14px 34px rgba(20,32,26,0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    pointer-events: none;
+  }
+  .bg-picker:has(#bg-panel-toggle:checked) .bg-picker__panel {
+    opacity: 1; visibility: visible; transform: translateY(0);
+    pointer-events: auto;
+  }
+  .bg-option {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; width: 76px;
+  }
+  .bg-swatch {
+    width: 68px; height: 50px;
+    border-radius: 10px;
+    border: 2px solid var(--line);
+    transition: border-color 0.15s ease;
+  }
+  .bg-option:has(.bg-radio:checked) .bg-swatch { border-color: var(--lime); }
+  .bg-option__name { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-align: center; }
+  /* .app-links a/label のピルボタン装飾（border/padding/border-radius）を、
+     パネル内側の要素（選択肢ラベル・背景クリック用バックドロップ）だけ打ち消す */
+  .bg-picker .bg-option,
+  .bg-picker .bg-picker__backdrop {
+    border: none; border-radius: 0; padding: 0;
   }
 
   /* ---------- Aitsu modal ---------- */
@@ -804,7 +850,6 @@
   </div>
 </header>
 
-<input type="checkbox" id="bg-toggle">
 <input type="checkbox" id="aitsu-modal-toggle" class="modal-toggle">
 <input type="checkbox" id="update-history-toggle" class="modal-toggle">
 <input type="checkbox" id="android-preview-toggle" class="modal-toggle">
@@ -1002,7 +1047,23 @@
           <span class="title">miitobow.com（このサイト）</span>
           <span class="desc">JavaScriptほぼ無しで作った、このブランドサイト自体も制作実例の一つです。下のボタンで背景デザインを変えられます。</span>
           <div class="app-links">
-            <label for="bg-toggle">背景を変える</label>
+            <div class="bg-picker">
+              <input type="checkbox" id="bg-panel-toggle" class="modal-toggle">
+              <label for="bg-panel-toggle">背景を変える</label>
+              <label for="bg-panel-toggle" class="bg-picker__backdrop" aria-label="閉じる"></label>
+              <div class="bg-picker__panel">
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-default" class="bg-radio" checked>
+                  <span class="bg-swatch bg-swatch--default"></span>
+                  <span class="bg-option__name">いつもの</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-aurora" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--aurora"></span>
+                  <span class="bg-option__name">オーロラ</span>
+                </label>
+              </div>
+            </div>
             <a href="/ui-guide.html">作り方の裏側を読む</a>
           </div>
         </div>
