@@ -262,14 +262,14 @@
     position: absolute;
     top: -6%;
     left: calc(-6% - 30px);
-    background: var(--bg-panel);
+    background: var(--neu-bg);
     border-radius: 50% / 62%;
     padding: clamp(14px, 1.2vw + 9px, 22px) clamp(18px, 1.4vw + 11px, 27px);
     font-size: clamp(0.8rem, 0.6vw + 0.65rem, 1.15rem);
     font-weight: 700;
     line-height: 1.4;
     color: var(--lime);
-    box-shadow: var(--card-shadow);
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
     max-width: clamp(130px, 8vw + 95px, 200px);
     text-align: center;
     opacity: 1;
@@ -282,9 +282,10 @@
     bottom: 18px;
     width: clamp(22px, 1.5vw + 16px, 32px);
     height: clamp(14px, 1vw + 10px, 20px);
-    background: var(--bg-panel);
+    background: var(--neu-bg);
     border-radius: 50%;
     transform: rotate(-25deg);
+    box-shadow: -3px -3px 6px var(--neu-light), 3px 3px 6px var(--neu-dark);
   }
   .hero-figure:hover .catchphrase { opacity: 0; }
 
@@ -933,7 +934,7 @@
     <div class="hero-content glass-panel">
       <span class="eyebrow">非エンジニアの個人開発者</span>
       <h1><span style="white-space:nowrap;">いつでも</span><span style="white-space:nowrap;"><span class="accent">いっしょ</span>。</span><br>ミートボー。</h1>
-      <p class="lead">個人開発やAIで何か作ってみたい人へ。盛らない開発記録と、公式情報を噛み砕いた実用知識を届けています。</p>
+      <p class="lead">個人開発やAIで何か作ってみたい人へ。<br>盛らない開発記録と、公式情報を噛み砕いた実用知識を届けています。</p>
       <div class="cta-row">
         <a class="btn btn-work" href="https://docs.google.com/forms/d/e/1FAIpQLSfNvO-i_Z42rshMFWYFez8Ya7sqdJ3A-jj4ZCVVsSFkIOdLpA/viewform" target="_blank" rel="noopener">お仕事依頼はこちら</a>
         <a class="btn btn-ghost" href="https://note.com/miitobow_studio" target="_blank" rel="noopener">noteを読む</a>
