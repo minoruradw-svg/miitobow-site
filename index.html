@@ -520,6 +520,38 @@
     background: linear-gradient(160deg, #9F1239 0%, #E11D48 30%, #FB7185 55%, #FBBF24 80%, #FDE68A 100%);
   }
 
+  /* ---------- グラデーション（くすみ系・落ち着いた系）10種 ---------- */
+  body:has(#bg-grad-muted-rose:checked), .bg-swatch--grad-muted-rose {
+    background: linear-gradient(160deg, #D9A9A0 0%, #C98D96 25%, #B87A8A 50%, #9A6478 75%, #7D4F66 100%);
+  }
+  body:has(#bg-grad-muted-sage:checked), .bg-swatch--grad-muted-sage {
+    background: linear-gradient(160deg, #B8C4B0 0%, #9BAB8F 25%, #8BA888 50%, #7A9678 75%, #647D63 100%);
+  }
+  body:has(#bg-grad-muted-slate:checked), .bg-swatch--grad-muted-slate {
+    background: linear-gradient(160deg, #A8B4C4 0%, #8FA0B8 25%, #6B87A8 50%, #5A7290 75%, #4A5C73 100%);
+  }
+  body:has(#bg-grad-muted-mustard:checked), .bg-swatch--grad-muted-mustard {
+    background: linear-gradient(160deg, #D4B876 0%, #C9A84C 25%, #B8943F 50%, #A17F35 75%, #856A2D 100%);
+  }
+  body:has(#bg-grad-muted-mauve:checked), .bg-swatch--grad-muted-mauve {
+    background: linear-gradient(160deg, #C4B0C9 0%, #AB8FB0 25%, #9A86A8 50%, #82708F 75%, #6A5C73 100%);
+  }
+  body:has(#bg-grad-muted-terracotta:checked), .bg-swatch--grad-muted-terracotta {
+    background: linear-gradient(160deg, #D4A583 0%, #C68A5A 25%, #B8794A 50%, #A1673D 75%, #855530 100%);
+  }
+  body:has(#bg-grad-muted-greige:checked), .bg-swatch--grad-muted-greige {
+    background: linear-gradient(160deg, #C9C3BA 0%, #B8B0A5 25%, #A8A29A 50%, #918B82 75%, #757067 100%);
+  }
+  body:has(#bg-grad-muted-bloom:checked), .bg-swatch--grad-muted-bloom {
+    background: linear-gradient(160deg, #C9A8B8 0%, #B88EA3 25%, #A8768F 50%, #906078 75%, #744C60 100%);
+  }
+  body:has(#bg-grad-muted-moss:checked), .bg-swatch--grad-muted-moss {
+    background: linear-gradient(160deg, #A8B895 0%, #93A67D 25%, #7D9268 50%, #6A7D56 75%, #566647 100%);
+  }
+  body:has(#bg-grad-muted-navy:checked), .bg-swatch--grad-muted-navy {
+    background: linear-gradient(160deg, #6B7A8F 0%, #556478 25%, #414F61 50%, #303C4C 75%, #212A37 100%);
+  }
+
   /* ---------- パターン系10種 ---------- */
   body:has(#bg-pat-terrazzo:checked), .bg-swatch--pat-terrazzo {
     background-color: #fbfbf9;
@@ -10175,6 +10207,56 @@
                       <input type="radio" name="bg-choice" id="bg-grad-rosegold" class="bg-radio">
                       <span class="bg-swatch bg-swatch--grad-rosegold"></span>
                       <span class="bg-option__name">ローズゴールド</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-rose" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-rose"></span>
+                      <span class="bg-option__name">くすみローズ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-sage" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-sage"></span>
+                      <span class="bg-option__name">セージスモーク</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-slate" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-slate"></span>
+                      <span class="bg-option__name">スレートブルー</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-mustard" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-mustard"></span>
+                      <span class="bg-option__name">マスタードダスク</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-mauve" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-mauve"></span>
+                      <span class="bg-option__name">モーヴトワイライト</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-terracotta" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-terracotta"></span>
+                      <span class="bg-option__name">テラコッタサンド</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-greige" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-greige"></span>
+                      <span class="bg-option__name">グレージュフォグ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-bloom" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-bloom"></span>
+                      <span class="bg-option__name">ダスクブルーム</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-moss" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-moss"></span>
+                      <span class="bg-option__name">モスグリーン</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-muted-navy" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-muted-navy"></span>
+                      <span class="bg-option__name">インクネイビー</span>
                     </label>
                   </div>
                 </div>
