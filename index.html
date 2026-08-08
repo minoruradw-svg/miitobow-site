@@ -394,6 +394,88 @@
     background: linear-gradient(160deg, #7A1F00 0%, #E8590C 28%, #FF922B 56%, #FFC078 80%, #FFE8CC 100%);
   }
 
+  /* ---------- パターン系10種 ---------- */
+  body:has(#bg-pat-dots:checked), .bg-swatch--pat-dots {
+    background-color: #f8f9fb;
+    background-image: radial-gradient(circle, rgba(60, 60, 70, 0.22) 1.6px, transparent 1.8px);
+    background-size: 22px 22px;
+  }
+  body:has(#bg-pat-stripe:checked), .bg-swatch--pat-stripe {
+    background-color: #f8f9fb;
+    background-image: repeating-linear-gradient(45deg, rgba(111, 174, 47, 0.16) 0px, rgba(111, 174, 47, 0.16) 10px, transparent 10px, transparent 24px);
+  }
+  body:has(#bg-pat-graph:checked), .bg-swatch--pat-graph {
+    background-color: #f9faf7;
+    background-image:
+      linear-gradient(rgba(90, 90, 100, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(90, 90, 100, 0.14) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  body:has(#bg-pat-terrazzo:checked), .bg-swatch--pat-terrazzo {
+    background-color: #fbfbf9;
+    background-image:
+      radial-gradient(circle at 10% 20%, #e8a33d 0, #e8a33d 6px, transparent 7px),
+      radial-gradient(circle at 25% 65%, #6fae2f 0, #6fae2f 5px, transparent 6px),
+      radial-gradient(circle at 45% 15%, #3b6fe0 0, #3b6fe0 4px, transparent 5px),
+      radial-gradient(circle at 60% 55%, #da4fc4 0, #da4fc4 5px, transparent 6px),
+      radial-gradient(circle at 80% 25%, #e85d5d 0, #e85d5d 4px, transparent 5px),
+      radial-gradient(circle at 15% 85%, #12b6c9 0, #12b6c9 6px, transparent 7px),
+      radial-gradient(circle at 90% 70%, #f0c419 0, #f0c419 5px, transparent 6px),
+      radial-gradient(circle at 35% 40%, #8b3ce0 0, #8b3ce0 4px, transparent 5px),
+      radial-gradient(circle at 70% 90%, #6fae2f 0, #6fae2f 5px, transparent 6px),
+      radial-gradient(circle at 55% 75%, #e8a33d 0, #e8a33d 4px, transparent 5px);
+    background-size: 220px 220px;
+  }
+  body:has(#bg-pat-bubbles:checked), .bg-swatch--pat-bubbles {
+    background-color: #f6fbf9;
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(111, 174, 47, 0.26) 0 22px, transparent 23px),
+      radial-gradient(circle at 70% 15%, rgba(111, 174, 47, 0.18) 0 14px, transparent 15px),
+      radial-gradient(circle at 40% 60%, rgba(111, 174, 47, 0.22) 0 30px, transparent 31px),
+      radial-gradient(circle at 85% 70%, rgba(111, 174, 47, 0.16) 0 18px, transparent 19px),
+      radial-gradient(circle at 10% 85%, rgba(111, 174, 47, 0.24) 0 16px, transparent 17px),
+      radial-gradient(circle at 55% 30%, rgba(111, 174, 47, 0.14) 0 10px, transparent 11px);
+    background-size: 260px 260px;
+  }
+  body:has(#bg-pat-argyle:checked), .bg-swatch--pat-argyle {
+    background-color: #f8f9fb;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(90, 90, 100, 0.16) 0 2px, transparent 2px 40px),
+      repeating-linear-gradient(-45deg, rgba(90, 90, 100, 0.16) 0 2px, transparent 2px 40px);
+  }
+  body:has(#bg-pat-checker:checked), .bg-swatch--pat-checker {
+    background-color: #f8f9fb;
+    background-image:
+      linear-gradient(45deg, rgba(90, 90, 100, 0.1) 25%, transparent 25%, transparent 75%, rgba(90, 90, 100, 0.1) 75%),
+      linear-gradient(45deg, rgba(90, 90, 100, 0.1) 25%, transparent 25%, transparent 75%, rgba(90, 90, 100, 0.1) 75%);
+    background-size: 56px 56px;
+    background-position: 0 0, 28px 28px;
+  }
+  body:has(#bg-pat-topo:checked), .bg-swatch--pat-topo {
+    background-color: #f4f8fa;
+    background-image:
+      repeating-radial-gradient(circle at 30% 40%, transparent 0, transparent 14px, rgba(59, 111, 224, 0.2) 15px, rgba(59, 111, 224, 0.2) 16px),
+      repeating-radial-gradient(circle at 80% 80%, transparent 0, transparent 18px, rgba(59, 111, 224, 0.14) 19px, rgba(59, 111, 224, 0.14) 20px);
+  }
+  body:has(#bg-pat-sparkle:checked), .bg-swatch--pat-sparkle {
+    background-color: #fdfaf3;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(196, 148, 30, 0.7) 0 1.5px, transparent 2px),
+      radial-gradient(circle at 32% 55%, rgba(196, 148, 30, 0.6) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 60% 22%, rgba(196, 148, 30, 0.7) 0 1.8px, transparent 2.3px),
+      radial-gradient(circle at 78% 65%, rgba(196, 148, 30, 0.5) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 45% 80%, rgba(196, 148, 30, 0.65) 0 1.4px, transparent 1.9px),
+      radial-gradient(circle at 90% 30%, rgba(196, 148, 30, 0.6) 0 1.2px, transparent 1.7px),
+      radial-gradient(circle at 20% 90%, rgba(196, 148, 30, 0.55) 0 1px, transparent 1.5px);
+    background-size: 180px 180px;
+  }
+  body:has(#bg-pat-crosshatch:checked), .bg-swatch--pat-crosshatch {
+    background-color: #f8f9fb;
+    background-image:
+      repeating-linear-gradient(60deg, rgba(90, 90, 100, 0.16) 0 1px, transparent 1px 12px),
+      repeating-linear-gradient(-60deg, rgba(90, 90, 100, 0.16) 0 1px, transparent 1px 12px);
+  }
+
   .bg-picker { position: relative; display: inline-block; }
   .bg-picker__backdrop {
     position: fixed; inset: 0; z-index: 39;
@@ -432,6 +514,8 @@
     transition: border-color 0.15s ease;
   }
   .bg-option:has(.bg-radio:checked) .bg-swatch { border-color: var(--lime); }
+  /* タイルが大きい柄はスウォッチだと模様がほぼ見えないため、プレビューだけ縮小表示 */
+  .bg-swatch--pat-terrazzo, .bg-swatch--pat-bubbles, .bg-swatch--pat-sparkle { background-size: 70px 70px !important; }
   .bg-option__name { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-align: center; }
   /* .app-links a/label のニューモーフィズム装飾（background/box-shadow/padding/border-radius）を、
      パネル内側の要素（選択肢ラベル・背景クリック用バックドロップ）だけ打ち消す */
@@ -1293,6 +1377,56 @@
                   <input type="radio" name="bg-choice" id="bg-grad-gold" class="bg-radio">
                   <span class="bg-swatch bg-swatch--grad-gold"></span>
                   <span class="bg-option__name">ゴールド</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-dots" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-dots"></span>
+                  <span class="bg-option__name">ドット</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-stripe" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-stripe"></span>
+                  <span class="bg-option__name">ストライプ</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-graph" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-graph"></span>
+                  <span class="bg-option__name">グラフ用紙</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-terrazzo" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-terrazzo"></span>
+                  <span class="bg-option__name">テラゾ</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-bubbles" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-bubbles"></span>
+                  <span class="bg-option__name">バブル</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-argyle" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-argyle"></span>
+                  <span class="bg-option__name">アーガイル</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-checker" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-checker"></span>
+                  <span class="bg-option__name">チェッカー</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-topo" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-topo"></span>
+                  <span class="bg-option__name">等高線</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-sparkle" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-sparkle"></span>
+                  <span class="bg-option__name">スパークル</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-pat-crosshatch" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--pat-crosshatch"></span>
+                  <span class="bg-option__name">クロスハッチ</span>
                 </label>
               </div>
             </div>
