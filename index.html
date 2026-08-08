@@ -332,6 +332,15 @@
   }
   .bg-swatch--default { background: var(--bg); }
   body:has(#bg-cream:checked), .bg-swatch--cream { background: #fbf7f1; }
+  /* ---------- 単色8種（原色4＋淡い色4） ---------- */
+  body:has(#bg-solid-cherry:checked), .bg-swatch--solid-cherry { background: #e5383b; }
+  body:has(#bg-solid-cobalt:checked), .bg-swatch--solid-cobalt { background: #1d4ed8; }
+  body:has(#bg-solid-sun:checked), .bg-swatch--solid-sun { background: #f7b500; }
+  body:has(#bg-solid-emerald:checked), .bg-swatch--solid-emerald { background: #0f9b6e; }
+  body:has(#bg-solid-lavender:checked), .bg-swatch--solid-lavender { background: #e6e0f7; }
+  body:has(#bg-solid-mint:checked), .bg-swatch--solid-mint { background: #dbf5e9; }
+  body:has(#bg-solid-peach:checked), .bg-swatch--solid-peach { background: #fbe2d8; }
+  body:has(#bg-solid-greige:checked), .bg-swatch--solid-greige { background: #e7e2d8; }
   /* ---------- ハニカム柄（黄・緑） ---------- */
   body:has(#bg-honey-yellow:checked), .bg-swatch--honey-yellow {
     background-color: #fffbf0;
@@ -357,9 +366,114 @@
     background-size: 44px 76px;
     background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
   }
+  body:has(#bg-honey-red:checked), .bg-swatch--honey-red {
+    background-color: #fff5f5;
+    background-image:
+      linear-gradient(30deg, rgba(229, 56, 59, 0.4) 12%, transparent 12.5%, transparent 87%, rgba(229, 56, 59, 0.4) 87.5%, rgba(229, 56, 59, 0.4)),
+      linear-gradient(150deg, rgba(229, 56, 59, 0.4) 12%, transparent 12.5%, transparent 87%, rgba(229, 56, 59, 0.4) 87.5%, rgba(229, 56, 59, 0.4)),
+      linear-gradient(30deg, rgba(229, 56, 59, 0.4) 12%, transparent 12.5%, transparent 87%, rgba(229, 56, 59, 0.4) 87.5%, rgba(229, 56, 59, 0.4)),
+      linear-gradient(150deg, rgba(229, 56, 59, 0.4) 12%, transparent 12.5%, transparent 87%, rgba(229, 56, 59, 0.4) 87.5%, rgba(229, 56, 59, 0.4)),
+      linear-gradient(60deg, rgba(242, 137, 139, 0.42) 25%, transparent 25.5%, transparent 75%, rgba(242, 137, 139, 0.42) 75%, rgba(242, 137, 139, 0.42)),
+      linear-gradient(60deg, rgba(242, 137, 139, 0.42) 25%, transparent 25.5%, transparent 75%, rgba(242, 137, 139, 0.42) 75%, rgba(242, 137, 139, 0.42));
+    background-size: 44px 76px;
+    background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  }
+  body:has(#bg-honey-blue:checked), .bg-swatch--honey-blue {
+    background-color: #f0f5ff;
+    background-image:
+      linear-gradient(30deg, rgba(29, 78, 216, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(29, 78, 216, 0.35) 87.5%, rgba(29, 78, 216, 0.35)),
+      linear-gradient(150deg, rgba(29, 78, 216, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(29, 78, 216, 0.35) 87.5%, rgba(29, 78, 216, 0.35)),
+      linear-gradient(30deg, rgba(29, 78, 216, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(29, 78, 216, 0.35) 87.5%, rgba(29, 78, 216, 0.35)),
+      linear-gradient(150deg, rgba(29, 78, 216, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(29, 78, 216, 0.35) 87.5%, rgba(29, 78, 216, 0.35)),
+      linear-gradient(60deg, rgba(147, 180, 245, 0.4) 25%, transparent 25.5%, transparent 75%, rgba(147, 180, 245, 0.4) 75%, rgba(147, 180, 245, 0.4)),
+      linear-gradient(60deg, rgba(147, 180, 245, 0.4) 25%, transparent 25.5%, transparent 75%, rgba(147, 180, 245, 0.4) 75%, rgba(147, 180, 245, 0.4));
+    background-size: 44px 76px;
+    background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  }
+  body:has(#bg-honey-orange:checked), .bg-swatch--honey-orange {
+    background-color: #fff4ec;
+    background-image:
+      linear-gradient(30deg, rgba(232, 114, 12, 0.38) 12%, transparent 12.5%, transparent 87%, rgba(232, 114, 12, 0.38) 87.5%, rgba(232, 114, 12, 0.38)),
+      linear-gradient(150deg, rgba(232, 114, 12, 0.38) 12%, transparent 12.5%, transparent 87%, rgba(232, 114, 12, 0.38) 87.5%, rgba(232, 114, 12, 0.38)),
+      linear-gradient(30deg, rgba(232, 114, 12, 0.38) 12%, transparent 12.5%, transparent 87%, rgba(232, 114, 12, 0.38) 87.5%, rgba(232, 114, 12, 0.38)),
+      linear-gradient(150deg, rgba(232, 114, 12, 0.38) 12%, transparent 12.5%, transparent 87%, rgba(232, 114, 12, 0.38) 87.5%, rgba(232, 114, 12, 0.38)),
+      linear-gradient(60deg, rgba(249, 189, 138, 0.42) 25%, transparent 25.5%, transparent 75%, rgba(249, 189, 138, 0.42) 75%, rgba(249, 189, 138, 0.42)),
+      linear-gradient(60deg, rgba(249, 189, 138, 0.42) 25%, transparent 25.5%, transparent 75%, rgba(249, 189, 138, 0.42) 75%, rgba(249, 189, 138, 0.42));
+    background-size: 44px 76px;
+    background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  }
+  body:has(#bg-honey-purple:checked), .bg-swatch--honey-purple {
+    background-color: #f7f0fc;
+    background-image:
+      linear-gradient(30deg, rgba(124, 58, 237, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(124, 58, 237, 0.35) 87.5%, rgba(124, 58, 237, 0.35)),
+      linear-gradient(150deg, rgba(124, 58, 237, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(124, 58, 237, 0.35) 87.5%, rgba(124, 58, 237, 0.35)),
+      linear-gradient(30deg, rgba(124, 58, 237, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(124, 58, 237, 0.35) 87.5%, rgba(124, 58, 237, 0.35)),
+      linear-gradient(150deg, rgba(124, 58, 237, 0.35) 12%, transparent 12.5%, transparent 87%, rgba(124, 58, 237, 0.35) 87.5%, rgba(124, 58, 237, 0.35)),
+      linear-gradient(60deg, rgba(201, 168, 245, 0.4) 25%, transparent 25.5%, transparent 75%, rgba(201, 168, 245, 0.4) 75%, rgba(201, 168, 245, 0.4)),
+      linear-gradient(60deg, rgba(201, 168, 245, 0.4) 25%, transparent 25.5%, transparent 75%, rgba(201, 168, 245, 0.4) 75%, rgba(201, 168, 245, 0.4));
+    background-size: 44px 76px;
+    background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  }
+  body:has(#bg-honey-mono:checked), .bg-swatch--honey-mono {
+    background-color: #f5f5f4;
+    background-image:
+      linear-gradient(30deg, rgba(107, 114, 128, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(107, 114, 128, 0.32) 87.5%, rgba(107, 114, 128, 0.32)),
+      linear-gradient(150deg, rgba(107, 114, 128, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(107, 114, 128, 0.32) 87.5%, rgba(107, 114, 128, 0.32)),
+      linear-gradient(30deg, rgba(107, 114, 128, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(107, 114, 128, 0.32) 87.5%, rgba(107, 114, 128, 0.32)),
+      linear-gradient(150deg, rgba(107, 114, 128, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(107, 114, 128, 0.32) 87.5%, rgba(107, 114, 128, 0.32)),
+      linear-gradient(60deg, rgba(195, 199, 206, 0.38) 25%, transparent 25.5%, transparent 75%, rgba(195, 199, 206, 0.38) 75%, rgba(195, 199, 206, 0.38)),
+      linear-gradient(60deg, rgba(195, 199, 206, 0.38) 25%, transparent 25.5%, transparent 75%, rgba(195, 199, 206, 0.38) 75%, rgba(195, 199, 206, 0.38));
+    background-size: 44px 76px;
+    background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
+  }
   body:has(#bg-honeycomb:checked), .bg-swatch--honeycomb {
     background-color: #6fae2f;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%2389c94f' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-yellow:checked), .bg-swatch--honeycomb-yellow {
+    background-color: #f2b705;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23fbe28a' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-red:checked), .bg-swatch--honeycomb-red {
+    background-color: #d92b2b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23f5a3a3' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-blue:checked), .bg-swatch--honeycomb-blue {
+    background-color: #2255d1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23a8c2f5' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-orange:checked), .bg-swatch--honeycomb-orange {
+    background-color: #e8720c;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23f7bd85' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-purple:checked), .bg-swatch--honeycomb-purple {
+    background-color: #7c3aed;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23d3b8fa' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-black:checked), .bg-swatch--honeycomb-black {
+    background-color: #14161a;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23f2c14e' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-navygold:checked), .bg-swatch--honeycomb-navygold {
+    background-color: #0f172a;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23d4af37' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-mono:checked), .bg-swatch--honeycomb-mono {
+    background-color: #55595f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%23b8bcc2' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
+  body:has(#bg-honeycomb-gradient:checked), .bg-swatch--honeycomb-gradient {
+    background-color: #12141c;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2386d93e'/%3E%3Cstop offset='50%25' stop-color='%2312b6c9'/%3E%3Cstop offset='100%25' stop-color='%238b3ce0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23g)' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 138px 79.67px;
   }
 
@@ -378,6 +492,21 @@
   }
   body:has(#bg-grad-gold:checked), .bg-swatch--grad-gold {
     background: linear-gradient(160deg, #7A1F00 0%, #E8590C 28%, #FF922B 56%, #FFC078 80%, #FFE8CC 100%);
+  }
+  body:has(#bg-grad-lagoon:checked), .bg-swatch--grad-lagoon {
+    background: linear-gradient(160deg, #0F766E 0%, #0891B2 30%, #38BDF8 60%, #A5F3FC 100%);
+  }
+  body:has(#bg-grad-mauve:checked), .bg-swatch--grad-mauve {
+    background: linear-gradient(160deg, #4C1D95 0%, #7C3AED 30%, #C026D3 60%, #F0ABFC 100%);
+  }
+  body:has(#bg-grad-citrus:checked), .bg-swatch--grad-citrus {
+    background: linear-gradient(160deg, #65A30D 0%, #CA8A04 40%, #EA580C 70%, #FDE047 100%);
+  }
+  body:has(#bg-grad-midnight:checked), .bg-swatch--grad-midnight {
+    background: linear-gradient(160deg, #020617 0%, #1E293B 35%, #4338CA 70%, #818CF8 100%);
+  }
+  body:has(#bg-grad-rosegold:checked), .bg-swatch--grad-rosegold {
+    background: linear-gradient(160deg, #9F1239 0%, #E11D48 30%, #FB7185 55%, #FBBF24 80%, #FDE68A 100%);
   }
 
   /* ---------- パターン系10種 ---------- */
@@ -461,6 +590,49 @@
       repeating-linear-gradient(60deg, rgba(90, 90, 100, 0.16) 0 1px, transparent 1px 12px),
       repeating-linear-gradient(-60deg, rgba(90, 90, 100, 0.16) 0 1px, transparent 1px 12px);
   }
+  body:has(#bg-pat-concrete:checked), .bg-swatch--pat-concrete {
+    background-color: #c9c7c1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.15 0 0 0 0 0.14 0 0 0 0 0.13 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+  body:has(#bg-pat-herringbone:checked), .bg-swatch--pat-herringbone {
+    background-color: #f4f1ec;
+    background-image:
+      linear-gradient(45deg, rgba(120, 110, 90, 0.28) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(120, 110, 90, 0.28) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(120, 110, 90, 0.28) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(120, 110, 90, 0.28) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+  body:has(#bg-pat-shimmer:checked), .bg-swatch--pat-shimmer {
+    background-color: #eef1f5;
+    background-image: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.9) 45%, rgba(134,217,62,0.35) 50%, rgba(255,255,255,0.9) 55%, transparent 70%);
+    background-size: 300% 300%;
+    animation: bgShimmer 6s ease-in-out infinite;
+  }
+  @keyframes bgShimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body:has(#bg-pat-shimmer:checked), .bg-swatch--pat-shimmer { animation: none; }
+  }
+  body:has(#bg-pat-ripple:checked), .bg-swatch--pat-ripple {
+    background-color: #eaf6fb;
+    background-image:
+      repeating-radial-gradient(circle at 20% 30%, rgba(18,182,201,0.22) 0, rgba(18,182,201,0.22) 2px, transparent 3px, transparent 26px),
+      repeating-radial-gradient(circle at 75% 70%, rgba(59,111,224,0.16) 0, rgba(59,111,224,0.16) 2px, transparent 3px, transparent 30px);
+    background-size: 160% 160%, 180% 180%;
+    animation: bgRipple 14s ease-in-out infinite;
+  }
+  @keyframes bgRipple {
+    0%, 100% { background-position: 0% 0%, 100% 100%; }
+    50% { background-position: 40% 60%, 60% 20%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body:has(#bg-pat-ripple:checked), .bg-swatch--pat-ripple { animation: none; }
+  }
 
   .bg-picker { position: relative; display: inline-block; }
   .bg-picker__backdrop {
@@ -527,7 +699,7 @@
   }
   .bg-option:has(.bg-radio:checked) .bg-swatch { border-color: var(--lime); }
   /* タイルが大きい柄はスウォッチだと模様がほぼ見えないため、プレビューだけ縮小表示 */
-  .bg-swatch--pat-terrazzo, .bg-swatch--pat-bubbles, .bg-swatch--pat-sparkle { background-size: 70px 70px !important; }
+  .bg-swatch--pat-terrazzo, .bg-swatch--pat-bubbles, .bg-swatch--pat-sparkle, .bg-swatch--pat-concrete { background-size: 70px 70px !important; }
   .bg-option__name { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-align: center; }
   /* 「動く」バッジ：bg-option--animated を付けたスウォッチの右上に⟳を表示 */
   .bg-option--animated .bg-swatch::after {
@@ -1363,6 +1535,46 @@
                       <span class="bg-swatch bg-swatch--cream"></span>
                       <span class="bg-option__name">クリーム</span>
                     </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-cherry" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-cherry"></span>
+                      <span class="bg-option__name">チェリー</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-cobalt" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-cobalt"></span>
+                      <span class="bg-option__name">コバルト</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-sun" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-sun"></span>
+                      <span class="bg-option__name">サン</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-emerald" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-emerald"></span>
+                      <span class="bg-option__name">エメラルド</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-lavender" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-lavender"></span>
+                      <span class="bg-option__name">ラベンダー</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-mint" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-mint"></span>
+                      <span class="bg-option__name">ミント</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-peach" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-peach"></span>
+                      <span class="bg-option__name">ピーチ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-solid-greige" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--solid-greige"></span>
+                      <span class="bg-option__name">グレージュ</span>
+                    </label>
                   </div>
                 </div>
 
@@ -1399,6 +1611,31 @@
                       <span class="bg-swatch bg-swatch--grad-gold"></span>
                       <span class="bg-option__name">エンバー</span>
                     </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-lagoon" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-lagoon"></span>
+                      <span class="bg-option__name">ラグーン</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-mauve" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-mauve"></span>
+                      <span class="bg-option__name">モーブ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-citrus" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-citrus"></span>
+                      <span class="bg-option__name">シトラス</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-midnight" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-midnight"></span>
+                      <span class="bg-option__name">ミッドナイト</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-rosegold" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-rosegold"></span>
+                      <span class="bg-option__name">ローズゴールド</span>
+                    </label>
                   </div>
                 </div>
 
@@ -1408,7 +1645,52 @@
                     <label class="bg-option">
                       <input type="radio" name="bg-choice" id="bg-honeycomb" class="bg-radio">
                       <span class="bg-swatch bg-swatch--honeycomb"></span>
-                      <span class="bg-option__name">ハニカム</span>
+                      <span class="bg-option__name">ハニカム（緑）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-yellow" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-yellow"></span>
+                      <span class="bg-option__name">ハニカム（黄）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-red" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-red"></span>
+                      <span class="bg-option__name">ハニカム（赤）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-blue" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-blue"></span>
+                      <span class="bg-option__name">ハニカム（青）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-orange" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-orange"></span>
+                      <span class="bg-option__name">ハニカム（橙）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-purple" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-purple"></span>
+                      <span class="bg-option__name">ハニカム（紫）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-black" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-black"></span>
+                      <span class="bg-option__name">ハニカム（黒×金）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-navygold" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-navygold"></span>
+                      <span class="bg-option__name">ハニカム（紺×金）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-mono" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-mono"></span>
+                      <span class="bg-option__name">ハニカム（モノクロ）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb-gradient" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb-gradient"></span>
+                      <span class="bg-option__name">ハニカム（グラデ線）</span>
                     </label>
                   </div>
                 </div>
@@ -1425,6 +1707,31 @@
                       <input type="radio" name="bg-choice" id="bg-honey-green" class="bg-radio">
                       <span class="bg-swatch bg-swatch--honey-green"></span>
                       <span class="bg-option__name">キューブ（緑）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-red" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-red"></span>
+                      <span class="bg-option__name">キューブ（赤）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-blue" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-blue"></span>
+                      <span class="bg-option__name">キューブ（青）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-orange" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-orange"></span>
+                      <span class="bg-option__name">キューブ（橙）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-purple" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-purple"></span>
+                      <span class="bg-option__name">キューブ（紫）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-mono" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-mono"></span>
+                      <span class="bg-option__name">キューブ（モノクロ）</span>
                     </label>
                   </div>
                 </div>
@@ -1481,6 +1788,26 @@
                       <input type="radio" name="bg-choice" id="bg-pat-crosshatch" class="bg-radio">
                       <span class="bg-swatch bg-swatch--pat-crosshatch"></span>
                       <span class="bg-option__name">クロスハッチ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-concrete" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-concrete"></span>
+                      <span class="bg-option__name">コンクリート</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-herringbone" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-herringbone"></span>
+                      <span class="bg-option__name">ヘリンボーン</span>
+                    </label>
+                    <label class="bg-option bg-option--animated">
+                      <input type="radio" name="bg-choice" id="bg-pat-shimmer" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-shimmer"></span>
+                      <span class="bg-option__name">シマー</span>
+                    </label>
+                    <label class="bg-option bg-option--animated">
+                      <input type="radio" name="bg-choice" id="bg-pat-ripple" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-ripple"></span>
+                      <span class="bg-option__name">波紋</span>
                     </label>
                   </div>
                 </div>
