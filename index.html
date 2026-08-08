@@ -332,6 +332,18 @@
   }
   .bg-swatch--default { background: var(--bg); }
   body:has(#bg-cream:checked), .bg-swatch--cream { background: #fbf7f1; }
+  body:has(#bg-marble:checked), .bg-swatch--marble {
+    background:
+      linear-gradient(122deg, transparent 42%, rgba(197, 160, 89, 0.55) 42.6%, rgba(197, 160, 89, 0.15) 43.2%, transparent 44%),
+      linear-gradient(122deg, transparent 57%, rgba(197, 160, 89, 0.35) 57.4%, transparent 58%),
+      linear-gradient(32deg, transparent 27%, rgba(160, 160, 160, 0.3) 27.6%, transparent 28.4%),
+      linear-gradient(32deg, transparent 68%, rgba(160, 160, 160, 0.22) 68.5%, transparent 69.3%),
+      linear-gradient(96deg, transparent 15%, rgba(197, 160, 89, 0.25) 15.4%, transparent 16%),
+      linear-gradient(158deg, transparent 80%, rgba(160, 160, 160, 0.25) 80.6%, transparent 81.4%),
+      radial-gradient(ellipse at 25% 18%, rgba(255, 255, 255, 0.9), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(255, 255, 255, 0.7), transparent 55%),
+      #f6f4f0;
+  }
 
   .bg-picker { position: relative; display: inline-block; }
   .bg-picker__backdrop {
@@ -1186,9 +1198,14 @@
                   <span class="bg-option__name">クリーム</span>
                 </label>
                 <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-marble" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--marble"></span>
+                  <span class="bg-option__name">大理石</span>
+                </label>
+                <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-aurora" class="bg-radio">
                   <span class="bg-swatch bg-swatch--aurora"></span>
-                  <span class="bg-option__name">オーロラ</span>
+                  <span class="bg-option__name">オーロラ（緑）</span>
                 </label>
               </div>
             </div>
