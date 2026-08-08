@@ -172,19 +172,35 @@
   .btn-primary {
     background: var(--btn-primary-bg);
     color: var(--btn-primary-ink);
+    border-color: transparent;
+    box-shadow: -5px -5px 10px var(--neu-light), 5px 5px 10px var(--neu-dark);
   }
-  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+  }
   .btn-ghost {
-    border-color: var(--line);
+    border-color: transparent;
     color: var(--ink);
-    background: transparent;
+    background: var(--bg-panel-soft);
+    box-shadow: -5px -5px 10px var(--neu-light), 5px 5px 10px var(--neu-dark);
   }
-  .btn-ghost:hover { border-color: var(--lime); transform: translateY(-2px); }
+  .btn-ghost:hover {
+    color: var(--lime);
+    transform: translateY(-2px);
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+  }
   .btn-work {
     background: #4c9a2a;
     color: #fff;
+    border-color: transparent;
+    box-shadow: -5px -5px 10px rgba(157, 214, 114, 0.55), 5px 5px 10px rgba(30, 66, 12, 0.45);
   }
-  .btn-work:hover { transform: translateY(-2px); background: #46901f; }
+  .btn-work:hover {
+    transform: translateY(-2px);
+    background: #46901f;
+    box-shadow: -6px -6px 12px rgba(157, 214, 114, 0.55), 6px 6px 12px rgba(30, 66, 12, 0.45);
+  }
   .footer-install-btn {
     padding: 8px 18px;
     font-size: 0.85rem;
