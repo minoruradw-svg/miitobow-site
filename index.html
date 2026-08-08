@@ -769,6 +769,19 @@
     box-shadow: inset -3px -3px 6px var(--neu-light), inset 3px 3px 6px var(--neu-dark);
     transform: translateY(0);
   }
+  .app-links .app-links-important {
+    background: #4c9a2a;
+    color: #fff;
+    box-shadow: -4px -4px 8px rgba(157, 214, 114, 0.55), 4px 4px 8px rgba(30, 66, 12, 0.45);
+  }
+  .app-links .app-links-important:hover {
+    color: #fff;
+    background: #46901f;
+    box-shadow: -5px -5px 10px rgba(157, 214, 114, 0.55), 5px 5px 10px rgba(30, 66, 12, 0.45);
+  }
+  .app-links .app-links-important:active {
+    box-shadow: inset -3px -3px 6px rgba(157, 214, 114, 0.5), inset 3px 3px 6px rgba(30, 66, 12, 0.4);
+  }
 
   @media (max-width: 760px) {
     .link-cols { grid-template-columns: 1fr; gap: 32px; }
@@ -1158,7 +1171,7 @@
           <div class="app-links">
             <div class="bg-picker">
               <input type="checkbox" id="bg-panel-toggle" class="modal-toggle">
-              <label for="bg-panel-toggle">背景を変える</label>
+              <label for="bg-panel-toggle" class="app-links-important">背景を変える</label>
               <label for="bg-panel-toggle" class="bg-picker__backdrop" aria-label="閉じる"></label>
               <div class="bg-picker__panel">
                 <label class="bg-option">
