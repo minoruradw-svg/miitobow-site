@@ -474,12 +474,13 @@
     background: var(--neu-bg);
     border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 12px;
+    padding: 14px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    width: max-content;
-    max-width: min(420px, calc(100vw - 48px));
+    flex-direction: column;
+    gap: 14px;
+    width: min(480px, calc(100vw - 48px));
+    max-height: min(480px, 70vh);
+    overflow-y: auto;
     box-shadow: 0 14px 34px rgba(20,32,26,0.18);
     opacity: 0; visibility: hidden; transform: translateY(-6px);
     transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
@@ -489,11 +490,36 @@
     opacity: 1; visibility: visible; transform: translateY(0);
     pointer-events: auto;
   }
+  .bg-search {
+    width: 100%;
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--ink);
+    background: var(--bg-panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+  }
+  .bg-search::placeholder { color: var(--ink-faint); }
+  .bg-shelf__label {
+    font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-faint);
+    margin: 0 0 8px;
+  }
+  .bg-shelf__row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+  }
   .bg-option {
     display: flex; flex-direction: column; align-items: center; gap: 6px;
-    cursor: pointer; width: 76px;
+    cursor: pointer; width: 76px; flex-shrink: 0;
+    scroll-snap-align: start;
   }
   .bg-swatch {
+    position: relative;
     width: 68px; height: 50px;
     border-radius: 10px;
     border: 2px solid var(--line);
@@ -503,6 +529,19 @@
   /* タイルが大きい柄はスウォッチだと模様がほぼ見えないため、プレビューだけ縮小表示 */
   .bg-swatch--pat-terrazzo, .bg-swatch--pat-bubbles, .bg-swatch--pat-sparkle { background-size: 70px 70px !important; }
   .bg-option__name { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-align: center; }
+  /* 「動く」バッジ：bg-option--animated を付けたスウォッチの右上に⟳を表示 */
+  .bg-option--animated .bg-swatch::after {
+    content: "⟳";
+    position: absolute; top: -6px; right: -6px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+  }
   /* .app-links a/label のニューモーフィズム装飾（background/box-shadow/padding/border-radius）を、
      パネル内側の要素（選択肢ラベル・背景クリック用バックドロップ）だけ打ち消す */
   .bg-picker .bg-option,
@@ -1309,111 +1348,142 @@
               <label for="bg-panel-toggle" class="app-links-important">背景を変える</label>
               <label for="bg-panel-toggle" class="bg-picker__backdrop" aria-label="閉じる"></label>
               <div class="bg-picker__panel">
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-default" class="bg-radio" checked>
-                  <span class="bg-swatch bg-swatch--default"></span>
-                  <span class="bg-option__name">いつもの</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-cream" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--cream"></span>
-                  <span class="bg-option__name">クリーム</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-aurora" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--aurora"></span>
-                  <span class="bg-option__name">オーロラ（緑）</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-honey-yellow" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--honey-yellow"></span>
-                  <span class="bg-option__name">キューブ（黄）</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-honey-green" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--honey-green"></span>
-                  <span class="bg-option__name">キューブ（緑）</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-honeycomb" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--honeycomb"></span>
-                  <span class="bg-option__name">ハニカム</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-grad-app" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--grad-app"></span>
-                  <span class="bg-option__name">スクショで翻訳</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-grad-sunset" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--grad-sunset"></span>
-                  <span class="bg-option__name">サンセット</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-grad-sky" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--grad-sky"></span>
-                  <span class="bg-option__name">スカイ</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-grad-candy" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--grad-candy"></span>
-                  <span class="bg-option__name">キャンディ</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-grad-gold" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--grad-gold"></span>
-                  <span class="bg-option__name">エンバー</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-dots" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-dots"></span>
-                  <span class="bg-option__name">ドット</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-stripe" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-stripe"></span>
-                  <span class="bg-option__name">ストライプ</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-graph" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-graph"></span>
-                  <span class="bg-option__name">グラフ用紙</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-terrazzo" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-terrazzo"></span>
-                  <span class="bg-option__name">テラゾ</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-bubbles" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-bubbles"></span>
-                  <span class="bg-option__name">バブル</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-argyle" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-argyle"></span>
-                  <span class="bg-option__name">アーガイル</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-checker" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-checker"></span>
-                  <span class="bg-option__name">チェッカー</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-topo" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-topo"></span>
-                  <span class="bg-option__name">等高線</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-sparkle" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-sparkle"></span>
-                  <span class="bg-option__name">スパークル</span>
-                </label>
-                <label class="bg-option">
-                  <input type="radio" name="bg-choice" id="bg-pat-crosshatch" class="bg-radio">
-                  <span class="bg-swatch bg-swatch--pat-crosshatch"></span>
-                  <span class="bg-option__name">クロスハッチ</span>
-                </label>
+                <input type="text" class="bg-search" placeholder="背景を検索（例：緑、動く）">
+
+                <div class="bg-shelf">
+                  <h4 class="bg-shelf__label">単色</h4>
+                  <div class="bg-shelf__row">
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-default" class="bg-radio" checked>
+                      <span class="bg-swatch bg-swatch--default"></span>
+                      <span class="bg-option__name">いつもの</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-cream" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--cream"></span>
+                      <span class="bg-option__name">クリーム</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="bg-shelf">
+                  <h4 class="bg-shelf__label">グラデーション</h4>
+                  <div class="bg-shelf__row">
+                    <label class="bg-option bg-option--animated">
+                      <input type="radio" name="bg-choice" id="bg-aurora" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--aurora"></span>
+                      <span class="bg-option__name">オーロラ（緑）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-app" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-app"></span>
+                      <span class="bg-option__name">スクショで翻訳</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-sunset" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-sunset"></span>
+                      <span class="bg-option__name">サンセット</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-sky" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-sky"></span>
+                      <span class="bg-option__name">スカイ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-candy" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-candy"></span>
+                      <span class="bg-option__name">キャンディ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-grad-gold" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--grad-gold"></span>
+                      <span class="bg-option__name">エンバー</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="bg-shelf">
+                  <h4 class="bg-shelf__label">ハニカム</h4>
+                  <div class="bg-shelf__row">
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honeycomb" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honeycomb"></span>
+                      <span class="bg-option__name">ハニカム</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="bg-shelf">
+                  <h4 class="bg-shelf__label">キューブ</h4>
+                  <div class="bg-shelf__row">
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-yellow" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-yellow"></span>
+                      <span class="bg-option__name">キューブ（黄）</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-honey-green" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--honey-green"></span>
+                      <span class="bg-option__name">キューブ（緑）</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="bg-shelf">
+                  <h4 class="bg-shelf__label">模様</h4>
+                  <div class="bg-shelf__row">
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-dots" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-dots"></span>
+                      <span class="bg-option__name">ドット</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-stripe" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-stripe"></span>
+                      <span class="bg-option__name">ストライプ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-graph" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-graph"></span>
+                      <span class="bg-option__name">グラフ用紙</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-terrazzo" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-terrazzo"></span>
+                      <span class="bg-option__name">テラゾ</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-bubbles" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-bubbles"></span>
+                      <span class="bg-option__name">バブル</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-argyle" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-argyle"></span>
+                      <span class="bg-option__name">アーガイル</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-checker" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-checker"></span>
+                      <span class="bg-option__name">チェッカー</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-topo" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-topo"></span>
+                      <span class="bg-option__name">等高線</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-sparkle" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-sparkle"></span>
+                      <span class="bg-option__name">スパークル</span>
+                    </label>
+                    <label class="bg-option">
+                      <input type="radio" name="bg-choice" id="bg-pat-crosshatch" class="bg-radio">
+                      <span class="bg-swatch bg-swatch--pat-crosshatch"></span>
+                      <span class="bg-option__name">クロスハッチ</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
             <a href="/ui-guide.html">作り方の裏側を読む</a>
@@ -1631,5 +1701,46 @@
   window.addEventListener('appinstalled', function () {
     btn.hidden = true;
   });
+})();
+</script>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'miitobow-bg';
+  var radios = document.querySelectorAll('.bg-radio');
+  if (!radios.length) return;
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  if (saved) {
+    var savedRadio = document.getElementById(saved);
+    if (savedRadio) savedRadio.checked = true;
+  }
+
+  radios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      if (!radio.checked) return;
+      try { localStorage.setItem(STORAGE_KEY, radio.id); } catch (e) {}
+    });
+  });
+
+  var searchInput = document.querySelector('.bg-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll('.bg-shelf').forEach(function (shelf) {
+        var visibleCount = 0;
+        shelf.querySelectorAll('.bg-option').forEach(function (opt) {
+          var name = (opt.querySelector('.bg-option__name').textContent || '').toLowerCase();
+          var isAnimated = opt.classList.contains('bg-option--animated');
+          var matchesAnimated = (q === '動く' || q === 'あにめ' || q === 'アニメーション') && isAnimated;
+          var show = !q || name.indexOf(q) !== -1 || matchesAnimated;
+          opt.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
+        });
+        shelf.style.display = visibleCount ? '' : 'none';
+      });
+    });
+  }
 })();
 </script>
