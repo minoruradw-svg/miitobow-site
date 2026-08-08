@@ -357,6 +357,11 @@
     background-size: 44px 76px;
     background-position: 0 0, 0 0, 22px 38px, 22px 38px, 0 0, 22px 38px;
   }
+  body:has(#bg-honeycomb:checked), .bg-swatch--honeycomb {
+    background-color: #6fae2f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='138' height='79.67'%3E%3Cg fill='none' stroke='%2389c94f' stroke-width='2.5'%3E%3Cpolygon points='92.00,39.84 69.00,79.67 23.00,79.67 0.00,39.84 23.00,0.00 69.00,0.00'/%3E%3Cpolygon points='161.00,0.00 138.00,39.84 92.00,39.84 69.00,0.00 92.00,-39.84 138.00,-39.84'/%3E%3Cpolygon points='161.00,79.67 138.00,119.51 92.00,119.51 69.00,79.67 92.00,39.84 138.00,39.84'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 138px 79.67px;
+  }
 
   /* ---------- グラデーション5種（1つはスクショで翻訳のAuroraカラー） ---------- */
   body:has(#bg-grad-app:checked), .bg-swatch--grad-app {
@@ -1322,12 +1327,17 @@
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-honey-yellow" class="bg-radio">
                   <span class="bg-swatch bg-swatch--honey-yellow"></span>
-                  <span class="bg-option__name">ハニカム（黄）</span>
+                  <span class="bg-option__name">キューブ（黄）</span>
                 </label>
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-honey-green" class="bg-radio">
                   <span class="bg-swatch bg-swatch--honey-green"></span>
-                  <span class="bg-option__name">ハニカム（緑）</span>
+                  <span class="bg-option__name">キューブ（緑）</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-honeycomb" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--honeycomb"></span>
+                  <span class="bg-option__name">ハニカム</span>
                 </label>
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-grad-app" class="bg-radio">
@@ -1352,7 +1362,7 @@
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-grad-gold" class="bg-radio">
                   <span class="bg-swatch bg-swatch--grad-gold"></span>
-                  <span class="bg-option__name">ゴールド</span>
+                  <span class="bg-option__name">エンバー</span>
                 </label>
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-pat-dots" class="bg-radio">
