@@ -539,12 +539,15 @@
     background: var(--bg-panel-soft);
     border-radius: 20px;
     padding: 26px 24px;
-    box-shadow: var(--card-shadow);
-    border: 2px solid transparent;
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+    border: none;
     overflow: hidden;
-    transition: border-color 0.2s ease;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
   }
-  .why-card:hover { border-color: var(--lime); }
+  .why-card:hover {
+    transform: translateY(-2px);
+    box-shadow: -8px -8px 16px var(--neu-light), 8px 8px 16px var(--neu-dark);
+  }
   .why-card__mascot {
     position: absolute;
     right: -10px;
@@ -593,12 +596,16 @@
     color: inherit;
     background: var(--bg-panel);
     border-radius: 22px;
-    border: 2px solid transparent;
+    border: none;
     padding: 18px;
     margin-bottom: 40px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
-  .new-article:hover { transform: translateY(-2px); border-color: var(--lime); }
+  .new-article:hover {
+    transform: translateY(-2px);
+    box-shadow: -8px -8px 16px var(--neu-light), 8px 8px 16px var(--neu-dark);
+  }
   .new-article__image {
     width: 100%;
     height: 150px;
