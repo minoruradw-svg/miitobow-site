@@ -331,6 +331,7 @@
     body:has(#bg-aurora:checked), .bg-swatch--aurora { animation: none; }
   }
   .bg-swatch--default { background: var(--bg); }
+  body:has(#bg-cream:checked), .bg-swatch--cream { background: #fbf7f1; }
 
   .bg-picker { position: relative; display: inline-block; }
   .bg-picker__backdrop {
@@ -1178,6 +1179,11 @@
                   <input type="radio" name="bg-choice" id="bg-default" class="bg-radio" checked>
                   <span class="bg-swatch bg-swatch--default"></span>
                   <span class="bg-option__name">いつもの</span>
+                </label>
+                <label class="bg-option">
+                  <input type="radio" name="bg-choice" id="bg-cream" class="bg-radio">
+                  <span class="bg-swatch bg-swatch--cream"></span>
+                  <span class="bg-option__name">クリーム</span>
                 </label>
                 <label class="bg-option">
                   <input type="radio" name="bg-choice" id="bg-aurora" class="bg-radio">
