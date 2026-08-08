@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>miitobow UI辞典 — このサイトの動きの名前と作り方</title>
+<meta name="description" content="miitobow.comを作る中で登場した9個のUI/モーションを、名前・正式な仕組み・作り方の指示文つきで紹介します。">
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --bg: #fbf7f1;
+    --panel: #f3ead9;
+    --panel-soft: #f7f0e4;
+    --ink: #221f1b;
+    --ink-soft: #6b6459;
+    --ink-faint: #7d766a;
+    --line: #e5d9c2;
+    --accent: #4c9a2a;
+    --accent-soft: rgba(76, 154, 42, 0.12);
+    --code-bg: #1f2a22;
+    --code-ink: #dcf3cc;
+    --code-comment: #8fae7c;
+    --shadow: 0 10px 30px rgba(60, 50, 30, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141d17;
+      --panel: #1c2820;
+      --panel-soft: #1a251e;
+      --ink: #f2ede2;
+      --ink-soft: #aca89c;
+      --ink-faint: #9aa896;
+      --line: #33452f;
+      --accent: #86d93e;
+      --accent-soft: rgba(134, 217, 62, 0.14);
+      --code-bg: #26362b;
+      --code-ink: #d9f2c8;
+      --code-comment: #6f9a5c;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1880px; margin: 0 auto; padding: 0 28px; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding-top: 24px;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  header.top {
+    position: relative;
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero-char {
+    position: absolute;
+    right: -6px;
+    bottom: -14px;
+    font-size: clamp(3rem, 8vw, 7rem);
+    opacity: 0.9;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 16px rgba(0,0,0,0.12));
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .eyebrow::before { content: ""; width: 20px; height: 2px; background: var(--accent); display: inline-block; }
+  h1 {
+    font-size: clamp(1.9rem, 1.3rem + 2vw, 2.9rem);
+    line-height: 1.25;
+    margin: 0 0 18px;
+    text-wrap: balance;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  h1 .accent { color: var(--accent); }
+  .lead {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 6px;
+  }
+  .lead-sub {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    max-width: 62ch;
+  }
+  .lead-sub a { color: var(--ink-faint); }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+    max-width: 78%;
+  }
+  .jump a {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+  .palette {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px 6px 6px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .swatch__dot { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; border: 1px solid var(--line); }
+  .swatch code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    margin-left: 2px;
+  }
+
+  section.grid-section { padding: 56px 0 90px; }
+  .grid-head { max-width: 68ch; margin-bottom: 34px; }
+  .grid-head h2 { font-size: 1.4rem; margin: 0 0 8px; }
+  .grid-head p { color: var(--ink-soft); margin: 0; font-size: 0.95rem; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 22px;
+  }
+
+  .card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card-head { display: flex; flex-direction: column; gap: 4px; }
+  .tag {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 2px;
+  }
+  .tag--layout { color: #3b6fc4; background: rgba(59, 111, 196, 0.12); }
+  .tag--motion { color: #b8792a; background: rgba(184, 121, 42, 0.12); }
+  .tag--interact { color: var(--accent); background: var(--accent-soft); }
+  .tag--deco { color: #a6459c; background: rgba(166, 69, 156, 0.12); }
+  @media (prefers-color-scheme: dark) {
+    .tag--layout { color: #7fa8e8; background: rgba(127, 168, 232, 0.16); }
+    .tag--motion { color: #e0a862; background: rgba(224, 168, 98, 0.16); }
+    .tag--deco { color: #d888cd; background: rgba(216, 136, 205, 0.16); }
+  }
+  .card h3 { font-size: 1.15rem; margin: 0; }
+  .formal {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .desc { font-size: 0.88rem; color: var(--ink-soft); margin: 0; overflow-wrap: break-word; word-break: normal; }
+
+  .stage {
+    position: relative;
+    height: 150px;
+    border-radius: 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .stage-hint {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .prompt-block { border-top: 1px solid var(--line); padding-top: 12px; }
+  .prompt-block summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+  .prompt-block summary::-webkit-details-marker { display: none; }
+  .prompt-block summary::before { content: "▸ 指示文を見る"; }
+  .prompt-block[open] summary::before { content: "▾ 指示文を隠す"; }
+  .prompt-block pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    color: var(--code-ink);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    margin: 12px 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--code-comment);
+    color: var(--code-comment);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .copy-btn.copied { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  .demo-edge { position: relative; width: 100%; height: 100%; }
+  .demo-edge__panel { position: absolute; inset: 0; background: linear-gradient(120deg, var(--accent-soft), transparent 60%); }
+  .demo-edge__box { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.72rem; color: var(--ink-soft); max-width: 40%; }
+  .demo-edge__char {
+    position: absolute; right: -6px; bottom: -6px;
+    width: 92px; height: 92px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.4rem;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  }
+
+  .demo-pose { width: 84px; height: 84px; position: relative; cursor: pointer; }
+  .demo-pose__face {
+    position: absolute; inset: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 2.6rem;
+    transition: opacity 0.3s ease;
+    background: var(--panel-soft);
+  }
+  .demo-pose__face--b { opacity: 0; }
+  .demo-pose:hover .demo-pose__face--a { opacity: 0; }
+  .demo-pose:hover .demo-pose__face--b { opacity: 1; }
+
+  .demo-bubble {
+    position: relative;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 50% / 62%;
+    padding: 14px 18px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    max-width: 130px;
+  }
+  .demo-bubble::after {
+    content: "";
+    position: absolute;
+    right: -6px; bottom: 16px;
+    width: 18px; height: 12px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+  }
+
+  .demo-modal-trigger {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .demo-modal-toggle { display: none; }
+  .demo-modal {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.2s ease;
+  }
+  .demo-modal-toggle:checked ~ .demo-modal { opacity: 1; visibility: visible; }
+  .demo-modal__card { background: var(--panel-soft); border-radius: 12px; padding: 16px 20px; font-size: 0.8rem; text-align: center; }
+  .demo-modal__close { display: block; margin-top: 10px; font-size: 0.72rem; color: var(--accent); cursor: pointer; text-align: center; }
+
+  .demo-peek { position: relative; width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+  .demo-peek__floor { position: absolute; left: 10%; right: 10%; bottom: 40px; height: 1px; background: var(--line); }
+  .demo-peek__char {
+    position: absolute; left: 50%; bottom: 40px;
+    transform: translate(-50%, 10%);
+    font-size: 1.8rem;
+    opacity: 0.22;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .demo-peek:hover .demo-peek__char { opacity: 1; transform: translate(-50%, -55%); }
+  .demo-peek__label { position: absolute; bottom: 12px; font-size: 0.72rem; font-weight: 700; color: var(--accent); }
+
+  .demo-illust { position: relative; width: 100%; height: 100%; display: flex; align-items: center; padding: 0 14px; overflow: hidden; }
+  .demo-illust__text { font-size: 0.76rem; color: var(--ink-soft); max-width: 56%; }
+  .demo-illust__char {
+    position: absolute; right: -8px; bottom: -8px;
+    font-size: 3.2rem;
+    opacity: 0.18; transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .demo-illust:hover .demo-illust__char { opacity: 1; transform: translateY(0); }
+
+  .demo-clamp {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    resize: horizontal; overflow: auto;
+    border-right: 2px dashed var(--line);
+  }
+  .demo-clamp__bubble {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 700;
+    text-align: center;
+    padding: clamp(6px, 3vw, 16px) clamp(10px, 5vw, 26px);
+    font-size: clamp(0.65rem, 3vw, 1.1rem);
+    white-space: nowrap;
+  }
+
+  .demo-details summary { cursor: pointer; font-size: 0.82rem; font-weight: 700; color: var(--accent); list-style: none; }
+  .demo-details summary::-webkit-details-marker { display: none; }
+  .demo-details summary::before { content: "▸ "; }
+  .demo-details[open] summary::before { content: "▾ "; }
+  .demo-details ul { margin: 8px 0 0; padding-left: 18px; font-size: 0.76rem; color: var(--ink-soft); }
+
+  .demo-btn {
+    border: 1px solid var(--line);
+    color: var(--ink);
+    background: transparent;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .demo-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .demo-btn-row { display: flex; align-items: center; gap: 10px; }
+  .demo-btn-important {
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: inherit;
+  }
+
+  footer.foot { border-top: 1px solid var(--line); padding: 32px 0 60px; color: var(--ink-faint); font-size: 0.82rem; }
+
+  @media (max-width: 640px) {
+    header.top { padding: 32px 0 36px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back-link" href="/">← miitobow.comに戻る</a>
+
+  <header class="top">
+    <span class="eyebrow">UI辞典・自分用</span>
+    <h1>miitobow.comの動き、<br>なんて<span class="accent">呼べば</span>いいんだっけ。</h1>
+    <p class="lead">namethatui.comの「UIパーツに名前と作り方の指示文をつける」形式を借りて、miitobow.comを作る中で登場した9個の動きをまとめました。</p>
+    <p class="lead-sub">実際に触って確認できます（ホバー・クリック・横リサイズ）。下の指示文はそのままAIへの依頼文としてコピーできます。</p>
+    <nav class="jump" aria-label="9個の動きへのジャンプ">
+      <a href="#sec-edge">端まで伸びるヒーロー</a>
+      <a href="#sec-pose">ポーズが変わるキャラ</a>
+      <a href="#sec-bubble">楕円の吹き出し</a>
+      <a href="#sec-modal">URLを汚さないモーダル</a>
+      <a href="#sec-peek">線からひょっこり</a>
+      <a href="#sec-illust">内容に合わせて出てくる挿絵</a>
+      <a href="#sec-clamp">壊れないサイズ調整</a>
+      <a href="#sec-details">JSなしで開く一覧</a>
+      <a href="#sec-btn">普段は黒、大事な時だけ緑</a>
+    </nav>
+    <span class="hero-char" aria-hidden="true">👟</span>
+    <div class="palette">
+      <span class="swatch"><span class="swatch__dot" style="background:#fbf7f1;"></span>bg（クリーム）<code>#fbf7f1</code></span>
+      <span class="swatch"><span class="swatch__dot" style="background:#4c9a2a;"></span>accent（グリーン）<code>#4c9a2a</code></span>
+      <span class="swatch"><span class="swatch__dot" style="background:#221f1b;"></span>ink（本文）<code>#221f1b</code></span>
+      <span class="swatch"><span class="swatch__dot" style="background:#1f2a22;"></span>code-bg（指示文の背景）<code>#1f2a22</code></span>
+    </div>
+  </header>
+
+  <section class="grid-section">
+    <div class="grid-head">
+      <h2>9個の動き</h2>
+      <p>それぞれ「なんて呼ぶか」「正式には何という仕組みか」「どう頼めば作れるか」の3点セットです。</p>
+    </div>
+
+    <div class="grid">
+
+      <article class="card" id="sec-edge">
+        <span class="tag tag--layout">レイアウト</span>
+        <div class="card-head"><h3>端まで伸びるヒーロー</h3>
+        <p class="formal">Edge-to-Edge Hero / Full-Bleed Layout</p></div>
+        <div class="stage">
+          <div class="demo-edge">
+            <div class="demo-edge__panel"></div>
+            <div class="demo-edge__box">本文は中央寄せのまま</div>
+            <div class="demo-edge__char">👟</div>
+          </div>
+        </div>
+        <p class="desc">背景とキャラだけ画面の端まで伸ばし、本文は普段どおり中央寄せの幅に収める。ウルトラワイド画面で本文とキャラの間が際限なく開かないよう、キャラの位置を本文コンテナの伸び方に合わせて計算する。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="edge" type="button">コピー</button></summary>
+          <pre id="p-edge">ヒーローセクションだけ画面幅いっぱいに広げて、右端にキャラクターを配置して。
+本文は今までどおり中央寄せの最大幅コンテナのままでいい。
+超ワイド画面で見たとき、本文とキャラの間の余白が際限なく開かないように、
+キャラの位置を本文コンテナの伸び方に合わせて調整して。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-pose">
+        <span class="tag tag--motion">モーション</span>
+        <div class="card-head"><h3>ポーズが変わるキャラ</h3>
+        <p class="formal">Hover Cross-Fade / Image Swap on Hover</p></div>
+        <div class="stage">
+          <div class="demo-pose">
+            <div class="demo-pose__face demo-pose__face--a">👋</div>
+            <div class="demo-pose__face demo-pose__face--b">🛹</div>
+          </div>
+          <span class="stage-hint">カーソルを乗せる</span>
+        </div>
+        <p class="desc">同じ位置に2枚の画像を重ねておき、ホバー時にopacityだけをクロスフェード。位置がズレないよう両方とも同じ基準点（今回は足元）で揃える。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="pose" type="button">コピー</button></summary>
+          <pre id="p-pose">同じ位置にキャラクターの画像を2枚重ねて配置して。
+普段は1枚目を表示、カーソルを合わせたら2枚目にふわっとクロスフェードで切り替わるようにして。
+2枚とも足元（下端）を基準に揃えて、ホバーしたときにキャラの大きさが変わって見えないようにして。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-bubble">
+        <span class="tag tag--deco">装飾</span>
+        <div class="card-head"><h3>楕円の吹き出し</h3>
+        <p class="formal">CSS Speech Bubble (radius ellipse + tail)</p></div>
+        <div class="stage">
+          <div class="demo-bubble">やっほー！<br>ミートボーだよ</div>
+        </div>
+        <p class="desc">角丸ではなく縦横で半径比を変えた楕円形。尻尾は小さい円を`::after`で作って斜めに回転させるだけ。画像もJSも使わない。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="bubble" type="button">コピー</button></summary>
+          <pre id="p-bubble">吹き出しを作って。角丸の四角ではなく、楕円形（border-radius: 50% / 62%くらいの比率）にして。
+右下に疑似要素（::after）で小さい円を1つ作り、-25度くらい回転させて尻尾に見せて。
+画像は使わずCSSだけで作って。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-modal">
+        <span class="tag tag--interact">インタラクション</span>
+        <div class="card-head"><h3>URLを汚さないモーダル</h3>
+        <p class="formal">Checkbox-Hack Modal (JS-free toggle)</p></div>
+        <div class="stage">
+          <label class="demo-modal-trigger" for="demo-modal-cb">開く</label>
+          <input type="checkbox" id="demo-modal-cb" class="demo-modal-toggle">
+          <div class="demo-modal">
+            <div class="demo-modal__card">
+              閉じてもスクロール位置は動きません
+              <label class="demo-modal__close" for="demo-modal-cb">閉じる ×</label>
+            </div>
+          </div>
+        </div>
+        <p class="desc">見えないcheckboxとlabelの組み合わせで開閉を管理。<code>href="#"</code>を閉じるボタンに使うとページの先頭にジャンプしてしまうので、代わりにこの方式を使う。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="modal" type="button">コピー</button></summary>
+          <pre id="p-modal">JavaScriptを使わずにCSSだけでモーダル（ポップアップ）を作って。
+非表示のcheckboxと、それに対応するlabelの組み合わせで開閉を管理して。
+閉じるボタンにhref="#"は使わないで（ページの一番上にジャンプしてしまうため）。
+labelのfor属性を使って同じcheckboxを開く用・閉じる用の両方から操作して。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-peek">
+        <span class="tag tag--motion">モーション</span>
+        <div class="card-head"><h3>線からひょっこり</h3>
+        <p class="formal">Peek Reveal / Boundary-Crossing Hover</p></div>
+        <div class="stage">
+          <div class="demo-peek">
+            <div class="demo-peek__floor"></div>
+            <div class="demo-peek__char">🙂</div>
+            <span class="demo-peek__label">枠にカーソルを乗せる</span>
+          </div>
+        </div>
+        <p class="desc">普段は透明にして線の下に隠しておき、親要素をホバーしたときだけ上にスライドしながら顔を出す。線をまたぐ動きが「ひょっこり」感を作る。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="peek" type="button">コピー</button></summary>
+          <pre id="p-peek">この枠（フッターの罫線など）にカーソルを合わせたときだけ、
+キャラクターが線の上からひょっこり顔を出すようにして。
+普段はopacity:0で透明にして少し下にずらしておき、
+ホバーしたら上にスライドしながらフェードインさせて。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-illust">
+        <span class="tag tag--motion">モーション</span>
+        <div class="card-head"><h3>内容に合わせて出てくる挿絵</h3>
+        <p class="formal">Content-Matched Hover Illustration</p></div>
+        <div class="stage">
+          <div class="demo-illust">
+            <span class="demo-illust__text">話を盛らない。転んだ話も書きます。</span>
+            <span class="demo-illust__char">🤕</span>
+          </div>
+        </div>
+        <p class="desc">カードごとに内容に合ったイラストを用意し、ホバー時だけ右下に表示。本文の幅はホバーしていない時から狭めに固定しておくことで、イラストが出た瞬間にレイアウトが動かない。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="illust" type="button">コピー</button></summary>
+          <pre id="p-illust">カードにカーソルを合わせたときだけ、右下にそのカードの内容に合ったイラストが
+ふわっと出てくるようにして。
+文章の横幅は、ホバーしていないときから最初から少し狭めに固定しておいて。
+イラストが出てきたタイミングで文字とかぶってレイアウトが動かないようにして。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-clamp">
+        <span class="tag tag--layout">レイアウト</span>
+        <div class="card-head"><h3>壊れないサイズ調整</h3>
+        <p class="formal">Fluid Sizing with clamp()</p></div>
+        <div class="stage">
+          <div class="demo-clamp">
+            <span class="demo-clamp__bubble">👟 いつでもいっしょ</span>
+          </div>
+          <span class="stage-hint">右下の点線をドラッグ</span>
+        </div>
+        <p class="desc">font-size・padding・max-widthをすべてclamp()で指定。画面が狭くても文字が親要素からはみ出さず、広い画面ではちゃんと大きくなる。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="clamp" type="button">コピー</button></summary>
+          <pre id="p-clamp">この要素のサイズ（文字の大きさ・余白）を画面幅に応じてなめらかに変えて。
+狭い画面のときの最小サイズと、広い画面のときの最大サイズを決めて、
+font-sizeやpaddingをclamp(最小値, 可変値, 最大値)の形で指定して。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-details">
+        <span class="tag tag--interact">インタラクション</span>
+        <div class="card-head"><h3>JSなしで開く一覧</h3>
+        <p class="formal">Native <code>&lt;details&gt;</code> Disclosure</p></div>
+        <div class="stage">
+          <details class="demo-details">
+            <summary>Lv.1〜10を全部見る</summary>
+            <ul><li>Lv.1 非エンジニアでも公開</li><li>Lv.2 AIが指摘した最重要バグ</li></ul>
+          </details>
+        </div>
+        <p class="desc">ブラウザ標準の<code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>を使う。開閉の状態管理もアニメーションもブラウザ任せで、JSは一切書かない。矢印マークだけCSSで自作。この指示文ブロック自体もこの仕組みで開閉しています。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="details" type="button">コピー</button></summary>
+          <pre id="p-details">一覧をクリックで開閉できるようにして。
+JavaScriptは使わず、HTML標準のdetails要素とsummary要素を使って実装して。
+開閉を示す矢印マークはブラウザ標準のものを消して、自分でCSSでデザインして。</pre>
+        </details>
+      </article>
+
+      <article class="card" id="sec-btn">
+        <span class="tag tag--interact">インタラクション</span>
+        <div class="card-head"><h3>普段は黒、大事な時だけ緑</h3>
+        <p class="formal">Two-Tier Accent Reveal</p></div>
+        <div class="stage">
+          <div class="demo-btn-row">
+            <button class="demo-btn">noteを読む</button>
+            <button class="demo-btn-important">お仕事依頼はこちら</button>
+          </div>
+        </div>
+        <p class="desc">重要度の低いボタンは普段黒・グレー枠で控えめに。特に押してほしいボタンだけ最初から色（緑）を付けて差をつける。ホバーで緑になるのは「控えめ組」だけ。</p>
+        <details class="prompt-block">
+          <summary><button class="copy-btn" data-copy="btn" type="button">コピー</button></summary>
+          <pre id="p-btn">このボタンは普段は黒文字・グレーの枠だけの控えめなデザインにして、
+カーソルを合わせたときだけブランドカラーの緑に変わるようにして。
+一番押してほしいボタンだけは、最初から緑背景・白文字にして目立たせて。</pre>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="foot">
+    参考：<a href="https://namethatui.com" target="_blank" rel="noopener" style="color:var(--ink-faint)">namethatui.com</a>の形式を借用。miitobow.com制作時（2026-08-05〜06）に登場した動きをまとめました。
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll(".copy-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-copy");
+      var text = document.getElementById("p-" + id).textContent;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = "コピーした";
+        btn.classList.add("copied");
+        setTimeout(function () {
+          btn.textContent = "コピー";
+          btn.classList.remove("copied");
+        }, 1600);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
