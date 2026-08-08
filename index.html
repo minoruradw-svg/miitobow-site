@@ -29,6 +29,8 @@
     --card-shadow: 0 1px 0 rgba(34,31,27,0.04);
     --btn-primary-bg: var(--ink);
     --btn-primary-ink: var(--bg);
+    --neu-light: rgba(255, 255, 255, 0.85);
+    --neu-dark: rgba(178, 163, 133, 0.45);
   }
   :root[data-theme="dark"] {
     --bg: #14201a;
@@ -46,6 +48,8 @@
     --card-shadow: none;
     --btn-primary-bg: var(--lime);
     --btn-primary-ink: #14201a;
+    --neu-light: rgba(255, 255, 255, 0.05);
+    --neu-dark: rgba(0, 0, 0, 0.55);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -64,6 +68,8 @@
       --card-shadow: none;
       --btn-primary-bg: var(--lime);
       --btn-primary-ink: #14201a;
+      --neu-light: rgba(255, 255, 255, 0.05);
+      --neu-dark: rgba(0, 0, 0, 0.55);
     }
   }
 
@@ -327,11 +333,15 @@
   }
   .bg-option:has(.bg-radio:checked) .bg-swatch { border-color: var(--lime); }
   .bg-option__name { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-align: center; }
-  /* .app-links a/label のピルボタン装飾（border/padding/border-radius）を、
+  /* .app-links a/label のニューモーフィズム装飾（background/box-shadow/padding/border-radius）を、
      パネル内側の要素（選択肢ラベル・背景クリック用バックドロップ）だけ打ち消す */
   .bg-picker .bg-option,
   .bg-picker .bg-picker__backdrop {
-    border: none; border-radius: 0; padding: 0;
+    background: none; box-shadow: none; border: none; border-radius: 0; padding: 0;
+  }
+  .bg-picker .bg-option:hover,
+  .bg-picker .bg-picker__backdrop:hover {
+    box-shadow: none; transform: none;
   }
 
   /* ---------- Aitsu modal ---------- */
@@ -623,13 +633,18 @@
   .link-card {
     display: block;
     padding: 16px 18px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
+    background: var(--bg-panel-soft);
+    border: none;
+    border-radius: 16px;
     margin-bottom: 12px;
     text-decoration: none;
-    transition: border-color 0.15s ease, transform 0.15s ease;
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
   }
-  .link-card:hover { border-color: var(--lime); transform: translateX(2px); }
+  .link-card:hover {
+    transform: translateY(-2px);
+    box-shadow: -8px -8px 16px var(--neu-light), 8px 8px 16px var(--neu-dark);
+  }
   .link-card .title { display: block; font-weight: 700; margin-bottom: 4px; transition: color 0.15s ease; }
   .link-card:hover .title { color: var(--lime); }
   .link-card .desc { display: block; font-size: 0.86rem; color: var(--ink-soft); }
@@ -694,13 +709,23 @@
     font-weight: 700;
     color: var(--ink);
     text-decoration: none;
-    border: 1px solid var(--line);
+    background: var(--bg-panel-soft);
+    border: none;
     border-radius: 999px;
     padding: 6px 14px;
-    transition: border-color 0.15s ease, color 0.15s ease;
+    box-shadow: -4px -4px 8px var(--neu-light), 4px 4px 8px var(--neu-dark);
+    transition: box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
     cursor: pointer;
   }
-  .app-links a:hover, .app-links label:hover { border-color: var(--lime); color: var(--lime); }
+  .app-links a:hover, .app-links label:hover {
+    color: var(--lime);
+    box-shadow: -5px -5px 10px var(--neu-light), 5px 5px 10px var(--neu-dark);
+    transform: translateY(-1px);
+  }
+  .app-links a:active, .app-links label:active {
+    box-shadow: inset -3px -3px 6px var(--neu-light), inset 3px 3px 6px var(--neu-dark);
+    transform: translateY(0);
+  }
 
   @media (max-width: 760px) {
     .link-cols { grid-template-columns: 1fr; gap: 32px; }
