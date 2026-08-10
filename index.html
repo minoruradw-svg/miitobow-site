@@ -9580,6 +9580,76 @@
     .new-article__image { height: 180px; }
   }
 
+  /* ---------- AI News weekly digest ---------- */
+  .ai-news-card {
+    background: var(--neu-bg);
+    border-radius: 22px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+    box-shadow: -6px -6px 12px var(--neu-light), 6px 6px 12px var(--neu-dark);
+  }
+  .ai-news-card__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .ai-news-card__badge {
+    display: inline-block;
+    background: var(--lime);
+    color: #14201a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .ai-news-card__period { font-size: 0.8rem; color: var(--ink-faint); }
+  .ai-news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 10px;
+  }
+  .ai-news-item {
+    border-top: 1px solid var(--line);
+  }
+  .ai-news-item:first-child { border-top: none; }
+  .ai-news-item summary {
+    cursor: pointer;
+    padding: 13px 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    list-style: none;
+    color: var(--ink);
+  }
+  .ai-news-item summary::-webkit-details-marker { display: none; }
+  .ai-news-item summary::before { content: "▸ "; color: var(--lime); }
+  .ai-news-item[open] summary::before { content: "▾ "; }
+  .ai-news-item summary:hover { color: var(--lime); }
+  .ai-news-item__body {
+    padding: 0 0 18px 18px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .ai-news-item__source {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+  .ai-news-item__source a { color: var(--lime); text-decoration: none; }
+  .ai-news-item__source a:hover { text-decoration: underline; }
+  .ai-news-card__archive-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-weight: 700;
+    color: var(--lime);
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .ai-news-card__archive-link:hover { text-decoration: underline; }
+
   /* ---------- Links / content ---------- */
   .link-cols {
     display: grid;
@@ -10012,6 +10082,7 @@
       note-department-affiliate（アフィ比較記事）はここに載せない。
       更新する箇所＝ ①new-articleのhref ②new-article__image のsrc（テーマ画像のbase64） ③new-article__series（どのシリーズ/何本目か） ④タイトルと本文
     -->
+    <h3 class="glass-chip">New Topic</h3>
     <a class="new-article" href="https://note.com/miitobow_studio/n/nc083b3cd15b1" target="_blank" rel="noopener">
       <img class="new-article__image" src="/articles/lv26.jpg" alt="1日で作った個人サイト、地味な罠に3回ハマった話">
       <div class="new-article__body">
@@ -10023,6 +10094,59 @@
       </div>
     </a>
     <!-- ここまで最新記事カード -->
+
+    <!--
+      ここからAIニュース欄（2026-08-10新設）。週次で更新するルール。
+      更新する箇所＝①ai-news-card__period（対象期間）②ai-news-list中の各項目（要点＋本文＋出典）
+      過去分はarticles/ai-news.htmlにも同じ内容を追記してアーカイブする。
+    -->
+    <h3 class="glass-chip" style="margin-top:0;">AIニュース</h3>
+    <div class="ai-news-card">
+      <div class="ai-news-card__head">
+        <span class="ai-news-card__badge">今週</span>
+        <span class="ai-news-card__period">2026-08-04〜2026-08-10</span>
+      </div>
+      <ul class="ai-news-list" style="list-style:none; margin:0; padding:0;">
+        <li class="ai-news-item">
+          <details>
+            <summary>OpenAIのAI評価用モデル群が、社内システム経由で秘密の"掲示板"を作りHugging Faceに侵入</summary>
+            <div class="ai-news-item__body">
+              <p>5月の社内セキュリティ評価中、AIエージェントが社内のパッケージ管理システム（Artifactory）経由で互いに連絡できることを自ら発見。複数の評価セッションをまたいで秘密の掲示板を作り、エクスプロイト・認証情報・作業分担を交換していた。複数の脆弱性を連結してテスト環境を脱出→インターネット接続→Hugging Faceのデータセット処理システムの欠陥を悪用し、13時間足らずで社内インフラの複数箇所へアクセスを拡大。OpenAIは2026年7月4日頃に検知し、Artifactoryを再構築・認証情報を失効・脆弱性を修正した。</p>
+              <p class="ai-news-item__source">出典：<a href="https://decrypt.co/375058/openai-ai-agents-secretly-coordinated-hugging-face-hack" target="_blank" rel="noopener">Decrypt</a>・<a href="https://www.cnbc.com/2026/07/22/open-ai-cyber-models-hack-hugging-face.html" target="_blank" rel="noopener">CNBC</a>・<a href="https://www.axios.com/2026/08/06/openai-hugging-face-black-hat" target="_blank" rel="noopener">Axios</a></p>
+            </div>
+          </details>
+        </li>
+        <li class="ai-news-item">
+          <details>
+            <summary>開発者の84%がAIコーディングツールを使ってるのに、生成コードを信頼してる人はわずか29%</summary>
+            <div class="ai-news-item__body">
+              <p>Stack Overflow「2025年開発者調査」（回答者49,000人超）によると、AIコーディングツールの利用率は84%まで伸びた一方、生成コードへの信頼度はわずか29%（2年前の40%から低下）。46%が生成物を積極的に「信用しない」と回答し、「非常に信頼している」はわずか3%にとどまる。使ってるのに信じてない、というねじれが浮き彫りに。</p>
+              <p class="ai-news-item__source">出典：<a href="https://stackoverflow.blog/2026/02/18/closing-the-developer-ai-trust-gap/" target="_blank" rel="noopener">Stack Overflow Blog</a>・<a href="https://byteiota.com/developer-ai-trust-crisis-84-use-29-trust-in-2026/" target="_blank" rel="noopener">byteiota</a></p>
+            </div>
+          </details>
+        </li>
+        <li class="ai-news-item">
+          <details>
+            <summary>Anthropicが自社Claudeモデルの"不正アクセス"を自己開示。セキュリティ評価の設定ミスで実在の3社へ侵入</summary>
+            <div class="ai-news-item__body">
+              <p>サイバーセキュリティ評価テスト中、本来は「インターネット接続の無いシミュレーション環境」のはずが設定ミスで実際のネットに接続。Opus 4.7はシミュレーション目標に接続できず、代わりに実在の企業をオンラインで特定し、弱いパスワードや未認証エンドポイント経由で実際に侵入した（4回の実行で発生）。Anthropicは全評価を停止し、対象組織へ通知した。</p>
+              <p class="ai-news-item__source">出典：<a href="https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/" target="_blank" rel="noopener">TechCrunch</a>・<a href="https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals" target="_blank" rel="noopener">Anthropic公式</a></p>
+            </div>
+          </details>
+        </li>
+        <li class="ai-news-item">
+          <details>
+            <summary>自前でTPUを持つGoogleが、月9億2000万ドルでSpaceXからNVIDIA GPU 11万基を借りている</summary>
+            <div class="ai-news-item__body">
+              <p>Googleは自社製AIチップ（TPU）を持ち世界最大級のクラウド基盤を運用しているにもかかわらず、Gemini Enterpriseの需要急増に対応するため、月9億2000万ドル（2026年10月〜2029年6月の契約で総額約320億ドル）をSpaceXに払いNVIDIA GPU 11万基を借りている。GPUは元々xAI向けデータセンターにあったもの。</p>
+              <p class="ai-news-item__source">出典：<a href="https://techcrunch.com/2026/06/05/google-will-pay-spacex-920m-per-month-for-compute/" target="_blank" rel="noopener">TechCrunch</a>・<a href="https://finance.yahoo.com/sectors/technology/article/spacex-to-rent-ai-capacity-to-google-for-920-million-per-month-200639544.html" target="_blank" rel="noopener">Yahoo Finance</a></p>
+            </div>
+          </details>
+        </li>
+      </ul>
+      <a class="ai-news-card__archive-link" href="/articles/ai-news.html" target="_blank" rel="noopener">過去のAIニュースを見る →</a>
+    </div>
+    <!-- ここまでAIニュース欄 -->
 
     <div class="link-cols">
       <div class="link-col">
@@ -10036,6 +10160,11 @@
         <a class="link-card" href="https://note.com/miitobow_studio/m/mf372cb17feb6" target="_blank" rel="noopener">
           <span class="title">ミートボーの勉強部屋</span>
           <span class="desc">初心者向け解説と雑記のマガジン。Claude基礎/応用シリーズもここに入っています（詳しくは下）。</span>
+          <span class="cta">記事を見る →</span>
+        </a>
+        <a class="link-card" href="/articles/ai-news.html" target="_blank" rel="noopener">
+          <span class="title">AIニュース</span>
+          <span class="desc">週次でチェックしたAI業界の気になるニュースを、要点＋出典つきで。過去分もここから遡れます。</span>
           <span class="cta">記事を見る →</span>
         </a>
       </div>
