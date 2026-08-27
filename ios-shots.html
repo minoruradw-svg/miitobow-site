@@ -29,6 +29,13 @@
  ol{padding-left:20px;margin:8px 0} ol li{margin:8px 0;font-size:14.5px}
  .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
  code{background:#eef3f7;border-radius:5px;padding:1px 6px;font-size:13px}
+ textarea{width:100%;min-height:190px;padding:12px 14px;border:1px solid #d5dde5;border-radius:10px;
+  font-size:15px;line-height:1.6;font-family:inherit;resize:vertical;color:var(--ink);background:#fbfdff}
+ .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+ .btn{border:0;font-weight:700;font-size:15px;padding:11px 22px;border-radius:10px;cursor:pointer}
+ .btn.primary{background:var(--accent);color:#fff}
+ .btn.ghost{background:#fff;color:var(--muted);border:1px solid #d5dde5}
+ .msg{color:var(--accent);font-weight:700;font-size:14px}
  footer{color:var(--muted);font-size:12px;margin-top:26px;border-top:1px solid var(--line);padding-top:14px}
 </style></head><body>
 <div class="wrap">
@@ -36,11 +43,25 @@
  <p class="sub">スクショで翻訳 — 6.9インチ用（1290×2796）3枚</p>
 
  <div class="note">
-  <b>このページの使い方</b><br>
-  Mac の Safari/Chrome で開くなら各画像の <b>ダウンロード</b> ボタン、
-  iPhone/iPad なら画像を <b>長押し →「写真に追加」</b> で3枚とも保存 →
-  下の手順で App Store Connect にアップロードします。
+  <b>このページでできること</b><br>
+  ① 下の欄に <b>Appleのリジェクト内容を書いて「コピー」</b> → Claudeに貼る。<br>
+  ② 提出用の <b>スクショ3枚を保存</b>（Mac＝ダウンロード / iPhone＝長押しで写真に追加）。
  </div>
+
+ <h2 id="report">① Appleのリジェクト内容をここに貼る</h2>
+ <div class="box">
+  <p style="font-size:14px;color:var(--muted);margin:0 0 10px">
+   App Storeの<b>審査メール</b>や<b>解決センター</b>の文面を、ここに貼り付け（または入力）→
+   <b>コピー</b>を押して、Claudeのチャットに貼ってください。（自動保存されるので消えません）</p>
+  <textarea id="err" placeholder="ここに Apple からのリジェクト理由を貼り付け／入力…"></textarea>
+  <div class="row">
+   <button id="copyBtn" class="btn primary">コピー</button>
+   <button id="clearBtn" class="btn ghost">消去</button>
+   <span id="msg" class="msg"></span>
+  </div>
+ </div>
+
+ <h2>② 提出用スクリーンショット（3枚）</h2>
  
     <div class="card">
       <div class="cap"><span class="num">1</span><span class="ttl">もう読める（言語対応）</span>
@@ -64,7 +85,7 @@
       <p class="hint">iPhone/iPad は画像を<b>長押し →「写真に追加」</b>で保存できます。</p>
     </div>
 
- <h2>App Store Connect に提出する手順</h2>
+ <h2>③ App Store Connect に提出する手順</h2>
  <div class="box">
   <ol>
    <li><b>App Store Connect</b> を開く（<code>appstoreconnect.apple.com</code>）→「マイApp」→「スクショで翻訳」。</li>
@@ -82,4 +103,25 @@
 
  <footer>このページは提出作業用の一時ページです（検索非表示）。提出が終わったら削除してかまいません。</footer>
 </div>
+
+<script>
+(function(){
+  var t=document.getElementById('err'), msg=document.getElementById('msg');
+  try{var s=localStorage.getItem('ios_err'); if(s) t.value=s;}catch(e){}
+  t.addEventListener('input',function(){try{localStorage.setItem('ios_err',t.value);}catch(e){}});
+  function flash(m){msg.textContent=m; setTimeout(function(){msg.textContent='';},2200);}
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    if(!t.value.trim()){flash('先に内容を入力してください');return;}
+    t.focus(); t.select(); t.setSelectionRange(0,999999);
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t.value).then(function(){flash('コピーしました ✓ チャットに貼れます');},
+        function(){try{document.execCommand('copy');flash('コピーしました ✓');}catch(e){flash('長押しで手動コピーしてください');}});
+    }else{try{document.execCommand('copy');flash('コピーしました ✓');}catch(e){flash('長押しで手動コピーしてください');}}
+  });
+  document.getElementById('clearBtn').addEventListener('click',function(){
+    t.value=''; try{localStorage.removeItem('ios_err');}catch(e){} flash('消去しました');
+  });
+})();
+</script>
+
 </body></html>
