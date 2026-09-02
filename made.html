@@ -1365,7 +1365,9 @@
   }
   @media (max-width: 860px) {
     /* 縦長になりすぎて一目で分かりにくいため、狭い画面でも横並びのまま縮小する */
-    .why-cycle__stage { min-height: 420px; }
+    /* 二重に効いていた左右パディングを外し、他のカードと同じ横幅まで広げる */
+    .why-cycle { padding: 24px 0 8px; }
+    .why-cycle__stage { min-height: 290px; }
     .why-cycle__item {
       flex-direction: row;
       align-items: center;
@@ -1383,25 +1385,36 @@
   }
   @media (max-width: 380px) {
     .why-cycle__figure { width: 82px; height: 120px; }
+    .why-cycle__stage { min-height: 400px; }
   }
-  .why-cycle__dots {
+  /* ドット（●●●●）は「自分で操作するスワイプUI」に見えてしまうため、
+     自動再生であることが一目で分かるプログレスバー（Instagramストーリー風）に変更 */
+  .why-cycle__bars {
     display: flex;
-    justify-content: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: 20px;
   }
-  .why-cycle__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
+  .why-cycle__bar {
+    position: relative;
+    flex: 1 1 0;
+    height: 4px;
+    border-radius: 2px;
     background: var(--line);
+    overflow: hidden;
+  }
+  .why-cycle__bar-fill {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    border-radius: 2px;
+    background: var(--lime);
   }
   @media (prefers-reduced-motion: reduce) {
     /* 自動で動くのを止めるだけにして、1件だけ静止表示（4件を縦に並べない） */
     .why-cycle__item { animation: none !important; opacity: 0 !important; }
     .why-cycle__item--1 { opacity: 1 !important; }
-    .why-cycle__dot { animation: none !important; background: var(--line) !important; }
-    .why-cycle__dot--1 { background: var(--lime) !important; }
+    .why-cycle__bar-fill { animation: none !important; width: 0% !important; }
+    .why-cycle__bar--1 .why-cycle__bar-fill { width: 100% !important; }
   }
 
   /* ---------- HOME専用：4項目ハブ ---------- */
