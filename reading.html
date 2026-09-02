@@ -1489,19 +1489,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     padding: 8px 0 40px;
   }
   .made-carousel__stage {
-    perspective: 1300px;
-    width: 240px;
-    height: 300px;
-    cursor: grab;
-    touch-action: pan-y;
-    user-select: none;
-    -webkit-user-select: none;
+    perspective: 3300px;
+    width: 380px;
+    height: 420px;
   }
-  .made-carousel__stage.is-dragging { cursor: grabbing; }
   .made-carousel__inner {
     position: relative;
     width: 100%;
@@ -1511,22 +1506,50 @@
   .made-carousel__card {
     position: absolute;
     inset: 0;
+    transform-style: preserve-3d;
+    -webkit-font-smoothing: antialiased;
+    backface-visibility: hidden;
+  }
+  .made-carousel__face {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     text-align: center;
-    padding: 22px 20px;
-    border-radius: 22px;
+    padding: 26px 24px;
+    border-radius: 26px;
     color: var(--ink);
     background: var(--glass-bg);
     border: 1.5px solid var(--glass-border);
-    box-shadow: 0 12px 30px var(--glass-shadow);
+    box-shadow: 0 16px 34px var(--glass-shadow);
+  }
+  /* カードの「厚み」：左右に薄い側面を貼って本のような立体感を出す */
+  .made-carousel__card::before,
+  .made-carousel__card::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    width: 18px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.16), rgba(0,0,0,0.05));
+  }
+  .made-carousel__card::before {
+    right: -9px;
+    transform-origin: left center;
+    transform: rotateY(90deg);
+  }
+  .made-carousel__card::after {
+    left: -9px;
+    transform-origin: right center;
+    transform: rotateY(-90deg);
   }
   .made-carousel__icon {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 16px;
     object-fit: cover;
     pointer-events: none;
@@ -1534,37 +1557,69 @@
   .made-carousel__title {
     font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
     font-weight: 900;
-    font-size: 1rem;
+    font-size: 1.08rem;
     line-height: 1.3;
     pointer-events: none;
   }
   .made-carousel__desc {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     color: var(--ink-soft);
-    line-height: 1.5;
+    line-height: 1.6;
     pointer-events: none;
   }
-  .made-carousel__go {
-    margin-top: 2px;
-    padding: 6px 18px;
+  .made-carousel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .made-carousel__action {
+    padding: 7px 16px;
     border-radius: 999px;
     background: var(--lime);
     color: #14201a;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     text-decoration: none;
+    cursor: pointer;
   }
-  .made-carousel__go:hover { background: var(--lime-bright); }
-  .made-carousel__hint {
-    font-size: 0.82rem;
+  .made-carousel__action:hover { background: var(--lime-bright); }
+  .made-carousel__dragbar {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    max-width: 90%;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .made-carousel__dragbar.is-dragging { cursor: grabbing; }
+  .made-carousel__dragbar-track {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+  .made-carousel__dragbar-handle {
+    flex: 0 0 auto;
+    margin: 0 auto;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     color: var(--ink-faint);
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
   }
   .made-carousel__nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
-    max-width: 560px;
+    max-width: 640px;
   }
   .made-carousel__navlink {
     padding: 7px 16px;
@@ -1575,18 +1630,21 @@
     font-size: 0.8rem;
     font-weight: 700;
     text-decoration: none;
+    cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
   }
   .made-carousel__navlink:hover { color: var(--forest); border-color: var(--lime); }
   @media (max-width: 640px) {
-    .made-carousel__stage { width: 190px; height: 250px; perspective: 1000px; }
-    .made-carousel__icon { width: 46px; height: 46px; }
-    .made-carousel__title { font-size: 0.92rem; }
-    .made-carousel__desc { font-size: 0.72rem; }
+    .made-carousel__stage { width: 260px; height: 360px; perspective: 2400px; }
+    .made-carousel__icon { width: 48px; height: 48px; }
+    .made-carousel__title { font-size: 0.95rem; }
+    .made-carousel__desc { font-size: 0.74rem; }
+    .made-carousel__action { font-size: 0.74rem; padding: 6px 13px; }
   }
   @media (prefers-reduced-motion: reduce) {
     /* ドラッグでの3D回転自体が負荷になりうるため、平らな並びに切り替える */
-    .made-carousel__stage { perspective: none; width: 100%; max-width: 560px; height: auto; cursor: default; }
+    .made-carousel__stage { perspective: none; width: 100%; max-width: 560px; height: auto; }
+    .made-carousel__dragbar { display: none; }
     .made-carousel__inner {
       transform: none !important;
       display: grid;
@@ -1597,8 +1655,10 @@
       position: relative;
       inset: auto;
       transform: none !important;
-      aspect-ratio: 4 / 3;
     }
+    .made-carousel__card::before,
+    .made-carousel__card::after { display: none; }
+    .made-carousel__face { position: relative; inset: auto; height: 100%; }
   }
 
 </style></head>
