@@ -1303,7 +1303,7 @@
   }
   .why-cycle__stage {
     position: relative;
-    min-height: 420px;
+    min-height: 480px;
     overflow: hidden;
   }
   .why-cycle__item {
@@ -1313,6 +1313,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 40px;
+    padding: 44px 56px;
+    border-radius: 32px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 14px 40px var(--glass-shadow);
     text-decoration: none;
     color: inherit;
   }
@@ -1353,13 +1358,14 @@
     filter: drop-shadow(0 20px 30px var(--glass-shadow));
   }
   @media (max-width: 860px) {
-    .why-cycle__stage { min-height: 660px; }
+    .why-cycle__stage { min-height: 720px; }
     .why-cycle__item {
       flex-direction: column-reverse;
       justify-content: flex-start;
       text-align: center;
       gap: 16px;
-      padding: 8px 0;
+      padding: 28px 22px;
+      border-radius: 24px;
     }
     .why-cycle__text { max-width: none; }
     .why-cycle__item p { max-width: none; }
