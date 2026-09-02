@@ -562,7 +562,8 @@
   .new-article__image {
     width: 100%;
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--bg-panel-soft);
     border-radius: 14px;
     display: block;
   }
@@ -1280,7 +1281,8 @@
     }
     .hero-new__media { position: relative; inset: auto; height: 46vh; min-height: 320px; }
     .hero-new::after { display: none; }
-    .hero-new__wrap { padding: 24px 0 40px; }
+    /* 背景ピッカーの色/柄が直接透けるとテキストが読めなくなるため、この帯だけ固定パネル色にする */
+    .hero-new__wrap { padding: 24px 0 40px; background: var(--bg-panel); }
     .hero-new__content { padding: 0 24px; max-width: none; }
     .hero-new__eyebrow { color: var(--forest); text-shadow: none; }
     .hero-new__title { color: var(--ink); text-shadow: none; }
@@ -1481,6 +1483,167 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .atmosphere video { display: none; }
+  }
+
+  /* ---------- 作ったものページ専用：回転3Dカルーセル（uiverse.io swift-panda-38を参考） ---------- */
+  .made-carousel__intro {
+    margin-top: 8px;
+  }
+  .made-carousel__intro-desc {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  .made-carousel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 8px 0 40px;
+  }
+  .made-carousel__stage {
+    perspective: 6000px;
+    width: 380px;
+    height: 420px;
+  }
+  .made-carousel__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  .made-carousel__card {
+    position: absolute;
+    inset: 0;
+    -webkit-font-smoothing: antialiased;
+    backface-visibility: hidden;
+  }
+  .made-carousel__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 26px 24px;
+    border-radius: 26px;
+    color: var(--ink);
+    background: var(--glass-bg);
+    border: 1.5px solid var(--glass-border);
+    box-shadow: 0 16px 34px var(--glass-shadow);
+  }
+  .made-carousel__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .made-carousel__title {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.08rem;
+    line-height: 1.3;
+    pointer-events: none;
+  }
+  .made-carousel__desc {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    pointer-events: none;
+  }
+  .made-carousel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .made-carousel__action {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--lime);
+    color: #14201a;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .made-carousel__action:hover { background: var(--lime-bright); }
+  .made-carousel__dragbar {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    max-width: 90%;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .made-carousel__dragbar.is-dragging { cursor: grabbing; }
+  .made-carousel__dragbar-track {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+  .made-carousel__dragbar-handle {
+    flex: 0 0 auto;
+    margin: 0 auto;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .made-carousel__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 640px;
+  }
+  .made-carousel__navlink {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .made-carousel__navlink:hover { color: var(--forest); border-color: var(--lime); }
+  @media (max-width: 640px) {
+    .made-carousel__stage { width: 260px; height: 360px; perspective: 4500px; }
+    .made-carousel__icon { width: 48px; height: 48px; }
+    .made-carousel__title { font-size: 0.95rem; }
+    .made-carousel__desc { font-size: 0.74rem; }
+    .made-carousel__action { font-size: 0.74rem; padding: 6px 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* ドラッグでの3D回転自体が負荷になりうるため、平らな並びに切り替える */
+    .made-carousel__stage { perspective: none; width: 100%; max-width: 560px; height: auto; }
+    .made-carousel__dragbar { display: none; }
+    .made-carousel__inner {
+      transform: none !important;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .made-carousel__card {
+      position: relative;
+      inset: auto;
+      transform: none !important;
+    }
+    .made-carousel__face { position: relative; inset: auto; height: 100%; }
   }
 
 </style></head>
