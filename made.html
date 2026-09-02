@@ -10052,9 +10052,6 @@
     margin: 0 auto;
     padding: 48px 24px 72px;
   }
-  @media (max-width: 640px) {
-    .hub-grid { grid-template-columns: 1fr; }
-  }
   .hub-card {
     display: flex;
     flex-direction: column;
@@ -10068,6 +10065,14 @@
     transition: transform 0.18s ease, box-shadow 0.18s ease;
   }
   .hub-card:hover { transform: translateY(-4px); box-shadow: 0 16px 38px var(--glass-shadow); }
+  @media (max-width: 640px) {
+    /* PC同様、4枚が一度に見えるよう2x2グリッドのまま縮小する（1列縦積みにしない） */
+    .hub-grid { gap: 10px; padding: 28px 14px 40px; }
+    .hub-card { padding: 14px 12px; gap: 5px; border-radius: 16px; }
+    .hub-card__label { font-size: 1rem; }
+    .hub-card__desc { font-size: 0.72rem; line-height: 1.45; }
+    .hub-card__cta { font-size: 0.72rem; }
+  }
   .hub-card__label {
     font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
     font-weight: 900;
@@ -10092,6 +10097,78 @@
   .content-narrow .link-col h3:first-child { margin-top: 0; }
   .content-narrow > .series-block:first-child { margin-top: 0; }
 
+  /* ---------- 読み物ページ専用：インタラクティブ本棚 ---------- */
+  .bookshelf {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) {
+    .bookshelf { grid-template-columns: 1fr; }
+  }
+  .bookshelf__stage {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+  }
+  .bookshelf__img { display: block; width: 100%; height: auto; }
+  .bookshelf__hotspot {
+    position: absolute;
+    top: 22%;
+    height: 56%;
+    display: block;
+    border-radius: 8px;
+    outline: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .bookshelf__hotspot:hover,
+  .bookshelf__hotspot:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7) inset, 0 12px 26px rgba(0, 0, 0, 0.28);
+    transform: translateY(-6px);
+  }
+  .bookshelf__pullbook {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  }
+  .bookshelf__hotspot.is-animating .bookshelf__pullbook {
+    animation: bookshelfPullOut 0.48s ease forwards;
+  }
+  @keyframes bookshelfPullOut {
+    0% { opacity: 0; transform: translateY(0) scale(0.96); }
+    35% { opacity: 0.9; transform: translateY(-18px) scale(1.03) rotate(-2deg); }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.08) rotate(-4deg); }
+  }
+  .bookshelf__panel {
+    position: relative;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+  }
+  .bookshelf__panel-default { color: var(--ink-faint); font-size: 0.92rem; }
+  .bookshelf__panel-item {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bookshelf__panel-tag {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+  .bookshelf__panel-item p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; margin: 0; }
+  .bookshelf__panel-cta { font-weight: 700; color: var(--forest); font-size: 0.88rem; }
+
   .content-wide {
     max-width: 960px;
     margin: 0 auto;
@@ -10099,7 +10176,7 @@
   }
   .content-wide .link-col h3:first-child { margin-top: 32px; }
 
-  /* ---------- HOME専用：新ヒーロー（フルブリード・動画背景＋テキストオーバーレイ） ---------- */
+  /* ---------- 新ヒーロー（フルブリード・動画背景＋テキストオーバーレイ／HOME・読み物・作ったもので共通） ---------- */
   .hero-new {
     position: relative;
     overflow: hidden;
@@ -10201,6 +10278,96 @@
     }
   }
 
+  /* ---------- 短めヒーロー（WHY FOLLOW用：下にコンテンツを収めるため） ---------- */
+  .hero-new--compact { min-height: clamp(320px, 48vh, 460px); }
+  @media (max-width: 640px) {
+    .hero-new--compact { min-height: clamp(260px, 34vh, 340px); }
+  }
+
+  /* ---------- WHY FOLLOWページ専用：自動で切り替わる1枚カード ---------- */
+  .why-cycle {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 8px;
+  }
+  .why-cycle__stage {
+    position: relative;
+    min-height: 230px;
+  }
+  .why-cycle__item {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding: 28px 24px;
+    border-radius: 22px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px var(--glass-shadow);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+  }
+  .why-cycle__item .why-icon,
+  .why-cycle__item h3,
+  .why-cycle__item p,
+  .why-cycle__item .why-cycle__cta {
+    position: relative;
+    z-index: 1;
+  }
+  .why-cycle__item .why-icon { width: 34px; height: 34px; color: var(--lime); }
+  .why-cycle__item h3 {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 0;
+  }
+  .why-cycle__item p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 30ch;
+  }
+  .why-cycle__cta { font-weight: 700; color: var(--forest); font-size: 0.88rem; }
+  .why-cycle__item .why-card__mascot {
+    position: absolute;
+    right: -6px;
+    bottom: -10px;
+    height: 92%;
+    max-height: 200px;
+    width: auto;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (max-width: 640px) {
+    .why-cycle__item .why-card__mascot { display: none; }
+    .why-cycle__item p { max-width: none; }
+  }
+  .why-cycle__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .why-cycle__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .why-cycle__item { animation: none !important; opacity: 1 !important; position: relative; margin-bottom: 12px; }
+    .why-cycle__dot { animation: none !important; }
+    .why-cycle__stage { min-height: 0; }
+  }
+
   /* ---------- HOME専用：4項目ハブ ---------- */
   .hub-section__head {
     text-align: center;
@@ -10219,6 +10386,10 @@
     font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
     font-weight: 900;
     font-size: clamp(1.6rem, 4vw, 2.2rem);
+  }
+  @media (max-width: 640px) {
+    .hub-section__head { margin: 32px 0 4px; }
+    .hub-section__head h2 { font-size: 1.28rem; }
   }
 
   /* ---------- HOME専用：オーロラ・アトモスフィア帯 ---------- */
@@ -10292,6 +10463,21 @@
   </div>
 </nav>
 
+<header class="hero-new hero-new--page">
+  <div class="hero-new__media">
+    <video class="hero-new__img" autoplay muted loop playsinline poster="/assets/hero-made.jpg" aria-label="作ったもの">
+      <source src="/assets/hero-made.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="wrap hero-new__wrap">
+    <div class="hero-new__content">
+      <span class="eyebrow hero-new__eyebrow">Made</span>
+      <h1 class="hero-new__title hero-new__title--page">作ったもの</h1>
+      <p class="lead hero-new__lead">翻訳アプリ「スクショで翻訳」、LINEスタンプ・絵文字、そしてこのサイト自体も制作実例の一つです。</p>
+    </div>
+  </div>
+</header>
+
 <input type="checkbox" id="aitsu-modal-toggle" class="modal-toggle">
 <input type="checkbox" id="update-history-toggle" class="modal-toggle">
 <input type="checkbox" id="android-preview-toggle" class="modal-toggle">
@@ -10362,12 +10548,6 @@
 
 <div class="wrap">
 <div class="content-narrow">
-<header class="page-header">
-  <span class="page-header__eyebrow">Made</span>
-  <h1>作ったもの</h1>
-  <p>翻訳アプリ「スクショで翻訳」、LINEスタンプ・絵文字、そしてこのサイト自体も制作実例の一つです。</p>
-</header>
-
 <div class="link-col">
         <h3 class="glass-chip" style="margin-top:0;">アプリ</h3>
         <div class="link-card app-card">
@@ -16406,6 +16586,7 @@
               </div>
             </div>
             <a href="/ui-guide.html">作り方の裏側を読む</a>
+            <a href="/archive/home-旧デザイン.html" target="_blank" rel="noopener">旧デザインを見る</a>
           </div>
         </div>
 
