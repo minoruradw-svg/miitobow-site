@@ -10487,25 +10487,25 @@
 </div>
 
 <style>
-  .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-default,
+  html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-default,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-default,
       .bookshelf:has(.bookshelf__hotspot--1.is-revealed) .bookshelf__panel-default { display: none; }
-      .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-item--1,
-      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-item--1,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-item--1,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-item--1,
       .bookshelf:has(.bookshelf__hotspot--1.is-revealed) .bookshelf__panel-item--1 { display: flex; }
       .bookshelf__hotspot--1.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
-      .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-default,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-default,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-default,
       .bookshelf:has(.bookshelf__hotspot--2.is-revealed) .bookshelf__panel-default { display: none; }
-      .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-item--2,
-      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-item--2,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-item--2,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-item--2,
       .bookshelf:has(.bookshelf__hotspot--2.is-revealed) .bookshelf__panel-item--2 { display: flex; }
       .bookshelf__hotspot--2.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
-      .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-default,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-default,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-default,
       .bookshelf:has(.bookshelf__hotspot--3.is-revealed) .bookshelf__panel-default { display: none; }
-      .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-item--3,
-      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-item--3,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-item--3,
+      html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-item--3,
       .bookshelf:has(.bookshelf__hotspot--3.is-revealed) .bookshelf__panel-item--3 { display: flex; }
       .bookshelf__hotspot--3.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
 </style>
@@ -10518,6 +10518,7 @@
   // それをあてにすると1回のタップで即遷移してしまうため、
   // media featureで確実に判定する。
   var supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (supportsHover) { document.documentElement.classList.add('bookshelf-hover-capable'); }
 
   function animateAndGo(a) {
     a.classList.add('is-animating');
