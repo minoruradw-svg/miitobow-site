@@ -10097,6 +10097,78 @@
   .content-narrow .link-col h3:first-child { margin-top: 0; }
   .content-narrow > .series-block:first-child { margin-top: 0; }
 
+  /* ---------- 読み物ページ専用：インタラクティブ本棚 ---------- */
+  .bookshelf {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) {
+    .bookshelf { grid-template-columns: 1fr; }
+  }
+  .bookshelf__stage {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+  }
+  .bookshelf__img { display: block; width: 100%; height: auto; }
+  .bookshelf__hotspot {
+    position: absolute;
+    top: 22%;
+    height: 56%;
+    display: block;
+    border-radius: 8px;
+    outline: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .bookshelf__hotspot:hover,
+  .bookshelf__hotspot:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7) inset, 0 12px 26px rgba(0, 0, 0, 0.28);
+    transform: translateY(-6px);
+  }
+  .bookshelf__pullbook {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  }
+  .bookshelf__hotspot.is-animating .bookshelf__pullbook {
+    animation: bookshelfPullOut 0.48s ease forwards;
+  }
+  @keyframes bookshelfPullOut {
+    0% { opacity: 0; transform: translateY(0) scale(0.96); }
+    35% { opacity: 0.9; transform: translateY(-18px) scale(1.03) rotate(-2deg); }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.08) rotate(-4deg); }
+  }
+  .bookshelf__panel {
+    position: relative;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+  }
+  .bookshelf__panel-default { color: var(--ink-faint); font-size: 0.92rem; }
+  .bookshelf__panel-item {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bookshelf__panel-tag {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+  .bookshelf__panel-item p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; margin: 0; }
+  .bookshelf__panel-cta { font-weight: 700; color: var(--forest); font-size: 0.88rem; }
+
   .content-wide {
     max-width: 960px;
     margin: 0 auto;
@@ -10386,26 +10458,66 @@
 
 <div class="wrap">
 <div class="content-narrow">
-      <div class="link-col">
-        <h3 class="glass-chip">読みもの</h3>
-        <h3 class="glass-chip" style="margin-top:0; visibility:hidden;" aria-hidden="true">アプリ</h3>
-        <a class="link-card" href="https://note.com/miitobow_studio/m/m232e65c2cf64" target="_blank" rel="noopener">
-          <span class="title">開発Lv上げ日記</span>
-          <span class="desc">個人開発の詰まり・気づきを、Lv.1から連番で。</span>
-          <span class="cta">記事を見る →</span>
-        </a>
-        <a class="link-card" href="https://note.com/miitobow_studio/m/mf372cb17feb6" target="_blank" rel="noopener">
-          <span class="title">ミートボーの勉強部屋</span>
-          <span class="desc">初心者向け解説と雑記のマガジン。Claude基礎/応用シリーズもここに入っています（詳しくは下）。</span>
-          <span class="cta">記事を見る →</span>
-        </a>
-        <a class="link-card" href="/articles/ai-news.html" target="_blank" rel="noopener">
-          <span class="title">AIニュース</span>
-          <span class="desc">週次でチェックしたAI業界の気になるニュースを、要点＋出典つきで。過去分もここから遡れます。</span>
-          <span class="cta">記事を見る →</span>
-        </a>
+<div class="link-col">
+  <h3 class="glass-chip">読みもの</h3>
+  <div class="bookshelf">
+    <div class="bookshelf__stage">
+      <img class="bookshelf__img" src="/assets/bookshelf.jpg" alt="読みものの本棚（開発Lv上げ日記・ミートボーの勉強部屋・AIニュース）">
+      <a class="bookshelf__hotspot bookshelf__hotspot--1" style="left:13%;width:24%;" href="https://note.com/miitobow_studio/m/m232e65c2cf64" target="_blank" rel="noopener" aria-label="開発Lv上げ日記を読む"><span class="bookshelf__pullbook" style="background:var(--lime-bright);"></span></a><a class="bookshelf__hotspot bookshelf__hotspot--2" style="left:40%;width:22%;" href="https://note.com/miitobow_studio/m/mf372cb17feb6" target="_blank" rel="noopener" aria-label="ミートボーの勉強部屋を読む"><span class="bookshelf__pullbook" style="background:#e8825a;"></span></a><a class="bookshelf__hotspot bookshelf__hotspot--3" style="left:68%;width:23%;" href="/articles/ai-news.html" target="_blank" rel="noopener" aria-label="AIニュースを読む"><span class="bookshelf__pullbook" style="background:#3ec2d1;"></span></a>
+    </div>
+    <div class="bookshelf__panel">
+      <div class="bookshelf__panel-default">
+        <span class="bookshelf__panel-hint">← 本にカーソルを合わせてみて</span>
       </div>
+      <div class="bookshelf__panel-item bookshelf__panel-item--1">
+  <span class="bookshelf__panel-tag" style="color:var(--forest);">開発Lv上げ日記</span>
+  <p>個人開発の詰まり・気づきを、Lv.1から連番で。</p>
+  <span class="bookshelf__panel-cta">記事を見る →</span>
+</div><div class="bookshelf__panel-item bookshelf__panel-item--2">
+  <span class="bookshelf__panel-tag" style="color:#c8623f;">ミートボーの勉強部屋</span>
+  <p>初心者向け解説と雑記のマガジン。Claude基礎/応用シリーズもここに入っています。</p>
+  <span class="bookshelf__panel-cta">記事を見る →</span>
+</div><div class="bookshelf__panel-item bookshelf__panel-item--3">
+  <span class="bookshelf__panel-tag" style="color:#12889a;">AIニュース</span>
+  <p>週次でチェックしたAI業界の気になるニュースを、要点＋出典つきで。</p>
+  <span class="bookshelf__panel-cta">記事を見る →</span>
+</div>
+    </div>
+  </div>
+</div>
 
+<style>
+  .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-item--1,
+      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-item--1 { display: flex; }
+      .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-item--2,
+      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-item--2 { display: flex; }
+      .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-item--3,
+      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-item--3 { display: flex; }
+</style>
+
+<script>
+(function () {
+  document.querySelectorAll('.bookshelf__hotspot').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (a.classList.contains('is-animating')) return;
+      e.preventDefault();
+      a.classList.add('is-animating');
+      var href = a.getAttribute('href');
+      var target = a.getAttribute('target') || '_self';
+      setTimeout(function () {
+        if (target === '_blank') { window.open(href, '_blank', 'noopener'); }
+        else { window.location.href = href; }
+      }, 480);
+    });
+  });
+})();
+</script>
 
     <div class="series-block">
       <div class="series-head glass-panel">
