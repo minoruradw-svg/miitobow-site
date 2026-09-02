@@ -1511,7 +1511,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: 38px;
     padding: 8px 0 40px;
   }
   .made-carousel__stage {
@@ -1635,7 +1635,9 @@
   }
   .made-carousel__navlink:hover { color: var(--forest); border-color: var(--lime); }
   @media (max-width: 640px) {
-    .made-carousel__stage { width: 260px; height: 360px; perspective: 4500px; }
+    /* 一番情報量の多いカード(3ボタン)がステージの高さからはみ出し、その最後のボタンが
+       下のドラッグバーの上に重なって誤タップを誘発していたため、高さと余白を拡大 */
+    .made-carousel__stage { width: 260px; height: 410px; perspective: 4500px; }
     .made-carousel__icon { width: 48px; height: 48px; }
     .made-carousel__title { font-size: 0.95rem; }
     .made-carousel__desc { font-size: 0.74rem; }
