@@ -1384,9 +1384,11 @@
     background: var(--line);
   }
   @media (prefers-reduced-motion: reduce) {
-    .why-cycle__item { animation: none !important; opacity: 1 !important; position: relative; margin-bottom: 40px; }
-    .why-cycle__dot { animation: none !important; }
-    .why-cycle__stage { min-height: 0; }
+    /* 自動で動くのを止めるだけにして、1件だけ静止表示（4件を縦に並べない） */
+    .why-cycle__item { animation: none !important; opacity: 0 !important; }
+    .why-cycle__item--1 { opacity: 1 !important; }
+    .why-cycle__dot { animation: none !important; background: var(--line) !important; }
+    .why-cycle__dot--1 { background: var(--lime) !important; }
   }
 
   /* ---------- HOME専用：4項目ハブ ---------- */
