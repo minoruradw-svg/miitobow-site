@@ -10467,7 +10467,7 @@
     </div>
     <div class="bookshelf__panel">
       <div class="bookshelf__panel-default">
-        <span class="bookshelf__panel-hint">← 本にカーソルを合わせてみて</span>
+        <span class="bookshelf__panel-hint">← 本をタップ・クリックしてみて</span>
       </div>
       <div class="bookshelf__panel-item bookshelf__panel-item--1">
   <span class="bookshelf__panel-tag" style="color:var(--forest);">開発Lv上げ日記</span>
@@ -10488,33 +10488,70 @@
 
 <style>
   .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--1.is-revealed) .bookshelf__panel-default { display: none; }
       .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-item--1,
-      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-item--1 { display: flex; }
+      .bookshelf:has(.bookshelf__hotspot--1:focus-visible) .bookshelf__panel-item--1,
+      .bookshelf:has(.bookshelf__hotspot--1.is-revealed) .bookshelf__panel-item--1 { display: flex; }
+      .bookshelf__hotspot--1.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
       .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--2.is-revealed) .bookshelf__panel-default { display: none; }
       .bookshelf:has(.bookshelf__hotspot--2:hover) .bookshelf__panel-item--2,
-      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-item--2 { display: flex; }
+      .bookshelf:has(.bookshelf__hotspot--2:focus-visible) .bookshelf__panel-item--2,
+      .bookshelf:has(.bookshelf__hotspot--2.is-revealed) .bookshelf__panel-item--2 { display: flex; }
+      .bookshelf__hotspot--2.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
       .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-default,
-      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-default { display: none; }
+      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-default,
+      .bookshelf:has(.bookshelf__hotspot--3.is-revealed) .bookshelf__panel-default { display: none; }
       .bookshelf:has(.bookshelf__hotspot--3:hover) .bookshelf__panel-item--3,
-      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-item--3 { display: flex; }
+      .bookshelf:has(.bookshelf__hotspot--3:focus-visible) .bookshelf__panel-item--3,
+      .bookshelf:has(.bookshelf__hotspot--3.is-revealed) .bookshelf__panel-item--3 { display: flex; }
+      .bookshelf__hotspot--3.is-revealed { box-shadow: 0 0 0 3px rgba(255,255,255,0.7) inset, 0 12px 26px rgba(0,0,0,0.28); transform: translateY(-6px); }
 </style>
 
 <script>
 (function () {
-  document.querySelectorAll('.bookshelf__hotspot').forEach(function (a) {
+  var hotspots = document.querySelectorAll('.bookshelf__hotspot');
+  // ホバー可能な環境（マウス等）かどうかで挙動を分ける。
+  // タッチ端末はブラウザがタップ後に:hoverを付けてしまう機種があり、
+  // それをあてにすると1回のタップで即遷移してしまうため、
+  // media featureで確実に判定する。
+  var supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function animateAndGo(a) {
+    a.classList.add('is-animating');
+    var href = a.getAttribute('href');
+    var target = a.getAttribute('target') || '_self';
+    setTimeout(function () {
+      if (target === '_blank') { window.open(href, '_blank', 'noopener'); }
+      else { window.location.href = href; }
+    }, 480);
+  }
+
+  hotspots.forEach(function (a) {
     a.addEventListener('click', function (e) {
       if (a.classList.contains('is-animating')) return;
+      if (supportsHover) {
+        // マウス環境：ホバーで既に中身が見えているので、そのままクリックで遷移
+        e.preventDefault();
+        animateAndGo(a);
+        return;
+      }
+      // タッチ環境：1回目のタップは中身をプレビューするだけで遷移しない
+      if (!a.classList.contains('is-revealed')) {
+        e.preventDefault();
+        hotspots.forEach(function (el) { el.classList.remove('is-revealed'); });
+        a.classList.add('is-revealed');
+        return;
+      }
       e.preventDefault();
-      a.classList.add('is-animating');
-      var href = a.getAttribute('href');
-      var target = a.getAttribute('target') || '_self';
-      setTimeout(function () {
-        if (target === '_blank') { window.open(href, '_blank', 'noopener'); }
-        else { window.location.href = href; }
-      }, 480);
+      animateAndGo(a);
     });
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.bookshelf')) return;
+    hotspots.forEach(function (el) { el.classList.remove('is-revealed'); });
   });
 })();
 </script>
