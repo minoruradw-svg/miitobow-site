@@ -1484,6 +1484,104 @@
     .atmosphere video { display: none; }
   }
 
+  /* ---------- 作ったものページ専用：回転3Dカルーセル（uiverse.io swift-panda-38を参考） ---------- */
+  .made-carousel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0 40px;
+  }
+  .made-carousel__stage {
+    perspective: 1100px;
+    width: 200px;
+    height: 240px;
+  }
+  .made-carousel__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: madeCarouselSpin 22s linear infinite;
+  }
+  .made-carousel__inner:hover,
+  .made-carousel__inner:focus-within {
+    animation-play-state: paused;
+  }
+  .made-carousel__card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 22px;
+    text-decoration: none;
+    color: #fff;
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+  }
+  .made-carousel__card--1 { transform: rotateY(0deg) translateZ(170px); background: linear-gradient(160deg, #3ec2d1, #1a8fa0); }
+  .made-carousel__card--2 { transform: rotateY(90deg) translateZ(170px); background: linear-gradient(160deg, var(--lime-bright), var(--forest)); }
+  .made-carousel__card--3 { transform: rotateY(180deg) translateZ(170px); background: linear-gradient(160deg, #34d16a, #06c755); }
+  .made-carousel__card--4 { transform: rotateY(270deg) translateZ(170px); background: linear-gradient(160deg, #ffcf4d, #e8720c); }
+  .made-carousel__hint {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+  .made-carousel__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .made-carousel__navlink {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .made-carousel__navlink:hover { color: var(--forest); border-color: var(--lime); }
+  @keyframes madeCarouselSpin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
+  @media (max-width: 640px) {
+    .made-carousel__stage { width: 160px; height: 190px; perspective: 900px; }
+    .made-carousel__card { font-size: 1rem; padding: 14px; }
+    .made-carousel__card--1 { transform: rotateY(0deg) translateZ(135px); }
+    .made-carousel__card--2 { transform: rotateY(90deg) translateZ(135px); }
+    .made-carousel__card--3 { transform: rotateY(180deg) translateZ(135px); }
+    .made-carousel__card--4 { transform: rotateY(270deg) translateZ(135px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 回転を止めるだけだと4枚中3枚が裏を向いて見えなくなるため、平らな並びに切り替える */
+    .made-carousel__stage { perspective: none; width: 100%; max-width: 560px; height: auto; }
+    .made-carousel__inner {
+      animation: none;
+      transform: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .made-carousel__card {
+      position: relative;
+      inset: auto;
+      transform: none !important;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
 </style></head>
 <body>
 
@@ -1594,8 +1692,26 @@
   </div>
 </a>
 
+<div class="made-carousel">
+  <div class="made-carousel__stage">
+    <div class="made-carousel__inner">
+      <a class="made-carousel__card made-carousel__card--1" href="#made-apps">アプリ</a>
+      <a class="made-carousel__card made-carousel__card--2" href="#made-site">ホームページ</a>
+      <a class="made-carousel__card made-carousel__card--3" href="#made-stickers">LINEスタンプ</a>
+      <a class="made-carousel__card made-carousel__card--4" href="#made-emoji">LINE絵文字</a>
+    </div>
+  </div>
+  <p class="made-carousel__hint">カードをタップ、または下のボタンで移動</p>
+  <div class="made-carousel__nav">
+    <a class="made-carousel__navlink" href="#made-apps">アプリ</a>
+    <a class="made-carousel__navlink" href="#made-site">ホームページ</a>
+    <a class="made-carousel__navlink" href="#made-stickers">LINEスタンプ</a>
+    <a class="made-carousel__navlink" href="#made-emoji">LINE絵文字</a>
+  </div>
+</div>
+
 <div class="link-col">
-        <h3 class="glass-chip" style="margin-top:0;">アプリ</h3>
+        <h3 class="glass-chip" id="made-apps" style="margin-top:0; scroll-margin-top:96px;">アプリ</h3>
         <div class="link-card app-card">
           <span class="title">スクショで翻訳（PC版）</span>
           <div class="app-card__head">
@@ -1625,7 +1741,7 @@
           </div>
         </div>
 
-        <h3 class="glass-chip" style="margin-top:20px;">ホームページ</h3>
+        <h3 class="glass-chip" id="made-site" style="margin-top:20px; scroll-margin-top:96px;">ホームページ</h3>
         <div class="link-card app-card">
           <span class="title">miitobow.com（このサイト）</span>
           <span class="desc">JavaScriptほぼ無しで作った、このブランドサイト自体も制作実例の一つです。下のボタンで背景デザインを変えられます。</span>
@@ -7636,7 +7752,7 @@
           </div>
         </div>
 
-        <h3 class="glass-chip" style="margin-top:20px;">LINEスタンプ</h3>
+        <h3 class="glass-chip" id="made-stickers" style="margin-top:20px; scroll-margin-top:96px;">LINEスタンプ</h3>
         <div class="link-card app-card">
           <span class="title">miitobow LINEスタンプ シリーズ</span>
           <span class="desc">クレイアート風キャラクターたちの、日常のやりとりでそのまま使えるシール風LINEスタンプです。ミートボー・ビビちゃん、それぞれ全40種。</span>
@@ -7645,7 +7761,7 @@
           </div>
         </div>
 
-        <h3 class="glass-chip" style="margin-top:20px;">LINE絵文字</h3>
+        <h3 class="glass-chip" id="made-emoji" style="margin-top:20px; scroll-margin-top:96px;">LINE絵文字</h3>
         <div class="link-card app-card">
           <span class="title">miitobow LINE絵文字 シリーズ</span>
           <span class="desc">トークルームでそのまま使えるリアクション絵文字です。ミートボーの表情豊かな40種から順次公開。</span>
