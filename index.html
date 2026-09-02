@@ -1006,8 +1006,8 @@
       grid-column: 1;
       width: 100%;
       flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 12px;
+      justify-content: center;
+      gap: 18px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -1017,11 +1017,17 @@
     }
     .site-nav__links::-webkit-scrollbar { display: none; }
     .site-nav__link {
-      font-size: 0.74rem;
+      font-size: 0.86rem;
       letter-spacing: 0;
       padding-bottom: 4px;
       flex: 0 0 auto;
     }
+  }
+  @media (max-width: 340px) {
+    /* 中央寄せだと画面幅より広がった分が両端とも見切れて操作できなくなるため、
+       非常に狭い画面だけ元のサイズ・左詰め（スクロールで全項目に届く）に戻す */
+    .site-nav__links { justify-content: flex-start; gap: 12px; }
+    .site-nav__link { font-size: 0.74rem; }
   }
 
   .page-header {
@@ -1365,7 +1371,9 @@
   }
   @media (max-width: 860px) {
     /* 縦長になりすぎて一目で分かりにくいため、狭い画面でも横並びのまま縮小する */
-    .why-cycle__stage { min-height: 420px; }
+    /* 二重に効いていた左右パディングを外し、他のカードと同じ横幅まで広げる */
+    .why-cycle { padding: 24px 0 8px; }
+    .why-cycle__stage { min-height: 290px; }
     .why-cycle__item {
       flex-direction: row;
       align-items: center;
@@ -1383,25 +1391,36 @@
   }
   @media (max-width: 380px) {
     .why-cycle__figure { width: 82px; height: 120px; }
+    .why-cycle__stage { min-height: 400px; }
   }
-  .why-cycle__dots {
+  /* ドット（●●●●）は「自分で操作するスワイプUI」に見えてしまうため、
+     自動再生であることが一目で分かるプログレスバー（Instagramストーリー風）に変更 */
+  .why-cycle__bars {
     display: flex;
-    justify-content: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: 20px;
   }
-  .why-cycle__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
+  .why-cycle__bar {
+    position: relative;
+    flex: 1 1 0;
+    height: 4px;
+    border-radius: 2px;
     background: var(--line);
+    overflow: hidden;
+  }
+  .why-cycle__bar-fill {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    border-radius: 2px;
+    background: var(--lime);
   }
   @media (prefers-reduced-motion: reduce) {
     /* 自動で動くのを止めるだけにして、1件だけ静止表示（4件を縦に並べない） */
     .why-cycle__item { animation: none !important; opacity: 0 !important; }
     .why-cycle__item--1 { opacity: 1 !important; }
-    .why-cycle__dot { animation: none !important; background: var(--line) !important; }
-    .why-cycle__dot--1 { background: var(--lime) !important; }
+    .why-cycle__bar-fill { animation: none !important; width: 0% !important; }
+    .why-cycle__bar--1 .why-cycle__bar-fill { width: 100% !important; }
   }
 
   /* ---------- HOME専用：4項目ハブ ---------- */
@@ -1498,7 +1517,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: 38px;
     padding: 8px 0 40px;
   }
   .made-carousel__stage {
@@ -1622,7 +1641,9 @@
   }
   .made-carousel__navlink:hover { color: var(--forest); border-color: var(--lime); }
   @media (max-width: 640px) {
-    .made-carousel__stage { width: 260px; height: 360px; perspective: 4500px; }
+    /* 一番情報量の多いカード(3ボタン)がステージの高さからはみ出し、その最後のボタンが
+       下のドラッグバーの上に重なって誤タップを誘発していたため、高さと余白を拡大 */
+    .made-carousel__stage { width: 260px; height: 410px; perspective: 4500px; }
     .made-carousel__icon { width: 48px; height: 48px; }
     .made-carousel__title { font-size: 0.95rem; }
     .made-carousel__desc { font-size: 0.74rem; }

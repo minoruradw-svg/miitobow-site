@@ -1006,8 +1006,8 @@
       grid-column: 1;
       width: 100%;
       flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 12px;
+      justify-content: center;
+      gap: 18px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -1017,11 +1017,17 @@
     }
     .site-nav__links::-webkit-scrollbar { display: none; }
     .site-nav__link {
-      font-size: 0.74rem;
+      font-size: 0.86rem;
       letter-spacing: 0;
       padding-bottom: 4px;
       flex: 0 0 auto;
     }
+  }
+  @media (max-width: 340px) {
+    /* 中央寄せだと画面幅より広がった分が両端とも見切れて操作できなくなるため、
+       非常に狭い画面だけ元のサイズ・左詰め（スクロールで全項目に届く）に戻す */
+    .site-nav__links { justify-content: flex-start; gap: 12px; }
+    .site-nav__link { font-size: 0.74rem; }
   }
 
   .page-header {
