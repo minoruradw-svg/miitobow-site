@@ -1063,6 +1063,10 @@
     margin: 0 auto;
     padding: 48px 24px 72px;
   }
+  .hub-grid--3 { grid-template-columns: repeat(3, 1fr); max-width: 1080px; }
+  @media (max-width: 760px) {
+    .hub-grid--3 { grid-template-columns: 1fr; }
+  }
   .hub-card {
     display: flex;
     flex-direction: column;
@@ -1489,7 +1493,6 @@
     <a href="/why.html" class="site-nav__link site-nav__link--active">WHY FOLLOW</a>
     <a href="/reading.html" class="site-nav__link">読み物</a>
     <a href="/made.html" class="site-nav__link">作ったもの</a>
-    <a href="/new.html" class="site-nav__link">NEW</a>
   </div>
 </nav>
 

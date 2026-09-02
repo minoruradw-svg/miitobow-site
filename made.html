@@ -1063,6 +1063,10 @@
     margin: 0 auto;
     padding: 48px 24px 72px;
   }
+  .hub-grid--3 { grid-template-columns: repeat(3, 1fr); max-width: 1080px; }
+  @media (max-width: 760px) {
+    .hub-grid--3 { grid-template-columns: 1fr; }
+  }
   .hub-card {
     display: flex;
     flex-direction: column;
@@ -1303,7 +1307,7 @@
   }
   .why-cycle__stage {
     position: relative;
-    min-height: 420px;
+    min-height: 480px;
     overflow: hidden;
   }
   .why-cycle__item {
@@ -1313,6 +1317,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 40px;
+    padding: 44px 56px;
+    border-radius: 32px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 14px 40px var(--glass-shadow);
     text-decoration: none;
     color: inherit;
   }
@@ -1353,17 +1362,25 @@
     filter: drop-shadow(0 20px 30px var(--glass-shadow));
   }
   @media (max-width: 860px) {
-    .why-cycle__stage { min-height: 660px; }
+    /* 縦長になりすぎて一目で分かりにくいため、狭い画面でも横並びのまま縮小する */
+    .why-cycle__stage { min-height: 420px; }
     .why-cycle__item {
-      flex-direction: column-reverse;
-      justify-content: flex-start;
-      text-align: center;
-      gap: 16px;
-      padding: 8px 0;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 14px;
+      padding: 20px 18px;
+      border-radius: 22px;
     }
-    .why-cycle__text { max-width: none; }
-    .why-cycle__item p { max-width: none; }
-    .why-cycle__figure { height: 220px; width: auto; }
+    .why-cycle__text { max-width: none; flex: 1 1 auto; min-width: 0; }
+    .why-cycle__item .why-icon { width: 24px; height: 24px; margin-bottom: 4px; }
+    .why-cycle__item h3 { font-size: 1.1rem; line-height: 1.3; margin-bottom: 8px; }
+    .why-cycle__item p { max-width: none; font-size: 0.78rem; line-height: 1.45; margin-bottom: 8px; }
+    .why-cycle__cta { font-size: 0.78rem; }
+    .why-cycle__figure { flex: 0 0 auto; height: 140px; width: 100px; }
+  }
+  @media (max-width: 380px) {
+    .why-cycle__figure { width: 82px; height: 120px; }
   }
   .why-cycle__dots {
     display: flex;
@@ -1378,9 +1395,11 @@
     background: var(--line);
   }
   @media (prefers-reduced-motion: reduce) {
-    .why-cycle__item { animation: none !important; opacity: 1 !important; position: relative; margin-bottom: 40px; }
-    .why-cycle__dot { animation: none !important; }
-    .why-cycle__stage { min-height: 0; }
+    /* 自動で動くのを止めるだけにして、1件だけ静止表示（4件を縦に並べない） */
+    .why-cycle__item { animation: none !important; opacity: 0 !important; }
+    .why-cycle__item--1 { opacity: 1 !important; }
+    .why-cycle__dot { animation: none !important; background: var(--line) !important; }
+    .why-cycle__dot--1 { background: var(--lime) !important; }
   }
 
   /* ---------- HOME専用：4項目ハブ ---------- */
@@ -1474,7 +1493,6 @@
     <a href="/why.html" class="site-nav__link">WHY FOLLOW</a>
     <a href="/reading.html" class="site-nav__link">読み物</a>
     <a href="/made.html" class="site-nav__link site-nav__link--active">作ったもの</a>
-    <a href="/new.html" class="site-nav__link">NEW</a>
   </div>
 </nav>
 
@@ -1563,6 +1581,18 @@
 
 <div class="wrap">
 <div class="content-narrow">
+<h3 class="glass-chip" style="margin-bottom:16px;">New Topic</h3>
+<a class="new-article" href="https://store.line.me/stickershop/product/36275441/ja" target="_blank" rel="noopener">
+  <img class="new-article__image" src="/articles/darusa-new.jpg" alt="だるさ・やる気ゼロスタンプ">
+  <div class="new-article__body">
+    <span class="new-article__badge">NEW</span>
+    <span class="new-article__series">LINEスタンプ</span>
+    <h3 class="new-article__title">「だるさ・やる気ゼロ」スタンプ、公開しました</h3>
+    <p class="new-article__desc">布団から出たくない、やる気が電波圏外——そんな日にそのまま送れる全40種。LINEスタンプショップで販売中です。</p>
+    <span class="new-article__cta">スタンプを見る →</span>
+  </div>
+</a>
+
 <div class="link-col">
         <h3 class="glass-chip" style="margin-top:0;">アプリ</h3>
         <div class="link-card app-card">
