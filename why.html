@@ -10097,6 +10097,78 @@
   .content-narrow .link-col h3:first-child { margin-top: 0; }
   .content-narrow > .series-block:first-child { margin-top: 0; }
 
+  /* ---------- 読み物ページ専用：インタラクティブ本棚 ---------- */
+  .bookshelf {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) {
+    .bookshelf { grid-template-columns: 1fr; }
+  }
+  .bookshelf__stage {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+  }
+  .bookshelf__img { display: block; width: 100%; height: auto; }
+  .bookshelf__hotspot {
+    position: absolute;
+    top: 22%;
+    height: 56%;
+    display: block;
+    border-radius: 8px;
+    outline: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .bookshelf__hotspot:hover,
+  .bookshelf__hotspot:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7) inset, 0 12px 26px rgba(0, 0, 0, 0.28);
+    transform: translateY(-6px);
+  }
+  .bookshelf__pullbook {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  }
+  .bookshelf__hotspot.is-animating .bookshelf__pullbook {
+    animation: bookshelfPullOut 0.48s ease forwards;
+  }
+  @keyframes bookshelfPullOut {
+    0% { opacity: 0; transform: translateY(0) scale(0.96); }
+    35% { opacity: 0.9; transform: translateY(-18px) scale(1.03) rotate(-2deg); }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.08) rotate(-4deg); }
+  }
+  .bookshelf__panel {
+    position: relative;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+  }
+  .bookshelf__panel-default { color: var(--ink-faint); font-size: 0.92rem; }
+  .bookshelf__panel-item {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bookshelf__panel-tag {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+  .bookshelf__panel-item p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; margin: 0; }
+  .bookshelf__panel-cta { font-weight: 700; color: var(--forest); font-size: 0.88rem; }
+
   .content-wide {
     max-width: 960px;
     margin: 0 auto;
