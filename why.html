@@ -1061,6 +1061,28 @@
     font-size: 1rem;
     line-height: 1.8;
   }
+  .page-header--inline {
+    margin: 20px 0 32px;
+    border-radius: 24px;
+    padding: clamp(32px, 6vw, 56px) 24px;
+  }
+  .page-back-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--forest);
+    text-decoration: none;
+  }
+  .page-back-link:hover { text-decoration: underline; }
+  /* 背景選択専用ページ：横スクロールの棚ではなく、全種類が見渡せるようウィンドウ幅いっぱいに折り返す */
+  .bg-page .bg-shelf { margin-bottom: 28px; }
+  .bg-page .bg-shelf__row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 16px;
+  }
+  .bg-page .bg-search { max-width: 420px; }
 
   .hub-grid {
     display: grid;
