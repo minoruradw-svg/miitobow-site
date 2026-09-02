@@ -10079,29 +10079,98 @@
   }
   .content-wide .link-col h3:first-child { margin-top: 32px; }
 
-  /* ---------- HOME専用：新ヒーロー ---------- */
-  .hero-new { padding: 48px 0 0; overflow: hidden; }
-  .hero-new__wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    align-items: center;
+  /* ---------- HOME専用：新ヒーロー（フルブリード・動画背景＋テキストオーバーレイ） ---------- */
+  .hero-new {
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(560px, 86vh, 880px);
+    display: flex;
+    align-items: flex-end;
   }
-  @media (max-width: 860px) {
-    .hero-new__wrap { grid-template-columns: 1fr; }
+  .hero-new__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
-  .hero-new__content { padding: 40px; }
-  .hero-new__content h1 {
-    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
-    font-weight: 900;
-  }
-  .hero-new__figure { position: relative; }
   .hero-new__img {
     display: block;
     width: 100%;
-    height: auto;
-    border-radius: 28px;
-    box-shadow: 0 20px 50px var(--glass-shadow);
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .hero-new::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(11, 20, 16, 0) 20%, rgba(11, 20, 16, 0.72) 100%);
+    pointer-events: none;
+  }
+  .hero-new__wrap {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 40px 0 48px;
+  }
+  .hero-new__content {
+    max-width: 560px;
+    padding: 0 40px;
+  }
+  .hero-new__eyebrow {
+    color: #d8f5b0;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.5);
+  }
+  .hero-new__title {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.45);
+  }
+  .hero-new__title .accent { color: #d8f5b0; }
+  .hero-new__lead {
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 12px rgba(0,0,0,0.45);
+  }
+  .hero-new__btn-ghost {
+    border-color: transparent;
+    color: #fff;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: none;
+  }
+  .hero-new__btn-ghost:hover {
+    background: rgba(255,255,255,0.26);
+    transform: translateY(-2px);
+  }
+  .hero-new .aitsu-decoration {
+    position: absolute;
+    z-index: 2;
+    top: 24px;
+    right: 24px;
+  }
+  @media (max-width: 640px) {
+    /* 動くキャラの位置とテキストが毎回重なるため、狭い画面ではオーバーレイをやめて縦積みにする */
+    .hero-new {
+      flex-direction: column;
+      align-items: stretch;
+      min-height: auto;
+    }
+    .hero-new__media { position: relative; inset: auto; height: 46vh; min-height: 320px; }
+    .hero-new::after { display: none; }
+    .hero-new__wrap { padding: 24px 0 40px; }
+    .hero-new__content { padding: 0 24px; max-width: none; }
+    .hero-new__eyebrow { color: var(--forest); text-shadow: none; }
+    .hero-new__title { color: var(--ink); text-shadow: none; }
+    .hero-new__title .accent { color: var(--lime); }
+    .hero-new__lead { color: var(--ink-soft); text-shadow: none; }
+    .hero-new__btn-ghost {
+      color: var(--ink);
+      background: var(--neu-bg);
+      box-shadow: -5px -5px 10px var(--neu-light), 5px 5px 10px var(--neu-dark);
+      backdrop-filter: none;
+    }
   }
 
   /* ---------- HOME専用：4項目ハブ ---------- */
@@ -10196,24 +10265,24 @@
 </nav>
 
 <header class="hero-new">
+  <div class="hero-new__media">
+    <video class="hero-new__img" autoplay muted loop playsinline poster="/assets/hero-walk.jpg" aria-label="ジオラマ風の小さな街を元気よく歩くミートボー">
+      <source src="/assets/hero-walk.mp4" type="video/mp4">
+    </video>
+  </div>
+  <label class="aitsu-decoration" for="aitsu-modal-toggle" aria-label="キャラクター「あいつ」について">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.9c2.8-1.1 8-1.6 11.2-.5"/><path d="M5.7 6.3C6.4 4.2 8.4 2.8 10.7 2.8c2.5 0 4.4 1.4 5.2 3.5"/><path d="M6 7.1c-1.4 1.7-2.2 3.8-2.2 6 0 3.8 3.1 6.2 7.8 6.2s7.8-2.4 7.8-6.2c0-2.6-1.2-5.1-3.5-6.7"/><circle cx="8.1" cy="10" r="1.8"/><circle cx="11.7" cy="10" r="1.8"/><path d="M6.4 9.4h7.1"/><path d="M4.2 20.2c1 .9 2 1.3 3.2 1.3h8.9c1.2 0 2.2-.4 3.2-1.3"/><circle cx="8.7" cy="22.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15.5" cy="22.2" r="0.9" fill="currentColor" stroke="none"/></svg>
+  </label>
   <div class="wrap hero-new__wrap">
-    <div class="hero-new__content glass-panel">
-      <span class="eyebrow">非エンジニアの個人開発者</span>
-      <h1><span style="white-space:nowrap;">いつでも</span><span style="white-space:nowrap;"><span class="accent">いっしょ</span>。</span><br>ミートボー。</h1>
-      <p class="lead">個人開発やAIで何か作ってみたい人へ。<br>盛らない開発記録と、公式情報を噛み砕いた実用知識を届けています。</p>
+    <div class="hero-new__content">
+      <span class="eyebrow hero-new__eyebrow">非エンジニアの個人開発者</span>
+      <h1 class="hero-new__title"><span style="white-space:nowrap;">いつでも</span><span style="white-space:nowrap;"><span class="accent">いっしょ</span>。</span><br>ミートボー。</h1>
+      <p class="lead hero-new__lead">個人開発やAIで何か作ってみたい人へ。<br>盛らない開発記録と、公式情報を噛み砕いた実用知識を届けています。</p>
       <div class="cta-row">
         <a class="btn btn-work" href="https://docs.google.com/forms/d/e/1FAIpQLSfNvO-i_Z42rshMFWYFez8Ya7sqdJ3A-jj4ZCVVsSFkIOdLpA/viewform" target="_blank" rel="noopener">お仕事依頼はこちら</a>
-        <a class="btn btn-ghost" href="https://note.com/miitobow_studio" target="_blank" rel="noopener">noteを読む</a>
-        <a class="btn btn-ghost" href="https://www.threads.net/@miitobow" target="_blank" rel="noopener">Threadsをフォロー</a>
+        <a class="btn hero-new__btn-ghost" href="https://note.com/miitobow_studio" target="_blank" rel="noopener">noteを読む</a>
+        <a class="btn hero-new__btn-ghost" href="https://www.threads.net/@miitobow" target="_blank" rel="noopener">Threadsをフォロー</a>
       </div>
-    </div>
-    <div class="hero-new__figure">
-      <video class="hero-new__img" autoplay muted loop playsinline poster="/assets/hero-walk.jpg" aria-label="ジオラマ風の小さな街を元気よく歩くミートボー">
-        <source src="/assets/hero-walk.mp4" type="video/mp4">
-      </video>
-      <label class="aitsu-decoration" for="aitsu-modal-toggle" aria-label="キャラクター「あいつ」について">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.9c2.8-1.1 8-1.6 11.2-.5"/><path d="M5.7 6.3C6.4 4.2 8.4 2.8 10.7 2.8c2.5 0 4.4 1.4 5.2 3.5"/><path d="M6 7.1c-1.4 1.7-2.2 3.8-2.2 6 0 3.8 3.1 6.2 7.8 6.2s7.8-2.4 7.8-6.2c0-2.6-1.2-5.1-3.5-6.7"/><circle cx="8.1" cy="10" r="1.8"/><circle cx="11.7" cy="10" r="1.8"/><path d="M6.4 9.4h7.1"/><path d="M4.2 20.2c1 .9 2 1.3 3.2 1.3h8.9c1.2 0 2.2-.4 3.2-1.3"/><circle cx="8.7" cy="22.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15.5" cy="22.2" r="0.9" fill="currentColor" stroke="none"/></svg>
-      </label>
     </div>
   </div>
 </header>
