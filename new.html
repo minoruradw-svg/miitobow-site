@@ -10278,6 +10278,67 @@
     }
   }
 
+  /* ---------- 短めヒーロー（WHY FOLLOW用：下にコンテンツを収めるため） ---------- */
+  .hero-new--compact { min-height: clamp(320px, 48vh, 460px); }
+  @media (max-width: 640px) {
+    .hero-new--compact { min-height: clamp(260px, 34vh, 340px); }
+  }
+
+  /* ---------- WHY FOLLOWページ専用：自動で切り替わる1枚カード ---------- */
+  .why-cycle {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 8px;
+  }
+  .why-cycle__stage {
+    position: relative;
+    min-height: 230px;
+  }
+  .why-cycle__item {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding: 28px 24px;
+    border-radius: 22px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px var(--glass-shadow);
+    text-decoration: none;
+    color: inherit;
+  }
+  .why-cycle__item .why-icon { width: 34px; height: 34px; color: var(--lime); }
+  .why-cycle__item h3 {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 0;
+  }
+  .why-cycle__item p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.65; margin: 0; max-width: 42ch; }
+  .why-cycle__cta { font-weight: 700; color: var(--forest); font-size: 0.88rem; }
+  .why-cycle__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .why-cycle__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .why-cycle__item { animation: none !important; opacity: 1 !important; position: relative; margin-bottom: 12px; }
+    .why-cycle__dot { animation: none !important; }
+    .why-cycle__stage { min-height: 0; }
+  }
+
   /* ---------- HOME専用：4項目ハブ ---------- */
   .hub-section__head {
     text-align: center;
