@@ -1615,9 +1615,11 @@
   .made-carousel__action:hover { background: var(--lime-bright); }
   .made-carousel__dragbar {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    width: 260px;
-    max-width: 90%;
+    gap: 12px;
+    width: 300px;
+    max-width: 92%;
     cursor: grab;
     touch-action: pan-y;
     user-select: none;
@@ -1625,22 +1627,52 @@
   }
   .made-carousel__dragbar.is-dragging { cursor: grabbing; }
   .made-carousel__dragbar-track {
-    flex: 1;
-    height: 4px;
+    position: relative;
+    width: 100%;
+    height: 6px;
     border-radius: 999px;
     background: var(--line);
   }
-  .made-carousel__dragbar-handle {
-    flex: 0 0 auto;
-    margin: 0 auto;
-    padding: 8px 18px;
+  .made-carousel__dragbar-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 0%;
     border-radius: 999px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    color: var(--ink-faint);
+    background: var(--lime);
+  }
+  .made-carousel__dragbar-dot {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--line);
+    transform: translate(-50%, -50%);
+  }
+  .made-carousel__dragbar-dot.is-active { border-color: var(--lime); background: var(--lime); }
+  .made-carousel__dragbar-handle {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    box-shadow: 0 6px 14px var(--glass-shadow);
+    transform: translate(-50%, -50%);
+  }
+  .made-carousel__dragbar-label {
+    margin: 0;
     font-size: 0.78rem;
     font-weight: 700;
-    white-space: nowrap;
+    color: var(--ink-faint);
+    text-align: center;
   }
   .made-carousel__nav {
     display: flex;
@@ -3017,8 +3049,12 @@
     </div>
   </div>
   <div class="made-carousel__dragbar" id="made-carousel-dragbar" role="slider" aria-label="表示するカードを切り替える" tabindex="0">
-    <span class="made-carousel__dragbar-track"></span>
-    <span class="made-carousel__dragbar-handle">⇔ ドラッグして回す</span>
+    <div class="made-carousel__dragbar-track" id="made-carousel-track">
+      <span class="made-carousel__dragbar-fill" id="made-carousel-fill"></span>
+      <span class="made-carousel__dragbar-dot" style="left:0.0%"></span><span class="made-carousel__dragbar-dot" style="left:20.0%"></span><span class="made-carousel__dragbar-dot" style="left:40.0%"></span><span class="made-carousel__dragbar-dot" style="left:60.0%"></span><span class="made-carousel__dragbar-dot" style="left:80.0%"></span>
+      <span class="made-carousel__dragbar-handle" id="made-carousel-handle">⇔</span>
+    </div>
+    <p class="made-carousel__dragbar-label">← ここをドラッグしてカードを切り替える →</p>
   </div>
   <div class="made-carousel__nav">
     <a class="made-carousel__navlink" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener">スクショで翻訳（PC版）</a><label class="made-carousel__navlink" for="android-preview-toggle">スクショで翻訳（Android/iOS）</label><a class="made-carousel__navlink" href="/background.html" target="_self" rel="noopener">miitobow.com（このサイト）</a><a class="made-carousel__navlink" href="/articles/line-stickers.html" target="_blank" rel="noopener">LINEスタンプ シリーズ</a><a class="made-carousel__navlink" href="/articles/line-emoji.html" target="_blank" rel="noopener">LINE絵文字 シリーズ</a>
@@ -3038,6 +3074,11 @@
 (function () {
   var inner = document.getElementById('made-carousel-inner');
   var bar = document.getElementById('made-carousel-dragbar');
+  var fill = document.getElementById('made-carousel-fill');
+  var handle = document.getElementById('made-carousel-handle');
+  var dots = bar ? bar.querySelectorAll('.made-carousel__dragbar-dot') : [];
+  var n = 5;
+  var step = 72.0;
   if (!inner || !bar) return;
   var rotation = 0;
   var dragging = false;
@@ -3046,6 +3087,14 @@
 
   function apply() {
     inner.style.transform = 'rotateY(' + rotation + 'deg)';
+    var norm = ((rotation % 360) + 360) % 360;
+    var pct = (norm / 360) * 100;
+    fill.style.width = pct + '%';
+    handle.style.left = pct + '%';
+    var activeIndex = Math.round(norm / step) % n;
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('is-active', i === activeIndex);
+    });
   }
 
   function pointerDown(x) {
@@ -3077,6 +3126,8 @@
     if (e.key === 'ArrowLeft') { rotation -= 72.0; apply(); }
     if (e.key === 'ArrowRight') { rotation += 72.0; apply(); }
   });
+
+  apply();
 })();
 </script>
 
