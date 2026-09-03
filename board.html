@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ミートボー掲示板 | miitobow</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f9f4;
+    --surface: #ffffff;
+    --surface-soft: #eef3ea;
+    --ink: #1f2b20;
+    --ink-soft: #5c6b5c;
+    --ink-faint: #93a190;
+    --accent: #5f9c39;
+    --accent-dark: #467029;
+    --accent-glow: rgba(95, 156, 57, 0.14);
+    --border: #dde6d8;
+    --danger: #c1502e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+      --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #6c7c68;
+      --accent: #82c455; --accent-dark: #9ed873; --accent-glow: rgba(130, 196, 85, 0.18);
+      --border: #2b3625; --danger: #e08a6c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+    --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #6c7c68;
+    --accent: #82c455; --accent-dark: #9ed873; --accent-glow: rgba(130, 196, 85, 0.18);
+    --border: #2b3625; --danger: #e08a6c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .head { font-family: "M PLUS Rounded 1c", "Hiragino Sans", sans-serif; font-weight: 900; letter-spacing: 0.02em; }
+
+  #lock {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 22px; padding: 24px; text-align: center;
+  }
+  #lock .mark {
+    width: 56px; height: 56px; border-radius: 16px; background: var(--surface);
+    border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 26px; box-shadow: 0 6px 18px var(--accent-glow);
+  }
+  #lock h1 { font-size: 1.3rem; margin: 0; }
+  #lock p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+  #pin-form { display: flex; gap: 10px; }
+  .pin-box {
+    width: 46px; height: 56px; text-align: center; font-size: 1.5rem;
+    font-variant-numeric: tabular-nums; border-radius: 12px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--ink); outline: none;
+  }
+  .pin-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  #lock-error { color: var(--danger); font-size: 0.85rem; min-height: 1.2em; visibility: hidden; }
+  #lock-error.show { visibility: visible; }
+  #lock.shake #pin-form { animation: shake 0.35s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+
+  #board { display: none; min-height: 100vh; flex-direction: column; }
+  #board.show { display: flex; }
+  .topbar {
+    position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 16px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .topbar h1 { font-size: 1.1rem; margin: 0; }
+  .topbar .count { font-size: 0.78rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 18px 16px 100px; display: flex; flex-direction: column; gap: 14px; }
+  .composer { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .composer textarea {
+    resize: vertical; min-height: 84px; border: none; outline: none; background: transparent;
+    color: var(--ink); font-family: inherit; font-size: 0.98rem; line-height: 1.6;
+  }
+  .composer textarea::placeholder { color: var(--ink-faint); }
+  .composer-row { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+  .hint { font-size: 0.76rem; color: var(--ink-faint); margin-right: auto; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  .btn-primary {
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
+    padding: 9px 20px; border-radius: 999px; transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-primary:disabled { opacity: 0.5; cursor: default; }
+  .posts { display: flex; flex-direction: column; gap: 10px; }
+  .post { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .post-text { white-space: pre-wrap; word-break: break-word; font-size: 0.96rem; line-height: 1.7; }
+  .post-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .post-time { font-size: 0.74rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .post-actions { display: flex; gap: 6px; }
+  .btn-ghost {
+    background: var(--surface-soft); color: var(--ink-soft); font-size: 0.76rem; font-weight: 700;
+    padding: 6px 12px; border-radius: 999px; transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover { background: var(--accent-glow); color: var(--accent-dark); }
+  .btn-ghost.copied { background: var(--accent); color: #fff; }
+  .btn-ghost.danger:hover { background: rgba(193, 80, 46, 0.14); color: var(--danger); }
+  .empty { text-align: center; color: var(--ink-faint); font-size: 0.88rem; padding: 40px 20px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div id="lock">
+  <div class="mark">📋</div>
+  <h1 class="head">ミートボー掲示板</h1>
+  <p>4桁のパスコードを入力してください</p>
+  <form id="pin-form" autocomplete="off">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="0">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="1">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="2">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="3">
+  </form>
+  <div id="lock-error">パスコードが違います</div>
+</div>
+
+<div id="board">
+  <div class="topbar">
+    <h1 class="head">ミートボー掲示板</h1>
+    <span class="count" id="count"></span>
+  </div>
+  <main>
+    <div class="composer">
+      <textarea id="new-text" placeholder="ここに書いて投稿…"></textarea>
+      <div class="composer-row">
+        <span class="hint" id="composer-hint"></span>
+        <button class="btn-primary" id="post-btn" type="button">投稿</button>
+      </div>
+    </div>
+    <div class="posts" id="posts"></div>
+    <p class="empty" id="empty-msg" hidden>まだ投稿がありません</p>
+  </main>
+</div>
+
+<script>
+(function () {
+  var SESSION_KEY = "miitobow-board-pin";
+  var lockEl = document.getElementById("lock");
+  var boardEl = document.getElementById("board");
+  var pinForm = document.getElementById("pin-form");
+  var pinBoxes = Array.prototype.slice.call(document.querySelectorAll(".pin-box"));
+  var lockError = document.getElementById("lock-error");
+
+  var postsEl = document.getElementById("posts");
+  var emptyMsg = document.getElementById("empty-msg");
+  var countEl = document.getElementById("count");
+  var newText = document.getElementById("new-text");
+  var postBtn = document.getElementById("post-btn");
+  var hint = document.getElementById("composer-hint");
+  var currentPin = null;
+
+  function fmtTime(ts) {
+    var d = new Date(ts);
+    var mm = String(d.getMonth() + 1).padStart(2, "0");
+    var dd = String(d.getDate()).padStart(2, "0");
+    var hh = String(d.getHours()).padStart(2, "0");
+    var mi = String(d.getMinutes()).padStart(2, "0");
+    return mm + "/" + dd + " " + hh + ":" + mi;
+  }
+
+  function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    done();
+  }
+
+  function render(posts) {
+    postsEl.innerHTML = "";
+    emptyMsg.hidden = posts.length > 0;
+    countEl.textContent = posts.length ? posts.length + "件" : "";
+    posts.forEach(function (data) {
+      var card = document.createElement("div");
+      card.className = "post";
+
+      var textEl = document.createElement("div");
+      textEl.className = "post-text";
+      textEl.textContent = data.text || "";
+      card.appendChild(textEl);
+
+      var foot = document.createElement("div");
+      foot.className = "post-foot";
+
+      var timeEl = document.createElement("span");
+      timeEl.className = "post-time";
+      timeEl.textContent = fmtTime(data.createdAt || 0);
+      foot.appendChild(timeEl);
+
+      var actions = document.createElement("div");
+      actions.className = "post-actions";
+
+      var copyBtn = document.createElement("button");
+      copyBtn.className = "btn-ghost";
+      copyBtn.type = "button";
+      copyBtn.textContent = "コピー";
+      copyBtn.addEventListener("click", function () {
+        var text = data.text || "";
+        var done = function () {
+          copyBtn.textContent = "コピーしました";
+          copyBtn.classList.add("copied");
+          setTimeout(function () {
+            copyBtn.textContent = "コピー";
+            copyBtn.classList.remove("copied");
+          }, 1400);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+        } else {
+          fallbackCopy(text, done);
+        }
+      });
+      actions.appendChild(copyBtn);
+
+      var delBtn = document.createElement("button");
+      delBtn.className = "btn-ghost danger";
+      delBtn.type = "button";
+      delBtn.textContent = "削除";
+      delBtn.addEventListener("click", function () {
+        fetch("/api/board/" + encodeURIComponent(data.id), {
+          method: "DELETE",
+          headers: { "X-Board-Pin": currentPin },
+        }).then(loadPosts);
+      });
+      actions.appendChild(delBtn);
+
+      foot.appendChild(actions);
+      card.appendChild(foot);
+      postsEl.appendChild(card);
+    });
+  }
+
+  function loadPosts() {
+    return fetch("/api/board", { headers: { "X-Board-Pin": currentPin } })
+      .then(function (res) {
+        if (res.status === 401) { throw new Error("unauthorized"); }
+        return res.json();
+      })
+      .then(render)
+      .catch(function () {
+        hint.textContent = "読み込みに失敗しました";
+      });
+  }
+
+  function submitPost() {
+    var text = newText.value.trim();
+    if (!text) return;
+    postBtn.disabled = true;
+    fetch("/api/board", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
+      body: JSON.stringify({ text: text }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("failed");
+        newText.value = "";
+        return loadPosts();
+      })
+      .catch(function () {
+        hint.textContent = "投稿に失敗しました";
+      })
+      .finally(function () {
+        postBtn.disabled = false;
+        newText.focus();
+      });
+  }
+
+  function showBoard(pin) {
+    currentPin = pin;
+    lockEl.style.display = "none";
+    boardEl.classList.add("show");
+    postBtn.addEventListener("click", submitPost);
+    newText.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submitPost();
+    });
+    loadPosts();
+    setInterval(loadPosts, 15000);
+  }
+
+  function tryUnlock(pin) {
+    fetch("/api/board", { headers: { "X-Board-Pin": pin } }).then(function (res) {
+      if (res.status === 401) {
+        lockError.classList.add("show");
+        lockEl.classList.add("shake");
+        setTimeout(function () { lockEl.classList.remove("shake"); }, 350);
+        pinBoxes.forEach(function (b) { b.value = ""; });
+        pinBoxes[0].focus();
+        return;
+      }
+      try { sessionStorage.setItem(SESSION_KEY, pin); } catch (e) {}
+      showBoard(pin);
+    }).catch(function () {
+      lockError.textContent = "通信に失敗しました";
+      lockError.classList.add("show");
+    });
+  }
+
+  pinBoxes.forEach(function (box, i) {
+    box.addEventListener("input", function () {
+      box.value = box.value.replace(/[^0-9]/g, "").slice(0, 1);
+      if (box.value && i < pinBoxes.length - 1) pinBoxes[i + 1].focus();
+      var joined = pinBoxes.map(function (b) { return b.value; }).join("");
+      if (joined.length === 4) tryUnlock(joined);
+    });
+    box.addEventListener("keydown", function (e) {
+      if (e.key === "Backspace" && !box.value && i > 0) pinBoxes[i - 1].focus();
+    });
+  });
+  pinForm.addEventListener("submit", function (e) { e.preventDefault(); });
+
+  var savedPin = null;
+  try { savedPin = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
+  if (savedPin) {
+    tryUnlock(savedPin);
+  } else {
+    pinBoxes[0].focus();
+  }
+})();
+</script>
+</body>
+</html>

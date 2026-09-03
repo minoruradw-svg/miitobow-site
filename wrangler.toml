@@ -1,0 +1,7 @@
+name = "miitobow-site"
+pages_build_output_dir = "."
+compatibility_date = "2026-09-01"
+
+[[kv_namespaces]]
+binding = "MIITOBOW_BOARD"
+id = "1a2089f61d894098ba880bf3a3ec2196"
