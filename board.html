@@ -211,29 +211,21 @@
   var imagePreview = document.getElementById("image-preview");
   var imagePreviewImg = document.getElementById("image-preview-img");
   var imageRemoveBtn = document.getElementById("image-remove-btn");
-  var pendingImage = null; // リサイズ済みdata URL
+  var pendingImage = null; // 元画質のままのdata URL
   var currentPin = null;
 
-  var IMAGE_MAX_DIMENSION = 1600;
+  // 元画質のまま保存する代わりに、あまり大きすぎるファイルだけは弾く
+  // （画像は直近3件しか保持しない仕組みなので、通常の写真サイズなら気にしなくてよい）。
+  var IMAGE_MAX_FILE_BYTES = 15 * 1024 * 1024;
 
-  function resizeImageFile(file, done) {
+  function readImageFile(file, done) {
+    if (file.size > IMAGE_MAX_FILE_BYTES) {
+      done(null, "画像が大きすぎます(15MBまで)");
+      return;
+    }
     var reader = new FileReader();
-    reader.onload = function () {
-      var img = new Image();
-      img.onload = function () {
-        var scale = Math.min(1, IMAGE_MAX_DIMENSION / Math.max(img.width, img.height));
-        var w = Math.round(img.width * scale);
-        var h = Math.round(img.height * scale);
-        var canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        done(canvas.toDataURL("image/jpeg", 0.82));
-      };
-      img.onerror = function () { done(null); };
-      img.src = reader.result;
-    };
-    reader.onerror = function () { done(null); };
+    reader.onload = function () { done(reader.result, null); };
+    reader.onerror = function () { done(null, "画像の読み込みに失敗しました"); };
     reader.readAsDataURL(file);
   }
 
@@ -243,11 +235,11 @@
     var file = imageInput.files && imageInput.files[0];
     imageInput.value = "";
     if (!file) return;
-    hint.textContent = "画像を処理中…";
-    resizeImageFile(file, function (dataUrl) {
+    hint.textContent = "画像を読み込み中…";
+    readImageFile(file, function (dataUrl, errMsg) {
       hint.textContent = "";
       if (!dataUrl) {
-        hint.textContent = "画像の読み込みに失敗しました";
+        hint.textContent = errMsg || "画像の読み込みに失敗しました";
         return;
       }
       pendingImage = dataUrl;
