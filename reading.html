@@ -1768,7 +1768,35 @@
     display: none;
   }
   .made-list-toggle:has(.toggle-state:checked) ~ .made-list {
-    display: block;
+    /* 縦積みではなく、画面幅に合わせて弁当箱のように敷き詰める表示（カード自体のデザインは変更しない）。
+       ページ本体は読みやすさ優先の狭い幅のままなので、この一覧だけ画面幅いっぱいまで広げる。
+       CSS Gridだと見出し(h3)が全列を占有し続けてauto-fitが機能しないため、
+       カテゴリ内のカード枚数に応じて自然に伸縮するFlexboxを採用（1枚だけの時は横幅いっぱいに広がる） */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100vw;
+    max-width: 1200px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+  .made-list-toggle:has(.toggle-state:checked) ~ .made-list > h3 {
+    flex: 1 1 100%;
+    margin: 0 0 4px;
+  }
+  .made-list-toggle:has(.toggle-state:checked) ~ .made-list .link-card {
+    flex: 1 1 280px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) {
+    .made-list-toggle:has(.toggle-state:checked) ~ .made-list {
+      padding: 0 16px;
+    }
+    .made-list-toggle:has(.toggle-state:checked) ~ .made-list .link-card {
+      flex-basis: 100%;
+    }
   }
 
 </style></head>
