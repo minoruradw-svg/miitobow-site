@@ -1799,6 +1799,136 @@
     }
   }
 
+  /* ---------- HOME専用：自己紹介カード（uiverse.io/andrew-demchenk0/chatty-hound-50を参考） ---------- */
+  .intro-card-section {
+    padding: 56px 24px 8px;
+    /* 白背景に埋もれないよう、はっきり分かる緑の面に。モバイルではこの上にヒーローの
+       クリーム色パネル(--bg-panel)が来るため、混ざらず区切りが分かるよう別系統の色にしている */
+    background:
+      radial-gradient(ellipse 900px 460px at 50% 0%, var(--lime-glow), transparent 80%),
+      color-mix(in srgb, var(--lime-bright) 14%, var(--bg));
+  }
+  .intro-card {
+    position: relative;
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--neu-bg);
+    border-radius: 24px;
+    box-shadow: -8px -8px 18px var(--neu-light), 8px 8px 18px var(--neu-dark);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 36px;
+  }
+  .intro-card__visual {
+    position: relative;
+  }
+  .intro-card__banner {
+    height: 110px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .intro-card__banner svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .intro-card__avatar {
+    display: block;
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    border: 5px solid var(--neu-bg);
+    background: var(--neu-bg);
+    object-fit: cover;
+    margin: -58px auto 0;
+    box-shadow: 0 8px 18px var(--glass-shadow);
+  }
+  .intro-card__body {
+    padding: 16px 32px 0;
+  }
+  /* 画面が広くなるほど「上に細い帯、下にテキスト」の縦積みが間延びして見えるため、
+     ある程度の幅からは左にビジュアルパネル・右にテキストの横並びに切り替える */
+  @media (min-width: 760px) {
+    .intro-card {
+      display: flex;
+      align-items: stretch;
+      max-width: 760px;
+      text-align: left;
+      padding-bottom: 0;
+    }
+    .intro-card__visual {
+      flex: 0 0 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .intro-card__banner {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+    }
+    .intro-card__avatar {
+      position: relative;
+      margin: 0;
+      z-index: 1;
+    }
+    .intro-card__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 36px 44px;
+    }
+    .intro-card__tagline,
+    .intro-card__text {
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 46ch;
+    }
+  }
+  .intro-card__title {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin: 0 0 6px;
+  }
+  .intro-card__tagline {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--forest);
+    margin: 0 0 16px;
+  }
+  .intro-card__text {
+    font-size: 0.94rem;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    max-width: 44ch;
+    margin: 0 auto 24px;
+  }
+  .intro-card__btn {
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 999px;
+    background: var(--lime);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .intro-card__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px var(--glass-shadow);
+  }
+  @media (max-width: 640px) {
+    .intro-card-section { padding: 40px 20px 8px; }
+    .intro-card__body { padding: 14px 22px 0; }
+    .intro-card__title { font-size: 1.24rem; }
+    .intro-card__text { font-size: 0.88rem; }
+  }
+
 </style></head>
 <body>
 
