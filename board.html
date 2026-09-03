@@ -50,6 +50,7 @@
   .head { font-family: "M PLUS Rounded 1c", "Hiragino Sans", sans-serif; font-weight: 900; letter-spacing: 0.02em; }
 
   #lock {
+    position: relative;
     min-height: 100vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 22px; padding: 24px; text-align: center;
   }
@@ -76,7 +77,7 @@
   #board.show { display: flex; }
   .topbar {
     position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--border);
-    padding: 16px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 12px 18px 14px; display: flex; flex-direction: column; gap: 6px;
   }
   .topbar h1 { font-size: 1.1rem; margin: 0; }
   .topbar .count { font-size: 0.78rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
@@ -112,11 +113,25 @@
   .btn-ghost.danger:hover { background: rgba(193, 80, 46, 0.14); color: var(--danger); }
   .empty { text-align: center; color: var(--ink-faint); font-size: 0.88rem; padding: 40px 20px; }
   [hidden] { display: none !important; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--accent-dark); }
+  #lock .back-link { position: absolute; top: 18px; left: 18px; }
+  .topbar-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 </style>
 </head>
 <body>
 
 <div id="lock">
+  <a class="back-link" href="/">← miitobow.comに戻る</a>
   <div class="mark">📋</div>
   <h1 class="head">ミートボー掲示板</h1>
   <p>4桁のパスコードを入力してください</p>
@@ -131,8 +146,11 @@
 
 <div id="board">
   <div class="topbar">
+    <div class="topbar-top">
+      <a class="back-link" href="/">← miitobow.comに戻る</a>
+      <span class="count" id="count"></span>
+    </div>
     <h1 class="head">ミートボー掲示板</h1>
-    <span class="count" id="count"></span>
   </div>
   <main>
     <div class="composer">
