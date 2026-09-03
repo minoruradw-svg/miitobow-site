@@ -308,13 +308,18 @@
     var text = newText.value.trim();
     if (!text) return;
     postBtn.disabled = true;
+    hint.textContent = "";
     fetch("/api/board", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
       body: JSON.stringify({ text: text }),
     })
       .then(function (res) {
-        if (!res.ok) throw new Error("failed");
+        if (!res.ok) {
+          return res.json().catch(function () { return {}; }).then(function (err) {
+            throw new Error(err.message || "failed");
+          });
+        }
         return res.json();
       })
       .then(function (created) {
@@ -322,8 +327,8 @@
         render(mergedPosts());
         newText.value = "";
       })
-      .catch(function () {
-        hint.textContent = "投稿に失敗しました";
+      .catch(function (err) {
+        hint.textContent = (err && err.message) || "投稿に失敗しました";
       })
       .finally(function () {
         postBtn.disabled = false;
