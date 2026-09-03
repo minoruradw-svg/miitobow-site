@@ -186,6 +186,25 @@
     done();
   }
 
+  // KVは結果整合性のため、投稿/削除の直後は最大1分ほどGETに反映されないことがある。
+  // 体験を損なわないよう、確定前の変更をローカルに保持してサーバー結果とマージする。
+  var serverPosts = [];
+  var localAdds = []; // {id, text, createdAt} まだGET結果に出てきていない自分の投稿
+  var localDeletes = []; // GET結果からまだ消えていない、削除済みのid
+
+  function mergedPosts() {
+    var byId = {};
+    serverPosts.forEach(function (p) { byId[p.id] = p; });
+    localAdds.forEach(function (p) { if (!byId[p.id]) byId[p.id] = p; });
+    localDeletes.forEach(function (id) { delete byId[id]; });
+    var list = Object.keys(byId).map(function (k) { return byId[k]; });
+    list.sort(function (a, b) { return b.createdAt - a.createdAt; });
+    // サーバーに載った分はローカル差分から外す（掃除）
+    localAdds = localAdds.filter(function (p) { return !serverPosts.some(function (s) { return s.id === p.id; }); });
+    localDeletes = localDeletes.filter(function (id) { return serverPosts.some(function (s) { return s.id === id; }); });
+    return list;
+  }
+
   function render(posts) {
     postsEl.innerHTML = "";
     emptyMsg.hidden = posts.length > 0;
@@ -237,10 +256,12 @@
       delBtn.type = "button";
       delBtn.textContent = "削除";
       delBtn.addEventListener("click", function () {
+        localDeletes.push(data.id);
+        render(mergedPosts());
         fetch("/api/board/" + encodeURIComponent(data.id), {
           method: "DELETE",
           headers: { "X-Board-Pin": currentPin },
-        }).then(loadPosts);
+        }).catch(function () {});
       });
       actions.appendChild(delBtn);
 
@@ -256,7 +277,10 @@
         if (res.status === 401) { throw new Error("unauthorized"); }
         return res.json();
       })
-      .then(render)
+      .then(function (posts) {
+        serverPosts = posts;
+        render(mergedPosts());
+      })
       .catch(function () {
         hint.textContent = "読み込みに失敗しました";
       });
@@ -273,8 +297,12 @@
     })
       .then(function (res) {
         if (!res.ok) throw new Error("failed");
+        return res.json();
+      })
+      .then(function (created) {
+        localAdds.push(created);
+        render(mergedPosts());
         newText.value = "";
-        return loadPosts();
       })
       .catch(function () {
         hint.textContent = "投稿に失敗しました";
