@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>翻訳テストページ｜スクショで翻訳</title>
+<style>
+  :root{
+    --bg:#eef1f4; --card:#ffffff; --ink:#1a2127; --muted:#5c6a72;
+    --line:#e2e7eb; --accent:#2c82e2; --price:#0a7a5a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.55;-webkit-text-size-adjust:100%;}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px 64px;}
+  header.top{padding:8px 2px 4px;}
+  header.top h1{font-size:1.3rem;margin:0 0 6px;}
+  header.top p{margin:0;color:var(--muted);font-size:.92rem;}
+  .how{background:#dfeeff;border:1px solid #c4defa;border-radius:12px;padding:12px 14px;margin:16px 0 8px;font-size:.9rem;color:#1c3a5a;}
+  .how b{color:#12395f;}
+  .cap{display:flex;align-items:center;gap:8px;margin:26px 2px 8px;}
+  .cap .no{background:var(--accent);color:#fff;font-weight:700;font-size:.8rem;border-radius:999px;padding:2px 10px;}
+  .cap .ttl{font-weight:700;font-size:.98rem;}
+  .cap .pair{margin-left:auto;font-size:.78rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px;background:#fff;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;box-shadow:0 1px 3px rgba(20,40,60,.06);}
+  .card .pad{padding:18px 18px;}
+  /* --- generic UI mock --- */
+  .appbar{display:flex;align-items:center;gap:12px;background:#f4f6f8;border-bottom:1px solid var(--line);padding:14px 18px;font-weight:700;font-size:1.05rem;}
+  .appbar .back{color:var(--accent);font-size:1.2rem;}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:1.02rem;}
+  .row:last-child{border-bottom:none;}
+  .row .sub{color:var(--muted);font-size:.85rem;}
+  .row .chev{color:#b7c1c8;}
+  /* article */
+  .art h2{margin:0 0 10px;font-size:1.18rem;line-height:1.35;}
+  .art p{margin:0 0 12px;font-size:1rem;}
+  .art .by{color:var(--muted);font-size:.82rem;margin:0 0 14px;}
+  /* menu */
+  .menu h3{margin:0 0 4px;font-size:1.05rem;letter-spacing:.02em;}
+  .menu .item{padding:12px 0;border-bottom:1px dashed var(--line);}
+  .menu .item:last-child{border-bottom:none;}
+  .menu .line{display:flex;justify-content:space-between;font-weight:600;}
+  .menu .price{color:var(--price);}
+  .menu .desc{color:var(--muted);font-size:.88rem;margin-top:2px;}
+  /* product */
+  .prod .name{font-size:1.15rem;font-weight:700;}
+  .prod .p{color:var(--price);font-size:1.25rem;font-weight:800;margin:6px 0 10px;}
+  .prod .feat{font-size:.95rem;margin:0 0 10px;}
+  .prod .stars{color:#e8a400;font-size:.95rem;}
+  .prod .cart{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;font-weight:700;border-radius:10px;padding:11px 22px;}
+  /* steps */
+  .steps h3{margin:0 0 10px;font-size:1.08rem;}
+  .steps ol{margin:0;padding-left:1.3em;}
+  .steps li{margin:7px 0;font-size:1rem;}
+  /* dialogs */
+  .msg{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;font-size:1rem;background:#fbfcfd;}
+  .msg:first-child{margin-top:0;}
+  /* chat */
+  .chat .b{max-width:82%;padding:10px 14px;border-radius:16px;margin:8px 0;font-size:1rem;}
+  .chat .them{background:#eef1f4;border-top-left-radius:4px;}
+  .chat .me{background:#d7ecff;margin-left:auto;border-top-right-radius:4px;}
+  .foot{margin-top:40px;text-align:center;}
+  .foot a{color:var(--accent);text-decoration:none;font-size:.9rem;}
+  .langtag{font-size:.78rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>翻訳テストページ</h1>
+    <p>「スクショで翻訳」の訳の出方を、色々な文章パターンで試すためのページです。</p>
+  </header>
+
+  <div class="how">
+    <b>使い方</b>：このページをスマホで開き、試したいカードが画面に入るようにして<b>スクショ</b>を撮り、アプリで翻訳してください。各カード右上の <b>英→日</b> などが、選ぶと良い言語ペアの目安です。
+  </div>
+
+  <!-- 1. App UI -->
+  <div class="cap"><span class="no">1</span><span class="ttl">アプリのUI（設定画面）</span><span class="pair">英→日</span></div>
+  <div class="card">
+    <div class="appbar"><span class="back">‹</span> Settings</div>
+    <div class="row"><span>Account</span><span class="chev">›</span></div>
+    <div class="row"><span>Notifications</span><span class="chev">›</span></div>
+    <div class="row"><span>Privacy &amp; security</span><span class="chev">›</span></div>
+    <div class="row"><span>Display</span><span class="chev">›</span></div>
+    <div class="row"><span>Language &amp; region</span><span class="chev">›</span></div>
+    <div class="row"><span>Storage</span><span class="sub">42.6 GB used</span></div>
+    <div class="row"><span>Help &amp; feedback</span><span class="chev">›</span></div>
+    <div class="row"><span style="color:#c0392b">Log out</span></div>
+  </div>
+
+  <!-- 2. News article -->
+  <div class="cap"><span class="no">2</span><span class="ttl">ニュース記事（自然な文章）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad art">
+    <h2>City opens new riverside park this weekend</h2>
+    <p class="by">By Local News · March 14</p>
+    <p>The new park along the east river will open to the public on Saturday morning. It features walking trails, a playground, and a small cafe by the water.</p>
+    <p>Officials say the project took two years to complete and cost about three million dollars. Residents are encouraged to use public transport, as parking near the entrance will be limited during the opening weekend.</p>
+  </div></div>
+
+  <!-- 3. Cafe menu -->
+  <div class="cap"><span class="no">3</span><span class="ttl">カフェのメニュー（品名＋値段＋説明）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad menu">
+    <h3>MORNING MENU</h3>
+    <div class="item"><div class="line"><span>Hot Coffee</span><span class="price">$3.50</span></div><div class="desc">Freshly brewed every hour.</div></div>
+    <div class="item"><div class="line"><span>Iced Latte</span><span class="price">$4.20</span></div><div class="desc">Espresso with cold milk over ice.</div></div>
+    <div class="item"><div class="line"><span>Blueberry Pancakes</span><span class="price">$6.80</span></div><div class="desc">Served with maple syrup and butter.</div></div>
+    <div class="item"><div class="line"><span>Ham &amp; Cheese Sandwich</span><span class="price">$5.50</span></div><div class="desc">Toasted, with a side of salad.</div></div>
+  </div></div>
+
+  <!-- 4. Product -->
+  <div class="cap"><span class="no">4</span><span class="ttl">通販の商品ページ</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad prod">
+    <div class="name">Wireless Earbuds Pro</div>
+    <div class="p">$79.99</div>
+    <p class="feat">Active noise cancelling. Up to 24 hours of battery life with the charging case. Water resistant for workouts and rain.</p>
+    <div class="stars">★★★★☆ <span class="langtag">1,284 reviews</span></div>
+    <div class="cart">Add to cart</div>
+  </div></div>
+
+  <!-- 5. How-to steps -->
+  <div class="cap"><span class="no">5</span><span class="ttl">手順・説明（番号つき）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad steps">
+    <h3>How to reset your password</h3>
+    <ol>
+      <li>Open the app and tap your profile picture.</li>
+      <li>Go to Settings and select Security.</li>
+      <li>Tap “Reset password” and enter your email address.</li>
+      <li>Check your inbox for the reset link.</li>
+      <li>Create a new password and save your changes.</li>
+    </ol>
+  </div></div>
+
+  <!-- 6. Dialogs / notifications -->
+  <div class="cap"><span class="no">6</span><span class="ttl">通知・ダイアログ（短い文）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <div class="msg">Your payment was successful. A receipt has been sent to your email.</div>
+    <div class="msg">Battery is low. Please connect a charger.</div>
+    <div class="msg">Are you sure you want to delete this file? This action cannot be undone.</div>
+    <div class="msg">No internet connection. Please try again later.</div>
+  </div></div>
+
+  <!-- 7. Casual chat / slang -->
+  <div class="cap"><span class="no">7</span><span class="ttl">カジュアルな会話・スラング</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad chat">
+    <div class="b them">omg that concert last night was insane lol</div>
+    <div class="b me">tbh I almost didn’t go, so glad I did!</div>
+    <div class="b them">wanna grab lunch later? my treat 😄</div>
+    <div class="b me">sounds great, brb gotta finish some work first</div>
+    <div class="b them">no rush, ttyl!</div>
+  </div></div>
+
+  <!-- 8. Korean -->
+  <div class="cap"><span class="no">8</span><span class="ttl">韓国語（カフェ・案内）</span><span class="pair">韓→日</span></div>
+  <div class="card"><div class="pad menu">
+    <h3>카페 메뉴</h3>
+    <div class="item"><div class="line"><span>아메리카노</span><span class="price">4,000원</span></div><div class="desc">따뜻하게 또는 차갑게 즐기세요.</div></div>
+    <div class="item"><div class="line"><span>카페라떼</span><span class="price">4,500원</span></div><div class="desc">부드러운 우유 거품이 올라갑니다.</div></div>
+    <div class="item"><div class="line"><span>치즈 케이크</span><span class="price">6,000원</span></div><div class="desc">매일 아침 직접 굽습니다.</div></div>
+  </div></div>
+  <div class="card" style="margin-top:12px"><div class="pad">
+    <div class="msg">화장실은 계산대 왼쪽에 있습니다.</div>
+    <div class="msg">사진 촬영은 금지되어 있습니다.</div>
+    <div class="msg">영업시간: 오전 9시 ~ 오후 10시 (연중무휴)</div>
+  </div></div>
+
+  <!-- 9. Japanese source -->
+  <div class="cap"><span class="no">9</span><span class="ttl">日本語（→英・韓のテスト用）</span><span class="pair">日→英/韓</span></div>
+  <div class="card"><div class="pad menu">
+    <h3>本日のおすすめ</h3>
+    <div class="item"><div class="line"><span>特製ラーメン</span><span class="price">850円</span></div><div class="desc">とんこつスープに自家製の細麺。</div></div>
+    <div class="item"><div class="line"><span>餃子（6個）</span><span class="price">400円</span></div><div class="desc">国産豚とにらを使用しています。</div></div>
+    <div class="item"><div class="line"><span>チャーハン</span><span class="price">700円</span></div><div class="desc">パラパラに炒めた自慢の一品。</div></div>
+    <div class="desc" style="margin-top:10px">営業時間 11:00〜22:00／定休日 月曜日</div>
+  </div></div>
+
+  <div class="foot">
+    <a href="/">← miitobow.com にもどる</a>
+  </div>
+</div>
+</body>
+</html>
