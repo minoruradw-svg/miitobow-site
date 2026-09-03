@@ -90,6 +90,22 @@
   .composer textarea::placeholder { color: var(--ink-faint); }
   .composer-row { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
   .hint { font-size: 0.76rem; color: var(--ink-faint); margin-right: auto; }
+  .composer-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .image-pick-btn {
+    display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border);
+    background: transparent; color: var(--ink-soft); border-radius: 10px; padding: 6px 10px;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .image-pick-btn:hover { background: var(--accent-glow); color: var(--accent-dark); }
+  .image-preview { position: relative; display: inline-block; }
+  .image-preview img { display: block; max-width: 140px; max-height: 140px; border-radius: 10px; border: 1px solid var(--border); }
+  .image-preview .remove-image {
+    position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--danger); color: #fff; border: none; font-size: 0.8rem; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .post-image-link { display: block; }
+  .post-image { max-width: 100%; border-radius: 10px; display: block; }
   button { font-family: inherit; cursor: pointer; border: none; }
   .btn-primary {
     background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
@@ -107,6 +123,8 @@
   .btn-ghost {
     background: var(--surface-soft); color: var(--ink-soft); font-size: 0.76rem; font-weight: 700;
     padding: 6px 12px; border-radius: 999px; transition: background 0.15s ease, color 0.15s ease;
+    border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;
+    font-family: inherit;
   }
   .btn-ghost:hover { background: var(--accent-glow); color: var(--accent-dark); }
   .btn-ghost.copied { background: var(--accent); color: #fff; }
@@ -155,6 +173,14 @@
   <main>
     <div class="composer">
       <textarea id="new-text" placeholder="ここに書いて投稿…"></textarea>
+      <div class="composer-tools">
+        <input type="file" id="image-input" accept="image/*" hidden>
+        <button class="image-pick-btn" id="image-pick-btn" type="button">📷 画像を選ぶ</button>
+        <div class="image-preview" id="image-preview" hidden>
+          <img id="image-preview-img" alt="添付画像プレビュー">
+          <button class="remove-image" id="image-remove-btn" type="button" aria-label="画像を外す">×</button>
+        </div>
+      </div>
       <div class="composer-row">
         <span class="hint" id="composer-hint"></span>
         <button class="btn-primary" id="post-btn" type="button">投稿</button>
@@ -180,7 +206,61 @@
   var newText = document.getElementById("new-text");
   var postBtn = document.getElementById("post-btn");
   var hint = document.getElementById("composer-hint");
+  var imageInput = document.getElementById("image-input");
+  var imagePickBtn = document.getElementById("image-pick-btn");
+  var imagePreview = document.getElementById("image-preview");
+  var imagePreviewImg = document.getElementById("image-preview-img");
+  var imageRemoveBtn = document.getElementById("image-remove-btn");
+  var pendingImage = null; // リサイズ済みdata URL
   var currentPin = null;
+
+  var IMAGE_MAX_DIMENSION = 1600;
+
+  function resizeImageFile(file, done) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var scale = Math.min(1, IMAGE_MAX_DIMENSION / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale);
+        var h = Math.round(img.height * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        done(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = function () { done(null); };
+      img.src = reader.result;
+    };
+    reader.onerror = function () { done(null); };
+    reader.readAsDataURL(file);
+  }
+
+  imagePickBtn.addEventListener("click", function () { imageInput.click(); });
+
+  imageInput.addEventListener("change", function () {
+    var file = imageInput.files && imageInput.files[0];
+    imageInput.value = "";
+    if (!file) return;
+    hint.textContent = "画像を処理中…";
+    resizeImageFile(file, function (dataUrl) {
+      hint.textContent = "";
+      if (!dataUrl) {
+        hint.textContent = "画像の読み込みに失敗しました";
+        return;
+      }
+      pendingImage = dataUrl;
+      imagePreviewImg.src = dataUrl;
+      imagePreview.hidden = false;
+    });
+  });
+
+  imageRemoveBtn.addEventListener("click", function () {
+    pendingImage = null;
+    imagePreviewImg.src = "";
+    imagePreview.hidden = true;
+  });
 
   function fmtTime(ts) {
     var d = new Date(ts);
@@ -231,10 +311,25 @@
       var card = document.createElement("div");
       card.className = "post";
 
-      var textEl = document.createElement("div");
-      textEl.className = "post-text";
-      textEl.textContent = data.text || "";
-      card.appendChild(textEl);
+      if (data.image) {
+        var imgLink = document.createElement("a");
+        imgLink.className = "post-image-link";
+        imgLink.href = data.image;
+        imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
+        var imgEl = document.createElement("img");
+        imgEl.className = "post-image";
+        imgEl.src = data.image;
+        imgEl.alt = "投稿画像";
+        imgLink.appendChild(imgEl);
+        card.appendChild(imgLink);
+      }
+
+      if (data.text) {
+        var textEl = document.createElement("div");
+        textEl.className = "post-text";
+        textEl.textContent = data.text;
+        card.appendChild(textEl);
+      }
 
       var foot = document.createElement("div");
       foot.className = "post-foot";
@@ -247,27 +342,38 @@
       var actions = document.createElement("div");
       actions.className = "post-actions";
 
-      var copyBtn = document.createElement("button");
-      copyBtn.className = "btn-ghost";
-      copyBtn.type = "button";
-      copyBtn.textContent = "コピー";
-      copyBtn.addEventListener("click", function () {
-        var text = data.text || "";
-        var done = function () {
-          copyBtn.textContent = "コピーしました";
-          copyBtn.classList.add("copied");
-          setTimeout(function () {
-            copyBtn.textContent = "コピー";
-            copyBtn.classList.remove("copied");
-          }, 1400);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
-        } else {
-          fallbackCopy(text, done);
-        }
-      });
-      actions.appendChild(copyBtn);
+      if (data.text) {
+        var copyBtn = document.createElement("button");
+        copyBtn.className = "btn-ghost";
+        copyBtn.type = "button";
+        copyBtn.textContent = "コピー";
+        copyBtn.addEventListener("click", function () {
+          var text = data.text || "";
+          var done = function () {
+            copyBtn.textContent = "コピーしました";
+            copyBtn.classList.add("copied");
+            setTimeout(function () {
+              copyBtn.textContent = "コピー";
+              copyBtn.classList.remove("copied");
+            }, 1400);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+          } else {
+            fallbackCopy(text, done);
+          }
+        });
+        actions.appendChild(copyBtn);
+      }
+
+      if (data.image) {
+        var saveBtn = document.createElement("a");
+        saveBtn.className = "btn-ghost";
+        saveBtn.href = data.image;
+        saveBtn.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
+        saveBtn.textContent = "画像を保存";
+        actions.appendChild(saveBtn);
+      }
 
       var delBtn = document.createElement("button");
       delBtn.className = "btn-ghost danger";
@@ -306,13 +412,16 @@
 
   function submitPost() {
     var text = newText.value.trim();
-    if (!text) return;
+    var image = pendingImage;
+    if (!text && !image) return;
     postBtn.disabled = true;
     hint.textContent = "";
+    var body = { text: text };
+    if (image) body.image = image;
     fetch("/api/board", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
-      body: JSON.stringify({ text: text }),
+      body: JSON.stringify(body),
     })
       .then(function (res) {
         if (!res.ok) {
@@ -326,6 +435,9 @@
         localAdds.push(created);
         render(mergedPosts());
         newText.value = "";
+        pendingImage = null;
+        imagePreviewImg.src = "";
+        imagePreview.hidden = true;
       })
       .catch(function (err) {
         hint.textContent = (err && err.message) || "投稿に失敗しました";
