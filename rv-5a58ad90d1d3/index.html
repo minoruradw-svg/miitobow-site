@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Screenshot Translator — Permission Demo</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; background: #0e1621; color: #e8eef3;
+         font-family: -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 24px 18px 60px; }
+  h1 { font-size: 1.35rem; margin: 0 0 4px; }
+  .sub { color: #8fa3b0; margin: 0 0 20px; font-size: .95rem; }
+  video { width: 100%; max-width: 380px; display: block; margin: 0 auto 24px;
+          border-radius: 14px; background:#000; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+  h2 { font-size: 1.05rem; margin: 26px 0 6px; color: #7fd1cd; }
+  ol, ul { margin: 6px 0 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .perm { background:#16232f; border:1px solid #24384a; border-radius:10px;
+          padding:12px 16px; margin:10px 0; }
+  .perm b { color:#9ad; }
+  .muted { color:#8fa3b0; font-size:.9rem; }
+  code { background:#16232f; padding:1px 6px; border-radius:5px; font-size:.85em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Screenshot Translator — Sensitive Permissions Demo</h1>
+  <p class="sub">App: <b>スクショで翻訳 (Screenshot Translator)</b> · package <code>com.miitobow.screenshot_translator</code><br>
+     Private demo for Google Play review. Not linked from anywhere; unlisted.</p>
+
+  <video controls playsinline preload="metadata" src="demo.mp4"></video>
+
+  <h2>What this video shows</h2>
+  <ol>
+    <li>The user opens the app and turns on the optional <b>“Screenshot auto-detect”</b> switch (off by default).</li>
+    <li>A persistent foreground-service notification (“Standing by”) appears while the feature is on.</li>
+    <li>The user opens another app (Android Settings) and takes a screenshot.</li>
+    <li>The app detects the newly saved screenshot and offers translation (“Screenshot detected — tap to translate”).</li>
+    <li>The user taps “Translate”; the screenshot opens in the app’s range/language screen.</li>
+    <li>The text is recognized and translated <b>entirely on the device</b> (English → Japanese), shown overlaid on the image.</li>
+  </ol>
+
+  <h2>Why each sensitive permission is required</h2>
+  <div class="perm">
+    <b>READ_MEDIA_IMAGES (access to all photos)</b><br>
+    The core purpose of the auto-detect feature is to notice a screenshot the moment the user saves it, in any app.
+    This requires observing newly added images in the device’s media store. The Android photo picker cannot be used,
+    because the picker only returns a file the user manually selects — it cannot detect a new screenshot automatically,
+    which is the entire feature. Access is used only while the user has turned the feature on.
+  </div>
+  <div class="perm">
+    <b>FOREGROUND_SERVICE_SPECIAL_USE</b><br>
+    Detecting a screenshot right after it is taken requires a short-lived background watcher that runs only while the
+    feature is enabled. It runs as a foreground service with an ongoing notification so the user always knows it is active,
+    and it stops completely when the user turns the feature off.
+  </div>
+
+  <h2>Privacy</h2>
+  <ul>
+    <li>OCR and translation run <b>fully on-device</b>; images and text are never uploaded or transmitted.</li>
+    <li>The feature is <b>off by default</b> and can be turned off at any time, which fully stops the watcher.</li>
+    <li>Privacy policy: <a href="https://minoruradw-svg.github.io/privacy/privacy-policy.html">https://minoruradw-svg.github.io/privacy/privacy-policy.html</a> (see Section 7).</li>
+  </ul>
+  <p class="muted">Note: this recording was captured on an Android emulator. On the emulator the detection is shown via a
+  notification; on physical devices the app can also show an on-screen “Translate” confirmation popup when the optional
+  “display over other apps” permission is granted. Both paths exercise the same READ_MEDIA_IMAGES and foreground-service usage.</p>
+</div>
+</body>
+</html>
