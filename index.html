@@ -1802,9 +1802,11 @@
   /* ---------- HOME専用：自己紹介カード（uiverse.io/andrew-demchenk0/chatty-hound-50を参考） ---------- */
   .intro-card-section {
     padding: 56px 24px 8px;
-    /* 白背景に埋もれないよう、うっすら緑のグロー。モバイルではこの上にヒーローの
+    /* 白背景に埋もれないよう、はっきり分かる緑の面に。モバイルではこの上にヒーローの
        クリーム色パネル(--bg-panel)が来るため、混ざらず区切りが分かるよう別系統の色にしている */
-    background: radial-gradient(ellipse 900px 420px at 50% 0%, var(--lime-glow), transparent 72%), var(--bg);
+    background:
+      radial-gradient(ellipse 900px 460px at 50% 0%, var(--lime-glow), transparent 80%),
+      color-mix(in srgb, var(--lime-bright) 14%, var(--bg));
   }
   .intro-card {
     position: relative;
