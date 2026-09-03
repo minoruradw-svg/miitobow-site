@@ -1061,6 +1061,28 @@
     font-size: 1rem;
     line-height: 1.8;
   }
+  .page-header--inline {
+    margin: 20px 0 32px;
+    border-radius: 24px;
+    padding: clamp(32px, 6vw, 56px) 24px;
+  }
+  .page-back-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--forest);
+    text-decoration: none;
+  }
+  .page-back-link:hover { text-decoration: underline; }
+  /* 背景選択専用ページ：横スクロールの棚ではなく、全種類が見渡せるようウィンドウ幅いっぱいに折り返す */
+  .bg-page .bg-shelf { margin-bottom: 28px; }
+  .bg-page .bg-shelf__row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 16px;
+  }
+  .bg-page .bg-search { max-width: 420px; }
 
   .hub-grid {
     display: grid;
@@ -1593,9 +1615,11 @@
   .made-carousel__action:hover { background: var(--lime-bright); }
   .made-carousel__dragbar {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    width: 260px;
-    max-width: 90%;
+    gap: 12px;
+    width: 300px;
+    max-width: 92%;
     cursor: grab;
     touch-action: pan-y;
     user-select: none;
@@ -1603,22 +1627,52 @@
   }
   .made-carousel__dragbar.is-dragging { cursor: grabbing; }
   .made-carousel__dragbar-track {
-    flex: 1;
-    height: 4px;
+    position: relative;
+    width: 100%;
+    height: 6px;
     border-radius: 999px;
     background: var(--line);
   }
-  .made-carousel__dragbar-handle {
-    flex: 0 0 auto;
-    margin: 0 auto;
-    padding: 8px 18px;
+  .made-carousel__dragbar-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 0%;
     border-radius: 999px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    color: var(--ink-faint);
+    background: var(--lime);
+  }
+  .made-carousel__dragbar-dot {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--line);
+    transform: translate(-50%, -50%);
+  }
+  .made-carousel__dragbar-dot.is-active { border-color: var(--lime); background: var(--lime); }
+  .made-carousel__dragbar-handle {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    box-shadow: 0 6px 14px var(--glass-shadow);
+    transform: translate(-50%, -50%);
+  }
+  .made-carousel__dragbar-label {
+    margin: 0;
     font-size: 0.78rem;
     font-weight: 700;
-    white-space: nowrap;
+    color: var(--ink-faint);
+    text-align: center;
   }
   .made-carousel__nav {
     display: flex;
@@ -1667,6 +1721,159 @@
     .made-carousel__face { position: relative; inset: auto; height: 100%; }
   }
 
+  /* ---------- 作ったもの一覧の表示/非表示トグル（uiverse.io/mobinkakei/great-skunk-8を参考） ---------- */
+  .made-list-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 8px 0 40px;
+  }
+  .made-list-toggle .toggle-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .made-list-toggle .toggle {
+    isolation: isolate;
+    position: relative;
+    height: 30px;
+    width: 60px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: var(--neu-bg);
+    box-shadow: -5px -3px 6px var(--neu-light), 5px 3px 8px var(--neu-dark);
+  }
+  .made-list-toggle .toggle-state { display: none; }
+  .made-list-toggle .indicator {
+    height: 100%;
+    width: 200%;
+    background: var(--neu-bg);
+    border-radius: 15px;
+    transform: translate3d(-75%, 0, 0);
+    transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+    box-shadow: -5px -3px 6px var(--neu-light), 5px 3px 8px var(--neu-dark);
+  }
+  .made-list-toggle .toggle-state:checked ~ .indicator {
+    transform: translate3d(25%, 0, 0);
+    background: var(--lime);
+    box-shadow: none;
+  }
+  .made-list-toggle__label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .made-list {
+    display: none;
+  }
+  .made-list-toggle:has(.toggle-state:checked) ~ .made-list {
+    /* 縦積みではなく、画面幅に合わせて弁当箱のように敷き詰める表示（カード自体のデザインは変更しない）。
+       ページ本体は読みやすさ優先の狭い幅のままなので、この一覧だけ画面幅いっぱいまで広げる。
+       CSS Gridだと見出し(h3)が全列を占有し続けてauto-fitが機能しないため、
+       カテゴリ内のカード枚数に応じて自然に伸縮するFlexboxを採用（1枚だけの時は横幅いっぱいに広がる） */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100vw;
+    max-width: 1200px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+  .made-list-toggle:has(.toggle-state:checked) ~ .made-list > h3 {
+    flex: 1 1 100%;
+    margin: 0 0 4px;
+  }
+  .made-list-toggle:has(.toggle-state:checked) ~ .made-list .link-card {
+    flex: 1 1 280px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) {
+    .made-list-toggle:has(.toggle-state:checked) ~ .made-list {
+      padding: 0 16px;
+    }
+    .made-list-toggle:has(.toggle-state:checked) ~ .made-list .link-card {
+      flex-basis: 100%;
+    }
+  }
+
+  /* ---------- HOME専用：自己紹介カード（uiverse.io/andrew-demchenk0/chatty-hound-50を参考） ---------- */
+  .intro-card-section {
+    padding: 56px 24px 8px;
+  }
+  .intro-card {
+    position: relative;
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--neu-bg);
+    border-radius: 24px;
+    box-shadow: -8px -8px 18px var(--neu-light), 8px 8px 18px var(--neu-dark);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 36px;
+  }
+  .intro-card__banner {
+    height: 110px;
+    background: linear-gradient(135deg, var(--lime-bright), var(--forest));
+  }
+  .intro-card__avatar {
+    display: block;
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    border: 5px solid var(--neu-bg);
+    background: var(--neu-bg);
+    object-fit: cover;
+    margin: -58px auto 0;
+    box-shadow: 0 8px 18px var(--glass-shadow);
+  }
+  .intro-card__body {
+    padding: 16px 32px 0;
+  }
+  .intro-card__title {
+    font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin: 0 0 6px;
+  }
+  .intro-card__tagline {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--forest);
+    margin: 0 0 16px;
+  }
+  .intro-card__text {
+    font-size: 0.94rem;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    max-width: 44ch;
+    margin: 0 auto 24px;
+  }
+  .intro-card__btn {
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 999px;
+    background: var(--lime);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .intro-card__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px var(--glass-shadow);
+  }
+  @media (max-width: 640px) {
+    .intro-card-section { padding: 40px 20px 8px; }
+    .intro-card__body { padding: 14px 22px 0; }
+    .intro-card__title { font-size: 1.24rem; }
+    .intro-card__text { font-size: 0.88rem; }
+  }
+
 </style></head>
 <body>
 
@@ -1697,11 +1904,25 @@
       <div class="cta-row">
         <a class="btn btn-work" href="https://docs.google.com/forms/d/e/1FAIpQLSfNvO-i_Z42rshMFWYFez8Ya7sqdJ3A-jj4ZCVVsSFkIOdLpA/viewform" target="_blank" rel="noopener">お仕事依頼はこちら</a>
         <a class="btn hero-new__btn-ghost" href="https://note.com/miitobow_studio" target="_blank" rel="noopener">noteを読む</a>
-        <a class="btn hero-new__btn-ghost" href="https://www.threads.net/@miitobow" target="_blank" rel="noopener">Threadsをフォロー</a>
       </div>
     </div>
   </div>
 </header>
+
+<section class="intro-card-section">
+  <div class="wrap">
+    <div class="intro-card">
+      <div class="intro-card__banner"></div>
+      <img class="intro-card__avatar" src="/apple-touch-icon.png" alt="ミートボー">
+      <div class="intro-card__body">
+        <h2 class="intro-card__title">ミートボー</h2>
+        <p class="intro-card__tagline">非エンジニアの個人開発者</p>
+        <p class="intro-card__text">はじめまして。プログラミング未経験から、AIを相棒に翻訳アプリ「スクショで翻訳」やLINEスタンプを作っています。うまくいった話も、詰まった話も、盛らずにそのまま発信中です。</p>
+        <a class="intro-card__btn" href="https://www.threads.net/@miitobow" target="_blank" rel="noopener">Threadsをフォロー</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <input type="checkbox" id="aitsu-modal-toggle" class="modal-toggle">
 <input type="checkbox" id="update-history-toggle" class="modal-toggle">
