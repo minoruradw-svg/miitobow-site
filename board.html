@@ -111,6 +111,53 @@
   .post-image-grid.count-1 .post-image-link { width: 100%; height: auto; max-height: 340px; }
   .post-image { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; background: var(--surface-soft); }
   .post-image-grid.count-1 .post-image { height: auto; object-fit: contain; }
+
+  .category-chip {
+    display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow);
+    color: var(--accent-dark); font-size: 0.78rem; font-weight: 700; border-radius: 999px;
+    padding: 5px 11px; border: none; cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .category-chip .chip-remove { font-weight: 900; opacity: 0.7; }
+  .category-chip .chip-remove:hover { opacity: 1; }
+  .category-picker { display: flex; flex-direction: column; gap: 8px; }
+  .category-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .category-chips:empty { display: none; }
+  .category-search-wrap { position: relative; }
+  .category-search-wrap input {
+    width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 10px; font-size: 0.86rem; font-family: inherit; background: var(--surface-soft);
+    color: var(--ink);
+  }
+  .category-suggestions {
+    position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 5; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    max-height: 220px; overflow-y: auto; padding: 6px;
+  }
+  .category-suggestion-item {
+    display: block; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer;
+    padding: 8px 10px; border-radius: 8px; font-size: 0.86rem; color: var(--ink); font-family: inherit;
+  }
+  .category-suggestion-item:hover, .category-suggestion-item.active { background: var(--accent-glow); color: var(--accent-dark); }
+  .category-suggestion-item.create-new { color: var(--accent-dark); font-weight: 700; }
+  .post-categories { display: flex; flex-wrap: wrap; gap: 5px; }
+  .post-categories:empty { display: none; }
+  .post-category-tag {
+    font-size: 0.72rem; font-weight: 700; color: var(--accent-dark); background: var(--accent-glow);
+    border-radius: 999px; padding: 3px 9px;
+  }
+  .category-filter-bar { display: flex; flex-direction: column; gap: 8px; margin-top: -2px; }
+  .category-filter-search-wrap input {
+    width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px;
+    padding: 7px 10px; font-size: 0.84rem; font-family: inherit; background: var(--surface);
+    color: var(--ink);
+  }
+  .category-filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .category-filter-chip {
+    display: inline-flex; align-items: center; font-size: 0.78rem; font-weight: 700; border-radius: 999px;
+    padding: 5px 12px; border: 1px solid var(--border); cursor: pointer; font-family: inherit;
+    background: var(--surface); color: var(--ink-soft);
+  }
+  .category-filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   button { font-family: inherit; cursor: pointer; border: none; }
   .btn-primary {
     background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
@@ -195,10 +242,23 @@
         <button class="image-pick-btn" id="image-pick-btn" type="button">📷 画像を選ぶ（複数可）</button>
       </div>
       <div class="image-preview-grid" id="image-preview-grid"></div>
+      <div class="category-picker">
+        <div class="category-chips" id="category-chips-selected"></div>
+        <div class="category-search-wrap">
+          <input type="text" id="category-search" placeholder="カテゴリーを検索 / 新規作成…" autocomplete="off">
+          <div class="category-suggestions" id="category-suggestions" hidden></div>
+        </div>
+      </div>
       <div class="composer-row">
         <span class="hint" id="composer-hint"></span>
         <button class="btn-primary" id="post-btn" type="button">投稿</button>
       </div>
+    </div>
+    <div class="category-filter-bar" id="category-filter-bar" hidden>
+      <div class="category-filter-search-wrap">
+        <input type="text" id="category-filter-search" placeholder="カテゴリーで絞り込み…" autocomplete="off">
+      </div>
+      <div class="category-filter-chips" id="category-filter-chips"></div>
     </div>
     <div class="posts" id="posts"></div>
     <p class="empty" id="empty-msg" hidden>まだ投稿がありません</p>
@@ -225,6 +285,15 @@
   var imagePickBtn = document.getElementById("image-pick-btn");
   var imagePreviewGrid = document.getElementById("image-preview-grid");
   var pendingImages = []; // 元画質のままのdata URLの配列
+  var categoryChipsSelectedEl = document.getElementById("category-chips-selected");
+  var categorySearchInput = document.getElementById("category-search");
+  var categorySuggestionsEl = document.getElementById("category-suggestions");
+  var categoryFilterBar = document.getElementById("category-filter-bar");
+  var categoryFilterSearchInput = document.getElementById("category-filter-search");
+  var categoryFilterChipsEl = document.getElementById("category-filter-chips");
+  var allCategories = []; // [{id, name}]
+  var selectedCategoryIds = []; // 投稿フォームで選択中
+  var activeFilterIds = []; // 一覧の絞り込みで選択中
   var currentPin = null;
 
   // 元画質のまま保存する代わりに、あまり大きすぎるファイルだけは弾く
@@ -290,10 +359,173 @@
         if (remaining === 0) {
           if (hint.textContent === "画像を読み込み中…") hint.textContent = "";
           renderImagePreview();
+          if (pendingImages.length && selectedCategoryIds.indexOf("image") === -1) {
+            selectedCategoryIds.push("image");
+            renderSelectedChips();
+          }
         }
       });
     });
   });
+
+  // --- カテゴリー管理 ---
+
+  function categoryName(id) {
+    var found = allCategories.filter(function (c) { return c.id === id; })[0];
+    return found ? found.name : id;
+  }
+
+  function loadCategories() {
+    return fetch("/api/board/categories", { headers: { "X-Board-Pin": currentPin } })
+      .then(function (res) { return res.json(); })
+      .then(function (list) {
+        allCategories = Array.isArray(list) ? list : [];
+        renderSelectedChips();
+        renderFilterChips();
+      })
+      .catch(function () {});
+  }
+
+  function createCategory(name, done) {
+    fetch("/api/board/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
+      body: JSON.stringify({ name: name }),
+    })
+      .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+      .then(function (result) {
+        if (result.ok) {
+          allCategories.push(result.data);
+          done(result.data);
+        } else if (result.data && result.data.category) {
+          // 既に同名がある場合はそれを使う
+          done(result.data.category);
+        } else {
+          hint.textContent = (result.data && result.data.message) || "カテゴリーの作成に失敗しました";
+          done(null);
+        }
+      })
+      .catch(function () {
+        hint.textContent = "カテゴリーの作成に失敗しました";
+        done(null);
+      });
+  }
+
+  function renderSelectedChips() {
+    categoryChipsSelectedEl.innerHTML = "";
+    selectedCategoryIds.forEach(function (id) {
+      var chip = document.createElement("button");
+      chip.className = "category-chip";
+      chip.type = "button";
+      var label = document.createElement("span");
+      label.textContent = categoryName(id);
+      chip.appendChild(label);
+      var remove = document.createElement("span");
+      remove.className = "chip-remove";
+      remove.textContent = "×";
+      chip.appendChild(remove);
+      chip.addEventListener("click", function () {
+        selectedCategoryIds = selectedCategoryIds.filter(function (x) { return x !== id; });
+        renderSelectedChips();
+      });
+      categoryChipsSelectedEl.appendChild(chip);
+    });
+  }
+
+  function selectCategory(id) {
+    if (selectedCategoryIds.indexOf(id) === -1) selectedCategoryIds.push(id);
+    categorySearchInput.value = "";
+    categorySuggestionsEl.hidden = true;
+    renderSelectedChips();
+  }
+
+  function renderSuggestions() {
+    var query = categorySearchInput.value.trim();
+    var lower = query.toLowerCase();
+    var candidates = allCategories.filter(function (c) {
+      return selectedCategoryIds.indexOf(c.id) === -1 && (!lower || c.name.toLowerCase().indexOf(lower) !== -1);
+    });
+    categorySuggestionsEl.innerHTML = "";
+    candidates.forEach(function (c) {
+      var item = document.createElement("button");
+      item.className = "category-suggestion-item";
+      item.type = "button";
+      item.textContent = c.name;
+      item.addEventListener("click", function () { selectCategory(c.id); });
+      categorySuggestionsEl.appendChild(item);
+    });
+    var exactMatch = allCategories.some(function (c) { return c.name.toLowerCase() === lower; });
+    if (query && !exactMatch) {
+      var createItem = document.createElement("button");
+      createItem.className = "category-suggestion-item create-new";
+      createItem.type = "button";
+      createItem.textContent = "＋「" + query + "」を新規作成";
+      createItem.addEventListener("click", function () {
+        createItem.disabled = true;
+        createCategory(query, function (created) {
+          if (created) selectCategory(created.id);
+        });
+      });
+      categorySuggestionsEl.appendChild(createItem);
+    }
+    categorySuggestionsEl.hidden = candidates.length === 0 && !(query && !exactMatch);
+  }
+
+  categorySearchInput.addEventListener("input", renderSuggestions);
+  categorySearchInput.addEventListener("focus", renderSuggestions);
+  categorySearchInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      var query = categorySearchInput.value.trim();
+      if (!query) return;
+      var exact = allCategories.filter(function (c) { return c.name.toLowerCase() === query.toLowerCase(); })[0];
+      if (exact) {
+        selectCategory(exact.id);
+      } else {
+        createCategory(query, function (created) {
+          if (created) selectCategory(created.id);
+        });
+      }
+    }
+  });
+  document.addEventListener("click", function (e) {
+    if (!categorySearchInput.contains(e.target) && !categorySuggestionsEl.contains(e.target)) {
+      categorySuggestionsEl.hidden = true;
+    }
+  });
+
+  function renderFilterChips() {
+    var query = categoryFilterSearchInput.value.trim().toLowerCase();
+    var visible = allCategories.filter(function (c) { return !query || c.name.toLowerCase().indexOf(query) !== -1; });
+    categoryFilterBar.hidden = allCategories.length === 0;
+    categoryFilterChipsEl.innerHTML = "";
+    visible.forEach(function (c) {
+      var chip = document.createElement("button");
+      chip.className = "category-filter-chip" + (activeFilterIds.indexOf(c.id) !== -1 ? " active" : "");
+      chip.type = "button";
+      chip.textContent = c.name;
+      chip.addEventListener("click", function () {
+        if (activeFilterIds.indexOf(c.id) === -1) {
+          activeFilterIds.push(c.id);
+        } else {
+          activeFilterIds = activeFilterIds.filter(function (x) { return x !== c.id; });
+        }
+        renderFilterChips();
+        render(applyCategoryFilter(mergedPosts()));
+      });
+      categoryFilterChipsEl.appendChild(chip);
+    });
+  }
+
+  categoryFilterSearchInput.addEventListener("input", renderFilterChips);
+
+  function applyCategoryFilter(posts) {
+    if (!activeFilterIds.length) return posts;
+    return posts.filter(function (p) {
+      var cats = Array.isArray(p.categories) ? p.categories : [];
+      return activeFilterIds.some(function (id) { return cats.indexOf(id) !== -1; });
+    });
+  }
 
   function fmtTime(ts) {
     var d = new Date(ts);
@@ -410,6 +642,19 @@
         card.appendChild(textEl);
       }
 
+      var postCategories = Array.isArray(data.categories) ? data.categories : [];
+      if (postCategories.length) {
+        var catRow = document.createElement("div");
+        catRow.className = "post-categories";
+        postCategories.forEach(function (cid) {
+          var tag = document.createElement("span");
+          tag.className = "post-category-tag";
+          tag.textContent = categoryName(cid);
+          catRow.appendChild(tag);
+        });
+        card.appendChild(catRow);
+      }
+
       var foot = document.createElement("div");
       foot.className = "post-foot";
 
@@ -451,7 +696,7 @@
       delBtn.textContent = "削除";
       delBtn.addEventListener("click", function () {
         localDeletes.push(data.id);
-        render(mergedPosts());
+        render(applyCategoryFilter(mergedPosts()));
         fetch("/api/board/" + encodeURIComponent(data.id), {
           method: "DELETE",
           headers: { "X-Board-Pin": currentPin },
@@ -473,7 +718,7 @@
       })
       .then(function (posts) {
         serverPosts = posts;
-        render(mergedPosts());
+        render(applyCategoryFilter(mergedPosts()));
         if (hint.textContent === "読み込みに失敗しました") hint.textContent = "";
       })
       .catch(function () {
@@ -487,8 +732,10 @@
     if (!text && !images.length) return;
     postBtn.disabled = true;
     hint.textContent = "";
+    var categories = selectedCategoryIds.slice();
     var body = { text: text };
     if (images.length) body.images = images;
+    if (categories.length) body.categories = categories;
     fetch("/api/board", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
@@ -504,10 +751,12 @@
       })
       .then(function (created) {
         localAdds.push(created);
-        render(mergedPosts());
+        render(applyCategoryFilter(mergedPosts()));
         newText.value = "";
         pendingImages = [];
         renderImagePreview();
+        selectedCategoryIds = [];
+        renderSelectedChips();
       })
       .catch(function (err) {
         hint.textContent = (err && err.message) || "投稿に失敗しました";
@@ -534,8 +783,9 @@
         setTimeout(function () { refreshBtn.classList.remove("spinning"); }, 600);
       });
     });
-    loadPosts();
+    loadCategories().then(loadPosts);
     setInterval(loadPosts, 15000);
+    setInterval(loadCategories, 60000);
   }
 
   function tryUnlock(pin) {

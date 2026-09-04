@@ -113,6 +113,9 @@ export async function onRequestPost({ request, env }) {
   }
   const text = typeof body.text === "string" ? body.text.trim() : "";
   const rawImages = Array.isArray(body.images) ? body.images : [];
+  const rawCategories = Array.isArray(body.categories)
+    ? body.categories.filter((c) => typeof c === "string" && c.length && c.length <= 64).slice(0, 20)
+    : [];
 
   for (const img of rawImages) {
     if (typeof img !== "string" || !/^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(img)) {
@@ -159,9 +162,18 @@ export async function onRequestPost({ request, env }) {
     imageIds.push(imgId);
   }
 
+  // 画像を貼った投稿には「画像」カテゴリー(id: image)を自動付与する
+  // （クライアント側でも自動選択するが、念のためサーバー側でも保証する）。
+  const categories = Array.from(new Set(rawCategories));
+  if (imageIds.length && !categories.includes("image")) {
+    categories.push("image");
+  }
+
   const createdAt = Date.now();
   const id = crypto.randomUUID();
-  const post = imageIds.length ? { id, text, images: imageIds, createdAt } : { id, text, createdAt };
+  const post = { id, text, createdAt };
+  if (imageIds.length) post.images = imageIds;
+  if (categories.length) post.categories = categories;
   await env.MIITOBOW_BOARD.put(`post:${createdAt}:${id}`, JSON.stringify(post));
   if (imageIds.length) {
     await trimOldImages(env);
