@@ -232,6 +232,17 @@
     background: var(--surface); color: var(--ink-soft);
   }
   .category-filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .date-filter-bar { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin-top: -4px; }
+  .date-filter-field { display: flex; flex-direction: column; gap: 3px; font-size: 0.74rem; color: var(--ink-faint); font-weight: 700; }
+  .date-filter-field input {
+    border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 0.82rem;
+    font-family: inherit; background: var(--surface); color: var(--ink);
+  }
+  .date-filter-clear {
+    background: transparent; border: 1px solid var(--border); color: var(--ink-soft); border-radius: 999px;
+    padding: 6px 12px; font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .date-filter-clear:hover { background: var(--accent-glow); color: var(--accent-dark); }
   button { font-family: inherit; cursor: pointer; border: none; }
   .btn-primary {
     background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
@@ -344,6 +355,17 @@
         <input type="text" id="category-filter-search" placeholder="カテゴリーで絞り込み…" autocomplete="off">
       </div>
       <div class="category-filter-chips" id="category-filter-chips"></div>
+    </div>
+    <div class="date-filter-bar">
+      <label class="date-filter-field">
+        <span>開始日</span>
+        <input type="date" id="date-filter-from">
+      </label>
+      <label class="date-filter-field">
+        <span>終了日</span>
+        <input type="date" id="date-filter-to">
+      </label>
+      <button class="date-filter-clear" id="date-filter-clear" type="button" hidden>クリア</button>
     </div>
     <div class="posts" id="posts"></div>
     <p class="empty" id="empty-msg" hidden>まだ投稿がありません</p>
@@ -541,6 +563,9 @@
   var categoryFilterBar = document.getElementById("category-filter-bar");
   var categoryFilterSearchInput = document.getElementById("category-filter-search");
   var categoryFilterChipsEl = document.getElementById("category-filter-chips");
+  var dateFilterFrom = document.getElementById("date-filter-from");
+  var dateFilterTo = document.getElementById("date-filter-to");
+  var dateFilterClear = document.getElementById("date-filter-clear");
   var categoryManageToggle = document.getElementById("category-manage-toggle");
   var categoryManagePanel = document.getElementById("category-manage-panel");
   var allCategories = []; // [{id, name}]
@@ -769,7 +794,7 @@
           activeFilterIds = activeFilterIds.filter(function (x) { return x !== c.id; });
         }
         renderFilterChips();
-        render(applyCategoryFilter(mergedPosts()));
+        render(applyAllFilters(mergedPosts()));
       });
       categoryFilterChipsEl.appendChild(chip);
     });
@@ -784,6 +809,51 @@
       return activeFilterIds.some(function (id) { return cats.indexOf(id) !== -1; });
     });
   }
+
+  // --- 日付での絞り込み ---
+  function parseLocalDate(dateStr, endOfDay) {
+    // <input type="date">の値("YYYY-MM-DD")をローカルタイムゾーンの0時/23:59:59.999として解釈する
+    var parts = dateStr.split("-");
+    var y = Number(parts[0]), m = Number(parts[1]) - 1, d = Number(parts[2]);
+    return endOfDay ? new Date(y, m, d, 23, 59, 59, 999).getTime() : new Date(y, m, d, 0, 0, 0, 0).getTime();
+  }
+
+  function applyDateFilter(posts) {
+    var fromVal = dateFilterFrom.value;
+    var toVal = dateFilterTo.value;
+    if (!fromVal && !toVal) return posts;
+    var fromTs = fromVal ? parseLocalDate(fromVal, false) : null;
+    var toTs = toVal ? parseLocalDate(toVal, true) : null;
+    return posts.filter(function (p) {
+      var ts = p.createdAt || 0;
+      if (fromTs !== null && ts < fromTs) return false;
+      if (toTs !== null && ts > toTs) return false;
+      return true;
+    });
+  }
+
+  function applyAllFilters(posts) {
+    return applyDateFilter(applyCategoryFilter(posts));
+  }
+
+  function updateDateFilterClearVisibility() {
+    dateFilterClear.hidden = !dateFilterFrom.value && !dateFilterTo.value;
+  }
+
+  dateFilterFrom.addEventListener("change", function () {
+    updateDateFilterClearVisibility();
+    render(applyAllFilters(mergedPosts()));
+  });
+  dateFilterTo.addEventListener("change", function () {
+    updateDateFilterClearVisibility();
+    render(applyAllFilters(mergedPosts()));
+  });
+  dateFilterClear.addEventListener("click", function () {
+    dateFilterFrom.value = "";
+    dateFilterTo.value = "";
+    updateDateFilterClearVisibility();
+    render(applyAllFilters(mergedPosts()));
+  });
 
   function renameCategory(id, name, done) {
     fetch("/api/board/categories/" + encodeURIComponent(id), {
@@ -845,7 +915,7 @@
             renderManagePanel();
             renderSelectedChips();
             renderFilterChips();
-            render(applyCategoryFilter(mergedPosts()));
+            render(applyAllFilters(mergedPosts()));
           });
         });
         row.appendChild(saveBtn);
@@ -873,11 +943,12 @@
 
   function fmtTime(ts) {
     var d = new Date(ts);
+    var yyyy = d.getFullYear();
     var mm = String(d.getMonth() + 1).padStart(2, "0");
     var dd = String(d.getDate()).padStart(2, "0");
     var hh = String(d.getHours()).padStart(2, "0");
     var mi = String(d.getMinutes()).padStart(2, "0");
-    return mm + "/" + dd + " " + hh + ":" + mi;
+    return yyyy + "/" + mm + "/" + dd + " " + hh + ":" + mi;
   }
 
   function fallbackCopy(text, done) {
@@ -1033,7 +1104,7 @@
         if (ok) {
           popup.hidden = true;
           input.value = "";
-          render(applyCategoryFilter(mergedPosts()));
+          render(applyAllFilters(mergedPosts()));
         } else {
           hint.textContent = "カテゴリーの追加に失敗しました";
         }
@@ -1207,7 +1278,7 @@
       delBtn.textContent = "削除";
       delBtn.addEventListener("click", function () {
         localDeletes.push(data.id);
-        render(applyCategoryFilter(mergedPosts()));
+        render(applyAllFilters(mergedPosts()));
         fetch("/api/board/" + encodeURIComponent(data.id), {
           method: "DELETE",
           headers: { "X-Board-Pin": currentPin },
@@ -1229,7 +1300,7 @@
       })
       .then(function (posts) {
         serverPosts = posts;
-        render(applyCategoryFilter(mergedPosts()));
+        render(applyAllFilters(mergedPosts()));
         if (hint.textContent === "読み込みに失敗しました") hint.textContent = "";
       })
       .catch(function () {
@@ -1262,7 +1333,7 @@
       })
       .then(function (created) {
         localAdds.push(created);
-        render(applyCategoryFilter(mergedPosts()));
+        render(applyAllFilters(mergedPosts()));
         newText.value = "";
         pendingImages = [];
         renderImagePreview();
