@@ -107,10 +107,31 @@
     cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
   .post-image-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-  .post-image-grid .post-image-link { display: block; width: 110px; height: 110px; }
+  .post-image-grid .post-image-link {
+    display: block; width: 110px; height: 110px; padding: 0; margin: 0; background: none;
+    border: none; cursor: pointer; font: inherit;
+  }
   .post-image-grid.count-1 .post-image-link { width: 100%; height: auto; max-height: 340px; }
   .post-image { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; background: var(--surface-soft); }
   .post-image-grid.count-1 .post-image { height: auto; object-fit: contain; }
+
+  .image-lightbox {
+    position: fixed; inset: 0; z-index: 50; background: rgba(10, 14, 8, 0.86);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 24px;
+  }
+  .image-lightbox img {
+    max-width: 100%; max-height: 78vh; object-fit: contain; border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .lightbox-close {
+    position: absolute; top: 16px; right: 18px; width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.14); color: #fff; font-size: 1.3rem; border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,0.26); }
+  .lightbox-actions { display: flex; gap: 10px; }
+  .lightbox-actions .btn-primary { text-decoration: none; padding: 10px 26px; }
 
   .category-chip {
     display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow);
@@ -169,7 +190,14 @@
     font-size: 0.72rem; font-weight: 700; color: var(--accent-dark); background: var(--accent-glow);
     border-radius: 999px; padding: 3px 9px;
   }
-  .post-top { position: relative; display: flex; justify-content: flex-end; }
+  .post-top { position: relative; display: flex; justify-content: flex-end; gap: 6px; }
+  .save-all-btn {
+    background: transparent; border: 1px dashed var(--border); color: var(--ink-faint);
+    font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 3px 10px;
+    cursor: pointer; font-family: inherit;
+  }
+  .save-all-btn:hover { color: var(--accent-dark); border-color: var(--accent); background: var(--accent-glow); }
+  .save-all-btn:disabled { opacity: 0.6; cursor: default; }
   .add-category-btn {
     background: transparent; border: 1px dashed var(--border); color: var(--ink-faint);
     font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 3px 10px;
@@ -308,6 +336,14 @@
   </main>
 </div>
 
+<div class="image-lightbox" id="image-lightbox" hidden>
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="閉じる">×</button>
+  <img id="lightbox-img" alt="画像プレビュー">
+  <div class="lightbox-actions">
+    <a class="btn-primary" id="lightbox-save" download>保存</a>
+  </div>
+</div>
+
 <script>
 (function () {
   var SESSION_KEY = "miitobow-board-pin";
@@ -319,6 +355,29 @@
 
   var postsEl = document.getElementById("posts");
   var emptyMsg = document.getElementById("empty-msg");
+  var lightboxEl = document.getElementById("image-lightbox");
+  var lightboxImg = document.getElementById("lightbox-img");
+  var lightboxSave = document.getElementById("lightbox-save");
+  var lightboxClose = document.getElementById("lightbox-close");
+
+  function openLightbox(url, filename) {
+    lightboxImg.src = url;
+    lightboxSave.href = url;
+    lightboxSave.download = filename;
+    lightboxEl.hidden = false;
+  }
+  function closeLightbox() {
+    lightboxEl.hidden = true;
+    lightboxImg.src = "";
+  }
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightboxEl.addEventListener("click", function (e) {
+    if (e.target === lightboxEl) closeLightbox();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !lightboxEl.hidden) closeLightbox();
+  });
+
   var countEl = document.getElementById("count");
   var refreshBtn = document.getElementById("refresh-btn");
   var newText = document.getElementById("new-text");
@@ -742,9 +801,51 @@
       .catch(function () { done(false); });
   }
 
+  function downloadSequentially(urls, baseFilename) {
+    urls.forEach(function (url, i) {
+      setTimeout(function () {
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = baseFilename + (urls.length > 1 ? "-" + (i + 1) : "") + ".jpg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, i * 350);
+    });
+  }
+
+  function buildSaveAllButton(data) {
+    var legacyImages = data.image ? [data.image] : [];
+    var newImageIds = Array.isArray(data.images) ? data.images : [];
+    if (!legacyImages.length && !newImageIds.length) return null;
+
+    var btn = document.createElement("button");
+    btn.className = "save-all-btn";
+    btn.type = "button";
+    btn.textContent = "⬇ まとめて保存";
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      btn.disabled = true;
+      btn.textContent = "保存中…";
+      var promises = legacyImages.map(function (dataUrl) { return Promise.resolve(dataUrl); })
+        .concat(newImageIds.map(function (id) { return getImageBlobUrl(id).catch(function () { return null; }); }));
+      Promise.all(promises).then(function (urls) {
+        var valid = urls.filter(Boolean);
+        downloadSequentially(valid, "miitobow-board-" + (data.createdAt || Date.now()));
+      }).finally(function () {
+        btn.disabled = false;
+        btn.textContent = "⬇ まとめて保存";
+      });
+    });
+    return btn;
+  }
+
   function buildAddCategoryWidget(data) {
     var wrap = document.createElement("div");
     wrap.className = "post-top";
+
+    var saveAllBtn = buildSaveAllButton(data);
+    if (saveAllBtn) wrap.appendChild(saveAllBtn);
 
     var btn = document.createElement("button");
     btn.className = "add-category-btn";
@@ -851,35 +952,41 @@
         grid.className = "post-image-grid count-" + totalCount;
 
         legacyImages.forEach(function (dataUrl, i) {
-          var imgLink = document.createElement("a");
+          var imgLink = document.createElement("button");
+          imgLink.type = "button";
           imgLink.className = "post-image-link";
-          imgLink.href = dataUrl;
-          imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
           var imgEl = document.createElement("img");
           imgEl.className = "post-image";
           imgEl.src = dataUrl;
           imgEl.alt = "投稿画像";
           imgLink.appendChild(imgEl);
+          var filename = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
+          imgLink.addEventListener("click", function () { openLightbox(dataUrl, filename); });
           grid.appendChild(imgLink);
         });
 
         newImageIds.forEach(function (imgId, i) {
-          var imgLink = document.createElement("a");
+          var imgLink = document.createElement("button");
+          imgLink.type = "button";
           imgLink.className = "post-image-link";
           var imgEl = document.createElement("img");
           imgEl.className = "post-image";
           imgEl.alt = "投稿画像";
           imgLink.appendChild(imgEl);
           grid.appendChild(imgLink);
+          var filename = "miitobow-board-" + (data.createdAt || Date.now()) + "-" + (i + 1) + ".jpg";
+          var resolvedUrl = null;
           getImageBlobUrl(imgId)
             .then(function (url) {
               imgEl.src = url;
-              imgLink.href = url;
-              imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + "-" + (i + 1) + ".jpg";
+              resolvedUrl = url;
             })
             .catch(function () {
               imgEl.alt = "画像の読み込みに失敗しました";
             });
+          imgLink.addEventListener("click", function () {
+            if (resolvedUrl) openLightbox(resolvedUrl, filename);
+          });
         });
 
         card.appendChild(grid);
