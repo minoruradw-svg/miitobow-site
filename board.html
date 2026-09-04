@@ -97,15 +97,20 @@
     font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: inherit;
   }
   .image-pick-btn:hover { background: var(--accent-glow); color: var(--accent-dark); }
-  .image-preview { position: relative; display: inline-block; }
-  .image-preview img { display: block; max-width: 140px; max-height: 140px; border-radius: 10px; border: 1px solid var(--border); }
-  .image-preview .remove-image {
-    position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--danger); color: #fff; border: none; font-size: 0.8rem; line-height: 1;
+  .image-preview-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .image-preview-grid:empty { display: none; }
+  .image-thumb { position: relative; width: 72px; height: 72px; }
+  .image-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 10px; border: 1px solid var(--border); }
+  .image-thumb .remove-image {
+    position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--danger); color: #fff; border: none; font-size: 0.75rem; line-height: 1;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
-  .post-image-link { display: block; }
-  .post-image { max-width: 100%; border-radius: 10px; display: block; }
+  .post-image-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .post-image-grid .post-image-link { display: block; width: 110px; height: 110px; }
+  .post-image-grid.count-1 .post-image-link { width: 100%; height: auto; max-height: 340px; }
+  .post-image { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; background: var(--surface-soft); }
+  .post-image-grid.count-1 .post-image { height: auto; object-fit: contain; }
   button { font-family: inherit; cursor: pointer; border: none; }
   .btn-primary {
     background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
@@ -174,13 +179,10 @@
     <div class="composer">
       <textarea id="new-text" placeholder="ここに書いて投稿…"></textarea>
       <div class="composer-tools">
-        <input type="file" id="image-input" accept="image/*" hidden>
-        <button class="image-pick-btn" id="image-pick-btn" type="button">📷 画像を選ぶ</button>
-        <div class="image-preview" id="image-preview" hidden>
-          <img id="image-preview-img" alt="添付画像プレビュー">
-          <button class="remove-image" id="image-remove-btn" type="button" aria-label="画像を外す">×</button>
-        </div>
+        <input type="file" id="image-input" accept="image/*" multiple hidden>
+        <button class="image-pick-btn" id="image-pick-btn" type="button">📷 画像を選ぶ（複数可）</button>
       </div>
+      <div class="image-preview-grid" id="image-preview-grid"></div>
       <div class="composer-row">
         <span class="hint" id="composer-hint"></span>
         <button class="btn-primary" id="post-btn" type="button">投稿</button>
@@ -208,15 +210,14 @@
   var hint = document.getElementById("composer-hint");
   var imageInput = document.getElementById("image-input");
   var imagePickBtn = document.getElementById("image-pick-btn");
-  var imagePreview = document.getElementById("image-preview");
-  var imagePreviewImg = document.getElementById("image-preview-img");
-  var imageRemoveBtn = document.getElementById("image-remove-btn");
-  var pendingImage = null; // 元画質のままのdata URL
+  var imagePreviewGrid = document.getElementById("image-preview-grid");
+  var pendingImages = []; // 元画質のままのdata URLの配列
   var currentPin = null;
 
   // 元画質のまま保存する代わりに、あまり大きすぎるファイルだけは弾く
-  // （画像は直近3件しか保持しない仕組みなので、通常の写真サイズなら気にしなくてよい）。
+  // （画像は直近20枚しか保持しない仕組みなので、通常の写真サイズなら気にしなくてよい）。
   var IMAGE_MAX_FILE_BYTES = 15 * 1024 * 1024;
+  var IMAGE_MAX_COUNT = 20;
 
   function readImageFile(file, done) {
     if (file.size > IMAGE_MAX_FILE_BYTES) {
@@ -229,29 +230,56 @@
     reader.readAsDataURL(file);
   }
 
+  function renderImagePreview() {
+    imagePreviewGrid.innerHTML = "";
+    pendingImages.forEach(function (dataUrl, idx) {
+      var thumb = document.createElement("div");
+      thumb.className = "image-thumb";
+      var img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = "添付画像プレビュー";
+      thumb.appendChild(img);
+      var removeBtn = document.createElement("button");
+      removeBtn.className = "remove-image";
+      removeBtn.type = "button";
+      removeBtn.setAttribute("aria-label", "この画像を外す");
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", function () {
+        pendingImages.splice(idx, 1);
+        renderImagePreview();
+      });
+      thumb.appendChild(removeBtn);
+      imagePreviewGrid.appendChild(thumb);
+    });
+  }
+
   imagePickBtn.addEventListener("click", function () { imageInput.click(); });
 
   imageInput.addEventListener("change", function () {
-    var file = imageInput.files && imageInput.files[0];
+    var files = imageInput.files ? Array.prototype.slice.call(imageInput.files) : [];
     imageInput.value = "";
-    if (!file) return;
+    if (!files.length) return;
+    if (pendingImages.length + files.length > IMAGE_MAX_COUNT) {
+      hint.textContent = "1回に選べる画像は" + IMAGE_MAX_COUNT + "枚までです";
+      files = files.slice(0, IMAGE_MAX_COUNT - pendingImages.length);
+      if (!files.length) return;
+    }
     hint.textContent = "画像を読み込み中…";
-    readImageFile(file, function (dataUrl, errMsg) {
-      hint.textContent = "";
-      if (!dataUrl) {
-        hint.textContent = errMsg || "画像の読み込みに失敗しました";
-        return;
-      }
-      pendingImage = dataUrl;
-      imagePreviewImg.src = dataUrl;
-      imagePreview.hidden = false;
+    var remaining = files.length;
+    files.forEach(function (file) {
+      readImageFile(file, function (dataUrl, errMsg) {
+        remaining -= 1;
+        if (dataUrl) {
+          pendingImages.push(dataUrl);
+        } else if (errMsg) {
+          hint.textContent = errMsg;
+        }
+        if (remaining === 0) {
+          if (hint.textContent === "画像を読み込み中…") hint.textContent = "";
+          renderImagePreview();
+        }
+      });
     });
-  });
-
-  imageRemoveBtn.addEventListener("click", function () {
-    pendingImage = null;
-    imagePreviewImg.src = "";
-    imagePreview.hidden = true;
   });
 
   function fmtTime(ts) {
@@ -295,6 +323,23 @@
     return list;
   }
 
+  // 画像本体は/api/board/image/<id>から個別取得（一覧取得を軽く保つため）。
+  // 取得済みのBlob URLはキャッシュして使い回す。
+  var imageBlobCache = {};
+  function getImageBlobUrl(imgId) {
+    if (!imageBlobCache[imgId]) {
+      imageBlobCache[imgId] = fetch("/api/board/image/" + encodeURIComponent(imgId), {
+        headers: { "X-Board-Pin": currentPin },
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("load failed");
+          return res.blob();
+        })
+        .then(function (blob) { return URL.createObjectURL(blob); });
+    }
+    return imageBlobCache[imgId];
+  }
+
   function render(posts) {
     postsEl.innerHTML = "";
     emptyMsg.hidden = posts.length > 0;
@@ -303,17 +348,46 @@
       var card = document.createElement("div");
       card.className = "post";
 
-      if (data.image) {
-        var imgLink = document.createElement("a");
-        imgLink.className = "post-image-link";
-        imgLink.href = data.image;
-        imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
-        var imgEl = document.createElement("img");
-        imgEl.className = "post-image";
-        imgEl.src = data.image;
-        imgEl.alt = "投稿画像";
-        imgLink.appendChild(imgEl);
-        card.appendChild(imgLink);
+      var legacyImages = data.image ? [data.image] : [];
+      var newImageIds = Array.isArray(data.images) ? data.images : [];
+      if (legacyImages.length || newImageIds.length) {
+        var grid = document.createElement("div");
+        var totalCount = legacyImages.length + newImageIds.length;
+        grid.className = "post-image-grid count-" + totalCount;
+
+        legacyImages.forEach(function (dataUrl, i) {
+          var imgLink = document.createElement("a");
+          imgLink.className = "post-image-link";
+          imgLink.href = dataUrl;
+          imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
+          var imgEl = document.createElement("img");
+          imgEl.className = "post-image";
+          imgEl.src = dataUrl;
+          imgEl.alt = "投稿画像";
+          imgLink.appendChild(imgEl);
+          grid.appendChild(imgLink);
+        });
+
+        newImageIds.forEach(function (imgId, i) {
+          var imgLink = document.createElement("a");
+          imgLink.className = "post-image-link";
+          var imgEl = document.createElement("img");
+          imgEl.className = "post-image";
+          imgEl.alt = "投稿画像";
+          imgLink.appendChild(imgEl);
+          grid.appendChild(imgLink);
+          getImageBlobUrl(imgId)
+            .then(function (url) {
+              imgEl.src = url;
+              imgLink.href = url;
+              imgLink.download = "miitobow-board-" + (data.createdAt || Date.now()) + "-" + (i + 1) + ".jpg";
+            })
+            .catch(function () {
+              imgEl.alt = "画像の読み込みに失敗しました";
+            });
+        });
+
+        card.appendChild(grid);
       }
 
       if (data.text) {
@@ -358,15 +432,6 @@
         actions.appendChild(copyBtn);
       }
 
-      if (data.image) {
-        var saveBtn = document.createElement("a");
-        saveBtn.className = "btn-ghost";
-        saveBtn.href = data.image;
-        saveBtn.download = "miitobow-board-" + (data.createdAt || Date.now()) + ".jpg";
-        saveBtn.textContent = "画像を保存";
-        actions.appendChild(saveBtn);
-      }
-
       var delBtn = document.createElement("button");
       delBtn.className = "btn-ghost danger";
       delBtn.type = "button";
@@ -404,12 +469,12 @@
 
   function submitPost() {
     var text = newText.value.trim();
-    var image = pendingImage;
-    if (!text && !image) return;
+    var images = pendingImages.slice();
+    if (!text && !images.length) return;
     postBtn.disabled = true;
     hint.textContent = "";
     var body = { text: text };
-    if (image) body.image = image;
+    if (images.length) body.images = images;
     fetch("/api/board", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
@@ -427,9 +492,8 @@
         localAdds.push(created);
         render(mergedPosts());
         newText.value = "";
-        pendingImage = null;
-        imagePreviewImg.src = "";
-        imagePreview.hidden = true;
+        pendingImages = [];
+        renderImagePreview();
       })
       .catch(function (err) {
         hint.textContent = (err && err.message) || "投稿に失敗しました";

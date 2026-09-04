@@ -16,6 +16,17 @@ export async function onRequestDelete({ request, env, params }) {
   const list = await env.MIITOBOW_BOARD.list({ prefix: "post:" });
   const match = list.keys.find((k) => k.name.endsWith(":" + id));
   if (match) {
+    const raw = await env.MIITOBOW_BOARD.get(match.name);
+    if (raw) {
+      try {
+        const post = JSON.parse(raw);
+        if (Array.isArray(post.images)) {
+          for (const imgId of post.images) {
+            await env.MIITOBOW_BOARD.delete(`img:${imgId}`);
+          }
+        }
+      } catch (e) {}
+    }
     await env.MIITOBOW_BOARD.delete(match.name);
   }
   return new Response(null, { status: 204 });

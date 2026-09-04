@@ -1,5 +1,5 @@
-// GET  /api/board   -> 投稿一覧（新しい順）
-// POST /api/board   -> 投稿を追加（text/imageのどちらか、または両方）
+// GET  /api/board   -> 投稿一覧（新しい順・画像本体は含まない。各画像は/api/board/image/<id>で個別取得）
+// POST /api/board   -> 投稿を追加（text/imagesのどちらか、または両方。1投稿で複数枚OK）
 // どちらも X-Board-Pin ヘッダーがCloudflareの環境変数(BOARD_PIN)と一致しないと401。
 //
 // バグ等による無限投稿・容量肥大を防ぐための上限（KV無料枠：保存1GB・書き込み1日1000件に対し、
@@ -8,22 +8,32 @@ const MAX_POSTS = 500;
 // note記事の全文コピペ（数千字）にも余裕を持たせつつ、事故で巨大なテキストが
 // 入らないよう上限を設定（KVは1件25MBまで可能だが、そこまでは要らない）。
 const MAX_TEXT_LENGTH = 20000;
-// 画像は元画質のままdata URLとして受け取る（リサイズ・圧縮なし）。
-// KVの1件あたり上限は25MB。base64化で元ファイルの約1.33倍になるので、
-// クライアント側の15MBファイル上限に対して余裕を持たせた値にしてある。
+// 画像は元画質のままdata URLとして受け取る（リサイズ・圧縮なし）。1枚ずつ個別のKVキーに
+// 保存するので、投稿本体（テキスト+画像ID一覧）のJSONが25MB上限に触れる心配はない。
 const MAX_IMAGE_DATA_LENGTH = 21 * 1024 * 1024;
-// 画像は「直近N件の投稿」だけ残し、それより古い画像は自動で消してテキストだけ残す
-// （携帯の写真をそのまま貼れるようにする代わりに、容量が際限なく増えないようにする安全弁）。
-const MAX_IMAGE_POSTS = 3;
+// 画像は「直近N枚」だけ残し、それより古い画像は自動で消してテキストだけ残す
+// （元画質のまま複数枚貼れるようにする代わりに、容量が際限なく増えないようにする安全弁）。
+const MAX_IMAGES = 20;
 
 function checkPin(request, env) {
   const pin = request.headers.get("X-Board-Pin") || "";
   return env.BOARD_PIN && pin === env.BOARD_PIN;
 }
 
+function base64ToBytes(dataUrl) {
+  const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1);
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+// 画像は「直近20枚」だけ残す。旧形式（投稿に直接埋め込まれたdata URLの`image`フィールド）は
+// 対象外（過去の投稿を壊さないよう触らない）。新形式の`images`（画像ID配列）だけを対象に、
+// 新しい投稿から数えて20枚を超えた分の画像実体を削除し、投稿側の参照も外す。
 async function trimOldImages(env) {
   const list = await env.MIITOBOW_BOARD.list({ prefix: "post:" });
-  const withImages = [];
+  const items = [];
   for (const k of list.keys) {
     const raw = await env.MIITOBOW_BOARD.get(k.name);
     if (!raw) continue;
@@ -33,13 +43,30 @@ async function trimOldImages(env) {
     } catch (e) {
       continue;
     }
-    if (post.image) withImages.push({ key: k.name, post });
+    if (Array.isArray(post.images) && post.images.length) items.push({ key: k.name, post });
   }
-  withImages.sort((a, b) => b.post.createdAt - a.post.createdAt);
-  const excess = withImages.slice(MAX_IMAGE_POSTS);
-  for (const item of excess) {
-    delete item.post.image;
-    await env.MIITOBOW_BOARD.put(item.key, JSON.stringify(item.post));
+  items.sort((a, b) => b.post.createdAt - a.post.createdAt);
+
+  let kept = 0;
+  const toDelete = [];
+  for (const item of items) {
+    const imgs = item.post.images;
+    if (kept >= MAX_IMAGES) {
+      toDelete.push(...imgs);
+      item.post.images = [];
+      await env.MIITOBOW_BOARD.put(item.key, JSON.stringify(item.post));
+    } else if (kept + imgs.length <= MAX_IMAGES) {
+      kept += imgs.length;
+    } else {
+      const keepCount = MAX_IMAGES - kept;
+      toDelete.push(...imgs.slice(keepCount));
+      item.post.images = imgs.slice(0, keepCount);
+      await env.MIITOBOW_BOARD.put(item.key, JSON.stringify(item.post));
+      kept = MAX_IMAGES;
+    }
+  }
+  for (const id of toDelete) {
+    await env.MIITOBOW_BOARD.delete(`img:${id}`);
   }
 }
 
@@ -85,21 +112,29 @@ export async function onRequestPost({ request, env }) {
     });
   }
   const text = typeof body.text === "string" ? body.text.trim() : "";
-  const image = typeof body.image === "string" ? body.image : "";
+  const rawImages = Array.isArray(body.images) ? body.images : [];
 
-  if (image && !/^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(image)) {
+  for (const img of rawImages) {
+    if (typeof img !== "string" || !/^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(img)) {
+      return new Response(
+        JSON.stringify({ error: "invalid_image", message: "画像の形式が正しくありません" }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+    if (img.length > MAX_IMAGE_DATA_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: "invalid_image", message: "画像サイズが大きすぎます。別の画像を試してください" }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+  }
+  if (rawImages.length > MAX_IMAGES) {
     return new Response(
-      JSON.stringify({ error: "invalid_image", message: "画像の形式が正しくありません" }),
+      JSON.stringify({ error: "invalid_image", message: `1回に選べる画像は${MAX_IMAGES}枚までです` }),
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
-  if (image && image.length > MAX_IMAGE_DATA_LENGTH) {
-    return new Response(
-      JSON.stringify({ error: "invalid_image", message: "画像サイズが大きすぎます。別の画像を試してください" }),
-      { status: 400, headers: { "content-type": "application/json" } }
-    );
-  }
-  if ((!text && !image) || text.length > MAX_TEXT_LENGTH) {
+  if ((!text && !rawImages.length) || text.length > MAX_TEXT_LENGTH) {
     return new Response(
       JSON.stringify({ error: "invalid_text", message: `1件あたり${MAX_TEXT_LENGTH}文字までです（${text.length}文字）` }),
       { status: 400, headers: { "content-type": "application/json" } }
@@ -113,11 +148,22 @@ export async function onRequestPost({ request, env }) {
       { status: 507, headers: { "content-type": "application/json" } }
     );
   }
+
+  const imageIds = [];
+  for (const dataUrl of rawImages) {
+    const mimeMatch = /^data:(image\/[a-zA-Z0-9.+-]+);base64,/.exec(dataUrl);
+    const mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+    const bytes = base64ToBytes(dataUrl);
+    const imgId = crypto.randomUUID();
+    await env.MIITOBOW_BOARD.put(`img:${imgId}`, bytes, { metadata: { mime } });
+    imageIds.push(imgId);
+  }
+
   const createdAt = Date.now();
   const id = crypto.randomUUID();
-  const post = image ? { id, text, image, createdAt } : { id, text, createdAt };
+  const post = imageIds.length ? { id, text, images: imageIds, createdAt } : { id, text, createdAt };
   await env.MIITOBOW_BOARD.put(`post:${createdAt}:${id}`, JSON.stringify(post));
-  if (image) {
+  if (imageIds.length) {
     await trimOldImages(env);
   }
   return new Response(JSON.stringify(post), {
