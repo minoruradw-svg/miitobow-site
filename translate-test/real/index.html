@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Realistic UI test</title>
+<style>
+  :root{ --bg:#eceef1; --card:#fff; --ink:#111418; --muted:#6b7580;
+    --line:#e6e9ed; --accent:#0a84ff; --green:#128a4a; --sep:#f0f2f4; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans KR",sans-serif;
+    line-height:1.5;-webkit-text-size-adjust:100%;}
+  .wrap{max-width:400px;margin:0 auto;padding:0 0 60px;}
+  .screen{background:var(--card);margin:0 0 22px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  /* status bar */
+  .sb{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 6px;font-size:.8rem;font-weight:600;color:var(--ink);}
+  .sb .r{letter-spacing:1px;}
+  /* nav bar */
+  .nav{display:flex;align-items:center;gap:10px;padding:6px 16px 14px;border-bottom:1px solid var(--line);}
+  .nav .bk{color:var(--accent);font-size:1.4rem;line-height:1;}
+  .nav h1{font-size:1.35rem;font-weight:700;margin:0;}
+  .nav .big{font-size:1.7rem;}
+  /* settings list */
+  .grp{padding:8px 0 4px;}
+  .glabel{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding:14px 18px 6px;}
+  .item{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--sep);}
+  .item:last-child{border-bottom:none;}
+  .item .t{font-size:1.02rem;}
+  .item .v{color:var(--muted);font-size:.95rem;}
+  .item .chev{color:#c3cad2;margin-left:8px;}
+  /* notifications */
+  .noti{padding:14px 18px;border-bottom:1px solid var(--sep);}
+  .noti .app{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+  .noti .body{font-size:1rem;}
+  /* article */
+  .art{padding:18px;}
+  .art .tag{font-size:.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;}
+  .art h2{font-size:1.3rem;line-height:1.3;margin:6px 0 8px;}
+  .art .meta{color:var(--muted);font-size:.82rem;margin-bottom:12px;}
+  .art p{font-size:1rem;margin:0 0 12px;}
+  /* menu */
+  .menu{padding:6px 18px 16px;}
+  .menu .mh{font-size:1.15rem;font-weight:700;margin:14px 0 8px;}
+  .mi{padding:11px 0;border-bottom:1px solid var(--sep);}
+  .mi:last-child{border-bottom:none;}
+  .mi .top{display:flex;justify-content:space-between;font-size:1.02rem;font-weight:600;}
+  .mi .pr{color:var(--green);font-weight:700;}
+  .mi .d{color:var(--muted);font-size:.9rem;margin-top:2px;}
+  /* chat */
+  .chat{padding:16px 14px;}
+  .bub{max-width:78%;padding:9px 14px;border-radius:18px;margin:7px 0;font-size:1rem;line-height:1.4;}
+  .them{background:#eceef1;border-bottom-left-radius:5px;}
+  .me{background:#0a84ff;color:#fff;margin-left:auto;border-bottom-right-radius:5px;}
+  .time{text-align:center;font-size:.72rem;color:var(--muted);margin:10px 0 2px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 1. Settings (EN) -->
+  <div class="screen" id="s1">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><span class="bk">‹</span><h1 class="big">Settings</h1></div>
+    <div class="glabel">General</div>
+    <div class="item"><span class="t">Software Update</span><span class="v">iOS 18.2 &nbsp;<span class="chev">›</span></span></div>
+    <div class="item"><span class="t">Storage</span><span class="v">Used 78.4 GB of 128 GB <span class="chev">›</span></span></div>
+    <div class="item"><span class="t">Date &amp; Time</span><span class="chev">›</span></div>
+    <div class="glabel">Notifications &amp; Sound</div>
+    <div class="item"><span class="t">Notifications</span><span class="v">Banners, Sounds <span class="chev">›</span></span></div>
+    <div class="item"><span class="t">Do Not Disturb</span><span class="v">Off <span class="chev">›</span></span></div>
+    <div class="item"><span class="t">Screen Time</span><span class="v">3h 12m today <span class="chev">›</span></span></div>
+    <div class="glabel">Privacy</div>
+    <div class="item"><span class="t">Location Services</span><span class="v">While Using <span class="chev">›</span></span></div>
+    <div class="item"><span class="t">Sign out of your account</span></div>
+  </div>
+
+  <!-- 2. Notifications (EN) -->
+  <div class="screen" id="s2">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><h1>Notifications</h1></div>
+    <div class="noti"><div class="app">Delivery</div><div class="body">Your order is out for delivery and will arrive by 6:30 PM today.</div></div>
+    <div class="noti"><div class="app">Calendar</div><div class="body">Reminder: Dentist appointment tomorrow at 10:00 AM.</div></div>
+    <div class="noti"><div class="app">Bank</div><div class="body">Your monthly statement is ready. Tap to view your balance and recent transactions.</div></div>
+    <div class="noti"><div class="app">Weather</div><div class="body">Heavy rain expected this afternoon. Remember to bring an umbrella.</div></div>
+  </div>
+
+  <!-- 3. News article (EN) -->
+  <div class="screen" id="s3">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="art">
+      <span class="tag">Technology</span>
+      <h2>New high-speed train line connects two major cities</h2>
+      <div class="meta">By Sarah Chen · 5 min read</div>
+      <p>A new high-speed rail line opened this week, cutting the travel time between the two cities from four hours to just ninety minutes.</p>
+      <p>The service will run every thirty minutes during peak hours. Officials expect it to carry more than fifty thousand passengers each day once it is fully operational.</p>
+    </div>
+  </div>
+
+  <!-- 4. Restaurant menu (EN) -->
+  <div class="screen" id="s4">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><span class="bk">‹</span><h1>Menu</h1></div>
+    <div class="menu">
+      <div class="mh">Starters</div>
+      <div class="mi"><div class="top"><span>Caesar Salad</span><span class="pr">$9</span></div><div class="d">Crisp romaine, parmesan, and croutons.</div></div>
+      <div class="mi"><div class="top"><span>Tomato Soup</span><span class="pr">$7</span></div><div class="d">Served warm with a slice of bread.</div></div>
+      <div class="mh">Main Dishes</div>
+      <div class="mi"><div class="top"><span>Grilled Salmon</span><span class="pr">$18</span></div><div class="d">With roasted vegetables and lemon.</div></div>
+      <div class="mi"><div class="top"><span>Beef Burger</span><span class="pr">$14</span></div><div class="d">Cheddar, lettuce, and fries on the side.</div></div>
+    </div>
+  </div>
+
+  <!-- 5. Messaging (EN, natural) -->
+  <div class="screen" id="s5">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><span class="bk">‹</span><h1>Emma</h1></div>
+    <div class="chat">
+      <div class="time">Today 12:30 PM</div>
+      <div class="bub them">Hey, are we still on for dinner tonight?</div>
+      <div class="bub me">Yes! I made a reservation for seven o'clock.</div>
+      <div class="bub them">Perfect. Should I pick you up on the way?</div>
+      <div class="bub me">That would be great, thank you!</div>
+      <div class="bub them">No problem, see you soon.</div>
+    </div>
+  </div>
+
+  <!-- 6. Korean signage (KO, natural) -->
+  <div class="screen" id="s6">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><h1>안내</h1></div>
+    <div class="noti"><div class="body">화장실은 2층에 있습니다.</div></div>
+    <div class="noti"><div class="body">계산은 카드와 현금 모두 가능합니다.</div></div>
+    <div class="noti"><div class="body">주문하신 음료가 준비되면 번호로 불러드립니다.</div></div>
+    <div class="noti"><div class="body">와이파이 비밀번호는 영수증 하단을 확인해 주세요.</div></div>
+    <div class="noti"><div class="body">영업시간은 오전 10시부터 밤 9시까지입니다.</div></div>
+  </div>
+
+  <!-- 7. Japanese menu (JA, natural) → 英/韓 -->
+  <div class="screen" id="s7">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
+    <div class="nav"><h1>お品書き</h1></div>
+    <div class="menu">
+      <div class="mh">お食事</div>
+      <div class="mi"><div class="top"><span>牛丼（並盛）</span><span class="pr">500円</span></div><div class="d">やわらかい牛肉と玉ねぎを甘辛く煮込みました。</div></div>
+      <div class="mi"><div class="top"><span>天ぷら定食</span><span class="pr">980円</span></div><div class="d">えびと季節の野菜。ごはんとみそ汁つき。</div></div>
+      <div class="mi"><div class="top"><span>冷やしうどん</span><span class="pr">650円</span></div><div class="d">つるっとした喉ごし。夏season限定です。</div></div>
+      <div class="mi"><div class="top"><span>お茶</span><span class="pr">無料</span></div><div class="d">温かいお茶をご用意しています。</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
