@@ -6,150 +6,316 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Realistic UI test</title>
 <style>
-  :root{ --bg:#eceef1; --card:#fff; --ink:#111418; --muted:#6b7580;
-    --line:#e6e9ed; --accent:#0a84ff; --green:#128a4a; --sep:#f0f2f4; }
+  :root{
+    --ink:#111827; --muted:#6B7280; --line:#E5E7EB; --bg:#FFFFFF; --cardbg:#F9FAFB;
+    --page:#e7e9ec;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans KR",sans-serif;
+  body{margin:0;background:var(--page);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans KR","Noto Sans JP",sans-serif;
     line-height:1.5;-webkit-text-size-adjust:100%;}
-  .wrap{max-width:400px;margin:0 auto;padding:0 0 60px;}
-  .screen{background:var(--card);margin:0 0 22px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .wrap{max-width:412px;margin:0 auto;padding:0 0 60px;}
+
+  /* back navigation */
+  .backtop{max-width:412px;margin:0 auto;padding:14px 16px 4px;}
+  .backtop a{display:inline-block;font-size:.86rem;color:#0f4a30;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:6px 14px;text-decoration:none;font-weight:600;}
+  .backfab{position:fixed;right:14px;bottom:18px;z-index:50;background:#ffffff;color:#0f4a30;border:1px solid #bfe6cf;border-radius:999px;padding:9px 15px;font-size:.82rem;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+  .backbottom{max-width:412px;margin:0 auto;padding:8px 16px 40px;text-align:center;}
+  .backbottom a{color:#0f4a30;font-size:.86rem;text-decoration:none;font-weight:600;}
+
+  /* screen shell */
+  .screen{background:var(--bg);margin:0 0 26px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-radius:2px;overflow:hidden;}
+  .capline{max-width:412px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:8px;}
+  .capline .no{background:#2c82e2;color:#fff;font-weight:700;font-size:.78rem;border-radius:999px;padding:2px 10px;}
+  .capline .ttl{font-weight:700;font-size:.92rem;color:#1a2127;}
+  .capline .pair{margin-left:auto;font-size:.74rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px;background:#fff;}
+
   /* status bar */
-  .sb{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 6px;font-size:.8rem;font-weight:600;color:var(--ink);}
-  .sb .r{letter-spacing:1px;}
-  /* nav bar */
-  .nav{display:flex;align-items:center;gap:10px;padding:6px 16px 14px;border-bottom:1px solid var(--line);}
-  .nav .bk{color:var(--accent);font-size:1.4rem;line-height:1;}
-  .nav h1{font-size:1.35rem;font-weight:700;margin:0;}
-  .nav .big{font-size:1.7rem;}
-  /* settings list */
-  .grp{padding:8px 0 4px;}
-  .glabel{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding:14px 18px 6px;}
-  .item{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--sep);}
+  .sb{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-size:13px;font-weight:600;}
+  .sb .r{letter-spacing:.5px;font-size:12px;}
+
+  /* app bar */
+  .appbar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff;min-height:52px;}
+  .appbar .ic{width:24px;height:24px;border-radius:6px;background:#F3F4F6;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;flex:none;}
+  .appbar .bk{font-size:22px;color:var(--ink);line-height:1;flex:none;}
+  .appbar h1{font-size:17px;font-weight:600;margin:0;}
+  .appbar .right{margin-left:auto;display:flex;gap:8px;}
+
+  /* brand row */
+  .brand{display:flex;align-items:center;gap:8px;padding:14px 16px 2px;}
+  .brand .sq{width:28px;height:28px;border-radius:7px;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .brand .wm{font-weight:800;letter-spacing:-.02em;font-size:17px;color:var(--ink);}
+  .brand .after{margin-left:auto;font-size:13px;color:var(--muted);}
+
+  .body{padding:12px 16px 20px;}
+  .card{background:var(--cardbg);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05);}
+  .card:first-child{margin-top:0;}
+  .card:last-child{margin-bottom:0;}
+  h2.h{font-size:20px;font-weight:700;margin:0 0 8px;line-height:1.3;}
+  .subline{color:var(--muted);font-size:13px;margin:0 0 10px;}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;}
+
+  .kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);font-size:13px;flex:none;padding-top:1px;}
+  .kv .v{text-align:right;}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .p{font-size:15px;margin:0 0 12px;}
+  .p:last-child{margin-bottom:0;}
+
+  .btn{display:block;width:100%;text-align:center;color:#fff;font-weight:700;font-size:15px;border-radius:12px;padding:14px;margin-top:14px;border:none;}
+
+  .gesture{width:134px;height:5px;border-radius:3px;background:#111;opacity:.85;margin:16px auto 6px;}
+
+  /* R1 airline */
+  .route{font-size:19px;font-weight:800;margin:2px 0 4px;}
+  .flightmeta{color:var(--muted);font-size:13px;margin-bottom:10px;}
+
+  /* R2 hotel */
+  .stay{display:flex;gap:14px;margin:10px 0 6px;}
+  .stay .col{flex:1;}
+  .stay .lab{font-size:12px;color:var(--muted);margin-bottom:2px;}
+  .stay .val{font-size:15px;font-weight:700;}
+  .bullets{margin:10px 0 0;padding-left:1.1em;}
+  .bullets li{font-size:14px;margin:8px 0;}
+
+  /* R3 delivery */
+  .storerow{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+  .storerow .nm{font-weight:700;font-size:16px;}
+  .storerow .meta{color:var(--muted);font-size:13px;}
+  .item{padding:10px 0;border-bottom:1px solid var(--line);}
   .item:last-child{border-bottom:none;}
-  .item .t{font-size:1.02rem;}
-  .item .v{color:var(--muted);font-size:.95rem;}
-  .item .chev{color:#c3cad2;margin-left:8px;}
-  /* notifications */
-  .noti{padding:14px 18px;border-bottom:1px solid var(--sep);}
-  .noti .app{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
-  .noti .body{font-size:1rem;}
-  /* article */
-  .art{padding:18px;}
-  .art .tag{font-size:.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;}
-  .art h2{font-size:1.3rem;line-height:1.3;margin:6px 0 8px;}
-  .art .meta{color:var(--muted);font-size:.82rem;margin-bottom:12px;}
-  .art p{font-size:1rem;margin:0 0 12px;}
-  /* menu */
-  .menu{padding:6px 18px 16px;}
-  .menu .mh{font-size:1.15rem;font-weight:700;margin:14px 0 8px;}
-  .mi{padding:11px 0;border-bottom:1px solid var(--sep);}
-  .mi:last-child{border-bottom:none;}
-  .mi .top{display:flex;justify-content:space-between;font-size:1.02rem;font-weight:600;}
-  .mi .pr{color:var(--green);font-weight:700;}
-  .mi .d{color:var(--muted);font-size:.9rem;margin-top:2px;}
-  /* chat */
-  .chat{padding:16px 14px;}
-  .bub{max-width:78%;padding:9px 14px;border-radius:18px;margin:7px 0;font-size:1rem;line-height:1.4;}
-  .them{background:#eceef1;border-bottom-left-radius:5px;}
-  .me{background:#0a84ff;color:#fff;margin-left:auto;border-bottom-right-radius:5px;}
-  .time{text-align:center;font-size:.72rem;color:var(--muted);margin:10px 0 2px;}
+  .item .top{display:flex;justify-content:space-between;font-size:15px;font-weight:600;}
+  .item .opt{color:var(--muted);font-size:13px;margin-top:2px;}
+
+  /* R4 news */
+  .tag{font-size:12px;font-weight:700;color:#1E3A5F;text-transform:uppercase;letter-spacing:.05em;}
+  .headline{font-size:19px;font-weight:700;margin:6px 0 8px;line-height:1.32;}
+  .story{padding:16px 0;border-bottom:1px solid var(--line);}
+  .story:last-child{border-bottom:none;}
+  .story h3{font-size:16px;margin:0 0 6px;font-weight:700;}
+  .story p{font-size:14px;margin:0;color:var(--ink);}
+
+  /* R5 notification shade */
+  .datehead{font-size:13px;color:var(--muted);text-align:center;padding:14px 0 6px;}
+  .noti{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);align-items:flex-start;}
+  .noti:last-child{border-bottom:none;}
+  .noti .ic{width:32px;height:32px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;}
+  .noti .txt{flex:1;}
+  .noti .head{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px;}
+  .noti .body2{font-size:14.5px;}
+
+  /* R6 payment */
+  .balancebar{display:flex;justify-content:space-between;align-items:baseline;padding:2px 16px 12px;}
+  .balancebar .lab{font-size:13px;color:var(--muted);}
+  .balancebar .amt{font-size:20px;font-weight:800;}
+  .glabel{font-size:12px;font-weight:700;color:var(--muted);padding:12px 16px 4px;}
+  .txrow{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);}
+  .txrow:last-of-type{border-bottom:none;}
+  .txrow .nm{font-size:15px;}
+  .txrow .nm .sub2{display:block;font-size:12px;color:var(--muted);}
+  .txrow .amt2{font-weight:700;font-variant-numeric:tabular-nums;}
+  .amt2.minus{color:#B91C1C;}
+  .amt2.plus{color:#15803D;}
+  .foottxt{padding:10px 16px 4px;color:var(--muted);font-size:12px;}
+
+  /* R7 product LP */
+  .hero{padding:6px 0 4px;}
+  .hero h2{font-size:21px;font-weight:800;margin:0 0 6px;}
+  .hero .tagline{font-size:14.5px;color:var(--ink);margin:0 0 4px;}
+  .pricebar{display:flex;align-items:baseline;gap:10px;margin:8px 0 2px;}
+  .pricebar .now{font-size:22px;font-weight:800;}
+  .pricebar .was{font-size:14px;color:var(--muted);text-decoration:line-through;}
 </style>
 </head>
 <body>
+<div class="backtop"><a href="../">← 翻訳テストにもどる</a></div>
+<a class="backfab" href="../">← テストへ</a>
+
 <div class="wrap">
 
-  <!-- 1. Settings (EN) -->
+  <!-- R1. Skyward Air booking confirmation (EN -> JA) -->
+  <div class="capline"><span class="no">R1</span><span class="ttl">航空券予約確認メール（Skyward Air）</span><span class="pair">英→日</span></div>
   <div class="screen" id="s1">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><span class="bk">‹</span><h1 class="big">Settings</h1></div>
-    <div class="glabel">General</div>
-    <div class="item"><span class="t">Software Update</span><span class="v">iOS 18.2 &nbsp;<span class="chev">›</span></span></div>
-    <div class="item"><span class="t">Storage</span><span class="v">Used 78.4 GB of 128 GB <span class="chev">›</span></span></div>
-    <div class="item"><span class="t">Date &amp; Time</span><span class="chev">›</span></div>
-    <div class="glabel">Notifications &amp; Sound</div>
-    <div class="item"><span class="t">Notifications</span><span class="v">Banners, Sounds <span class="chev">›</span></span></div>
-    <div class="item"><span class="t">Do Not Disturb</span><span class="v">Off <span class="chev">›</span></span></div>
-    <div class="item"><span class="t">Screen Time</span><span class="v">3h 12m today <span class="chev">›</span></span></div>
-    <div class="glabel">Privacy</div>
-    <div class="item"><span class="t">Location Services</span><span class="v">While Using <span class="chev">›</span></span></div>
-    <div class="item"><span class="t">Sign out of your account</span></div>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="appbar"><span class="bk">‹</span><h1>Booking confirmation</h1><span class="right"><span class="ic">↗</span></span></div>
+    <div class="brand"><span class="sq" style="background:#2563EB;">S</span><span class="wm">Skyward Air</span><span class="after"><span class="badge" style="background:#DCFCE7;color:#166534;">CONFIRMED</span></span></div>
+    <div class="body">
+      <div class="p" style="color:var(--muted);font-size:13px;">Ref: SK7M2Q</div>
+      <div class="route">Tokyo (HND) → Singapore (SIN)</div>
+      <div class="flightmeta">Fri, Nov 14&nbsp;&nbsp;22:55 → 05:20 +1<br>Flight SW 512 · Economy · 7h 25m</div>
+      <div class="card">
+        <div class="kv"><span class="k">Passenger</span><span class="v">TANAKA / YUKI</span></div>
+        <div class="kv"><span class="k">Seat</span><span class="v">34A (window)</span></div>
+        <div class="kv"><span class="k">Baggage</span><span class="v">1 × 23 kg checked, 1 × 7 kg cabin</span></div>
+      </div>
+      <p class="p">Check-in opens 48 hours before departure and closes 60 minutes before.</p>
+      <p class="p">Changes are permitted up to 24 hours before departure for a fee. Cancellations are non-refundable except for taxes.</p>
+      <button class="btn" style="background:#2563EB;">Manage booking</button>
+    </div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 2. Notifications (EN) -->
+  <!-- R2. 하루호텔 check-in guide (KO -> JA) -->
+  <div class="capline"><span class="no">R2</span><span class="ttl">ホテルのチェックイン案内（하루호텔）</span><span class="pair">韓→日</span></div>
   <div class="screen" id="s2">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><h1>Notifications</h1></div>
-    <div class="noti"><div class="app">Delivery</div><div class="body">Your order is out for delivery and will arrive by 6:30 PM today.</div></div>
-    <div class="noti"><div class="app">Calendar</div><div class="body">Reminder: Dentist appointment tomorrow at 10:00 AM.</div></div>
-    <div class="noti"><div class="app">Bank</div><div class="body">Your monthly statement is ready. Tap to view your balance and recent transactions.</div></div>
-    <div class="noti"><div class="app">Weather</div><div class="body">Heavy rain expected this afternoon. Remember to bring an umbrella.</div></div>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="appbar"><span class="bk">‹</span><h1>체크인 안내</h1></div>
+    <div class="brand"><span class="sq" style="background:#B45309;">하</span><span class="wm">하루호텔 명동</span><span class="after">HR-20931</span></div>
+    <div class="body">
+      <div class="stay">
+        <div class="col"><div class="lab">체크인</div><div class="val">11월 14일 (금) 15:00부터</div></div>
+      </div>
+      <div class="stay">
+        <div class="col"><div class="lab">체크아웃</div><div class="val">11월 16일 (일) 11:00까지</div></div>
+      </div>
+      <div class="card">
+        <ul class="bullets">
+          <li>조식은 2층 라운지에서 07:00~10:00 제공됩니다.</li>
+          <li>객실 내 흡연은 금지되어 있으며, 적발 시 청소비 200,000원이 부과됩니다.</li>
+          <li>수건과 어메니티는 요청 시에만 교체해 드립니다.</li>
+          <li>늦은 체크아웃은 사전 요청 시 13:00까지 가능하며, 추가 요금은 없습니다.</li>
+        </ul>
+      </div>
+      <p class="p" style="color:var(--muted);font-size:13px;">문의: 프런트 (내선 0)</p>
+    </div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 3. News article (EN) -->
+  <!-- R3. Nibble delivery cart (EN -> JA) -->
+  <div class="capline"><span class="no">R3</span><span class="ttl">フードデリバリー注文画面（Nibble）</span><span class="pair">英→日</span></div>
   <div class="screen" id="s3">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="art">
-      <span class="tag">Technology</span>
-      <h2>New high-speed train line connects two major cities</h2>
-      <div class="meta">By Sarah Chen · 5 min read</div>
-      <p>A new high-speed rail line opened this week, cutting the travel time between the two cities from four hours to just ninety minutes.</p>
-      <p>The service will run every thirty minutes during peak hours. Officials expect it to carry more than fifty thousand passengers each day once it is fully operational.</p>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="appbar"><span class="bk">‹</span><h1>Your cart</h1><span class="right"><span class="sq" style="background:#F97316;width:24px;height:24px;border-radius:6px;font-size:12px;">N</span></span></div>
+    <div class="body">
+      <div class="storerow">
+        <span class="nm">Green Bowl Kitchen</span>
+        <span class="meta">· 25–35 min</span>
+        <span class="badge" style="background:#FEF9C3;color:#854D0E;">4.7 ★</span>
+      </div>
+      <div class="card" style="margin-top:10px;">
+        <div class="item">
+          <div class="top"><span>2 × Chicken Teriyaki Bowl</span><span class="num">$23.80</span></div>
+          <div class="opt">Extra rice, No onions, Sauce on the side</div>
+        </div>
+        <div class="item">
+          <div class="top"><span>1 × Miso Soup</span><span class="num">$3.50</span></div>
+        </div>
+        <div class="item">
+          <div class="top"><span>1 × Sparkling Water 500 mL</span><span class="num">$2.20</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kv"><span class="k">Subtotal</span><span class="v num">$29.50</span></div>
+        <div class="kv"><span class="k">Delivery fee</span><span class="v num">$1.99</span></div>
+        <div class="kv"><span class="k">Service fee (10%)</span><span class="v num">$2.95</span></div>
+        <div class="kv"><span class="k">Tip</span><span class="v num">$4.00</span></div>
+        <div class="kv" style="font-weight:800;"><span class="k">Total</span><span class="v num">$38.44</span></div>
+      </div>
+      <p class="p" style="color:var(--muted);font-size:13px;">Deliver to: 12 Maple St, Apt 4B — Leave at door</p>
+      <button class="btn" style="background:#F97316;">Place order</button>
     </div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 4. Restaurant menu (EN) -->
+  <!-- R4. The Daily Current news home (EN -> JA) -->
+  <div class="capline"><span class="no">R4</span><span class="ttl">ニュースアプリ トップ（The Daily Current）</span><span class="pair">英→日</span></div>
   <div class="screen" id="s4">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><span class="bk">‹</span><h1>Menu</h1></div>
-    <div class="menu">
-      <div class="mh">Starters</div>
-      <div class="mi"><div class="top"><span>Caesar Salad</span><span class="pr">$9</span></div><div class="d">Crisp romaine, parmesan, and croutons.</div></div>
-      <div class="mi"><div class="top"><span>Tomato Soup</span><span class="pr">$7</span></div><div class="d">Served warm with a slice of bread.</div></div>
-      <div class="mh">Main Dishes</div>
-      <div class="mi"><div class="top"><span>Grilled Salmon</span><span class="pr">$18</span></div><div class="d">With roasted vegetables and lemon.</div></div>
-      <div class="mi"><div class="top"><span>Beef Burger</span><span class="pr">$14</span></div><div class="d">Cheddar, lettuce, and fries on the side.</div></div>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="brand"><span class="sq" style="background:#1E3A5F;">D</span><span class="wm">The Daily Current</span><span class="after">Today</span></div>
+    <div class="body">
+      <div class="story">
+        <span class="tag">Top story</span>
+        <h3 style="font-size:19px;">City Council Rejects Plan to Raise Parking Fees</h3>
+        <p>The proposal, which would have doubled rates downtown, failed by a single vote. Officials say a revised plan is unlikely before spring.</p>
+      </div>
+      <div class="story">
+        <h3>Heat Warning Extended Through Friday</h3>
+        <p>Temperatures are expected to reach 38°C. Residents are advised not to leave children or pets in vehicles.</p>
+      </div>
+      <div class="story">
+        <h3>Local Bakery Wins National Award</h3>
+        <p>"We never expected this," said owner Rose Park, who opened the shop in 2019.</p>
+      </div>
     </div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 5. Messaging (EN, natural) -->
-  <div class="screen" id="s5">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><span class="bk">‹</span><h1>Emma</h1></div>
-    <div class="chat">
-      <div class="time">Today 12:30 PM</div>
-      <div class="bub them">Hey, are we still on for dinner tonight?</div>
-      <div class="bub me">Yes! I made a reservation for seven o'clock.</div>
-      <div class="bub them">Perfect. Should I pick you up on the way?</div>
-      <div class="bub me">That would be great, thank you!</div>
-      <div class="bub them">No problem, see you soon.</div>
+  <!-- R5. OS notification shade (EN -> JA) -->
+  <div class="capline"><span class="no">R5</span><span class="ttl">OSシステム通知シェード</span><span class="pair">英→日</span></div>
+  <div class="screen" id="s5" style="background:#EEF0F2;">
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="datehead">Fri, Nov 14</div>
+    <div class="card" style="margin:0 16px 12px;padding:0;">
+      <div class="noti">
+        <span class="ic" style="background:#2563EB;">S</span>
+        <div class="txt">
+          <div class="head"><span>Skyward Air</span><span>2m</span></div>
+          <div class="body2">Gate change: SW 512 now departs from Gate 24, not Gate 18.</div>
+        </div>
+      </div>
+      <div class="noti">
+        <span class="ic" style="background:#F97316;">N</span>
+        <div class="txt">
+          <div class="head"><span>Nibble</span><span>18m</span></div>
+          <div class="body2">Your order is on its way. Estimated arrival 19:40. Don't forget to leave the door unlocked.</div>
+        </div>
+      </div>
+      <div class="noti">
+        <span class="ic" style="background:#6B7280;">⚙</span>
+        <div class="txt">
+          <div class="head"><span>System</span><span>1h</span></div>
+          <div class="body2">Software update available. Installing tonight at 2:00 AM unless you postpone. Battery must be above 50%.</div>
+        </div>
+      </div>
     </div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 6. Korean signage (KO, natural) -->
+  <!-- R6. 페이플러스 payment history (KO -> JA) -->
+  <div class="capline"><span class="no">R6</span><span class="ttl">モバイル決済 取引履歴（페이플러스）</span><span class="pair">韓→日</span></div>
   <div class="screen" id="s6">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><h1>안내</h1></div>
-    <div class="noti"><div class="body">화장실은 2층에 있습니다.</div></div>
-    <div class="noti"><div class="body">계산은 카드와 현금 모두 가능합니다.</div></div>
-    <div class="noti"><div class="body">주문하신 음료가 준비되면 번호로 불러드립니다.</div></div>
-    <div class="noti"><div class="body">와이파이 비밀번호는 영수증 하단을 확인해 주세요.</div></div>
-    <div class="noti"><div class="body">영업시간은 오전 10시부터 밤 9시까지입니다.</div></div>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="appbar"><span class="bk">‹</span><span class="sq" style="background:#0F766E;width:24px;height:24px;border-radius:6px;font-size:12px;">페</span><h1 style="margin-left:6px;">페이플러스</h1></div>
+    <div class="balancebar"><span class="lab">잔액</span><span class="amt num">84,300원</span></div>
+    <div class="glabel">오늘</div>
+    <div class="txrow"><span class="nm">편의점 스물넷</span><span class="amt2 minus num">-4,500원</span></div>
+    <div class="txrow"><span class="nm">지하철 (하차)</span><span class="amt2 minus num">-1,400원</span></div>
+    <div class="txrow"><span class="nm">카페 라운드<span class="sub2">취소됨</span></span><span class="amt2 minus num">-6,800원</span></div>
+    <div class="glabel">어제</div>
+    <div class="txrow"><span class="nm">택시 이동</span><span class="amt2 minus num">-12,300원</span></div>
+    <div class="txrow"><span class="nm">김민지 님에게 송금</span><span class="amt2 minus num">-30,000원</span></div>
+    <div class="txrow"><span class="nm">충전 (은행 계좌)</span><span class="amt2 plus num">+50,000원</span></div>
+    <div class="foottxt">* 취소된 거래는 3~5영업일 내 환불됩니다.<br>* 하루 송금 한도는 2,000,000원이며, 초과 시 다음 날 가능합니다.</div>
+    <div class="gesture"></div>
   </div>
 
-  <!-- 7. Japanese menu (JA, natural) → 英/韓 -->
+  <!-- R7. Lumo Home product LP (EN -> JA) -->
+  <div class="capline"><span class="no">R7</span><span class="ttl">家電の製品LP（Lumo Home）</span><span class="pair">英→日</span></div>
   <div class="screen" id="s7">
-    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮</span></div>
-    <div class="nav"><h1>お品書き</h1></div>
-    <div class="menu">
-      <div class="mh">お食事</div>
-      <div class="mi"><div class="top"><span>牛丼（並盛）</span><span class="pr">500円</span></div><div class="d">やわらかい牛肉と玉ねぎを甘辛く煮込みました。</div></div>
-      <div class="mi"><div class="top"><span>天ぷら定食</span><span class="pr">980円</span></div><div class="d">えびと季節の野菜。ごはんとみそ汁つき。</div></div>
-      <div class="mi"><div class="top"><span>冷やしうどん</span><span class="pr">650円</span></div><div class="d">つるっとした喉ごし。夏season限定です。</div></div>
-      <div class="mi"><div class="top"><span>お茶</span><span class="pr">無料</span></div><div class="d">温かいお茶をご用意しています。</div></div>
+    <div class="sb"><span>9:41</span><span class="r">5G ▮▮▮ 100%</span></div>
+    <div class="brand"><span class="sq" style="background:#16A34A;">L</span><span class="wm">Lumo Home</span></div>
+    <div class="body">
+      <div class="hero">
+        <h2>Aria Air Purifier</h2>
+        <p class="tagline">Quiet enough for a nursery. Powerful enough for a living room.</p>
+      </div>
+      <div class="card">
+        <div class="kv"><span class="k">Coverage</span><span class="v">up to 45 m²</span></div>
+        <div class="kv"><span class="k">Noise level</span><span class="v">22–48 dB</span></div>
+        <div class="kv"><span class="k">Filter life</span><span class="v">approx. 12 months</span></div>
+        <div class="kv"><span class="k">Power</span><span class="v">28 W (max)</span></div>
+      </div>
+      <div class="pricebar"><span class="now num">$179</span><span class="was num">$229</span><span class="badge" style="background:#DCFCE7;color:#166534;">Save 22%</span></div>
+      <p class="p" style="color:var(--muted);font-size:13.5px;">Free shipping on orders over $50. 30-day returns, no questions asked.</p>
+      <button class="btn" style="background:#16A34A;">Add to cart</button>
     </div>
+    <div class="gesture"></div>
   </div>
 
 </div>
+
+<div class="backbottom"><a href="../">← 翻訳テストにもどる</a></div>
 </body>
 </html>

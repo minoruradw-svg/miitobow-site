@@ -64,6 +64,55 @@
   .foot{margin-top:40px;text-align:center;}
   .foot a{color:var(--accent);text-decoration:none;font-size:.9rem;}
   .langtag{font-size:.78rem;color:var(--muted);}
+
+  /* --- P10-P20 additions --- */
+  .rx{padding:0;}
+  .rx .hd{padding:16px 18px 10px;border-bottom:1px solid var(--line);}
+  .rx .hd .drug{font-weight:800;font-size:1.05rem;}
+  .rx .hd .sub{color:var(--muted);font-size:.85rem;margin-top:2px;}
+  .rx .body{padding:14px 18px;}
+  .rx .body p{margin:0 0 10px;font-size:.98rem;}
+  .rx .warn{background:#fff3f2;border:1px solid #f2c6c2;border-radius:10px;padding:10px 14px;margin-top:8px;color:#7a2018;font-size:.92rem;}
+  .rx .warn p{margin:4px 0;}
+
+  .svc .updated{padding:12px 18px;color:var(--muted);font-size:.82rem;border-bottom:1px solid var(--line);}
+  .svc .line{padding:14px 18px;border-bottom:1px solid var(--line);}
+  .svc .line:last-child{border-bottom:none;}
+  .svc .line p{margin:0;font-size:.95rem;}
+  .svc .lh{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .svc .tag{font-weight:700;font-size:.92rem;}
+  .svc .badge{font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 10px;}
+  .svc .b-delay{background:#fff1d6;color:#8a5a00;}
+  .svc .b-sus{background:#fde2e1;color:#95241d;}
+  .svc .b-good{background:#dcf3e3;color:#1a6b3a;}
+  .svc .note{padding:12px 18px;color:var(--muted);font-size:.85rem;}
+
+  .dosetbl{width:100%;border-collapse:collapse;font-size:.92rem;}
+  .dosetbl th,.dosetbl td{border:1px solid var(--line);padding:8px 10px;text-align:left;}
+  .dosetbl th{background:#f4f6f8;font-weight:700;}
+
+  .pol h4{margin:0 0 8px;font-size:1.05rem;}
+  .pol p{margin:0 0 10px;font-size:.98rem;}
+  .pol ul{margin:8px 0;padding-left:1.2em;}
+  .pol li{margin:6px 0;font-size:.95rem;}
+  .pol .times{margin-top:10px;color:var(--muted);font-size:.9rem;}
+
+  .kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.95rem;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);}
+
+  .rev{border-bottom:1px solid var(--line);padding:12px 0;}
+  .rev:last-child{border-bottom:none;}
+  .rev .stars{color:#e8a400;font-weight:700;}
+  .rev .t{font-weight:700;margin:2px 0 4px;}
+  .rev p{margin:0;font-size:.95rem;}
+
+  .ing p{margin:0 0 10px;font-size:.95rem;}
+  .ing .b{font-weight:700;}
+  .ing .small{color:var(--muted);font-size:.85rem;}
+
+  .chatname{font-weight:700;font-size:.85rem;color:var(--muted);margin:10px 0 4px;}
+  .chatname:first-child{margin-top:0;}
 </style>
 </head>
 <body>
@@ -80,13 +129,13 @@
   <div class="how" style="background:#e9f6ef;border-color:#bfe6cf;color:#0f4a30;">
     <b>リアルな実UI版（実機テスト用）</b>：実際のアプリ画面に近い自然な内容です。各画面へジャンプできます。
     <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:8px;">
-      <a href="real/#s1" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">① 設定（英→日）</a>
-      <a href="real/#s2" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">② 通知（英→日）</a>
-      <a href="real/#s3" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">③ ニュース（英→日）</a>
-      <a href="real/#s4" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">④ メニュー（英→日）</a>
-      <a href="real/#s5" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">⑤ チャット（英→日）</a>
-      <a href="real/#s6" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">⑥ 韓国語案内（韓→日）</a>
-      <a href="real/#s7" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">⑦ 和食メニュー（日→英・韓）</a>
+      <a href="real/#s1" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R1 航空券予約（英→日）</a>
+      <a href="real/#s2" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R2 ホテル（韓→日）</a>
+      <a href="real/#s3" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R3 デリバリー（英→日）</a>
+      <a href="real/#s4" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R4 ニュース（英→日）</a>
+      <a href="real/#s5" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R5 通知シェード（英→日）</a>
+      <a href="real/#s6" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R6 決済履歴（韓→日）</a>
+      <a href="real/#s7" style="display:inline-block;background:#fff;border:1px solid #bfe6cf;border-radius:999px;padding:4px 13px;color:#0f4a30;text-decoration:none;font-size:.86rem;">R7 製品LP（英→日）</a>
       <a href="real/" style="display:inline-block;background:#0f4a30;border:1px solid #0f4a30;border-radius:999px;padding:4px 13px;color:#fff;text-decoration:none;font-size:.86rem;">全部を続けて見る →</a>
     </div>
   </div>
@@ -188,6 +237,167 @@
     <div class="item"><div class="line"><span>餃子（6個）</span><span class="price">400円</span></div><div class="desc">国産豚とにらを使用しています。</div></div>
     <div class="item"><div class="line"><span>チャーハン</span><span class="price">700円</span></div><div class="desc">パラパラに炒めた自慢の一品。</div></div>
     <div class="desc" style="margin-top:10px">営業時間 11:00〜22:00／定休日 月曜日</div>
+  </div></div>
+
+  <!-- 10. Pharmacy label (design doc P10) -->
+  <div class="cap"><span class="no">10</span><span class="ttl">薬の用法・用量（薬局ラベル）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="rx">
+    <div class="hd">
+      <div class="drug">Rx&nbsp;&nbsp;AMOXICILLIN 500 mg Capsules</div>
+      <div class="sub">Qty: 21&nbsp;&nbsp;&nbsp;Refills: 0</div>
+    </div>
+    <div class="body">
+      <p>Take ONE capsule by mouth THREE times a day for 7 days.</p>
+      <p>Take with or without food.</p>
+      <p>Do NOT take more than 3 capsules in 24 hours.</p>
+      <p>Finish all of this medicine, even if you feel better.</p>
+      <p>Do not skip doses. If you miss a dose, take it as soon as you remember, unless it is almost time for the next dose.</p>
+      <div class="warn">
+        <p>! Do not take this medicine if you are allergic to penicillin.</p>
+        <p>! Not for children under 12 unless directed by a doctor.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 11. Train service status (design doc P11) -->
+  <div class="cap"><span class="no">11</span><span class="ttl">電車の運行情報（遅延・運休・振替）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="svc">
+    <div class="updated">Service Status&nbsp;&nbsp;Updated 08:42</div>
+    <div class="line">
+      <div class="lh"><span class="tag">Blue Line</span><span class="badge b-delay">DELAYS</span></div>
+      <p>Trains are running up to 20 minutes late due to signal failure at Harbor Station. Delays are expected to continue until approximately 10:00.</p>
+    </div>
+    <div class="line">
+      <div class="lh"><span class="tag">Green Line</span><span class="badge b-sus">PARTIAL SUSPENSION</span></div>
+      <p>No service between Riverside and Central until further notice. Buses are replacing trains between these stations. Tickets and passes are valid on replacement buses.</p>
+    </div>
+    <div class="line">
+      <div class="lh"><span class="tag">Red Line</span><span class="badge b-good">GOOD SERVICE</span></div>
+      <p>Trains are running normally.</p>
+    </div>
+    <div class="note">Note: The last train from Central departs at 23:55, not 00:20, on Sundays.</div>
+  </div></div>
+
+  <!-- 12. Children's dose table (design doc P12) -->
+  <div class="cap"><span class="no">12</span><span class="ttl">解熱鎮痛薬 年齢別用量表</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <p style="margin:0 0 12px;font-weight:700;">Children's Fever &amp; Pain Reducer&nbsp; (Acetaminophen 160 mg / 5 mL)</p>
+    <table class="dosetbl">
+      <tr><th>Age</th><th>Weight</th><th>Dose</th></tr>
+      <tr><td>under 2 years</td><td>under 24 lb</td><td>ask a doctor</td></tr>
+      <tr><td>2–3 years</td><td>24–35 lb</td><td>5 mL</td></tr>
+      <tr><td>4–5 years</td><td>36–47 lb</td><td>7.5 mL</td></tr>
+      <tr><td>6–8 years</td><td>48–59 lb</td><td>10 mL</td></tr>
+    </table>
+    <p style="margin:14px 0 0;">Repeat every 4 hours if needed. Do not give more than 5 doses in 24 hours.</p>
+    <p>Do not give with any other medicine containing acetaminophen.</p>
+    <p>Shake well before use. Use only the enclosed measuring cup.</p>
+  </div></div>
+
+  <!-- 13. Hotel cancellation policy (design doc P13) -->
+  <div class="cap"><span class="no">13</span><span class="ttl">ホテルのキャンセル規定</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad pol">
+    <h4>Cancellation Policy</h4>
+    <p>Free cancellation until 6:00 PM local time on the day before arrival.</p>
+    <p>Cancellations made after this time will be charged the first night's rate, unless the room is rebooked.</p>
+    <p>No-shows will be charged in full.</p>
+    <ul>
+      <li>Non-refundable rates cannot be changed or cancelled.</li>
+      <li>Early check-out does not qualify for a refund.</li>
+      <li>Bookings of 5 rooms or more are subject to group terms and are not covered by this policy.</li>
+    </ul>
+    <div class="times">Check-in from 3:00 PM&nbsp;&nbsp;&nbsp;Check-out by 11:00 AM</div>
+  </div></div>
+
+  <!-- 14. Airport security signage (design doc P14) -->
+  <div class="cap"><span class="no">14</span><span class="ttl">空港セキュリティの掲示</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad pol">
+    <h4>Security Screening</h4>
+    <p>Please have your boarding pass and ID ready.</p>
+    <p>Remove laptops and tablets from your bag. Liquids must be in containers of 100 mL or less, in one clear resealable bag.</p>
+    <p>Do not leave bags unattended. Unattended items will be removed.</p>
+    <p>You may keep your shoes on unless asked to remove them.</p>
+    <p>Passengers with a connecting flight need not collect checked baggage.</p>
+    <p>Gate closes 15 minutes before departure.</p>
+  </div></div>
+
+  <!-- 15. Car rental summary (design doc P15) -->
+  <div class="cap"><span class="no">15</span><span class="ttl">レンタカーの明細</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <p style="margin:0 0 12px;font-weight:700;">Rental Summary&nbsp;&nbsp;Confirmation #RC-48213</p>
+    <div class="kv"><span class="k">Pick-up</span><span>Fri, Oct 3, 10:00 AM&nbsp; Downtown Airport</span></div>
+    <div class="kv"><span class="k">Return</span><span>Mon, Oct 6, 10:00 AM&nbsp; Same location</span></div>
+    <p style="margin:14px 0 6px;">Compact &nbsp;·&nbsp; Automatic &nbsp;·&nbsp; 3 days</p>
+    <p style="margin:0 0 8px;">Mileage: 150 miles/day included. $0.25 per additional mile.</p>
+    <p style="margin:0 0 8px;">Fuel: Full to Full. Refueling fee $9.99/gal plus $25 service charge if returned below full.</p>
+    <p style="margin:0 0 8px;">Deposit: $200 (held, not charged)</p>
+    <p style="margin:0 0 8px;font-weight:700;">Total estimated: $187.50 (taxes included)</p>
+    <p style="margin:10px 0 0;color:var(--muted);">Drivers under 25 pay a young driver surcharge of $30/day.</p>
+  </div></div>
+
+  <!-- 16. Utility bill notice (design doc P16) -->
+  <div class="cap"><span class="no">16</span><span class="ttl">電気・ガス料金通知（同綴り多義語）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <p style="margin:0 0 4px;font-weight:800;font-size:1.05rem;">Your Bill Is Ready</p>
+    <p style="margin:0 0 14px;color:var(--muted);font-size:.85rem;">Account 2291-7734&nbsp;&nbsp;Billing period: Aug 1 – Aug 31</p>
+    <div class="kv"><span class="k">Electricity</span><span>412 kWh&nbsp;&nbsp;$58.20</span></div>
+    <div class="kv"><span class="k">Gas</span><span>18 therms&nbsp;&nbsp;$21.40</span></div>
+    <div class="kv"><span class="k">Fixed charge</span><span>$12.00</span></div>
+    <div class="kv"><span class="k">Late charge (previous)</span><span>$5.00</span></div>
+    <div class="kv" style="font-weight:700;"><span class="k">Total due</span><span>$96.60&nbsp;&nbsp;Due Sep 15</span></div>
+    <p style="margin:14px 0 8px;">Your current plan: Spring Saver (rate change effective Nov 1).</p>
+    <p style="margin:0 0 8px;">Please check your meter reading. If the reading does not match, contact us before the due date.</p>
+    <p style="margin:0;">We will not charge a fee for paying online.</p>
+  </div></div>
+
+  <!-- 17. Product reviews (design doc P17) -->
+  <div class="cap"><span class="no">17</span><span class="ttl">商品レビュー（皮肉・反語）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <p style="margin:0 0 8px;font-weight:700;">Customer Reviews&nbsp;&nbsp;4.2 ★ (1,284)</p>
+    <div class="rev"><div class="stars">★★★★★</div><div class="t">Worth every penny</div><p>Not a single complaint after two months. Battery easily lasts a full day. Couldn't be happier.</p></div>
+    <div class="rev"><div class="stars">★★☆☆☆</div><div class="t">"Waterproof" — sure.</div><p>Great, until it rained. Now the screen flickers. If you never go outside, this is the watch for you.</p></div>
+    <div class="rev"><div class="stars">★★★☆☆</div><div class="t">Good, not great</div><p>Does what it says. Nothing more, nothing less. Strap could be softer. I'd buy it again, but I wouldn't recommend it to everyone.</p></div>
+  </div></div>
+
+  <!-- 18. Chat with proper-noun-looking names (design doc P18) -->
+  <div class="cap"><span class="no">18</span><span class="ttl">固有名詞が一般名詞に見えるチャット</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad chat">
+    <div class="chatname">Hope Miller</div>
+    <div class="b them">Hi! Mr. Green said the meeting moved to April 2 at 3 pm, room Summer.</div>
+    <div class="chatname" style="text-align:right">You</div>
+    <div class="b me">Got it. Is that the room next to the Bank of Lake branch?</div>
+    <div class="chatname">Hope Miller</div>
+    <div class="b them">Yes. Also, Mark will bring the March report — Grace can't make it.<br>Let's meet at Rose Cafe by the West Gate first.</div>
+    <div class="chatname" style="text-align:right">You</div>
+    <div class="b me">Sounds good. See you at 2:30 then.</div>
+  </div></div>
+
+  <!-- 19. Food allergen label (design doc P19) -->
+  <div class="cap"><span class="no">19</span><span class="ttl">食品アレルゲン・原材料表示</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad ing">
+    <p><span class="b">INGREDIENTS:</span> Wheat flour, sugar, palm oil, cocoa (7%), whey powder (milk), salt, emulsifier (soy lecithin), natural flavour.</p>
+    <p><span class="b">CONTAINS:</span> Wheat, Milk, Soy.<br><span class="b">MAY CONTAIN:</span> Peanuts, Tree nuts, Egg.</p>
+    <p>Made in a facility that also processes sesame.</p>
+    <p>Free from artificial colours. Not suitable for vegans.</p>
+    <p>Gluten-free? No.&nbsp;&nbsp;Halal? Yes.</p>
+    <p class="small">Best before: see base of pack.&nbsp;&nbsp;Store in a cool, dry place. Once opened, consume within 3 days.</p>
+  </div></div>
+
+  <!-- 20. Japanese polite notice (design doc P20) -->
+  <div class="cap"><span class="no">20</span><span class="ttl">日本語の丁寧なお知らせ（掲示）</span><span class="pair">日→英/韓</span></div>
+  <div class="card"><div class="pad pol">
+    <h4>ご利用の皆さまへ</h4>
+    <p>いつもご利用いただきありがとうございます。<br>
+    設備点検のため、下記の日程でエレベーターをご利用いただけません。ご不便をおかけしますが、ご理解のほどお願い申し上げます。</p>
+    <p>日時：9月12日（金）10:00〜15:00（予定）<br>
+    　　　※作業状況により前後する場合がございます。</p>
+    <ul>
+      <li>点検中は階段をご利用ください。</li>
+      <li>お体の不自由な方は、事前に管理室までお申し出ください。</li>
+      <li>大きなお荷物の搬入は、この時間帯を避けていただけますと幸いです。</li>
+      <li>当日は雨天でも実施いたします。中止の場合のみ、掲示にてお知らせします。</li>
+    </ul>
+    <p>なお、ご不明な点がございましたら、お気軽にお問い合わせください。</p>
   </div></div>
 
   <div class="foot">
