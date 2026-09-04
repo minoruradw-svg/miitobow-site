@@ -169,6 +169,23 @@
     font-size: 0.72rem; font-weight: 700; color: var(--accent-dark); background: var(--accent-glow);
     border-radius: 999px; padding: 3px 9px;
   }
+  .post-top { position: relative; display: flex; justify-content: flex-end; }
+  .add-category-btn {
+    background: transparent; border: 1px dashed var(--border); color: var(--ink-faint);
+    font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 3px 10px;
+    cursor: pointer; font-family: inherit;
+  }
+  .add-category-btn:hover { color: var(--accent-dark); border-color: var(--accent); background: var(--accent-glow); }
+  .add-category-popup {
+    position: absolute; right: 0; top: calc(100% + 4px); z-index: 6; width: 220px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14); padding: 8px;
+  }
+  .add-category-popup input {
+    width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 8px; font-size: 0.82rem; font-family: inherit; background: var(--surface-soft); color: var(--ink);
+  }
+  .add-category-suggestions { max-height: 180px; overflow-y: auto; margin-top: 4px; }
   .category-filter-bar { display: flex; flex-direction: column; gap: 8px; margin-top: -2px; }
   .category-filter-search-wrap input {
     width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px;
@@ -520,6 +537,12 @@
     if (!categorySearchInput.contains(e.target) && !categorySuggestionsEl.contains(e.target)) {
       categorySuggestionsEl.hidden = true;
     }
+    document.querySelectorAll(".post-top").forEach(function (wrap) {
+      if (!wrap.contains(e.target)) {
+        var popup = wrap.querySelector(".add-category-popup");
+        if (popup) popup.hidden = true;
+      }
+    });
   });
 
   function renderFilterChips() {
@@ -699,6 +722,117 @@
     return imageBlobCache[imgId];
   }
 
+  function addCategoryToExistingPost(postId, categoryId, done) {
+    fetch("/api/board/" + encodeURIComponent(postId), {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
+      body: JSON.stringify({ categoryId: categoryId }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("failed");
+        return res.json();
+      })
+      .then(function (updated) {
+        [serverPosts, localAdds].forEach(function (arr) {
+          var target = arr.filter(function (p) { return p.id === postId; })[0];
+          if (target) target.categories = updated.categories;
+        });
+        done(true);
+      })
+      .catch(function () { done(false); });
+  }
+
+  function buildAddCategoryWidget(data) {
+    var wrap = document.createElement("div");
+    wrap.className = "post-top";
+
+    var btn = document.createElement("button");
+    btn.className = "add-category-btn";
+    btn.type = "button";
+    btn.textContent = "＋ カテゴリー追加";
+
+    var popup = document.createElement("div");
+    popup.className = "add-category-popup";
+    popup.hidden = true;
+    var input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "カテゴリーを検索 / 新規作成…";
+    input.autocomplete = "off";
+    var suggestions = document.createElement("div");
+    suggestions.className = "add-category-suggestions";
+    popup.appendChild(input);
+    popup.appendChild(suggestions);
+
+    function currentCategoryIds() {
+      return Array.isArray(data.categories) ? data.categories : [];
+    }
+
+    function applyAdd(categoryId) {
+      var already = currentCategoryIds();
+      if (already.indexOf(categoryId) !== -1) {
+        popup.hidden = true;
+        input.value = "";
+        return;
+      }
+      addCategoryToExistingPost(data.id, categoryId, function (ok) {
+        if (ok) {
+          popup.hidden = true;
+          input.value = "";
+          render(applyCategoryFilter(mergedPosts()));
+        } else {
+          hint.textContent = "カテゴリーの追加に失敗しました";
+        }
+      });
+    }
+
+    function renderSug() {
+      var query = input.value.trim();
+      var lower = query.toLowerCase();
+      var already = currentCategoryIds();
+      var candidates = allCategories.filter(function (c) {
+        return already.indexOf(c.id) === -1 && (!lower || c.name.toLowerCase().indexOf(lower) !== -1);
+      });
+      suggestions.innerHTML = "";
+      candidates.forEach(function (c) {
+        var item = document.createElement("button");
+        item.className = "category-suggestion-item";
+        item.type = "button";
+        item.textContent = c.name;
+        item.addEventListener("click", function () { applyAdd(c.id); });
+        suggestions.appendChild(item);
+      });
+      var exactMatch = allCategories.some(function (c) { return c.name.toLowerCase() === lower; });
+      if (query && !exactMatch) {
+        var createItem = document.createElement("button");
+        createItem.className = "category-suggestion-item create-new";
+        createItem.type = "button";
+        createItem.textContent = "＋「" + query + "」を新規作成";
+        createItem.addEventListener("click", function () {
+          createItem.disabled = true;
+          createCategory(query, function (created) {
+            if (created) applyAdd(created.id);
+          });
+        });
+        suggestions.appendChild(createItem);
+      }
+    }
+
+    input.addEventListener("input", renderSug);
+    input.addEventListener("focus", renderSug);
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      popup.hidden = !popup.hidden;
+      if (!popup.hidden) {
+        renderSug();
+        input.focus();
+      }
+    });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(popup);
+    return wrap;
+  }
+
   function render(posts) {
     postsEl.innerHTML = "";
     emptyMsg.hidden = posts.length > 0;
@@ -706,6 +840,8 @@
     posts.forEach(function (data) {
       var card = document.createElement("div");
       card.className = "post";
+
+      card.appendChild(buildAddCategoryWidget(data));
 
       var legacyImages = data.image ? [data.image] : [];
       var newImageIds = Array.isArray(data.images) ? data.images : [];
