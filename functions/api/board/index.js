@@ -8,6 +8,7 @@ const MAX_POSTS = 500;
 // note記事の全文コピペ（数千字）にも余裕を持たせつつ、事故で巨大なテキストが
 // 入らないよう上限を設定（KVは1件25MBまで可能だが、そこまでは要らない）。
 const MAX_TEXT_LENGTH = 20000;
+const MAX_TITLE_LENGTH = 200;
 // 画像は元画質のままdata URLとして受け取る（リサイズ・圧縮なし）。1枚ずつ個別のKVキーに
 // 保存するので、投稿本体（テキスト+画像ID一覧）のJSONが25MB上限に触れる心配はない。
 const MAX_IMAGE_DATA_LENGTH = 21 * 1024 * 1024;
@@ -112,7 +113,14 @@ export async function onRequestPost({ request, env }) {
     });
   }
   const text = typeof body.text === "string" ? body.text.trim() : "";
+  const title = typeof body.title === "string" ? body.title.trim() : "";
   const rawImages = Array.isArray(body.images) ? body.images : [];
+  if (title.length > MAX_TITLE_LENGTH) {
+    return new Response(
+      JSON.stringify({ error: "invalid_title", message: `題名は${MAX_TITLE_LENGTH}文字までです（${title.length}文字）` }),
+      { status: 400, headers: { "content-type": "application/json" } }
+    );
+  }
   const rawCategories = Array.isArray(body.categories)
     ? body.categories.filter((c) => typeof c === "string" && c.length && c.length <= 64).slice(0, 20)
     : [];
@@ -137,7 +145,7 @@ export async function onRequestPost({ request, env }) {
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
-  if ((!text && !rawImages.length) || text.length > MAX_TEXT_LENGTH) {
+  if ((!text && !rawImages.length && !title) || text.length > MAX_TEXT_LENGTH) {
     return new Response(
       JSON.stringify({ error: "invalid_text", message: `1件あたり${MAX_TEXT_LENGTH}文字までです（${text.length}文字）` }),
       { status: 400, headers: { "content-type": "application/json" } }
@@ -172,6 +180,7 @@ export async function onRequestPost({ request, env }) {
   const createdAt = Date.now();
   const id = crypto.randomUUID();
   const post = { id, text, createdAt };
+  if (title) post.title = title;
   if (imageIds.length) post.images = imageIds;
   if (categories.length) post.categories = categories;
   await env.MIITOBOW_BOARD.put(`post:${createdAt}:${id}`, JSON.stringify(post));

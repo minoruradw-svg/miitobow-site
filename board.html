@@ -93,6 +93,13 @@
     color: var(--ink); font-family: inherit; font-size: 0.98rem; line-height: 1.6;
   }
   .composer textarea::placeholder { color: var(--ink-faint); }
+  .composer #new-title {
+    border: none; outline: none; background: transparent; color: var(--ink);
+    font-family: inherit; font-size: 1.02rem; font-weight: 700; line-height: 1.5;
+    padding: 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+  }
+  .composer #new-title::placeholder { color: var(--ink-faint); font-weight: 700; }
+  .post-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
   .composer-row { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
   .hint { font-size: 0.76rem; color: var(--ink-faint); margin-right: auto; }
   .composer-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -330,6 +337,7 @@
   </div>
   <main>
     <div class="composer">
+      <input type="text" id="new-title" placeholder="題名（任意）" maxlength="200">
       <textarea id="new-text" placeholder="ここに書いて投稿…"></textarea>
       <div class="composer-tools">
         <input type="file" id="image-input" accept="image/*" multiple hidden>
@@ -550,6 +558,7 @@
 
   var countEl = document.getElementById("count");
   var refreshBtn = document.getElementById("refresh-btn");
+  var newTitle = document.getElementById("new-title");
   var newText = document.getElementById("new-text");
   var postBtn = document.getElementById("post-btn");
   var hint = document.getElementById("composer-hint");
@@ -1217,6 +1226,13 @@
         card.appendChild(grid);
       }
 
+      if (data.title) {
+        var titleEl = document.createElement("div");
+        titleEl.className = "post-title";
+        titleEl.textContent = data.title;
+        card.appendChild(titleEl);
+      }
+
       if (data.text) {
         var textEl = document.createElement("div");
         textEl.className = "post-text";
@@ -1248,13 +1264,13 @@
       var actions = document.createElement("div");
       actions.className = "post-actions";
 
-      if (data.text) {
+      if (data.text || data.title) {
         var copyBtn = document.createElement("button");
         copyBtn.className = "btn-ghost";
         copyBtn.type = "button";
         copyBtn.textContent = "コピー";
         copyBtn.addEventListener("click", function () {
-          var text = data.text || "";
+          var text = data.title ? (data.title + (data.text ? "\n" + data.text : "")) : (data.text || "");
           var done = function () {
             copyBtn.textContent = "コピーしました";
             copyBtn.classList.add("copied");
@@ -1309,13 +1325,15 @@
   }
 
   function submitPost() {
+    var title = newTitle.value.trim();
     var text = newText.value.trim();
     var images = pendingImages.slice();
-    if (!text && !images.length) return;
+    if (!text && !images.length && !title) return;
     postBtn.disabled = true;
     hint.textContent = "";
     var categories = selectedCategoryIds.slice();
     var body = { text: text };
+    if (title) body.title = title;
     if (images.length) body.images = images;
     if (categories.length) body.categories = categories;
     fetch("/api/board", {
@@ -1334,6 +1352,7 @@
       .then(function (created) {
         localAdds.push(created);
         render(applyAllFilters(mergedPosts()));
+        newTitle.value = "";
         newText.value = "";
         pendingImages = [];
         renderImagePreview();
@@ -1355,6 +1374,10 @@
     boardEl.classList.add("show");
     postBtn.addEventListener("click", submitPost);
     newText.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submitPost();
+    });
+    newTitle.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); newText.focus(); }
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submitPost();
     });
     refreshBtn.addEventListener("click", function () {
