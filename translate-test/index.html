@@ -402,24 +402,25 @@
 
   <!-- ===== 追加：翻訳しづらい「いやらしい」項目 P21–P30 ===== -->
   <div class="how" style="background:#fdeede;border-color:#f4d3a6;color:#6a3d08;">
-    <b>ここから下は「翻訳しづらい」難問セット（P21〜P30）</b>：イディオム・句動詞・法律文・専門用語・二重否定・曖昧構文・単位や日付・ビジネス隠語・ダジャレ・超長文など、機械翻訳が崩れやすいパターンを集めました。訳の粗を見つけるためのテスト用です。
+    <b>ここから下は「翻訳しづらい」難問セット（P21〜P34）</b>：イディオム・句動詞・法律文・専門用語・二重否定・同綴り異義語・英米差・ビジネス隠語・ダジャレ・超長文・UIラベル孤立・標識・否定疑問・固有名詞など、機械翻訳が崩れやすいパターンを集めました。訳の粗を見つけるためのテスト用です。
   </div>
 
   <!-- 21. Idioms / figurative -->
   <div class="cap"><span class="no">21</span><span class="ttl">イディオム・言い回し</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad">
     <div class="msg">I'm feeling a bit under the weather today, so can we take a rain check on dinner?</div>
-    <div class="msg">Don't worry, the exam was a piece of cake. I passed with flying colors.</div>
-    <div class="msg">Just give me a ballpark figure — I don't need it down to the last penny.</div>
-    <div class="msg">He let the cat out of the bag about the surprise party.</div>
-    <div class="msg">It's not rocket science, but you'll have to think outside the box.</div>
+    <div class="msg">Dessert is on the house — thanks for being such good sports about the wait.</div>
+    <div class="msg">The contractor cut corners on the wiring, and it came back to bite us.</div>
+    <div class="msg">I won't sugarcoat it: sales went south last quarter, and that was the last straw.</div>
+    <div class="msg">She's been on the fence about the offer, but I think she'll come around by Friday.</div>
   </div></div>
 
   <!-- 22. Phrasal verbs (support) -->
   <div class="cap"><span class="no">22</span><span class="ttl">句動詞だらけのサポート文</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad art">
-    <p>We're looking into the problem right now. In the meantime, please back up your data, log out of all your devices, and hold off on any updates until we've sorted it out.</p>
-    <p>If the app keeps crashing, try turning it off and on again. We'll get back to you as soon as we've figured out what's going on. Thanks for bearing with us.</p>
+    <p>If the meeting runs over, we'll have to put the demo off until Friday. Could you turn the volume down a notch and pick the kids up on the way back?</p>
+    <p>I picked up a cold last week, so I'll drop you off at the station instead. Look it up and get back to me — we ran out of time, so let's call it a day and pick up where we left off tomorrow.</p>
+    <p>Sorry to put you through this; we'll make it up to you and make up for the lost time.</p>
   </div></div>
 
   <!-- 23. Legalese / indemnification -->
@@ -435,10 +436,11 @@
   <div class="card"><div class="pad steps">
     <h3>Release 4.2.0 — What's new</h3>
     <ol>
-      <li>Improved throughput and reduced latency on large uploads.</li>
-      <li>The legacy v1 API is now deprecated and will be removed in a future release.</li>
-      <li>Fixed a race condition that could cause the cache to return stale data.</li>
-      <li>This update is backward-compatible, so no migration is required.</li>
+      <li>Fixed a race condition in the scheduler that could deadlock the worker pool under heavy load.</li>
+      <li>Resolved a memory leak that caused the app to be killed in the background.</li>
+      <li>The master branch has been renamed to main; existing forks should rebase before opening a pull request.</li>
+      <li>Breaking change: clients calling the legacy endpoint will now fail closed instead of silently returning stale data.</li>
+      <li>Rolled back last night's flaky build; the regression was traced to a dirty cache entry and an orphaned lock file.</li>
       <li>Known issue: dark mode may flicker after a rollback.</li>
     </ol>
   </div></div>
@@ -456,21 +458,24 @@
     </ul>
   </div></div>
 
-  <!-- 26. Ambiguous sentences -->
-  <div class="cap"><span class="no">26</span><span class="ttl">意味が二通りにとれる文（曖昧）</span><span class="pair">英→日</span></div>
+  <!-- 26. Homographs disambiguated by context -->
+  <div class="cap"><span class="no">26</span><span class="ttl">同じ綴りで意味が変わる語（文脈で一義）</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad">
-    <div class="msg">She saw the man on the hill with the telescope.</div>
-    <div class="msg">Visiting relatives can be boring.</div>
-    <div class="msg">The chicken is ready to eat.</div>
-    <div class="msg">We saw her duck behind the car.</div>
-    <div class="msg">They are cooking apples.</div>
+    <div class="msg">There are only two seats left on the left side, and the bus on the right already left.</div>
+    <div class="msg">Sorry, that item is out of stock. The soup is made with chicken stock, so it's not vegetarian.</div>
+    <div class="msg">The vending machine is out of order, so I ordered online in order to save time.</div>
+    <div class="msg">You have the right to a refund — just turn right at the counter and sign under the exit sign.</div>
+    <div class="msg">Bear right at the fork, watch out for bears, and you must bear the cost of any damage.</div>
+    <div class="msg">Please address the parcel to this address, and address any complaints to the manager.</div>
+    <div class="msg">Wait a minute — the text on this label is too minute to read without glasses.</div>
   </div></div>
 
-  <!-- 27. Units, numbers, dates -->
-  <div class="cap"><span class="no">27</span><span class="ttl">単位・分数・日付フォーマット</span><span class="pair">英→日</span></div>
+  <!-- 27. Units, UK/US differences, time, dates -->
+  <div class="cap"><span class="no">27</span><span class="ttl">単位・英米差・時刻・日付</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad art">
-    <p>Preheat the oven to 375°F (190°C). Add 1½ cups of flour and a pinch of salt, then bake for 25–30 minutes, or until golden brown. Makes about 2 dozen cookies.</p>
-    <p>Net weight: 1 lb 2 oz (510 g). Serving size: ⅓ cup. Best before 03/04/2026 (DD/MM/YYYY). Store below 25°C.</p>
+    <p>Check-in is from half past two; checkout is by noon on the 3rd. Breakfast is on the first floor (one flight up from reception), Monday through Friday, 6:30 to 9.</p>
+    <p>Rent is 1,200 a month, paid biweekly, with a deposit due a fortnight before move-in. The flat is on the second floor of a three-storey building; the previous tenant was 6 ft 2 and 12 stone.</p>
+    <p>Preheat the oven to 375 F (190 C). Add 1 1/2 cups of flour; bake 25 to 30 minutes. Makes about 2 dozen. Best before 03/04/2026 (DD/MM/YYYY). Store below 25 C.</p>
   </div></div>
 
   <!-- 28. Corporate jargon email -->
@@ -484,16 +489,72 @@
   <!-- 29. Marketing puns / wordplay -->
   <div class="cap"><span class="no">29</span><span class="ttl">ダジャレ・言葉遊びの広告</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad">
-    <div class="msg">Our coffee is brew-tiful. Wake up and smell the savings.</div>
-    <div class="msg">Life's short. Stay grounded — up to 50% off, today only.</div>
     <div class="msg">Bean there, done that? Try our new cold brew.</div>
     <div class="msg">Espresso yourself. You deserve a latte love.</div>
+    <div class="msg">Everything must go! Prices slashed — while supplies last.</div>
+    <div class="msg">Buy one, get one free. No strings attached, but some restrictions apply.</div>
+    <div class="msg">Doors open at 7. First come, first served. Cash only.</div>
+    <div class="msg">Limited time only — offer ends Sunday. Don't miss out!</div>
   </div></div>
 
   <!-- 30. One long run-on sentence -->
   <div class="cap"><span class="no">30</span><span class="ttl">とても長い一文（節が多い）</span><span class="pair">英→日</span></div>
   <div class="card"><div class="pad art">
     <p>Although the museum, which had been closed for nearly three years while it underwent extensive renovations that were repeatedly delayed by funding shortfalls and unexpected structural problems, finally reopened last spring to considerable public excitement, many longtime visitors were disappointed to find that the beloved central gallery, once home to the collection's most famous paintings, had quietly been turned into a gift shop and a cafe.</p>
+  </div></div>
+
+  <!-- 31. Isolated UI labels (no context) -->
+  <div class="cap"><span class="no">31</span><span class="ttl">UIラベル単体（文脈なし・1語ずつ）</span><span class="pair">英→日</span></div>
+  <div class="card">
+    <div class="appbar"><span class="back">‹</span> Account</div>
+    <div class="row"><span>Available balance</span><span class="chev">›</span></div>
+    <div class="row"><span>Pending</span><span class="chev">›</span></div>
+    <div class="row"><span>Outstanding</span><span class="chev">›</span></div>
+    <div class="row"><span>Interest</span><span class="chev">›</span></div>
+    <div class="row"><span>Statement</span><span class="chev">›</span></div>
+    <div class="row"><span>Cleared</span><span class="chev">›</span></div>
+    <div class="row"><span>Declined</span><span class="chev">›</span></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="appbar"><span class="back">‹</span> Profile</div>
+    <div class="row"><span>Post</span><span class="chev">›</span></div>
+    <div class="row"><span>Story</span><span class="chev">›</span></div>
+    <div class="row"><span>Handle</span><span class="chev">›</span></div>
+    <div class="row"><span>Draft</span><span class="chev">›</span></div>
+    <div class="row"><span>Mute</span><span class="chev">›</span></div>
+    <div class="row"><span>Block</span><span class="chev">›</span></div>
+    <div class="row"><span>Report</span><span class="chev">›</span></div>
+  </div>
+
+  <!-- 32. Signage / short imperatives -->
+  <div class="cap"><span class="no">32</span><span class="ttl">標識・掲示（短い命令文）</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <div class="msg">Mind the gap.</div>
+    <div class="msg">Keep left. Way out →</div>
+    <div class="msg">No standing at any time.</div>
+    <div class="msg">Dead end. This door is alarmed.</div>
+    <div class="msg">Wet paint. Watch your head.</div>
+    <div class="msg">Give way to pedestrians.</div>
+    <div class="msg">Baby changing on the next floor.</div>
+  </div></div>
+
+  <!-- 33. Negative questions, Yes/No, sarcasm -->
+  <div class="cap"><span class="no">33</span><span class="ttl">否定疑問のYes/No・皮肉</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad">
+    <div class="msg">"You don't have a reservation, do you?" "No, I'm afraid not."</div>
+    <div class="msg">"Isn't the museum closed on Mondays?" "No, it's open every day in summer."</div>
+    <div class="msg">Oh great, another delay. Just what I needed.</div>
+    <div class="msg">Thanks a lot for the heads-up — I found out five minutes before the meeting.</div>
+    <div class="msg">Yeah, right, like that's going to happen.</div>
+  </div></div>
+
+  <!-- 34. Proper nouns that look like common nouns -->
+  <div class="cap"><span class="no">34</span><span class="ttl">固有名詞が普通名詞に見える</span><span class="pair">英→日</span></div>
+  <div class="card"><div class="pad art">
+    <p>Change at Reading for services to Bath; the next train is on platform 4.</p>
+    <p>We're staying two nights in Nice before the sleeper to Paris.</p>
+    <p>Georgia and Turkey both require an e-visa, so apply before you fly.</p>
+    <p>The Tube is closed on Boxing Day, and most shops shut early on Black Friday.</p>
   </div></div>
 
   <div class="foot">
