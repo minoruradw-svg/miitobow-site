@@ -3265,29 +3265,39 @@
       <a class="made-carousel__action" href="/articles/line-emoji.html" target="_blank" rel="noopener">絵文字一覧を見る</a>
     </div>
   </div>
+</div><div class="made-carousel__card made-carousel__card--6">
+  <div class="made-carousel__face">
+    <img class="made-carousel__icon" src="/articles/miitobow-room-icon.png" alt="">
+    <span class="made-carousel__title">ミートボーの部屋</span>
+    <span class="made-carousel__desc">Three.jsで作った3Dの暮らしアプリ。読書・コーヒー・スケボーなどをのんびり眺められます。</span>
+    <div class="made-carousel__actions">
+      <a class="made-carousel__action" href="/room/" target="_blank" rel="noopener">部屋をのぞく</a>
+    </div>
+  </div>
 </div>
     </div>
   </div>
   <div class="made-carousel__dragbar" id="made-carousel-dragbar" role="slider" aria-label="表示するカードを切り替える" tabindex="0">
     <div class="made-carousel__dragbar-track" id="made-carousel-track">
       <span class="made-carousel__dragbar-fill" id="made-carousel-fill"></span>
-      <span class="made-carousel__dragbar-dot" style="left:0.0%"></span><span class="made-carousel__dragbar-dot" style="left:20.0%"></span><span class="made-carousel__dragbar-dot" style="left:40.0%"></span><span class="made-carousel__dragbar-dot" style="left:60.0%"></span><span class="made-carousel__dragbar-dot" style="left:80.0%"></span>
+      <span class="made-carousel__dragbar-dot" style="left:0.0%"></span><span class="made-carousel__dragbar-dot" style="left:16.6667%"></span><span class="made-carousel__dragbar-dot" style="left:33.3333%"></span><span class="made-carousel__dragbar-dot" style="left:50.0%"></span><span class="made-carousel__dragbar-dot" style="left:66.6667%"></span><span class="made-carousel__dragbar-dot" style="left:83.3333%"></span>
       <span class="made-carousel__dragbar-handle" id="made-carousel-handle">⇔</span>
     </div>
     <p class="made-carousel__dragbar-label">← ここをドラッグしてカードを切り替える →</p>
   </div>
   <div class="made-carousel__nav">
-    <a class="made-carousel__navlink" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener">スクショで翻訳（PC版）</a><label class="made-carousel__navlink" for="android-preview-toggle">スクショで翻訳（Android/iOS）</label><a class="made-carousel__navlink" href="/background.html" target="_self" rel="noopener">miitobow.com（このサイト）</a><a class="made-carousel__navlink" href="/articles/line-stickers.html" target="_blank" rel="noopener">LINEスタンプ シリーズ</a><a class="made-carousel__navlink" href="/articles/line-emoji.html" target="_blank" rel="noopener">LINE絵文字 シリーズ</a>
+    <a class="made-carousel__navlink" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener">スクショで翻訳（PC版）</a><label class="made-carousel__navlink" for="android-preview-toggle">スクショで翻訳（Android/iOS）</label><a class="made-carousel__navlink" href="/background.html" target="_self" rel="noopener">miitobow.com（このサイト）</a><a class="made-carousel__navlink" href="/articles/line-stickers.html" target="_blank" rel="noopener">LINEスタンプ シリーズ</a><a class="made-carousel__navlink" href="/articles/line-emoji.html" target="_blank" rel="noopener">LINE絵文字 シリーズ</a><a class="made-carousel__navlink" href="/room/" target="_blank" rel="noopener">ミートボーの部屋</a>
   </div>
 </div>
 
 <style>
   .made-carousel__card { transform: none; }
   .made-carousel__card--1 { transform: rotateY(0.0deg) translateZ(300px); }
-      .made-carousel__card--2 { transform: rotateY(72.0deg) translateZ(300px); }
-      .made-carousel__card--3 { transform: rotateY(144.0deg) translateZ(300px); }
-      .made-carousel__card--4 { transform: rotateY(216.0deg) translateZ(300px); }
-      .made-carousel__card--5 { transform: rotateY(288.0deg) translateZ(300px); }
+      .made-carousel__card--2 { transform: rotateY(60.0deg) translateZ(300px); }
+      .made-carousel__card--3 { transform: rotateY(120.0deg) translateZ(300px); }
+      .made-carousel__card--4 { transform: rotateY(180.0deg) translateZ(300px); }
+      .made-carousel__card--5 { transform: rotateY(240.0deg) translateZ(300px); }
+      .made-carousel__card--6 { transform: rotateY(300.0deg) translateZ(300px); }
 </style>
 
 <script>
@@ -3297,8 +3307,8 @@
   var fill = document.getElementById('made-carousel-fill');
   var handle = document.getElementById('made-carousel-handle');
   var dots = bar ? bar.querySelectorAll('.made-carousel__dragbar-dot') : [];
-  var n = 5;
-  var step = 72.0;
+  var n = 6;
+  var step = 60.0;
   if (!inner || !bar) return;
   var rotation = 0;
   var dragging = false;
@@ -3343,8 +3353,8 @@
   bar.addEventListener('touchend', pointerUp);
 
   bar.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') { rotation -= 72.0; apply(); }
-    if (e.key === 'ArrowRight') { rotation += 72.0; apply(); }
+    if (e.key === 'ArrowLeft') { rotation -= 60.0; apply(); }
+    if (e.key === 'ArrowRight') { rotation += 60.0; apply(); }
   });
 
   apply();
