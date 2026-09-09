@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>アクセス状況 | miitobow</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f9f4;
+    --surface: #ffffff;
+    --surface-soft: #eef3ea;
+    --ink: #1f2b20;
+    --ink-soft: #5c6b5c;
+    --ink-faint: #93a190;
+    --accent: #5f9c39;
+    --accent-dark: #467029;
+    --accent-glow: rgba(95, 156, 57, 0.14);
+    --border: #dde6d8;
+    --danger: #c1502e;
+    --bar: #86d93e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+      --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #6c7c68;
+      --accent: #82c455; --accent-dark: #9ed873; --accent-glow: rgba(130, 196, 85, 0.18);
+      --border: #2b3625; --danger: #e08a6c; --bar: #6fae44;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+    --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #6c7c68;
+    --accent: #82c455; --accent-dark: #9ed873; --accent-glow: rgba(130, 196, 85, 0.18);
+    --border: #2b3625; --danger: #e08a6c; --bar: #6fae44;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .head { font-family: "M PLUS Rounded 1c", "Hiragino Sans", sans-serif; font-weight: 900; letter-spacing: 0.02em; }
+
+  main { max-width: 720px; margin: 0 auto; padding: 28px 18px 80px; display: flex; flex-direction: column; gap: 18px; }
+  header.page-head { display: flex; flex-direction: column; gap: 4px; padding: 6px 2px 4px; }
+  header.page-head h1 { margin: 0; font-size: 1.35rem; }
+  header.page-head .sub { color: var(--ink-soft); font-size: 0.85rem; }
+  a.back { color: var(--ink-faint); font-size: 0.82rem; text-decoration: none; }
+  a.back:hover { color: var(--accent-dark); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 480px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .card .label { font-size: 0.76rem; color: var(--ink-faint); font-weight: 700; }
+  .card .num { font-size: 1.9rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .card .num small { font-size: 0.95rem; font-weight: 700; color: var(--ink-soft); margin-left: 2px; }
+  .card .breakdown { font-size: 0.78rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+  .panel h2 { margin: 0 0 12px; font-size: 0.95rem; }
+  .chart-wrap { overflow-x: auto; }
+  #chart { display: block; }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 0.78rem; color: var(--ink-soft); }
+  .legend .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+  .legend .dot.pv { background: var(--bar); }
+  .legend .dot.vi { background: var(--accent-dark); }
+
+  #state { padding: 40px 0; text-align: center; color: var(--ink-faint); font-size: 0.88rem; }
+  #state.hidden { display: none; }
+  .updated { font-size: 0.74rem; color: var(--ink-faint); text-align: right; }
+
+  #notconfigured { display: none; }
+  #notconfigured.show { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← miitobow.com へ戻る</a>
+  <header class="page-head">
+    <h1 class="head">アクセス状況</h1>
+    <div class="sub">miitobow.com の閲覧数（Cloudflare Web Analyticsより）</div>
+  </header>
+
+  <div id="state">読み込み中…</div>
+  <div id="notconfigured">
+    <div class="panel">まだ集計が設定されていません。</div>
+  </div>
+
+  <div id="content" style="display:none; flex-direction:column; gap:18px;">
+    <div class="cards">
+      <div class="card">
+        <div class="label">直近24時間</div>
+        <div class="num" id="c-1d-pv">–<small>PV</small></div>
+        <div class="breakdown" id="c-1d-vi">– 訪問</div>
+      </div>
+      <div class="card">
+        <div class="label">直近7日</div>
+        <div class="num" id="c-7d-pv">–<small>PV</small></div>
+        <div class="breakdown" id="c-7d-vi">– 訪問</div>
+      </div>
+      <div class="card">
+        <div class="label">直近30日</div>
+        <div class="num" id="c-30d-pv">–<small>PV</small></div>
+        <div class="breakdown" id="c-30d-vi">– 訪問</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>日別推移（直近30日）</h2>
+      <div class="chart-wrap"><canvas id="chart" height="180"></canvas></div>
+      <div class="legend">
+        <span><span class="dot pv"></span>ページビュー</span>
+        <span><span class="dot vi"></span>訪問</span>
+      </div>
+    </div>
+
+    <div class="updated" id="updated-at"></div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var stateEl = document.getElementById('state');
+  var notConfEl = document.getElementById('notconfigured');
+  var contentEl = document.getElementById('content');
+
+  function fmt(n) { return (n || 0).toLocaleString('ja-JP'); }
+
+  function renderCards(data) {
+    document.getElementById('c-1d-pv').innerHTML = fmt(data.last1d.pageviews) + '<small>PV</small>';
+    document.getElementById('c-1d-vi').textContent = fmt(data.last1d.visits) + ' 訪問';
+    document.getElementById('c-7d-pv').innerHTML = fmt(data.last7d.pageviews) + '<small>PV</small>';
+    document.getElementById('c-7d-vi').textContent = fmt(data.last7d.visits) + ' 訪問';
+    document.getElementById('c-30d-pv').innerHTML = fmt(data.last30d.pageviews) + '<small>PV</small>';
+    document.getElementById('c-30d-vi').textContent = fmt(data.last30d.visits) + ' 訪問';
+    var d = new Date(data.updatedAt);
+    document.getElementById('updated-at').textContent =
+      '更新: ' + d.toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function renderChart(daily) {
+    var canvas = document.getElementById('chart');
+    var dpr = window.devicePixelRatio || 1;
+    var wrapWidth = canvas.parentElement.clientWidth;
+    var barSlot = Math.max(18, Math.min(28, wrapWidth / Math.max(daily.length, 1)));
+    var width = Math.max(wrapWidth, barSlot * daily.length);
+    var height = 180;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    var style = getComputedStyle(document.documentElement);
+    var barColor = style.getPropertyValue('--bar').trim();
+    var accentColor = style.getPropertyValue('--accent-dark').trim();
+    var faintColor = style.getPropertyValue('--ink-faint').trim();
+
+    var maxPv = Math.max.apply(null, daily.map(function (d) { return d.pageviews; }).concat([1]));
+    var padBottom = 20, padTop = 6;
+    var chartH = height - padBottom - padTop;
+
+    ctx.clearRect(0, 0, width, height);
+    daily.forEach(function (d, i) {
+      var x = i * barSlot;
+      var pvH = (d.pageviews / maxPv) * chartH;
+      var viH = (d.visits / maxPv) * chartH;
+      var barW = Math.max(4, barSlot * 0.32);
+
+      ctx.fillStyle = barColor;
+      ctx.fillRect(x + barSlot * 0.18, padTop + (chartH - pvH), barW, pvH);
+
+      ctx.fillStyle = accentColor;
+      ctx.fillRect(x + barSlot * 0.52, padTop + (chartH - viH), barW, viH);
+
+      if (daily.length <= 15 || i % Math.ceil(daily.length / 10) === 0) {
+        ctx.fillStyle = faintColor;
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        var label = d.date.slice(5).replace('-', '/');
+        ctx.fillText(label, x + barSlot / 2, height - 6);
+      }
+    });
+  }
+
+  fetch('/api/stats')
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+    .then(function (res) {
+      if (!res.ok) {
+        if (res.body && res.body.error === 'not_configured') {
+          stateEl.classList.add('hidden');
+          notConfEl.classList.add('show');
+        } else {
+          stateEl.textContent = '読み込みに失敗しました。';
+        }
+        return;
+      }
+      stateEl.classList.add('hidden');
+      contentEl.style.display = 'flex';
+      renderCards(res.body);
+      renderChart(res.body.daily.length ? res.body.daily : [{ date: '-', pageviews: 0, visits: 0 }]);
+    })
+    .catch(function () {
+      stateEl.textContent = '読み込みに失敗しました。';
+    });
+})();
+</script>
+</body>
+</html>
