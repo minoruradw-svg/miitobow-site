@@ -3,7 +3,9 @@
 // （Account Analytics:Read権限のAPIトークン）でサーバー側からのみ叩く。トークン値はクライアントに渡さない。
 
 const ACCOUNT_TAG = "17cc2544057c28d189a5e846fb3f79c9";
-const SITE_TAG = "a605107326c34038b1f102869faccfd7"; // beaconトークン＝siteTag（公開埋め込み用の値。秘密ではない）
+// GraphQL Analytics API上のsiteTagはビーコンのdata-cf-beaconトークンとは別値
+// （/api/stats-debugでアカウント内の実データを調べて特定した。2026-09-09）
+const SITE_TAG = "3e3956cf064c47f0b5e21fb6a12aabf4";
 
 const GRAPHQL_URL = "https://api.cloudflare.com/client/v4/graphql";
 
