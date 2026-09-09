@@ -154,10 +154,10 @@
     var dpr = window.devicePixelRatio || 1;
     var wrapWidth = canvas.parentElement.clientWidth;
     var barSlot = Math.max(18, Math.min(28, wrapWidth / Math.max(daily.length, 1)));
-    var width = Math.max(wrapWidth, barSlot * daily.length);
+    var width = Math.round(Math.max(wrapWidth, barSlot * daily.length));
     var height = 180;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     var ctx = canvas.getContext('2d');
@@ -172,6 +172,10 @@
     var padBottom = 20, padTop = 6;
     var chartH = height - padBottom - padTop;
 
+    // devicePixelRatio込みの実ピクセル格子に座標をスナップする（小数座標のままだと
+    // アンチエイリアスでバーの輪郭がぼやける）。
+    function snap(v) { return Math.round(v * dpr) / dpr; }
+
     ctx.clearRect(0, 0, width, height);
     daily.forEach(function (d, i) {
       var x = i * barSlot;
@@ -180,17 +184,23 @@
       var barW = Math.max(4, barSlot * 0.32);
 
       ctx.fillStyle = barColor;
-      ctx.fillRect(x + barSlot * 0.18, padTop + (chartH - pvH), barW, pvH);
+      ctx.fillRect(
+        snap(x + barSlot * 0.18), snap(padTop + (chartH - pvH)),
+        snap(barW), snap(pvH)
+      );
 
       ctx.fillStyle = accentColor;
-      ctx.fillRect(x + barSlot * 0.52, padTop + (chartH - viH), barW, viH);
+      ctx.fillRect(
+        snap(x + barSlot * 0.52), snap(padTop + (chartH - viH)),
+        snap(barW), snap(viH)
+      );
 
       if (daily.length <= 15 || i % Math.ceil(daily.length / 10) === 0) {
         ctx.fillStyle = faintColor;
         ctx.font = '10px sans-serif';
         ctx.textAlign = 'center';
         var label = d.date.slice(5).replace('-', '/');
-        ctx.fillText(label, x + barSlot / 2, height - 6);
+        ctx.fillText(label, snap(x + barSlot / 2), snap(height - 6));
       }
     });
   }
