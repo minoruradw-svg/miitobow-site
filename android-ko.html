@@ -233,6 +233,21 @@ html[data-motion="paused"] .headline-char{animation:none;opacity:1;color:inherit
 }
 @media(max-width:700px){.everyday-photo:nth-of-type(2){object-position:88% center}}
 .demo-languages{padding-bottom:16px;border-bottom:1px solid #ffffff26}.demo-languages + .demo-controls{margin-top:16px}
+/* Mobile photos follow the copy in their own row, instead of filling its height. */
+@media(max-width:700px){
+ .hero-stage,#worries,#download{display:grid;grid-template-columns:minmax(0,1fr);background:#17251e}
+ .hero-stage:before,.pain-slideshow:before,#download:before{display:none}
+ .hero-stage .hero-grid{display:contents}
+ .hero-stage .hero-copy{grid-row:1;width:calc(100% - 40px);margin:auto;padding:42px 0 28px}
+ .hero-stage>.hero-lifestyle{position:relative;inset:auto;grid-row:2;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;z-index:0;border-radius:0;animation:none;transform:none}
+ html[data-motion] .hero-stage>.hero-lifestyle{animation:none;transform:none}
+ .hero-grid>.hero-copy+div{grid-row:3;width:calc(100% - 40px);margin:auto;padding:22px 0 25px}
+ .pain-inner,#download>.wrap{grid-row:1;min-height:0;padding:44px 0 30px;align-items:flex-start}
+ .pain-stories{min-height:182px}
+ .pain-photos{position:relative;inset:auto;grid-row:2;aspect-ratio:3/2;z-index:0;overflow:hidden}
+ .pain-photo{object-position:center;object-fit:contain}
+ #download>.closing-photo{position:relative;inset:auto;grid-row:2;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;object-position:center;z-index:0;mask-image:none;-webkit-mask-image:none}
+}
 /* Page language switch and translated copy. */
 .language-bar{background:#f5f4ef;border-bottom:1px solid #dededb;color:#333b34;font:600 12px/1.5 system-ui,sans-serif}
 .language-inner{display:flex;justify-content:flex-end;align-items:center;gap:18px;min-height:48px}
