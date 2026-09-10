@@ -1,19 +1,23 @@
 // DELETE /api/board/<id>  -> 該当の投稿を削除。X-Board-Pin必須。
 // PATCH  /api/board/<id>  -> 投稿にカテゴリーを1件追加 { categoryId }。X-Board-Pin必須。
+//
+// ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
+// （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
+
+import { loadIndex, saveIndex } from "./_lib.js";
 
 function checkPin(request, env) {
   const pin = request.headers.get("X-Board-Pin") || "";
   return env.BOARD_PIN && pin === env.BOARD_PIN;
 }
 
-async function findPost(env, id) {
-  const list = await env.MIITOBOW_BOARD.list({ prefix: "post:" });
-  const match = list.keys.find((k) => k.name.endsWith(":" + id));
-  if (!match) return null;
-  const raw = await env.MIITOBOW_BOARD.get(match.name);
+async function findPost(env, id, index) {
+  const entry = index.find((e) => e.id === id);
+  if (!entry) return null;
+  const raw = await env.MIITOBOW_BOARD.get(entry.key);
   if (!raw) return null;
   try {
-    return { key: match.name, post: JSON.parse(raw) };
+    return { key: entry.key, post: JSON.parse(raw) };
   } catch (e) {
     return null;
   }
@@ -43,7 +47,8 @@ export async function onRequestPatch({ request, env, params }) {
     });
   }
 
-  const found = await findPost(env, params.id);
+  const index = await loadIndex(env);
+  const found = await findPost(env, params.id, index);
   if (!found) {
     return new Response(JSON.stringify({ error: "not_found" }), {
       status: 404,
@@ -67,7 +72,8 @@ export async function onRequestDelete({ request, env, params }) {
       headers: { "content-type": "application/json" },
     });
   }
-  const found = await findPost(env, params.id);
+  const index = await loadIndex(env);
+  const found = await findPost(env, params.id, index);
   if (found) {
     if (Array.isArray(found.post.images)) {
       for (const imgId of found.post.images) {
@@ -75,6 +81,7 @@ export async function onRequestDelete({ request, env, params }) {
       }
     }
     await env.MIITOBOW_BOARD.delete(found.key);
+    await saveIndex(env, index.filter((e) => e.id !== params.id));
   }
   return new Response(null, { status: 204 });
 }

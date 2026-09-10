@@ -2,6 +2,11 @@
 // POST /api/board   -> 投稿を追加（text/imagesのどちらか、または両方。1投稿で複数枚OK）
 // どちらも X-Board-Pin ヘッダーがCloudflareの環境変数(BOARD_PIN)と一致しないと401。
 //
+// ⚠️ post:キーの一覧はKVのlist()を毎回叩かず、_lib.jsの索引キー(board:index)で管理する
+// （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
+
+import { loadIndex, saveIndex } from "./_lib.js";
+
 // バグ等による無限投稿・容量肥大を防ぐための上限（KV無料枠：保存1GB・書き込み1日1000件に対し、
 // 十分すぎるほど余裕を持たせた値。個人用メモとして通常使う分には絶対に到達しない）。
 const MAX_POSTS = 500;
@@ -32,11 +37,13 @@ function base64ToBytes(dataUrl) {
 // 画像は「直近20枚」だけ残す。旧形式（投稿に直接埋め込まれたdata URLの`image`フィールド）は
 // 対象外（過去の投稿を壊さないよう触らない）。新形式の`images`（画像ID配列）だけを対象に、
 // 新しい投稿から数えて20枚を超えた分の画像実体を削除し、投稿側の参照も外す。
-async function trimOldImages(env) {
-  const list = await env.MIITOBOW_BOARD.list({ prefix: "post:" });
+// index引数＝呼び出し元が既に読み込み済みの索引（新しい順）。画像付きエントリ(hasImages)だけを
+// 対象に、そのkeyからpost本体をgetする（list()は使わない）。
+async function trimOldImages(env, index) {
+  const candidates = index.filter((e) => e.hasImages);
   const items = [];
-  for (const k of list.keys) {
-    const raw = await env.MIITOBOW_BOARD.get(k.name);
+  for (const entry of candidates) {
+    const raw = await env.MIITOBOW_BOARD.get(entry.key);
     if (!raw) continue;
     let post;
     try {
@@ -44,18 +51,23 @@ async function trimOldImages(env) {
     } catch (e) {
       continue;
     }
-    if (Array.isArray(post.images) && post.images.length) items.push({ key: k.name, post });
+    if (Array.isArray(post.images) && post.images.length) items.push({ key: entry.key, post, entry });
   }
   items.sort((a, b) => b.post.createdAt - a.post.createdAt);
 
   let kept = 0;
   const toDelete = [];
+  let indexChanged = false;
   for (const item of items) {
     const imgs = item.post.images;
     if (kept >= MAX_IMAGES) {
       toDelete.push(...imgs);
       item.post.images = [];
       await env.MIITOBOW_BOARD.put(item.key, JSON.stringify(item.post));
+      // 画像を全て間引いたので索引のhasImagesも倒しておく（放置すると次回以降の
+      // trimOldImagesが毎回この投稿を無駄にgetし続ける＝読み取り回数の緩やかな増加を招く）。
+      item.entry.hasImages = false;
+      indexChanged = true;
     } else if (kept + imgs.length <= MAX_IMAGES) {
       kept += imgs.length;
     } else {
@@ -69,6 +81,9 @@ async function trimOldImages(env) {
   for (const id of toDelete) {
     await env.MIITOBOW_BOARD.delete(`img:${id}`);
   }
+  if (indexChanged) {
+    await saveIndex(env, index);
+  }
 }
 
 export async function onRequestGet({ request, env }) {
@@ -78,10 +93,10 @@ export async function onRequestGet({ request, env }) {
       headers: { "content-type": "application/json" },
     });
   }
-  const list = await env.MIITOBOW_BOARD.list({ prefix: "post:" });
+  const index = await loadIndex(env);
   const posts = await Promise.all(
-    list.keys.map(async (k) => {
-      const raw = await env.MIITOBOW_BOARD.get(k.name);
+    index.map(async (entry) => {
+      const raw = await env.MIITOBOW_BOARD.get(entry.key);
       if (!raw) return null;
       try {
         return JSON.parse(raw);
@@ -90,6 +105,7 @@ export async function onRequestGet({ request, env }) {
       }
     })
   );
+  // indexは既に新しい順で保持しているが、フォーマット揺れに備えてここでも念のため並べ替える。
   const valid = posts.filter(Boolean).sort((a, b) => b.createdAt - a.createdAt);
   return new Response(JSON.stringify(valid), {
     headers: { "content-type": "application/json" },
@@ -151,9 +167,9 @@ export async function onRequestPost({ request, env }) {
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
-  // 現在の件数がMAX_POSTS以上なら新規投稿を拒否（limitに達した時点で打ち切って件数だけ見る＝軽量）
-  const existing = await env.MIITOBOW_BOARD.list({ prefix: "post:", limit: MAX_POSTS });
-  if (existing.keys.length >= MAX_POSTS) {
+  // 現在の件数がMAX_POSTS以上なら新規投稿を拒否（索引の長さを見るだけ＝list()不要）
+  const index = await loadIndex(env);
+  if (index.length >= MAX_POSTS) {
     return new Response(
       JSON.stringify({ error: "limit_reached", message: `投稿数が上限(${MAX_POSTS}件)に達しています。古い投稿を削除してください。` }),
       { status: 507, headers: { "content-type": "application/json" } }
@@ -183,9 +199,13 @@ export async function onRequestPost({ request, env }) {
   if (title) post.title = title;
   if (imageIds.length) post.images = imageIds;
   if (categories.length) post.categories = categories;
-  await env.MIITOBOW_BOARD.put(`post:${createdAt}:${id}`, JSON.stringify(post));
+  const key = `post:${createdAt}:${id}`;
+  await env.MIITOBOW_BOARD.put(key, JSON.stringify(post));
+
+  const newIndex = [{ id, key, createdAt, hasImages: imageIds.length > 0 }, ...index];
+  await saveIndex(env, newIndex);
   if (imageIds.length) {
-    await trimOldImages(env);
+    await trimOldImages(env, newIndex);
   }
   return new Response(JSON.stringify(post), {
     status: 201,
