@@ -595,12 +595,12 @@
   // （画像は直近20枚しか保持しない仕組みなので、通常の写真サイズなら気にしなくてよい）。
   var IMAGE_MAX_FILE_BYTES = 15 * 1024 * 1024;
   var IMAGE_MAX_COUNT = 20;
-  // 動画は容量を圧迫しやすいので上限を小さめに（サーバー側のMAX_VIDEO_DATA_LENGTHと合わせる）。
-  var VIDEO_MAX_FILE_BYTES = 15 * 1024 * 1024;
+  // サーバー側のMAX_VIDEO_DATA_LENGTH（KVの1件25MBハード上限に対する安全マージン）と合わせる。
+  var VIDEO_MAX_FILE_BYTES = 24 * 1024 * 1024;
 
   function readVideoFile(file, done) {
     if (file.size > VIDEO_MAX_FILE_BYTES) {
-      done(null, "動画が大きすぎます(15MBまで)");
+      done(null, "動画が大きすぎます(24MBまで)");
       return;
     }
     var reader = new FileReader();
