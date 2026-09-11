@@ -654,6 +654,55 @@
     });
   });
 
+  // クリップボードからの画像/動画貼り付け（Ctrl+V）にも対応。
+  // スクリーンショットをコピーしてそのまま貼れるようにする。
+  newText.addEventListener("paste", function (e) {
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    var handledAny = false;
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.kind !== "file") continue;
+      if (item.type.indexOf("image/") === 0) {
+        var imgFile = item.getAsFile();
+        if (!imgFile) continue;
+        handledAny = true;
+        if (pendingImages.length >= IMAGE_MAX_COUNT) {
+          hint.textContent = "1回に選べる画像は" + IMAGE_MAX_COUNT + "枚までです";
+          continue;
+        }
+        readImageFile(imgFile, function (dataUrl, errMsg) {
+          if (dataUrl) {
+            pendingImages.push(dataUrl);
+            renderImagePreview();
+            if (selectedCategoryIds.indexOf("image") === -1) {
+              selectedCategoryIds.push("image");
+              renderSelectedChips();
+            }
+          } else if (errMsg) {
+            hint.textContent = errMsg;
+          }
+        });
+      } else if (item.type.indexOf("video/") === 0) {
+        var vidFile = item.getAsFile();
+        if (!vidFile) continue;
+        handledAny = true;
+        readVideoFile(vidFile, function (dataUrl, errMsg) {
+          if (dataUrl) {
+            pendingVideo = dataUrl;
+            renderVideoPreview();
+            if (selectedCategoryIds.indexOf("video") === -1) {
+              selectedCategoryIds.push("video");
+              renderSelectedChips();
+            }
+          } else if (errMsg) {
+            hint.textContent = errMsg;
+          }
+        });
+      }
+    }
+    if (handledAny) e.preventDefault();
+  });
+
   function readImageFile(file, done) {
     if (file.size > IMAGE_MAX_FILE_BYTES) {
       done(null, "画像が大きすぎます(15MBまで)");
