@@ -127,6 +127,7 @@
   .post-image { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; background: var(--surface-soft); }
   .post-image-grid.count-1 .post-image { height: auto; object-fit: contain; }
   .post-video { width: 100%; max-height: 420px; border-radius: 10px; display: block; background: #000; margin-top: 6px; }
+  .post-video + .save-all-btn { margin-top: 6px; }
   #video-preview-grid .image-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 10px; border: 1px solid var(--border); background: #000; }
 
   .image-lightbox {
@@ -1312,10 +1313,38 @@
         var videoEl = document.createElement("video");
         videoEl.className = "post-video";
         videoEl.controls = true;
+        videoEl.preload = "metadata";
         getVideoBlobUrl(data.video)
           .then(function (url) { videoEl.src = url; })
-          .catch(function () {});
+          .catch(function () {
+            videoEl.replaceWith(document.createTextNode("動画の読み込みに失敗しました"));
+          });
+
+        var videoSaveBtn = document.createElement("button");
+        videoSaveBtn.className = "save-all-btn";
+        videoSaveBtn.type = "button";
+        videoSaveBtn.textContent = "⬇ 動画を保存";
+        videoSaveBtn.addEventListener("click", function () {
+          videoSaveBtn.disabled = true;
+          videoSaveBtn.textContent = "保存中…";
+          fetch("/api/board/video/" + encodeURIComponent(data.video), { headers: { "X-Board-Pin": currentPin } })
+            .then(function (res) {
+              if (!res.ok) throw new Error("load failed");
+              return res.blob();
+            })
+            .then(function (blob) {
+              var filename = "miitobow-board-" + (data.createdAt || Date.now()) + ".mp4";
+              return new Promise(function (resolve) { saveBlob(filename, blob, resolve); });
+            })
+            .catch(function () {})
+            .finally(function () {
+              videoSaveBtn.disabled = false;
+              videoSaveBtn.textContent = "⬇ 動画を保存";
+            });
+        });
+
         card.appendChild(videoEl);
+        card.appendChild(videoSaveBtn);
       }
 
       if (data.title) {
