@@ -80,6 +80,9 @@ export async function onRequestDelete({ request, env, params }) {
         await env.MIITOBOW_BOARD.delete(`img:${imgId}`);
       }
     }
+    if (found.post.video) {
+      await env.MIITOBOW_BOARD.delete(`vid:${found.post.video}`);
+    }
     await env.MIITOBOW_BOARD.delete(found.key);
     await saveIndex(env, index.filter((e) => e.id !== params.id));
   }

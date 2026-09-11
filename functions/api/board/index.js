@@ -20,6 +20,10 @@ const MAX_IMAGE_DATA_LENGTH = 21 * 1024 * 1024;
 // 画像は「直近N枚」だけ残し、それより古い画像は自動で消してテキストだけ残す
 // （元画質のまま複数枚貼れるようにする代わりに、容量が際限なく増えないようにする安全弁）。
 const MAX_IMAGES = 20;
+// 動画は画像よりファイルサイズが大きく容量を圧迫しやすいため、上限を小さめ（15MB前後）・
+// 保持件数も少なめ（直近5件）にする（2026-09-11・KV無料枠1GB・1件25MB上限に対する安全マージン）。
+const MAX_VIDEO_DATA_LENGTH = 20 * 1024 * 1024;
+const MAX_VIDEOS = 5;
 
 function checkPin(request, env) {
   const pin = request.headers.get("X-Board-Pin") || "";
@@ -86,6 +90,39 @@ async function trimOldImages(env, index) {
   }
 }
 
+// 動画は「直近MAX_VIDEOS件」だけ残す。trimOldImagesと同じ考え方だが、動画は1投稿につき1本
+// （images配列と違い複数本は想定しない）なので、間引き判定は投稿単位でよい。
+async function trimOldVideos(env, index) {
+  const candidates = index.filter((e) => e.hasVideo);
+  if (candidates.length <= MAX_VIDEOS) return;
+  const items = [];
+  for (const entry of candidates) {
+    const raw = await env.MIITOBOW_BOARD.get(entry.key);
+    if (!raw) continue;
+    let post;
+    try {
+      post = JSON.parse(raw);
+    } catch (e) {
+      continue;
+    }
+    if (post.video) items.push({ post, entry });
+  }
+  items.sort((a, b) => b.post.createdAt - a.post.createdAt);
+
+  let indexChanged = false;
+  for (let i = MAX_VIDEOS; i < items.length; i++) {
+    const item = items[i];
+    await env.MIITOBOW_BOARD.delete(`vid:${item.post.video}`);
+    delete item.post.video;
+    await env.MIITOBOW_BOARD.put(item.entry.key, JSON.stringify(item.post));
+    item.entry.hasVideo = false;
+    indexChanged = true;
+  }
+  if (indexChanged) {
+    await saveIndex(env, index);
+  }
+}
+
 export async function onRequestGet({ request, env }) {
   if (!checkPin(request, env)) {
     return new Response(JSON.stringify({ error: "unauthorized" }), {
@@ -131,6 +168,7 @@ export async function onRequestPost({ request, env }) {
   const text = typeof body.text === "string" ? body.text.trim() : "";
   const title = typeof body.title === "string" ? body.title.trim() : "";
   const rawImages = Array.isArray(body.images) ? body.images : [];
+  const rawVideo = typeof body.video === "string" ? body.video : "";
   if (title.length > MAX_TITLE_LENGTH) {
     return new Response(
       JSON.stringify({ error: "invalid_title", message: `題名は${MAX_TITLE_LENGTH}文字までです（${title.length}文字）` }),
@@ -161,7 +199,21 @@ export async function onRequestPost({ request, env }) {
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
-  if ((!text && !rawImages.length && !title) || text.length > MAX_TEXT_LENGTH) {
+  if (rawVideo) {
+    if (!/^data:video\/[a-zA-Z0-9.+-]+;base64,/.test(rawVideo)) {
+      return new Response(
+        JSON.stringify({ error: "invalid_video", message: "動画の形式が正しくありません" }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+    if (rawVideo.length > MAX_VIDEO_DATA_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: "invalid_video", message: "動画サイズが大きすぎます。別の動画を試してください" }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+  }
+  if ((!text && !rawImages.length && !rawVideo && !title) || text.length > MAX_TEXT_LENGTH) {
     return new Response(
       JSON.stringify({ error: "invalid_text", message: `1件あたり${MAX_TEXT_LENGTH}文字までです（${text.length}文字）` }),
       { status: 400, headers: { "content-type": "application/json" } }
@@ -186,11 +238,23 @@ export async function onRequestPost({ request, env }) {
     imageIds.push(imgId);
   }
 
-  // 画像を貼った投稿には「画像」カテゴリー(id: image)を自動付与する
-  // （クライアント側でも自動選択するが、念のためサーバー側でも保証する）。
+  let videoId = null;
+  if (rawVideo) {
+    const mimeMatch = /^data:(video\/[a-zA-Z0-9.+-]+);base64,/.exec(rawVideo);
+    const mime = mimeMatch ? mimeMatch[1] : "video/mp4";
+    const bytes = base64ToBytes(rawVideo);
+    videoId = crypto.randomUUID();
+    await env.MIITOBOW_BOARD.put(`vid:${videoId}`, bytes, { metadata: { mime } });
+  }
+
+  // 画像を貼った投稿には「画像」カテゴリー(id: image)、動画を貼った投稿には「動画」カテゴリー
+  // (id: video)を自動付与する（クライアント側でも自動選択するが、念のためサーバー側でも保証する）。
   const categories = Array.from(new Set(rawCategories));
   if (imageIds.length && !categories.includes("image")) {
     categories.push("image");
+  }
+  if (videoId && !categories.includes("video")) {
+    categories.push("video");
   }
 
   const createdAt = Date.now();
@@ -198,14 +262,18 @@ export async function onRequestPost({ request, env }) {
   const post = { id, text, createdAt };
   if (title) post.title = title;
   if (imageIds.length) post.images = imageIds;
+  if (videoId) post.video = videoId;
   if (categories.length) post.categories = categories;
   const key = `post:${createdAt}:${id}`;
   await env.MIITOBOW_BOARD.put(key, JSON.stringify(post));
 
-  const newIndex = [{ id, key, createdAt, hasImages: imageIds.length > 0 }, ...index];
+  const newIndex = [{ id, key, createdAt, hasImages: imageIds.length > 0, hasVideo: !!videoId }, ...index];
   await saveIndex(env, newIndex);
   if (imageIds.length) {
     await trimOldImages(env, newIndex);
+  }
+  if (videoId) {
+    await trimOldVideos(env, newIndex);
   }
   return new Response(JSON.stringify(post), {
     status: 201,

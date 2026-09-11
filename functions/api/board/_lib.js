@@ -9,7 +9,7 @@
 
 export const INDEX_KEY = "board:index";
 
-// 索引エントリ: { id, key, createdAt, hasImages }（新しい順で保持）
+// 索引エントリ: { id, key, createdAt, hasImages, hasVideo }（新しい順で保持）
 
 async function rebuildIndexFromList(env) {
   // 索引が無い/壊れている時だけ通る復旧パス。post:キーを全件scanして索引を再構築し、
@@ -30,6 +30,7 @@ async function rebuildIndexFromList(env) {
       key: k.name,
       createdAt: post.createdAt,
       hasImages: Array.isArray(post.images) && post.images.length > 0,
+      hasVideo: !!post.video,
     });
   }
   entries.sort((a, b) => b.createdAt - a.createdAt);

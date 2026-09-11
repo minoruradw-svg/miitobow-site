@@ -126,6 +126,8 @@
   .post-image-grid.count-1 .post-image-link { width: 100%; height: auto; max-height: 340px; }
   .post-image { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; background: var(--surface-soft); }
   .post-image-grid.count-1 .post-image { height: auto; object-fit: contain; }
+  .post-video { width: 100%; max-height: 420px; border-radius: 10px; display: block; background: #000; margin-top: 6px; }
+  #video-preview-grid .image-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 10px; border: 1px solid var(--border); background: #000; }
 
   .image-lightbox {
     position: fixed; inset: 0; z-index: 50; background: rgba(10, 14, 8, 0.86);
@@ -342,8 +344,11 @@
       <div class="composer-tools">
         <input type="file" id="image-input" accept="image/*" multiple hidden>
         <button class="image-pick-btn" id="image-pick-btn" type="button">📷 画像を選ぶ（複数可）</button>
+        <input type="file" id="video-input" accept="video/*" hidden>
+        <button class="image-pick-btn" id="video-pick-btn" type="button">🎥 動画を選ぶ（1本）</button>
       </div>
       <div class="image-preview-grid" id="image-preview-grid"></div>
+      <div class="image-preview-grid" id="video-preview-grid"></div>
       <div class="category-picker">
         <div class="category-chips" id="category-chips-selected"></div>
         <div class="category-search-wrap">
@@ -566,6 +571,10 @@
   var imagePickBtn = document.getElementById("image-pick-btn");
   var imagePreviewGrid = document.getElementById("image-preview-grid");
   var pendingImages = []; // 元画質のままのdata URLの配列
+  var videoInput = document.getElementById("video-input");
+  var videoPickBtn = document.getElementById("video-pick-btn");
+  var videoPreviewGrid = document.getElementById("video-preview-grid");
+  var pendingVideo = null; // data URLの動画（1本のみ）
   var categoryChipsSelectedEl = document.getElementById("category-chips-selected");
   var categorySearchInput = document.getElementById("category-search");
   var categorySuggestionsEl = document.getElementById("category-suggestions");
@@ -586,6 +595,63 @@
   // （画像は直近20枚しか保持しない仕組みなので、通常の写真サイズなら気にしなくてよい）。
   var IMAGE_MAX_FILE_BYTES = 15 * 1024 * 1024;
   var IMAGE_MAX_COUNT = 20;
+  // 動画は容量を圧迫しやすいので上限を小さめに（サーバー側のMAX_VIDEO_DATA_LENGTHと合わせる）。
+  var VIDEO_MAX_FILE_BYTES = 15 * 1024 * 1024;
+
+  function readVideoFile(file, done) {
+    if (file.size > VIDEO_MAX_FILE_BYTES) {
+      done(null, "動画が大きすぎます(15MBまで)");
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function () { done(reader.result, null); };
+    reader.onerror = function () { done(null, "動画の読み込みに失敗しました"); };
+    reader.readAsDataURL(file);
+  }
+
+  function renderVideoPreview() {
+    videoPreviewGrid.innerHTML = "";
+    if (!pendingVideo) return;
+    var thumb = document.createElement("div");
+    thumb.className = "image-thumb";
+    var vid = document.createElement("video");
+    vid.src = pendingVideo;
+    vid.muted = true;
+    thumb.appendChild(vid);
+    var removeBtn = document.createElement("button");
+    removeBtn.className = "remove-image";
+    removeBtn.type = "button";
+    removeBtn.setAttribute("aria-label", "この動画を外す");
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", function () {
+      pendingVideo = null;
+      renderVideoPreview();
+    });
+    thumb.appendChild(removeBtn);
+    videoPreviewGrid.appendChild(thumb);
+  }
+
+  videoPickBtn.addEventListener("click", function () { videoInput.click(); });
+
+  videoInput.addEventListener("change", function () {
+    var file = videoInput.files && videoInput.files[0];
+    videoInput.value = "";
+    if (!file) return;
+    hint.textContent = "動画を読み込み中…";
+    readVideoFile(file, function (dataUrl, errMsg) {
+      if (dataUrl) {
+        pendingVideo = dataUrl;
+        if (hint.textContent === "動画を読み込み中…") hint.textContent = "";
+        renderVideoPreview();
+        if (selectedCategoryIds.indexOf("video") === -1) {
+          selectedCategoryIds.push("video");
+          renderSelectedChips();
+        }
+      } else if (errMsg) {
+        hint.textContent = errMsg;
+      }
+    });
+  });
 
   function readImageFile(file, done) {
     if (file.size > IMAGE_MAX_FILE_BYTES) {
@@ -1009,6 +1075,22 @@
     return imageBlobCache[imgId];
   }
 
+  // 動画本体は/api/board/video/<id>から個別取得（画像と同じ考え方）。
+  var videoBlobCache = {};
+  function getVideoBlobUrl(vidId) {
+    if (!videoBlobCache[vidId]) {
+      videoBlobCache[vidId] = fetch("/api/board/video/" + encodeURIComponent(vidId), {
+        headers: { "X-Board-Pin": currentPin },
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("load failed");
+          return res.blob();
+        })
+        .then(function (blob) { return URL.createObjectURL(blob); });
+    }
+    return videoBlobCache[vidId];
+  }
+
   function addCategoryToExistingPost(postId, categoryId, done) {
     fetch("/api/board/" + encodeURIComponent(postId), {
       method: "PATCH",
@@ -1226,6 +1308,16 @@
         card.appendChild(grid);
       }
 
+      if (data.video) {
+        var videoEl = document.createElement("video");
+        videoEl.className = "post-video";
+        videoEl.controls = true;
+        getVideoBlobUrl(data.video)
+          .then(function (url) { videoEl.src = url; })
+          .catch(function () {});
+        card.appendChild(videoEl);
+      }
+
       if (data.title) {
         var titleEl = document.createElement("div");
         titleEl.className = "post-title";
@@ -1328,13 +1420,15 @@
     var title = newTitle.value.trim();
     var text = newText.value.trim();
     var images = pendingImages.slice();
-    if (!text && !images.length && !title) return;
+    var video = pendingVideo;
+    if (!text && !images.length && !video && !title) return;
     postBtn.disabled = true;
     hint.textContent = "";
     var categories = selectedCategoryIds.slice();
     var body = { text: text };
     if (title) body.title = title;
     if (images.length) body.images = images;
+    if (video) body.video = video;
     if (categories.length) body.categories = categories;
     fetch("/api/board", {
       method: "POST",
@@ -1356,6 +1450,8 @@
         newText.value = "";
         pendingImages = [];
         renderImagePreview();
+        pendingVideo = null;
+        renderVideoPreview();
         selectedCategoryIds = [];
         renderSelectedChips();
       })
