@@ -5,7 +5,7 @@
 // ⚠️ post:キーの一覧はKVのlist()を毎回叩かず、_lib.jsの索引キー(board:index)で管理する
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex } from "./_lib.js";
+import { loadIndex, saveIndex, loadCache, rebuildCache } from "./_lib.js";
 
 // バグ等による無限投稿・容量肥大を防ぐための上限（KV無料枠：保存1GB・書き込み1日1000件に対し、
 // 十分すぎるほど余裕を持たせた値。個人用メモとして通常使う分には絶対に到達しない）。
@@ -133,19 +133,9 @@ export async function onRequestGet({ request, env }) {
     });
   }
   const index = await loadIndex(env);
-  const posts = await Promise.all(
-    index.map(async (entry) => {
-      const raw = await env.MIITOBOW_BOARD.get(entry.key);
-      if (!raw) return null;
-      try {
-        return JSON.parse(raw);
-      } catch (e) {
-        return null;
-      }
-    })
-  );
-  // indexは既に新しい順で保持しているが、フォーマット揺れに備えてここでも念のため並べ替える。
-  const valid = posts.filter(Boolean).sort((a, b) => b.createdAt - a.createdAt);
+  // 一覧取得はキャッシュ1本のgetだけで完結させる（board.htmlの15秒間隔ポーリングと組み合わさって
+  // 投稿ごとに毎回get()していた頃に読み取り回数が線形に増え続けた事故の恒久対策）。
+  const valid = await loadCache(env, index);
   return new Response(JSON.stringify(valid), {
     headers: { "content-type": "application/json" },
   });
@@ -277,6 +267,7 @@ export async function onRequestPost({ request, env }) {
   if (videoId) {
     await trimOldVideos(env, newIndex);
   }
+  await rebuildCache(env, newIndex);
   return new Response(JSON.stringify(post), {
     status: 201,
     headers: { "content-type": "application/json" },

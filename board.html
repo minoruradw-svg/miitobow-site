@@ -1563,8 +1563,10 @@
       });
     });
     loadCategories().then(loadPosts);
-    setInterval(loadPosts, 15000);
-    setInterval(loadCategories, 60000);
+    // 30秒間隔（元は15秒）。一覧取得はキャッシュ1本読みに直したので負荷は小さいが、
+    // 開きっぱなしのタブが多いほど効いてくるので念のため間隔も伸ばしておく。
+    setInterval(loadPosts, 30000);
+    setInterval(loadCategories, 120000);
   }
 
   function tryUnlock(pin) {

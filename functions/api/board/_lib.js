@@ -8,6 +8,7 @@
 // `プロジェクト/miitobow公式サイト/進捗.md`2026-09-10エントリ・`lessons.md`2026-09-10エントリ参照）。
 
 export const INDEX_KEY = "board:index";
+export const CACHE_KEY = "board:posts_cache";
 
 // 索引エントリ: { id, key, createdAt, hasImages, hasVideo }（新しい順で保持）
 
@@ -55,4 +56,42 @@ export async function loadIndex(env) {
 
 export async function saveIndex(env, entries) {
   await env.MIITOBOW_BOARD.put(INDEX_KEY, JSON.stringify(entries));
+}
+
+// ⚠️ 2026-09-11、索引化（list()解消）だけでは足りず、GET一覧取得が「索引1回＋投稿ごとに1回」の
+// N+1回読み取りのままだったため、15秒間隔の自動更新（board.html）と組み合わさってKV無料枠の
+// 1日読み取り上限に到達し続けた事故の恒久対策。一覧の中身（投稿本文まるごと）を1本の
+// キャッシュキーに事前組み立てしておき、GETは常にこのキー1本のgetだけで完結させる
+// （投稿件数が増えても・何回ポーリングされても読み取り回数が増えない設計）。
+// キャッシュはPOST/PATCH/DELETEなど書き込み系の操作が起きた時だけ組み立て直す
+// （書き込みは人間の操作起点で低頻度なので、そこでN回読むコストは無視できる）。
+export async function rebuildCache(env, index) {
+  const posts = await Promise.all(
+    index.map(async (entry) => {
+      const raw = await env.MIITOBOW_BOARD.get(entry.key);
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch (e) {
+        return null;
+      }
+    })
+  );
+  const valid = posts.filter(Boolean).sort((a, b) => b.createdAt - a.createdAt);
+  await env.MIITOBOW_BOARD.put(CACHE_KEY, JSON.stringify(valid));
+  return valid;
+}
+
+export async function loadCache(env, index) {
+  const raw = await env.MIITOBOW_BOARD.get(CACHE_KEY);
+  if (raw !== null) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) {
+      // 壊れていたら下の再構築にフォールスルー。
+    }
+  }
+  // キャッシュが無い/壊れている時だけ、その場でN+1回読み直して復旧する（自己修復・初回のみ）。
+  return rebuildCache(env, index);
 }

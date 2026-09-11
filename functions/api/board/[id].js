@@ -4,7 +4,7 @@
 // ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex } from "./_lib.js";
+import { loadIndex, saveIndex, rebuildCache } from "./_lib.js";
 
 function checkPin(request, env) {
   const pin = request.headers.get("X-Board-Pin") || "";
@@ -60,6 +60,7 @@ export async function onRequestPatch({ request, env, params }) {
   if (!categories.includes(categoryId)) categories.push(categoryId);
   post.categories = categories;
   await env.MIITOBOW_BOARD.put(found.key, JSON.stringify(post));
+  await rebuildCache(env, index);
   return new Response(JSON.stringify(post), {
     headers: { "content-type": "application/json" },
   });
@@ -84,7 +85,9 @@ export async function onRequestDelete({ request, env, params }) {
       await env.MIITOBOW_BOARD.delete(`vid:${found.post.video}`);
     }
     await env.MIITOBOW_BOARD.delete(found.key);
-    await saveIndex(env, index.filter((e) => e.id !== params.id));
+    const newIndex = index.filter((e) => e.id !== params.id);
+    await saveIndex(env, newIndex);
+    await rebuildCache(env, newIndex);
   }
   return new Response(null, { status: 204 });
 }
