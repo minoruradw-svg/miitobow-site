@@ -26,6 +26,8 @@
   .pr-note { font-size:12.5px; color:#888; border-left:3px solid #ddd; padding-left:10px; margin-bottom:32px; }
   h1 { font-size:23px; line-height:1.55; margin:8px 0 8px; }
   .situation { font-size:14.5px; color:#4CA468; font-weight:700; margin-bottom:22px; }
+  .stat-badges { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 28px; }
+  .stat-badges span { background:#eaf6ee; color:#2f8a52; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:999px; }
   .conclusion-box {
     background:#fff; border-radius:14px; padding:18px 18px; margin-bottom:32px;
     box-shadow:0 1px 4px rgba(0,0,0,.06); border:1px solid #eee; font-size:15.5px;
@@ -34,26 +36,34 @@
   .conclusion-box li { margin-bottom:10px; line-height:1.6; }
   h2 { font-size:19px; margin:46px 0 18px; padding-top:8px; border-top:1px solid #e6e6e6; }
   h2:first-of-type { border-top:none; }
-  .product-h2 { border-top:1px solid #e6e6e6; padding-top:32px; margin-top:50px; }
+  .product-h2 { border-top:1px solid #e6e6e6; padding-top:32px; margin-top:50px; margin-bottom:0; }
+  .product-card { background:#fff; border-radius:18px; padding:22px 18px 20px; margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,.05); border:1px solid #eee; }
   .product-situation { font-size:20px; font-weight:800; margin:0 0 4px; line-height:1.5; }
-  .product-name { font-size:14px; color:#888; margin:0 0 16px; }
+  .product-name-row { margin:0 0 16px; }
+  .product-name { font-size:14px; color:#888; display:inline-block; margin-right:8px; }
+  .price-badge { font-size:11.5px; font-weight:700; color:#fff; background:#4CA468; padding:4px 11px; border-radius:999px; display:inline-block; }
   .trust-line { font-size:13.5px; color:#666; background:#f0f4f0; padding:10px 12px; border-radius:8px; margin-bottom:18px; line-height:1.7; }
   .product-img { width:100%; max-width:380px; display:block; margin:0 auto 20px; border-radius:12px; }
   .fit-box { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
-  .fit-box .col { background:#fff; border-radius:10px; padding:14px 16px; font-size:14.5px; border:1px solid #eee; line-height:1.7; }
+  .fit-box .col { background:#fafbfa; border-radius:10px; padding:14px 16px; font-size:14.5px; border:1px solid #eee; line-height:1.7; }
   .fit-box .col.good { border-left:4px solid #4CA468; }
   .fit-box .col.bad { border-left:4px solid #c98a4b; }
-  .fit-box .col b { display:block; margin-bottom:8px; font-size:12.5px; }
-  .fit-box .col ul { margin:0; padding-left:1.1em; }
-  .fit-box .col li { margin-bottom:4px; }
+  .fit-box .col b { display:block; margin-bottom:8px; font-size:12px; letter-spacing:.02em; color:#888; text-transform:uppercase; }
+  .fit-box .col ul { margin:0; padding:0; list-style:none; }
+  .fit-box .col li { margin-bottom:6px; padding-left:1.5em; position:relative; font-weight:600; }
   .fit-box .col li:last-child { margin-bottom:0; }
+  .fit-box .col.good li::before { content:"✓"; position:absolute; left:0; color:#4CA468; font-weight:900; }
+  .fit-box .col.bad li::before { content:"✕"; position:absolute; left:0; color:#c98a4b; font-weight:900; }
   .conclusion-line { font-weight:700; font-size:15.5px; margin:18px 0 12px; }
   .buy-link {
-    display:block; text-align:center; padding:13px 26px; background:#06C755; color:#fff;
-    font-weight:700; font-size:15px; border-radius:22px; text-decoration:none;
-    margin-bottom:20px; box-shadow:0 2px 8px rgba(6,199,85,.25);
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:14px 26px; background:#06C755; color:#fff;
+    font-weight:700; font-size:15.5px; border-radius:12px; text-decoration:none;
+    margin-bottom:20px; box-shadow:0 3px 10px rgba(6,199,85,.3);
   }
   .buy-link:hover { background:#05b34c; }
+  .buy-link .arrow { transition:transform .15s ease; }
+  .buy-link:hover .arrow { transform:translateX(3px); }
   .review-voice { background:#fff8ee; border-radius:10px; padding:16px 16px; font-size:14px; margin:18px 0; border:1px solid #f0e2c8; line-height:1.8; }
   .review-voice b { display:block; margin-bottom:6px; }
   .review-voice .src { font-size:12px; color:#999; margin-top:10px; }
@@ -79,13 +89,15 @@
   .sources li { margin-bottom:8px; word-break:break-all; line-height:1.6; }
   @media (prefers-color-scheme: dark) {
     body { background:#14201a; color:#e5efec; }
-    .conclusion-box, .fit-box .col { background:#1d2b23; border-color:#2a3d33; }
+    .conclusion-box, .product-card { background:#1d2b23; border-color:#2a3d33; }
+    .fit-box .col { background:#182420; border-color:#2a3d33; }
     .trust-line { background:#20302a; color:#b7c4bd; }
     .review-voice { background:#2a2418; border-color:#3a3020; }
     .spec-text { color:#cfd8d3; }
     h2 { border-color:#2a3d33; }
     .product-h2 { border-color:#2a3d33; }
     .product-name { color:#8ea79a; }
+    .stat-badges span { background:#1d3327; color:#7fd39c; }
   }
 </style>
 </head>
@@ -103,6 +115,12 @@
 <p>腰や肩が痛くなって、<br>椅子のせいかもと<br>思ったことはないですか。</p>
 <p>種類が多すぎて、正直迷います。<br>なので今回、価格.com・各メーカー公式・<br>楽天/Yahoo!公式ストアを調査。<br>低評価や評判に疑いのある商品も含めて<br>計17候補から5商品まで絞り込みました。</p>
 <p>各商品の実際の低評価レビューも読んだうえで、<br>向いてる人・向いてない人をまとめているので、<br>自分に合ったデスクチェアを探してみてください。</p>
+
+<div class="stat-badges">
+  <span>17候補を調査</span>
+  <span>5商品に厳選</span>
+  <span>低評価レビューも確認済み</span>
+</div>
 
 <div class="conclusion-box">
   <b>結論から先に言うと：</b>
@@ -144,35 +162,35 @@
 <div class="compare-recap">
   <h3>IKEA MARKUS</h3>
   <ul>
-    <li>価格帯：最安クラス</li>
+    <li>最安クラス</li>
     <li>耐荷重：110kg</li>
     <li>ランバーサポート：あり</li>
     <li>保証：10年</li>
   </ul>
   <h3>バウヒュッテ G-530</h3>
   <ul>
-    <li>価格帯：手頃</li>
+    <li>手頃</li>
     <li>耐荷重：約100kg</li>
     <li>ランバーサポート：記載なし（立体クッション）</li>
     <li>保証：記載なし</li>
   </ul>
   <h3>SIDIZ T50</h3>
   <ul>
-    <li>価格帯：標準</li>
+    <li>標準</li>
     <li>耐荷重：約124.7kg</li>
     <li>ランバーサポート：高さ・奥行き2方向調整</li>
     <li>保証：海外12年（国内記載なし）</li>
   </ul>
   <h3>COFO Chair Premium</h3>
   <ul>
-    <li>価格帯：上位</li>
+    <li>上位</li>
     <li>耐荷重：135kg</li>
     <li>ランバーサポート：可動式</li>
     <li>保証：3年</li>
   </ul>
   <h3>エルゴヒューマン プロ2</h3>
   <ul>
-    <li>価格帯：最上位</li>
+    <li>最上位</li>
     <li>耐荷重：記載なし</li>
     <li>ランバーサポート：独立式・硬さ調整可</li>
     <li>保証：外観1年・可動部2年・構造体5年</li>
@@ -181,16 +199,18 @@
 
 <div class="product-h2" id="yasusa-hosho">
   <p class="product-situation">とにかく安く、<br>長く使いたい人へ</p>
-  <p class="product-name">IKEA MARKUS</p>
 </div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">IKEA MARKUS</p><span class="price-badge">最安クラス</span></div>
 <p class="trust-line">17候補中、5商品の中では最安クラス。<br>保証年数は国内公式ページで<br>確認できた中で最長でした。</p>
 <img class="product-img" src="research-deskchair/01_ikea-markus.jpg" alt="IKEA MARKUS">
 <div class="fit-box">
-  <div class="col good"><b>向いてる人</b><ul><li>とにかく安く、長時間座れる椅子を探している人。</li><li>保証の長さを重視する人。</li></ul></div>
-  <div class="col bad"><b>向いてない人</b><ul><li>肘の位置を細かく調整したい人</li></ul></div>
+  <div class="col good"><b>向いてる人</b><ul><li>安さ重視の人</li><li>保証の長さが欲しい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>肘を細かく調整したい人</li></ul></div>
 </div>
 <p class="conclusion-line">安さと保証の長さで選ぶなら、<br>この1台です。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B0B6B6T42D?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0B6B6T42D?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
 <div class="review-voice">
   <b>低評価レビューも見ました</b>
   小柄な人には座面が高く感じる、<br>賃貸だとキャスターの仕様上<br>うまく体重が乗らないと<br>床を傷つける可能性がある、<br>という声があります。<br>一方180cm前後の体格の人からは<br>「ちょうどいい」という評価が多く、<br>体格による向き不向きが<br>はっきり分かれる椅子でした。
@@ -200,20 +220,22 @@
 <p class="spec-text">ランバーサポート付きです。<br>アームレストは固定式で、<br>細かい可動はありません。</p>
 <p class="spec-text">保証は10年。<br>国内向けの公式ページで<br>確認できた保証としては、<br>今回の中で一番長い方です。</p>
 <p class="spec-text">素晴らしい安定感。<br>仕事場にももってこい。<br>私みたいにあまりこだわりない人は<br>これがいいかもです。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B0B6B6T42D?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0B6B6T42D?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <div class="product-h2" id="gaming-heiyou">
   <p class="product-situation">ゲーミングと<br>コーディングを兼用したい人へ</p>
-  <p class="product-name">バウヒュッテ G-530</p>
 </div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">バウヒュッテ G-530</p><span class="price-badge">手頃</span></div>
 <p class="trust-line">4Dアームレストで伸縮幅87mm。<br>腰まわりは立体クッションで<br>支える構造です。</p>
 <img class="product-img" src="research-deskchair/02_bauhutte-g530.jpg" alt="バウヒュッテ G-530">
 <div class="fit-box">
-  <div class="col good"><b>向いてる人</b><ul><li>ゲーミングとコーディングを兼用したい人。</li><li>肘の位置を細かく調整したい人。</li></ul></div>
-  <div class="col bad"><b>向いてない人</b><ul><li>腰専用の独立したサポートを重視したい人</li></ul></div>
+  <div class="col good"><b>向いてる人</b><ul><li>ゲーミングと兼用したい人</li><li>肘を細かく調整したい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>腰専用の独立サポートが欲しい人</li></ul></div>
 </div>
 <p class="conclusion-line">ゲーミングチェアとしての作り込みと、<br>実用性を両立したいなら<br>この1台です。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B08P5KKNWP?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B08P5KKNWP?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
 <div class="review-voice">
   <b>低評価レビューも見ました</b>
   楽天レビューには星2の評価もあり、<br>「高さ調整が思ったよりできず、<br>クッションを一枚敷いて使っている」<br>「組み立てが大変だった」<br>という声がありました。<br>座り心地やファブリックの質感自体は<br>好意的な声が多く、組み立て・微調整の<br>手間がネックになりやすいようです。
@@ -221,20 +243,22 @@
 </div>
 <p class="spec-text">耐荷重は約100kg。<br>本体サイズは幅730×奥行725mm<br>（725〜1130mm）です。</p>
 <p class="spec-text">独立式のランバーサポートという<br>記載はなく、保証期間も<br>情報源に記載がありませんでした。<br>無い情報は推測で埋めていません。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B08P5KKNWP?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B08P5KKNWP?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <div class="product-h2" id="chousei">
   <p class="product-situation">座面や肘の位置を<br>細かく体に合わせたい人へ</p>
-  <p class="product-name">SIDIZ T50</p>
 </div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">SIDIZ T50</p><span class="price-badge">標準</span></div>
 <p class="trust-line">ランバーサポートは高さ・奥行きの<br>2方向調整、アームレストは3方向可動。<br>5商品中もっとも調整幅が<br>広い1台です。</p>
 <img class="product-img" src="research-deskchair/03_sidiz-t50.jpg" alt="SIDIZ T50">
 <div class="fit-box">
-  <div class="col good"><b>向いてる人</b><ul><li>座面の奥行きや肘の位置など細かく体に合わせたい人。</li></ul></div>
-  <div class="col bad"><b>向いてない人</b><ul><li>国内での保証年数をはっきり確認してから選びたい人</li></ul></div>
+  <div class="col good"><b>向いてる人</b><ul><li>座面や肘を細かく合わせたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>国内保証年数を確認したい人</li></ul></div>
 </div>
 <p class="conclusion-line">細かい調整幅を重視するなら、<br>この1台です。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B00KYCO34S?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B00KYCO34S?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
 <div class="review-voice">
   <b>低評価レビューも見ました</b>
   サクラチェッカーでは、<br>Amazonレビューにやらせ傾向が<br>ある可能性が指摘されています。<br>実際のレビューでは<br>「カーペットの上で椅子を動かすと<br>取り外し式の座面カバーがずれる」<br>という声もありました。<br>致命的な不満というより、<br>使い込む中で気づく<br>細かな点のようです。
@@ -243,20 +267,22 @@
 <p class="spec-text">耐荷重は約124.7kg<br>（海外公式サイト調べ）。<br>外寸は幅688×奥行642mm、<br>座面奥行は480mmです。</p>
 <p class="spec-text">アームレストは<br>3方向に動きます。</p>
 <p class="spec-text">保証は、海外のSIDIZ公式<br>サイトには「最大12年」と<br>ありましたが、国内の<br>正規代理店のページには<br>年数の記載が<br>見当たりませんでした。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B00KYCO34S?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B00KYCO34S?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <div class="product-h2" id="taika-jyuu">
   <p class="product-situation">体重をしっかり<br>支えてほしい人へ</p>
-  <p class="product-name">COFO Chair Premium</p>
 </div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">COFO Chair Premium</p><span class="price-badge">上位</span></div>
 <p class="trust-line">耐荷重135kgは、数字が確認できた<br>4商品の中で最もタフでした。</p>
 <img class="product-img" src="research-deskchair/04_cofo-premium.jpg" alt="COFO Chair Premium">
 <div class="fit-box">
-  <div class="col good"><b>向いてる人</b><ul><li>しっかりした耐荷重を求める人</li><li>保証3年という安心感も欲しい人</li></ul></div>
-  <div class="col bad"><b>向いてない人</b><ul><li>とにかく価格を抑えたい人</li></ul></div>
+  <div class="col good"><b>向いてる人</b><ul><li>耐荷重重視の人</li><li>保証3年の安心感が欲しい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>価格を抑えたい人</li></ul></div>
 </div>
 <p class="conclusion-line">耐荷重の安心感を最優先するなら、<br>この1台です。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
 <div class="review-voice">
   <b>低評価レビューも見ました</b>
   座面の高さ（48cm）が<br>小柄な人には合わない場合がある、<br>座面の角度が変えられず<br>脚の付け根が圧迫される感じがする、<br>という口コミがありました。<br>「合う人には最高だけど、<br>合わないとストレスになる」<br>という声もあり、体型との相性が<br>分かれる椅子のようです。
@@ -265,20 +291,22 @@
 <p class="spec-text">座面は幅52.6×奥行49cm。<br>奥行は5.5cmまで<br>調整できます。</p>
 <p class="spec-text">ランバーサポートは<br>可動式です。<br>アームレストは4D。<br>保証は3年でした。</p>
 <p class="spec-text">個人的にはこれかなぁ。<br>凄くデザインがタイプで<br>私が買うとしたらこれですね。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <div class="product-h2" id="nagaku-tsukau">
   <p class="product-situation">長く使う椅子に<br>投資したい人へ</p>
-  <p class="product-name">エルゴヒューマン プロ2</p>
 </div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">エルゴヒューマン プロ2</p><span class="price-badge">最上位</span></div>
 <p class="trust-line">保証は外観1年・可動部2年・<br>構造体5年の3段階。<br>壊れ方ごとに年数が<br>決まっている作りです。</p>
 <img class="product-img" src="research-deskchair/05_ergohuman-pro2.webp" alt="エルゴヒューマン プロ2">
 <div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>長く使いたい人</li><li>腰をしっかり支えたい人</li></ul></div>
-  <div class="col bad"><b>向いてない人</b><ul><li>耐荷重の数値を基準に比較して選びたい人には、判断材料が足りません</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>耐荷重の数値で比較したい人</li></ul></div>
 </div>
 <p class="conclusion-line">価格より長期的な安心感を<br>重視するなら、この1台です。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CCD51QMR?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CCD51QMR?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
 <div class="review-voice">
   <b>低評価レビューも見ました</b>
   メッシュの反発が強く、<br>体重が軽い人だと<br>「底付き感」や坐骨の圧迫を<br>感じるという声があります。<br>旧モデルは「壊れやすい」という<br>口コミも見られましたが、<br>プロ2以降はフレーム強度と<br>メッシュの張りが改良され、<br>故障の口コミはあまり<br>見られなくなっているようです。
@@ -286,7 +314,7 @@
 </div>
 <p class="spec-text">耐荷重は、公式サイトを<br>含めどこにも記載が<br>見当たりませんでした。<br>無い情報は推測で埋めません。</p>
 <p class="spec-text">ランバーサポートは独立式で、<br>硬さも調節できます。<br>アームレストは4Dです。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CCD51QMR?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CCD51QMR?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <h2>調べてみて驚いたこと</h2>
 <p>14商品以上を比較していて、<br>一番驚いたのはエルゴヒューマンでした。</p>
@@ -306,7 +334,7 @@
 <h2>迷ったらこれ</h2>
 <p>ここまで読んでもまだ迷ったら、<br>5商品の中で耐荷重135kgと<br>最もタフなCOFO Chair Premiumが、<br>最初の1脚におすすめです。</p>
 <p>可動式のランバーサポートと<br>4Dアームレストで体格差にも<br>対応しやすく、保証3年という<br>安心感も外しにくいポイントです。</p>
-<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る →</a>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B09STCDKSC?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
 
 <h2>よくある質問</h2>
 <div class="faq-item"><p class="q">Q. デスクチェアは組み立てが必要？</p><p>A. ほとんどの商品が、届いてから<br>自分で組み立てる形式です。<br>工具は付属していることが<br>多いですが、時間には<br>余裕を持つのがおすすめです。</p></div>
