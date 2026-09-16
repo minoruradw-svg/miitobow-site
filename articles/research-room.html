@@ -19,41 +19,48 @@
     text-decoration:none;
   }
   .home-link:hover { text-decoration:underline; }
-  .list-heading {
-    max-width:1700px;
-    margin:56px auto 14px;
-    font-size:15px;
-    font-weight:700;
-    color:#555;
+  .list-section { max-width:1700px; margin:56px auto 0; }
+  .list-heading { font-size:15px; font-weight:700; color:#555; margin-bottom:14px; }
+  .list-tools { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:16px; }
+  .list-search {
+    flex:1 1 220px; min-width:0; max-width:320px;
+    padding:10px 14px; border:1px solid #e2e5d8; border-radius:10px;
+    background:#fff; font-size:13.5px; color:#375147;
   }
+  .list-search::placeholder { color:#9da896; }
+  .list-filters { display:flex; flex-wrap:wrap; gap:6px; }
+  .list-filters button {
+    font-size:12px; padding:8px 13px; border:1px solid transparent;
+    background:#eef1e6; color:#5a6b56; border-radius:999px; cursor:pointer; font-weight:600;
+  }
+  .list-filters button[aria-pressed="true"] { background:#4CA468; color:#fff; }
+  .list-count { font-size:12px; color:#8c978a; margin-left:auto; }
   .list {
     display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap:14px;
-    max-width:1700px;
-    margin:0 auto;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap:10px;
   }
   .card {
     background:#fff;
-    border-radius:14px;
-    padding:16px 18px;
-    box-shadow:0 1px 4px rgba(0,0,0,.06);
+    border-radius:12px;
+    padding:14px 16px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05);
     border:1px solid #eee;
     display:block;
     text-decoration:none;
-    color:inherit;
+    color:#2f4947;
+    font-size:13.5px;
+    font-weight:700;
+    text-align:center;
     transition:transform .15s ease, box-shadow .15s ease;
   }
   .card:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.1); }
-  .card .num { font-size:11px; color:#aaa; margin-bottom:4px; }
-  .card .title { font-size:14.5px; color:#222; font-weight:700; line-height:1.6; }
-  .card .cta { display:block; margin-top:8px; font-size:12.5px; color:#4CA468; font-weight:700; }
-  .card.pending { opacity:.55; }
-  .card.pending .cta { color:#999; }
+  .card[hidden] { display:none; }
   @media (prefers-color-scheme: dark) {
     .card { background:#1d2b23; border-color:#2a3d33; color:#e5efec; }
-    .card .title { color:#e5efec; }
     .list-heading { color:#b7c4bd; }
+    .list-search { background:#1d2b23; border-color:#2a3d33; color:#e5efec; }
+    .list-filters button { background:#242f27; color:#a9b6a4; }
   }
   .room-3d { width:100%; max-width:1700px; height:88vh; min-height:640px; border:0; display:block; margin:10px auto 0; border-radius:16px; }
   @media (max-width:760px) { .room-3d { height:1320px; min-height:0; } }
@@ -62,49 +69,89 @@
 <body>
 <a class="home-link" href="/reading.html">&larr; 読みものに戻る</a>
 <iframe class="room-3d" src="/miitobow-research/?embed=1" title="ミートボーの調査部屋（3D）" loading="lazy"></iframe>
+<div class="list-section">
 <p class="list-heading">全42記事の一覧</p>
-<div class="list">
-  <a class="card" href="/articles/research-monitorarm"><div class="num">01</div><div class="title">モニターアーム16種類を調査して分かった、あなたに合う1本</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-deskchair"><div class="num">02</div><div class="title">デスクチェア17候補を調査して分かった、コーディングに合う1脚</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-pcspeaker"><div class="num">03</div><div class="title">作業用PCスピーカー14種類を調査して分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-mouse"><div class="num">04</div><div class="title">ワイヤレスマウス17種類調査して分かった、あなたに合う1本</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-standingdesk"><div class="num">05</div><div class="title">昇降デスクを9種類調査して分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-keyboard"><div class="num">06</div><div class="title">分割キーボード14種類を調査して分かった、あなたに合う1本</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-laptopstand"><div class="num">07</div><div class="title">ノートPCスタンド22種類を調査して分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="/articles/research-usbhub"><div class="num">08</div><div class="title">USBハブ・ドッキングステーション19種類を調査して分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nfe59765fbca1" target="_blank" rel="noopener"><div class="num">09</div><div class="title">デスクライトを25候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nbea48d03799e" target="_blank" rel="noopener"><div class="num">10</div><div class="title">在宅ワーク向けWebカメラ16種類を調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nb363444d199a" target="_blank" rel="noopener"><div class="num">11</div><div class="title">PCモニターを14候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nba0b2807a39e" target="_blank" rel="noopener"><div class="num">12</div><div class="title">ヘッドセットを10候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n5036762454a0" target="_blank" rel="noopener"><div class="num">13</div><div class="title">モニターライトを17候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n541327068f68" target="_blank" rel="noopener"><div class="num">14</div><div class="title">デスクマットを18候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n65e994644b6f" target="_blank" rel="noopener"><div class="num">15</div><div class="title">ケーブルオーガナイザーを12種類調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n890d71a20acf" target="_blank" rel="noopener"><div class="num">16</div><div class="title">リストレストを14候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n8709c5be4953" target="_blank" rel="noopener"><div class="num">17</div><div class="title">ノートPC冷却パッドを17候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nbc25b6d03fb6" target="_blank" rel="noopener"><div class="num">18</div><div class="title">デスク上収納ラックを11候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n163882ded8f1" target="_blank" rel="noopener"><div class="num">19</div><div class="title">フットレストを12候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n9356c0ae5928" target="_blank" rel="noopener"><div class="num">20</div><div class="title">デスク用ワイヤレス充電器を8候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/ne1ce83cd30be" target="_blank" rel="noopener"><div class="num">21</div><div class="title">トラックボールマウスを12候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n3efd50574546" target="_blank" rel="noopener"><div class="num">22</div><div class="title">卓上USB扇風機を16候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n4b75b341690c" target="_blank" rel="noopener"><div class="num">23</div><div class="title">コピースタンドを11候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/ncc37018b4934" target="_blank" rel="noopener"><div class="num">24</div><div class="title">チェアマットを16候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n3c531f8b9ac4" target="_blank" rel="noopener"><div class="num">25</div><div class="title">モバイルディスプレイを24候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n73990893fb4f" target="_blank" rel="noopener"><div class="num">26</div><div class="title">タブレットスタンドを16候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n537b1fb083c0" target="_blank" rel="noopener"><div class="num">27</div><div class="title">完全ワイヤレスイヤホンを15候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nffdbfb87ccfa" target="_blank" rel="noopener"><div class="num">28</div><div class="title">ランバークッションを16候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/nea3653c9effe" target="_blank" rel="noopener"><div class="num">29</div><div class="title">テントを12候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n2dc0d81624df" target="_blank" rel="noopener"><div class="num">30</div><div class="title">卓上加湿器を12候補調べて分かった、デスクワークに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n17299ced9fcf" target="_blank" rel="noopener"><div class="num">31</div><div class="title">ブルーライトカットメガネを9候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n8e3b33484d06" target="_blank" rel="noopener"><div class="num">32</div><div class="title">モバイルバッテリーを15候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n0c53838647b3" target="_blank" rel="noopener"><div class="num">33</div><div class="title">エルゴノミクスマウスパッドを10候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/na30736f86b30" target="_blank" rel="noopener"><div class="num">34</div><div class="title">USBマイクを10候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n340dd0fcd63a" target="_blank" rel="noopener"><div class="num">35</div><div class="title">キャンプ用LEDランタンを12候補調べて分かった、失敗しない選び方</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n53ffd3f966fa" target="_blank" rel="noopener"><div class="num">36</div><div class="title">ポータブル電源を18候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/ne173d9d1f9f5" target="_blank" rel="noopener"><div class="num">37</div><div class="title">キャンプチェアを15候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n09a8654b2dd9" target="_blank" rel="noopener"><div class="num">38</div><div class="title">骨伝導イヤホンを18候補調べて分かった、耳をふさがず使える1台の選び方</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n1bf32675b822" target="_blank" rel="noopener"><div class="num">39</div><div class="title">除湿機を13候補調べて分かった、部屋干し・梅雨対策に合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n6e6fd090bd29" target="_blank" rel="noopener"><div class="num">40</div><div class="title">スマホスタンドを10候補調べて分かった、デスクに置くならこの1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/n24dd53423ca5" target="_blank" rel="noopener"><div class="num">41</div><div class="title">インフレーダブルマットを16候補調べて分かった、あなたに合う1台</div><span class="cta">記事を読む →</span></a>
-  <a class="card" href="https://note.com/miitobow_studio/n/ncbd6b2e2ef55" target="_blank" rel="noopener"><div class="num">43</div><div class="title">焚き火台を10候補調べて分かった、キャンプに合う1台</div><span class="cta">記事を読む →</span></a>
+<div class="list-tools">
+  <input class="list-search" id="list-search" type="search" placeholder="商品名で探す" aria-label="商品名で探す">
+  <div class="list-filters" role="group" aria-label="カテゴリで絞り込み">
+    <button type="button" data-category="all" aria-pressed="true">すべて</button>
+    <button type="button" data-category="desk" aria-pressed="false">デスクまわり</button>
+    <button type="button" data-category="life" aria-pressed="false">リビング・普段使い</button>
+    <button type="button" data-category="camp" aria-pressed="false">キャンプ</button>
+  </div>
+  <span class="list-count" id="list-count"></span>
 </div>
+<div class="list" id="list">
+  <a class="card" data-category="desk" href="/articles/research-monitorarm">モニターアーム</a>
+  <a class="card" data-category="desk" href="/articles/research-deskchair">デスクチェア</a>
+  <a class="card" data-category="desk" href="/articles/research-pcspeaker">PCスピーカー</a>
+  <a class="card" data-category="desk" href="/articles/research-mouse">ワイヤレスマウス</a>
+  <a class="card" data-category="desk" href="/articles/research-standingdesk">昇降デスク</a>
+  <a class="card" data-category="desk" href="/articles/research-keyboard">分割キーボード</a>
+  <a class="card" data-category="desk" href="/articles/research-laptopstand">ノートPCスタンド</a>
+  <a class="card" data-category="desk" href="/articles/research-usbhub">USBハブ</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nfe59765fbca1" target="_blank" rel="noopener">デスクライト</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nbea48d03799e" target="_blank" rel="noopener">Webカメラ</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nb363444d199a" target="_blank" rel="noopener">PCモニター</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nba0b2807a39e" target="_blank" rel="noopener">ヘッドセット</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n5036762454a0" target="_blank" rel="noopener">モニターライト</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n541327068f68" target="_blank" rel="noopener">デスクマット</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n65e994644b6f" target="_blank" rel="noopener">ケーブルオーガナイザー</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n890d71a20acf" target="_blank" rel="noopener">リストレスト</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n8709c5be4953" target="_blank" rel="noopener">ノートPC冷却パッド</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nbc25b6d03fb6" target="_blank" rel="noopener">デスク収納ラック</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n163882ded8f1" target="_blank" rel="noopener">フットレスト</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n9356c0ae5928" target="_blank" rel="noopener">ワイヤレス充電器</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/ne1ce83cd30be" target="_blank" rel="noopener">トラックボールマウス</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n3efd50574546" target="_blank" rel="noopener">卓上USB扇風機</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n4b75b341690c" target="_blank" rel="noopener">コピースタンド</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/ncc37018b4934" target="_blank" rel="noopener">チェアマット</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n3c531f8b9ac4" target="_blank" rel="noopener">モバイルディスプレイ</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n73990893fb4f" target="_blank" rel="noopener">タブレットスタンド</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n537b1fb083c0" target="_blank" rel="noopener">完全ワイヤレスイヤホン</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/nffdbfb87ccfa" target="_blank" rel="noopener">ランバークッション</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/nea3653c9effe" target="_blank" rel="noopener">テント</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n2dc0d81624df" target="_blank" rel="noopener">卓上加湿器</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n17299ced9fcf" target="_blank" rel="noopener">ブルーライトカットメガネ</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n8e3b33484d06" target="_blank" rel="noopener">モバイルバッテリー</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/n0c53838647b3" target="_blank" rel="noopener">エルゴノミクスマウスパッド</a>
+  <a class="card" data-category="desk" href="https://note.com/miitobow_studio/n/na30736f86b30" target="_blank" rel="noopener">USBマイク</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/n340dd0fcd63a" target="_blank" rel="noopener">LEDランタン</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/n53ffd3f966fa" target="_blank" rel="noopener">ポータブル電源</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/ne173d9d1f9f5" target="_blank" rel="noopener">キャンプチェア</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n09a8654b2dd9" target="_blank" rel="noopener">骨伝導イヤホン</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n1bf32675b822" target="_blank" rel="noopener">除湿機</a>
+  <a class="card" data-category="life" href="https://note.com/miitobow_studio/n/n6e6fd090bd29" target="_blank" rel="noopener">スマホスタンド</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/n24dd53423ca5" target="_blank" rel="noopener">インフレーダブルマット</a>
+  <a class="card" data-category="camp" href="https://note.com/miitobow_studio/n/ncbd6b2e2ef55" target="_blank" rel="noopener">焚火台</a>
+</div>
+</div>
+<script>
+(() => {
+  const list = document.querySelector('#list');
+  const cards = [...list.querySelectorAll('.card')];
+  const search = document.querySelector('#list-search');
+  const count = document.querySelector('#list-count');
+  const filters = [...document.querySelectorAll('.list-filters button')];
+  let category = 'all', query = '';
+  function apply() {
+    const q = query.trim().normalize('NFKC').toLocaleLowerCase('ja');
+    let visible = 0;
+    cards.forEach(card => {
+      const matches = (category === 'all' || card.dataset.category === category) &&
+        (!q || card.textContent.normalize('NFKC').toLocaleLowerCase('ja').includes(q));
+      card.hidden = !matches;
+      if (matches) visible++;
+    });
+    count.textContent = `${visible} / ${cards.length} 件`;
+  }
+  search.addEventListener('input', e => { query = e.target.value; apply(); });
+  filters.forEach(btn => btn.addEventListener('click', () => {
+    category = btn.dataset.category;
+    filters.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    apply();
+  }));
+  apply();
+})();
+</script>
 </body></html>
