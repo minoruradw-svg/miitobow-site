@@ -103,10 +103,11 @@
     "title": "Webカメラ",
     "category": "desk",
     "model": "camera",
-    "summary": "",
-    "content": "",
-    "url": "",
-    "affiliateUrl": ""
+    "summary": "19候補を調査して選んだ5商品",
+    "content": "Webカメラ19候補を調査。価格・解像度・視野角・フォーカス方式から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-webcam",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-webcam/theme.png"
   },
   {
     "id": "pc-monitor",
