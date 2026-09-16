@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>トラックボールマウスを12候補調べて分かった、あなたに合う1台</title>
+<style>
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+    background:#f8f9fb;
+    color:#222;
+    font-size:16.5px;
+    line-height:1.9;
+  }
+  .home-link {
+    display:block;
+    max-width:600px;
+    margin:0 auto;
+    padding:20px 20px 0;
+    font-size:14px;
+    color:#4CA468;
+    text-decoration:none;
+  }
+  .home-link:hover { text-decoration:underline; }
+  .wrap { max-width:600px; margin:0 auto; padding:16px 20px 100px; }
+  .pr-note { font-size:12.5px; color:#888; border-left:3px solid #ddd; padding-left:10px; margin-bottom:32px; }
+  h1 { font-size:23px; line-height:1.55; margin:8px 0 8px; }
+  .situation { font-size:14.5px; color:#4CA468; font-weight:700; margin-bottom:22px; }
+  .stat-badges { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 28px; }
+  .stat-badges span { background:#eaf6ee; color:#2f8a52; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:999px; }
+  .conclusion-box {
+    background:#fff; border-radius:14px; padding:18px 18px; margin-bottom:32px;
+    box-shadow:0 1px 4px rgba(0,0,0,.06); border:1px solid #eee; font-size:15.5px;
+  }
+  .conclusion-box ul { margin:10px 0 0; padding-left:1.1em; }
+  .conclusion-box li { margin-bottom:10px; line-height:1.6; }
+  h2 { font-size:19px; margin:46px 0 18px; padding-top:8px; border-top:1px solid #e6e6e6; }
+  h2:first-of-type { border-top:none; }
+  .product-h2 { border-top:1px solid #e6e6e6; padding-top:32px; margin-top:50px; margin-bottom:0; }
+  .product-card { background:#fff; border-radius:18px; padding:22px 18px 20px; margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,.05); border:1px solid #eee; }
+  .product-situation { font-size:20px; font-weight:800; margin:0 0 4px; line-height:1.5; }
+  .product-name-row { margin:0 0 16px; }
+  .product-name { font-size:14px; color:#888; display:inline-block; margin-right:8px; }
+  .price-badge { font-size:11.5px; font-weight:700; color:#fff; background:#4CA468; padding:4px 11px; border-radius:999px; display:inline-block; }
+  .trust-line { font-size:13.5px; color:#666; background:#f0f4f0; padding:10px 12px; border-radius:8px; margin-bottom:18px; line-height:1.7; }
+  .trust-line p { margin:0 0 6px; }
+  .trust-line p:last-child { margin:0; }
+  .product-img { width:100%; max-width:380px; display:block; margin:0 auto 20px; border-radius:12px; }
+  .fit-box { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+  .fit-box .col { background:#fafbfa; border-radius:10px; padding:14px 16px; font-size:14.5px; border:1px solid #eee; line-height:1.7; }
+  .fit-box .col.good { border-left:4px solid #4CA468; }
+  .fit-box .col.bad { border-left:4px solid #c98a4b; }
+  .fit-box .col b { display:block; margin-bottom:8px; font-size:12px; letter-spacing:.02em; color:#888; text-transform:uppercase; }
+  .fit-box .col ul { margin:0; padding:0; list-style:none; }
+  .fit-box .col li { margin-bottom:6px; padding-left:1.5em; position:relative; font-weight:600; }
+  .fit-box .col li:last-child { margin-bottom:0; }
+  .fit-box .col.good li::before { content:"✓"; position:absolute; left:0; color:#4CA468; font-weight:900; }
+  .fit-box .col.bad li::before { content:"✕"; position:absolute; left:0; color:#c98a4b; font-weight:900; }
+  .conclusion-line { font-weight:700; font-size:15.5px; margin:18px 0 12px; }
+  .buy-link {
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:14px 26px; background:#06C755; color:#fff;
+    font-weight:700; font-size:15.5px; border-radius:12px; text-decoration:none;
+    margin-bottom:20px; box-shadow:0 3px 10px rgba(6,199,85,.3);
+  }
+  .buy-link:hover { background:#05b34c; }
+  .buy-link .arrow { transition:transform .15s ease; }
+  .buy-link:hover .arrow { transform:translateX(3px); }
+  .review-voice { background:#fff8ee; border-radius:10px; padding:16px 16px; font-size:14px; margin:18px 0; border:1px solid #f0e2c8; line-height:1.8; }
+  .review-voice b { display:block; margin-bottom:6px; }
+  .review-voice .src { font-size:12px; color:#999; margin-top:10px; }
+  .review-voice .src a { color:#999; }
+  .spec-text { font-size:15px; color:#444; }
+  p { margin:0 0 18px; }
+  a { color:#4CA468; }
+  .theme-img { width:100%; border-radius:14px; margin:4px 0 24px; display:block; }
+  .compare-img { display:block; width:100%; border-radius:10px; margin:12px auto; }
+  .compare-cap { font-size:12.5px; color:#888; text-align:center; margin-top:-6px; margin-bottom:20px; }
+  .compare-recap { margin-bottom:28px; }
+  .compare-recap h3 { font-size:15px; margin:0 0 8px; }
+  .compare-recap ul { margin:0 0 18px; padding-left:1.1em; font-size:14px; color:#444; line-height:1.75; }
+  .compare-recap ul li { margin-bottom:2px; }
+  @media (prefers-color-scheme: dark) {
+    .compare-recap ul { color:#cfd8d3; }
+  }
+  .faq-item {
+    background:#fff; border-radius:14px; padding:16px 18px; margin-bottom:14px;
+    font-size:15px; line-height:1.8; box-shadow:0 1px 4px rgba(0,0,0,.05); border:1px solid #eee;
+  }
+  .faq-item p { margin:0; }
+  .related-list { font-size:14.5px; }
+  .related-list li { margin-bottom:10px; }
+  .sources { font-size:12.5px; color:#888; }
+  .sources li { margin-bottom:8px; word-break:break-all; line-height:1.6; }
+  @media (prefers-color-scheme: dark) {
+    body { background:#14201a; color:#e5efec; }
+    .conclusion-box, .product-card, .faq-item { background:#1d2b23; border-color:#2a3d33; }
+    .fit-box .col { background:#182420; border-color:#2a3d33; }
+    .trust-line { background:#20302a; color:#b7c4bd; }
+    .review-voice { background:#2a2418; border-color:#3a3020; }
+    .spec-text { color:#cfd8d3; }
+    h2 { border-color:#2a3d33; }
+    .product-h2 { border-color:#2a3d33; }
+    .product-name { color:#8ea79a; }
+    .stat-badges span { background:#1d3327; color:#7fd39c; }
+  }
+
+/* Wide product stories; article prose retains a comfortable reading width. */
+.wrap{max-width:none;padding:24px 0 100px}
+.wrap> :not(.product-feature){max-width:720px;margin-left:auto;margin-right:auto;width:calc(100% - 48px)}
+.home-link{max-width:768px}
+.product-feature{width:100%;margin:80px 0 40px;scroll-margin-top:24px}
+.product-stage{position:relative;isolation:isolate;overflow:hidden;background:#fff;color:#202923;min-height:660px}
+.product-stage>.product-img{position:absolute;inset:28px 1% 28px auto;width:58%;height:calc(100% - 56px);max-width:none;object-fit:contain;border-radius:0;margin:0;z-index:-2}
+.product-stage:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#f0f4ef 0%,#f0f4eff5 25%,#f0f4efbc 42%,#fff0 62%)}
+.product-overlay{max-width:1440px;margin:auto;min-height:660px;padding:72px clamp(24px,5vw,80px);display:flex;align-items:center}
+.product-copy{width:52%;max-width:650px}
+.product-index{display:block;font-size:12px;letter-spacing:.19em;font-weight:700;color:#466750;margin-bottom:22px}
+.product-copy .product-situation{font-size:clamp(30px,3.6vw,56px);font-weight:800;line-height:1.5;letter-spacing:-.045em;border:0;padding:0;margin:0 0 24px}
+.product-copy .product-name-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 22px}
+.product-copy .product-name{font-size:20px;font-weight:700;color:inherit;margin:0}
+.product-copy .price-badge{background:#315c40;font-size:12px}
+.product-copy .trust-line{background:none;padding:0;border:0;border-radius:0;color:#4b594e;font-size:15px;line-height:1.9;margin:0 0 28px}
+.product-copy .buy-link{display:inline-flex;min-height:56px;margin:0;background:#245837;border:1px solid #245837;border-radius:7px;padding:14px 28px;gap:30px;box-shadow:none;color:#fff}
+.product-copy .buy-link:hover{background:#173f26}
+.buy-link:focus-visible{outline:3px solid #d88630;outline-offset:5px}
+.product-details{max-width:1120px;padding:28px 24px 0;margin:auto}
+.product-details .fit-box{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:0}
+.product-details .fit-box .col{padding:24px 28px;background:#fff;font-size:16px}
+.product-details .fit-box .col b{font-size:14px;color:#466750;margin-bottom:12px}
+.product-details .fit-box .col.bad b{color:#865629}
+.product-details .conclusion-line{margin:24px 0 0;font-size:15px;color:#516156}
+.lifestyle-feature .product-stage>.product-img{inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+.lifestyle-feature .product-stage{color:#fff}
+.lifestyle-feature .product-stage:after{background:linear-gradient(90deg,#14231bed 0%,#14231bd9 30%,#14231b59 57%,#14231b00 78%)}
+.lifestyle-feature .product-index{color:#c3dbc5}
+.lifestyle-feature .trust-line{color:#f0f3eb}
+.lifestyle-feature .buy-link{background:#f0f4e9;color:#203829;border-color:#f0f4e9}
+.lifestyle-feature .buy-link:hover{background:#d7e4cf}
+@media(min-width:1800px){.product-stage>.product-img{right:calc((100% - 1600px)/2);width:800px}.lifestyle-feature .product-stage>.product-img{right:0;width:100%}}
+@media(max-width:700px){
+ .wrap> :not(.product-feature){width:calc(100% - 40px)}
+ .product-feature{margin-top:56px}
+ .product-stage{display:flex;flex-direction:column;min-height:0}
+ .product-overlay{order:0;min-height:0;padding:36px 24px;width:100%;background:#f0f4ef}
+ .product-copy{width:100%;max-width:none}
+ .product-copy .product-situation{font-size:clamp(27px,7.5vw,38px)}
+ .product-copy .product-name{font-size:18px}
+ .product-copy .trust-line{font-size:14px}
+ .product-stage>.product-img,.lifestyle-feature .product-stage>.product-img{position:relative;inset:auto;order:1;width:100%;height:auto;max-height:520px;aspect-ratio:1/1;object-fit:contain;z-index:0;background:#fff}
+ .product-stage:after{display:none}
+ .product-details{padding:20px 20px 0}
+ .product-details .fit-box{grid-template-columns:1fr;gap:12px}
+ .product-details .fit-box .col{padding:20px;font-size:15px}
+ .lifestyle-feature .product-overlay{background:#203a2d}
+ .lifestyle-feature .product-stage>.product-img{aspect-ratio:2/1}
+}
+@media(prefers-color-scheme:dark){.product-details .fit-box .col{background:#1d2b23}.product-details .fit-box .col b{color:#abd4b7}.product-details .fit-box .col.bad b{color:#e8ba8a}.product-details .conclusion-line{color:#cfd8d3}}
+
+
+.chair-char{display:inline-block;white-space:pre}
+.chair-heading-playing .chair-char{animation:chair-blur-in .8s ease var(--char-delay) 1 both}
+@keyframes chair-blur-in{from{filter:blur(12px);opacity:0;transform:scale(1.1)}to{filter:blur(0);opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.chair-char{animation:none!important;filter:none;opacity:1;transform:none}}
+
+/* Full-width opening image; retain its original proportions. */
+.wrap>img.theme-img{width:100%;max-width:none;height:auto;border-radius:0;margin:24px 0 40px}
+
+.wrap>.pick-carousel{max-width:1120px;padding:0;margin-top:40px;margin-bottom:56px;border:1px solid #dfe6dc;border-radius:20px;background:#f0f4ed;color:#223429;box-shadow:none;overflow:hidden}
+.pick-header{padding:30px 40px 0}.pick-header h2{border:0;margin:0;padding:0;font-size:17px}.pick-header p{font-size:13px;color:#596d5d;margin:8px 0 0}
+.pick-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#aac0ad transparent;overscroll-behavior-x:contain}
+.pick-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:24px 40px 30px}
+.pick-number{display:block;color:#647b68;font-size:12px;letter-spacing:.18em;margin-bottom:24px}.pick-reason{font-size:clamp(22px,2.4vw,32px);line-height:1.55;font-weight:700;margin:0 0 12px}
+.pick-copy h3{font-size:clamp(27px,3vw,42px);line-height:1.35;letter-spacing:-.035em;margin:0 0 28px;overflow-wrap:anywhere}.pick-detail{color:#365c40;font-size:13px;text-underline-offset:5px}
+.pick-product{min-width:0;background:#fff;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:stretch}
+.pick-product img{display:block;width:100%;height:300px;object-fit:contain;margin:0 0 16px;border-radius:8px}
+.pick-amazon{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;min-height:52px;color:#fff;background:#245837;border-radius:7px;text-decoration:none;font-size:15px;font-weight:700}.pick-amazon:hover{background:#173f26}
+.pick-controls{display:flex;align-items:center;justify-content:center;gap:22px;padding:0 24px 12px}.pick-controls[hidden]{display:none}.pick-dots{display:flex;gap:6px}.pick-controls button{cursor:pointer;border:1px solid #c7d6c8;background:transparent;color:#31543b;min-width:44px;min-height:44px;border-radius:50%;font:600 13px system-ui}.pick-controls button[aria-current="true"]{background:#245837;color:#fff;border-color:#245837}.pick-controls button:disabled{opacity:.35;cursor:default}
+.pick-controls button:focus-visible,.pick-track:focus-visible,.pick-carousel a:focus-visible{outline:3px solid #b2792d;outline-offset:3px}.pick-hint{text-align:center;font-size:11px;color:#647367;margin:0 20px 18px}
+@media(max-width:700px){.pick-header{padding:24px 22px 0}.pick-slide{grid-template-columns:1fr;gap:22px;padding:24px 22px}.pick-number{margin-bottom:12px}.pick-copy h3{font-size:30px;margin-bottom:16px}.pick-product img{height:230px}.pick-controls{gap:8px;padding-left:8px;padding-right:8px}.pick-dots{gap:2px}.pick-controls button{min-width:36px;min-height:44px}.pick-reason{font-size:23px}}
+
+
+/* A repeatable reading order: summary, purpose, products, research. */
+.article-lead{font-size:18px;line-height:1.95;color:#394b44}
+.wrap>.purpose-nav{max-width:1120px;margin-top:32px;margin-bottom:28px}
+.purpose-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
+.purpose-heading h2{font-size:20px;border:0;padding:0;margin:0}
+.purpose-heading>span{font-size:13px;color:#64736b}
+.purpose-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.purpose-links a{position:relative;display:flex;flex-direction:column;gap:7px;padding:18px 16px 22px;background:#f3f6f1;border:1px solid #dbe3d8;border-radius:12px;color:#263e30;text-decoration:none;transition:background .2s}
+.purpose-links a:hover{background:#e6eee1}
+.purpose-links a:focus-visible{outline:3px solid #53754c;outline-offset:3px}
+.purpose-number{font-size:11px;letter-spacing:.12em;color:#677c63}
+.purpose-links strong{font-size:16px}
+.purpose-product{font-size:11px;line-height:1.5;padding-right:10px}
+.purpose-arrow{position:absolute;right:12px;bottom:12px;color:#6a8066}
+.research-method{margin-top:48px;margin-bottom:40px;border:1px solid #dbe3d8;border-radius:12px;background:#f7f8f5;padding:20px 24px}
+.research-method summary{cursor:pointer;font-weight:700;line-height:1.7;color:#314934}
+.research-content{padding-top:12px}
+.research-content h2{font-size:21px;margin-top:28px}
+.research-content p{line-height:1.95}
+@media(max-width:700px){
+ .article-lead{font-size:16px}
+ .purpose-heading{display:block}
+ .purpose-heading>span{display:block;margin-top:4px}
+ .purpose-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .purpose-links a:last-child{grid-column:1/-1}
+ .purpose-links a{padding:14px 14px 18px}
+ .research-method{padding:18px}
+}
+
+.home-link{max-width:1120px;padding:24px 24px 0;font-size:13px;color:#536b5b}
+.wrap>.article-opening{max-width:960px;padding:48px 0 24px}
+.article-opening .situation{font-size:14px;line-height:1.8;color:#4a6853;margin:0 0 20px}
+.article-opening h1{font-size:clamp(34px,4.6vw,62px);line-height:1.3;letter-spacing:-.035em;margin:0 0 24px;color:#243f2d}
+.opening-summary{max-width:590px;font-size:16px;line-height:1.95;margin-bottom:26px;color:#536157}
+.opening-cta{display:inline-flex;align-items:center;gap:28px;padding:16px 24px;border-radius:8px;background:#245837;color:white;text-decoration:none;font-size:15px;font-weight:700}
+.opening-cta:hover{background:#173f26}
+.opening-cta:focus-visible{outline:3px solid #b2792d;outline-offset:4px}
+.wrap>.pr-note{margin-top:0;margin-bottom:28px;color:#68736c;font-size:12px;line-height:1.8}
+#purpose-picks{scroll-margin-top:24px}
+@media(max-width:700px){.wrap>.article-opening{padding:28px 0 16px}.article-opening .situation{font-size:12px;margin-bottom:16px}.article-opening h1{font-size:clamp(30px,8.5vw,42px)}.opening-summary{font-size:14px}.opening-cta{font-size:14px;padding:15px 20px}}
+@media(prefers-color-scheme:dark){.article-opening h1{color:#edf4e9}.article-opening .situation,.opening-summary,.wrap>.pr-note,.home-link{color:#bbcdbf}}
+
+/* A shared takeaway below the two suitability cards. */
+.product-details .conclusion-line{margin:20px 0 0;padding:20px 24px;border-left:3px solid #628665;border-radius:0 10px 10px 0;background:#edf3e9;color:#294632;font-size:16px;line-height:1.85}
+.decision-label{display:block;margin-bottom:6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#547359}
+.decision-text{display:block;font-weight:700}
+@media(max-width:700px){.product-details .conclusion-line{padding:17px 18px;font-size:15px;margin-top:16px}}
+@media(prefers-color-scheme:dark){.product-details .conclusion-line{background:#243b2c;border-left-color:#86af86;color:#e6efe2}.decision-label{color:#b1ccb0}}
+
+/* miitobow.com palette: warm ink, fresh green, quiet surfaces. */
+:root{--article-ink:#221f1b;--article-muted:#6b6459;--article-link:#397522;--article-green:#6fae2f;--article-button:#407f25;--article-button-hover:#32651d;--article-soft:#f0f6e8;--article-card:#fff;--article-border:#dde6d2;--article-warm:#fcf5eb;--article-orange:#a16a32}
+body{background:#f8f9fb;color:var(--article-ink)}
+a{color:var(--article-link)}
+.home-link,.opening-summary,.wrap>.pr-note,.purpose-heading>span,.purpose-number,.purpose-arrow,.pick-number,.pick-header p,.pick-hint,.compare-cap,.sources,.review-voice .src,.review-voice .src a,.spec-text{color:var(--article-muted)}
+.article-opening h1,.article-lead,.purpose-links a,.wrap>.pick-carousel,.research-method summary{color:var(--article-ink)}
+.article-opening .situation,.product-index,.decision-label,.pick-detail{color:var(--article-link)}
+.stat-badges span{background:var(--article-soft);color:var(--article-link)}
+.purpose-links a,.wrap>.pick-carousel,.research-method{background:var(--article-soft);border-color:var(--article-border)}
+.purpose-links a:hover{background:#e4efda}
+.pick-product,.product-details .fit-box .col,.faq-item{background:var(--article-card);border-color:var(--article-border);color:var(--article-ink)}
+.product-details .fit-box .col.good{border-left-color:var(--article-green)}
+.product-details .fit-box .col.good b,.fit-box .col.good li:before{color:var(--article-link)}
+.product-details .fit-box .col.bad{background:var(--article-warm);border-left-color:var(--article-orange)}
+.product-details .fit-box .col.bad b,.fit-box .col.bad li:before{color:var(--article-orange)}
+.product-details .conclusion-line{background:var(--article-soft);color:var(--article-ink);border-left-color:var(--article-green)}
+.review-voice{background:var(--article-warm);border-color:#eadcc9;color:var(--article-ink)}
+.product-stage{color:#221f1b}
+.product-stage:after{background:linear-gradient(90deg,#f0f6e8 0%,#f0f6e8f5 25%,#f0f6e8bc 42%,#fff0 62%)}
+.product-copy .trust-line{color:#6b6459}
+.product-copy .price-badge{background:var(--article-button);color:#fff}
+.lifestyle-feature .product-stage{color:#fff}
+.lifestyle-feature .product-stage:after{background:linear-gradient(90deg,#222719ed 0%,#222719d9 30%,#22271959 57%,#22271900 78%)}
+.lifestyle-feature .product-index{color:#d7edb8}.lifestyle-feature .trust-line{color:#f5f5ee}
+.buy-link,.product-copy .buy-link,.lifestyle-feature .buy-link,.pick-amazon,.opening-cta{background:var(--article-button);border-color:var(--article-button);color:#fff;box-shadow:none}
+.buy-link:hover,.product-copy .buy-link:hover,.lifestyle-feature .buy-link:hover,.pick-amazon:hover,.opening-cta:hover{background:var(--article-button-hover);border-color:var(--article-button-hover);color:#fff}
+.pick-controls button{color:var(--article-link);border-color:var(--article-border)}
+.pick-controls button[aria-current="true"]{background:var(--article-button);border-color:var(--article-button);color:#fff}
+.purpose-links a:focus-visible,.buy-link:focus-visible,.opening-cta:focus-visible,.pick-controls button:focus-visible,.pick-track:focus-visible,.pick-carousel a:focus-visible{outline-color:#a16a32}
+@media(max-width:700px){.product-overlay{background:#f0f6e8}.lifestyle-feature .product-overlay{background:#293420}}
+@media(prefers-color-scheme:dark){
+ :root{--article-ink:#eeeae3;--article-muted:#c0b8ac;--article-link:#b5d68e;--article-soft:#263323;--article-card:#242b21;--article-border:#435039;--article-warm:#342d23;--article-orange:#dfb27e}
+ body{background:#1b2119}.purpose-links a:hover{background:#34462d}.review-voice{border-color:#584834}.product-stage .product-index{color:#397522}.lifestyle-feature .product-index{color:#d7edb8}
+}
+
+</style>
+</head>
+<body>
+<a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a>
+<div class="wrap">
+
+
+
+<header class="article-opening">
+<p class="situation">パソコン作業で手首や肩がだるくなってきた人へ</p>
+<h1>そのマウス、<br>手首に負担かけてない？</h1>
+<p class="opening-summary">トラックボールマウス12候補を調査。操作タイプ・接続方式から、選び方の違う5商品を比較しました。</p>
+<a class="opening-cta" href="#purpose-picks">自分に合うトラックボールを探す <span aria-hidden="true">↓</span></a>
+</header>
+<img class="theme-img" src="research-trackball/theme.png" alt="トラックボールマウスを12候補調べて分かった、あなたに合う1台">
+<p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
+
+<p class="article-lead">12候補から、選び方の違う5商品に絞りました。まずは気になる1台へ。向いている人・向いていない人と、低評価レビューもまとめています。</p>
+
+<div class="stat-badges">
+  <span>12候補を調査</span>
+  <span>5商品に厳選</span>
+  <span>低評価レビューも確認済み</span>
+</div>
+
+<nav id="purpose-picks" class="purpose-nav" aria-label="目的別の商品目次"><div class="purpose-heading"><h2>目的から選ぶ</h2><span>気になる商品へ、そのまま移動</span></div><div class="purpose-links"><a href="#yasusa"><span class="purpose-number">01</span><strong>安さ重視</strong><span class="purpose-product">ロジクール ERGO M575S</span><span class="purpose-arrow" aria-hidden="true">↗</span></a><a href="#space"><span class="purpose-number">02</span><strong>省スペース</strong><span class="purpose-product">エレコム Relacon</span><span class="purpose-arrow" aria-hidden="true">↗</span></a><a href="#seion"><span class="purpose-number">03</span><strong>静音重視</strong><span class="purpose-product">サンワサプライ MA-WTB129BK</span><span class="purpose-arrow" aria-hidden="true">↗</span></a><a href="#tekubi"><span class="purpose-number">04</span><strong>手首に優しい</strong><span class="purpose-product">Kensington SlimBlade Pro</span><span class="purpose-arrow" aria-hidden="true">↗</span></a><a href="#pc"><span class="purpose-number">05</span><strong>PC切替</strong><span class="purpose-product">ロジクール MX ERGO S</span><span class="purpose-arrow" aria-hidden="true">↗</span></a></div></nav>
+<section class="conclusion-box pick-carousel" id="quick-picks" aria-label="目的別のおすすめ5商品" aria-roledescription="カルーセル"><div class="pick-header"><h2>結論から先に言うと：</h2><p>あなたの使い方に合う、1台を。</p></div><div class="pick-track" tabindex="0" aria-label="商品スライド。左右キーでも切り替えできます"><article class="pick-slide" aria-label="1 / 5：ロジクール ERGO M575S"><div class="pick-copy"><span class="pick-number">01 / 05</span><p class="pick-reason">安さ重視なら</p><h3>ロジクール ERGO M575S</h3><a class="pick-detail" href="#yasusa">向き・不向きも詳しく見る ↗</a></div><div class="pick-product"><img src="research-trackball/01_ergo.jpg" alt="ロジクール ERGO M575S" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B08L4ZR79Q?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="ロジクール ERGO M575SをAmazonで見る">Amazonで見る <span aria-hidden="true">↗</span></a></div></article>
+<article class="pick-slide" aria-label="2 / 5：エレコム Relacon"><div class="pick-copy"><span class="pick-number">02 / 05</span><p class="pick-reason">省スペース重視なら</p><h3>エレコム Relacon</h3><a class="pick-detail" href="#space">向き・不向きも詳しく見る ↗</a></div><div class="pick-product"><img src="research-trackball/02_relacon.jpg" alt="エレコム Relacon" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B07ZKL66GY?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="エレコム RelaconをAmazonで見る">Amazonで見る <span aria-hidden="true">↗</span></a></div></article>
+<article class="pick-slide" aria-label="3 / 5：サンワサプライ MA-WTB129BK"><div class="pick-copy"><span class="pick-number">03 / 05</span><p class="pick-reason">静音重視なら</p><h3>サンワサプライ MA-WTB129BK</h3><a class="pick-detail" href="#seion">向き・不向きも詳しく見る ↗</a></div><div class="pick-product"><img src="research-trackball/03_sanwa.jpg" alt="サンワサプライ MA-WTB129BK" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0BX777K6W?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="サンワサプライ MA-WTB129BKをAmazonで見る">Amazonで見る <span aria-hidden="true">↗</span></a></div></article>
+<article class="pick-slide" aria-label="4 / 5：Kensington SlimBlade Pro"><div class="pick-copy"><span class="pick-number">04 / 05</span><p class="pick-reason">手首に優しいのを重視するなら</p><h3>Kensington SlimBlade Pro</h3><a class="pick-detail" href="#tekubi">向き・不向きも詳しく見る ↗</a></div><div class="pick-product"><img src="research-trackball/04_slimblade.jpg" alt="Kensington SlimBlade Pro" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0BN8224SY?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="Kensington SlimBlade ProをAmazonで見る">Amazonで見る <span aria-hidden="true">↗</span></a></div></article>
+<article class="pick-slide" aria-label="5 / 5：ロジクール MX ERGO S"><div class="pick-copy"><span class="pick-number">05 / 05</span><p class="pick-reason">PC切替重視なら</p><h3>ロジクール MX ERGO S</h3><a class="pick-detail" href="#pc">向き・不向きも詳しく見る ↗</a></div><div class="pick-product"><img src="research-trackball/05_mxergo.jpg" alt="ロジクール MX ERGO S" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0DC5X912P?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="ロジクール MX ERGO SをAmazonで見る">Amazonで見る <span aria-hidden="true">↗</span></a></div></article></div><div class="pick-controls" hidden><button type="button" class="pick-prev" aria-label="前の商品">←</button><div class="pick-dots"><button type="button" data-pick="0" aria-label="ロジクール ERGO M575Sを表示" aria-current="true">01</button><button type="button" data-pick="1" aria-label="エレコム Relaconを表示">02</button><button type="button" data-pick="2" aria-label="サンワサプライ MA-WTB129BKを表示">03</button><button type="button" data-pick="3" aria-label="Kensington SlimBlade Proを表示">04</button><button type="button" data-pick="4" aria-label="ロジクール MX ERGO Sを表示">05</button></div><button type="button" class="pick-next" aria-label="次の商品">→</button></div><p class="pick-hint">横にスワイプして、5商品を見比べる</p></section>
+
+<h2>選び方の基準は2つ</h2>
+<p>調べてわかったのは、基準は意外とシンプルでした。</p>
+<p>1つ目は「操作タイプ」。親指で動かすか、人差し指や中指で動かすかで、手首の角度が変わります。</p>
+<p>2つ目は「接続方式」。複数のパソコンをBluetoothで切り替えたいか、1台だけに繋ぐかです。</p>
+
+<h2>比較表</h2>
+<img class="compare-img" src="research-trackball/compare.png" alt="トラックボールマウス5商品の価格帯・重量・操作タイプ・接続方式・特徴の比較表">
+<p class="compare-cap">価格帯・重量・操作タイプ・接続方式・特徴の比較（価格帯は最安クラス〜最上位の5段階）</p>
+
+<div class="compare-recap">
+  <h3>ロジクール ERGO M575S</h3>
+  <ul>
+    <li>最安クラス</li>
+    <li>重量：145g</li>
+    <li>操作タイプ：親指</li>
+    <li>接続方式：Bluetooth・無線2.4GHz</li>
+    <li>特徴：戻る/進むボタン付き</li>
+  </ul>
+  <h3>エレコム Relacon</h3>
+  <ul>
+    <li>手頃</li>
+    <li>重量：77g（電池別）</li>
+    <li>操作タイプ：親指</li>
+    <li>接続方式：無線2.4GHz</li>
+    <li>特徴：77gの携帯サイズ</li>
+  </ul>
+  <h3>サンワサプライ MA-WTB129BK</h3>
+  <ul>
+    <li>標準</li>
+    <li>重量：約126g（電池別）</li>
+    <li>操作タイプ：中指（エルゴノミクス）</li>
+    <li>接続方式：2.4GHz</li>
+    <li>特徴：全ボタン静音スイッチ</li>
+  </ul>
+  <h3>Kensington SlimBlade Pro</h3>
+  <ul>
+    <li>上位</li>
+    <li>重量：記載なし</li>
+    <li>操作タイプ：人差し指・中指</li>
+    <li>接続方式：Bluetooth・2.4GHz・有線</li>
+    <li>特徴：55mmボール・両利き対応</li>
+  </ul>
+  <h3>ロジクール MX ERGO S</h3>
+  <ul>
+    <li>最上位</li>
+    <li>重量：259g</li>
+    <li>操作タイプ：親指</li>
+    <li>接続方式：Bluetooth・2.4GHz（Bolt）</li>
+    <li>特徴：Easy-Switch・Logicool Flow</li>
+  </ul>
+</div>
+
+<section class="product-feature" id="yasusa" aria-labelledby="yasusa-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-trackball/01_ergo.jpg" alt="ロジクール ERGO M575S"><div class="product-overlay"><div class="product-copy"><span class="product-index">TRACKBALL / 01</span><h2 class="product-situation" id="yasusa-title">初めてトラックボールを<br>試す人へ</h2><div class="product-name-row"><p class="product-name">ロジクール ERGO M575S</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>5商品の中でもっとも手頃です。親指で動かすタイプなので、普通のマウスから移行しやすいです。</p><p>接続はBluetooth Low Energyと無線2.4GHzの両方に対応しています。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B08L4ZR79Q?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>初めてトラックボールを試す人</li><li>まずは価格を抑えたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>複数のパソコンを細かく切り替えたい人</li><li>長めの保証を重視したい人</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">とにかく安さを重視するなら、この1台です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューも見ました</b>
+  長時間の使用を繰り返していると、少し凝るように感じるという声があります。MX ERGOのような角度調節機能があれば良かったという意見もありましたが、大きな不満点は今回の調査では見当たりませんでした。
+  <p class="src">参考：<a href="https://kashiwagigarage.com/kashiwagi-trackball-m5750-review/" target="_blank" rel="noopener">ロジクール ERGO M575S レビュー</a></p>
+</div>
+<p class="spec-text">5商品の中で<br>もっとも手頃です。</p>
+<p class="spec-text">親指で動かすタイプなので、<br>普通のマウスから<br>移行しやすいです。</p>
+<p class="spec-text">重さは145g。ボタンは5つで、<br>戻る/進むボタンも付いています。</p>
+<p class="spec-text">接続はBluetoothLow Energyと<br>無線2.4GHzの両方に<br>対応しています。</p>
+<p class="spec-text">電池は乾電池式で、<br>保証は1年間です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B08L4ZR79Q?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<section class="product-feature" id="space" aria-labelledby="space-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-trackball/02_relacon.jpg" alt="エレコム Relacon"><div class="product-overlay"><div class="product-copy"><span class="product-index">TRACKBALL / 02</span><h2 class="product-situation" id="space-title">デスクが狭い人、<br>持ち運びたい人へ</h2><div class="product-name-row"><p class="product-name">エレコム Relacon</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>5商品の中でもっとも軽く、コンパクトです。手のひらに収まるサイズで、専用のスタンドも付属しています。</p><p>ボタンは10個。メディアコントロール用のボタンも含まれます。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B07ZKL66GY?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>デスクが狭い人</li><li>ノートパソコンと一緒に持ち運びたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>大きめの手でしっかり握って操作したい人</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">省スペースを重視するなら、この1台です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューも見ました</b>
+  本体を傾けるとトラックボールが隙間を動いてカタカタと音がし、親指でホールドし直す必要があるという指摘があります。逆さにするとボールが落ちることがある、複数デバイスへの接続ができず1接続のみという声もありました。
+  <p class="src">参考：<a href="https://2week.net/44585/" target="_blank" rel="noopener">エレコム Relacon レビュー</a></p>
+</div>
+<p class="spec-text">5商品の中でもっとも軽く、<br>コンパクトです。<br>重さは77g（電池を除く）。</p>
+<p class="spec-text">手のひらに収まるサイズで、<br>専用のスタンドも<br>付属しています。</p>
+<p class="spec-text">ボタンは10個。<br>メディアコントロール用の<br>ボタンも含まれます。</p>
+<p class="spec-text">接続は無線2.4GHz。<br>単四電池1本で、<br>電池寿命は約233日です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B07ZKL66GY?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<section class="product-feature" id="seion" aria-labelledby="seion-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-trackball/03_sanwa.jpg" alt="サンワサプライ MA-WTB129BK"><div class="product-overlay"><div class="product-copy"><span class="product-index">TRACKBALL / 03</span><h2 class="product-situation" id="seion-title">クリック音を気にしたくない人へ</h2><div class="product-name-row"><p class="product-name">サンワサプライ MA-WTB129BK</p><span class="price-badge">標準</span></div><div class="trust-line"><p>3つのボタン全てに、静音スイッチを採用しています。15度傾いたエルゴノミクス形状で、中指で操作します。</p><p>接続は2.4GHz。単三電池2本で動きます。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0BX777K6W?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>夜間や、家族が近くにいる環境でクリック音を気にしたくない人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>親指操作に慣れていて、持ち替えたくない人</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">静音性を重視するなら、この1台です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューも見ました</b>
+  今回調べた範囲では、目立った低評価の指摘は見当たりませんでした。「機能性は高くないが手にフィットする」という評価が中心で、比較的安価にトラックボールを試したい人や、オフィスで静音ボタンを求める人に向くという声がありました。
+  <p class="src">参考：<a href="https://my-best.com/products/1513138" target="_blank" rel="noopener">サンワサプライ MA-WTB129BK レビュー</a></p>
+</div>
+<p class="spec-text">3つのボタン全てに、<br>静音スイッチを採用しています。</p>
+<p class="spec-text">重さは約126g（電池を除く）。<br>15度傾いたエルゴノミクス形状で、<br>中指で操作します。</p>
+<p class="spec-text">接続は2.4GHz。<br>単三電池2本で動きます。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0BX777K6W?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<section class="product-feature" id="tekubi" aria-labelledby="tekubi-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-trackball/04_slimblade.jpg" alt="Kensington SlimBlade Pro"><div class="product-overlay"><div class="product-copy"><span class="product-index">TRACKBALL / 04</span><h2 class="product-situation" id="tekubi-title">長時間の作業で、<br>手首の負担を減らしたい人へ</h2><div class="product-name-row"><p class="product-name">Kensington SlimBlade Pro</p><span class="price-badge">上位</span></div><div class="trust-line"><p>人差し指・中指で操作するタイプで、手のひら全体を預けられる形状です。3年保証が付いています。</p><p>両利き対応で、右手でも左手でも使えます。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0BN8224SY?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>長時間の作業で、手首の負担を減らしたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>親指操作に慣れていて、すぐに持ち替えたい人</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">手首に優しいのを重視するなら、この1台です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューも見ました</b>
+  初心者には扱いが難しく、慣れが必要という指摘があります。スクロール時にきしみ音がするという報告もありましたが、個体差があり全ての製品で発生するわけではないようです。慣れれば手首の動きが減り快適という声も多くありました。
+  <p class="src">参考：<a href="https://gadgeneko.jp/kensington-slimblade-pro-review" target="_blank" rel="noopener">Kensington SlimBlade Pro レビュー</a></p>
+</div>
+<p class="spec-text">人差し指・中指で操作するタイプで、<br>手のひら全体を<br>預けられる形状です。</p>
+<p class="spec-text">ボールの直径は55mm。<br>今回の中で、保証がもっとも<br>長い商品です。3年保証が付いています。</p>
+<p class="spec-text">両利き対応で、<br>右手でも左手でも使えます。</p>
+<p class="spec-text">接続はBluetooth・2.4GHz・<br>有線の3方式です。<br>充電式バッテリーで、フル充電から約4ヶ月使えます。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0BN8224SY?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<section class="product-feature lifestyle-feature" id="pc" aria-labelledby="pc-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-trackball/05_mxergo.jpg" alt="ロジクール MX ERGO S"><div class="product-overlay"><div class="product-copy"><span class="product-index">TRACKBALL / 05</span><h2 class="product-situation" id="pc-title">複数のパソコンを行き来しながら<br>作業する人へ</h2><div class="product-name-row"><p class="product-name">ロジクール MX ERGO S</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>Easy-Switchで、2台のパソコンをボタン1つで切り替えられます。Logicool Flowにも対応しています。</p><p>パソコン間でコピー&ペーストもできます。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DC5X912P?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>複数のパソコンを行き来しながら作業する人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>1台のパソコンでしか使わない人</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">PC切替を重視するなら、この1台です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューも見ました</b>
+  カラーがグラファイトのみで、白系デバイスで統一したい人には選択肢に入らないという指摘があります。水平スクロールの代わりにDPIボタンでのジェスチャーコントロールが設定できなくなったという声もありました。
+  <p class="src">参考：<a href="https://gadget-utopia.com/gadget-reviews/ergos/" target="_blank" rel="noopener">ロジクール MX ERGO S レビュー</a></p>
+</div>
+<p class="spec-text">5商品の中で<br>もっとも高価です。</p>
+<p class="spec-text">Easy-Switchで、2台のパソコンを<br>ボタン1つで切り替えられます。</p>
+<p class="spec-text">Logicool Flowにも対応していて、<br>パソコン間でコピー&ペーストもできます。</p>
+<p class="spec-text">重さは259g。ボタンは8つで、<br>全ボタンが静音設計です。<br>充電はUSB-Cで、フル充電から最大4ヶ月使えます。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0DC5X912P?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<details class="research-method"><summary>12候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>毎日パソコンに向かっていて、私も手首や肩がだるくなることがあります。</p>
+<p>トラックボールが気になっていても、親指式や人差し指式など種類が多くて迷います。なので今回、マイベストの実機比較データと、価格.comのランキングを見ました。メーカー公式サイトでも確認しました。</p>
+<p>各商品ごとに、向いてる人・向いてない人も調べているので、自分に合ったトラックボールを探してみてください。</p>
+
+<h2>12候補から5つに絞り込みました</h2>
+<p>今回は、マイベストの実機比較データと、価格.comのランキングを見ました。メーカー公式サイトでも確認しました。</p>
+<p>ロジクール2機種、エレコムが5機種でした。サンワサプライ2機種、Kensingtonが1機種で、合計10候補です。</p>
+<p>この中から、5つに絞りました。</p>
+<p>エレコムEX-Gは、ERGO M575Sと価格帯・操作タイプが近く、役割が重なるため見送りました。</p>
+<p>エレコムHUGEは、SlimBlade Proと同じ人差し指・中指操作で、保証期間も3年に届かないため見送りました。</p>
+<p>サンワサプライのアームレスト式は、MA-WTB129BKと同じメーカー・同じ操作タイプで重複するため見送りました。</p>
+<p>エレコムIST PROは、MX ERGO Sと同じプレミアム帯で価格も近く、役割が重複するため見送りました。</p>
+<p>エレコムDEFT PROは、価格.comの満足度が3.90と、他の候補よりやや低かったため見送りました。</p>
+
+<h2>レビューが低い商品も見ました</h2>
+<p>10候補とは別に、評価に疑いがある商品も2つ調べました。</p>
+<p>ProtoArcのEM04は、実機レビューサイトでは高評価でした。ただ、サクラチェッカーでは「要注意メーカー」の判定が出ていました。レビュー件数が同カテゴリ平均の5分の1以下という指摘もありました。</p>
+<p>Haiuroshブランドの商品も「要注意製品」の判定でした。相場よりかなり安い値付けと、検索狙いに見える長い商品名が理由でした。</p>
+<p>低評価商品は2件にとどまりました。狙いは3件でしたが、無理に数を埋めませんでした。</p>
+
+</div></details>
+<h2>調べてみて驚いたこと</h2>
+<p>12商品以上を比較していて、一番驚いたのは「静音」を明記した商品の少なさでした。</p>
+<p>トラックボールはクリック音が気になりやすいのに、公式サイトで静音スイッチを明記していたのは1商品だけでした。</p>
+<p>もう1つ、低評価商品を調べていた時のことです。</p>
+<p>ProtoArcは実機レビューサイトでは評価が高かったのに、サクラチェッカーでは要注意メーカーでした。見る場所によって、評価が変わることを実感しました。</p>
+
+<h2>迷ったらこれ</h2>
+<img class="product-img" src="research-trackball/01_ergo.jpg" alt="ロジクール ERGO M575S">
+<p>ここまで読んでもまだ迷ったら、5商品で一番手頃で、親指操作だから普通のマウスからも移行しやすいロジクール ERGO M575Sが最初の1台におすすめです。</p>
+<p>価格を抑えつつ、初めてのトラックボールでも扱いに困りにくいので、外しにくい選択です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B08L4ZR79Q?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<h2>よくある質問</h2>
+<div class="faq-item"><p>Q. 親指操作と人差し指操作、どちらが初心者向け？<br>A. 普通のマウスに近い感覚で使えるのは親指操作タイプです。人差し指・中指操作は慣れるまで少し時間がかかります。</p></div>
+<div class="faq-item"><p>Q. トラックボールにマウスパッドは必要？<br>A. ボールを転がす操作なので、マウスパッドは基本的に不要です。</p></div>
+<div class="faq-item"><p>Q. ボールの掃除は必要？<br>A. 使っているとホコリが付着するため、定期的な掃除がおすすめです。掃除のしやすさは商品によって差があります。</p></div>
+<div class="faq-item"><p>Q. Mac・Windows両方で使える？<br>A. 今回調べた5商品はいずれも一般的なWindows・macOSに対応しています。購入前に、公式サイトで対応OSを確認してください。</p></div>
+
+<h2>こんな記事も書いてます</h2>
+<ul class="related-list">
+  <li><a href="/articles/research-room">ミートボーの調査部屋<br>（デスク周り・アウトドア用品の比較記事、全42本）</a></li>
+</ul>
+
+<h2>出典</h2>
+<ul class="sources">
+  <li>マイベスト トラックボールのおすすめ人気ランキング：<a href="https://my-best.com/474" target="_blank" rel="noopener">my-best.com</a></li>
+  <li>価格.com トラックボール人気売れ筋ランキング：<a href="https://kakaku.com/pc/trackball/ranking_V065/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>価格.com ロジクール MX ERGO S MXTB2 商品ページ：<a href="https://kakaku.com/item/K0001649145/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>楽天市場 ロジクール公式ストア MX ERGO S 商品ページ：<a href="https://item.rakuten.co.jp/logicool/mxtb2d/" target="_blank" rel="noopener">item.rakuten.co.jp</a></li>
+  <li>エレコム公式 Relacon M-RT1DRBK 商品ページ：<a href="https://www.elecom.co.jp/products/M-RT1DRBK.html" target="_blank" rel="noopener">elecom.co.jp</a></li>
+  <li>価格.com エレコム M-RT1DRBK スペック：<a href="https://kakaku.com/item/K0001206268/spec/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>サンワサプライ公式 MA-WTB129BK 商品ページ：<a href="https://www.sanwa.co.jp/product/syohin?code=MA-WTB129BK" target="_blank" rel="noopener">sanwa.co.jp</a></li>
+  <li>Kensington公式 SlimBlade Pro Trackball 商品ページ：<a href="https://www.kensington.com/ja-jp/p/" target="_blank" rel="noopener">kensington.com</a></li>
+  <li>価格.com Kensington SlimBlade Pro Trackball K72081JP：<a href="https://kakaku.com/item/K0001534548/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>サクラチェッカー トラックボールランキング：<a href="https://sakura-checker.jp/ranking/2151980051/" target="_blank" rel="noopener">sakura-checker.jp</a></li>
+  <li>サクラチェッカー ProtoArc EM04：<a href="https://sakura-checker.jp/search/B0C4NGCNXT/" target="_blank" rel="noopener">sakura-checker.jp</a></li>
+  <li>サクラチェッカー Haiurosh：<a href="https://sakura-checker.jp/search/B0C3XFMXBQ/" target="_blank" rel="noopener">sakura-checker.jp</a></li>
+  <li>ERGO M575ボタン構成の解説：<a href="https://yossense.com/ergo-m575-extension/" target="_blank" rel="noopener">yossense.com</a></li>
+  <li>ロジクール ERGO M575S 低評価レビュー参考：<a href="https://kashiwagigarage.com/kashiwagi-trackball-m5750-review/" target="_blank" rel="noopener">kashiwagigarage.com</a></li>
+  <li>エレコム Relacon 低評価レビュー参考：<a href="https://2week.net/44585/" target="_blank" rel="noopener">2week.net</a></li>
+  <li>Kensington SlimBlade Pro 低評価レビュー参考：<a href="https://gadgeneko.jp/kensington-slimblade-pro-review" target="_blank" rel="noopener">gadgeneko.jp</a></li>
+  <li>ロジクール MX ERGO S 低評価レビュー参考：<a href="https://gadget-utopia.com/gadget-reviews/ergos/" target="_blank" rel="noopener">gadget-utopia.com</a></li>
+</ul>
+
+</div>
+<script>
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('.product-copy .product-situation, .article-opening h1').forEach(heading => {
+    heading.setAttribute('aria-label', heading.innerText.replace(/\s+/g, ' ').trim());
+    let index = 0;
+    const split = element => {
+      [...element.childNodes].forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const fragment = document.createDocumentFragment();
+          for (const character of Array.from(node.textContent)) {
+            const span = document.createElement('span');
+            span.className = 'chair-char';
+            span.textContent = character;
+            span.setAttribute('aria-hidden', 'true');
+            span.style.setProperty('--char-delay', (index++ * .05) + 's');
+            fragment.append(span);
+          }
+          node.replaceWith(fragment);
+        } else if (node.nodeType === Node.ELEMENT_NODE) split(node);
+      });
+    };
+    split(heading);
+    const characters = heading.querySelectorAll('.chair-char');
+    characters[characters.length - 1]?.addEventListener('animationend', () => heading.classList.remove('chair-heading-playing'));
+    reduced.addEventListener('change', () => heading.classList.remove('chair-heading-playing'));
+    let ready = true;
+    new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        ready = true;
+        heading.classList.remove('chair-heading-playing');
+      } else if (ready && entry.intersectionRatio >= .25) {
+        ready = false;
+        if (!reduced.matches) heading.classList.add('chair-heading-playing');
+      }
+    }, {threshold: [0, .25]}).observe(heading);
+  });
+})();
+</script>
+<script>
+(() => {
+ const root=document.querySelector('.pick-carousel');
+ if(!root) return;
+ const track=root.querySelector('.pick-track'), slides=[...root.querySelectorAll('.pick-slide')];
+ const dots=[...root.querySelectorAll('[data-pick]')], prev=root.querySelector('.pick-prev'), next=root.querySelector('.pick-next');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ let current=0, pending=false;
+ function update(){
+   current=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/track.clientWidth)));
+   dots.forEach((dot,i)=>{if(i===current)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');});
+   prev.disabled=current===0;next.disabled=current===slides.length-1;
+ }
+ function go(index){track.scrollTo({left:Math.max(0,Math.min(slides.length-1,index))*track.clientWidth,behavior:reduced.matches?'instant':'smooth'});}
+ prev.addEventListener('click',()=>go(current-1));next.addEventListener('click',()=>go(current+1));
+ dots.forEach((dot,i)=>dot.addEventListener('click',()=>go(i)));
+ track.addEventListener('keydown',e=>{if(e.target!==track)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(current+(e.key==='ArrowRight'?1:-1));}});
+ track.addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(()=>{update();pending=false;});}},{passive:true});
+ window.addEventListener('resize',()=>{track.scrollTo({left:current*track.clientWidth,behavior:'instant'});update();});
+ root.querySelector('.pick-controls').hidden=false;update();
+})();</script>
+</body></html>
