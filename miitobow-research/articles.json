@@ -18,7 +18,8 @@
     "summary": "17候補を調査して選んだ5商品",
     "content": "デスクチェア17候補を調査。価格・耐荷重・保証から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-deskchair",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-deskchair/theme.png"
   },
   {
     "id": "pc-speaker",
@@ -28,7 +29,8 @@
     "summary": "14候補を調査して選んだ5商品",
     "content": "作業用PCスピーカー14候補を調査。価格・出力・保証から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-pcspeaker",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-pcspeaker/theme.png"
   },
   {
     "id": "wireless-mouse",
@@ -38,7 +40,8 @@
     "summary": "13候補を調査して選んだ5商品",
     "content": "作業用ワイヤレスマウス13候補を調査。接続方式・ボタン数・バッテリーから、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-mouse",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-mouse/theme.png"
   },
   {
     "id": "standing-desk",
@@ -48,7 +51,8 @@
     "summary": "9候補を調査して選んだ5商品",
     "content": "昇降デスク9候補を調査。耐荷重・昇降範囲・電動/手動から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-standingdesk",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-standingdesk/theme.png"
   },
   {
     "id": "split-keyboard",
@@ -58,7 +62,8 @@
     "summary": "14候補を調査して選んだ5商品",
     "content": "分割キーボード14候補を調査。接続方式・キー配列・保証から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-keyboard",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-keyboard/theme.png"
   },
   {
     "id": "laptop-stand",
@@ -68,7 +73,8 @@
     "summary": "22候補を調査して選んだ5商品",
     "content": "ノートPCスタンド22種類を調査。価格・角度調整・対応サイズ・耐荷重から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-laptopstand",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-laptopstand/theme.png"
   },
   {
     "id": "usb-hub",
@@ -78,7 +84,8 @@
     "summary": "19候補を調査して選んだ5商品",
     "content": "USBハブ・ドッキングステーション19種類を調査。価格・ポート構成・映像出力・給電力から、選び方の違う5商品を比較しました。",
     "url": "https://miitobow.com/articles/research-usbhub",
-    "affiliateUrl": ""
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-usbhub/theme.png"
   },
   {
     "id": "desk-lamp",

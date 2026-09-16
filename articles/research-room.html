@@ -6,7 +6,7 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body {
     font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
-    background:#f8f9fb;
+    background:#faf9f4;
     color:#222;
     padding:20px 20px 80px;
   }
@@ -19,10 +19,6 @@
     text-decoration:none;
   }
   .home-link:hover { text-decoration:underline; }
-  .header { text-align:center; margin-bottom:4px; max-width:640px; margin-left:auto; margin-right:auto; }
-  .header h1 { font-size:20px; color:#222; margin-bottom:4px; }
-  .header .desc { display:none; }
-  .badge { display:none; }
   .list-heading {
     max-width:1700px;
     margin:56px auto 14px;
@@ -55,12 +51,9 @@
   .card.pending { opacity:.55; }
   .card.pending .cta { color:#999; }
   @media (prefers-color-scheme: dark) {
-    body { background:#14201a; color:#e5efec; }
-    .card { background:#1d2b23; border-color:#2a3d33; }
+    .card { background:#1d2b23; border-color:#2a3d33; color:#e5efec; }
     .card .title { color:#e5efec; }
-    .header h1 { color:#e5efec; }
-    .header .desc { color:#b7c4bd; }
-    .badge { background:#242a4a; color:#9aa8ff; }
+    .list-heading { color:#b7c4bd; }
   }
   .room-3d { width:100%; max-width:1700px; height:88vh; min-height:640px; border:0; display:block; margin:10px auto 0; border-radius:16px; }
   @media (max-width:760px) { .room-3d { height:1320px; min-height:0; } }
@@ -68,9 +61,6 @@
 </head>
 <body>
 <a class="home-link" href="/reading.html">&larr; 読みものに戻る</a>
-<div class="header">
-  <h1>ミートボーの調査部屋</h1>
-</div>
 <iframe class="room-3d" src="/miitobow-research/?embed=1" title="ミートボーの調査部屋（3D）" loading="lazy"></iframe>
 <p class="list-heading">全42記事の一覧</p>
 <div class="list">
