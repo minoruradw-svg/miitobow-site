@@ -8,30 +8,34 @@
     font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
     background:#f8f9fb;
     color:#222;
-    padding:32px 24px 80px;
+    padding:20px 20px 80px;
   }
   .home-link {
     display:block;
-    max-width:1000px;
-    margin:0 auto 20px;
+    max-width:1700px;
+    margin:0 auto 16px;
     font-size:14px;
     color:#4CA468;
     text-decoration:none;
   }
   .home-link:hover { text-decoration:underline; }
-  .header { text-align:center; margin-bottom:8px; max-width:640px; margin-left:auto; margin-right:auto; }
-  .header h1 { font-size:26px; color:#222; margin-bottom:10px; }
-  .header .desc { font-size:14px; color:#555; line-height:1.8; }
-  .badge {
-    display:inline-block; margin-top:14px; padding:6px 16px; border-radius:999px;
-    background:#eef; color:#3d4fb8; font-size:12.5px; font-weight:700;
+  .header { text-align:center; margin-bottom:4px; max-width:640px; margin-left:auto; margin-right:auto; }
+  .header h1 { font-size:20px; color:#222; margin-bottom:4px; }
+  .header .desc { display:none; }
+  .badge { display:none; }
+  .list-heading {
+    max-width:1700px;
+    margin:56px auto 14px;
+    font-size:15px;
+    font-weight:700;
+    color:#555;
   }
   .list {
     display:grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap:14px;
-    max-width:1000px;
-    margin:32px auto 0;
+    max-width:1700px;
+    margin:0 auto;
   }
   .card {
     background:#fff;
@@ -58,18 +62,17 @@
     .header .desc { color:#b7c4bd; }
     .badge { background:#242a4a; color:#9aa8ff; }
   }
-  .room-3d { width:100%; max-width:1000px; height:1020px; border:0; display:block; margin:32px auto 0; border-radius:16px; }
-  @media (max-width:760px) { .room-3d { height:1320px; } }
+  .room-3d { width:100%; max-width:1700px; height:88vh; min-height:640px; border:0; display:block; margin:10px auto 0; border-radius:16px; }
+  @media (max-width:760px) { .room-3d { height:1320px; min-height:0; } }
 </style>
 </head>
 <body>
 <a class="home-link" href="/reading.html">&larr; 読みものに戻る</a>
 <div class="header">
   <h1>ミートボーの調査部屋</h1>
-  <p class="desc">デスク周り・アウトドア用品を中心に、価格.com・各メーカー公式・サクラチェッカーを横断して調べた比較記事です。「向いてる人／向いてない人」つきで、低評価だった商品も理由つきで紹介しています。</p>
-  <span class="badge">全42記事</span>
 </div>
 <iframe class="room-3d" src="/miitobow-research/?embed=1" title="ミートボーの調査部屋（3D）" loading="lazy"></iframe>
+<p class="list-heading">全42記事の一覧</p>
 <div class="list">
   <a class="card" href="/articles/research-monitorarm"><div class="num">01</div><div class="title">モニターアーム16種類を調査して分かった、あなたに合う1本</div><span class="cta">記事を読む →</span></a>
   <a class="card" href="/articles/research-deskchair"><div class="num">02</div><div class="title">デスクチェア17候補を調査して分かった、コーディングに合う1脚</div><span class="cta">記事を読む →</span></a>
