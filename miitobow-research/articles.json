@@ -125,10 +125,11 @@
     "title": "ヘッドセット",
     "category": "desk",
     "model": "headphones",
-    "summary": "",
-    "content": "",
-    "url": "",
-    "affiliateUrl": ""
+    "summary": "10候補を調査して選んだ5商品",
+    "content": "ヘッドセット10候補を調査。価格・重量・接続方式・ノイズ対策から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-headset",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-headset/theme.png"
   },
   {
     "id": "monitor-light",
