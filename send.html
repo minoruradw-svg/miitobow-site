@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ファイル転送 - miitobow.com</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif;
+    background: #f8f9fb; color: #222; padding: 24px 16px 80px; min-height: 100vh;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  .home-link { display: block; margin-bottom: 16px; font-size: 14px; color: #4CA468; text-decoration: none; }
+  .home-link:hover { text-decoration: underline; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .desc { font-size: 13px; color: #777; margin-bottom: 24px; line-height: 1.6; }
+
+  /* lock screen */
+  #lock { text-align: center; padding: 60px 0; }
+  #lock p { font-size: 14px; color: #666; margin-bottom: 20px; }
+  .pin-row { display: flex; gap: 10px; justify-content: center; }
+  .pin-box {
+    width: 48px; height: 56px; text-align: center; font-size: 24px;
+    border: 2px solid #ddd; border-radius: 10px; background: #fff; color: #222;
+  }
+  .pin-box:focus { outline: none; border-color: #4CA468; }
+  #lockError { color: #d33; font-size: 13px; margin-top: 14px; display: none; }
+  #lockError.show { display: block; }
+  .shake { animation: shake .35s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  #app { display: none; }
+  #app.show { display: block; }
+
+  .card {
+    background: #fff; border: 1px solid #eee; border-radius: 16px;
+    padding: 18px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .card h2 { font-size: 15px; margin-bottom: 10px; }
+
+  /* upload mode */
+  .drop-btn {
+    display: inline-block; padding: 12px 22px; background: #06C755; color: #fff;
+    font-weight: 700; font-size: 14px; border: none; border-radius: 24px; cursor: pointer;
+  }
+  .drop-btn:hover { background: #05b34c; }
+  .drop-btn:disabled { background: #aaa; cursor: default; }
+  #folderInput { display: none; }
+  .pending-list { margin-top: 14px; font-size: 13px; color: #555; }
+  .pending-folder { padding: 8px 0; border-top: 1px solid #f0f0f0; }
+  .pending-folder:first-child { border-top: none; }
+  .progress-bar-outer { height: 6px; background: #eee; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: #06C755; width: 0%; transition: width .2s; }
+  .link-box {
+    margin-top: 16px; padding: 12px; background: #eefaf3; border-radius: 10px;
+    font-size: 13px; word-break: break-all;
+  }
+  .link-box a { color: #05863a; font-weight: 700; }
+  .copy-btn {
+    margin-top: 8px; padding: 6px 14px; font-size: 12px; border: 1px solid #06C755;
+    background: #fff; color: #05863a; border-radius: 16px; cursor: pointer;
+  }
+  #hint { font-size: 13px; color: #d33; margin-top: 10px; }
+
+  /* view mode */
+  .folder-card { margin-bottom: 22px; }
+  .folder-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .folder-name { font-size: 15px; font-weight: 700; }
+  .folder-meta { font-size: 12px; color: #888; }
+  .save-all-btn {
+    padding: 8px 16px; background: #06C755; color: #fff; border: none;
+    border-radius: 18px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .save-all-btn:hover { background: #05b34c; }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px;
+  }
+  .grid a { display: block; }
+  .grid img, .grid video {
+    width: 100%; height: 96px; object-fit: cover; border-radius: 10px; border: 1px solid #eee;
+    background: repeating-conic-gradient(#f1f1f1 0% 25%, #fafafa 0% 50%) 50% / 12px 12px;
+  }
+  .grid .file-name { font-size: 10px; color: #999; text-align: center; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .empty { text-align: center; color: #999; font-size: 14px; padding: 40px 0; }
+  .tip { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.6; }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: #14201a; color: #e5efec; }
+    .card { background: #1d2b23; border-color: #2a3d33; }
+    .pin-box { background: #16221c; color: #e5efec; border-color: #2a3d33; }
+    .link-box { background: #16332a; color: #bfe3d0; }
+    .pending-folder { border-color: #2a3d33; }
+    .grid img, .grid video { border-color: #2a3d33; background: repeating-conic-gradient(#22322a 0% 25%, #1a2620 0% 50%) 50% / 12px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home-link" href="/made.html">&larr; miitobow.comトップに戻る</a>
+  <h1>📦 ファイル転送</h1>
+  <p class="desc">PCとスマホの間で、フォルダごと一時的にファイルをやり取りする場所です。保存したファイルは3日後に自動で消えます。</p>
+
+  <div id="lock">
+    <p>PINコードを入力してください</p>
+    <div class="pin-row">
+      <input class="pin-box" type="tel" inputmode="numeric" maxlength="1">
+      <input class="pin-box" type="tel" inputmode="numeric" maxlength="1">
+      <input class="pin-box" type="tel" inputmode="numeric" maxlength="1">
+      <input class="pin-box" type="tel" inputmode="numeric" maxlength="1">
+    </div>
+    <div id="lockError">PINが違います</div>
+  </div>
+
+  <div id="app">
+    <div id="uploadSection" class="card" style="display:none;">
+      <h2>フォルダを送る（PC側）</h2>
+      <input type="file" id="folderInput" webkitdirectory multiple>
+      <button class="drop-btn" id="pickBtn">フォルダを選択</button>
+      <div class="pending-list" id="pendingList"></div>
+      <div id="hint"></div>
+      <div class="link-box" id="linkBox" style="display:none;">
+        受け取り用リンク：<br>
+        <a id="shareLink" href="#" target="_blank"></a><br>
+        <button class="copy-btn" id="copyBtn">リンクをコピー</button>
+      </div>
+    </div>
+
+    <div id="viewSection"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SESSION_KEY = "miitobow-send-pin";
+  var lockEl = document.getElementById("lock");
+  var lockError = document.getElementById("lockError");
+  var pinBoxes = Array.prototype.slice.call(document.querySelectorAll(".pin-box"));
+  var appEl = document.getElementById("app");
+  var currentPin = null;
+
+  var params = new URLSearchParams(location.search);
+  var viewId = params.get("id");
+
+  function authHeaders(extra) {
+    var h = extra || {};
+    h["X-Board-Pin"] = currentPin;
+    return h;
+  }
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + "B";
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + "KB";
+    return (bytes / 1024 / 1024).toFixed(1) + "MB";
+  }
+
+  // ---------- upload mode (id無し) ----------
+  function initUpload() {
+    document.getElementById("uploadSection").style.display = "block";
+    var folderInput = document.getElementById("folderInput");
+    var pickBtn = document.getElementById("pickBtn");
+    var pendingList = document.getElementById("pendingList");
+    var hint = document.getElementById("hint");
+    var linkBox = document.getElementById("linkBox");
+    var shareLink = document.getElementById("shareLink");
+    var copyBtn = document.getElementById("copyBtn");
+
+    var transferId = null;
+    var folders = {}; // folderName -> [File]
+
+    pickBtn.addEventListener("click", function () { folderInput.click(); });
+
+    folderInput.addEventListener("change", function () {
+      var files = Array.prototype.slice.call(folderInput.files);
+      if (!files.length) return;
+      var topFolder = (files[0].webkitRelativePath || files[0].name).split("/")[0];
+      folders[topFolder] = files;
+      renderPending();
+      folderInput.value = "";
+    });
+
+    function renderPending() {
+      pendingList.innerHTML = "";
+      var names = Object.keys(folders);
+      if (!names.length) return;
+      names.forEach(function (name) {
+        var files = folders[name];
+        var totalSize = files.reduce(function (s, f) { return s + f.size; }, 0);
+        var row = document.createElement("div");
+        row.className = "pending-folder";
+        row.textContent = "📁 " + name + "（" + files.length + "件・" + fmtSize(totalSize) + "）";
+        pendingList.appendChild(row);
+      });
+      var sendBtn = document.createElement("button");
+      sendBtn.className = "drop-btn";
+      sendBtn.style.marginTop = "10px";
+      sendBtn.textContent = "この内容を送信する";
+      sendBtn.addEventListener("click", startUpload);
+      pendingList.appendChild(sendBtn);
+
+      var addMore = document.createElement("button");
+      addMore.className = "drop-btn";
+      addMore.style.marginTop = "10px";
+      addMore.style.marginLeft = "8px";
+      addMore.style.background = "#888";
+      addMore.textContent = "+ 別のフォルダを追加";
+      addMore.addEventListener("click", function () { folderInput.click(); });
+      pendingList.appendChild(addMore);
+
+      var progWrap = document.createElement("div");
+      progWrap.className = "progress-bar-outer";
+      progWrap.id = "progOuter";
+      progWrap.style.display = "none";
+      var progInner = document.createElement("div");
+      progInner.className = "progress-bar-inner";
+      progInner.id = "progInner";
+      progWrap.appendChild(progInner);
+      pendingList.appendChild(progWrap);
+    }
+
+    function startUpload() {
+      if (!transferId) transferId = crypto.randomUUID();
+      hint.textContent = "";
+      var allTasks = [];
+      Object.keys(folders).forEach(function (folder) {
+        folders[folder].forEach(function (file) {
+          allTasks.push({ folder: folder, file: file });
+        });
+      });
+      if (!allTasks.length) return;
+
+      var progOuter = document.getElementById("progOuter");
+      var progInner = document.getElementById("progInner");
+      progOuter.style.display = "block";
+      var done = 0;
+
+      function uploadNext(i) {
+        if (i >= allTasks.length) {
+          progInner.style.width = "100%";
+          var link = location.origin + "/send.html?id=" + transferId;
+          shareLink.href = link;
+          shareLink.textContent = link;
+          linkBox.style.display = "block";
+          folders = {};
+          renderPending();
+          return;
+        }
+        var task = allTasks[i];
+        var url = "/api/transfer/upload?id=" + encodeURIComponent(transferId) +
+          "&folder=" + encodeURIComponent(task.folder) +
+          "&name=" + encodeURIComponent(task.file.name);
+        fetch(url, {
+          method: "PUT",
+          headers: authHeaders({ "Content-Type": task.file.type || "application/octet-stream" }),
+          body: task.file,
+        }).then(function (res) {
+          if (!res.ok) {
+            return res.json().then(function (j) { throw new Error(j.message || "アップロード失敗"); });
+          }
+          done++;
+          progInner.style.width = Math.round((done / allTasks.length) * 100) + "%";
+          uploadNext(i + 1);
+        }).catch(function (err) {
+          hint.textContent = (task.file.name + ": " + (err.message || "失敗")) ;
+          uploadNext(i + 1);
+        });
+      }
+      uploadNext(0);
+    }
+  }
+
+  // ---------- view/download mode (idあり) ----------
+  function initView(id) {
+    var viewSection = document.getElementById("viewSection");
+    viewSection.innerHTML = '<div class="card"><h2>読み込み中...</h2></div>';
+
+    fetch("/api/transfer/list?id=" + encodeURIComponent(id), { headers: authHeaders() })
+      .then(function (res) {
+        if (!res.ok) throw new Error("読み込みに失敗しました");
+        return res.json();
+      })
+      .then(function (data) {
+        var folderNames = Object.keys(data.folders || {});
+        if (!folderNames.length) {
+          viewSection.innerHTML = '<div class="card"><div class="empty">まだファイルがありません（消えている場合、転送から3日以上経っている可能性があります）</div></div>';
+          return;
+        }
+        viewSection.innerHTML = "";
+        folderNames.forEach(function (folder) {
+          var files = data.folders[folder];
+          var totalSize = files.reduce(function (s, f) { return s + f.size; }, 0);
+          var card = document.createElement("div");
+          card.className = "card folder-card";
+
+          var head = document.createElement("div");
+          head.className = "folder-head";
+          var title = document.createElement("div");
+          title.innerHTML = '<div class="folder-name">📁 ' + folder + '</div><div class="folder-meta">' + files.length + '件・' + fmtSize(totalSize) + '</div>';
+          head.appendChild(title);
+          var saveBtn = document.createElement("button");
+          saveBtn.className = "save-all-btn";
+          saveBtn.textContent = "全部まとめて保存";
+          saveBtn.addEventListener("click", function () {
+            var url = "/api/transfer/zip?id=" + encodeURIComponent(id) + "&folder=" + encodeURIComponent(folder) + "&pin=" + encodeURIComponent(currentPin);
+            window.location.href = url;
+          });
+          head.appendChild(saveBtn);
+          card.appendChild(head);
+
+          var grid = document.createElement("div");
+          grid.className = "grid";
+          files.forEach(function (f) {
+            var cell = document.createElement("div");
+            var isVideo = f.contentType.indexOf("video/") === 0;
+            var fileUrl = "/api/transfer/file?key=" + encodeURIComponent(f.key) + "&pin=" + encodeURIComponent(currentPin);
+            var link = document.createElement("a");
+            link.href = fileUrl + "&download=1";
+            if (isVideo) {
+              var vid = document.createElement("video");
+              vid.src = fileUrl;
+              vid.muted = true;
+              vid.playsInline = true;
+              link.appendChild(vid);
+            } else {
+              var img = document.createElement("img");
+              img.src = fileUrl;
+              img.loading = "lazy";
+              link.appendChild(img);
+            }
+            cell.appendChild(link);
+            var nameEl = document.createElement("div");
+            nameEl.className = "file-name";
+            nameEl.textContent = f.name;
+            cell.appendChild(nameEl);
+            grid.appendChild(cell);
+          });
+          card.appendChild(grid);
+          var tip = document.createElement("div");
+          tip.className = "tip";
+          tip.textContent = "画像を長押しすると個別に保存できます。まとめて保存したい時は上の「全部まとめて保存」でZIPをダウンロードしてください。";
+          card.appendChild(tip);
+          viewSection.appendChild(card);
+        });
+      })
+      .catch(function (err) {
+        viewSection.innerHTML = '<div class="card"><div class="empty">' + (err.message || "読み込みに失敗しました") + '</div></div>';
+      });
+  }
+
+  function showApp(pin) {
+    currentPin = pin;
+    lockEl.style.display = "none";
+    appEl.classList.add("show");
+    if (viewId) {
+      initView(viewId);
+    } else {
+      initUpload();
+    }
+  }
+
+  function tryUnlock(pin) {
+    var testUrl = viewId ? ("/api/transfer/list?id=" + encodeURIComponent(viewId)) : "/api/transfer/list?id=00000000-0000-0000-0000-000000000000";
+    fetch(testUrl, { headers: { "X-Board-Pin": pin } }).then(function (res) {
+      if (res.status === 401) {
+        lockError.classList.add("show");
+        lockEl.classList.add("shake");
+        setTimeout(function () { lockEl.classList.remove("shake"); }, 350);
+        pinBoxes.forEach(function (b) { b.value = ""; });
+        pinBoxes[0].focus();
+        return;
+      }
+      try { sessionStorage.setItem(SESSION_KEY, pin); } catch (e) {}
+      showApp(pin);
+    }).catch(function () {
+      lockError.textContent = "通信に失敗しました";
+      lockError.classList.add("show");
+    });
+  }
+
+  pinBoxes.forEach(function (box, i) {
+    box.addEventListener("input", function () {
+      box.value = box.value.replace(/[^0-9]/g, "").slice(0, 1);
+      if (box.value && i < pinBoxes.length - 1) pinBoxes[i + 1].focus();
+      var joined = pinBoxes.map(function (b) { return b.value; }).join("");
+      if (joined.length === 4) tryUnlock(joined);
+    });
+    box.addEventListener("keydown", function (e) {
+      if (e.key === "Backspace" && !box.value && i > 0) pinBoxes[i - 1].focus();
+    });
+  });
+
+  var savedPin = null;
+  try { savedPin = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
+  if (savedPin) {
+    tryUnlock(savedPin);
+  } else {
+    pinBoxes[0].focus();
+  }
+
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "copyBtn") {
+      var link = document.getElementById("shareLink").href;
+      navigator.clipboard.writeText(link).then(function () {
+        e.target.textContent = "コピーしました";
+        setTimeout(function () { e.target.textContent = "リンクをコピー"; }, 1500);
+      });
+    }
+  });
+})();
+</script>
+</body></html>
