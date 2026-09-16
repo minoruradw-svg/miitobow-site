@@ -92,10 +92,11 @@
     "title": "デスクライト",
     "category": "desk",
     "model": "lamp",
-    "summary": "",
-    "content": "",
-    "url": "",
-    "affiliateUrl": ""
+    "summary": "25候補を調査して選んだ5商品",
+    "content": "デスクライト25候補を調査。価格・消費電力・演色性・調光調色から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-desklight",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-desklight/theme.png"
   },
   {
     "id": "webcam",
