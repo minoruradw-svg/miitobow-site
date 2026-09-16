@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>モニターアーム16種類を調査して分かった、あなたに合う1本</title>
+<style>
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+    background:#f8f9fb;
+    color:#222;
+    font-size:16.5px;
+    line-height:1.9;
+  }
+  .home-link {
+    display:block;
+    max-width:600px;
+    margin:0 auto;
+    padding:20px 20px 0;
+    font-size:14px;
+    color:#4CA468;
+    text-decoration:none;
+  }
+  .home-link:hover { text-decoration:underline; }
+  .wrap { max-width:600px; margin:0 auto; padding:16px 20px 100px; }
+  .pr-note { font-size:12.5px; color:#888; border-left:3px solid #ddd; padding-left:10px; margin-bottom:32px; }
+  h1 { font-size:23px; line-height:1.55; margin:8px 0 8px; }
+  .situation { font-size:14.5px; color:#4CA468; font-weight:700; margin-bottom:22px; }
+  .stat-badges { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 28px; }
+  .stat-badges span { background:#eaf6ee; color:#2f8a52; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:999px; }
+  .conclusion-box {
+    background:#fff; border-radius:14px; padding:18px 18px; margin-bottom:32px;
+    box-shadow:0 1px 4px rgba(0,0,0,.06); border:1px solid #eee; font-size:15.5px;
+  }
+  .conclusion-box ul { margin:10px 0 0; padding-left:1.1em; }
+  .conclusion-box li { margin-bottom:10px; line-height:1.6; }
+  h2 { font-size:19px; margin:46px 0 18px; padding-top:8px; border-top:1px solid #e6e6e6; }
+  h2:first-of-type { border-top:none; }
+  .product-h2 { border-top:1px solid #e6e6e6; padding-top:32px; margin-top:50px; margin-bottom:0; }
+  .product-card { background:#fff; border-radius:18px; padding:22px 18px 20px; margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,.05); border:1px solid #eee; }
+  .product-situation { font-size:20px; font-weight:800; margin:0 0 4px; line-height:1.5; }
+  .product-name-row { margin:0 0 16px; }
+  .product-name { font-size:14px; color:#888; display:inline-block; margin-right:8px; }
+  .price-badge { font-size:11.5px; font-weight:700; color:#fff; background:#4CA468; padding:4px 11px; border-radius:999px; display:inline-block; }
+  .trust-line { font-size:13.5px; color:#666; background:#f0f4f0; padding:10px 12px; border-radius:8px; margin-bottom:18px; line-height:1.7; }
+  .product-img { width:100%; max-width:380px; display:block; margin:0 auto 20px; border-radius:12px; }
+  .fit-box { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+  .fit-box .col { background:#fafbfa; border-radius:10px; padding:14px 16px; font-size:14.5px; border:1px solid #eee; line-height:1.7; }
+  .fit-box .col.good { border-left:4px solid #4CA468; }
+  .fit-box .col.bad { border-left:4px solid #c98a4b; }
+  .fit-box .col b { display:block; margin-bottom:8px; font-size:12px; letter-spacing:.02em; color:#888; text-transform:uppercase; }
+  .fit-box .col ul { margin:0; padding:0; list-style:none; }
+  .fit-box .col li { margin-bottom:6px; padding-left:1.5em; position:relative; font-weight:600; }
+  .fit-box .col li:last-child { margin-bottom:0; }
+  .fit-box .col.good li::before { content:"✓"; position:absolute; left:0; color:#4CA468; font-weight:900; }
+  .fit-box .col.bad li::before { content:"✕"; position:absolute; left:0; color:#c98a4b; font-weight:900; }
+  .conclusion-line { font-weight:700; font-size:15.5px; margin:18px 0 12px; }
+  .buy-link {
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:14px 26px; background:#06C755; color:#fff;
+    font-weight:700; font-size:15.5px; border-radius:12px; text-decoration:none;
+    margin-bottom:20px; box-shadow:0 3px 10px rgba(6,199,85,.3);
+  }
+  .buy-link:hover { background:#05b34c; }
+  .buy-link .arrow { transition:transform .15s ease; }
+  .buy-link:hover .arrow { transform:translateX(3px); }
+  .spec-text { font-size:15px; color:#444; }
+  p { margin:0 0 18px; }
+  a { color:#4CA468; }
+  .theme-img { width:100%; border-radius:14px; margin:4px 0 24px; display:block; }
+  .compare-img { display:block; width:100%; border-radius:10px; margin:12px auto; }
+  .compare-cap { font-size:12.5px; color:#888; text-align:center; margin-top:-6px; margin-bottom:20px; }
+  .compare-recap { margin-bottom:28px; }
+  .compare-recap h3 { font-size:15px; margin:0 0 8px; }
+  .compare-recap ul { margin:0 0 18px; padding-left:1.1em; font-size:14px; color:#444; line-height:1.75; }
+  .compare-recap ul li { margin-bottom:2px; }
+  .faq-item {
+    background:#fff; border-radius:14px; padding:16px 18px; margin-bottom:14px;
+    font-size:15px; line-height:1.8; box-shadow:0 1px 4px rgba(0,0,0,.05); border:1px solid #eee;
+  }
+  .faq-item p { margin:0; }
+  .related-list { font-size:14.5px; }
+  .related-list li { margin-bottom:10px; }
+  .sources { font-size:12.5px; color:#888; }
+  .sources li { margin-bottom:8px; word-break:break-all; line-height:1.6; }
+  .research-method { margin:32px 0; border:1px solid #e6e6e6; border-radius:12px; background:#fafbfa; padding:16px 20px; }
+  .research-method summary { cursor:pointer; font-weight:700; }
+  .research-content { padding-top:10px; }
+  @media (prefers-color-scheme: dark) {
+    body { background:#14201a; color:#e5efec; }
+    .conclusion-box, .product-card, .faq-item { background:#1d2b23; border-color:#2a3d33; }
+    .fit-box .col { background:#182420; border-color:#2a3d33; }
+    .trust-line { background:#20302a; color:#b7c4bd; }
+    .spec-text { color:#cfd8d3; }
+    h2 { border-color:#2a3d33; }
+    .product-h2 { border-color:#2a3d33; }
+    .product-name { color:#8ea79a; }
+    .stat-badges span { background:#1d3327; color:#7fd39c; }
+    .compare-recap ul { color:#cfd8d3; }
+    .research-method { background:#182420; border-color:#2a3d33; }
+  }
+</style>
+</head>
+<body>
+<a class="home-link" href="/articles/research-room.html">&larr; ミートボーの調査部屋に戻る</a>
+<div class="wrap">
+
+<p class="situation">デスク周りを整理したい人へ</p>
+<h1>モニターアーム16種類を調査して分かった、あなたに合う1本</h1>
+<img class="theme-img" src="research-monitorarm/theme.png" alt="モニターアーム16種類を調査して分かった、あなたに合う1本">
+<p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
+
+<p>デスク周りを整理したくて、モニターアームをずっと検討していました。種類が多すぎて、正直迷います。なので今回、価格.comのランキングや複数の比較記事、公式サイトでスペックを調べ比較しました。各商品ごとに向いてる人・向いてない人も調べているので、自分に合ったモニターアームを探してみてください。</p>
+
+<div class="stat-badges">
+  <span>16候補を調査</span>
+  <span>5商品に厳選</span>
+  <span>低評価商品も確認済み</span>
+</div>
+
+<div class="conclusion-box">
+  <b>結論から先に言うと：</b>
+  <ul>
+    <li>安さなら <b>グリーンハウス GH-AMCS01A</b></li>
+    <li>幅広い対応なら <b>Loctek D8</b></li>
+    <li>バランスなら <b>Pixio PS1S Wave</b></li>
+    <li>大型モニターなら <b>山善 AMA-S</b></li>
+    <li>長く使うなら <b>Ergotron LX</b></li>
+  </ul>
+</div>
+
+<h2>10候補から絞り込みました</h2>
+<p>今回、価格.comのランキングと複数の比較記事、商品の公式ホームページで調査を行い、グリーンハウス2機種・エレコム・NB North Bayou・Loctek・Pixio・山善・HUANUO・サンワサプライ・Ergotronの10候補を調査しました。この中から、5つに絞りました。</p>
+<p>グリーンハウスの2機種とエレコムは、価格・耐荷重が近い候補と重複するため、代表の1つだけ残しました。2候補は価格の出典がはっきりしなかったため見送りました。サンワサプライの高耐荷重モデルは、価格が他の倍以上で高すぎるので見送りにしました。</p>
+
+<h2>レビューが低かった6商品も見ました</h2>
+<p>10候補とは別に、満足度が低い商品も6つ調べました。</p>
+<p>回転の軸（ラッチ）が機構的に動かしづらく、上下の傾き調整も難しいという声（<a href="https://kakaku.com/item/K0001552150/review/" target="_blank" rel="noopener">DPA-SS08BK・満足度2.50</a>）。ねじが緩んでぐらつき、定期的な調整が必要という声（満足度2.27）もありました。他にも「ネジの緩みやすさ」「パイプ周辺のグラつき」という声がある機種が複数ありました。</p>
+<p>このうち5機種はエレコムの別ラインでしたが、1機種（DPA-SS08BK）は候補にあったDPA-SS08WHと同じシリーズの色違いでした。低評価の要因が候補モデルにも当てはまる可能性は否定できません。</p>
+<p>もう1つ、NB North Bayouはスコア自体は高めでしたが、<a href="https://sakura-checker.jp/search/B01EHQL3LW/" target="_blank" rel="noopener">サクラチェッカー</a>というサイトでレビュー件数の異常な多さを指摘されていました。信頼性が気になったので見送りました。</p>
+<p>これで合計16候補を見た上での、5商品の比較になります。残った5つは、価格帯も特徴もはっきり分かれていたので、この記事はこの5つで比較します。</p>
+
+<h2>選び方の基準は2つだけ</h2>
+<p>調べてわかったのは、基準はシンプルということです。1つ目は「耐荷重」。モニターの重さに耐えられるか。2つ目は「対応モニターサイズ」。自分のモニターの大きさに合うか。VESA規格（取り付け穴の規格）は、今回比較した5商品すべて対応でした。ここは差になりにくいポイントです。</p>
+
+<h2>比較表</h2>
+<img class="compare-img" src="research-monitorarm/compare.png" alt="モニターアーム5商品の価格帯・耐荷重・対応サイズ・保証の比較表">
+<p class="compare-cap">価格帯・耐荷重・対応サイズ・保証の比較（価格帯は最安クラス〜最上位の5段階）</p>
+
+<div class="compare-recap">
+  <h3>グリーンハウス GH-AMCS01A</h3>
+  <ul><li>最安クラス</li><li>耐荷重：2〜6.5kg</li><li>対応サイズ：17〜27インチ</li><li>保証：3年</li></ul>
+  <h3>Loctek D8</h3>
+  <ul><li>手頃</li><li>耐荷重：9kg</li><li>対応サイズ：10〜30インチ</li><li>保証：記載なし</li></ul>
+  <h3>Pixio PS1S Wave</h3>
+  <ul><li>標準</li><li>耐荷重：9kg</li><li>対応サイズ：17〜32インチ</li><li>保証：基本2年</li></ul>
+  <h3>山善 AMA-S</h3>
+  <ul><li>上位</li><li>耐荷重：15kg</li><li>対応サイズ：〜34インチ</li><li>保証：記載なし</li></ul>
+  <h3>Ergotron LX</h3>
+  <ul><li>最上位</li><li>耐荷重：3.2〜11.3kg</li><li>対応サイズ：〜34インチ</li><li>保証：10年</li></ul>
+</div>
+
+<div class="product-h2" id="yasusa">
+  <p class="product-situation">軽いモニターを安く固定したい人へ</p>
+</div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">グリーンハウス GH-AMCS01A</p><span class="price-badge">最安クラス</span></div>
+<p class="trust-line">今回の中では一番手頃。耐荷重2〜6.5kg、対応サイズ17〜27インチ、VESA規格75/100mm対応です。</p>
+<img class="product-img" src="research-monitorarm/01_greenhouse.jpg" alt="グリーンハウス GH-AMCS01A">
+<div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>ノートPC用の外部モニター1枚など、軽めのモニターを安く固定したい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>27インチ超の大きいモニターや、重量級のモニターを使う人</li></ul></div>
+</div>
+<p class="conclusion-line">とにかく安さを優先するなら、この1台です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B00CWXRI44?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
+<p class="spec-text">保証は3年。価格を考えると手厚い方です。</p>
+
+<div class="product-h2" id="haba">
+  <p class="product-situation">小さいサブモニターもまとめて固定したい人へ</p>
+</div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">Loctek D8</p><span class="price-badge">手頃</span></div>
+<p class="trust-line">海外ブランドですが対応が幅広く、対応サイズ10〜30インチは5商品中もっとも広めです。</p>
+<img class="product-img" src="research-monitorarm/02_loctek-d8.webp" alt="Loctek D8">
+<div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>10インチ台の小さいサブモニターもまとめて固定したい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>国内メーカーの保証を重視したい人</li></ul></div>
+</div>
+<p class="conclusion-line">対応サイズの広さで選ぶなら、この1台です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B01CE5JB7Q?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
+<p class="spec-text">耐荷重は9kg。VESA規格は75/100mm対応です。保証期間は情報源に記載がありませんでした。無い情報は推測で埋めません。</p>
+
+<div class="product-h2" id="balance">
+  <p class="product-situation">幅広いサイズに対応したい人へ</p>
+</div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">Pixio PS1S Wave</p><span class="price-badge">標準</span></div>
+<p class="trust-line">耐荷重9kg、対応17〜32インチ。グロメット式（デスクに穴を開けて固定）にも対応しています。</p>
+<img class="product-img" src="research-monitorarm/03_pixio-ps1s.jpg" alt="Pixio PS1S Wave">
+<div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>17〜32インチと幅広いサイズに対応したい人</li><li>ウルトラワイドモニターを検討中の人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>34インチ超の大型モニターを1枚がっつり使いたい人</li></ul></div>
+</div>
+<p class="conclusion-line">バランス重視なら、この1台です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B07Q8TJ2KL?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
+<p class="spec-text">保証は基本2年（<a href="https://pixiogaming.jp/pages/warranty-1" target="_blank" rel="noopener">Pixio公式の保証ページ</a>より）。<a href="https://item.rakuten.co.jp/pixiogaming/psw1s/" target="_blank" rel="noopener">販売ページでは「最大5年保証」</a>とも表示されていますが、延長の条件は明記されていませんでした。</p>
+
+<div class="product-h2" id="ogata">
+  <p class="product-situation">大型モニター1枚をがっつり支えたい人へ</p>
+</div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">山善 AMA-S</p><span class="price-badge">上位</span></div>
+<p class="trust-line">耐荷重15kg・対応34インチまでと、5商品の中で一番タフです。VESA規格は75/100mm対応です。</p>
+<img class="product-img" src="research-monitorarm/04_yamazen-ama-s.jpg" alt="山善 AMA-S">
+<div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>34インチクラスの大型モニター1枚をがっつり支えたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>2本アームでデュアル構成にしたい人（シングル専用のため）</li></ul></div>
+</div>
+<p class="conclusion-line">耐荷重の高さを優先するなら、この1台です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0936W21KL?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
+<p class="spec-text">保証期間は公式ページに記載がありませんでした。なお、メーカー公式（山善ビズコム）では現在「販売終了」の表記があります（Amazonでの取り扱い・在庫は別です）。</p>
+
+<div class="product-h2" id="nagaku">
+  <p class="product-situation">長く使う1本に投資したい人へ</p>
+</div>
+<div class="product-card">
+<div class="product-name-row"><p class="product-name">Ergotron LX</p><span class="price-badge">最上位</span></div>
+<p class="trust-line">耐荷重3.2〜11.3kg、対応34インチまで。保証は10年で、5商品の中で断トツです。</p>
+<img class="product-img" src="research-monitorarm/05_ergotron-lx.jpg" alt="Ergotron LX">
+<div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>長く使いたい人</li><li>毎日の位置調整が多い人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>初期費用を抑えたい人</li><li>耐荷重だけで選びたい人</li></ul></div>
+</div>
+<p class="conclusion-line">価格より長期的な安心感を重視するなら、この1台です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CHHV2PY2?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+</div>
+<p class="spec-text">耐荷重だけ見ると山善AMA-Sより低めですが、その代わり保証は10年。特許の機構で軽い操作感も売りです。差は「何年使うか」にあります。</p>
+
+<details class="research-method"><summary>調べてみて驚いたこと</summary><div class="research-content">
+<p>10商品以上を比較していて、一番驚いたのはErgotronでした。耐荷重だけ見ると、山善AMA-Sの方が数字は上です。なのに価格は3倍近い。普通なら「割高」で終わる話です。</p>
+<p>でも調べていくと、差は耐荷重ではなく年数でした。保証10年という数字は、今回の5商品で断トツです。「今の耐荷重」だけで比べると見誤る商品がある、という発見でした。</p>
+<p>エレコムを調べていた時も驚くことがありました。低評価だった6機種のうち5機種は候補のDPA-SS08WHとは別モデルでしたが、残る1機種（DPA-SS08BK）は、候補と同じシリーズの色違いでした。色が違うだけで、耐荷重も対応サイズも同じモデルです。低評価の要因が候補にも当てはまる可能性は否定できません。「ブランドで選ぶ」だけでは足りないと実感しました。</p>
+</div></details>
+
+<h2>迷ったらこれ</h2>
+<p>ここまで読んでもまだ迷ったら、17〜32インチと幅広いサイズに対応するPixio PS1S Waveが最初の1台におすすめです。ウルトラワイドモニターを検討中でも対応幅の広さが安心材料になり、保証2年も付いているので外しにくい選択です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B07Q8TJ2KL?tag=miitobow-22" target="_blank" rel="noopener">Amazonで見る<span class="arrow">→</span></a>
+
+<h2>よくある質問</h2>
+<div class="faq-item"><p>Q. モニターアームは後付けできる？<br>A. はい。ほとんどの製品が既存のデスクに後から取り付けられる設計です。</p></div>
+<div class="faq-item"><p>Q. VESA規格が合わない場合は？<br>A. 変換プレートで対応できる場合もありますが、まずはモニター背面のネジ穴間隔を先に確認するのがおすすめです。</p></div>
+<div class="faq-item"><p>Q. 耐荷重ギリギリでも大丈夫？<br>A. 耐荷重の上限に近いと、時間とともに下がってくることがあります。余裕を持った耐荷重を選ぶのが無難です。</p></div>
+
+<h2>こんな記事も書いてます</h2>
+<ul class="related-list">
+  <li><a href="/articles/research-room.html">ミートボーの調査部屋（デスク周り・アウトドア用品の比較記事、全42本）</a></li>
+</ul>
+
+<h2>出典</h2>
+<ul class="sources">
+  <li>グリーンハウス GH-AMCS01A 公式製品ページ：<a href="https://www.green-house.co.jp/products/gh-amcs01a/" target="_blank" rel="noopener">green-house.co.jp</a></li>
+  <li>グリーンハウス GH-AMCS01AC-BK 価格比較（価格.com）：<a href="https://kakaku.com/item/K0001489544/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>Loctek D8 レビュー（価格・スペック記載）：<a href="https://shopdd.jp/e/loctek-monitor-arm-d8" target="_blank" rel="noopener">shopdd.jp</a></li>
+  <li>Pixio PS1S Wave 公式ストア（楽天）：<a href="https://item.rakuten.co.jp/pixiogaming/psw1s/" target="_blank" rel="noopener">楽天市場</a></li>
+  <li>Pixio 製品保証について（公式FAQ）：<a href="https://pixiogaming.jp/pages/warranty-1" target="_blank" rel="noopener">pixiogaming.jp</a></li>
+  <li>山善 AMA-S 公式（山善ビズコム）：<a href="https://yamazenbizcom.jp/item/86889.html" target="_blank" rel="noopener">yamazenbizcom.jp</a></li>
+  <li>Ergotron LX 価格・スペック情報：<a href="https://www.office-com.jp/products/detail.php?product_id=402004" target="_blank" rel="noopener">office-com.jp</a></li>
+  <li>エレコム DPA-SS08BK 価格・レビュー（価格.com）：<a href="https://kakaku.com/item/K0001552150/review/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>エレコム DPA-SS08WH 価格・スペック（価格.com）：<a href="https://kakaku.com/item/K0001552410/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>価格.com モニターアーム満足度ランキング：<a href="https://kakaku.com/pc/monitor-arm/ranking_0086/rating/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>サクラチェッカー（NB North Bayou関連商品）：<a href="https://sakura-checker.jp/search/B01EHQL3LW/" target="_blank" rel="noopener">sakura-checker.jp</a></li>
+</ul>
+
+</div>
+</body></html>
