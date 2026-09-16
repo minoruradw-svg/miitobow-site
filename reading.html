@@ -629,6 +629,12 @@
     border-radius: 999px;
   }
   .ai-news-card__period { font-size: 0.8rem; color: var(--ink-faint); }
+  .ai-news-card__preview {
+    display: block;
+    width: 100%;
+    border-radius: 14px;
+    margin: 4px 0 14px;
+  }
   .ai-news-list {
     display: flex;
     flex-direction: column;
@@ -3214,34 +3220,6 @@
     </a>
 
 
-    <h3 class="glass-chip" style="margin-top:0; margin-bottom:16px;">ミートボーの調査部屋</h3>
-    <div class="ai-news-card">
-      <div class="ai-news-card__head">
-        <span class="ai-news-card__badge">全42記事</span>
-        <span class="ai-news-card__period">価格.com・メーカー公式・サクラチェッカーを横断調査</span>
-      </div>
-      <ul class="ai-news-list" style="list-style:none; margin:0; padding:0;">
-        <li class="ai-news-item">
-          <details>
-            <summary>デスクチェア17候補を調査して分かった、コーディングに合う1脚</summary>
-            <div class="ai-news-item__body">
-              <p>価格.com・各メーカー公式・楽天/Yahoo!公式ストアで14候補、さらに低評価・要注意商品3つを加えた計17候補を調査。耐荷重・保証期間を軸に5商品へ絞り込み、それぞれ向いてる人・向いてない人を明記。</p>
-            </div>
-          </details>
-        </li>
-        <li class="ai-news-item">
-          <details>
-            <summary>モニターアーム16種類を調査して分かった、あなたに合う1本</summary>
-            <div class="ai-news-item__body">
-              <p>耐荷重・対応幅・バランス・大型モニター対応・耐久性の5軸で比較。スペックの言い換えだけで終わらせず、サクラチェッカーで除外した商品とその理由も明記。</p>
-            </div>
-          </details>
-        </li>
-      </ul>
-      <a class="ai-news-card__archive-link" href="/articles/research-room.html">調査部屋を見る →</a>
-    </div>
-
-
 <div class="link-col">
   <h3 class="glass-chip">読みもの</h3>
   <div class="bookshelf">
@@ -3268,6 +3246,34 @@
 </div>
     </div>
   </div>
+</div>
+
+<h3 class="glass-chip" style="margin-top:40px; margin-bottom:16px;">ミートボーの調査部屋</h3>
+<div class="ai-news-card">
+  <div class="ai-news-card__head">
+    <span class="ai-news-card__badge">全42記事</span>
+    <span class="ai-news-card__period">価格.com・メーカー公式・サクラチェッカーを横断調査</span>
+  </div>
+  <img class="ai-news-card__preview" src="/assets/research-room-preview.jpg" alt="3Dのミートボーの調査部屋。デスクや棚に並んだ道具をクリックすると比較記事が読める">
+  <ul class="ai-news-list" style="list-style:none; margin:0; padding:0;">
+    <li class="ai-news-item">
+      <details>
+        <summary>デスクチェア17候補を調査して分かった、コーディングに合う1脚</summary>
+        <div class="ai-news-item__body">
+          <p>価格.com・各メーカー公式・楽天/Yahoo!公式ストアで14候補、さらに低評価・要注意商品3つを加えた計17候補を調査。耐荷重・保証期間を軸に5商品へ絞り込み、それぞれ向いてる人・向いてない人を明記。</p>
+        </div>
+      </details>
+    </li>
+    <li class="ai-news-item">
+      <details>
+        <summary>モニターアーム16種類を調査して分かった、あなたに合う1本</summary>
+        <div class="ai-news-item__body">
+          <p>耐荷重・対応幅・バランス・大型モニター対応・耐久性の5軸で比較。スペックの言い換えだけで終わらせず、サクラチェッカーで除外した商品とその理由も明記。</p>
+        </div>
+      </details>
+    </li>
+  </ul>
+  <a class="ai-news-card__archive-link" href="/articles/research-room.html">調査部屋を見る →</a>
 </div>
 
 <style>
