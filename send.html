@@ -272,12 +272,28 @@
     var viewSection = document.getElementById("viewSection");
     viewSection.innerHTML = '<div class="card"><h2>読み込み中...</h2></div>';
 
-    fetch("/api/transfer/list?id=" + encodeURIComponent(id), { headers: authHeaders() })
-      .then(function (res) {
+    var viewToken = null;
+    var viewExp = null;
+
+    // <img src>やダウンロードリンクは自前ヘッダーを付けられないため、生のPINではなく
+    // このid限定・15分間だけ有効なトークンをURLに使う（履歴・ログに残っても被害が小さい）。
+    var tokenPromise = fetch("/api/transfer/token", {
+      method: "POST",
+      headers: authHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify({ id: id }),
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) { viewToken = data.token; viewExp = data.exp; });
+
+    Promise.all([
+      tokenPromise,
+      fetch("/api/transfer/list?id=" + encodeURIComponent(id), { headers: authHeaders() }).then(function (res) {
         if (!res.ok) throw new Error("読み込みに失敗しました");
         return res.json();
-      })
-      .then(function (data) {
+      }),
+    ])
+      .then(function (results) {
+        var data = results[1];
         var folderNames = Object.keys(data.folders || {});
         if (!folderNames.length) {
           viewSection.innerHTML = '<div class="card"><div class="empty">まだファイルがありません（消えている場合、転送から3日以上経っている可能性があります）</div></div>';
@@ -306,7 +322,8 @@
           saveBtn.className = "save-all-btn";
           saveBtn.textContent = "全部まとめて保存";
           saveBtn.addEventListener("click", function () {
-            var url = "/api/transfer/zip?id=" + encodeURIComponent(id) + "&folder=" + encodeURIComponent(folder) + "&pin=" + encodeURIComponent(currentPin);
+            var url = "/api/transfer/zip?id=" + encodeURIComponent(id) + "&folder=" + encodeURIComponent(folder) +
+              "&token=" + encodeURIComponent(viewToken) + "&exp=" + encodeURIComponent(viewExp);
             window.location.href = url;
           });
           head.appendChild(saveBtn);
@@ -317,7 +334,8 @@
           files.forEach(function (f) {
             var cell = document.createElement("div");
             var isVideo = f.contentType.indexOf("video/") === 0;
-            var fileUrl = "/api/transfer/file?key=" + encodeURIComponent(f.key) + "&pin=" + encodeURIComponent(currentPin);
+            var fileUrl = "/api/transfer/file?key=" + encodeURIComponent(f.key) +
+              "&token=" + encodeURIComponent(viewToken) + "&exp=" + encodeURIComponent(viewExp);
             var link = document.createElement("a");
             link.href = fileUrl + "&download=1";
             if (isVideo) {

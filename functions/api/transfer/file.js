@@ -1,11 +1,9 @@
 // GET /api/transfer/file?key=<id>/<folder>/<name>
 // 1ファイルをそのままストリーム返却する（プレビュー表示・個別ダウンロード用）。
 
-import { checkPin, unauthorized, validId, validSegment } from "./_lib.js";
+import { checkAuth, unauthorized, validId, validSegment } from "./_lib.js";
 
 export async function onRequestGet({ request, env }) {
-  if (!checkPin(request, env)) return unauthorized();
-
   const url = new URL(request.url);
   const key = url.searchParams.get("key") || "";
   const parts = key.split("/");
@@ -15,6 +13,7 @@ export async function onRequestGet({ request, env }) {
       headers: { "content-type": "application/json" },
     });
   }
+  if (!(await checkAuth(request, env, parts[0]))) return unauthorized();
 
   const obj = await env.MIITOBOW_TRANSFER.get(key);
   if (!obj) {
