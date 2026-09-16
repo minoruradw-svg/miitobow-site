@@ -2,6 +2,12 @@
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ファイル転送 - miitobow.com</title>
+<link rel="manifest" href="/send-manifest.json">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ファイル転送">
+<meta name="theme-color" content="#06C755">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -83,6 +89,15 @@
   .empty { text-align: center; color: #999; font-size: 14px; padding: 40px 0; }
   .tip { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.6; }
 
+  .ios-install-tip {
+    position: relative; background: #eefaf3; border: 1px solid #bfe3cf; border-radius: 12px;
+    padding: 12px 34px 12px 14px; font-size: 13px; color: #256b45; line-height: 1.7; margin-bottom: 18px;
+  }
+  .ios-install-close {
+    position: absolute; top: 6px; right: 8px; border: none; background: none; font-size: 18px;
+    color: #256b45; cursor: pointer; line-height: 1; padding: 4px;
+  }
+
   @media (prefers-color-scheme: dark) {
     body { background: #14201a; color: #e5efec; }
     .card { background: #1d2b23; border-color: #2a3d33; }
@@ -98,6 +113,13 @@
   <a class="home-link" href="/made.html">&larr; miitobow.comトップに戻る</a>
   <h1>📦 ファイル転送</h1>
   <p class="desc">PCとスマホの間で、フォルダごと一時的にファイルをやり取りする場所です。保存したファイルは3日後に自動で消えます。</p>
+
+  <div id="iosInstallTip" class="ios-install-tip" style="display:none;">
+    📲 このページをホーム画面に追加するには、下の
+    <svg width="15" height="19" viewBox="0 0 15 19" fill="none" style="vertical-align:-3px;"><path d="M7.5 1v11M3.5 5L7.5 1L11.5 5" stroke="#06C755" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="1" y="12" width="13" height="6" rx="1.5" stroke="#06C755" stroke-width="1.6"/></svg>
+    共有ボタン → 「ホーム画面に追加」を選んでください。
+    <button id="iosInstallClose" class="ios-install-close" aria-label="閉じる">×</button>
+  </div>
 
   <div id="lock">
     <p>PINコードを入力してください</p>
@@ -139,6 +161,27 @@
 
   var params = new URLSearchParams(location.search);
   var viewId = params.get("id");
+
+  // iOS Safariは「ホーム画面に追加」をJSから直接開けない（Appleの既知の仕様制限）ため、
+  // 未インストール時だけ「共有ボタンから追加してください」の案内を出す。
+  (function initIosInstallTip() {
+    var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isStandalone = window.navigator.standalone === true ||
+      (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    var dismissed = false;
+    try { dismissed = localStorage.getItem("miitobow-send-ios-tip-dismissed") === "1"; } catch (e) {}
+    var tip = document.getElementById("iosInstallTip");
+    if (isIos && !isStandalone && !dismissed) {
+      tip.style.display = "block";
+    }
+    var closeBtn = document.getElementById("iosInstallClose");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        tip.style.display = "none";
+        try { localStorage.setItem("miitobow-send-ios-tip-dismissed", "1"); } catch (e) {}
+      });
+    }
+  })();
 
   function authHeaders(extra) {
     var h = extra || {};
