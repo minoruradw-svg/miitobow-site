@@ -293,7 +293,14 @@
           var head = document.createElement("div");
           head.className = "folder-head";
           var title = document.createElement("div");
-          title.innerHTML = '<div class="folder-name">📁 ' + folder + '</div><div class="folder-meta">' + files.length + '件・' + fmtSize(totalSize) + '</div>';
+          var nameEl2 = document.createElement("div");
+          nameEl2.className = "folder-name";
+          nameEl2.textContent = "📁 " + folder;
+          var metaEl = document.createElement("div");
+          metaEl.className = "folder-meta";
+          metaEl.textContent = files.length + "件・" + fmtSize(totalSize);
+          title.appendChild(nameEl2);
+          title.appendChild(metaEl);
           head.appendChild(title);
           var saveBtn = document.createElement("button");
           saveBtn.className = "save-all-btn";
@@ -341,7 +348,14 @@
         });
       })
       .catch(function (err) {
-        viewSection.innerHTML = '<div class="card"><div class="empty">' + (err.message || "読み込みに失敗しました") + '</div></div>';
+        viewSection.innerHTML = "";
+        var errCard = document.createElement("div");
+        errCard.className = "card";
+        var errEmpty = document.createElement("div");
+        errEmpty.className = "empty";
+        errEmpty.textContent = err.message || "読み込みに失敗しました";
+        errCard.appendChild(errEmpty);
+        viewSection.appendChild(errCard);
       });
   }
 
