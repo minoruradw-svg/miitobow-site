@@ -1,0 +1,423 @@
+[
+  {
+    "id": "monitor-arm",
+    "title": "モニターアーム",
+    "category": "desk",
+    "model": "arm",
+    "summary": "16候補を調査して選んだ5商品",
+    "content": "モニターアーム16候補を調査。価格・耐荷重・対応サイズから、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-monitorarm",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "desk-chair",
+    "title": "デスクチェア",
+    "category": "desk",
+    "model": "chair",
+    "summary": "17候補を調査して選んだ5商品",
+    "content": "デスクチェア17候補を調査。価格・耐荷重・保証から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-deskchair",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "pc-speaker",
+    "title": "PCスピーカー",
+    "category": "desk",
+    "model": "speaker",
+    "summary": "14候補を調査して選んだ5商品",
+    "content": "作業用PCスピーカー14候補を調査。価格・出力・保証から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-pcspeaker",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "wireless-mouse",
+    "title": "ワイヤレスマウス",
+    "category": "desk",
+    "model": "mouse",
+    "summary": "13候補を調査して選んだ5商品",
+    "content": "作業用ワイヤレスマウス13候補を調査。接続方式・ボタン数・バッテリーから、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-mouse",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "standing-desk",
+    "title": "昇降デスク",
+    "category": "desk",
+    "model": "desk",
+    "summary": "9候補を調査して選んだ5商品",
+    "content": "昇降デスク9候補を調査。耐荷重・昇降範囲・電動/手動から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-standingdesk",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "split-keyboard",
+    "title": "分割キーボード",
+    "category": "desk",
+    "model": "keyboard",
+    "summary": "14候補を調査して選んだ5商品",
+    "content": "分割キーボード14候補を調査。接続方式・キー配列・保証から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-keyboard",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "laptop-stand",
+    "title": "ノートPCスタンド",
+    "category": "desk",
+    "model": "stand",
+    "summary": "22候補を調査して選んだ5商品",
+    "content": "ノートPCスタンド22種類を調査。価格・角度調整・対応サイズ・耐荷重から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-laptopstand",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "usb-hub",
+    "title": "USBハブ",
+    "category": "desk",
+    "model": "hub",
+    "summary": "19候補を調査して選んだ5商品",
+    "content": "USBハブ・ドッキングステーション19種類を調査。価格・ポート構成・映像出力・給電力から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-usbhub",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "desk-lamp",
+    "title": "デスクライト",
+    "category": "desk",
+    "model": "lamp",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "webcam",
+    "title": "Webカメラ",
+    "category": "desk",
+    "model": "camera",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "pc-monitor",
+    "title": "PCモニター",
+    "category": "desk",
+    "model": "monitor",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "headset",
+    "title": "ヘッドセット",
+    "category": "desk",
+    "model": "headphones",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "monitor-light",
+    "title": "モニターライト",
+    "category": "desk",
+    "model": "bar",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "desk-mat",
+    "title": "デスクマット",
+    "category": "desk",
+    "model": "mat",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "cable-organizer",
+    "title": "ケーブルオーガナイザー",
+    "category": "desk",
+    "model": "cable-route",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "wrist-rest",
+    "title": "リストレスト",
+    "category": "desk",
+    "model": "rest",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "cooling-pad",
+    "title": "ノートPC冷却パッド",
+    "category": "desk",
+    "model": "cooler",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "desk-rack",
+    "title": "デスク収納ラック",
+    "category": "desk",
+    "model": "rack",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "footrest",
+    "title": "フットレスト",
+    "category": "desk",
+    "model": "footrest",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "wireless-charger",
+    "title": "ワイヤレス充電器",
+    "category": "desk",
+    "model": "charger",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "trackball",
+    "title": "トラックボールマウス",
+    "category": "desk",
+    "model": "trackball",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "usb-fan",
+    "title": "卓上USB扇風機",
+    "category": "desk",
+    "model": "fan",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "copy-stand",
+    "title": "コピースタンド",
+    "category": "desk",
+    "model": "copy",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "chair-mat",
+    "title": "チェアマット",
+    "category": "desk",
+    "model": "mat",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "mobile-display",
+    "title": "モバイルディスプレイ",
+    "category": "desk",
+    "model": "monitor",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "tablet-stand",
+    "title": "タブレットスタンド",
+    "category": "desk",
+    "model": "tablet",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "lumbar-cushion",
+    "title": "ランバークッション",
+    "category": "desk",
+    "model": "cushion",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "ergo-mousepad",
+    "title": "エルゴノミクスマウスパッド",
+    "category": "desk",
+    "model": "mousepad",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "usb-mic",
+    "title": "USBマイク",
+    "category": "desk",
+    "model": "mic",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "earbuds",
+    "title": "完全ワイヤレスイヤホン",
+    "category": "life",
+    "model": "earbuds",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "humidifier",
+    "title": "卓上加湿器",
+    "category": "life",
+    "model": "humidifier",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "glasses",
+    "title": "ブルーライトカットメガネ",
+    "category": "life",
+    "model": "glasses",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "powerbank",
+    "title": "モバイルバッテリー",
+    "category": "life",
+    "model": "powerbank",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "bone-headphones",
+    "title": "骨伝導イヤホン",
+    "category": "life",
+    "model": "headphones",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "dehumidifier",
+    "title": "除湿機",
+    "category": "life",
+    "model": "dehumidifier",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "phone-stand",
+    "title": "スマホスタンド",
+    "category": "life",
+    "model": "phone",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "tent",
+    "title": "テント",
+    "category": "camp",
+    "model": "tent",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "lantern",
+    "title": "LEDランタン",
+    "category": "camp",
+    "model": "lantern",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "power-station",
+    "title": "ポータブル電源",
+    "category": "camp",
+    "model": "power",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "camp-chair",
+    "title": "キャンプチェア",
+    "category": "camp",
+    "model": "campchair",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "camp-mat",
+    "title": "インフレーダブルマット",
+    "category": "camp",
+    "model": "roll",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  },
+  {
+    "id": "fire-pit",
+    "title": "焚火台",
+    "category": "camp",
+    "model": "firepit",
+    "summary": "",
+    "content": "",
+    "url": "",
+    "affiliateUrl": ""
+  }
+]
+
