@@ -392,10 +392,11 @@
     "title": "テント",
     "category": "camp",
     "model": "tent",
-    "summary": "",
-    "content": "",
-    "url": "",
-    "affiliateUrl": ""
+    "summary": "2〜4人用のポール式テント12候補を調査。設営方式・広さの実質値から、選び方の違う5商品を比較しました。",
+    "content": "2〜4人用のポール式テント12候補を調査。設営方式・広さの実質値から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-tent",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-tent/theme.png"
   },
   {
     "id": "lantern",
