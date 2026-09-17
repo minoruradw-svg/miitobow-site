@@ -408,10 +408,11 @@
     "title": "LEDランタン",
     "category": "camp",
     "model": "lantern",
-    "summary": "",
-    "content": "",
-    "url": "",
-    "affiliateUrl": ""
+    "summary": "キャンプ用LEDランタン12候補を調査。電源方式・防水等級・点灯時間から、選び方の違う5商品を比較しました。",
+    "content": "キャンプ用LEDランタン12候補を調査。電源方式・防水等級・点灯時間から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-lantern",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-lantern/theme.png"
   },
   {
     "id": "power-station",
