@@ -495,6 +495,17 @@
     "themeImage": "https://miitobow.com/articles/research-powerstrip/theme.png"
   },
   {
+    "id": "shredder",
+    "title": "シュレッダー",
+    "category": "desk",
+    "model": "shredder",
+    "summary": "21候補を調査して選んだ5商品",
+    "content": "シュレッダー21候補を調査。安さ・静音性・連続使用時間・細断の細かさ・投入口の広さから、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-shredder",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-shredder/theme.png"
+  },
+  {
     "id": "headphonestand",
     "title": "ヘッドホンスタンド",
     "category": "desk",
@@ -504,5 +515,16 @@
     "url": "https://miitobow.com/articles/research-headphonestand",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-headphonestand/theme.png"
+  },
+  {
+    "id": "laptopbag",
+    "title": "ノートPCバッグ",
+    "category": "desk",
+    "model": "laptopbag",
+    "summary": "17候補を調査して選んだ5商品",
+    "content": "ノートPCバッグ（インナーケース）17候補を調査。安さ・耐衝撃・撥水と多機種対応・軽さ・収納力から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-laptopbag",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-laptopbag/theme.png"
   }
 ]
