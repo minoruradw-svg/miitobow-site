@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#254c3d">
+  <meta name="description" content="ミートボーをドット絵にした、ブラウザで遊べる横スクロールアクション。3つのステージと縦スクロールの追加ステージ「天空の庭」を収録。">
+  <link rel="canonical" href="https://miitobow.com/game/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ミートボーの よりみち日和 — MIITOBOW POCKET ADVENTURE">
+  <meta property="og:description" content="ミートボーをドット絵にした、ブラウザで遊べる横スクロールアクション。3つのステージと縦スクロールの追加ステージ「天空の庭」を収録。">
+  <meta property="og:url" content="https://miitobow.com/game/">
+  <meta property="og:image" content="https://miitobow.com/game/game-preview.png">
+  <meta property="og:site_name" content="miitobow">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ミートボーの よりみち日和 — MIITOBOW POCKET ADVENTURE">
+  <meta name="twitter:description" content="ミートボーをドット絵にした、ブラウザで遊べる横スクロールアクション。">
+  <meta name="twitter:image" content="https://miitobow.com/game/game-preview.png">
+  <title>ミートボーの よりみち日和 — MIITOBOW POCKET ADVENTURE</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="engine.js"></script>
+  <script defer src="art.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="ミートボーのよりみち日和 トップ"><canvas id="brand-avatar" width="32" height="40" aria-hidden="true"></canvas><span>miitobow<span class="brand-sub">POCKET ADVENTURE</span></span></a>
+      <span class="edition">ちいさな冒険、ひとやすみ。</span>
+      <div class="tools"><button id="sound" aria-label="サウンドをオン" aria-pressed="false">♫ <span>音 OFF</span></button><button id="help" aria-label="遊び方を開く">?</button></div>
+    </header>
+    <section class="heading"><div><p class="eyebrow">A LITTLE DETOUR, A LITTLE JOY.</p><h1>ミートボーの <span>よりみち日和</span><i>✦</i></h1></div><span class="badge">ORIGINAL PIXEL GAME <b>01</b></span></section>
+    <section class="game-shell" aria-label="ミートボーのアクションゲーム">
+      <div class="hud"><div class="level-label"><span id="level-number">01 / 03</span><b id="level-name">こもれび公園</b></div><div class="counters"><span id="hearts" aria-label="体力3">♥ ♥ ♥</span><span class="stars">✦ <b id="star-count">000</b></span><span class="keepsakes" title="落としもの">▤ <b id="item-count">0 / 3</b></span></div><button id="pause" aria-label="一時停止" disabled>Ⅱ</button></div>
+      <div class="screen" id="screen">
+        <canvas id="game" width="640" height="360" tabindex="0" aria-label="ゲーム画面。左右キーで移動、スペースでジャンプ、Xでキラリ。遊び方ボタンから詳細を確認できます。"></canvas>
+        <div class="location">MIITOBOW TOWN <span>↗</span></div>
+        <div id="overlay" class="overlay">
+          <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+            <p id="modal-kicker" class="eyebrow">LET'S TAKE THE LONG WAY HOME</p>
+            <canvas id="hero-avatar" width="96" height="112" aria-hidden="true"></canvas>
+            <h2 id="modal-title">今日は、よりみち。</h2>
+            <p id="modal-description">風に飛ばされた、3つの落としもの。<br>キラリを集めて、街の向こうへ届けよう。</p>
+            <div id="help-content" hidden><p>← → / A D：移動　　Space / ↑ / W：ジャンプ<br>ジャンプは長押しで高く。Shift：スケートで加速<br>X / K：キラリ　　Esc / P：一時停止</p><p id="help-rules">各エリアの落としものを3つ集めて、右端の家へ。<br>ベンチを通ると体力回復＆再開地点に。<br>落ちても何度でも挑戦できます。制限時間なし。</p><p>スマホは画面下のボタンで操作できます。</p></div>
+            <button id="primary" class="primary">よりみちをはじめる <span>→</span></button>
+            <button id="sky-start" class="sky-start">新ステージ「天空の庭」に挑戦 ↑</button>
+            <button id="secondary" class="secondary" hidden>はじめから遊ぶ</button>
+            <p id="modal-foot" class="modal-foot">3 STAGES + SKY CLIMB · NO TIME LIMIT</p>
+          </div>
+        </div>
+      </div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div class="game-footer"><span><i class="status-dot"></i><b id="objective">落としものを 3 つ集めて、お届けしよう。</b></span><span id="power-status">✦ キラリ READY</span></div>
+      <div class="touch-controls" aria-label="タッチ操作"><div><button data-action="left" aria-label="左へ移動">◀</button><button data-action="right" aria-label="右へ移動">▶</button></div><div><button data-action="dash" aria-label="スケートで加速" class="skate">加速</button><button data-action="spark" aria-label="キラリ" class="spark">✦</button><button data-action="jump" aria-label="ジャンプ" class="jump">↑<small>JUMP</small></button></div></div>
+    </section>
+    <section class="under-game"><p><kbd>←</kbd> <kbd>→</kbd> 移動 <kbd>SPACE</kbd> ジャンプ <kbd>X</kbd> キラリ <kbd>SHIFT</kbd> スケート</p><span>急がなくていい。ちょっと、冒険しよう。</span></section>
+    <nav class="stage-grid" aria-label="ステージ選択 01〜06">
+      <a class="stage-card" href="?stage=1" data-stage="0"><span class="stage-number">01</span><span class="stage-info"><small>WOODLAND WALK</small><b>こもれび公園</b><span>木の足場と葉っぱの渡し舟。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+      <a class="stage-card" href="?stage=2" data-stage="1"><span class="stage-number">02</span><span class="stage-info"><small>COFFEE STREETS</small><b>まどろみ商店街</b><span>ひさしを渡る、街のおさんぽ。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+      <a class="stage-card" href="?stage=3" data-stage="2"><span class="stage-number">03</span><span class="stage-info"><small>SUNSET LIBRARY</small><b>ゆうやけ図書館</b><span>広い水路を越えて図書館へ。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+      <a class="stage-card" href="?stage=4" data-stage="4"><span class="stage-number">04</span><span class="stage-info"><small>HARD · WINDMILL</small><b>風車の水路</b><span>移動足場・ベルト・突風。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+      <a class="stage-card" href="?stage=5" data-stage="5"><span class="stage-number">05</span><span class="stage-info"><small>EXPERT · GREENHOUSE</small><b>月あかりの温室</b><span>消える回廊と崩れる足場。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+      <a class="stage-card" href="?stage=6" data-stage="6"><span class="stage-number">06</span><span class="stage-info"><small>MASTER · CLOCKWORK</small><b>星降る時計塔</b><span>仕掛けが重なる最終試練。</span></span><span class="stage-go">遊ぶ ↗</span></a>
+    </nav>
+    <a class="sky-banner" href="?stage=sky" data-stage="3"><span class="sky-banner-icon">↑</span><span><small>EXTRA STAGE · SKY CLIMB</small><b>天空の庭</b><span>50段の浮遊遺跡。落ちたら、ずっと下へ。</span></span><strong>挑戦する ↗</strong></a>
+    <a class="sky-banner" href="?stage=sky2" data-stage="7"><span class="sky-banner-icon">↑↑</span><span><small>SKY CLIMB VER.2 · 100 STEPS</small><b>天空の庭 Ver.2</b><span>100段・4,800m。滑る床、消える足場、噴気の試練。</span></span><strong>挑戦する ↗</strong></a>
+    <footer class="page-footer"><span>© miitobow · a small world of everyday wonders</span><span>MADE FOR A LITTLE BREAK ✦</span></footer>
+  </main>
+</body>
+</html>
