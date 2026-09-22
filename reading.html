@@ -3251,7 +3251,7 @@
 <h3 class="glass-chip" style="margin-top:40px; margin-bottom:16px;">ミートボーの調査部屋</h3>
 <div class="ai-news-card">
   <div class="ai-news-card__head">
-    <span class="ai-news-card__badge">全42記事</span>
+    <span class="ai-news-card__badge" id="research-room-count">全42記事</span>
     <span class="ai-news-card__period">価格.com・メーカー公式・サクラチェッカーを横断調査</span>
   </div>
   <img class="ai-news-card__preview" src="/assets/research-room-preview.jpg" alt="3Dのミートボーの調査部屋。デスクや棚に並んだ道具をクリックすると比較記事が読める">
@@ -3275,6 +3275,20 @@
   </ul>
   <a class="ai-news-card__archive-link" href="/articles/research-room.html">調査部屋を見る →</a>
 </div>
+<script>
+(function () {
+  var badge = document.getElementById('research-room-count');
+  if (!badge) return;
+  fetch('/miitobow-research/articles.json')
+    .then(function (r) { return r.json(); })
+    .then(function (list) {
+      if (Array.isArray(list) && list.length) {
+        badge.textContent = '全' + list.length + '記事';
+      }
+    })
+    .catch(function () {});
+})();
+</script>
 
 <style>
   html.bookshelf-hover-capable .bookshelf:has(.bookshelf__hotspot--1:hover) .bookshelf__panel-default,
