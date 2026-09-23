@@ -102,7 +102,7 @@
   }
   .faq-item p { margin:0; }
   .related-list { font-size:14.5px; }
-  .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin:14px 0 10px;}.related-card{display:block;text-decoration:none;color:var(--article-ink);background:var(--article-card);border:1px solid var(--article-border);border-radius:12px;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}.related-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}.related-card img{width:100%;aspect-ratio:16/9;object-fit:contain;display:block;background:var(--article-soft);}.related-card span{display:block;padding:8px 10px;font-size:12.5px;font-weight:700;line-height:1.4;}.related-hub-link{display:inline-block;margin-top:4px;font-size:13px;color:var(--article-link);}
+  .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin:14px 0 10px;}.related-card{display:block;text-decoration:none;color:var(--article-ink);background:var(--article-card);border:1px solid var(--article-border);border-radius:12px;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}.related-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}.related-card img{width:100%;aspect-ratio:16/9;object-fit:contain;display:block;background:var(--article-soft);}.related-card span{display:block;padding:8px 10px;font-size:12.5px;font-weight:700;line-height:1.4;}.related-hub-link{display:block;margin-top:4px;font-size:13px;color:var(--article-link);text-align:center;}
   .related-list li { margin-bottom:10px; }
   .sources { font-size:12.5px; color:#888; }
   .sources li { margin-bottom:8px; word-break:break-all; line-height:1.6; }
@@ -489,7 +489,8 @@ a{color:var(--article-link)}
   <a class="related-card" href="/articles/research-cableorganizer"><img src="/articles/research-cableorganizer/theme.png" alt="ケーブルオーガナイザー" loading="lazy"><span>ケーブルオーガナイザー</span></a>
   <a class="related-card" href="/articles/research-deskchair"><img src="/articles/research-deskchair/theme.png" alt="デスクチェア" loading="lazy"><span>デスクチェア</span></a>
 </div>
-<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全48本）</a>
+<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">…</span>本）</a>
+<script>(function(){var el=document.getElementById('related-hub-count');if(!el)return;fetch('/miitobow-research/articles.json').then(function(r){return r.json();}).then(function(list){if(Array.isArray(list)&&list.length){el.textContent=list.length;}}).catch(function(){});})();</script>
 
 <h2>出典</h2>
 <ul class="sources">
