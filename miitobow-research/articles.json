@@ -526,5 +526,21 @@
     "url": "https://miitobow.com/articles/research-laptopbag",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-laptopbag/theme.png"
+  },
+  {
+    "id": "ironstove",
+    "title": "アイロンストーブ",
+    "category": "camp",
+    "model": "ironstove",
+    "summary": "11候補を調査して選んだ5商品",
+    "content": "灯り・暖房・簡単な調理まで1台でこなす「アイロンストーブ」11候補を調査。価格・燃焼時間・調理のしやすさ・収納のしやすさ・素材の本格感から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-ironstove",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-ironstove/theme.png",
+    "position": [
+      1.75,
+      0.08,
+      3.9
+    ]
   }
 ]
