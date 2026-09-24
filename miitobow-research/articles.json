@@ -528,6 +528,17 @@
     "themeImage": "https://miitobow.com/articles/research-laptopbag/theme.png"
   },
   {
+    "id": "airpurifier",
+    "title": "卓上空気清浄機",
+    "category": "desk",
+    "model": "airpurifier",
+    "summary": "13候補を調査して選んだ5商品",
+    "content": "卓上空気清浄機13候補を調査。安さ・定番の安心感・省スペース(USB給電)・花粉対策(HEPA)・デザイン性から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-airpurifier",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-airpurifier/theme.png"
+  },
+  {
     "id": "ironstove",
     "title": "アイロンストーブ",
     "category": "camp",
