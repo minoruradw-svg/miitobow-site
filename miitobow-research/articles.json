@@ -553,5 +553,16 @@
       0.08,
       3.9
     ]
+  },
+  {
+    "id": "circulator",
+    "title": "サーキュレーター",
+    "category": "desk",
+    "model": "circulator",
+    "summary": "12候補を調査して選んだ5商品",
+    "content": "サーキュレーター12候補を調査。畳数選びのしやすさ・静音性・足元の寒さ対策・お手入れのしやすさ・部屋干し対応から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-circulator",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-circulator/theme.png"
   }
 ]
