@@ -575,5 +575,16 @@
     "url": "https://miitobow.com/articles/research-sleepingbag",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-sleepingbag/theme.png"
+  },
+  {
+    "id": "coolerbox",
+    "title": "クーラーボックス",
+    "category": "camp",
+    "model": "coolerbox",
+    "summary": "11候補を調査して選んだ5商品",
+    "content": "ハード・ソフト・電動まで、クーラーボックス11候補を調査。価格・保冷日数・容量・持ち運びやすさから、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-coolerbox",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-coolerbox/theme.png"
   }
 ]
