@@ -1,5 +1,10 @@
 [
  {
+  "slug": "gasburner",
+  "path": "/articles/research-gasburner.html",
+  "date": "2026-10-04"
+ },
+ {
   "slug": "camptable",
   "path": "/articles/research-camptable.html",
   "date": "2026-10-02"
