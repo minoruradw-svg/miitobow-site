@@ -278,6 +278,31 @@ a{color:var(--article-link)}
  body{background:#1b2119}.purpose-links a:hover{background:#34462d}.review-voice{border-color:#584834}.product-stage .product-index{color:#397522}.lifestyle-feature .product-index{color:#d7edb8}
 }
 
+/* desktop-alignment（2026-10-07）: 広い画面で左端を1本にそろえ、本文を読みやすくする。スマホ幅は変えない。 */
+@media (min-width:1100px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){
+    width:auto;max-width:800px;margin-left:max(40px,calc((100% - 1120px)/2));margin-right:auto}
+  .wrap > :is(.article-opening,.purpose-nav,.pick-carousel,.compare-img){
+    width:auto;max-width:min(1120px,calc(100% - 80px));margin-left:max(40px,calc((100% - 1120px)/2));margin-right:max(40px,calc((100% - 1120px)/2))}
+  .wrap > .article-opening{padding-left:0;padding-right:0}
+  .opening-summary{max-width:680px;font-size:17px}
+  .wrap > p, .wrap > ul, .wrap > ol{font-size:18px;line-height:2}
+  .wrap > h2{font-size:26px;margin-top:44px}
+  .compare-recap ul{font-size:16px}
+  .compare-cap{font-size:13.5px;text-align:left}
+  .spec-text{font-size:17px;line-height:2}
+  .review-voice{font-size:16.5px}
+  .product-overlay{max-width:1120px;width:calc(100% - 80px);padding-left:0;padding-right:0}
+  .product-copy{width:46%;max-width:520px}
+  .product-copy .trust-line{font-size:17px;line-height:1.95;color:#3f4d43}
+  .product-copy .product-name{font-size:22px}
+  .product-stage > .product-img{right:max(40px,calc((100% - 1120px)/2));width:min(520px,44%)}
+  .product-details{max-width:1120px;width:calc(100% - 80px);padding-left:0;padding-right:0}
+  .product-details .fit-box .col{font-size:17px}
+  .product-details .concl, .product-details .conclusion-line{font-size:16.5px}
+  .home-link{padding-left:0;margin-left:max(40px,calc((100% - 1120px)/2));margin-right:auto}
+  .pick-copy h3{font-size:clamp(24px,2.3vw,34px);overflow-wrap:break-word;word-break:keep-all}
+}
 </style>
 </head>
 <body>
