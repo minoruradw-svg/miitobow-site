@@ -2,12 +2,21 @@
  "updated": "2026-10-07",
  "picks": [
   {
+   "slug": "tent",
+   "url": "/articles/research-tent",
+   "title": "テントを12候補調べて分かった、あなたに合う1台",
+   "category": "テント",
+   "theme": "/articles/research-tent/theme.png",
+   "at": "2026-10-07T19:30:00+09:00",
+   "video": "29"
+  },
+  {
    "slug": "monitorarm",
    "url": "/articles/research-monitorarm",
    "title": "モニターアーム16種類を調査して分かった、あなたに合う1本",
    "category": "モニターアーム",
    "theme": "/articles/research-monitorarm/theme.png",
-   "at": "2026-09-11T19:30:00+09:00",
+   "at": "2026-10-08T19:30:00+09:00",
    "video": "01"
   },
   {
@@ -16,7 +25,7 @@
    "title": "デスクチェア17候補を調査して分かった、コーディングに合う1脚",
    "category": "デスクチェア",
    "theme": "/articles/research-deskchair/theme.png",
-   "at": "2026-09-23T19:30:00+09:00",
+   "at": "2026-10-09T19:30:00+09:00",
    "video": "02"
   },
   {
@@ -25,7 +34,7 @@
    "title": "作業用PCスピーカー14種類を調査して分かった、あなたに合う1台",
    "category": "PCスピーカー",
    "theme": "/articles/research-pcspeaker/theme.png",
-   "at": "2026-09-24T19:30:00+09:00",
+   "at": "2026-10-10T19:30:00+09:00",
    "video": "03"
   },
   {
@@ -34,7 +43,7 @@
    "title": "ワイヤレスマウス17種類調査して分かった、あなたに合う1本",
    "category": "ワイヤレスマウス",
    "theme": "/articles/research-mouse/theme.png",
-   "at": "2026-09-25T19:30:00+09:00",
+   "at": "2026-10-11T19:30:00+09:00",
    "video": "04"
   },
   {
@@ -43,7 +52,7 @@
    "title": "昇降デスクを9種類調査して分かった、あなたに合う1台",
    "category": "昇降デスク",
    "theme": "/articles/research-standingdesk/theme.png",
-   "at": "2026-09-26T19:30:00+09:00",
+   "at": "2026-10-12T19:30:00+09:00",
    "video": "05"
   },
   {
@@ -52,7 +61,7 @@
    "title": "分割キーボード14種類を調査して分かった、あなたに合う1本",
    "category": "分割キーボード",
    "theme": "/articles/research-keyboard/theme.png",
-   "at": "2026-09-27T19:30:00+09:00",
+   "at": "2026-10-13T19:30:00+09:00",
    "video": "06"
   },
   {
@@ -61,7 +70,7 @@
    "title": "ノートPCスタンド22種類を調査して分かった、あなたに合う1台",
    "category": "ノートPCスタンド",
    "theme": "/articles/research-laptopstand/theme.png",
-   "at": "2026-09-28T19:30:00+09:00",
+   "at": "2026-10-14T19:30:00+09:00",
    "video": "07"
   },
   {
@@ -70,7 +79,7 @@
    "title": "USBハブ・ドッキングステーション19種類を調査して分かった、あなたに合う1台",
    "category": "USBハブ",
    "theme": "/articles/research-usbhub/theme.png",
-   "at": "2026-09-29T19:30:00+09:00",
+   "at": "2026-10-15T19:30:00+09:00",
    "video": "08"
   },
   {
@@ -79,7 +88,7 @@
    "title": "デスクライトを25候補調べて分かった、あなたに合う1台",
    "category": "デスクライト",
    "theme": "/articles/research-desklight/theme.png",
-   "at": "2026-09-30T19:30:00+09:00",
+   "at": "2026-10-16T19:30:00+09:00",
    "video": "09"
   },
   {
@@ -88,7 +97,7 @@
    "title": "オートフォーカスも顔認証も比較して分かった、後悔しないWebカメラの選び方",
    "category": "Webカメラ",
    "theme": "/articles/research-webcam/theme.png",
-   "at": "2026-10-01T19:30:00+09:00",
+   "at": "2026-10-17T19:30:00+09:00",
    "video": "10"
   },
   {
@@ -97,7 +106,7 @@
    "title": "PCモニターを14候補調べて分かった、あなたに合う1台",
    "category": "PCモニター",
    "theme": "/articles/research-monitor/theme.png",
-   "at": "2026-10-02T19:30:00+09:00",
+   "at": "2026-10-18T19:30:00+09:00",
    "video": "11"
   },
   {
@@ -106,7 +115,7 @@
    "title": "ヘッドセットを10候補調べて分かった、あなたに合う1台",
    "category": "ヘッドセット",
    "theme": "/articles/research-headset/theme.png",
-   "at": "2026-10-03T19:30:00+09:00",
+   "at": "2026-10-19T19:30:00+09:00",
    "video": "12"
   },
   {
@@ -115,7 +124,7 @@
    "title": "モニターライトを17候補調べて分かった、あなたに合う1台",
    "category": "モニターライト",
    "theme": "/articles/research-monitorlight/theme.png",
-   "at": "2026-10-04T19:30:00+09:00",
+   "at": "2026-10-20T19:30:00+09:00",
    "video": "13"
   },
   {
@@ -124,8 +133,44 @@
    "title": "デスクマットを18候補調べて分かった、あなたに合う1台",
    "category": "デスクマット",
    "theme": "/articles/research-deskmat/theme.png",
-   "at": "2026-10-05T19:30:00+09:00",
+   "at": "2026-10-21T19:30:00+09:00",
    "video": "14"
+  },
+  {
+   "slug": "cableorganizer",
+   "url": "/articles/research-cableorganizer",
+   "title": "ケーブルオーガナイザーを12候補調べて分かった、あなたに合う1台",
+   "category": "ケーブルオーガナイザー",
+   "theme": "/articles/research-cableorganizer/theme.png",
+   "at": "2026-10-22T19:30:00+09:00",
+   "video": "15"
+  },
+  {
+   "slug": "wristrest",
+   "url": "/articles/research-wristrest",
+   "title": "リストレストを14候補調べて分かった、あなたに合う1台",
+   "category": "リストレスト",
+   "theme": "/articles/research-wristrest/theme.png",
+   "at": "2026-10-23T19:30:00+09:00",
+   "video": "16"
+  },
+  {
+   "slug": "coolpad",
+   "url": "/articles/research-coolpad",
+   "title": "ノートPC冷却パッドを17候補調べて分かった、あなたに合う1台",
+   "category": "ノートPC冷却パッド",
+   "theme": "/articles/research-coolpad/theme.png",
+   "at": "2026-10-24T19:30:00+09:00",
+   "video": "17"
+  },
+  {
+   "slug": "deskrack",
+   "url": "/articles/research-deskrack",
+   "title": "デスク収納ラックを11候補調べて分かった、あなたに合う1台",
+   "category": "デスク収納ラック",
+   "theme": "/articles/research-deskrack/theme.png",
+   "at": "2026-10-25T19:30:00+09:00",
+   "video": "18"
   },
   {
    "slug": "footrest",
@@ -133,17 +178,206 @@
    "title": "フットレストを12候補調べて分かった、あなたに合う1台",
    "category": "フットレスト",
    "theme": "/articles/research-footrest/theme.png",
-   "at": "2026-10-06T19:30:00+09:00",
+   "at": "2026-10-26T19:30:00+09:00",
    "video": "19"
   },
   {
-   "slug": "tent",
-   "url": "/articles/research-tent",
-   "title": "テントを12候補調べて分かった、あなたに合う1台",
-   "category": "テント",
-   "theme": "/articles/research-tent/theme.png",
-   "at": "2026-10-07T19:30:00+09:00",
-   "video": "29"
+   "slug": "wirelesscharger",
+   "url": "/articles/research-wirelesscharger",
+   "title": "ワイヤレス充電器を8候補調べて分かった、あなたに合う1台",
+   "category": "ワイヤレス充電器",
+   "theme": "/articles/research-wirelesscharger/theme.png",
+   "at": "2026-10-27T19:30:00+09:00",
+   "video": "20"
+  },
+  {
+   "slug": "trackball",
+   "url": "/articles/research-trackball",
+   "title": "トラックボールマウスを12候補調べて分かった、あなたに合う1台",
+   "category": "トラックボールマウス",
+   "theme": "/articles/research-trackball/theme.png",
+   "at": "2026-10-28T19:30:00+09:00",
+   "video": "21"
+  },
+  {
+   "slug": "usbfan",
+   "url": "/articles/research-usbfan",
+   "title": "卓上USB扇風機を16候補調べて分かった、あなたに合う1台",
+   "category": "卓上USB扇風機",
+   "theme": "/articles/research-usbfan/theme.png",
+   "at": "2026-10-29T19:30:00+09:00",
+   "video": "22"
+  },
+  {
+   "slug": "copystand",
+   "url": "/articles/research-copystand",
+   "title": "コピースタンドを11候補調べて分かった、あなたに合う1台",
+   "category": "コピースタンド",
+   "theme": "/articles/research-copystand/theme.png",
+   "at": "2026-10-30T19:30:00+09:00",
+   "video": "23"
+  },
+  {
+   "slug": "chairmat",
+   "url": "/articles/research-chairmat",
+   "title": "チェアマットを16候補調べて分かった、あなたに合う1台",
+   "category": "チェアマット",
+   "theme": "/articles/research-chairmat/theme.png",
+   "at": "2026-10-31T19:30:00+09:00",
+   "video": "24"
+  },
+  {
+   "slug": "mobiledisplay",
+   "url": "/articles/research-mobiledisplay",
+   "title": "モバイルディスプレイを24候補調べて分かった、あなたに合う1台",
+   "category": "モバイルディスプレイ",
+   "theme": "/articles/research-mobiledisplay/theme.png",
+   "at": "2026-11-01T19:30:00+09:00",
+   "video": "25"
+  },
+  {
+   "slug": "tabletstand",
+   "url": "/articles/research-tabletstand",
+   "title": "タブレットスタンドを16候補調べて分かった、あなたに合う1台",
+   "category": "タブレットスタンド",
+   "theme": "/articles/research-tabletstand/theme.png",
+   "at": "2026-11-02T19:30:00+09:00",
+   "video": "26"
+  },
+  {
+   "slug": "earbuds",
+   "url": "/articles/research-earbuds",
+   "title": "完全ワイヤレスイヤホンを15候補調べて分かった、あなたに合う1台",
+   "category": "完全ワイヤレスイヤホン",
+   "theme": "/articles/research-earbuds/theme.png",
+   "at": "2026-11-03T19:30:00+09:00",
+   "video": "27"
+  },
+  {
+   "slug": "lumbar",
+   "url": "/articles/research-lumbar",
+   "title": "ランバークッションを16候補調べて分かった、あなたに合う1台",
+   "category": "ランバークッション",
+   "theme": "/articles/research-lumbar/theme.png",
+   "at": "2026-11-04T19:30:00+09:00",
+   "video": "28"
+  },
+  {
+   "slug": "humidifier",
+   "url": "/articles/research-humidifier",
+   "title": "卓上加湿器を12候補調べて分かった、あなたに合う1台",
+   "category": "卓上加湿器",
+   "theme": "/articles/research-humidifier/theme.png",
+   "at": "2026-11-05T19:30:00+09:00",
+   "video": "30"
+  },
+  {
+   "slug": "blueglasses",
+   "url": "/articles/research-blueglasses",
+   "title": "ブルーライトカットメガネを9候補調べて分かった、あなたに合う1本",
+   "category": "ブルーライトカットメガネ",
+   "theme": "/articles/research-blueglasses/theme.png",
+   "at": "2026-11-06T19:30:00+09:00",
+   "video": "31"
+  },
+  {
+   "slug": "powerbank",
+   "url": "/articles/research-powerbank",
+   "title": "モバイルバッテリーを13候補調べて分かった、あなたに合う1台",
+   "category": "モバイルバッテリー",
+   "theme": "/articles/research-powerbank/theme.png",
+   "at": "2026-11-07T19:30:00+09:00",
+   "video": "32"
+  },
+  {
+   "slug": "mousepad",
+   "url": "/articles/research-mousepad",
+   "title": "エルゴノミクスマウスパッドを10候補調べて分かった、あなたに合う1台",
+   "category": "エルゴノミクスマウスパッド",
+   "theme": "/articles/research-mousepad/theme.png",
+   "at": "2026-11-08T19:30:00+09:00",
+   "video": "33"
+  },
+  {
+   "slug": "usbmic",
+   "url": "/articles/research-usbmic",
+   "title": "USBマイクを10候補調べて分かった、あなたに合う1台",
+   "category": "USBマイク",
+   "theme": "/articles/research-usbmic/theme.png",
+   "at": "2026-11-09T19:30:00+09:00",
+   "video": "34"
+  },
+  {
+   "slug": "lantern",
+   "url": "/articles/research-lantern",
+   "title": "LEDランタンを12候補調べて分かった、あなたに合う1台",
+   "category": "LEDランタン",
+   "theme": "/articles/research-lantern/theme.png",
+   "at": "2026-11-10T19:30:00+09:00",
+   "video": "35"
+  },
+  {
+   "slug": "powerstation",
+   "url": "/articles/research-powerstation",
+   "title": "ポータブル電源を18候補調べて分かった、あなたに合う1台",
+   "category": "ポータブル電源",
+   "theme": "/articles/research-powerstation/theme.png",
+   "at": "2026-11-11T19:30:00+09:00",
+   "video": "36"
+  },
+  {
+   "slug": "campchair",
+   "url": "/articles/research-campchair",
+   "title": "キャンプチェアを15候補調べて分かった、あなたに合う1台",
+   "category": "キャンプチェア",
+   "theme": "/articles/research-campchair/theme.png",
+   "at": "2026-11-12T19:30:00+09:00",
+   "video": "37"
+  },
+  {
+   "slug": "boneear",
+   "url": "/articles/research-boneear",
+   "title": "骨伝導イヤホンを18候補調べて分かった、あなたに合う1台",
+   "category": "骨伝導イヤホン",
+   "theme": "/articles/research-boneear/theme.png",
+   "at": "2026-11-13T19:30:00+09:00",
+   "video": "38"
+  },
+  {
+   "slug": "dehumidifier",
+   "url": "/articles/research-dehumidifier",
+   "title": "除湿機を13候補調べて分かった、あなたに合う1台",
+   "category": "除湿機",
+   "theme": "/articles/research-dehumidifier/theme.png",
+   "at": "2026-11-14T19:30:00+09:00",
+   "video": "39"
+  },
+  {
+   "slug": "phonestand",
+   "url": "/articles/research-phonestand",
+   "title": "スマホスタンドを10候補調べて分かった、あなたに合う1台",
+   "category": "スマホスタンド",
+   "theme": "/articles/research-phonestand/theme.png",
+   "at": "2026-11-15T19:30:00+09:00",
+   "video": "40"
+  },
+  {
+   "slug": "inflatemat",
+   "url": "/articles/research-inflatemat",
+   "title": "インフレーダブルマットを16候補調べて分かった、あなたに合う1台",
+   "category": "インフレーダブルマット",
+   "theme": "/articles/research-inflatemat/theme.png",
+   "at": "2026-11-16T19:30:00+09:00",
+   "video": "41"
+  },
+  {
+   "slug": "firepit",
+   "url": "/articles/research-firepit",
+   "title": "焚き火台を10候補調べて分かった、あなたに合う1台",
+   "category": "焚火台",
+   "theme": "/articles/research-firepit/theme.png",
+   "at": "2026-11-17T19:30:00+09:00",
+   "video": "43"
   }
  ]
 }
