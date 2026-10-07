@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>課金の用意 手順書</title>
+<style>
+  :root {
+    --bg: #f6f2e8; --card: #ffffff; --ink: #183d39; --muted: #5d6b64; --line: #e3dcc9;
+    --accent: #8c6d33; --accent-bg: #f3e8c8; --ok: #2f7a4a; --warn-bg: #fdecea; --warn: #a3301f;
+    --chip: #e8efe9; --code-bg: #12302d; --code-ink: #f5f1e7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f2623; --card: #16312e; --ink: #f1ede0; --muted: #b6c4bb; --line: #2a4944;
+      --accent: #d6bd7b; --accent-bg: #2c3d2f; --ok: #7fd49a; --warn-bg: #3b1d1a; --warn: #ff9b8a;
+      --chip: #23403b; --code-bg: #0a1b19; --code-ink: #f5f1e7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    line-height: 1.8; font-size: 17px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1 { font-size: 26px; margin: 8px 0 4px; line-height: 1.4; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  h2 { font-size: 20px; margin: 0 0 8px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 18px 14px; margin: 16px 0;
+  }
+  .step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .num {
+    flex: none; width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700;
+    display: grid; place-items: center; font-size: 18px;
+  }
+  .time { margin-left: auto; font-size: 13px; color: var(--muted); }
+  ol, ul { padding-left: 1.3em; margin: 8px 0; }
+  li { margin: 6px 0; }
+  b, strong { font-weight: 700; }
+  .chip {
+    display: inline-block; background: var(--chip); border: 1px solid var(--line);
+    border-radius: 8px; padding: 0 8px; font-weight: 600; white-space: nowrap;
+  }
+  a { color: var(--accent); }
+  .note { background: var(--accent-bg); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 15.5px; }
+  .warn { background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 15.5px; font-weight: 600; }
+  .ok { color: var(--ok); font-weight: 600; }
+  pre {
+    background: var(--code-bg); color: var(--code-ink); border-radius: 10px;
+    padding: 12px 14px; overflow-x: auto; font-size: 14px; line-height: 1.6; margin: 10px 0;
+  }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .copy { float: right; margin: -4px 0 0 8px; }
+  button {
+    font: inherit; font-size: 14px; border: 1px solid var(--accent); background: transparent;
+    color: var(--accent); border-radius: 8px; padding: 2px 12px; cursor: pointer;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-weight: 600; }
+  .check input { width: 22px; height: 22px; margin-top: 4px; accent-color: var(--ok); }
+  table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; width: 38%; }
+  .progress { position: sticky; top: 0; background: var(--bg); padding: 8px 0; z-index: 2; font-size: 14px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .bar { height: 8px; background: var(--chip); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .small { font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<div class="progress">
+  進み具合：<span id="done">0</span> / <span id="total">0</span> 完了
+  <div class="bar"><i id="bar"></i></div>
+</div>
+
+<h1>課金（月490円・初回1か月無料）の用意 手順書</h1>
+<p class="lead">アプリ内の購入（サブスク）を動かすための、<b>あなたの作業</b>です。コードの用意と、サーバー（購入の通知を受ける窓口）は、もう済んでいます。<br>
+<b>A → B → C の順</b>に、上から押すだけです。所要時間は<b>約1〜1.5時間</b>（Aの「契約」は、Appleの確認で、数日かかることがあります）。</p>
+
+<div class="warn">⚠ <b>秘密の値は、チャット・メール・スクリーンショットに載せない</b>でください：<br>
+・RevenueCat に入れる「合言葉」（下の手順B5のファイルの中身）<br>
+・App Store Connect の「アプリ内課金のキー（.p8）」<br>
+画面に<b>直接入れるだけ</b>にして、私（Claude）にも、値は見せないでください。</div>
+
+<div class="card">
+  <h2>先に知っておくこと</h2>
+  <ul>
+    <li><b>商品の名前（ID）は、これで固定</b>：<span class="chip">papakue_pro_monthly</span>（コードがこの名前を前提にしています。<b>1文字でも違うと、購入画面に出ません</b>）。</li>
+    <li>サブスクの<b>グループは1つ・商品は1つ</b>。<b>無料トライアルは、この1つにだけ</b>付けます。「戻ってきた人向けの無料（ウィンバック）」は、<b>設定しない</b>でください（無料の抜け穴になるため）。</li>
+    <li>開発用ビルドでの購入は、自動で<b>テスト（Sandbox）</b>になり、お金は、かかりません。</li>
+    <li>RevenueCat は、月の売上が約2,500ドルを超えるまで<b>無料</b>です（登録時に、料金の最新の条件を、一度見てください）。</li>
+  </ul>
+</div>
+
+<h2 style="margin-top:28px">A．App Store Connect（Apple）</h2>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A1</span><h2>「有料App契約」を有効にする（最優先）</h2><span class="time">約20分＋Appleの確認待ち</span></div>
+  <ol>
+    <li><a href="https://appstoreconnect.apple.com" target="_blank" rel="noopener">appstoreconnect.apple.com</a> にサインインし、<span class="chip">ビジネス</span>（または「契約、税金、銀行口座」）を開く。</li>
+    <li><span class="chip">有料App</span>（Paid Apps）の契約の行で、<span class="chip">契約を確認</span> → 同意する。</li>
+    <li>同じ画面で、<b>銀行口座</b>と<b>税務情報</b>を入れる（画面の案内どおり）。</li>
+    <li>状態が <span class="chip">有効</span> になれば完了。<b>「処理中」の間は、待つだけ</b>で大丈夫です（数日かかることがあります）。</li>
+  </ol>
+  <div class="note">すでに「有効」なら、何もせず次へ。ここが有効でないと、商品が、購入テストでも出てこないことがあります。</div>
+  <label class="check"><input type="checkbox"> 「有料App」の契約が「有効」になった（または、申し込んで待っている）</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A2</span><h2>サブスクのグループと商品を作る</h2><span class="time">約15分</span></div>
+  <ol>
+    <li>App Store Connect の <span class="chip">アプリ</span> → <span class="chip">パパクエ</span> を開く。</li>
+    <li>左のメニューの <span class="chip">収益化</span> → <span class="chip">サブスクリプション</span>（Monetization → Subscriptions）を押す。</li>
+    <li><span class="chip">グループを作成</span>。<b>参照名</b>＝<code>パパクエ プロ</code>。</li>
+    <li>グループの中で <span class="chip">サブスクリプションを作成</span>：<br>
+      ・<b>参照名</b>＝<code>パパクエ プロ（月額）</code><br>
+      ・<b>製品ID</b>＝<button class="copy" data-copy="pid">コピー</button><code id="pid">papakue_pro_monthly</code>（<b>あとで変更できません</b>。コピーして貼ってください）</li>
+    <li><b>サブスクリプション期間</b>＝<span class="chip">1か月</span>。</li>
+    <li><b>サブスクリプション価格</b>の<span class="chip">価格を追加</span>で、<b>日本・490円</b>を選ぶ（ほかの国は、自動で換算されます）。</li>
+    <li><b>ローカリゼーション</b>（日本語）：<br>
+      ・<b>表示名</b>＝<code>パパクエ プロ</code><br>
+      ・<b>説明</b>＝<code>おねがいを送り放題・広告なし</code>（短くてOK）</li>
+  </ol>
+  <label class="check"><input type="checkbox"> グループ「パパクエ プロ」と、商品 papakue_pro_monthly（1か月・490円）を作った</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A3</span><h2>「初回1か月無料」を付ける</h2><span class="time">約5分</span></div>
+  <ol>
+    <li>さっきの商品の画面で、<span class="chip">サブスクリプション価格</span>の近くにある<span class="chip">導入オファー</span>（Introductory Offers）を押す。</li>
+    <li><span class="chip">オファーを作成</span> → <b>種類＝<span class="chip">無料</span></b>、<b>期間＝<span class="chip">1か月</span></b>（画面で「1か月」が選べることを確認）、<b>対象の国＝すべて</b>、<b>開始日＝今日</b>、<b>終了日＝なし</b>。</li>
+    <li><b>「プロモーションオファー」「オファーコード」「ウィンバックオファー」は、作らない</b>でください。</li>
+  </ol>
+  <div class="note">「1か月」が選べない場合は、選べる期間を、私に教えてください（アプリの文言を合わせます）。</div>
+  <label class="check"><input type="checkbox"> 導入オファー（無料・1か月）を付けた</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A4</span><h2>アプリ内課金のキー（.p8）を作る（RevenueCat用）</h2><span class="time">約5分</span></div>
+  <ol>
+    <li>App Store Connect の <span class="chip">ユーザとアクセス</span> → <span class="chip">統合</span>（Integrations）→ <span class="chip">アプリ内課金</span>（In-App Purchase）を押す。</li>
+    <li><span class="chip">キーを生成</span>（または＋）。名前は、<code>papakuebilling</code>（半角英数字だけ）。</li>
+    <li><b>.p8 をダウンロード</b>する（<b>ダウンロードは、一度だけ</b>です。Mac・パソコンの、わかる場所に保存）。</li>
+    <li>画面の <b>キーID</b> と、上に出ている <b>発行者ID（Issuer ID）</b> を、メモ帳などに控える（<b>B-2で使います</b>）。</li>
+  </ol>
+  <div class="warn">⚠ この .p8 は、<b>通知用の .p8（papakuepush）とは、別のもの</b>です。混ぜないでください。</div>
+  <label class="check"><input type="checkbox"> アプリ内課金のキー（.p8）をダウンロードし、キーIDと発行者IDを控えた</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A5</span><h2>テスト用のApple ID（Sandbox）を作る</h2><span class="time">約5分</span></div>
+  <ol>
+    <li>App Store Connect の <span class="chip">ユーザとアクセス</span> → <span class="chip">Sandbox</span> → <span class="chip">テスター</span>（Test Accounts）→ ＋。</li>
+    <li>名前・メールアドレス・パスワード・国（日本）を入れる。<b>メールは、実際に使っていない、新しいもの</b>（例：自分のアドレスの「＋」付き <code>○○+test1@gmail.com</code> でも可。<b>本物のApple IDは、使えません</b>）。</li>
+    <li>iPhoneで、<span class="chip">設定</span> → <span class="chip">デベロッパ</span> → <span class="chip">Sandbox Apple アカウント</span> にサインインする（「デベロッパ」の項目は、Xcodeでアプリを入れたことがあるiPhoneに出ます）。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> テスト用のApple IDを作った（iPhoneへのサインインは、C-2のときで大丈夫）</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">A6</span><h2>（任意・おすすめ）小規模事業者プログラムに登録</h2><span class="time">約5分</span></div>
+  <ol>
+    <li><a href="https://developer.apple.com/app-store/small-business-program/" target="_blank" rel="noopener">App Store Small Business Program</a> のページから、申し込む。</li>
+    <li>承認されると、Appleの手数料が<b>30% → 15%</b>になります（年間の売上が100万ドルまでの開発者が対象）。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> 申し込んだ（または、今回は、しないことにした）</label>
+</div>
+
+<h2 style="margin-top:28px">B．RevenueCat</h2>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">B1</span><h2>アカウントとプロジェクトを作る</h2><span class="time">約5分</span></div>
+  <ol>
+    <li><a href="https://app.revenuecat.com/signup" target="_blank" rel="noopener">app.revenuecat.com</a> で、アカウントを作る（無料）。</li>
+    <li><span class="chip">Create new project</span> → 名前＝<code>パパクエ</code>。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> RevenueCat のプロジェクトを作った</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">B2</span><h2>アプリ（iOS）を足して、Appleと連携する</h2><span class="time">約10分</span></div>
+  <ol>
+    <li>プロジェクトで <span class="chip">Apps</span>（または「+ New」）→ <span class="chip">App Store</span> を選ぶ。</li>
+    <li><b>App name</b>＝<code>パパクエ</code>、<b>Bundle ID</b>＝<button class="copy" data-copy="bid">コピー</button><code id="bid">com.miitobow.todoQuest</code>。</li>
+    <li><b>In-app purchase key</b> の欄に、A4の <b>.p8 をアップロード</b>し、<b>キーID</b>と<b>発行者ID</b>を入れる。</li>
+    <li>保存する。「接続できた」などの表示が出れば成功。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> iOSアプリを足して、A4のキーを登録した</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">B3</span><h2>商品・権利・オファリングを作る</h2><span class="time">約10分</span></div>
+  <ol>
+    <li><span class="chip">Product catalog</span> → <span class="chip">Products</span> → 商品を足す（<b>Import</b>で、App Store Connect から取り込めます）。<b>製品ID</b>＝<code>papakue_pro_monthly</code>。</li>
+    <li><span class="chip">Entitlements</span> → <span class="chip">New</span>：<b>識別子</b>＝<button class="copy" data-copy="ent">コピー</button><code id="ent">pro</code>（<b>小文字で pro</b>。コードがこの名前を見ています）。作ったあと、この権利に<b>商品 papakue_pro_monthly を紐づける</b>。</li>
+    <li><span class="chip">Offerings</span> → <span class="chip">New</span>：<b>識別子</b>＝<code>default</code>。中に<span class="chip">Package</span>を足し、<b>種類＝Monthly（月額）</b>、<b>商品＝papakue_pro_monthly</b>。</li>
+    <li>この <code>default</code> を、<b>「現在（Current）」のオファリングにする</b>（最初の1つは、自動でなります。違っていたら切り替える）。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> 商品・権利（pro）・オファリング（default／Monthly）をつなげた</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">B4</span><h2>「公開SDKキー」を控える</h2><span class="time">約2分</span></div>
+  <ol>
+    <li><span class="chip">Project settings</span> → <span class="chip">API keys</span> を押す。</li>
+    <li>iOSアプリ用の <b>Public app-specific API key</b>（<code>appl_</code> から始まる文字列）を、コピーする。<b>「Secret」と書かれたキーでは、ありません</b>。</li>
+    <li>あとで、C-1で、Macのファイルに、貼ります（<b>チャットには、貼らない</b>）。</li>
+  </ol>
+  <label class="check"><input type="checkbox"> 公開SDKキー（appl_…）をコピーした</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">B5</span><h2>Webhook（購入の通知）を登録する</h2><span class="time">約5分</span></div>
+  <ol>
+    <li><span class="chip">Integrations</span> → <span class="chip">Webhooks</span> → <span class="chip">Add new webhook</span>（または「+ New」）。</li>
+    <li><b>Webhook URL</b>（このまま貼る）：
+      <pre><button class="copy" data-copy="url">コピー</button><code id="url">https://asia-northeast1-papakue-dev.cloudfunctions.net/revenueCatWebhook</code></pre></li>
+    <li><b>Authorization header value</b>（合言葉）：パソコンの、次のファイルを<b>メモ帳で開き、中身の1行を、まるごとコピーして貼る</b>。
+      <pre><code>P:\work\apps\todo-quest\firebase\.secrets\revenuecat-webhook-auth.txt</code></pre>
+      <span class="small">（Macで作業する時は、このファイルの中身を、私が別の方法で、渡します。教えてください。）</span></li>
+    <li><b>Environment</b>＝<span class="chip">Production and Sandbox</span>（両方）。<b>Events</b>＝すべて。<b>App</b>＝パパクエ。</li>
+    <li>保存して、<span class="chip">Send test event</span>（テスト送信）を押す。<b>成功（200）と出れば、OK</b>。</li>
+  </ol>
+  <div class="note">うまくいかない時（401などの失敗）は、<b>失敗の表示を、私に教えてください</b>（合言葉の値は、見せなくてOK）。</div>
+  <label class="check"><input type="checkbox"> Webhookを登録し、テスト送信が成功した</label>
+</div>
+
+<h2 style="margin-top:28px">C．アプリにキーを渡して、試す</h2>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">C1</span><h2>MacBookに、公開SDKキーを置く</h2><span class="time">約3分</span></div>
+  <p>MacBookの「ターミナル」で、次を<b>1行ずつ</b>実行します。<code>ここにキー</code>の部分だけ、B4でコピーしたキー（<code>appl_…</code>）に置き換えてください（<b>この1行を、チャットには、貼らないで</b>ください）。</p>
+  <pre><button class="copy" data-copy="c1">コピー</button><code id="c1">echo 'ここにキー' &gt; ~/.todoquest-revenuecat-ios-key</code></pre>
+  <p class="small">この1行は、キーを、Macのホームフォルダの隠しファイルに保存するだけです（Gitには、入りません）。</p>
+  <label class="check"><input type="checkbox"> Macに、キーのファイルを置いた</label>
+</div>
+
+<div class="card" data-step>
+  <div class="step-head"><span class="num">C2</span><h2>アプリを更新して、購入を試す</h2><span class="time">約10分</span></div>
+  <ol>
+    <li>いつものコマンドで更新：
+      <pre><button class="copy" data-copy="c2">コピー</button><code id="c2">cd ~/Developer/todo-quest &amp;&amp; git pull --autostash &amp;&amp; sh tool/mac_run.sh</code></pre></li>
+    <li>iPhoneで、<b>Sandboxのテスト用Apple ID</b>にサインインしておく（A5）。</li>
+    <li>アプリのパーティ画面で、「プランを見る」から購入画面を開く。<b>価格・「初回1か月無料」</b>が出ているか、見る。</li>
+    <li>購入する（Sandboxなので、お金は、かかりません。Sandboxでは、1か月が、数分に縮みます）。</li>
+    <li>購入のあと、「反映中…」を経て、<b>有料の表示になる</b>ことを確認する。</li>
+  </ol>
+  <div class="warn">⚠ 購入を試す<b>アプリのアカウント</b>は、<b>奥さまや、あなたの普段のアカウントではなく</b>、できれば、<b>試験用のもの</b>で。理由：Sandboxの購入が<b>期限切れ</b>になると、そのアカウントの「有料の印」が、外れます（普段の、手動の印を使っているアカウントで、試すと、印が消えます。その時は、私が付け直します）。</div>
+  <label class="check"><input type="checkbox"> 購入画面が出て、Sandboxで購入でき、有料になった</label>
+</div>
+
+<div class="card">
+  <h2>うまくいかない時（先に、よくある原因）</h2>
+  <ul>
+    <li><b>購入画面が「準備中」のまま</b>：C1のキーが入っていない／アプリを、<code>sh tool/mac_run.sh</code> 以外で起動した。</li>
+    <li><b>価格が出ない・商品が見つからない</b>：A1の契約が「有効」でない／商品IDの綴りの違い／B3でオファリングが「現在」でない。</li>
+    <li><b>購入できたのに、有料にならない</b>：B5のWebhookが、失敗している（RevenueCatの Webhooks の履歴を見る）。<b>表示を、私に教えてください</b>。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>公開する前に（今は、やらなくて大丈夫）</h2>
+  <ul>
+    <li>本番用の Firebase プロジェクトを作ったら、<b>Webhookの関数と合言葉</b>も、そちらに同じように用意します（私がやります）。RevenueCat には、<b>本番用のWebhookを、もう1つ</b>足します。</li>
+    <li>審査に出す時は、<b>サブスクを、アプリのバージョンに紐づけて</b>、審査用のスクリーンショット（購入画面）を付けます（私が、手順を出します）。</li>
+  </ul>
+</div>
+
+<p class="small">この手順書は、<code>docs/billing-setup.html</code> です。チェックの印は、このブラウザに保存されます（消えても、困りません）。</p>
+
+</main>
+<script>
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check input'));
+  var total = boxes.length;
+  document.getElementById('total').textContent = total;
+  var KEY = 'papakuebilling-setup-v1';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    document.getElementById('done').textContent = n;
+    document.getElementById('bar').style.width = (total ? (100 * n / total) : 0) + '%';
+  }
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener('change', function () {
+      saved[i] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+  Array.prototype.forEach.call(document.querySelectorAll('button.copy'), function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-copy'));
+      var text = el ? el.textContent : '';
+      function done() { btn.textContent = 'コピーしました'; setTimeout(function () { btn.textContent = 'コピー'; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
