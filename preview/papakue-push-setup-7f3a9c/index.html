@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>通知の用意（.p8）手順書</title>
+<style>
+  :root {
+    --bg: #f6f2e8; --card: #ffffff; --ink: #183d39; --muted: #5d6b64; --line: #e3dcc9;
+    --accent: #8c6d33; --accent-bg: #f3e8c8; --ok: #2f7a4a; --warn-bg: #fdecea; --warn: #a3301f;
+    --chip: #e8efe9; --code-bg: #12302d; --code-ink: #f5f1e7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f2623; --card: #16312e; --ink: #f1ede0; --muted: #b6c4bb; --line: #2a4944;
+      --accent: #d6bd7b; --accent-bg: #2c3d2f; --ok: #7fd49a; --warn-bg: #3b1d1a; --warn: #ff9b8a;
+      --chip: #23403b; --code-bg: #0a1b19; --code-ink: #f5f1e7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    line-height: 1.8; font-size: 17px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1 { font-size: 26px; margin: 8px 0 4px; line-height: 1.4; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  h2 { font-size: 20px; margin: 0 0 8px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 18px 14px; margin: 16px 0;
+  }
+  .step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .num {
+    flex: none; width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700;
+    display: grid; place-items: center; font-size: 18px;
+  }
+  .time { margin-left: auto; font-size: 13px; color: var(--muted); }
+  ol, ul { padding-left: 1.3em; margin: 8px 0; }
+  li { margin: 6px 0; }
+  b, strong { font-weight: 700; }
+  .chip {
+    display: inline-block; background: var(--chip); border: 1px solid var(--line);
+    border-radius: 8px; padding: 0 8px; font-weight: 600; white-space: nowrap;
+  }
+  a { color: var(--accent); }
+  .note { background: var(--accent-bg); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 15.5px; }
+  .warn { background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 15.5px; font-weight: 600; }
+  .ok { color: var(--ok); font-weight: 600; }
+  pre {
+    background: var(--code-bg); color: var(--code-ink); border-radius: 10px;
+    padding: 12px 14px; overflow-x: auto; font-size: 14px; line-height: 1.6; margin: 10px 0;
+  }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .copy { float: right; margin: -4px 0 0 8px; }
+  button {
+    font: inherit; font-size: 14px; border: 1px solid var(--accent); background: transparent;
+    color: var(--accent); border-radius: 8px; padding: 2px 12px; cursor: pointer;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-weight: 600; }
+  .check input { width: 22px; height: 22px; margin-top: 4px; accent-color: var(--ok); }
+  table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; width: 38%; }
+  .progress { position: sticky; top: 0; background: var(--bg); padding: 8px 0; z-index: 2; font-size: 14px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .bar { height: 8px; background: var(--chip); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .small { font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<div class="progress">
+  進み具合：<span id="done">0</span> / <span id="total">0</span> 完了
+  <div class="bar"><i id="bar"></i></div>
+</div>
+
+<h1>通知の用意（.p8）手順書</h1>
+<p class="lead">パーティの「おねがい」や「パーティクエスト」が届いたとき、相手のスマホが鳴るようにするための設定です。<br>
+所要時間は、<b>約15分</b>。<b>いちばん上から順に、押すだけ</b>で終わります。コードの用意は、もう済んでいます。</p>
+
+<div class="warn">⚠ <b>.p8 のファイルは、秘密の鍵</b>です。チャット・メール・スクリーンショット・GitHub には、貼らない・載せない。<br>
+Firebase の画面に、<b>直接アップロードするだけ</b>にしてください（私＝Claude にも、中身は見せないでください）。</div>
+
+<div class="card">
+  <h2>先に用意するもの</h2>
+  <ul>
+    <li>パソコンのブラウザ（Mac でも Windows でも OK。<b>最初から最後まで、同じパソコン</b>で行うのが楽です）</li>
+    <li>Apple Developer のアカウント（いつもの Apple ID）</li>
+    <li>Firebase のアカウント（<span class="chip">papakue-dev</span> を開ける Google アカウント）</li>
+  </ul>
+</div>
+
+<!-- ステップ1 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">1</span><h2>Apple：アプリの「通知」をオンにする</h2><span class="time">約3分</span></div>
+  <ol>
+    <li>ブラウザで <a href="https://developer.apple.com/account" target="_blank" rel="noopener">developer.apple.com/account</a> を開き、サインインする。</li>
+    <li><span class="chip">Certificates, IDs &amp; Profiles</span>（証明書、ID、プロファイル）を押す。</li>
+    <li>左のメニューの <span class="chip">Identifiers</span>（識別子）を押す。</li>
+    <li>一覧から <span class="chip">com.miitobow.todoQuest</span> を探して押す（パパクエのアプリです。<b>Watch や Widget のものではなく、末尾が何も付かないもの</b>）。</li>
+    <li>下へスクロールして、機能の一覧から <span class="chip">Push Notifications</span> を探し、<b>チェックを入れる</b>。</li>
+    <li>右上の <span class="chip">Save</span>（保存）を押す。確認が出たら <span class="chip">Confirm</span>。</li>
+  </ol>
+  <div class="note">すでにチェックが入っていたら、何もせず、次へ進んで大丈夫です。</div>
+  <label class="check"><input type="checkbox"> 「Push Notifications」にチェックを入れて、保存した</label>
+</div>
+
+<!-- ステップ2 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">2</span><h2>Apple：通知用の鍵（.p8）を作る</h2><span class="time">約4分</span></div>
+  <ol>
+    <li>同じ画面の左のメニューで <span class="chip">Keys</span>（キー）を押す。</li>
+    <li>青い <span class="chip">＋</span>（新しいキー）を押す。</li>
+    <li><b>Key Name</b>（名前）に、<code>papakue-push</code> と入れる（名前は何でもよい）。</li>
+    <li>一覧から <span class="chip">Apple Push Notifications service (APNs)</span> に<b>チェックを入れる</b>。</li>
+    <li><span class="chip">Continue</span> → <span class="chip">Register</span>（登録）を押す。</li>
+    <li><span class="chip">Download</span>（ダウンロード）を押して、<b>.p8 のファイルを保存</b>する。
+      <div class="warn">⚠ ダウンロードできるのは、<b>この1回だけ</b>です。画面を閉じる前に、必ず保存してください。</div>
+    </li>
+    <li>保存先は、<b>パパクエのフォルダの外</b>にします。おすすめ：<code>P:\work\secrets\</code>（なければ作る）。ファイル名は、<code>AuthKey_XXXXXXXXXX.p8</code> のような形です。</li>
+    <li>画面に出ている <b>Key ID</b>（10文字の英数字）を、<b>メモ</b>する。</li>
+  </ol>
+  <div class="note">
+    Apple の APNs キーは、<b>1つのアカウントで、2つまで</b>しか作れません。「上限です」と出たら、すでにあるキーが、ほかのアプリ用に使われていないか確認してください。迷ったら、その画面を、私に見せてください。
+  </div>
+  <label class="check"><input type="checkbox"> .p8 を保存して、Key ID をメモした</label>
+</div>
+
+<!-- ステップ3 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">3</span><h2>Apple：Team ID を調べる</h2><span class="time">約1分</span></div>
+  <ol>
+    <li>Apple Developer の画面の右上の、<b>アカウント名の下</b>に、<b>Team ID</b>（10文字の英数字）が出ています。</li>
+    <li>出ていないときは、左のメニューの <span class="chip">Membership details</span>（メンバーシップの詳細）を開くと、<b>Team ID</b> があります。</li>
+    <li>その10文字を、<b>メモ</b>する。</li>
+  </ol>
+  <div class="note">Key ID と Team ID は、<b>鍵そのものではない</b>ので、メモしたり、私に伝えたりして大丈夫です。</div>
+  <label class="check"><input type="checkbox"> Team ID をメモした</label>
+</div>
+
+<!-- ステップ4 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">4</span><h2>Firebase：鍵をアップロードする</h2><span class="time">約3分</span></div>
+  <ol>
+    <li>ブラウザで <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">console.firebase.google.com</a> を開き、<span class="chip">papakue-dev</span> を押す。</li>
+    <li>左上の <b>歯車のマーク</b> →  <span class="chip">プロジェクトの設定</span> を押す。</li>
+    <li>上のタブから <span class="chip">Cloud Messaging</span> を押す。</li>
+    <li>下へスクロールして、<span class="chip">Apple アプリの構成</span> の欄を探す。</li>
+    <li><span class="chip">com.miitobow.todoQuest</span> の中の、<span class="chip">APNs 認証キー</span> の <span class="chip">アップロード</span> を押す。</li>
+    <li>手順2で保存した <b>.p8 ファイル</b>を選ぶ。</li>
+    <li><b>キー ID</b> に、手順2の<b>Key ID</b>を入れる。<b>チーム ID</b> に、手順3の<b>Team ID</b>を入れる。</li>
+    <li><span class="chip">アップロード</span> を押す。</li>
+  </ol>
+  <p class="ok">うまくいくと、「APNs 認証キー」の欄に、キー ID が表示されます。</p>
+  <div class="note">「APNs 開発用認証キー」と「APNs 本番用認証キー」の2つの欄があるときは、<b>両方</b>に、同じ .p8 を、同じ Key ID と Team ID で、アップロードしてください（開発用のビルドにも、本番用のビルドにも、通知が届くようにするためです）。</div>
+  <label class="check"><input type="checkbox"> Firebase に .p8 をアップロードして、キー ID が表示された</label>
+</div>
+
+<!-- ステップ5 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">5</span><h2>Mac：アプリを入れ直す</h2><span class="time">約10分（ビルドの時間）</span></div>
+  <p>iPhone を Mac につないで、次のコマンドを入力します（コピーして貼り付け）。</p>
+  <button class="copy" data-copy="cmd1">コピー</button>
+  <pre><code id="cmd1">cd ~/Developer/todo-quest &amp;&amp; git stash &amp;&amp; git checkout m2-firebase &amp;&amp; git pull &amp;&amp; sh tool/mac_run.sh</code></pre>
+  <ul>
+    <li>初めて「通知の権限」を足したビルドなので、Xcode が<b>署名の設定を、自動で更新</b>します。少し時間がかかります。</li>
+    <li>「プロビジョニングプロファイルに、通知の権限がない」という意味のエラーが出たら、<b>手順1が済んでいるか</b>を確かめます。それでも出たら、そのエラーを、私に貼ってください。</li>
+  </ul>
+  <label class="check"><input type="checkbox"> Mac で入れ直して、アプリが起動した</label>
+</div>
+
+<!-- ステップ6 -->
+<div class="card" data-step>
+  <div class="step-head"><span class="num">6</span><h2>確認：通知が鳴るか試す</h2><span class="time">約5分</span></div>
+  <ol>
+    <li>パーティ画面の上に、<span class="chip">通知をオンにする</span> が出ていたら、押して、OS の確認で<b>「許可」</b>する。
+      <br><span class="small">（もう許可済みなら、小さく「依頼が来たら、通知でお知らせします。」と出ています。それで OK です）</span></li>
+    <li><b>2台のスマホ</b>（あなたと奥様）で、同じパーティに入っている状態にする。</li>
+    <li>どちらかが、もう一方に<b>「おねがい」または「パーティクエスト」を送る</b>。</li>
+    <li><b>受け取る側のスマホが鳴れば、成功</b>です。アプリを閉じていても、鳴ります。</li>
+    <li>相手が「受ける」を押すと、<b>送った側が鳴ります</b>。</li>
+  </ol>
+  <div class="note">通知の文は「新しいおねがいが届きました。」などです。<b>おねがいの題（中身）は、通知に入りません</b>（ロック画面で、他の人に見えても困らないようにするためです）。</div>
+  <label class="check"><input type="checkbox"> 相手のスマホが鳴った</label>
+</div>
+
+<div class="card">
+  <h2>うまくいかないとき</h2>
+  <table>
+    <tr><th>症状</th><td>見るところ</td></tr>
+    <tr><th>「通知をオンにする」が出ない</th><td>すでに許可済み（小さく「通知でお知らせします」と出る）か、断られている（「設定を開く」が出る）。断られているときは、iPhone の「設定」→「パパクエ」→「通知」をオンにする。</td></tr>
+    <tr><th>「登録できませんでした」と出る</th><td>通信を確かめる。手順4の、Firebase の鍵のアップロードが、うまくいっているか（キー ID が表示されているか）。</td></tr>
+    <tr><th>登録はできたのに、鳴らない</th><td>手順4の <b>Key ID と Team ID の入れ間違い</b>が、いちばん多い原因。入れ直してアップロードし直す。それでもだめなら、Firebase の <span class="chip">Functions</span> の <span class="chip">onRequestWritten</span> のログを、私に見せる。</td></tr>
+    <tr><th>アプリを開いている間だけ、出ない</th><td>仕様どおり、画面の上に出る設定です。出ない場合は、私に報告してください。</td></tr>
+    <tr><th>同じ端末で、別の人でサインインしたら、前の人の通知が来る</th><td>サインアウトで、その端末の登録は外れます。外れていない場合は、報告してください。</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>公開する前に（今は、やらなくて大丈夫）</h2>
+  <ul>
+    <li>本番用の Firebase プロジェクトを作ったら、そこにも、<b>同じ .p8</b> を、同じ手順（手順4）で登録する。</li>
+    <li>配布用のビルドでは、アプリの通知の設定（<code>aps-environment</code>）は、Xcode が<b>自動で本番用に切り替えます</b>。</li>
+  </ul>
+</div>
+
+<p class="small">この手順書は、<code>docs/push-setup.html</code>（同じ内容の文章版：<code>docs/push-setup.md</code>）です。チェックの印は、このブラウザに保存されます（消えても、困りません）。</p>
+
+</main>
+<script>
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check input'));
+  var total = boxes.length;
+  document.getElementById('total').textContent = total;
+  var KEY = 'papakue-push-setup-v1';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    document.getElementById('done').textContent = n;
+    document.getElementById('bar').style.width = (total ? (100 * n / total) : 0) + '%';
+  }
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener('change', function () {
+      saved[i] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+  Array.prototype.forEach.call(document.querySelectorAll('button.copy'), function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-copy'));
+      var text = el ? el.textContent : '';
+      function done() { btn.textContent = 'コピーしました'; setTimeout(function () { btn.textContent = 'コピー'; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
