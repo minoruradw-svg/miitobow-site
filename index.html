@@ -1941,7 +1941,24 @@
     .intro-card__text { font-size: 0.88rem; }
   }
 
-</style><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a605107326c34038b1f102869faccfd7"}'></script><!-- End Cloudflare Web Analytics --></head>
+</style><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a605107326c34038b1f102869faccfd7"}'></script><!-- End Cloudflare Web Analytics --><style id="today-picks-css">
+  .today-picks{display:none;margin:0;padding:8px 32px 64px;background:transparent}
+  .today-picks.on{display:block}
+  .today-picks .tp-inner{max-width:1080px;margin:0 auto;padding:0 24px}
+  .today-picks .tp-label{display:flex;align-items:center;gap:10px;margin:0 6px 16px;font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--forest,#3e7a57)}
+  .today-picks .tp-label::before{content:"";width:22px;height:2px;background:var(--lime,#6fae2f);border-radius:2px}
+  .today-picks .tp-card{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:26px;align-items:center;padding:20px 26px 20px 20px;border-radius:24px;background:var(--glass-bg);border:1px solid var(--glass-border);text-decoration:none;color:inherit;box-shadow:0 10px 30px rgba(40,60,40,.08)}
+  .today-picks .tp-card img{width:100%;height:auto;display:block;border-radius:16px;background:#e6e1d4}
+  .today-picks .tp-kicker{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.16em;color:var(--forest,#3e7a57);margin-bottom:6px}
+  .today-picks .tp-cat{font-size:1.5rem;font-weight:800;line-height:1.35;margin:0 0 6px}
+  .today-picks .tp-desc{font-size:.8rem;line-height:1.6;color:var(--ink-soft,#6b6459);margin:0 0 12px}
+  .today-picks .tp-cta{font-size:.78rem;font-weight:700;color:var(--forest,#3e7a57)}
+  .today-picks .tp-more{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-top:14px;padding:0 6px;font-size:.74rem;color:var(--ink-soft,#6b6459)}
+  .today-picks .tp-more a{color:inherit;border:1px solid var(--glass-border);background:var(--glass-bg);border-radius:999px;padding:4px 12px;text-decoration:none}
+  .today-picks .tp-more a.tp-room{color:var(--forest,#3e7a57);font-weight:700}
+  @media (max-width:640px){.today-picks{padding:0 0 48px}.today-picks .tp-inner{padding:0 46px}.today-picks .tp-card{grid-template-columns:1fr;gap:16px;padding:18px}.today-picks .tp-more{padding:0}.today-picks .tp-label{margin-left:0}}
+</style>
+</head>
 <body>
 
 <nav class="site-nav">
@@ -1951,6 +1968,7 @@
     <a href="/why.html" class="site-nav__link">WHY FOLLOW</a>
     <a href="/reading.html" class="site-nav__link">読み物</a>
     <a href="/made.html" class="site-nav__link">作ったもの</a>
+    <a href="/articles/research-room" class="site-nav__link">調査部屋</a>
   </div>
 </nav>
 
@@ -3249,6 +3267,7 @@
   </div>
 </div>
 
+<section class="today-picks" id="todayPicks" aria-label="今日の調査"><div class="tp-inner"></div></section>
 <section class="atmosphere">
   <video autoplay muted loop playsinline poster="/assets/miitobow-aurora-poster.jpg">
     <source src="/assets/miitobow-aurora.mp4" type="video/mp4">
@@ -3369,5 +3388,23 @@
 })();
 </script>
 
+<script id="today-picks-js">
+(function(){
+  var H=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  fetch('/assets/today-picks.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+    if(!d||!d.picks||!d.picks.length)return;
+    var now=Date.now(), picks=d.picks.slice().sort(function(a,b){return Date.parse(a.at)-Date.parse(b.at)});
+    var past=picks.filter(function(p){return Date.parse(p.at)<=now});
+    if(!past.length)return;
+    var cur=past[past.length-1], recent=past.slice(-6,-1).reverse();
+    var sec=document.getElementById('todayPicks'), w=sec.querySelector('.tp-inner');
+    w.innerHTML='<p class="tp-label">今日の調査</p><a class="tp-card" href="'+H(cur.url)+'">'+(cur.theme?'<img src="'+H(cur.theme)+'" alt="" loading="lazy">':'')
+      +'<div><span class="tp-kicker">TODAY’S PICK</span><p class="tp-cat">'+H(cur.category)+'</p>'
+      +'<p class="tp-desc">Instagramの動画で紹介した、商品の比較記事です。</p><span class="tp-cta">記事を読む →</span></div></a>'
+      +'<div class="tp-more"><span>最近の調査</span>'+recent.map(function(p){return '<a href="'+H(p.url)+'">'+H(p.category)+'</a>'}).join('')+'<a class="tp-room" href="/articles/research-room">調査部屋で、ほかの記事も見る →</a></div>';
+    sec.classList.add('on');
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

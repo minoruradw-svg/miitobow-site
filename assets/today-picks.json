@@ -1,0 +1,149 @@
+{
+ "updated": "2026-10-07",
+ "picks": [
+  {
+   "slug": "monitorarm",
+   "url": "/articles/research-monitorarm",
+   "title": "モニターアーム16種類を調査して分かった、あなたに合う1本",
+   "category": "モニターアーム",
+   "theme": "/articles/research-monitorarm/theme.png",
+   "at": "2026-09-11T19:30:00+09:00",
+   "video": "01"
+  },
+  {
+   "slug": "deskchair",
+   "url": "/articles/research-deskchair",
+   "title": "デスクチェア17候補を調査して分かった、コーディングに合う1脚",
+   "category": "デスクチェア",
+   "theme": "/articles/research-deskchair/theme.png",
+   "at": "2026-09-23T19:30:00+09:00",
+   "video": "02"
+  },
+  {
+   "slug": "pcspeaker",
+   "url": "/articles/research-pcspeaker",
+   "title": "作業用PCスピーカー14種類を調査して分かった、あなたに合う1台",
+   "category": "PCスピーカー",
+   "theme": "/articles/research-pcspeaker/theme.png",
+   "at": "2026-09-24T19:30:00+09:00",
+   "video": "03"
+  },
+  {
+   "slug": "mouse",
+   "url": "/articles/research-mouse",
+   "title": "ワイヤレスマウス17種類調査して分かった、あなたに合う1本",
+   "category": "ワイヤレスマウス",
+   "theme": "/articles/research-mouse/theme.png",
+   "at": "2026-09-25T19:30:00+09:00",
+   "video": "04"
+  },
+  {
+   "slug": "standingdesk",
+   "url": "/articles/research-standingdesk",
+   "title": "昇降デスクを9種類調査して分かった、あなたに合う1台",
+   "category": "昇降デスク",
+   "theme": "/articles/research-standingdesk/theme.png",
+   "at": "2026-09-26T19:30:00+09:00",
+   "video": "05"
+  },
+  {
+   "slug": "keyboard",
+   "url": "/articles/research-keyboard",
+   "title": "分割キーボード14種類を調査して分かった、あなたに合う1本",
+   "category": "分割キーボード",
+   "theme": "/articles/research-keyboard/theme.png",
+   "at": "2026-09-27T19:30:00+09:00",
+   "video": "06"
+  },
+  {
+   "slug": "laptopstand",
+   "url": "/articles/research-laptopstand",
+   "title": "ノートPCスタンド22種類を調査して分かった、あなたに合う1台",
+   "category": "ノートPCスタンド",
+   "theme": "/articles/research-laptopstand/theme.png",
+   "at": "2026-09-28T19:30:00+09:00",
+   "video": "07"
+  },
+  {
+   "slug": "usbhub",
+   "url": "/articles/research-usbhub",
+   "title": "USBハブ・ドッキングステーション19種類を調査して分かった、あなたに合う1台",
+   "category": "USBハブ",
+   "theme": "/articles/research-usbhub/theme.png",
+   "at": "2026-09-29T19:30:00+09:00",
+   "video": "08"
+  },
+  {
+   "slug": "desklight",
+   "url": "/articles/research-desklight",
+   "title": "デスクライトを25候補調べて分かった、あなたに合う1台",
+   "category": "デスクライト",
+   "theme": "/articles/research-desklight/theme.png",
+   "at": "2026-09-30T19:30:00+09:00",
+   "video": "09"
+  },
+  {
+   "slug": "webcam",
+   "url": "/articles/research-webcam",
+   "title": "オートフォーカスも顔認証も比較して分かった、後悔しないWebカメラの選び方",
+   "category": "Webカメラ",
+   "theme": "/articles/research-webcam/theme.png",
+   "at": "2026-10-01T19:30:00+09:00",
+   "video": "10"
+  },
+  {
+   "slug": "monitor",
+   "url": "/articles/research-monitor",
+   "title": "PCモニターを14候補調べて分かった、あなたに合う1台",
+   "category": "PCモニター",
+   "theme": "/articles/research-monitor/theme.png",
+   "at": "2026-10-02T19:30:00+09:00",
+   "video": "11"
+  },
+  {
+   "slug": "headset",
+   "url": "/articles/research-headset",
+   "title": "ヘッドセットを10候補調べて分かった、あなたに合う1台",
+   "category": "ヘッドセット",
+   "theme": "/articles/research-headset/theme.png",
+   "at": "2026-10-03T19:30:00+09:00",
+   "video": "12"
+  },
+  {
+   "slug": "monitorlight",
+   "url": "/articles/research-monitorlight",
+   "title": "モニターライトを17候補調べて分かった、あなたに合う1台",
+   "category": "モニターライト",
+   "theme": "/articles/research-monitorlight/theme.png",
+   "at": "2026-10-04T19:30:00+09:00",
+   "video": "13"
+  },
+  {
+   "slug": "deskmat",
+   "url": "/articles/research-deskmat",
+   "title": "デスクマットを18候補調べて分かった、あなたに合う1台",
+   "category": "デスクマット",
+   "theme": "/articles/research-deskmat/theme.png",
+   "at": "2026-10-05T19:30:00+09:00",
+   "video": "14"
+  },
+  {
+   "slug": "footrest",
+   "url": "/articles/research-footrest",
+   "title": "フットレストを12候補調べて分かった、あなたに合う1台",
+   "category": "フットレスト",
+   "theme": "/articles/research-footrest/theme.png",
+   "at": "2026-10-06T19:30:00+09:00",
+   "video": "19"
+  },
+  {
+   "slug": "tent",
+   "url": "/articles/research-tent",
+   "title": "テントを12候補調べて分かった、あなたに合う1台",
+   "category": "テント",
+   "theme": "/articles/research-tent/theme.png",
+   "at": "2026-10-07T19:30:00+09:00",
+   "video": "29"
+  }
+ ]
+}
