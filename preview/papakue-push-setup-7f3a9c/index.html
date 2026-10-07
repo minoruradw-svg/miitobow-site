@@ -116,7 +116,7 @@ Firebase の画面に、<b>直接アップロードするだけ</b>にしてく�
   <ol>
     <li>同じ画面の左のメニューで <span class="chip">Keys</span>（キー）を押す。</li>
     <li>青い <span class="chip">＋</span>（新しいキー）を押す。</li>
-    <li><b>Key Name</b>（名前）に、<code>papakue-push</code> と入れる（名前は何でもよい）。</li>
+    <li><b>Key Name</b>（名前）に、<code>papakuepush</code> と入れる（<b>ハイフン・スペース・記号は使えません</b>。半角の英数字だけ）。</li>
     <li>一覧から <span class="chip">Apple Push Notifications service (APNs)</span> に<b>チェックを入れる</b>。</li>
     <li><span class="chip">Continue</span> → <span class="chip">Register</span>（登録）を押す。</li>
     <li><span class="chip">Download</span>（ダウンロード）を押して、<b>.p8 のファイルを保存</b>する。
@@ -217,7 +217,7 @@ Firebase の画面に、<b>直接アップロードするだけ</b>にしてく�
   var boxes = Array.prototype.slice.call(document.querySelectorAll('.check input'));
   var total = boxes.length;
   document.getElementById('total').textContent = total;
-  var KEY = 'papakue-push-setup-v1';
+  var KEY = 'papakuepush-setup-v1';
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
   function update() {
