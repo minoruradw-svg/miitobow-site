@@ -641,5 +641,16 @@
     "url": "https://miitobow.com/articles/research-tarp",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-tarp/theme.png"
+  },
+  {
+    "id": "headlamp",
+    "title": "ヘッドライト",
+    "category": "camp",
+    "model": "headlamp",
+    "summary": "12候補を調査して選ぶ5商品",
+    "content": "明るさ・重さ・防水性能・電源方式まで、登山・キャンプ用ヘッドライト12候補を調査。価格・ルーメン・重量が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-headlamp",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-headlamp/theme.png"
   }
 ]
