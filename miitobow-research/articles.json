@@ -630,5 +630,16 @@
     "url": "https://miitobow.com/articles/research-cabletray",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-cabletray/theme.png"
+  },
+  {
+    "id": "tarp",
+    "title": "タープ",
+    "category": "camp",
+    "model": "tarp",
+    "summary": "11候補を調査して選ぶ5商品",
+    "content": "キャンプ用タープ11候補を調査。設営方式・サイズ・耐水圧から、選び方の違う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-tarp",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-tarp/theme.png"
   }
 ]
