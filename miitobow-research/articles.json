@@ -674,5 +674,16 @@
     "url": "https://miitobow.com/articles/research-fireblanket",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-fireblanket/theme.png"
+  },
+  {
+    "id": "peg",
+    "title": "ペグ＋ハンマー",
+    "category": "camp",
+    "model": "peg",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "種類・素材・本数・重さまで、キャンプ用のテント・タープ用ペグと打ち込みハンマー15候補を調査。種類が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-peg",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-peg/theme.png"
   }
 ]
