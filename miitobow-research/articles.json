@@ -685,5 +685,16 @@
     "url": "https://miitobow.com/articles/research-peg",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-peg/theme.png"
+  },
+  {
+    "id": "cooker",
+    "title": "キャンプクッカー",
+    "category": "camp",
+    "model": "cooker",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "素材・容量・用途・重さまで、キャンプ・登山用のクッカーセット15候補を調査。素材と使い方が重複しない5商品を比較しました。",
+    "affiliateUrl": "",
+    "url": "https://miitobow.com/articles/research-cooker",
+    "themeImage": "https://miitobow.com/articles/research-cooker/theme.png"
   }
 ]
