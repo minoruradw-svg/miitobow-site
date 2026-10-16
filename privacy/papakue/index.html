@@ -27,53 +27,99 @@
 <body>
 <div class="wrap">
   <h1>プライバシーポリシー / Privacy Policy</h1>
-  <div class="sub">パパクエ (Papakue) ／ 最終更新日 Last updated: 2026-10-05</div>
+  <div class="sub">パパクエ (Papakue) ／ 最終更新日 Last updated: 2026-10-16</div>
 
   <span class="lang">日本語</span>
 
   <h3>はじめに</h3>
-  <p>「パパクエ」（以下「本アプリ」）は、TODO（やること）を「クエスト」としてゲーム感覚で管理するアプリです。<strong>本アプリにはアカウント登録もログインもなく、あなたが作成したクエストの内容・達成記録は、原則としてお使いの端末内にのみ保存されます。</strong> 開発者や第三者のサーバーへ自動的に送信されることはありません。詳細は以下のとおりです。</p>
+  <p>「パパクエ」（以下「本アプリ」）は、TODO（やること）を「クエスト」としてゲーム感覚で管理するアプリです。<strong>ひとりで使う機能（クエスト・カレンダー・達成の記録・通知・ウィジェットなど）には、アカウント登録もログインも要りません。あなたが作成したクエストの内容・達成記録は、お使いの端末内にのみ保存され、開発者や第三者のサーバーへ送信されることはありません。</strong></p>
+  <p>一方、<strong>「パーティ」機能（家族や友人と、おねがいやパーティクエストをやりとりする機能）を使う時だけ</strong>、Appleでサインインし、パーティに必要な情報をサーバーに保存します。パーティを使わない方は、サインインも、そのための情報の送信もありません。以下に、何を・どこに・何のために保存するかをまとめます。</p>
 
   <h2>1. 本アプリが収集・送信する情報</h2>
-  <p><strong>クエストの内容（タイトル・メモ・カテゴリ・達成記録等）を、本アプリが自動的に収集・外部送信することはありません。</strong> すべて端末内のデータベースに保存され処理されます。本アプリ自身による利用状況の解析（テレメトリ）も行いません。</p>
+  <h3>1-1. ひとりで使う機能（端末の中だけ）</h3>
+  <p><strong>クエストの内容（タイトル・メモ・カテゴリ・達成記録・「今日のひとこと」等）を、本アプリが自動的に収集・外部送信することはありません。</strong>すべて端末内のデータベースに保存され処理されます。</p>
+  <h3>1-2. パーティ機能を使う場合（サーバーに保存するもの）</h3>
+  <ul>
+    <li><strong>アカウント情報</strong>：Appleでサインインすると、Appleから、ユーザーを区別する番号と、（あなたが許可した場合は）名前が渡されます。本アプリが使うのは、ユーザーを区別する番号と、パーティで相手に表示する<strong>表示名</strong>です。本アプリは、メールアドレスを求めず、保存もしません。</li>
+    <li><strong>パーティの情報</strong>：所属するパーティ、パーティの招待コード（24時間で無効になります）。</li>
+    <li><strong>おねがい・パーティクエストのやりとり</strong>：タイトル・内容・期限・状態の履歴、お礼のスタンプと、そこに添える短いひとこと。</li>
+    <li><strong>通報・ブロックの記録</strong>：相手を通報・ブロックした場合の記録（通報は運営だけが読みます。ブロックしたことは相手に伝えません）。</li>
+    <li><strong>通知用の端末の識別子（プッシュ通知トークン）</strong>：相手からのおねがいなどを、通知でお知らせするため。</li>
+    <li><strong>有料プラン（サブスクリプション）の状態</strong>：有料かどうか・期限・商品・無料トライアルかどうか。</li>
+    <li>クエスト本体・カレンダー・達成の記録・「今日のひとこと」などは、パーティ機能を使っていても、端末の中だけで、サーバーには送りません。パーティで共有するのは、あなたが送った「おねがい」「パーティクエスト」だけです。</li>
+  </ul>
+  <h3>1-3. 不正利用の防止のために、アカウント削除後も保持するもの</h3>
+  <p>無料で送れる回数（一生で3回）の回避や、招待コードの総当たりを防ぐため、<strong>Apple IDから作った、元に戻せないハッシュ値（SHA-256）</strong>を、アカウントを削除したあとも保持します。元のApple IDは保存せず、おねがいの内容・名前とは結びつけません。同じ目的で、無料トライアルを始めた時刻と回数も、このハッシュ値ごとに保持します（利用を止めるためではなく、異常な使い方に気づくための記録です）。通報の記録も、安全対策のため、削除後も残します。</p>
+  <h3>1-4. クラッシュの記録・アプリの設定</h3>
+  <ul>
+    <li><strong>クラッシュの記録（Firebase Crashlytics）</strong>：公開版のアプリが異常終了した時に、不具合を直すため、クラッシュの記録（エラーの内容、機種・OSの版、アプリの版、Firebaseが付ける端末の識別番号）がGoogle（Firebase）に送られます。<strong>クエストの内容・名前・アカウントの番号は、送りません。</strong></li>
+    <li><strong>アプリの設定の読み取り</strong>：起動の少しあと、アプリは、サーバーに置いた設定（古い版を案内する最低バージョン・メンテナンスのお知らせなど）を1回読みます。個人を特定する情報は送りません。</li>
+  </ul>
 
   <h2>2. 端末内に保存されるデータ（外部送信されません）</h2>
   <p>本アプリは利便性のため、以下を<strong>お使いの端末内にのみ</strong>保存します。</p>
   <ul>
-    <li>作成したクエストの内容（タイトル・メモ・カテゴリ・優先順位・アイコン等）と、達成/失敗の記録</li>
-    <li>アプリの各種設定（通知の表示方法、テーマ画像の表示有無 等）</li>
+    <li>作成したクエストの内容（タイトル・メモ・カテゴリ・優先順位・アイコン等）と、達成/失敗の記録、「今日のひとこと」</li>
+    <li>アプリの各種設定（通知の表示方法、達成済みの表示の有無 等）</li>
     <li>（iOS版・ホーム画面／ロック画面ウィジェット、ライブアクティビティ、Apple Watchを使う場合）表示用に、今日〜数日分のクエストの状況を、Appleの「App Group」や「WatchConnectivity」という端末内の仕組みを使って、アプリ・ウィジェット・お使いのiPhoneとApple Watchの間で共有します。Apple Watchでの「達成」「失敗」「詳細の追加」「クエストの追加」の操作も、iPhoneのアプリへ同じ仕組みで渡されます。これらはすべて端末同士の処理であり、開発者のサーバーなど外部へ送信されることはありません。</li>
   </ul>
-  <p>これらのデータは、本アプリをアンインストールすれば端末から消去されます（Android版は端末のバックアップ機能でクラウドに含まれる場合があります。第5項をご覧ください）。</p>
+  <p>これらのデータは、本アプリをアンインストールすれば端末から消去されます（Android版は端末のバックアップ機能でクラウドに含まれる場合があります。第6項をご覧ください）。</p>
 
   <h2>3. 通知について</h2>
-  <p>本アプリは、設定したクエストの開始時刻等をお知らせするために、<strong>端末のローカル通知機能</strong>を使用します。この通知はすべて端末内で予約・発火するもので、開発者のサーバーを経由しません。通知を送るためにお客様の情報が外部へ送信されることはありません。</p>
+  <p>クエストの開始時刻などのお知らせには、<strong>端末のローカル通知機能</strong>を使います。この通知はすべて端末内で予約・発火するもので、開発者のサーバーを経由しません。</p>
+  <p>パーティ機能で、相手からのおねがい・スタンプなどをお知らせする時は、<strong>プッシュ通知</strong>（AppleのAPNs、Googleのクラウドメッセージング／FCM）を使います。そのため、通知用の端末の識別子を、サーバーに保存します。通知はアプリの設定または端末の設定でオフにできます。</p>
 
   <h2>4. 広告について（Google AdMob）</h2>
-  <p>本アプリは、Googleの広告SDK（Google Mobile Ads / AdMob）を組み込んでいます。無料でお使いいただくための収益化手段として、バナー広告やネイティブ広告を表示する場合があります。</p>
+  <p>本アプリは、Googleの広告SDK（Google Mobile Ads / AdMob）を組み込んでいます。無料でお使いいただくための収益化手段として、バナー広告やネイティブ広告を表示する場合があります。<strong>有料プラン（パパクエ プロ）に加入している間は、広告を表示しません。</strong></p>
   <ul>
-    <li>広告の配信・測定のため、Google の広告SDKが、<strong>広告識別子（Advertising ID / IDFA）、IPアドレス（おおまかな場所の推定に使われます）、見た広告などの広告データ、クラッシュログやパフォーマンスデータなどの診断情報、デバイス情報を収集・利用</strong>する場合があります。これらは Google によって処理され、そのデータの取り扱いは Google のポリシーに従います。クエストの内容と結びつけて収集されることは、ありません。</li>
+    <li>広告の配信・測定のため、Google の広告SDKが、<strong>広告識別子（Advertising ID / IDFA）、IPアドレス（おおまかな場所の推定に使われます）、見た広告などの広告データ、クラッシュログやパフォーマンスデータなどの診断情報、デバイス情報を収集・利用</strong>する場合があります。これらは Google によって処理され、そのデータの取り扱いは Google のポリシーに従います。クエストの内容や、パーティの内容と結びつけて収集されることは、ありません。</li>
     <li>Google のプライバシーポリシー: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a><br>
         広告のパートナーとデータの取り扱い: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">https://policies.google.com/technologies/partner-sites</a></li>
     <li>上記のうち、<strong>広告のタップやアプリの起動などの操作情報（製品の操作）</strong>は、広告の効果の測定・改善のために使われます。<strong>起動時間・ハング率などのパフォーマンスデータ</strong>は、Google によって、お使いの端末や広告識別子に関連づけて扱われる場合があります（アプリの機能の維持、分析、広告の表示のためです）。いずれも、<strong>クエストの内容とは結びつきません</strong>。</li>
     <li>本アプリは、<strong>非パーソナライズ広告のみ</strong>を配信するよう設定しています（興味・関心に基づく広告のための追跡は行いません）。iOS版では「Appのトラッキング」の許可をお尋ねしません。</li>
     <li>広告IDのリセットやパーソナライズ広告のオフは、端末の設定（Android「設定 &gt; プライバシー &gt; 広告」、iOS「設定 &gt; プライバシー &gt; Appのトラッキング許可」）から行えます。</li>
-    <li><strong>クエストの内容（タイトル・メモ等）が広告SDKに渡されたり、広告に利用されたりすることはありません。</strong></li>
+    <li><strong>クエストの内容（タイトル・メモ等）や、パーティの内容が広告SDKに渡されたり、広告に利用されたりすることはありません。</strong></li>
   </ul>
 
-  <h2>5. バックアップ機能について</h2>
+  <h2>5. 有料プラン（サブスクリプション）と購入について</h2>
+  <ul>
+    <li>有料プラン「パパクエ プロ」（月額・自動更新・初めての方は無料トライアルあり）の購入・復元・更新の管理に、<strong>RevenueCat</strong>（米国）のサービスを使います。RevenueCatには、<strong>パパクエのアカウントを区別する番号と、購入の情報（商品・期間・期限・トライアルかどうか）</strong>が送られます。</li>
+    <li><strong>クレジットカードなどの支払い情報は、Appleが扱い、本アプリ・開発者は受け取りません。</strong></li>
+    <li>サーバーには、「有料かどうか・期限・商品」を保存し、パーティの相手が有料かどうかの確認と、広告を出さない判断に使います（パーティでは、どちらか一方が有料なら、2人とも使えます）。</li>
+    <li><strong>アカウントを削除しても、サブスクリプションは自動では解約されません。</strong>iPhoneの「設定 &gt; Apple ID &gt; サブスクリプション」から、ご自身で解約してください。</li>
+  </ul>
+
+  <h2>6. バックアップ機能について</h2>
   <p>Android版は端末標準の「自動バックアップ」機能に対応しており、OSの設定によりアプリのデータがお使いのGoogleアカウントのクラウドストレージにバックアップされる場合があります。これは<strong>OS標準の仕組み</strong>であり、本アプリが独自にデータを外部サーバーへ送信するものではありません。バックアップの有効/無効は端末の設定で変更できます。また、本アプリ内の「JSONエクスポート」機能を使うと、クエストデータをファイルとして書き出せます。このファイルは<strong>利用者ご自身が明示的に操作した場合にのみ</strong>作成・共有され、本アプリが自動的に送信することはありません。</p>
 
-  <h2>6. 第三者サービス・SDK</h2>
-  <p>本アプリが使用する第三者SDKは、広告配信のための Google Mobile Ads（AdMob）のみです。クエストデータの保存・通知・ウィジェット表示はすべて端末内蔵の仕組み（データベース・OS通知機能・App Group）で完結し、外部のクラウドサービスやアカウント基盤は使用していません。</p>
+  <h2>7. 第三者サービス・SDK、保存場所</h2>
+  <p>本アプリは、次の第三者のサービスを使います。</p>
+  <ul>
+    <li><strong>Google Mobile Ads（AdMob）</strong>：広告の配信（第4項）。</li>
+    <li><strong>Google Firebase</strong>：パーティ機能のサーバー（認証・データベース・サーバー上の処理・プッシュ通知・クラッシュの記録・不正なアプリからの接続を防ぐ「App Check」）。<strong>データベースは東京</strong>に置いています。認証・プッシュ通知・クラッシュの記録などは、米国など海外のサーバーを通ることがあります。</li>
+    <li><strong>Sign in with Apple</strong>：パーティ機能のサインイン。App Checkでは、Appleの端末の検証（App Attest／DeviceCheck）が使われます。</li>
+    <li><strong>RevenueCat</strong>：購入の管理（第5項）。</li>
+  </ul>
+  <p>ひとりで使う機能（クエストの保存・通知・ウィジェットの表示）は、端末内の仕組み（データベース・OS通知機能・App Group）で完結しています。</p>
 
-  <h2>7. 子供のプライバシー</h2>
-  <p>本アプリは、アカウント登録や個人を特定する情報の入力を求めません。特定の年齢層を対象に個人情報を収集することはありません。</p>
+  <h2>8. アカウントの削除とデータの扱い</h2>
+  <ul>
+    <li>アプリの「設定」の「アカウント」から、アプリの中で、アカウントを削除できます。<strong>自分のデータ（表示名・通知用の識別子・有料プランの状態など）は消えます。</strong>Appleのサインインの許可も、削除と同時に取り消します。</li>
+    <li>パーティからは抜けます（誰もいなくなったパーティは、おねがいごと消えます）。<strong>相手に送った「おねがい」の記録は、相手の側に残ります</strong>（相手の画面では、あなたは「なかま」と表示されます）。</li>
+    <li>第1-3項の、不正利用の防止のための記録（Apple IDのハッシュ値・通報の記録）は、削除後も残ります。</li>
+    <li>パーティを使わない方は、サーバーにデータが無いので、削除するものはありません。端末のデータは、アプリのアンインストールで消えます。</li>
+  </ul>
 
-  <h2>8. 本ポリシーの変更</h2>
-  <p>本ポリシーを更新する場合があります。重要な変更がある場合は、本アプリの更新および本ページで告知します。将来、パーティ機能（サブスクリプション）等でサーバーを利用する機能を追加する場合は、本ポリシーを改訂した上でご案内します。</p>
+  <h2>9. 通報・ブロック</h2>
+  <p>パーティの相手や、受け取ったおねがいを、通報できます。通報は運営だけが読み、対応の判断に使います。ブロックすると、相手からおねがいが届かず、招待コードでも参加できなくなります。ブロックしたことは、相手に伝えません。</p>
 
-  <h2>9. お問い合わせ</h2>
+  <h2>10. 子供のプライバシー</h2>
+  <p>ひとりで使う機能は、アカウント登録や個人を特定する情報の入力を求めません。パーティ機能のサインインは、Appleのアカウントを使うため、Appleの利用条件に従います。特定の年齢層を対象に、個人情報を集めることはありません。</p>
+
+  <h2>11. 本ポリシーの変更</h2>
+  <p>本ポリシーを更新する場合があります。重要な変更がある場合は、本アプリの更新および本ページで告知します。</p>
+
+  <h2>12. お問い合わせ</h2>
   <p>本ポリシーや本アプリのプライバシーに関するお問い合わせは、以下までご連絡ください。<br>
   連絡先: <a href="mailto:minoruru.radw@gmail.com">minoruru.radw@gmail.com</a></p>
 
@@ -82,48 +128,94 @@
   <span class="lang">English</span>
 
   <h3>Introduction</h3>
-  <p>"Papakue" ("the App") turns your to-do items into game-like "quests." <strong>The App has no account registration or sign-in, and the quests you create and their completion records are stored only on your device by default.</strong> They are not automatically sent to the developer or any third-party server. Details are below.</p>
+  <p>"Papakue" ("the App") turns your to-do items into game-like "quests." <strong>The features you use on your own (quests, calendar, completion records, notifications, widgets, etc.) need no account or sign-in. The quests you create and their completion records are stored only on your device and are never sent to the developer or any third-party server.</strong></p>
+  <p>However, <strong>only when you use the "Party" feature</strong> (exchanging requests and party quests with family or friends), you sign in with Apple and the information needed for the party is stored on a server. If you do not use the party feature, there is no sign-in and nothing is sent for it. Below we explain what is stored, where, and why.</p>
 
   <h2>1. Information We Collect or Transmit</h2>
-  <p><strong>The App does not automatically collect or transmit the content of your quests</strong> (titles, notes, categories, completion records, etc.). Everything is stored and processed in a database on your device. We do not perform any usage analytics (telemetry) of our own.</p>
+  <h3>1-1. Features you use on your own (on your device only)</h3>
+  <p><strong>The App does not automatically collect or transmit the content of your quests</strong> (titles, notes, categories, completion records, the "note of the day," etc.). Everything is stored and processed in a database on your device.</p>
+  <h3>1-2. When you use the Party feature (stored on a server)</h3>
+  <ul>
+    <li><strong>Account information</strong>: When you sign in with Apple, Apple provides an identifier that distinguishes you and, if you allow it, your name. The App uses the identifier and a <strong>display name</strong> shown to the other party members. The App does not request or store your email address.</li>
+    <li><strong>Party information</strong>: the party you belong to and its invite code (valid for 24 hours).</li>
+    <li><strong>Requests and party quests</strong>: titles, contents, due dates, status history, and thank-you stamps with a short message.</li>
+    <li><strong>Report and block records</strong>: records of reports and blocks you make (reports are read only by the operator; the other person is not told that you blocked them).</li>
+    <li><strong>A device identifier for push notifications (push token)</strong>: to notify you of requests and similar events.</li>
+    <li><strong>Subscription status</strong>: whether you have a paid plan, its expiry, the product, and whether it is a free trial.</li>
+    <li>Quests, the calendar, completion records, and the "note of the day" stay on your device even if you use the party feature. Only the requests and party quests you send are shared in the party.</li>
+  </ul>
+  <h3>1-3. Records kept for abuse prevention, even after account deletion</h3>
+  <p>To prevent circumventing the free-send limit (3 in total) and brute-forcing invite codes, we keep an <strong>irreversible hash (SHA-256) derived from your Apple ID</strong> even after you delete your account. The original Apple ID is not stored, and the hash is not linked to request contents or names. For the same purpose, the time and count of free-trial starts are also kept per hash (not to block use, but to notice abnormal usage). Report records are also kept after deletion for safety.</p>
+  <h3>1-4. Crash reports and app settings</h3>
+  <ul>
+    <li><strong>Crash reports (Firebase Crashlytics)</strong>: When the released app terminates abnormally, a crash report (error details, device model and OS version, app version, and an installation ID assigned by Firebase) is sent to Google (Firebase) to fix the problem. <strong>Quest contents, names, and your account identifier are not sent.</strong></li>
+    <li><strong>Reading app settings</strong>: Shortly after launch, the App reads settings kept on our server once (e.g., the minimum version and maintenance notices). No personally identifying information is sent.</li>
+  </ul>
 
   <h2>2. Data Stored on Your Device (never transmitted)</h2>
   <p>For convenience, the App stores the following <strong>only on your device</strong>:</p>
   <ul>
-    <li>The quests you create (titles, notes, categories, priority, icon, etc.) and their completion/failure records</li>
-    <li>App settings (notification display style, whether the themed header image is shown, etc.)</li>
+    <li>The quests you create (titles, notes, categories, priority, icon, etc.), their completion/failure records, and the "note of the day"</li>
+    <li>App settings (notification display style, whether cleared items are shown, etc.)</li>
     <li>(iOS, if you use home-screen or lock-screen widgets, Live Activities, or Apple Watch) A summary of today's and the next few days' quests, shared on-device between the App, the widgets, and your iPhone and Apple Watch via Apple's "App Group" and "WatchConnectivity" mechanisms. Actions you take on Apple Watch (complete, fail, add a note, add a quest) are passed to the App on your iPhone the same way. All of this happens between your own devices and is never transmitted to a developer server or any external party.</li>
   </ul>
-  <p>This data is removed from your device when you uninstall the App (on Android, it may be included in the device's own backup to your cloud account — see Section 5).</p>
+  <p>This data is removed from your device when you uninstall the App (on Android, it may be included in the device's own backup to your cloud account — see Section 6).</p>
 
   <h2>3. Notifications</h2>
-  <p>The App uses your device's <strong>local notification feature</strong> to remind you when a scheduled quest starts. These notifications are scheduled and fired entirely on your device and do not pass through a developer server. No information is sent externally in order to deliver a notification.</p>
+  <p>Reminders for quest start times use your device's <strong>local notification feature</strong>. They are scheduled and fired entirely on your device and do not pass through a developer server.</p>
+  <p>To notify you of requests, stamps, and similar events in the party feature, we use <strong>push notifications</strong> (Apple APNs and Google's Firebase Cloud Messaging). For this, a device identifier for notifications is stored on the server. You can turn notifications off in the App or in your device settings.</p>
 
   <h2>4. Advertising (Google AdMob)</h2>
-  <p>The App includes Google's advertising SDK (Google Mobile Ads / AdMob) and may display banner or native ads as a way to keep the App free.</p>
+  <p>The App includes Google's advertising SDK (Google Mobile Ads / AdMob) and may display banner or native ads as a way to keep the App free. <strong>While you have a paid plan ("Papakue Pro"), no ads are shown.</strong></p>
   <ul>
-    <li>For ad delivery and measurement, Google's ad SDK may collect and use an <strong>advertising identifier (Advertising ID / IDFA), IP address (used to estimate the approximate location), advertising data such as the ads shown, diagnostic information such as crash logs and performance data, and device information</strong>. These are processed by Google and subject to Google's own policies. They are never linked to the content of your quests.</li>
+    <li>For ad delivery and measurement, Google's ad SDK may collect and use an <strong>advertising identifier (Advertising ID / IDFA), IP address (used to estimate the approximate location), advertising data such as the ads shown, diagnostic information such as crash logs and performance data, and device information</strong>. These are processed by Google and subject to Google's own policies. They are never linked to the content of your quests or parties.</li>
     <li>Google's Privacy Policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a><br>
         How ad partners handle data: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">https://policies.google.com/technologies/partner-sites</a></li>
     <li>Of the above, <strong>interaction information such as ad taps and app launches (product interaction)</strong> is used to measure and improve ad effectiveness. <strong>Performance data such as launch time and hang rate</strong> may be handled by Google in association with your device or advertising identifier (for app functionality, analytics, and ad delivery). None of this is ever linked to <strong>the content of your quests</strong>.</li>
     <li>The App is configured to serve <strong>non-personalized ads only</strong> (no tracking for interest-based advertising). The iOS version does not ask for "App Tracking" permission.</li>
     <li>You can reset your advertising ID or opt out of personalized ads from your device settings (Android: Settings &gt; Privacy &gt; Ads; iOS: Settings &gt; Privacy &gt; Tracking).</li>
-    <li><strong>Your quest content (titles, notes, etc.) is never passed to the ad SDK or used for advertising.</strong></li>
+    <li><strong>Your quest content (titles, notes, etc.) and party content are never passed to the ad SDK or used for advertising.</strong></li>
   </ul>
 
-  <h2>5. Backups</h2>
+  <h2>5. Paid Plan (Subscription) and Purchases</h2>
+  <ul>
+    <li>For purchasing, restoring, and managing the paid plan "Papakue Pro" (monthly, auto-renewing, with a free trial for first-time subscribers), we use the service of <strong>RevenueCat</strong> (USA). RevenueCat receives <strong>an identifier of your Papakue account and purchase information (product, period, expiry, whether it is a trial)</strong>.</li>
+    <li><strong>Payment information such as credit card details is handled by Apple; the App and the developer do not receive it.</strong></li>
+    <li>The server stores "whether you have a paid plan, its expiry, and the product," used to check whether the other party member has a paid plan and to decide not to show ads. (In a party, if either member has a paid plan, both can use it.)</li>
+    <li><strong>Deleting your account does not cancel your subscription automatically.</strong> Please cancel it yourself from "Settings &gt; Apple ID &gt; Subscriptions" on your iPhone.</li>
+  </ul>
+
+  <h2>6. Backups</h2>
   <p>The Android version supports the OS's standard Auto Backup feature, which may back up the App's data to your Google account's cloud storage depending on your device settings. This is a <strong>standard OS mechanism</strong>, not a separate transmission initiated by the App itself. You can change this in your device settings. The App also has a "JSON export" feature that writes your quest data to a file; this file is created and shared <strong>only when you explicitly choose to do so</strong> — the App never sends it automatically.</p>
 
-  <h2>6. Third-Party Services and SDKs</h2>
-  <p>The only third-party SDK the App uses is Google Mobile Ads (AdMob) for showing ads. Storing quest data, notifications, and the widget display are all handled by on-device mechanisms (the local database, the OS notification system, and App Groups) — the App does not use any external cloud service or account system.</p>
+  <h2>7. Third-Party Services, SDKs, and Storage Location</h2>
+  <p>The App uses the following third-party services:</p>
+  <ul>
+    <li><strong>Google Mobile Ads (AdMob)</strong>: ad delivery (Section 4).</li>
+    <li><strong>Google Firebase</strong>: the server for the party feature (authentication, database, server-side processing, push notifications, crash reports, and "App Check," which prevents connections from unauthorized apps). <strong>The database is located in Tokyo.</strong> Authentication, push notifications, crash reports, etc. may pass through servers overseas, such as in the USA.</li>
+    <li><strong>Sign in with Apple</strong>: sign-in for the party feature. App Check uses Apple's device verification (App Attest / DeviceCheck).</li>
+    <li><strong>RevenueCat</strong>: managing purchases (Section 5).</li>
+  </ul>
+  <p>The features you use on your own (storing quests, notifications, and widget display) are handled entirely by on-device mechanisms (the local database, the OS notification system, and App Groups).</p>
 
-  <h2>7. Children's Privacy</h2>
-  <p>The App does not require account registration or any personally identifying information, and does not collect personal information targeted at any specific age group.</p>
+  <h2>8. Account Deletion and Data Handling</h2>
+  <ul>
+    <li>You can delete your account inside the App, from "Settings" &gt; "Account." <strong>Your data (display name, notification identifier, subscription status, etc.) is deleted.</strong> Your Sign in with Apple authorization is also revoked at the same time.</li>
+    <li>You leave your parties (a party with no members left is deleted together with its requests). <strong>Records of requests you sent remain on the other person's side</strong> (you appear to them as "なかま," meaning "a companion").</li>
+    <li>The abuse-prevention records in Section 1-3 (the hash of your Apple ID and report records) remain after deletion.</li>
+    <li>If you do not use the party feature, no data is held on the server, so there is nothing to delete. Data on your device is removed when you uninstall the App.</li>
+  </ul>
 
-  <h2>8. Changes to This Policy</h2>
-  <p>We may update this policy. We will announce material changes through an app update and on this page. If we add features that use a server, such as the planned "party" subscription feature, we will revise this policy accordingly before that happens.</p>
+  <h2>9. Reporting and Blocking</h2>
+  <p>You can report other party members and requests you receive. Reports are read only by the operator and used to decide on action. If you block someone, they can no longer send you requests or join through an invite code. The other person is not told that you blocked them.</p>
 
-  <h2>9. Contact</h2>
+  <h2>10. Children's Privacy</h2>
+  <p>The features you use on your own do not require account registration or any personally identifying information. Sign-in for the party feature uses an Apple account and follows Apple's terms. We do not collect personal information targeted at any specific age group.</p>
+
+  <h2>11. Changes to This Policy</h2>
+  <p>We may update this policy. We will announce material changes through an app update and on this page.</p>
+
+  <h2>12. Contact</h2>
   <p>For questions about this policy or the App's privacy, please contact:<br>
   Contact: <a href="mailto:minoruru.radw@gmail.com">minoruru.radw@gmail.com</a></p>
 </div>
