@@ -707,5 +707,16 @@
     "url": "https://miitobow.com/articles/research-gancharger",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-gancharger/theme.png"
+  },
+  {
+    "id": "micarm",
+    "title": "マイクアーム",
+    "category": "desk",
+    "model": "micarm",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "種類・可動域・設置方法・取り付けやすさまで、卓上マイクアーム15候補を調査。タイプが重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-micarm",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-micarm/theme.png"
   }
 ]
