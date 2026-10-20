@@ -4,12 +4,8 @@
 // ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex, rebuildCache } from "./_lib.js";
+import { loadIndex, saveIndex, rebuildCache, denyIfBadPin } from "./_lib.js";
 
-function checkPin(request, env) {
-  const pin = request.headers.get("X-Board-Pin") || "";
-  return env.BOARD_PIN && pin === env.BOARD_PIN;
-}
 
 async function findPost(env, id, index) {
   const entry = index.find((e) => e.id === id);
@@ -24,12 +20,8 @@ async function findPost(env, id, index) {
 }
 
 export async function onRequestPatch({ request, env, params }) {
-  if (!checkPin(request, env)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
-    });
-  }
+  const denied = await denyIfBadPin(request, env);
+  if (denied) return denied;
   let body;
   try {
     body = await request.json();
@@ -67,12 +59,8 @@ export async function onRequestPatch({ request, env, params }) {
 }
 
 export async function onRequestDelete({ request, env, params }) {
-  if (!checkPin(request, env)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
-    });
-  }
+  const denied = await denyIfBadPin(request, env);
+  if (denied) return denied;
   const index = await loadIndex(env);
   const found = await findPost(env, params.id, index);
   if (found) {

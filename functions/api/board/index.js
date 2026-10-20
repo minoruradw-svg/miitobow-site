@@ -5,7 +5,7 @@
 // ⚠️ post:キーの一覧はKVのlist()を毎回叩かず、_lib.jsの索引キー(board:index)で管理する
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex, loadCache, rebuildCache } from "./_lib.js";
+import { loadIndex, saveIndex, loadCache, rebuildCache, denyIfBadPin } from "./_lib.js";
 
 // バグ等による無限投稿・容量肥大を防ぐための上限（KV無料枠：保存1GB・書き込み1日1000件に対し、
 // 十分すぎるほど余裕を持たせた値。個人用メモとして通常使う分には絶対に到達しない）。
@@ -27,10 +27,6 @@ const MAX_IMAGES = 20;
 const MAX_VIDEO_DATA_LENGTH = 32 * 1024 * 1024;
 const MAX_VIDEOS = 5;
 
-function checkPin(request, env) {
-  const pin = request.headers.get("X-Board-Pin") || "";
-  return env.BOARD_PIN && pin === env.BOARD_PIN;
-}
 
 function base64ToBytes(dataUrl) {
   const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1);
@@ -126,12 +122,8 @@ async function trimOldVideos(env, index) {
 }
 
 export async function onRequestGet({ request, env }) {
-  if (!checkPin(request, env)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
-    });
-  }
+  const denied = await denyIfBadPin(request, env);
+  if (denied) return denied;
   const index = await loadIndex(env);
   // 一覧取得はキャッシュ1本のgetだけで完結させる（board.htmlの15秒間隔ポーリングと組み合わさって
   // 投稿ごとに毎回get()していた頃に読み取り回数が線形に増え続けた事故の恒久対策）。
@@ -142,12 +134,8 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!checkPin(request, env)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
-    });
-  }
+  const denied = await denyIfBadPin(request, env);
+  if (denied) return denied;
   let body;
   try {
     body = await request.json();

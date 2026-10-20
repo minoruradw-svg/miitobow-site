@@ -1,21 +1,14 @@
 // PUT /api/board/categories/<id>  -> カテゴリー名を修正 { name }
 // X-Board-Pin必須。
+import { denyIfBadPin } from "../_lib.js";
 
 const META_KEY = "meta:categories";
 const MAX_NAME_LENGTH = 30;
 
-function checkPin(request, env) {
-  const pin = request.headers.get("X-Board-Pin") || "";
-  return env.BOARD_PIN && pin === env.BOARD_PIN;
-}
 
 export async function onRequestPut({ request, env, params }) {
-  if (!checkPin(request, env)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
-    });
-  }
+  const denied = await denyIfBadPin(request, env);
+  if (denied) return denied;
   let body;
   try {
     body = await request.json();

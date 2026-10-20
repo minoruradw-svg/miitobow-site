@@ -95,3 +95,36 @@ export async function loadCache(env, index) {
   // キャッシュが無い/壊れている時だけ、その場でN+1回読み直して復旧する（自己修復・初回のみ）。
   return rebuildCache(env, index);
 }
+
+// ---- パスコード確認（2026-10-21：総当たり対策）----
+// 同じIPから MAX_PIN_FAILS 回まちがえたら、LOCK_SECONDS 秒間は（正しいパスコードでも）受け付けない。
+// 失敗回数はKVに「pinfail:<IP>」で持ち、最後の失敗から LOCK_SECONDS 秒で自動的に消える。
+// 正しいパスコードで通れば回数は0に戻る。ヘッダーが空の要求（画面を開いただけ）は数えない。
+export const MAX_PIN_FAILS = 10;
+export const LOCK_SECONDS = 15 * 60;
+
+function jsonResponse(obj, status) {
+  return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json" } });
+}
+
+// 通ればnull、通らなければ返すべきResponse（401＝違う／429＝まちがえすぎて一時停止中）を返す。
+export async function denyIfBadPin(request, env) {
+  const pin = request.headers.get("X-Board-Pin") || "";
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const key = "pinfail:" + ip;
+  let fails = 0;
+  try {
+    fails = parseInt((await env.MIITOBOW_BOARD.get(key)) || "0", 10) || 0;
+  } catch (e) { fails = 0; }
+  if (fails >= MAX_PIN_FAILS) {
+    return jsonResponse({ error: "locked", retryAfterSeconds: LOCK_SECONDS }, 429);
+  }
+  if (env.BOARD_PIN && pin === env.BOARD_PIN) {
+    if (fails > 0) { try { await env.MIITOBOW_BOARD.delete(key); } catch (e) {} }
+    return null;
+  }
+  if (pin !== "") {
+    try { await env.MIITOBOW_BOARD.put(key, String(fails + 1), { expirationTtl: LOCK_SECONDS }); } catch (e) {}
+  }
+  return jsonResponse({ error: "unauthorized" }, 401);
+}

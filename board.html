@@ -72,8 +72,28 @@
     font-variant-numeric: tabular-nums; border-radius: 12px; border: 1.5px solid var(--border);
     background: var(--surface); color: var(--ink); outline: none;
   }
+  .pin-box { width: 44px; }
+  #pin-ok {
+    width: 212px; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent); background: var(--accent);
+    color: #fff; font-size: 1rem; font-weight: 700; font-family: inherit; letter-spacing: 0.2em; cursor: pointer;
+  }
+  #pin-ok:hover { filter: brightness(1.06); }
+  #pin-ok:active { transform: scale(0.97); }
+  #pin-ok:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-glow); }
   .pin-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-  #lock-error { color: var(--danger); font-size: 0.85rem; min-height: 1.2em; visibility: hidden; }
+  /* 数字キーパッド：マウスで押せるように（PC＝ポインタが細かいデバイスだけ表示。スマホは端末の数字キーボードを使う） */
+  #keypad { display: none; grid-template-columns: repeat(3, 64px); gap: 10px; }
+  @media (hover: hover) and (pointer: fine) { #keypad { display: grid; } }
+  .key {
+    height: 52px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface);
+    color: var(--ink); font-size: 1.25rem; font-family: inherit; font-variant-numeric: tabular-nums;
+    cursor: pointer; transition: background 0.12s, border-color 0.12s, transform 0.06s;
+  }
+  .key:hover { border-color: var(--accent); background: var(--accent-glow); }
+  .key:active { transform: scale(0.95); }
+  .key:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .key.fn { font-size: 1rem; color: var(--ink-soft); }
+  #lock-error { color: var(--danger); font-size: 0.85rem; min-height: 1.2em; visibility: hidden; max-width: 320px; line-height: 1.6; }
   #lock-error.show { visibility: visible; }
   #lock.shake #pin-form { animation: shake 0.35s; }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
@@ -316,13 +336,22 @@
   <a class="back-link" href="/">← miitobow.comに戻る</a>
   <div class="mark">📋</div>
   <h1 class="head">ミートボー掲示板</h1>
-  <p>4桁のパスコードを入力してください</p>
+  <p>パスコードを入力して「決定」を押してください</p>
   <form id="pin-form" autocomplete="off">
     <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="0">
     <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="1">
     <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="2">
     <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="3">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="4">
+    <input class="pin-box" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="5">
   </form>
+  <div id="keypad" aria-label="数字キーパッド">
+    <button class="key" type="button" data-k="1">1</button><button class="key" type="button" data-k="2">2</button><button class="key" type="button" data-k="3">3</button>
+    <button class="key" type="button" data-k="4">4</button><button class="key" type="button" data-k="5">5</button><button class="key" type="button" data-k="6">6</button>
+    <button class="key" type="button" data-k="7">7</button><button class="key" type="button" data-k="8">8</button><button class="key" type="button" data-k="9">9</button>
+    <button class="key fn" type="button" data-k="clear" aria-label="全部消す">消す</button><button class="key" type="button" data-k="0">0</button><button class="key fn" type="button" data-k="back" aria-label="1文字戻す">⌫</button>
+  </div>
+  <button id="pin-ok" type="submit" form="pin-form">決定</button>
   <div id="lock-error">パスコードが違います</div>
 </div>
 
@@ -1571,7 +1600,14 @@
 
   function tryUnlock(pin) {
     fetch("/api/board", { headers: { "X-Board-Pin": pin } }).then(function (res) {
+      if (res.status === 429) {
+        lockError.textContent = "まちがいが続いたため、しばらく入力できません。15分ほど待ってからもう一度どうぞ";
+        lockError.classList.add("show");
+        pinBoxes.forEach(function (b) { b.value = ""; });
+        return;
+      }
       if (res.status === 401) {
+        lockError.textContent = "パスコードが違います";
         lockError.classList.add("show");
         lockEl.classList.add("shake");
         setTimeout(function () { lockEl.classList.remove("shake"); }, 350);
@@ -1591,14 +1627,51 @@
     box.addEventListener("input", function () {
       box.value = box.value.replace(/[^0-9]/g, "").slice(0, 1);
       if (box.value && i < pinBoxes.length - 1) pinBoxes[i + 1].focus();
-      var joined = pinBoxes.map(function (b) { return b.value; }).join("");
-      if (joined.length === 4) tryUnlock(joined);
     });
     box.addEventListener("keydown", function (e) {
       if (e.key === "Backspace" && !box.value && i > 0) pinBoxes[i - 1].focus();
+      if (e.key === "ArrowLeft" && i > 0) pinBoxes[i - 1].focus();
+      if (e.key === "ArrowRight" && i < pinBoxes.length - 1) pinBoxes[i + 1].focus();
     });
   });
-  pinForm.addEventListener("submit", function (e) { e.preventDefault(); });
+  // 桁数が分からないように自動送信はしない。「決定」ボタンかEnterで、入力した数字をそのまま送る
+  function submitPin() {
+    var joined = pinBoxes.map(function (b) { return b.value; }).join("");
+    if (!joined) return;
+    lockError.classList.remove("show");
+    tryUnlock(joined);
+  }
+  pinForm.addEventListener("submit", function (e) { e.preventDefault(); submitPin(); });
+  // キーパッドのボタンにフォーカスがある時でもEnterで送れるようにする（ロック画面が出ている間だけ）
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" || getComputedStyle(lockEl).display === "none") return;
+    e.preventDefault();
+    submitPin();
+  });
+
+  // 数字キーパッド（マウス用）：空いている最初の枠に入れる（送信は「決定」かEnter）
+  Array.prototype.forEach.call(document.querySelectorAll("#keypad .key"), function (key) {
+    key.addEventListener("click", function () {
+      var k = key.getAttribute("data-k");
+      lockError.classList.remove("show");
+      if (k === "clear") {
+        pinBoxes.forEach(function (b) { b.value = ""; });
+        pinBoxes[0].focus();
+      } else if (k === "back") {
+        for (var j = pinBoxes.length - 1; j >= 0; j--) {
+          if (pinBoxes[j].value) { pinBoxes[j].value = ""; pinBoxes[j].focus(); break; }
+        }
+      } else {
+        for (var i = 0; i < pinBoxes.length; i++) {
+          if (!pinBoxes[i].value) {
+            pinBoxes[i].value = k;
+            pinBoxes[i].dispatchEvent(new Event("input", { bubbles: true }));
+            break;
+          }
+        }
+      }
+    });
+  });
 
   var savedPin = null;
   try { savedPin = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
