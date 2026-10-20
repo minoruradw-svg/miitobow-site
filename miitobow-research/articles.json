@@ -696,5 +696,16 @@
     "affiliateUrl": "",
     "url": "https://miitobow.com/articles/research-cooker",
     "themeImage": "https://miitobow.com/articles/research-cooker/theme.png"
+  },
+  {
+    "id": "gancharger",
+    "title": "GaN充電器",
+    "category": "desk",
+    "model": "gancharger",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "出力・ポート数・サイズ・使い方まで、USB-C対応のGaN充電器15候補を調査。出力と用途が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-gancharger",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-gancharger/theme.png"
   }
 ]
