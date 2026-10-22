@@ -718,5 +718,16 @@
     "url": "https://miitobow.com/articles/research-micarm",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-micarm/theme.png"
+  },
+  {
+    "id": "umbrella",
+    "title": "折りたたみ傘",
+    "category": "life",
+    "model": "umbrella",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "自動開閉・重さ・大きさ・耐風・日傘兼用まで、折りたたみ傘の候補を調査。用途が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-umbrella",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-umbrella/theme.png"
   }
 ]
