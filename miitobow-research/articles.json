@@ -729,5 +729,16 @@
     "url": "https://miitobow.com/articles/research-umbrella",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-umbrella/theme.png"
+  },
+  {
+    "id": "extssd",
+    "title": "外付けSSD",
+    "category": "desk",
+    "model": "extssd",
+    "summary": "15候補を調査して選ぶ5商品",
+    "content": "接続方式・速度・耐久性・保証まで、外付けSSD15候補を調査。用途と方式が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-extssd",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-extssd/theme.png"
   }
 ]
