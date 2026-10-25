@@ -740,5 +740,16 @@
     "url": "https://miitobow.com/articles/research-extssd",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-extssd/theme.png"
+  },
+  {
+    "id": "waterjug",
+    "title": "ウォータージャグ",
+    "category": "camp",
+    "model": "waterjug",
+    "summary": "19候補を調査して選ぶ5商品",
+    "content": "容量・素材・保冷や保温・持ち運びやすさまで、ウォータージャグ19候補を調査。使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-waterjug",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-waterjug/theme.png"
   }
 ]

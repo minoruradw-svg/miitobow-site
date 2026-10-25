@@ -1,5 +1,10 @@
 [
  {
+  "slug": "waterjug",
+  "path": "/articles/research-waterjug.html",
+  "date": "2026-10-25"
+ },
+ {
   "slug": "extssd",
   "path": "/articles/research-extssd.html",
   "date": "2026-10-23"
