@@ -751,5 +751,16 @@
     "url": "https://miitobow.com/articles/research-waterjug",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-waterjug/theme.png"
+  },
+  {
+    "id": "outdoorwagon",
+    "title": "アウトドアワゴン",
+    "category": "camp",
+    "model": "outdoorwagon",
+    "summary": "23候補を調査して選ぶ5商品",
+    "content": "耐荷重・容量・タイヤ・折りたたみやすさまで、アウトドアワゴン23候補を調査。使い方に合う5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-outdoorwagon",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-outdoorwagon/theme.png"
   }
 ]
