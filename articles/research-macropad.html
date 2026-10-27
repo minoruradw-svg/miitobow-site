@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>マクロパッドを20候補調べて分かった、後悔しない1台</title>
+<meta name="description" content="ストリームデッキ、左手デバイス、ゲーム用キーパッドなどマクロパッド20候補を調査。画面付きキーやダイヤル、対応OSと設定ソフトの注意も確認し、使い方が重複しない5商品を比較しました。">
+<link rel="canonical" href="https://miitobow.com/articles/research-macropad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="マクロパッドを20候補調べて分かった、後悔しない1台">
+<meta property="og:description" content="ストリームデッキ、左手デバイス、ゲーム用キーパッドなどマクロパッド20候補を調査。画面付きキーやダイヤル、対応OSと設定ソフトの注意も確認し、使い方が重複しない5商品を比較しました。">
+<meta property="og:url" content="https://miitobow.com/articles/research-macropad">
+<meta property="og:image" content="https://miitobow.com/articles/research-macropad/theme.png">
+<meta property="og:site_name" content="miitobow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="マクロパッドを20候補調べて分かった、後悔しない1台">
+<meta name="twitter:description" content="ストリームデッキ、左手デバイス、ゲーム用キーパッドなどマクロパッド20候補を調査。画面付きキーやダイヤル、対応OSと設定ソフトの注意も確認し、使い方が重複しない5商品を比較しました。">
+<meta name="twitter:image" content="https://miitobow.com/articles/research-macropad/theme.png">
+
+<style>
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+    background:#f8f9fb;
+    color:#222;
+    font-size:16.5px;
+    line-height:1.9;
+  }
+  .home-link {
+    display:block;
+    max-width:600px;
+    margin:0 auto;
+    padding:20px 20px 0;
+    font-size:14px;
+    color:#4CA468;
+    text-decoration:none;
+  }
+  .home-link:hover { text-decoration:underline; }
+  .wrap { max-width:600px; margin:0 auto; padding:16px 20px 100px; }
+  .pr-note { font-size:12.5px; color:#888; border-left:3px solid #ddd; padding-left:10px; margin-bottom:32px; }
+  h1 { font-size:23px; line-height:1.55; margin:8px 0 8px; }
+  .situation { font-size:14.5px; color:#4CA468; font-weight:700; margin-bottom:22px; }
+  .stat-badges { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 28px; }
+  .stat-badges span { background:#eaf6ee; color:#2f8a52; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:999px; }
+  .conclusion-box {
+    background:#fff; border-radius:14px; padding:18px 18px; margin-bottom:32px;
+    box-shadow:0 1px 4px rgba(0,0,0,.06); border:1px solid #eee; font-size:15.5px;
+  }
+  .conclusion-box ul { margin:10px 0 0; padding-left:1.1em; }
+  .conclusion-box li { margin-bottom:10px; line-height:1.6; }
+  h2 { font-size:19px; margin:46px 0 18px; padding-top:8px; border-top:1px solid #e6e6e6; }
+  h2:first-of-type { border-top:none; }
+  .product-h2 { border-top:1px solid #e6e6e6; padding-top:32px; margin-top:50px; margin-bottom:0; }
+  .product-card { background:#fff; border-radius:18px; padding:22px 18px 20px; margin-bottom:18px; box-shadow:0 2px 10px rgba(0,0,0,.05); border:1px solid #eee; }
+  .product-situation { font-size:20px; font-weight:800; margin:0 0 4px; line-height:1.5; }
+  .product-name-row { margin:0 0 16px; }
+  .product-name { font-size:14px; color:#888; display:inline-block; margin-right:8px; }
+  .price-badge { font-size:11.5px; font-weight:700; color:#fff; background:#4CA468; padding:4px 11px; border-radius:999px; display:inline-block; }
+  .trust-line { font-size:13.5px; color:#666; background:#f0f4f0; padding:10px 12px; border-radius:8px; margin-bottom:18px; line-height:1.7; }
+  .trust-line p { margin:0 0 6px; }
+  .trust-line p:last-child { margin:0; }
+  .product-img { width:100%; max-width:380px; display:block; margin:0 auto 20px; border-radius:12px; }
+  .fit-box { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+  .fit-box .col { background:#fafbfa; border-radius:10px; padding:14px 16px; font-size:14.5px; border:1px solid #eee; line-height:1.7; }
+  .fit-box .col.good { border-left:4px solid #4CA468; }
+  .fit-box .col.bad { border-left:4px solid #c98a4b; }
+  .fit-box .col b { display:block; margin-bottom:8px; font-size:12px; letter-spacing:.02em; color:#888; text-transform:uppercase; }
+  .fit-box .col ul { margin:0; padding:0; list-style:none; }
+  .fit-box .col li { margin-bottom:6px; padding-left:1.5em; position:relative; font-weight:600; }
+  .fit-box .col li:last-child { margin-bottom:0; }
+  .fit-box .col.good li::before { content:"✓"; position:absolute; left:0; color:#4CA468; font-weight:900; }
+  .fit-box .col.bad li::before { content:"✕"; position:absolute; left:0; color:#c98a4b; font-weight:900; }
+  .conclusion-line { font-weight:700; font-size:15.5px; margin:18px 0 12px; }
+  .buy-link {
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:14px 26px; background:#06C755; color:#fff;
+    font-weight:700; font-size:15.5px; border-radius:12px; text-decoration:none;
+    margin-bottom:20px; box-shadow:0 3px 10px rgba(6,199,85,.3);
+  }
+  .buy-link:hover { background:#05b34c; }
+  .buy-link .arrow { transition:transform .15s ease; }
+  .buy-link:hover .arrow { transform:translateX(3px); }
+  .review-voice { background:#fff8ee; border-radius:10px; padding:16px 16px; font-size:14px; margin:18px 0; border:1px solid #f0e2c8; line-height:1.8; }
+  .review-voice b { display:block; margin-bottom:6px; }
+  .review-voice .src { font-size:12px; color:#999; margin-top:10px; }
+  .review-voice .src a { color:#999; }
+  .spec-text { font-size:15px; color:#444; }
+  p { margin:0 0 18px; }
+  a { color:#4CA468; }
+  .theme-img { width:100%; border-radius:14px; margin:4px 0 24px; display:block; }
+  .compare-img { display:block; width:100%; border-radius:10px; margin:12px auto; }
+  .compare-cap { font-size:12.5px; color:#888; text-align:center; margin-top:-6px; margin-bottom:20px; }
+  .compare-recap { margin-bottom:28px; }
+  .compare-recap h3 { font-size:15px; margin:0 0 8px; }
+  .compare-recap ul { margin:0 0 18px; padding-left:1.1em; font-size:14px; color:#444; line-height:1.75; }
+  .compare-recap ul li { margin-bottom:2px; }
+  @media (prefers-color-scheme: dark) {
+    .compare-recap ul { color:#cfd8d3; }
+  }
+  .faq-item {
+    background:#fff; border-radius:14px; padding:16px 18px; margin-bottom:14px;
+    font-size:15px; line-height:1.8; box-shadow:0 1px 4px rgba(0,0,0,.05); border:1px solid #eee;
+  }
+  .faq-item p { margin:0; }
+  .related-list { font-size:14.5px; }
+  .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin:14px 0 10px;}.related-card{display:block;text-decoration:none;color:var(--article-ink);background:var(--article-card);border:1px solid var(--article-border);border-radius:12px;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}.related-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}.related-card img{width:100%;aspect-ratio:16/9;object-fit:contain;display:block;background:var(--article-soft);}.related-card span{display:block;padding:8px 10px;font-size:12.5px;font-weight:700;line-height:1.4;}.related-hub-link{display:block;margin-top:4px;font-size:13px;color:var(--article-link);text-align:center;}
+  .related-list li { margin-bottom:10px; }
+  .sources { font-size:12.5px; color:#888; }
+  .sources li { margin-bottom:8px; word-break:break-all; line-height:1.6; }
+  @media (prefers-color-scheme: dark) {
+    body { background:#14201a; color:#e5efec; }
+    .conclusion-box, .product-card, .faq-item { background:#1d2b23; border-color:#2a3d33; }
+    .fit-box .col { background:#182420; border-color:#2a3d33; }
+    .trust-line { background:#20302a; color:#b7c4bd; }
+    .review-voice { background:#2a2418; border-color:#3a3020; }
+    .spec-text { color:#cfd8d3; }
+    h2 { border-color:#2a3d33; }
+    .product-h2 { border-color:#2a3d33; }
+    .product-name { color:#8ea79a; }
+    .stat-badges span { background:#1d3327; color:#7fd39c; }
+  }
+
+/* Wide product stories; article prose retains a comfortable reading width. */
+.wrap{max-width:none;padding:24px 0 100px}
+.wrap> :not(.product-feature){max-width:720px;margin-left:auto;margin-right:auto;width:calc(100% - 48px)}
+.home-link{max-width:768px}
+.product-feature{width:100%;margin:80px 0 40px;scroll-margin-top:24px}
+.product-stage{position:relative;isolation:isolate;overflow:hidden;background:#fff;color:#202923;min-height:660px}
+.product-stage>.product-img{position:absolute;inset:28px 1% 28px auto;width:58%;height:calc(100% - 56px);max-width:none;object-fit:contain;border-radius:0;margin:0;z-index:-2}
+.product-stage:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#f0f4ef 0%,#f0f4eff5 25%,#f0f4efbc 42%,#fff0 62%)}
+.product-overlay{max-width:1440px;margin:auto;min-height:660px;padding:72px clamp(24px,5vw,80px);display:flex;align-items:center}
+.product-copy{width:52%;max-width:650px}
+.product-index{display:block;font-size:12px;letter-spacing:.19em;font-weight:700;color:#466750;margin-bottom:22px}
+.product-copy .product-situation{font-size:clamp(30px,3.6vw,56px);font-weight:800;line-height:1.5;letter-spacing:-.045em;border:0;padding:0;margin:0 0 24px}
+.product-copy .product-name-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 22px}
+.product-copy .product-name{font-size:20px;font-weight:700;color:inherit;margin:0}
+.product-copy .price-badge{background:#315c40;font-size:12px}
+.product-copy .trust-line{background:none;padding:0;border:0;border-radius:0;color:#4b594e;font-size:15px;line-height:1.9;margin:0 0 28px}
+.product-copy .buy-link{display:inline-flex;min-height:56px;margin:0;background:#245837;border:1px solid #245837;border-radius:7px;padding:14px 28px;gap:30px;box-shadow:none;color:#fff}
+.product-copy .buy-link:hover{background:#173f26}
+.buy-link:focus-visible{outline:3px solid #d88630;outline-offset:5px}
+.product-details{max-width:1120px;padding:28px 24px 0;margin:auto}
+.product-details .fit-box{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:0}
+.product-details .fit-box .col{padding:24px 28px;background:#fff;font-size:16px}
+.product-details .fit-box .col b{font-size:14px;color:#466750;margin-bottom:12px}
+.product-details .fit-box .col.bad b{color:#865629}
+.product-details .conclusion-line{margin:24px 0 0;font-size:15px;color:#516156}
+.lifestyle-feature .product-stage>.product-img{inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+.lifestyle-feature .product-stage{color:#fff}
+.lifestyle-feature .product-stage:after{background:linear-gradient(90deg,#14231bed 0%,#14231bd9 30%,#14231b59 57%,#14231b00 78%)}
+.lifestyle-feature .product-index{color:#c3dbc5}
+.lifestyle-feature .trust-line{color:#f0f3eb}
+.lifestyle-feature .buy-link{background:#f0f4e9;color:#203829;border-color:#f0f4e9}
+.lifestyle-feature .buy-link:hover{background:#d7e4cf}
+@media(min-width:1800px){.product-stage>.product-img{right:calc((100% - 1600px)/2);width:800px}.lifestyle-feature .product-stage>.product-img{right:0;width:100%}}
+@media(max-width:700px){
+ .wrap> :not(.product-feature){width:calc(100% - 40px)}
+ .product-feature{margin-top:56px}
+ .product-stage{display:flex;flex-direction:column;min-height:0}
+ .product-overlay{order:0;min-height:0;padding:36px 24px;width:100%;background:#f0f4ef}
+ .product-copy{width:100%;max-width:none}
+ .product-copy .product-situation{font-size:clamp(27px,7.5vw,38px)}
+ .product-copy .product-name{font-size:18px}
+ .product-copy .trust-line{font-size:14px}
+ .product-stage>.product-img,.lifestyle-feature .product-stage>.product-img{position:relative;inset:auto;order:1;width:100%;height:auto;max-height:520px;aspect-ratio:1/1;object-fit:contain;z-index:0;background:#fff}
+ .product-stage:after{display:none}
+ .product-details{padding:20px 20px 0}
+ .product-details .fit-box{grid-template-columns:1fr;gap:12px}
+ .product-details .fit-box .col{padding:20px;font-size:15px}
+ .lifestyle-feature .product-overlay{background:#203a2d}
+ .lifestyle-feature .product-stage>.product-img{aspect-ratio:2/1}
+}
+@media(prefers-color-scheme:dark){.product-details .fit-box .col{background:#1d2b23}.product-details .fit-box .col b{color:#abd4b7}.product-details .fit-box .col.bad b{color:#e8ba8a}.product-details .conclusion-line{color:#cfd8d3}}
+
+
+.chair-char{display:inline-block;white-space:pre}
+.chair-heading-playing .chair-char{animation:chair-blur-in .8s ease var(--char-delay) 1 both}
+@keyframes chair-blur-in{from{filter:blur(12px);opacity:0;transform:scale(1.1)}to{filter:blur(0);opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.chair-char{animation:none!important;filter:none;opacity:1;transform:none}}
+
+/* Full-width opening image; retain its original proportions. */
+.wrap>img.theme-img{width:100%;max-width:none;height:auto;border-radius:0;margin:24px 0 40px}
+
+.wrap>.pick-carousel{max-width:1120px;padding:0;margin-top:40px;margin-bottom:56px;border:1px solid #dfe6dc;border-radius:20px;background:#f0f4ed;color:#223429;box-shadow:none;overflow:hidden}
+.pick-header{padding:30px 40px 0}.pick-header h2{border:0;margin:0;padding:0;font-size:17px}.pick-header p{font-size:13px;color:#596d5d;margin:8px 0 0}
+.pick-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#aac0ad transparent;overscroll-behavior-x:contain}
+.pick-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:24px 40px 30px}
+.pick-number{display:block;color:#647b68;font-size:12px;letter-spacing:.18em;margin-bottom:24px}.pick-reason{font-size:clamp(22px,2.4vw,32px);line-height:1.55;font-weight:700;margin:0 0 12px}
+.pick-copy h3{font-size:clamp(27px,3vw,42px);line-height:1.35;letter-spacing:-.035em;margin:0 0 28px;overflow-wrap:anywhere}.pick-detail{color:#365c40;font-size:13px;text-underline-offset:5px}
+.pick-product{min-width:0;background:#fff;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:stretch}
+.pick-product img{display:block;width:100%;height:300px;object-fit:contain;margin:0 0 16px;border-radius:8px}
+.pick-amazon{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;min-height:52px;color:#fff;background:#245837;border-radius:7px;text-decoration:none;font-size:15px;font-weight:700}.pick-amazon:hover{background:#173f26}
+.pick-controls{display:flex;align-items:center;justify-content:center;gap:22px;padding:0 24px 12px}.pick-controls[hidden]{display:none}.pick-dots{display:flex;gap:6px}.pick-controls button{cursor:pointer;border:1px solid #c7d6c8;background:transparent;color:#31543b;min-width:44px;min-height:44px;border-radius:50%;font:600 13px system-ui}.pick-controls button[aria-current="true"]{background:#245837;color:#fff;border-color:#245837}.pick-controls button:disabled{opacity:.35;cursor:default}
+.pick-controls button:focus-visible,.pick-track:focus-visible,.pick-carousel a:focus-visible{outline:3px solid #b2792d;outline-offset:3px}.pick-hint{text-align:center;font-size:11px;color:#647367;margin:0 20px 18px}
+@media(max-width:700px){.pick-header{padding:24px 22px 0}.pick-slide{grid-template-columns:1fr;gap:22px;padding:24px 22px}.pick-number{margin-bottom:12px}.pick-copy h3{font-size:30px;margin-bottom:16px}.pick-product img{height:230px}.pick-controls{gap:8px;padding-left:8px;padding-right:8px}.pick-dots{gap:2px}.pick-controls button{min-width:36px;min-height:44px}.pick-reason{font-size:23px}}
+
+
+/* A repeatable reading order: summary, purpose, products, research. */
+.article-lead{font-size:18px;line-height:1.95;color:#394b44}
+.wrap>.purpose-nav{max-width:1120px;margin-top:32px;margin-bottom:28px}
+.purpose-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
+.purpose-heading h2{font-size:20px;border:0;padding:0;margin:0}
+.purpose-heading>span{font-size:13px;color:#64736b}
+.purpose-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.purpose-links a{position:relative;display:flex;flex-direction:column;gap:7px;padding:18px 16px 22px;background:#f3f6f1;border:1px solid #dbe3d8;border-radius:12px;color:#263e30;text-decoration:none;transition:background .2s}
+.purpose-links a:hover{background:#e6eee1}
+.purpose-links a:focus-visible{outline:3px solid #53754c;outline-offset:3px}
+.purpose-number{font-size:11px;letter-spacing:.12em;color:#677c63}
+.purpose-links strong{font-size:16px}
+.purpose-product{font-size:11px;line-height:1.5;padding-right:10px}
+.purpose-arrow{position:absolute;right:12px;bottom:12px;color:#6a8066}
+.research-method{margin-top:48px;margin-bottom:40px;border:1px solid #dbe3d8;border-radius:12px;background:#f7f8f5;padding:20px 24px}
+.research-method summary{cursor:pointer;font-weight:700;line-height:1.7;color:#314934}
+.research-content{padding-top:12px}
+.research-content h2{font-size:21px;margin-top:28px}
+.research-content p{line-height:1.95}
+@media(max-width:700px){
+ .article-lead{font-size:16px}
+ .purpose-heading{display:block}
+ .purpose-heading>span{display:block;margin-top:4px}
+ .purpose-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .purpose-links a:last-child{grid-column:1/-1}
+ .purpose-links a{padding:14px 14px 18px}
+ .research-method{padding:18px}
+}
+
+.home-link{max-width:1120px;padding:24px 24px 0;font-size:13px;color:#536b5b}
+.wrap>.article-opening{max-width:960px;padding:48px 0 24px}
+.article-opening .situation{font-size:14px;line-height:1.8;color:#4a6853;margin:0 0 20px}
+.article-opening h1{font-size:clamp(34px,4.6vw,62px);line-height:1.3;letter-spacing:-.035em;margin:0 0 24px;color:#243f2d}
+.opening-summary{max-width:590px;font-size:16px;line-height:1.95;margin-bottom:26px;color:#536157}
+.opening-cta{display:inline-flex;align-items:center;gap:28px;padding:16px 24px;border-radius:8px;background:#245837;color:white;text-decoration:none;font-size:15px;font-weight:700}
+.opening-cta:hover{background:#173f26}
+.opening-cta:focus-visible{outline:3px solid #b2792d;outline-offset:4px}
+.wrap>.pr-note{margin-top:0;margin-bottom:28px;color:#68736c;font-size:12px;line-height:1.8}
+#purpose-picks{scroll-margin-top:24px}
+@media(max-width:700px){.wrap>.article-opening{padding:28px 0 16px}.article-opening .situation{font-size:12px;margin-bottom:16px}.article-opening h1{font-size:clamp(30px,8.5vw,42px)}.opening-summary{font-size:14px}.opening-cta{font-size:14px;padding:15px 20px}}
+@media(prefers-color-scheme:dark){.article-opening h1{color:#edf4e9}.article-opening .situation,.opening-summary,.wrap>.pr-note,.home-link{color:#bbcdbf}}
+
+/* A shared takeaway below the two suitability cards. */
+.product-details .conclusion-line{margin:20px 0 0;padding:20px 24px;border-left:3px solid #628665;border-radius:0 10px 10px 0;background:#edf3e9;color:#294632;font-size:16px;line-height:1.85}
+.decision-label{display:block;margin-bottom:6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#547359}
+.decision-text{display:block;font-weight:700}
+@media(max-width:700px){.product-details .conclusion-line{padding:17px 18px;font-size:15px;margin-top:16px}}
+@media(prefers-color-scheme:dark){.product-details .conclusion-line{background:#243b2c;border-left-color:#86af86;color:#e6efe2}.decision-label{color:#b1ccb0}}
+
+/* miitobow.com palette: warm ink, fresh green, quiet surfaces. */
+:root{--article-ink:#221f1b;--article-muted:#6b6459;--article-link:#397522;--article-green:#6fae2f;--article-button:#407f25;--article-button-hover:#32651d;--article-soft:#f0f6e8;--article-card:#fff;--article-border:#dde6d2;--article-warm:#fcf5eb;--article-orange:#a16a32}
+body{background:#f8f9fb;color:var(--article-ink)}
+a{color:var(--article-link)}
+.home-link,.opening-summary,.wrap>.pr-note,.purpose-heading>span,.purpose-number,.purpose-arrow,.pick-number,.pick-header p,.pick-hint,.compare-cap,.sources,.review-voice .src,.review-voice .src a,.spec-text{color:var(--article-muted)}
+.article-opening h1,.article-lead,.purpose-links a,.wrap>.pick-carousel,.research-method summary{color:var(--article-ink)}
+.article-opening .situation,.product-index,.decision-label,.pick-detail{color:var(--article-link)}
+.stat-badges span{background:var(--article-soft);color:var(--article-link)}
+.purpose-links a,.wrap>.pick-carousel,.research-method{background:var(--article-soft);border-color:var(--article-border)}
+.purpose-links a:hover{background:#e4efda}
+.pick-product,.product-details .fit-box .col,.faq-item{background:var(--article-card);border-color:var(--article-border);color:var(--article-ink)}
+.product-details .fit-box .col.good{border-left-color:var(--article-green)}
+.product-details .fit-box .col.good b,.fit-box .col.good li:before{color:var(--article-link)}
+.product-details .fit-box .col.bad{background:var(--article-warm);border-left-color:var(--article-orange)}
+.product-details .fit-box .col.bad b,.fit-box .col.bad li:before{color:var(--article-orange)}
+.product-details .conclusion-line{background:var(--article-soft);color:var(--article-ink);border-left-color:var(--article-green)}
+.review-voice{background:var(--article-warm);border-color:#eadcc9;color:var(--article-ink)}
+.product-stage{color:#221f1b}
+.product-stage:after{background:linear-gradient(90deg,#f0f6e8 0%,#f0f6e8f5 25%,#f0f6e8bc 42%,#fff0 62%)}
+.product-copy .trust-line{color:#6b6459}
+.product-copy .price-badge{background:var(--article-button);color:#fff}
+.lifestyle-feature .product-stage{color:#fff}
+.lifestyle-feature .product-stage:after{background:linear-gradient(90deg,#222719ed 0%,#222719d9 30%,#22271959 57%,#22271900 78%)}
+.lifestyle-feature .product-index{color:#d7edb8}.lifestyle-feature .trust-line{color:#f5f5ee}
+.buy-link,.product-copy .buy-link,.lifestyle-feature .buy-link,.pick-amazon,.opening-cta{background:var(--article-button);border-color:var(--article-button);color:#fff;box-shadow:none}
+.buy-link:hover,.product-copy .buy-link:hover,.lifestyle-feature .buy-link:hover,.pick-amazon:hover,.opening-cta:hover{background:var(--article-button-hover);border-color:var(--article-button-hover);color:#fff}
+.pick-controls button{color:var(--article-link);border-color:var(--article-border)}
+.pick-controls button[aria-current="true"]{background:var(--article-button);border-color:var(--article-button);color:#fff}
+.purpose-links a:focus-visible,.buy-link:focus-visible,.opening-cta:focus-visible,.pick-controls button:focus-visible,.pick-track:focus-visible,.pick-carousel a:focus-visible{outline-color:#a16a32}
+@media(max-width:700px){.product-overlay{background:#f0f6e8}.lifestyle-feature .product-overlay{background:#293420}}
+@media(prefers-color-scheme:dark){
+ :root{--article-ink:#eeeae3;--article-muted:#c0b8ac;--article-link:#b5d68e;--article-soft:#263323;--article-card:#242b21;--article-border:#435039;--article-warm:#342d23;--article-orange:#dfb27e}
+ body{background:#1b2119}.purpose-links a:hover{background:#34462d}.review-voice{border-color:#584834}.product-stage .product-index{color:#397522}.lifestyle-feature .product-index{color:#d7edb8}
+}
+
+/* desktop-alignment（2026-10-07）: 広い画面で左端を1本にそろえ、本文を読みやすくする。スマホ幅は変えない。 */
+@media (min-width:1100px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){
+    width:auto;max-width:800px;margin-left:max(40px,calc((100% - 1120px)/2));margin-right:auto}
+  .wrap > :is(.article-opening,.purpose-nav,.pick-carousel,.compare-img){
+    width:auto;max-width:min(1120px,calc(100% - 80px));margin-left:max(40px,calc((100% - 1120px)/2));margin-right:max(40px,calc((100% - 1120px)/2))}
+  .wrap > .article-opening{padding-left:0;padding-right:0}
+  .opening-summary{max-width:680px;font-size:17px}
+  .wrap > p, .wrap > ul, .wrap > ol{font-size:18px;line-height:2}
+  .wrap > h2{font-size:26px;margin-top:44px}
+  .compare-recap ul{font-size:16px}
+  .compare-cap{font-size:13.5px;text-align:left}
+  .spec-text{font-size:17px;line-height:2}
+  .review-voice{font-size:16.5px}
+  .product-overlay{max-width:1120px;width:calc(100% - 80px);padding-left:0;padding-right:0}
+  .product-copy{width:46%;max-width:520px}
+  .product-copy .trust-line{font-size:17px;line-height:1.95;color:#3f4d43}
+  .product-copy .product-name{font-size:22px}
+  .product-stage > .product-img{right:max(40px,calc((100% - 1120px)/2));width:min(520px,44%)}
+  .product-details{max-width:1120px;width:calc(100% - 80px);padding-left:0;padding-right:0}
+  .product-details .fit-box .col{font-size:17px}
+  .product-details .concl, .product-details .conclusion-line{font-size:16.5px}
+  .home-link{padding-left:0;margin-left:max(40px,calc((100% - 1120px)/2));margin-right:auto}
+  .pick-copy h3{font-size:clamp(24px,2.3vw,34px);overflow-wrap:break-word;word-break:keep-all}
+}
+</style>
+
+
+</head>
+<body>
+<a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a>
+<div class="wrap">
+<header class="article-opening">
+<p class="situation">マクロパッドやストリームデッキを選べず、買ってから使いこなせず後悔したくない人へ</p>
+<h1>そのマクロパッド、<br>キーの数と値段だけで選んでいませんか？</h1>
+<p class="opening-summary">ストリームデッキ、左手デバイス、ゲーム用キーパッドなどマクロパッド20候補を調査。画面付きキーやダイヤル、対応OSと設定ソフトの注意も確認し、使い方が重複しない5商品を比較しました。</p>
+<a class="opening-cta" href="#purpose-picks">自分に合うマクロパッドを探す <span aria-hidden="true">&darr;</span></a>
+</header>
+<img class="theme-img" src="research-macropad/theme.png" alt="マクロパッドを20候補調べて分かった、後悔しない1台">
+<p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
+
+<p class="article-lead">20候補から、使い方の違う5商品に絞りました。まずは気になる1つへ。向いている人・向いていない人と、低評価レビュー、買う前に確認したいこともまとめています。</p>
+
+<div class="stat-badges">
+  <span>20候補を調査</span>
+  <span>5商品に厳選</span>
+  <span>低評価レビューも確認済み</span>
+</div><nav id="purpose-picks" class="purpose-nav" aria-label="目的別の商品目次"><div class="purpose-heading"><h2>目的から選ぶ</h2><span>気になる商品へ、そのまま移動</span></div><div class="purpose-links"><a href="#lcd-starter"><span class="purpose-number">01</span><strong>画面付きキーを、安く試す</strong><span class="purpose-product">ActionRing ストリームコントローラーデック N3</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#left-hand-creator"><span class="purpose-number">02</span><strong>絵や編集の、左手ショートカット</strong><span class="purpose-product">XPPen ACK05 左手デバイス</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#gaming-keypad"><span class="purpose-number">03</span><strong>ゲームで、押すキーを増やす</strong><span class="purpose-product">Razer Tartarus V2</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#stream-deck-mk2"><span class="purpose-number">04</span><strong>定番のストリームデッキで</strong><span class="purpose-product">Elgato Stream Deck MK.2</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#dials-touch"><span class="purpose-number">05</span><strong>ダイヤルで音量や明るさを</strong><span class="purpose-product">Elgato Stream Deck +</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a></div></nav><section class="conclusion-box pick-carousel" id="quick-picks" aria-label="目的別のおすすめ5商品" aria-roledescription="カルーセル"><div class="pick-header"><h2>結論から先に言うと：</h2><p>画面付きキーか、普通のキーか。ダイヤルは要るか、無線か、ゲームか編集か。何を優先するかで1つを。</p></div><div class="pick-track" tabindex="0" aria-label="商品スライド。左右キーでも切り替えできます"><article class="pick-slide" aria-label="1 / 5：ActionRing ストリームコントローラーデック N3"><div class="pick-copy"><span class="pick-number">01 / 05</span><p class="pick-reason">画面付きキーのマクロパッドを、まず安く試したいなら</p><h3>ActionRing ストリームコントローラーデック N3</h3><a class="pick-detail" href="#lcd-starter">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-macropad/01_actionring.jpg" alt="ActionRing ストリームコントローラーデック N3" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0FT89PKYC?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="ActionRing ストリームコントローラーデック N3をAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="2 / 5：XPPen ACK05 左手デバイス"><div class="pick-copy"><span class="pick-number">02 / 05</span><p class="pick-reason">イラスト・画像・動画編集で、左手のショートカットを増やしたいなら</p><h3>XPPen ACK05 左手デバイス</h3><a class="pick-detail" href="#left-hand-creator">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-macropad/02_xppen-ack05.jpg" alt="XPPen ACK05 左手デバイス" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0GJCQ42PM?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="XPPen ACK05 左手デバイスをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="3 / 5：Razer Tartarus V2"><div class="pick-copy"><span class="pick-number">03 / 05</span><p class="pick-reason">ゲームで押したいキーが足りないなら</p><h3>Razer Tartarus V2</h3><a class="pick-detail" href="#gaming-keypad">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-macropad/03_razer-tartarus-v2.jpg" alt="Razer Tartarus V2" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B077T9391Z?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="Razer Tartarus V2をAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="4 / 5：Elgato Stream Deck MK.2"><div class="pick-copy"><span class="pick-number">04 / 05</span><p class="pick-reason">画面付きキーを、定番のストリームデッキで使いたいなら</p><h3>Elgato Stream Deck MK.2</h3><a class="pick-detail" href="#stream-deck-mk2">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-macropad/04_streamdeck-mk2.jpg" alt="Elgato Stream Deck MK.2" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0CDWSWLWV?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="Elgato Stream Deck MK.2をAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="5 / 5：Elgato Stream Deck +"><div class="pick-copy"><span class="pick-number">05 / 05</span><p class="pick-reason">音量や明るさを、ダイヤルで動かしたいなら</p><h3>Elgato Stream Deck +</h3><a class="pick-detail" href="#dials-touch">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-macropad/05_streamdeck-plus.jpg" alt="Elgato Stream Deck +" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0CDWQS6NW?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="Elgato Stream Deck +をAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article></div><div class="pick-controls" hidden><button type="button" class="pick-prev" aria-label="前の商品">&larr;</button><div class="pick-dots"><button type="button" data-pick="0" aria-label="ActionRing ストリームコントローラーデック N3を表示" aria-current="true">01</button><button type="button" data-pick="1" aria-label="XPPen ACK05 左手デバイスを表示">02</button><button type="button" data-pick="2" aria-label="Razer Tartarus V2を表示">03</button><button type="button" data-pick="3" aria-label="Elgato Stream Deck MK.2を表示">04</button><button type="button" data-pick="4" aria-label="Elgato Stream Deck +を表示">05</button></div><button type="button" class="pick-next" aria-label="次の商品">&rarr;</button></div><p class="pick-hint">横にスワイプして、5商品を見比べる</p></section><h2>選び方の基準は3つ</h2>
+<p>調べてわかったのは、基準は3つでした。</p>
+<p>1つ目は「キーの中に画面があるか」。今回の5商品のうち、画面付きのキー（LCDキー）があるのは、ActionRing、Elgato Stream Deck MK.2、Stream Deck +の3つで、キーの中に画像やアイコンを映せます（商品ページの表記）。XPPen ACK05とRazer Tartarus V2は画面が無い普通のキーなので、キーの数や形で選びます。</p>
+<p>2つ目は「設定ソフトと対応OS」。5商品はどれも、専用ソフトでキーに操作を割り当てます。ElgatoはWindows 11とmacOS 13以降、ActionRingはWindows 10 64ビット版以上とmacOS 14.0以上と仕様欄に書かれていますが、3商品とも同じ商品ページの別の欄と表記が食い違っていました。ActionRingは「iOS, Windows」、Elgatoの2商品は商品説明に「macOS 10.15以降、Windows 10（64ビット）」とあります。XPPen ACK05は、商品ページの本文にOSの記載が見当たりませんでした。購入前に、自分のPCで使えるかを確認するのが大事です。</p>
+<p>3つ目は「接続と大きさ」。無線（Bluetoothか専用レシーバー）に対応するのはXPPen ACK05だけで、ほかの4商品は有線です。重さは、約75g（XPPen ACK05）から約465g（Stream Deck +）まで、約6倍の差がありました。デスクのどこに置くかで選びます。</p>
+
+<h2>比較表</h2>
+<img class="compare-img" src="research-macropad/compare.png" alt="マクロパッド5商品の価格帯・タイプとキー数・接続と対応OS・大きさと重さ・向く使い方の比較表">
+<p class="compare-cap">価格帯・タイプとキー数・接続と対応OS・大きさと重さ・向く使い方の比較（価格帯は、調査時点のAmazon出品価格の順に付けた目安です。価格は変動が大きく、商品ごとに差があります。対応OSや大きさは商品ページの表記です）</p>
+<div class="compare-recap">
+  <h3>ActionRing ストリームコントローラーデック N3</h3>
+  <ul><li>最安クラス</li><li>LCDキー6個＋ダイヤル3つ</li><li>USB-C有線・Windows 10以上／macOS 14以上（欄により食い違い）</li><li>約131×80×68mm</li></ul>
+  <h3>XPPen ACK05 左手デバイス</h3>
+  <ul><li>手頃</li><li>10キー＋ホイール（4グループで最大36）</li><li>Bluetooth／2.4GHz／USB有線</li><li>約75g</li></ul>
+  <h3>Razer Tartarus V2</h3>
+  <ul><li>標準</li><li>32キー＋8方向サムパッド＋ホイール</li><li>USB有線（Macは設定ソフトに注意）</li><li>約340g・約20×15×6cm</li></ul>
+  <h3>Elgato Stream Deck MK.2</h3>
+  <ul><li>上位</li><li>LCDキー15個</li><li>USB-C着脱式・Windows 11／macOS 13以降（仕様表。説明文は表記が違う）</li><li>約11.8×8.4×2.5cm（Amazon表記）</li></ul>
+  <h3>Elgato Stream Deck +</h3>
+  <ul><li>最上位</li><li>LCDキー8個＋ダイヤル4つ＋タッチストリップ</li><li>USB-C・Windows 11／macOS 13以降（仕様表。説明文は表記が違う）</li><li>約465g・約14×13.8×11cm</li></ul>
+</div>
+
+<section class="product-feature" id="lcd-starter" aria-labelledby="lcd-starter-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-macropad/01_actionring.jpg" alt="ActionRing ストリームコントローラーデック N3"><div class="product-overlay"><div class="product-copy"><span class="product-index">MACROPAD / 01</span><h2 class="product-situation" id="lcd-starter-title">まず、画面付きのキーを<br>安く試してみたい人へ</h2><div class="product-name-row"><p class="product-name">ActionRing ストリームコントローラーデック N3（LCDキー6個＋ダイヤル3つ）</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>ActionRingのストリームコントローラーデックは、画面付きのキーがあるマクロパッドを、まず安く試したい人に向く1台です。LCDキーは6個、ダイヤルは3つ、大きさは約131×80×68mmです（Amazon商品ページの表記）。</p><p>各キーに好きな画像やGIFアニメを表示できます。接続はUSB-Cの有線（ケーブル約1.5m）で、設定ソフトはVSD Craft、保証は購入日から24か月と書かれています。対応OSは、仕様欄に「Windows 10 64ビット版以上、macOS 14.0以上」とある一方、商品名の下の欄は「iOS, Windows」とあり、表記が食い違っています。販売元はBasicolorTech HK Limitedです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FT89PKYC?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>画面付きキーのマクロパッドを、まず手頃に試したい人</li><li>音量などを、ダイヤルで操作したい人（ダイヤルは3つ）</li><li>キーに好きな画像やGIFを表示したい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>キーの数がたくさん要る人（LCDキーは6個。レビューには、ページを切り替えて増やす使い方とあります）</li><li>無線で使いたい人（有線のみ。レビューにも、有線専用なので注意、とあります）</li><li>設定ソフトの説明が少ないと困る人（★4のレビューに、説明がほとんど無く、初心者には厳しいかもという声）</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">LCDキー6個とダイヤル3つが付いて、5商品の中でいちばん手頃な価格帯です。評価は4.7と5商品で最も高い一方、件数は189件と少なめです。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューを調べました</b>
+  Amazonの評価は、★5が79%、★4が15%、★3が3%、★2が2%、★1が1%です（189件）。今回ページで確認できた日本のレビューに★1〜★3は見当たらず、気になる声は★4と★5の中にありました。★4には、設定ソフトの使い方の説明がほとんど無く（動画でも分かりにくい）、PCにある程度慣れていないと理解は難しいかも、という投稿があります（ソフトはよくできているとも書かれています）。★5にも、有線専用なのでそこは注意、機能が多くて逆に迷うかも、意識して左手を使わないと飾りになってしまう、という投稿がありました。個別の投稿の真偽までは確認できません。
+  <p class="src">参考：Amazon商品ページのレビュー（★4、★5）</p>
+</div>
+<p class="spec-text">ActionRingのストリームコントローラーデックは、<br>画面付きのキーを安く試したい人に<br>向く1台です。</p>
+<p class="spec-text">LCDキーは6個、ダイヤルは3つで、<br>接続はUSB-Cの有線です。</p>
+<p class="spec-text">対応OSの表記が食い違うので、<br>購入前に自分のPCで使えるか確認します。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0FT89PKYC?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+
+<section class="product-feature" id="left-hand-creator" aria-labelledby="left-hand-creator-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-macropad/02_xppen-ack05.jpg" alt="XPPen ACK05 左手デバイス"><div class="product-overlay"><div class="product-copy"><span class="product-index">MACROPAD / 02</span><h2 class="product-situation" id="left-hand-creator-title">絵や写真・動画の編集で、<br>左手のショートカットを増やしたい人へ</h2><div class="product-name-row"><p class="product-name">XPPen ACK05 左手デバイス（10キー＋ホイール）</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>XPPenのACK05は、イラストや画像・動画の編集で、左手のショートカットを増やしたい人に向く1台です。10個のキーと1個のダイヤル（ホイール）があり、4グループで最大36個のショートカットを登録できます（Amazon商品ページの表記）。</p><p>接続はBluetooth・専用レシーバー・USB有線の3種類、重さは約75gです。保証は1年と書かれています。商品ページの本文にはOSの記載が見当たらず、レビューには、iPadで一部が使えなかった（★3）という声と、事前にPCで更新するとiPad Airで使えた（★5）という声があります。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0GJCQ42PM?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>ペンタブや液タブで、イラスト・画像・動画編集をする人</li><li>Bluetoothか専用レシーバーで、無線で使いたい人</li><li>ホイールで、拡大縮小やブラシサイズを変えたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>設定ソフトを入れていないPCでも、同じ設定で使いたい人（レビューに、会社のPCにはソフトを入れず使いたかったが使えなかったという声）</li><li>iPadで全機能を使いたい人（レビューに、モード切り替えができず、一部のキー操作が効かなかったという声。一方、事前にPCで更新するとiPad Airで使えたという★5の声もあります）</li><li>キーの中に画面がほしい人（画面は付きません）</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">約75gで、無線を含む3通りの接続に対応します。評価は3.9と5商品の中では低めですが、件数は1,163件あります。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューを調べました</b>
+  Amazonの評価は、★5が49%、★4が22%、★3が14%、★2が7%、★1が8%です（1,163件）。★1には、Bluetoothがなかなかつながらず、やっとつながったら真ん中のボタンが全て無反応で、返品した、という投稿がありました。★2には、自宅のPCで設定したあと、ソフトを入れていない会社のPCでも同じ設定を使いたかったが使えず、ソフトもよく落ちる、という投稿があります。★3には、iPadで使うとモード切り替えができず、一部のキー操作が効かなかった、という投稿がありました（ソフトウェア更新でiPad未対応から対応になった製品なので今後好転するかも、とも書かれています）。一方、★5には、事前にPCで必要なアップデートを行うとiPad Airで使えた、という投稿もあります。ほかに、滑りやすいので滑り止めを付けた、という★5の投稿もあります。このページのレビューには、2018〜2020年の海外のレビューも混ざっています。個別の投稿の真偽までは確認できません。
+  <p class="src">参考：Amazon商品ページのレビュー（★1、★2、★3、★5）</p>
+</div>
+<p class="spec-text">XPPenのACK05は、<br>左手でショートカットを使いたい人に<br>向く1台です。</p>
+<p class="spec-text">キーは10個とホイール1個、<br>重さは約75gです。</p>
+<p class="spec-text">接続はBluetooth・専用レシーバー・<br>USB有線の3種類です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0GJCQ42PM?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+
+<section class="product-feature" id="gaming-keypad" aria-labelledby="gaming-keypad-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-macropad/03_razer-tartarus-v2.jpg" alt="Razer Tartarus V2"><div class="product-overlay"><div class="product-copy"><span class="product-index">MACROPAD / 03</span><h2 class="product-situation" id="gaming-keypad-title">ゲームで押したいキーが<br>足りなくて困っている人へ</h2><div class="product-name-row"><p class="product-name">Razer Tartarus V2（32キー）</p><span class="price-badge">標準</span></div><div class="trust-line"><p>RazerのTartarus V2は、ゲームで押したいキーが足りず、左手専用のキーパッドがほしい人に向く1台です。32個のプログラムできるキー、8方向のサムパッド、スクロールホイールが付き、重さは約340g、大きさは約20.3×15.3×6cmです（Amazon商品ページの表記）。</p><p>キーは、メンブレンのやわらかさとメカニカルのクリック感を合わせた「メカメンブレン」で、バックライト（商品ページの箇条書きは「個別にプログラム可能な1,680万色」、概要欄は「単色」と表記が食い違います）と、位置を2段階に調整できる取り外し式のパームレストが付きます。接続はUSB有線、保証は2年、設定はRazer Synapseで行います。この商品ページはRazer直販ではなく、第三者の出品者が販売しており、中古の出品も混ざります。購入時に、販売元と新品かどうかを確認してください。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B077T9391Z?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>ゲームで、押すキーを左手に集めたい人</li><li>手のひらを置いて、長く使いたい人（パームレスト付き）</li><li>キーごとに、バックライトの色まで設定したい人（色数の表記は商品ページ内で食い違うため、購入前に確認）</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>Macで設定したい人（価格.comのスペックはWindowsとMac対応ですが、Razer公式フォーラムに、macOS 10.15以降でSynapseが認識しないという2021年の回答があります）</li><li>親指で押すキーの位置が遠いと感じる人（★3のレビューに、手の大きさによっては負担という声）</li><li>FPSゲームで、押し続ける操作をする人（★1のレビューに、十字キーの押し続けが効かなくなったという声）</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">キーが32個あり、8方向サムパッドとホイールまで付いて、5商品の中でいちばんキーの多い1台です。評価は4.2で、件数は4,840件と最も多くなっています。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューを調べました</b>
+  Amazonの評価は、★5が62%、★4が17%、★3が8%、★2が4%、★1が9%です（4,840件）。★1には、FPSゲーム用に買い、1週間ほどで「Razer Synapseが必要です」というマークが出て、十字キーの押し続けが効かなくなり、斜め移動も設定できず、まともに遊べなかった、という投稿がありました（アプリを終了した状態だと動いた、とも書かれています）。★3には、キーボードのカチカチ感は安心できるが、親指で押すスペースの位置が遠く、手の大きさによっては負担になる、という投稿があります。Macについては、Razer公式フォーラムの2021年の投稿に、Razerのサポートが「Mac版のSynapse 2はmacOS 10.14までしか対応しておらず、10.15以降では認識されないのは想定どおり」と答えたものがありました（現在の状況は確認できていません）。個別の投稿の真偽までは確認できません。
+  <p class="src">参考：Amazon商品ページのレビュー（★1、★3）、Razer Insider（公式フォーラム）、価格.com</p>
+</div>
+<p class="spec-text">RazerのTartarus V2は、<br>ゲームで左手のキーを増やしたい人に<br>向く1台です。</p>
+<p class="spec-text">キーは32個、<br>重さは約340gです。</p>
+<p class="spec-text">接続はUSB有線で、<br>設定はRazer Synapseで行います。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B077T9391Z?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+
+<section class="product-feature" id="stream-deck-mk2" aria-labelledby="stream-deck-mk2-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-macropad/04_streamdeck-mk2.jpg" alt="Elgato Stream Deck MK.2"><div class="product-overlay"><div class="product-copy"><span class="product-index">MACROPAD / 04</span><h2 class="product-situation" id="stream-deck-mk2-title">画面付きキーを、<br>定番のストリームデッキで使いたい人へ</h2><div class="product-name-row"><p class="product-name">Elgato Stream Deck MK.2（LCDキー15個）</p><span class="price-badge">上位</span></div><div class="trust-line"><p>ElgatoのStream Deck MK.2は、画面付きのキー15個で、アプリや配信の操作をワンタッチで呼び出したい人に向く1台です。大きさは約11.8×8.4×2.5cmで、卓上スタンドとUSB-Cケーブルが付きます（Amazon商品ページの表記）。</p><p>対応OSは、仕様表にはWindows 11とmacOS 13以降とある一方、商品説明には「macOS 10.15以降、Windows 10（64ビット）」ともあり、表記が違います。保証は2年6か月（レシートや領収書が必要）と書かれています。この商品ページには、32キーの大きなモデルも同じ枠に並び、レビューも混ざります。この記事は15キーのMK.2を対象にしています。販売元はAmazon.co.jpです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0CDWSWLWV?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>OBSやDiscordなど、配信や通話の操作をワンタッチにしたい人</li><li>画面付きキーで、何のボタンか見て分かるようにしたい人</li><li>Amazon.co.jpの販売で、保証が2年6か月ほしい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>ダイヤルで音量などを動かしたい人（MK.2にダイヤルは無く、ダイヤルがあるのはStream Deck +）</li><li>価格を抑えたい人（ActionRingやXPPenより上の価格帯）</li><li>画面表示の不具合が心配な人（★3に、1か月足らずでボタンが白く霞んだという投稿。32キーのモデルの購入者の投稿です）</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">LCDキーが15個ある定番モデルで、評価は4.5、件数は720件です。Amazon.co.jpの販売で、保証は2年6か月と書かれています。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューを調べました</b>
+  Amazonの評価は、★5が71%、★4が17%、★3が8%、★2が2%、★1が2%です（720件）。★3には、使い始めて1か月足らずで全てのボタンが白く霞み、押せば動くが見づらい、抜いて何日か放電すると戻る、という投稿がありました（32キーのモデルの購入者の投稿で、同じ商品ページに混ざっています）。同じ投稿に、調べると同じ症状が見つかるが不良品とアドバイスされていた、自動スリープで定期的に画面が消えるようにしておくと大丈夫なよう、という記述もあります。同じ投稿には、ダイヤル付きのStream Deck +を使っていたが、配信をしない自分にはダイヤルがあまり役に立たなかった、とも書かれています。Amazonのレビュー要約（AI生成）には、設定は簡単という声と使い方が複雑という声があり、トラブルやエラーの報告も見られるとありました。Web検索では、ボタンの白化や不具合を独立して確認した記事は見つかりませんでした。個別の投稿の真偽までは確認できません。
+  <p class="src">参考：Amazon商品ページのレビュー（★3、レビュー要約）</p>
+</div>
+<p class="spec-text">ElgatoのStream Deck MK.2は、<br>画面付きキーを定番で使いたい人に<br>向く1台です。</p>
+<p class="spec-text">LCDキーは15個、<br>卓上スタンドが付きます。</p>
+<p class="spec-text">仕様表の対応OSは<br>Windows 11とmacOS 13以降です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CDWSWLWV?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+
+<section class="product-feature" id="dials-touch" aria-labelledby="dials-touch-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-macropad/05_streamdeck-plus.jpg" alt="Elgato Stream Deck +"><div class="product-overlay"><div class="product-copy"><span class="product-index">MACROPAD / 05</span><h2 class="product-situation" id="dials-touch-title">音量や明るさを、<br>ダイヤルでなめらかに動かしたい人へ</h2><div class="product-name-row"><p class="product-name">Elgato Stream Deck +（LCDキー8個＋ダイヤル4つ）</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>ElgatoのStream Deck +は、画面付きキーに加えて、音量や明るさをダイヤルで動かしたい人に向く1台です。LCDキーが8個、押し込めるダイヤルが4つ、タッチストリップ（約108×14mmの画面）が付きます。大きさは約14×13.8×11cm、重さは約465gです（Amazon商品ページの表記）。</p><p>対応OSは、仕様表にはWindows 11とmacOS 13以降とある一方、商品説明には「Windows 10（64ビット）、macOS 10.15以降」ともあり、表記が違います。保証は2年6か月と書かれています。ElgatoのMK.2との比較表では、ボタンは15個のMK.2より少ない8個です。販売元はAmazon.co.jpです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0CDWQS6NW?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+  <div class="col good"><b>向いてる人</b><ul><li>音量・明るさ・タイムライン操作を、ダイヤルで調整したい人</li><li>配信やスタジオ作業で、ミキサーのように使いたい人（商品名にオーディオミキサー、プロダクションコンソールとあります）</li><li>キーの画面に加えて、タッチストリップの表示も使いたい人</li></ul></div>
+  <div class="col bad"><b>向いてない人</b><ul><li>価格を抑えたい人（5商品の中で最上位の価格帯）</li><li>ボタンの数を多く使いたい人（LCDキーは8個。MK.2は15個）</li><li>画面まわりの仕上がりが気になる人（★3に、ディスプレイと保護ガラスの間に取れないゴミがあったという投稿）</li></ul></div>
+</div>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">ダイヤルが4つ、画面付きのタッチストリップまで付くのは、5商品の中でこの1台だけです。評価は4.4、件数は415件です。</span></p></div></section>
+<div class="review-voice">
+  <b>低評価レビューを調べました</b>
+  Amazonの評価は、★5が69%、★4が13%、★3が10%、★2が3%、★1が5%です（415件）。★3には、操作性が良く質感もよいが、ディスプレイと保護ガラスのような所の間に取れないゴミがあった、という投稿がありました（3人が参考になったとしています）。Amazonのレビュー要約（AI生成）には、操作性は高く評価され、価格・連携性・ディスプレイについては意見が分かれている、とあります。また、MK.2のページにある★3の投稿には、このStream Deck +を使っていたが、配信をしない自分にはダイヤルがあまり役に立たなかった、と書かれていました。個別の投稿の真偽までは確認できません。
+  <p class="src">参考：Amazon商品ページのレビュー（★3、レビュー要約）</p>
+</div>
+<p class="spec-text">ElgatoのStream Deck +は、<br>ダイヤルで音量や明るさを動かしたい人に<br>向く1台です。</p>
+<p class="spec-text">LCDキーは8個、ダイヤルは4つで、<br>タッチストリップが付きます。</p>
+<p class="spec-text">重さは約465g、<br>対応OSは仕様表でWindows 11とmacOS 13以降です。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CDWQS6NW?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+
+<details class="research-method" id="research-method"><summary>20候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>マクロパッドは、画面付きのキーがあるか、ダイヤルがあるか、無線か、対応OSと設定ソフトはどうか、といった違いが大きく、「買ったのに自分のPCで使えなかった」「思ったよりキーが少ない」「設定が難しくて使いこなせない」というギャップが起きやすい道具です。正直どれを選べばいいのか迷います。</p>
+<p>なので今回、ストリームデッキ、左手デバイス、ゲーム用キーパッドなどのマクロパッドの仕様を調べて比較しました。各商品ごとに、向いてる人・向いてない人も調べているので、自分に合う1つを探してみてください。</p>
+
+<h2>20候補から5つに絞り込みました</h2>
+<p>Amazonの商品ページを中心に調べました。今回はActionRing ストリームコントローラーデック N3・XPPen ACK05・Razer Tartarus V2・Elgato Stream Deck MK.2・Elgato Stream Deck +・Elgato Stream Deck Neo・Elgato Stream Deck Mini・Elgato Stream Deck XL・Elgato フットペダル型 Stream Deck・ロジクール MX クリエイティブ コンソール・VSDINSIDE M18・STREONOR 15キー・CineTreak CT-SD15・HUION Keydial mini・KB16 マクロメカニカルキーボード・サンワダイレクト 400-SKB085・Benboo 9キー3ダイヤル・Eoutegn ミニマクロキーパッド・Razer Tartarus Pro・Razer Orbweaverの20候補を調べ、使い方が重複しないよう5商品に絞りました。このうち、Razer Tartarus ProとRazer Orbweaverは、Amazonの検索結果の評価のみの確認で、ほかの18候補はAmazonの商品ページで、評価（付いているもの）と主な仕様を確認しました。</p>
+<p>採用したのは、ActionRing（画面付きキーを安く試す）、XPPen ACK05（イラスト・動画編集の左手・無線）、Razer Tartarus V2（ゲーム用の32キー）、Elgato Stream Deck MK.2（画面付きキーの定番）、Elgato Stream Deck +（ダイヤルとタッチストリップ）の5つです。</p>
+<p>見送ったのは、採用した商品と使い方が重なるものと、判断材料が足りないものです。画面付きキーを安く試す枠では、VSDINSIDE M18（評価4.4・864件・15キー）、STREONOR（評価4.6・210件）、CineTreak CT-SD15（評価4.6・3件）が重なります。M18は件数が864件と多く有力でしたが、ActionRingはダイヤルが3つ付き、5商品の中でいちばん手頃な価格帯でした。CineTreakは件数が3件と少なく、判断材料が足りませんでした。</p>
+<p>Elgatoの枠では、Stream Deck Neo（評価4.5・218件）、Mini（評価4.4・98件）、XL（MK.2と同じページの選択肢で、評価も共通）が、MK.2やStream Deck +と同じ系列で使い方が重なるため、代表として2つに絞りました。フットペダル型（評価4.5・1,673件）は足で操作する別の用途のため、手元の比較から外しました。</p>
+<p>イラスト・動画編集の枠では、HUION Keydial mini（評価3.7・250件）と、ロジクール MX クリエイティブ コンソール（評価3.5・51件。★1が23%）が重なります。どちらも評価がXPPen ACK05（3.9）以下で、用途も重なるため見送りました。</p>
+<p>キー型の枠では、KB16（評価4.4・203件・16キー）が、Razer Tartarus V2やXPPen ACK05と使い方が重なります。サンワダイレクト 400-SKB085（12キー）は、商品ページに、設定内容を本体メモリーに保存し、専用ドライバが入っていないPCでも使えると書かれていて気になりましたが、Amazonの評価がまだ付いていませんでした。Benboo 9キー3ダイヤルとEoutegn ミニマクロキーパッドも、評価が付いておらず、判断材料が足りませんでした。ゲーム用では、Razer Tartarus Pro（検索結果の評価3.9）とRazer Orbweaver（2014年モデルの表記・評価4.6）は、検索結果に出品価格が表示されなかったため、Tartarus V2に絞りました。</p>
+
+<h2>低評価の商品も見ました</h2>
+<p>5商品それぞれについて、Amazon商品ページに載っている★1〜★5のレビューを確認しました。個別レビューの真偽までは検証できないため、確認できた範囲の傾向としてまとめています。Web検索では、各商品の低評価を独立して検証した記事までは見つかりませんでした（Razer Tartarus V2のMacの設定だけ、Razer公式フォーラムの投稿がありました）。</p>
+<p>確認できた指摘は、ActionRingの設定ソフトの説明が少ない点（1件）、XPPen ACK05のBluetooth接続・別PCでの設定・iPadでの動作（3件）、Razer Tartarus V2の十字キーの反応と親指キーの位置（2件）、Stream Deck MK.2のボタンの白化（1件・32キーのモデルの購入者）、Stream Deck +の画面の隙間のゴミ（1件）です。</p>
+
+</div></details>
+
+<h2>調べてみて驚いたこと</h2>
+<p>調査中、同じ商品ページの中で、対応OSの数字が食い違うものがあって驚きました。ActionRingは、仕様欄が「Windows 10 64ビット版以上、macOS 14.0以上」なのに、別の欄は「iOS, Windows」でした。Elgatoの2商品も、仕様表は「Windows 11、macOS 13以降」ですが、商品説明には「macOS 10.15以降、Windows 10（64ビット）」とあります（新しい方は仕様表の表記です）。どちらに合わせるかは、購入前にElgato公式で確認してください。Razer Tartarus V2も、価格.comのスペックはWindowsとMac対応ですが、Razer公式フォーラムには、Mac版のSynapseが古いmacOSまでしか対応していないという回答がありました。</p>
+<p>もう1つ驚いたのは、設定の持ち運びです。XPPen ACK05のレビューには、自宅のPCで設定したあと、ソフトを入れていない会社のPCで同じ設定を使えなかったという投稿がありました。会社のPCなど、ソフトを入れられない場所で使うなら、設定の保存先を先に確認した方が安心です。</p>
+<p>さらに、価格帯は最安クラスから最上位まで幅がありますが、評価は4.7（ActionRing）、3.9（XPPen ACK05）、4.2（Razer）、4.5（MK.2）、4.4（Stream Deck +）で、価格の高さと評価は並びませんでした。この記事では金額を載せず、相対的な目安で示しています。購入前に、Amazonの販売元と価格を確認してください。</p>
+<p>つまり、キーの数や価格より、自分のPCで使えるか、何を押したいか、どこで使うかで選ぶのが大事だと分かりました。</p>
+
+<h2>マクロパッドを買う前に確認したいこと</h2>
+<p>マクロパッドは、買ってから「自分のPCで動かなかった」「設定が使えなかった」と気づくことが多い道具です。ここでは、今回確認できた根拠のある注意だけを載せます。</p>
+<p>対応OSは、商品ページの仕様欄で、自分のWindowsやmacOSのバージョンに合うかを確認します。ActionRingやElgatoのように、同じページで表記が食い違うものもあります。</p>
+<p>設定ソフトを入れられないPCで使うなら、設定が本体に残るかを確認します。サンワダイレクト 400-SKB085の商品ページには、設定内容を本体メモリーに保存すると書かれていますが、今回の5商品では、商品ページでそうした記載を確認できませんでした。</p>
+<p>販売元と保証も見ておきます。ActionRingは販売元がBasicolorTech HK Limitedで保証24か月、XPPen ACK05は保証1年、Razer Tartarus V2は第三者の出品者の販売で二年間のメーカー保証と書かれ（中古の出品も混ざるので、新品かどうかも確認します）、Elgatoの2商品はAmazon.co.jpの販売で保証は2年6か月（レシートや領収書が必要）です。今回確認できた範囲では、安全面に関わる★1の投稿は見当たりませんでした。</p>
+
+<h2>迷ったらこれ</h2>
+<img class="product-img" src="research-macropad/04_streamdeck-mk2.jpg" alt="Elgato Stream Deck MK.2">
+<p>ここまで読んでも迷ったら、画面付きのキー15個で、Amazon.co.jpの販売・保証2年6か月、Elgato Stream Deck MK.2が、一番外しにくいと考えます（評価は4.5、720件）。画面付きキーを安く試したいならActionRing、左手のショートカットだけならXPPen ACK05も選択肢です。MK.2の対応OSは、仕様表ではWindows 11とmacOS 13以降ですが、商品説明の表記は違うので、購入前に確認してください。</p>
+<a class="buy-link" href="https://www.amazon.co.jp/dp/B0CDWSWLWV?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
+
+<h2>よくある質問</h2>
+<div class="faq-item"><p>Q. ストリームデッキと、普通のマクロパッド（左手デバイス）は何が違いますか。<br>A. 今回の5商品でいうと、キーの中に画面があるのは、ActionRing、Elgato Stream Deck MK.2、Stream Deck +の3つで、画像やアイコンをキーに映せます（商品ページの表記）。XPPen ACK05とRazer Tartarus V2は画面が無い普通のキーで、キーの数や形で選びます。</p></div>
+<div class="faq-item"><p>Q. Macでも使えますか。<br>A. Elgatoの2商品はmacOS 13以降、ActionRingはmacOS 14.0以上と、仕様欄に書かれています（Elgatoの2商品は商品説明に「macOS 10.15以降」ともあり、同じページで表記が違います）。XPPen ACK05は、商品ページの本文にOSの記載が見当たりませんでした。Razer Tartarus V2は、価格.comのスペックではMac対応ですが、Razer公式フォーラムに、macOS 10.15以降でSynapseが認識しないという2021年の回答があります。購入前に、メーカーの最新の情報で確認してください。</p></div>
+<div class="faq-item"><p>Q. 会社のPCなど、ソフトを入れられないPCでも使えますか。<br>A. XPPen ACK05のレビューに、ソフトを入れていないPCで同じ設定を使えなかったという投稿がありました。今回の5商品では、設定が本体に残ると商品ページで確認できたものは無かったので、使う前にメーカーの説明で確認してください。</p></div>
+<div class="faq-item"><p>Q. 無線で使えますか。<br>A. 今回の5商品で、無線に対応するのはXPPen ACK05（Bluetoothと専用レシーバー）だけです。ほかの4商品は、有線の接続です。</p></div>
+
+<h2>こんな記事も書いてます</h2>
+<div class="related-grid">
+  <a class="related-card" href="/articles/research-keyboard"><img src="/articles/research-keyboard/theme.png" alt="分割キーボード" loading="lazy"><span>分割キーボード</span></a>
+  <a class="related-card" href="/articles/research-trackball"><img src="/articles/research-trackball/theme.png" alt="トラックボールマウス" loading="lazy"><span>トラックボールマウス</span></a>
+  <a class="related-card" href="/articles/research-mouse"><img src="/articles/research-mouse/theme.png" alt="ワイヤレスマウス" loading="lazy"><span>ワイヤレスマウス</span></a>
+  <a class="related-card" href="/articles/research-usbmic"><img src="/articles/research-usbmic/theme.png" alt="USBマイク" loading="lazy"><span>USBマイク</span></a>
+  <a class="related-card" href="/articles/research-webcam"><img src="/articles/research-webcam/theme.png" alt="Webカメラ" loading="lazy"><span>Webカメラ</span></a>
+</div>
+<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">&hellip;</span>本）</a>
+<script>(function(){var el=document.getElementById('related-hub-count');if(!el)return;fetch('/miitobow-research/articles.json').then(function(r){return r.json();}).then(function(list){if(Array.isArray(list)&&list.length){el.textContent=list.length;}}).catch(function(){});})();</script>
+
+<p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
+<h2>出典</h2>
+<ul class="sources">
+  <li>Razer Insider（公式フォーラム）tartarus v2 not detected by synapse mac（Macでの対応状況・2021年）：<a href="https://insider.razer.com/razer-support-45/tartarus-v2-not-detected-by-synapse-mac-28839" target="_blank" rel="noopener">insider.razer.com</a></li>
+  <li>価格.com Razer Tartarus V2 RZ07-02270100-R3M1（対応OSの表記）：<a href="https://kakaku.com/item/K0001024390/" target="_blank" rel="noopener">kakaku.com</a></li>
+  <li>Amazon.co.jp ActionRing ストリームコントローラーデック N3（LCDキー6個＋ダイヤル3つ）：<a href="https://www.amazon.co.jp/dp/B0FT89PKYC?tag=miitobow-22" target="_blank" rel="noopener">amazon.co.jp</a></li>
+  <li>Amazon.co.jp XPPen ACK05 左手デバイス（10キー＋ホイール）：<a href="https://www.amazon.co.jp/dp/B0GJCQ42PM?tag=miitobow-22" target="_blank" rel="noopener">amazon.co.jp</a></li>
+  <li>Amazon.co.jp Razer Tartarus V2（32キー）：<a href="https://www.amazon.co.jp/dp/B077T9391Z?tag=miitobow-22" target="_blank" rel="noopener">amazon.co.jp</a></li>
+  <li>Amazon.co.jp Elgato Stream Deck MK.2（LCDキー15個）：<a href="https://www.amazon.co.jp/dp/B0CDWSWLWV?tag=miitobow-22" target="_blank" rel="noopener">amazon.co.jp</a></li>
+  <li>Amazon.co.jp Elgato Stream Deck +（LCDキー8個＋ダイヤル4つ）：<a href="https://www.amazon.co.jp/dp/B0CDWQS6NW?tag=miitobow-22" target="_blank" rel="noopener">amazon.co.jp</a></li>
+</ul>
+
+</div>
+<script>
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('.product-copy .product-situation, .article-opening h1').forEach(heading => {
+    heading.setAttribute('aria-label', heading.innerText.replace(/\s+/g, ' ').trim());
+    let index = 0;
+    const split = element => {
+      [...element.childNodes].forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const fragment = document.createDocumentFragment();
+          for (const character of Array.from(node.textContent)) {
+            const span = document.createElement('span');
+            span.className = 'chair-char';
+            span.textContent = character;
+            span.setAttribute('aria-hidden', 'true');
+            span.style.setProperty('--char-delay', (index++ * .05) + 's');
+            fragment.append(span);
+          }
+          node.replaceWith(fragment);
+        } else if (node.nodeType === Node.ELEMENT_NODE) split(node);
+      });
+    };
+    split(heading);
+    const characters = heading.querySelectorAll('.chair-char');
+    characters[characters.length - 1]?.addEventListener('animationend', () => heading.classList.remove('chair-heading-playing'));
+    reduced.addEventListener('change', () => heading.classList.remove('chair-heading-playing'));
+    let ready = true;
+    new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        ready = true;
+        heading.classList.remove('chair-heading-playing');
+      } else if (ready && entry.intersectionRatio >= .25) {
+        ready = false;
+        if (!reduced.matches) heading.classList.add('chair-heading-playing');
+      }
+    }, {threshold: [0, .25]}).observe(heading);
+  });
+})();
+</script>
+<script>
+(() => {
+ const root=document.querySelector('.pick-carousel');
+ if(!root) return;
+ const track=root.querySelector('.pick-track'), slides=[...root.querySelectorAll('.pick-slide')];
+ const dots=[...root.querySelectorAll('[data-pick]')], prev=root.querySelector('.pick-prev'), next=root.querySelector('.pick-next');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ let current=0, pending=false;
+ function update(){
+   current=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/track.clientWidth)));
+   dots.forEach((dot,i)=>{if(i===current)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');});
+   prev.disabled=current===0;next.disabled=current===slides.length-1;
+ }
+ function go(index){track.scrollTo({left:Math.max(0,Math.min(slides.length-1,index))*track.clientWidth,behavior:reduced.matches?'instant':'smooth'});}
+ prev.addEventListener('click',()=>go(current-1));next.addEventListener('click',()=>go(current+1));
+ dots.forEach((dot,i)=>dot.addEventListener('click',()=>go(i)));
+ track.addEventListener('keydown',e=>{if(e.target!==track)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(current+(e.key==='ArrowRight'?1:-1));}});
+ track.addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(()=>{update();pending=false;});}},{passive:true});
+ window.addEventListener('resize',()=>{track.scrollTo({left:current*track.clientWidth,behavior:'instant'});update();});
+ root.querySelector('.pick-controls').hidden=false;update();
+})();</script>
+</body></html>

@@ -773,5 +773,16 @@
     "url": "https://miitobow.com/articles/research-hammock",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-hammock/theme.png"
+  },
+  {
+    "id": "macropad",
+    "title": "マクロパッド",
+    "category": "desk",
+    "model": "macropad",
+    "summary": "20候補を調査して選ぶ5商品",
+    "content": "画面付きキー・ダイヤル・ゲーム用キーパッドまで、マクロパッド20候補を調査。対応OSと設定ソフトの注意も確認し、使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-macropad",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-macropad/theme.png"
   }
 ]
