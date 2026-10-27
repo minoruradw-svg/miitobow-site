@@ -762,5 +762,16 @@
     "url": "https://miitobow.com/articles/research-outdoorwagon",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-outdoorwagon/theme.png"
+  },
+  {
+    "id": "hammock",
+    "title": "ハンモック",
+    "category": "camp",
+    "model": "hammock",
+    "summary": "20候補を調査して選ぶ5商品",
+    "content": "吊り下げ式・自立式・ハンモックチェア・蚊帳付きまで、ハンモック20候補を調査。耐荷重と設置の注意も確認し、使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-hammock",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-hammock/theme.png"
   }
 ]
