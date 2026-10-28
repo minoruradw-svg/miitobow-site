@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>北九州バスマップ | miitobow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +25,7 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
+  @supports (height: 100dvh) { html, body { height: 100dvh; } }
   body { background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
     font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif; -webkit-font-smoothing: antialiased; }
   .head { font-family: "M PLUS Rounded 1c","Hiragino Sans",sans-serif; font-weight: 900; letter-spacing: .02em; }
@@ -70,14 +71,26 @@
   .note { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; line-height: 1.7; color: var(--ink-faint); }
   .note a { color: var(--accent-dark); }
   .leaflet-container { font-family: inherit; }
+  .grab { display: none; }
   @media (max-width: 760px) {
     main { flex-direction: column; }
-    #panel { width: 100%; border-left: 0; border-top: 1px solid var(--border); max-height: 36%; }
+    #panel { width: 100%; border-left: 0; border-top: 1px solid var(--border); max-height: 36%;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); -webkit-overflow-scrolling: touch; }
     #panel.sel { max-height: 52%; }
+    #panel.min { max-height: 0; padding-top: 0; padding-bottom: 0; border-top: 0; overflow: hidden; }
+    .grab { display: block; width: 100%; padding: 11px 12px; font-size: 14px; font-weight: 700; border: 0;
+      border-top: 1px solid var(--border); background: var(--surface-soft); color: var(--accent-dark); cursor: pointer; }
     header { padding: 8px 12px; gap: 6px 10px; }
     header h1 { font-size: 16px; }
     .searchwrap { flex: 1 1 180px; }
+    #q { font-size: 16px; padding: 10px 12px; }   /* 16px未満だとiPhoneで入力時に画面が拡大される */
+    .chip { padding: 8px 14px; font-size: 13px; }
     .chip .long { display: none; }
+    #sug button { padding: 13px 12px; font-size: 15px; }
+    .rt { padding: 12px; font-size: 15px; }
+    .stoplist button { padding: 10px 4px; font-size: 14px; }
+    .back { padding: 10px 14px; font-size: 13px; }
+    .leaflet-touch .leaflet-bar a { width: 40px; height: 40px; line-height: 40px; }
   }
   @media (min-width: 761px) { .chip .short { display: none; } }
 </style>
@@ -93,6 +106,7 @@
 </header>
 <main>
   <div id="map" role="application" aria-label="北九州市のバス停の地図"></div>
+  <button id="grab" class="grab" type="button" aria-controls="panel" aria-expanded="true">一覧をたたむ ▼</button>
   <aside id="panel"></aside>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
@@ -112,7 +126,7 @@ const routeLabel = r => r.name;
 const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
 const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (a.g === "nishitetsu" ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
 
-const map = L.map("map", { zoomControl: true, preferCanvas: true }).setView([33.8636, 130.7118], 14);
+const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }) }).setView([33.8636, 130.7118], 14);
 L.tileLayer("https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", { minZoom: 5, maxZoom: 18, maxNativeZoom: 18, attribution: "地図：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>" }).addTo(map);
 // パネルの高さが変わっても地図の大きさを取り直す（スマホで中心がずれるのを防ぐ）
 new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
@@ -171,6 +185,14 @@ function setRing(s) {
 }
 
 const panel = document.getElementById("panel");
+const grab = document.getElementById("grab");
+const isMobile = () => matchMedia("(max-width: 760px)").matches;
+function setMin(v) {
+  panel.classList.toggle("min", v);
+  grab.textContent = v ? "一覧を開く ▲" : "一覧をたたむ ▼";
+  grab.setAttribute("aria-expanded", String(!v));
+}
+grab.onclick = () => setMin(!panel.classList.contains("min"));
 const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const NOTE = `<div class="note"><b>このページについて</b><br>
 ・個人が趣味で調べて作った<b>非公式</b>のページです。北九州市・西鉄バス・国土交通省などの公式なものではありません。<br>
@@ -182,7 +204,7 @@ const NOTE = `<div class="note"><b>このページについて</b><br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></div>`;
 
 function home() {
-  hoverOff();
+  hoverOff(); setMin(false);
   selRoute = null; lastStop = null; paint(); map.closePopup(); setRing(null);
   panel.classList.remove("sel");
   panel.innerHTML = `<h2 class="head">バス停を押してみてください</h2>
@@ -201,7 +223,7 @@ function groupedRoutes(rs) {
   return out;
 }
 function showStop(s, fly) {
-  hoverOff();
+  hoverOff(); setMin(false);
   selRoute = null; lastStop = s; paint(); setRing(s); panel.classList.add("sel");
   if (fly) map.setView([s.lat, s.lon], Math.max(map.getZoom(), 16));
   const rs = s.rts.map(i => routes[i]);
@@ -211,7 +233,7 @@ function showStop(s, fly) {
   panel.scrollTop = 0;
 }
 function showRoute(r) {
-  hoverOff();
+  hoverOff(); setMin(false);
   selRoute = r; on[r.g] = true; syncChips(); paint(); map.closePopup(); panel.classList.add("sel");
   setRing(lastStop && r.stops.includes(lastStop) ? lastStop : null);
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { padding: [24, 24], maxZoom: 16 });
@@ -225,6 +247,7 @@ function showRoute(r) {
     const same = () => r.stops.filter(x => x.name === b.dataset.n);
     b.onclick = () => {
       const s = same()[0]; if (!s) return;
+      if (isMobile()) setMin(true);
       map.setView([s.lat, s.lon], Math.max(map.getZoom(), 15)); hoverOn(same());
     };
     b.onmouseenter = b.onfocus = () => hoverOn(same());
