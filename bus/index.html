@@ -58,7 +58,9 @@
   .rt:hover { border-color: var(--accent); }
   .rt small { color: var(--ink-faint); font-size: 11px; }
   .back { margin-bottom: 10px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); cursor: pointer; font-size: 12px; }
-  .stoplist { columns: 2; column-gap: 8px; list-style: none; padding: 0; margin: 6px 0 0; }
+  .stoplist { list-style: none; counter-reset: st; padding: 0; margin: 6px 0 0; }
+  .stoplist li { counter-increment: st; display: flex; align-items: baseline; }
+  .stoplist li::before { content: counter(st); flex: none; width: 2.2em; text-align: right; padding-right: .6em; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
   .stoplist li { break-inside: avoid; }
   .stoplist button { display: block; width: 100%; text-align: left; padding: 3px 4px; font-size: 13px; line-height: 1.5; color: var(--ink); background: none; border: 0; border-radius: 6px; cursor: pointer; }
   .stoplist button:hover, .stoplist button.hl { background: var(--accent-glow); font-weight: 700; }
@@ -123,6 +125,38 @@ const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], stops: [], g: 
 stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
 routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; });
 const routeLabel = r => r.name;
+// 系統のバス停を移動順に並べる（位置からの推定）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
+function orderRoute(r) {
+  const by = new Map();
+  r.stops.forEach(s => { const a = by.get(s.name) || { name: s.name, la: 0, lo: 0, c: 0, st: [] }; a.la += s.lat; a.lo += s.lon; a.c++; a.st.push(s); by.set(s.name, a); });
+  const P = [...by.values()].map(a => ({ name: a.name, x: (a.lo / a.c) * 91, y: (a.la / a.c) * 111, st: a.st }));
+  const n = P.length; if (n <= 2) return P.sort((a, b) => a.x - b.x).map(p => p.name);
+  const d = (a, b) => Math.hypot(P[a].x - P[b].x, P[a].y - P[b].y);
+  // Prim法で最小全域木
+  const par = new Array(n).fill(-1), best = new Array(n).fill(Infinity), inT = new Array(n).fill(false), adj = P.map(() => []);
+  best[0] = 0;
+  for (let k = 0; k < n; k++) {
+    let u = -1; for (let i = 0; i < n; i++) if (!inT[i] && (u < 0 || best[i] < best[u])) u = i;
+    inT[u] = true; if (par[u] >= 0) { adj[u].push(par[u]); adj[par[u]].push(u); }
+    for (let v = 0; v < n; v++) if (!inT[v]) { const w = d(u, v); if (w < best[v]) { best[v] = w; par[v] = u; } }
+  }
+  const bfs = src => { const dist = new Array(n).fill(-1), prev = new Array(n).fill(-1); dist[src] = 0; const q = [src];
+    for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (dist[v] < 0) { dist[v] = dist[u] + 1; prev[v] = u; q.push(v); } }); }
+    return { dist, prev }; };
+  const far = res => res.dist.indexOf(Math.max(...res.dist));
+  const A = far(bfs(0)); const rb = bfs(A); const B = far(rb);
+  let path = []; for (let v = B; v >= 0; v = rb.prev[v]) path.push(v);   // B→A
+  path.reverse();                                                       // A→B
+  if (P[path[0]].x > P[path[path.length - 1]].x) path.reverse();        // 西の端から始める
+  // 軸に乗らないバス停は、軸に最短でつながる地点の直後に入れる
+  const onPath = new Map(path.map((v, i) => [v, i])), anchor = new Array(n).fill(-1), depth = new Array(n).fill(0), q = [];
+  path.forEach((v, i) => { anchor[v] = i; q.push(v); });
+  for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (anchor[v] < 0) { anchor[v] = anchor[u]; depth[v] = depth[u] + 1; q.push(v); } }); }
+  const groups = path.map(() => []); for (let v = 0; v < n; v++) if (!onPath.has(v)) groups[anchor[v]].push(v);
+  const out = []; path.forEach((v, i) => { out.push(v); groups[i].sort((a, b) => depth[a] - depth[b] || d(v, a) - d(v, b)).forEach(x => out.push(x)); });
+  return out.map(i => P[i].name);
+}
+routes.forEach(r => { r.order = orderRoute(r); });
 const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
 const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (a.g === "nishitetsu" ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
 
@@ -240,8 +274,8 @@ function showRoute(r) {
   const back = lastStop ? `← ${esc(lastStop.name)}にもどる` : "← もどる";
   panel.innerHTML = `<button class="back" id="bk">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <p>${esc(OPNAME(r.op))}／データ上のバス停 ${r.n}か所</p>
-  <p class="tip">※バス停の順番は元データに無いため、通るバス停だけを光らせています。名前を押すと地図でその場所に寄ります。</p>
-  <ul class="stoplist">${r.names.slice().sort((a, b) => a.localeCompare(b, "ja")).map(n => `<li><button data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ul>${NOTE}`;
+  <p class="tip">※元データに停車順が無いため、バス停の位置から<b>移動順を推定</b>しています（実際の順や向きとずれることがあります。枝分かれする系統は特にずれます）。名前を押すと地図でその場所に寄ります。</p>
+  <ol class="stoplist">${r.order.map(n => `<li><button data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`;
   document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
   panel.querySelectorAll(".stoplist button").forEach(b => {
     const same = () => r.stops.filter(x => x.name === b.dataset.n);
