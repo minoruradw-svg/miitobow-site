@@ -3297,12 +3297,22 @@
     </div>
   </div>
 </div>
+<div class="made-carousel__card made-carousel__card--8">
+  <div class="made-carousel__face">
+    <img class="made-carousel__icon" src="/bus/bus-icon.svg" alt="">
+    <span class="made-carousel__title">北九州バスマップ</span>
+    <span class="made-carousel__desc">北九州市のバス停と通る系統を地図で眺められるページ。個人が調べた非公式の地図です。</span>
+    <div class="made-carousel__actions">
+      <a class="made-carousel__action" href="/bus/" target="_blank" rel="noopener">地図を見る</a>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="made-carousel__dragbar" id="made-carousel-dragbar" role="slider" aria-label="表示するカードを切り替える" tabindex="0">
     <div class="made-carousel__dragbar-track" id="made-carousel-track">
       <span class="made-carousel__dragbar-fill" id="made-carousel-fill"></span>
-      <span class="made-carousel__dragbar-dot" style="left:0.0%"></span><span class="made-carousel__dragbar-dot" style="left:14.2857%"></span><span class="made-carousel__dragbar-dot" style="left:28.5714%"></span><span class="made-carousel__dragbar-dot" style="left:42.8571%"></span><span class="made-carousel__dragbar-dot" style="left:57.1429%"></span><span class="made-carousel__dragbar-dot" style="left:71.4286%"></span><span class="made-carousel__dragbar-dot" style="left:85.7143%"></span>
+      <span class="made-carousel__dragbar-dot" style="left:0%"></span><span class="made-carousel__dragbar-dot" style="left:12.5%"></span><span class="made-carousel__dragbar-dot" style="left:25%"></span><span class="made-carousel__dragbar-dot" style="left:37.5%"></span><span class="made-carousel__dragbar-dot" style="left:50%"></span><span class="made-carousel__dragbar-dot" style="left:62.5%"></span><span class="made-carousel__dragbar-dot" style="left:75%"></span><span class="made-carousel__dragbar-dot" style="left:87.5%"></span>
       <span class="made-carousel__dragbar-handle" id="made-carousel-handle">⇔</span>
     </div>
     <p class="made-carousel__dragbar-label">← ここをドラッグしてカードを切り替える →</p>
@@ -3314,13 +3324,14 @@
 
 <style>
   .made-carousel__card { transform: none; }
-  .made-carousel__card--1 { transform: rotateY(0.0deg) translateZ(460px); }
-      .made-carousel__card--2 { transform: rotateY(51.4286deg) translateZ(460px); }
-      .made-carousel__card--3 { transform: rotateY(102.8571deg) translateZ(460px); }
-      .made-carousel__card--4 { transform: rotateY(154.2857deg) translateZ(460px); }
-      .made-carousel__card--5 { transform: rotateY(205.7143deg) translateZ(460px); }
-      .made-carousel__card--6 { transform: rotateY(257.1429deg) translateZ(460px); }
-      .made-carousel__card--7 { transform: rotateY(308.5714deg) translateZ(460px); }
+  .made-carousel__card--1 { transform: rotateY(0deg) translateZ(520px); }
+      .made-carousel__card--2 { transform: rotateY(45deg) translateZ(520px); }
+      .made-carousel__card--3 { transform: rotateY(90deg) translateZ(520px); }
+      .made-carousel__card--4 { transform: rotateY(135deg) translateZ(520px); }
+      .made-carousel__card--5 { transform: rotateY(180deg) translateZ(520px); }
+      .made-carousel__card--6 { transform: rotateY(225deg) translateZ(520px); }
+      .made-carousel__card--7 { transform: rotateY(270deg) translateZ(520px); }
+      .made-carousel__card--8 { transform: rotateY(315deg) translateZ(520px); }
 </style>
 
 <script>
@@ -3330,8 +3341,8 @@
   var fill = document.getElementById('made-carousel-fill');
   var handle = document.getElementById('made-carousel-handle');
   var dots = bar ? bar.querySelectorAll('.made-carousel__dragbar-dot') : [];
-  var n = 7;
-  var step = 51.4286;
+  var n = 8;
+  var step = 45;
   if (!inner || !bar) return;
   var rotation = 0;
   var dragging = false;
@@ -3472,6 +3483,15 @@
           <span class="desc">ミートボーをドット絵にした、ブラウザで遊べる横スクロールアクション。3つのステージと、天空を登る縦スクロールの追加ステージ「天空の庭」を収録。</span>
           <div class="app-links">
             <a class="app-links-important" href="/game/" target="_blank" rel="noopener">今すぐ遊ぶ</a>
+          </div>
+        </div>
+
+        <h3 class="glass-chip" id="made-map" style="margin-top:20px; scroll-margin-top:96px;">Webアプリ</h3>
+        <div class="link-card app-card">
+          <span class="title">北九州バスマップ</span>
+          <span class="desc">北九州市のバス停と、そこを通る系統（路線）を地図で眺められるページ。「このバス停からどこへ行ける？」を俯瞰するために、自分が住む街のために作りました。個人が調べた非公式のページで、時刻や並び順は載っていません。</span>
+          <div class="app-links">
+            <a class="app-links-important" href="/bus/" target="_blank" rel="noopener">地図を見る</a>
           </div>
         </div>
 
