@@ -60,7 +60,7 @@
   .stoplist { columns: 2; column-gap: 8px; list-style: none; padding: 0; margin: 6px 0 0; }
   .stoplist li { break-inside: avoid; }
   .stoplist button { display: block; width: 100%; text-align: left; padding: 3px 4px; font-size: 13px; line-height: 1.5; color: var(--ink); background: none; border: 0; border-radius: 6px; cursor: pointer; }
-  .stoplist button:hover { background: var(--accent-glow); }
+  .stoplist button:hover, .stoplist button.hl { background: var(--accent-glow); font-weight: 700; }
   .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
   .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .rt { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
@@ -127,8 +127,29 @@ const markers = stops.map(s => {
   m.on("click", () => { if (isSel(s)) showStop(s); });   // 薄くした点は押せない（誤タップ防止）
   m.bindTooltip(s.name, { direction: "top", offset: [0, -4] });
   m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
+  m.on("mouseover", () => { if (isSel(s)) hoverOn([s], true); });
+  m.on("mouseout", () => hoverOff());
   s.m = m; return m;
 });
+
+// カーソルを合わせたバス停を強調（大きな黄色の輪）。リストの名前に合わせた時も、地図の点に合わせた時も同じ見え方
+let hoverRings = [], hoverList = [];
+function hoverOn(list, fromMap) {
+  hoverOff(); hoverList = list.slice();
+  list.forEach(s => {
+    if (!s.m._map) return;
+    hoverRings.push(L.circleMarker([s.lat, s.lon], { radius: baseR() + 13, color: "#1f2b20", weight: 4, fillColor: "#ffd400", fillOpacity: .6, interactive: false }).addTo(map));
+    s.m.bringToFront();
+  });
+  if (list[0] && list[0].m._map) list[0].m.openTooltip();
+  const li = panel.querySelector(`.stoplist button[data-n="${CSS.escape(list[0].name)}"]`);
+  if (li && fromMap) li.classList.add("hl");
+}
+function hoverOff() {
+  hoverRings.forEach(r => r.remove()); hoverRings = [];
+  hoverList.forEach(s => s.m.closeTooltip()); hoverList = [];
+  panel.querySelectorAll(".stoplist button.hl").forEach(b => b.classList.remove("hl"));
+}
 
 function paint() {
   const r0 = baseR();
@@ -161,6 +182,7 @@ const NOTE = `<div class="note"><b>このページについて</b><br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></div>`;
 
 function home() {
+  hoverOff();
   selRoute = null; lastStop = null; paint(); map.closePopup(); setRing(null);
   panel.classList.remove("sel");
   panel.innerHTML = `<h2 class="head">バス停を押してみてください</h2>
@@ -179,6 +201,7 @@ function groupedRoutes(rs) {
   return out;
 }
 function showStop(s, fly) {
+  hoverOff();
   selRoute = null; lastStop = s; paint(); setRing(s); panel.classList.add("sel");
   if (fly) map.setView([s.lat, s.lon], Math.max(map.getZoom(), 16));
   const rs = s.rts.map(i => routes[i]);
@@ -188,6 +211,7 @@ function showStop(s, fly) {
   panel.scrollTop = 0;
 }
 function showRoute(r) {
+  hoverOff();
   selRoute = r; on[r.g] = true; syncChips(); paint(); map.closePopup(); panel.classList.add("sel");
   setRing(lastStop && r.stops.includes(lastStop) ? lastStop : null);
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { padding: [24, 24], maxZoom: 16 });
@@ -197,9 +221,14 @@ function showRoute(r) {
   <p class="tip">※バス停の順番は元データに無いため、通るバス停だけを光らせています。名前を押すと地図でその場所に寄ります。</p>
   <ul class="stoplist">${r.names.slice().sort((a, b) => a.localeCompare(b, "ja")).map(n => `<li><button data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ul>${NOTE}`;
   document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
-  panel.querySelectorAll(".stoplist button").forEach(b => b.onclick = () => {
-    const s = r.stops.find(x => x.name === b.dataset.n); if (!s) return;
-    map.setView([s.lat, s.lon], Math.max(map.getZoom(), 15)); s.m.openTooltip();
+  panel.querySelectorAll(".stoplist button").forEach(b => {
+    const same = () => r.stops.filter(x => x.name === b.dataset.n);
+    b.onclick = () => {
+      const s = same()[0]; if (!s) return;
+      map.setView([s.lat, s.lon], Math.max(map.getZoom(), 15)); hoverOn(same());
+    };
+    b.onmouseenter = b.onfocus = () => hoverOn(same());
+    b.onmouseleave = b.onblur = () => hoverOff();
   });
   panel.scrollTop = 0;
 }
