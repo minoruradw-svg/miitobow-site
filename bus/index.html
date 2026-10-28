@@ -13,14 +13,14 @@
     --bg: #f6f9f4; --surface: #ffffff; --surface-soft: #eef3ea;
     --ink: #1f2b20; --ink-soft: #5c6b5c; --ink-faint: #93a190;
     --accent: #5f9c39; --accent-dark: #467029; --accent-glow: rgba(95,156,57,.16);
-    --border: #dde6d8; --nishitetsu: #2f8a4e; --city: #e0892b; --other: #5a7fa8;
+    --border: #dde6d8; --nishitetsu: #2f8a4e; --city: #9b4dca; --other: #5a7fa8;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
       --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #6c7c68;
       --accent: #82c455; --accent-dark: #9ed873; --accent-glow: rgba(130,196,85,.2);
-      --border: #2b3625; --nishitetsu: #5fc080; --city: #f0a456; --other: #86a9d0;
+      --border: #2b3625; --nishitetsu: #5fc080; --city: #c58be8; --other: #86a9d0;
     }
   }
   * { box-sizing: border-box; }
@@ -55,26 +55,39 @@
   .rt { display: block; width: 100%; text-align: left; margin: 0 0 6px; padding: 8px 10px; border-radius: 9px; font-size: 13px;
     border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); cursor: pointer; }
   .rt:hover { border-color: var(--accent); }
-  .rt small { color: var(--ink-faint); display: block; font-size: 11px; margin-top: 2px; }
+  .rt small { color: var(--ink-faint); font-size: 11px; }
   .back { margin-bottom: 10px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); cursor: pointer; font-size: 12px; }
-  .stoplist { columns: 2; column-gap: 12px; font-size: 12px; line-height: 1.8; color: var(--ink-soft); padding-left: 16px; margin: 6px 0 0; }
+  .stoplist { columns: 2; column-gap: 8px; list-style: none; padding: 0; margin: 6px 0 0; }
+  .stoplist li { break-inside: avoid; }
+  .stoplist button { display: block; width: 100%; text-align: left; padding: 3px 4px; font-size: 13px; line-height: 1.5; color: var(--ink); background: none; border: 0; border-radius: 6px; cursor: pointer; }
+  .stoplist button:hover { background: var(--accent-glow); }
+  .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rt { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .rt small { display: inline; margin: 0; flex: none; }
+  .tip { font-size: 12px; color: var(--ink-faint); line-height: 1.6; margin: 0 0 8px; }
+  #sug button.act { background: var(--accent-glow); }
   .note { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; line-height: 1.7; color: var(--ink-faint); }
   .note a { color: var(--accent-dark); }
   .leaflet-container { font-family: inherit; }
-  .pop h3 { margin: 0 0 4px; font-size: 14px; }
-  .pop button { display: block; width: 100%; text-align: left; margin-top: 4px; padding: 5px 8px; font-size: 12px; border: 1px solid #dde6d8; border-radius: 7px; background: #f6f9f4; cursor: pointer; }
   @media (max-width: 760px) {
     main { flex-direction: column; }
-    #panel { width: 100%; border-left: 0; border-top: 1px solid var(--border); max-height: 38%; }
+    #panel { width: 100%; border-left: 0; border-top: 1px solid var(--border); max-height: 36%; }
+    #panel.sel { max-height: 52%; }
+    header { padding: 8px 12px; gap: 6px 10px; }
+    header h1 { font-size: 16px; }
+    .searchwrap { flex: 1 1 180px; }
+    .chip .long { display: none; }
   }
+  @media (min-width: 761px) { .chip .short { display: none; } }
 </style>
 </head>
 <body>
 <header>
   <h1 class="head">北九州バスマップ</h1>
   <div class="searchwrap">
-    <input id="q" type="search" placeholder="バス停名・系統名で探す（例：折尾駅、77系統）" autocomplete="off" aria-label="バス停名・系統名で探す">
-    <div id="sug" hidden></div>
+    <input id="q" type="search" placeholder="バス停・系統を検索" autocomplete="off" aria-label="バス停名・系統名で探す">
+    <div id="sug" role="listbox" aria-label="検索候補" hidden></div>
   </div>
   <div class="chips" id="chips"></div>
 </header>
@@ -88,35 +101,52 @@ const D = {"ops":["西鉄バス北九州","北九州市","北九州第一交通"
 const OPNAME = i => D.ops[i];
 const GROUP = i => { const n = D.ops[i]; return n.startsWith("西鉄") ? "nishitetsu" : n === "北九州市" ? "city" : "other"; };
 const GLABEL = { nishitetsu: "西鉄バス", city: "北九州市（おでかけ交通など）", other: "その他の事業者" };
+const GSHORT = { nishitetsu: "西鉄", city: "市", other: "他" };
+const GORDER = ["nishitetsu", "city", "other"];
 const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
 const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
-const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], stops: [] , g: GROUP(r[0])}));
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], stops: [], g: GROUP(r[0]) }));
 stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
+routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; });
 const routeLabel = r => r.name;
+const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
+const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (a.g === "nishitetsu" ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
 
 const map = L.map("map", { zoomControl: true, preferCanvas: true }).setView([33.8636, 130.7118], 14);
 L.tileLayer("https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", { minZoom: 5, maxZoom: 18, maxNativeZoom: 18, attribution: "地図：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>" }).addTo(map);
+// パネルの高さが変わっても地図の大きさを取り直す（スマホで中心がずれるのを防ぐ）
+new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
 
 const on = { nishitetsu: true, city: true, other: true };
-let selRoute = null;
+let selRoute = null, lastStop = null, focusRing = null;
 const colorOf = g => css(g);
+const isSel = s => !selRoute || selRoute.stops.includes(s);
+const baseR = () => { const z = map.getZoom(); return z <= 12 ? 3 : z <= 14 ? 4.5 : z <= 15 ? 5.5 : 7; };
 const markers = stops.map(s => {
-  const m = L.circleMarker([s.lat, s.lon], { radius: 5, weight: 1.5, color: "#fff", fillColor: colorOf(s.g), fillOpacity: .95 });
-  m.on("click", () => showStop(s));
+  const m = L.circleMarker([s.lat, s.lon], { radius: 5, weight: 2, color: "#fff", fillColor: colorOf(s.g), fillOpacity: .95 });
+  m.on("click", () => { if (isSel(s)) showStop(s); });   // 薄くした点は押せない（誤タップ防止）
   m.bindTooltip(s.name, { direction: "top", offset: [0, -4] });
+  m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
   s.m = m; return m;
 });
 
 function paint() {
+  const r0 = baseR();
   stops.forEach(s => {
-    const vis = on[s.g];
-    const inSel = !selRoute || selRoute.stops.includes(s);
+    const inSel = isSel(s);
+    // 系統を選んでいる間は、その系統が通るバス停を事業者フィルタに関係なく出す
+    const vis = on[s.g] || (selRoute && inSel);
     if (!vis) { s.m.remove(); return; }
     if (!s.m._map) s.m.addTo(map);
     s.m.setStyle({ fillColor: colorOf(s.g), fillOpacity: inSel ? .95 : .12, opacity: inSel ? 1 : .15,
-      radius: selRoute && inSel ? 7 : 5, weight: selRoute && inSel ? 2 : 1.5 });
+      radius: selRoute && inSel ? r0 + 2 : r0, weight: selRoute && inSel ? 2.5 : 2 });
     if (selRoute && inSel) s.m.bringToFront();
   });
+}
+map.on("zoomend", paint);
+function setRing(s) {
+  if (focusRing) { focusRing.remove(); focusRing = null; }
+  if (s) focusRing = L.circleMarker([s.lat, s.lon], { radius: 13, color: "#1f2b20", weight: 3, fill: false, interactive: false }).addTo(map);
 }
 
 const panel = document.getElementById("panel");
@@ -124,40 +154,54 @@ const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&
 const NOTE = `<div class="note"><b>このページについて</b><br>
 ・個人が趣味で調べて作った<b>非公式</b>のページです。北九州市・西鉄バス・国土交通省などの公式なものではありません。<br>
 ・内容に誤り・抜け・古い情報がある可能性があります。ご利用は自己責任でお願いします。乗車前は必ず事業者の公式情報（<a href="http://nishitetsu-ktq.jp/rosen/" target="_blank" rel="noopener">西鉄バス北九州の公式路線図</a>など）でご確認ください。<br>
-・バス停の並び順・時刻・運賃は含みません。系統によっては一部のバス停しか載っていません。<br>
+・バス停の並び順・時刻・運賃は含みません（元データに順番が無いため、系統は「通るバス停を光らせる」表示です）。系統によっては一部のバス停しか載っていません。<br>
 <b>出典</b><br>
 ・バス停・系統：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html" target="_blank" rel="noopener">国土交通省 国土数値情報（バス停留所データ・令和4年度・CC BY 4.0）</a>を加工して作成（2022年度時点）<br>
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図）</a><br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></div>`;
 
 function home() {
-  selRoute = null; paint();
-  const counts = { nishitetsu: 0, city: 0, other: 0 };
-  stops.forEach(s => counts[s.g]++);
+  selRoute = null; lastStop = null; paint(); map.closePopup(); setRing(null);
+  panel.classList.remove("sel");
   panel.innerHTML = `<h2 class="head">バス停を押してみてください</h2>
-  <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統が通るバス停だけが光ります。</p>
-  <p>上の検索から、バス停名や系統名でも探せます。</p>${NOTE}`;
+  <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統（路線）が出ます。系統を選ぶと、その系統が通るバス停だけが光ります。</p>
+  <p>上の検索から、バス停名や系統名でも探せます（例：折尾駅、77系統）。</p>${NOTE}`;
 }
-function routeBtn(r, extra) {
-  return `<button class="rt" data-r="${r.i}">${esc(routeLabel(r))}<small>${esc(OPNAME(r.op))}・${r.stops.length}か所${extra || ""}</small></button>`;
+function routeBtn(r) {
+  return `<button class="rt" data-r="${r.i}"><span>${esc(routeLabel(r))}</span><small>${r.n}か所</small></button>`;
+}
+function groupedRoutes(rs) {
+  let out = "", cur = "";
+  rs.slice().sort(routeCmp).forEach(r => {
+    if (r.g !== cur) { cur = r.g; out += `<div class="grp"><i style="background:var(--${r.g})"></i>${GLABEL[r.g]}</div>`; }
+    out += routeBtn(r);
+  });
+  return out;
 }
 function showStop(s, fly) {
-  selRoute = null; paint();
+  selRoute = null; lastStop = s; paint(); setRing(s); panel.classList.add("sel");
   if (fly) map.setView([s.lat, s.lon], Math.max(map.getZoom(), 16));
   const rs = s.rts.map(i => routes[i]);
   panel.innerHTML = `<button class="back" id="bk">← もどる</button><h2 class="head">${esc(s.name)}</h2>
-  <p>${rs.length ? "このバス停を通る系統（" + rs.length + "）" : "系統の情報がありません"}</p>${rs.map(r => routeBtn(r)).join("")}${NOTE}`;
+  <p>${rs.length ? "このバス停を通る系統（" + rs.length + "）" : "系統の情報がありません"}</p>${groupedRoutes(rs)}${NOTE}`;
   bind();
-  L.popup({ closeButton: false, offset: [0, -4] }).setLatLng([s.lat, s.lon]).setContent(`<div class="pop"><h3>${esc(s.name)}</h3>${rs.length}系統</div>`).openOn(map);
+  panel.scrollTop = 0;
 }
 function showRoute(r) {
-  selRoute = r; paint(); map.closePopup();
-  const names = [...new Set(r.stops.map(s => s.name))];
-  map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { padding: [40, 40], maxZoom: 16 });
-  panel.innerHTML = `<button class="back" id="bk">← もどる</button><h2 class="head">${esc(routeLabel(r))}</h2>
-  <p>${esc(OPNAME(r.op))}／データ上のバス停 ${names.length}か所（並び順は不明）</p>
-  <ul class="stoplist">${names.sort((a, b) => a.localeCompare(b, "ja")).map(n => `<li>${esc(n)}</li>`).join("")}</ul>${NOTE}`;
-  document.getElementById("bk").onclick = home;
+  selRoute = r; on[r.g] = true; syncChips(); paint(); map.closePopup(); panel.classList.add("sel");
+  setRing(lastStop && r.stops.includes(lastStop) ? lastStop : null);
+  map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { padding: [24, 24], maxZoom: 16 });
+  const back = lastStop ? `← ${esc(lastStop.name)}にもどる` : "← もどる";
+  panel.innerHTML = `<button class="back" id="bk">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
+  <p>${esc(OPNAME(r.op))}／データ上のバス停 ${r.n}か所</p>
+  <p class="tip">※バス停の順番は元データに無いため、通るバス停だけを光らせています。名前を押すと地図でその場所に寄ります。</p>
+  <ul class="stoplist">${r.names.slice().sort((a, b) => a.localeCompare(b, "ja")).map(n => `<li><button data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ul>${NOTE}`;
+  document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  panel.querySelectorAll(".stoplist button").forEach(b => b.onclick = () => {
+    const s = r.stops.find(x => x.name === b.dataset.n); if (!s) return;
+    map.setView([s.lat, s.lon], Math.max(map.getZoom(), 15)); s.m.openTooltip();
+  });
+  panel.scrollTop = 0;
 }
 function bind() {
   panel.querySelectorAll(".rt").forEach(b => b.onclick = () => showRoute(routes[+b.dataset.r]));
@@ -165,34 +209,52 @@ function bind() {
 }
 
 // フィルタ
-const chips = document.getElementById("chips");
-["nishitetsu", "city", "other"].forEach(g => {
+const chips = document.getElementById("chips"), chipEls = {};
+GORDER.forEach(g => {
   const c = document.createElement("button"); c.className = "chip"; c.setAttribute("aria-pressed", "true");
-  c.innerHTML = `<i style="background:var(--${g})"></i>${GLABEL[g]}`;
-  c.onclick = () => { on[g] = !on[g]; c.setAttribute("aria-pressed", on[g]); paint(); };
-  chips.appendChild(c);
+  c.innerHTML = `<i style="background:var(--${g})"></i><span class="long">${GLABEL[g]}</span><span class="short">${GSHORT[g]}</span>`;
+  c.setAttribute("aria-label", GLABEL[g] + "のバス停を表示");
+  c.onclick = () => { on[g] = !on[g]; syncChips(); map.closePopup(); paint(); };
+  chips.appendChild(c); chipEls[g] = c;
 });
+function syncChips() { GORDER.forEach(g => chipEls[g].setAttribute("aria-pressed", on[g])); }
 
-// 検索
+// 検索（Enter／↑↓／Escに対応）
 const q = document.getElementById("q"), sug = document.getElementById("sug");
 const kana = t => t.normalize("NFKC").toLowerCase();
-const items = [...routes.map(r => ({ t: "r", r, key: kana(routeLabel(r) + " " + OPNAME(r.op)) })), ...stops.map(s => ({ t: "s", s, key: kana(s.name) }))];
+const items = [...routes.map(r => ({ t: "r", r, key: kana(routeLabel(r) + " " + OPNAME(r.op)) })),
+  ...stops.map(s => ({ t: "s", s, key: kana(s.name) }))];
+let hit = [], act = -1;
+function pick(it) {
+  sug.hidden = true; q.value = ""; act = -1;
+  it.t === "r" ? showRoute(it.r) : (map.setView([it.s.lat, it.s.lon], 16), showStop(it.s));
+}
+function setAct(k) {
+  act = k;
+  sug.querySelectorAll("button[data-k]").forEach((b, i) => { b.classList.toggle("act", i === act); b.setAttribute("aria-selected", i === act); if (i === act) b.scrollIntoView({ block: "nearest" }); });
+}
 q.oninput = () => {
-  const v = kana(q.value.trim());
+  const v = kana(q.value.trim()); act = -1;
   if (!v) { sug.hidden = true; return; }
-  const hit = items.filter(it => it.key.includes(v));
+  hit = items.filter(it => it.key.includes(v));
   hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || (a.key.startsWith(v) ? 0 : 1) - (b.key.startsWith(v) ? 0 : 1));
-  sug.innerHTML = hit.slice(0, 40).map((it, k) => it.t === "r"
-    ? `<button data-k="${k}">${esc(routeLabel(it.r))}<small>系統・${esc(OPNAME(it.r.op))}</small></button>`
-    : `<button data-k="${k}">${esc(it.s.name)}<small>バス停</small></button>`).join("") || `<button disabled>見つかりません</button>`;
+  hit = hit.slice(0, 40);
+  sug.innerHTML = hit.map((it, k) => it.t === "r"
+    ? `<button role="option" data-k="${k}">${esc(routeLabel(it.r))}<small>系統・${esc(OPNAME(it.r.op))}</small></button>`
+    : `<button role="option" data-k="${k}">${esc(it.s.name)}<small>バス停・${esc(OPNAME(it.s.op))}・${it.s.rts.length}系統</small></button>`).join("") || `<button disabled>見つかりません</button>`;
   sug.hidden = false;
-  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => {
-    const it = hit[+b.dataset.k]; sug.hidden = true; q.value = "";
-    it.t === "r" ? showRoute(it.r) : (map.setView([it.s.lat, it.s.lon], 16), showStop(it.s));
-  });
+  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+};
+q.onkeydown = e => {
+  if (e.key === "Escape") { sug.hidden = true; return; }
+  if (sug.hidden || !hit.length) return;
+  if (e.key === "ArrowDown") { e.preventDefault(); setAct((act + 1) % hit.length); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setAct((act - 1 + hit.length) % hit.length); }
+  else if (e.key === "Enter") { e.preventDefault(); pick(hit[act >= 0 ? act : 0]); }
 };
 document.addEventListener("click", e => { if (!e.target.closest(".searchwrap")) sug.hidden = true; });
 home();
+map.invalidateSize();
 </script>
 </body>
 </html>
