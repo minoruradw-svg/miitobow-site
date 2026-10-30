@@ -145,6 +145,14 @@
   .rt small { color: var(--ink-soft); font-size: 12px; flex: none; }
   .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
   .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 5px; margin: 6px 0 8px; padding: 6px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .rbar button { flex: 1 1 0; min-width: 44px; min-height: 44px; padding: 0 4px; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  @media (hover: hover) { .rbar button:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); } }   /* 指で押した後に「押されたまま」に見えないよう、カーソルのある端末だけ */
+  .rbar button:disabled { opacity: .4; cursor: default; }
+  .rbar button[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); }
+  .rbar button[aria-pressed="true"]::before { content: "✓ "; font-weight: 800; }   /* オンの目印(色だけに頼らない) */
+  .rbar #rPos { flex: none; min-width: 72px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .stnum { width: auto !important; min-width: 16px; padding: 0 4px; border: 1.5px solid #1f2b20; border-radius: 8px; background: rgba(255,255,255,.94); color: #1f2b20; font: 700 11px/13px system-ui, sans-serif; text-align: center; pointer-events: none; box-sizing: border-box; }
   .stoplist { list-style: none; counter-reset: st; padding: 0; margin: 0; }
   .stoplist li { counter-increment: st; display: flex; align-items: center; }
   .stoplist li::before { content: counter(st); flex: none; width: 2.4em; text-align: right; padding-right: .7em; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
@@ -430,7 +438,7 @@ const markers = stops.map(s => {
   m.bindTooltip(s.name, { direction: "top", offset: [0, -4] });
   m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
   m.on("mouseover", () => { if (isSel(s)) hoverOn([s], true); });
-  m.on("mouseout", () => hoverOff());
+  m.on("mouseout", () => { if (!touchOnly()) hoverOff(); });   // 指で押した時に出る疑似mouseoutで、選択中の輪を消さない
   s.m = m; return m;
 });
 
@@ -464,7 +472,25 @@ function styleOne(s, r0) {
     radius: cur ? r0 + 4 : selRoute && inSel ? r0 + 2 : r0, weight: cur ? 3 : selRoute && inSel ? 2.5 : 2 });
   if ((selRoute && inSel) || cur) s.m.bringToFront();
 }
-function paint() { const r0 = baseR(); stops.forEach(s => styleOne(s, r0)); drawRings(); }
+// 系統を選んでいる間、地図の点に『推定順の番号』を出す（切り替え可・この端末に覚える）。低ズームでは、1・5の倍数・最後だけ
+const touchOnly = () => isMobile() || matchMedia("(hover: none)").matches;   // カーソルを合わせられない端末(スマホ・タブレット)
+let numOn = true; try { numOn = localStorage.getItem("busmap.num") !== "0"; } catch (e) {}
+const numLayer = L.layerGroup().addTo(map);
+function drawNums() {
+  numLayer.clearLayers();
+  if (!selRoute || !numOn) return;
+  const z = map.getZoom(), n = selRoute.order.length, pos = new Map(selRoute.order.map((nm, i) => [nm, i + 1]));
+  const sel = curStops[0] ? curStops[0].name : null, items = [];
+  selRoute.stops.forEach(s => { const k = pos.get(s.name); if (!k) return;
+    const pri = s.name === sel ? 0 : (k === 1 || k === n) ? 1 : k % 5 === 0 ? 2 : 3;
+    if (z < 13 && pri > 2) return;
+    items.push({ s, k, pri, p: map.latLngToContainerPoint([s.lat, s.lon]) }); });
+  items.sort((a, b) => a.pri - b.pri || a.k - b.k);
+  const kept = [];   // 画面上で重なる番号は、優先度の高い方だけ残す(選択中・最初/最後・5の倍数 → その他)
+  items.forEach(it => { if (kept.some(o => Math.abs(o.p.x - it.p.x) < 26 && Math.abs(o.p.y - it.p.y) < 18)) return; kept.push(it);
+    L.marker([it.s.lat, it.s.lon], { icon: L.divIcon({ className: "stnum", html: String(it.k), iconSize: [22, 16], iconAnchor: [-4, 21] }), interactive: false, keyboard: false, zIndexOffset: 400 }).addTo(numLayer); });
+}
+function paint() { const r0 = baseR(); stops.forEach(s => styleOne(s, r0)); drawRings(); drawNums(); }
 // 選択中のバス停の外周リング（白い縁取り＋濃い輪＋ブランドグリーンの塗り）
 function drawRings() {
   curRings.forEach(r => r.remove()); curRings = [];
@@ -641,20 +667,44 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span><span>データ上の停留所 <b>${r.n}</b>か所</span></div>
   <div class="lh">停留所一覧（位置からの推定順）</div>
-  <p class="tip">※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。名前を押すと地図でその場所に寄ります。</p>
+  <p class="tip">※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <div class="rbar" role="group" aria-label="停留所を順に見る（推定順）"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="地図の点に推定順の番号を出す">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);
   if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
   document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  // ---- 停留所を順に見る（推定順）。スマホは『押しても拡大しない』：印を付けるだけ。近くを見たい時は『拡大』 ----
+  const fitAll = () => map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const same = n => r.stops.filter(x => x.name === n);
+  const rPrev = document.getElementById("rPrev"), rNext = document.getElementById("rNext"), rZoom = document.getElementById("rZoom"), rPos = document.getElementById("rPos"), rAllBtn = document.getElementById("rAll");
+  let idx = curStops[0] ? r.order.indexOf(curStops[0].name) : -1;
+  const sync = () => {
+    rPos.innerHTML = `推定 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
+    const ae = document.activeElement; rPrev.disabled = idx <= 0; rNext.disabled = idx >= r.order.length - 1; rZoom.disabled = idx < 0;
+    if (ae && ae.disabled) (ae === rPrev ? rNext : ae === rNext ? rPrev : rAllBtn).focus();   // 押せなくなったボタンにフォーカスが残って、キーボード操作が途切れないように
+    pbody.querySelectorAll(".stoplist button").forEach(b => { if (idx >= 0 && b.dataset.n === r.order[idx]) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+  };
+  const mark = (i, zoomIn) => {   // i番目のバス停に印(黄色の輪＋名前)を付ける。zoomIn=trueの時だけ寄せる。それ以外は、隠れている時だけ最小限に動かす
+    const list = same(r.order[i]); if (!list[0]) return; idx = i;
+    if (isMobile() && sheetState !== "mid") setSheet("mid");
+    setCur(list); hoverOn(list); sync();
+    if (zoomIn) focusTo(L.latLng(list[0].lat, list[0].lon), Math.max(map.getZoom(), 16)); else ensureVisible(L.latLng(list[0].lat, list[0].lon));
+  };
+  sync();
+  rPrev.onclick = () => mark(Math.max(0, idx - 1), false);
+  rNext.onclick = () => mark(Math.min(r.order.length - 1, idx + 1), false);
+  rZoom.onclick = () => { if (idx >= 0) mark(idx, true); };
+  document.getElementById("rAll").onclick = () => { hoverOff(); fitAll(); };
+  document.getElementById("rNum").onclick = e => { numOn = !numOn; try { localStorage.setItem("busmap.num", numOn ? "1" : "0"); } catch (x) {} e.currentTarget.setAttribute("aria-pressed", String(numOn)); drawNums(); };
   pbody.querySelectorAll(".stoplist button").forEach(b => {
-    const same = () => r.stops.filter(x => x.name === b.dataset.n);
     b.onclick = () => {
-      const s = same()[0]; if (!s) return;
+      const i = r.order.indexOf(b.dataset.n), s = same(b.dataset.n)[0]; if (!s || i < 0) return;
+      if (touchOnly()) { mark(i, false); return; }   // スマホ・タブレット(カーソルを合わせられない端末)は、拡大しない
+      idx = i; sync();
       if (isMobile()) setSheet("mid");           // 一覧のタップ→標準段へ。選んだ地点はシートの裏に隠れない位置へ寄せる
-      setCur(same()); focusTo(L.latLng(s.lat, s.lon), Math.max(map.getZoom(), 15)); hoverOn(same());
+      setCur(same(b.dataset.n)); focusTo(L.latLng(s.lat, s.lon), Math.max(map.getZoom(), 15)); hoverOn(same(b.dataset.n));
     };
-    b.onmouseenter = b.onfocus = () => hoverOn(same());
-    b.onmouseleave = b.onblur = () => hoverOff();
+    if (!touchOnly()) { b.onmouseenter = () => hoverOn(same(b.dataset.n)); b.onmouseleave = () => hoverOff(); b.onfocus = () => hoverOn(same(b.dataset.n)); b.onblur = () => hoverOff(); }   // スマホは、地図を押すとフォーカスが外れて黄色い輪が消えるので、focus連動にしない
   });
 }
 function bind() {
