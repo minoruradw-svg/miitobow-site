@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<title>パパクエ｜人生がパパッとクエストになる</title>
+<meta name="description" content="毎日を冒険にする、TODOアプリ。毎日のやることをクエストにして、家族やパートナーとお願い・達成・ありがとうをやり取りできるiPhoneアプリ。">
+<link rel="icon" href="assets/icon_96.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+:root {
+  --bg: #ffffff; --ink: #1f2223; --ink2: #5e635f; --line: #e6e8e6;
+  --grad: linear-gradient(135deg, #10a98c 0%, #2e9f5f 52%, #4c8f20 100%);
+  --gx: clamp(24px, 8.33vw, 160px);          /* 左の余白＝文字・リード・ボタンの縦の軸 */
+  --pw: clamp(250px, 22.9vw, 360px);         /* 3Dスマホの幅（1440で330） */
+  --mw: clamp(118px, 10.8vw, 170px);         /* ミートボーの幅（1440で155）＝アプリより目立たない大きさ */
+  --h1: clamp(44px, 6.67vw, 104px);          /* 1440で96 */
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; font-weight: 400; line-height: 1.9; overflow-x: clip; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+p, h1 { margin: 0; }
+
+/* ---------- ヘッダー ---------- */
+.top { position: fixed; z-index: 30; inset: 0 0 auto 0; height: 64px; background: rgba(255,255,255,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(230,232,230,.7); }
+.top .in { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--gx); gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 800; font-size: 17px; letter-spacing: .02em; }
+.brand img { width: 30px; height: 30px; border-radius: 8px; }
+.nav { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; color: var(--ink2); }
+.nav a:not(.pill) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 8px; }
+.nav a:hover { color: var(--ink); }
+.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 24px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 700; font-size: 15px; white-space: nowrap; transition: background .18s, transform .18s; }
+.pill:hover { background: #2e2f31; transform: translateY(-1px); }
+.pill:active { transform: none; }
+.pill:focus-visible, a:focus-visible { outline: 3px solid #20cfaf; outline-offset: 3px; }
+.top .pill { min-height: 44px; padding: 0 20px; font-size: 14px; }
+
+/* ---------- ファーストビュー ---------- */
+.hero { position: relative; height: 150vh; height: 150svh; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; }
+
+.copy { position: absolute; left: var(--gx); top: clamp(112px, 16.7vh, 190px); width: min(720px, calc(100vw - var(--gx) * 2)); will-change: opacity, transform; }
+.eyebrow { font-size: 14px; font-weight: 700; letter-spacing: .18em; color: var(--ink2); margin-bottom: clamp(14px, 2.2vh, 22px); }
+h1 { font-size: var(--h1); font-weight: 800; line-height: 1.12; letter-spacing: .01em; font-feature-settings: "palt"; }
+h1 .ln { display: block; white-space: nowrap; }
+h1 .pp { font-weight: 900; }
+h1 .c { display: inline-block; transform-origin: 50% 78%; color: #1e9a70; }   /* 文字ごとのグラデは下のJSで連続させる */
+.lead { font-size: clamp(15px, 1.25vw, 19px); line-height: 1.9; color: var(--ink2); margin-top: clamp(22px, 3.6vh, 38px); max-width: 30em; }
+.cta { display: flex; align-items: center; gap: 22px; margin-top: clamp(26px, 4.2vh, 40px); flex-wrap: wrap; }
+.cta .pill { min-height: 56px; padding: 0 32px; font-size: 17px; }
+.cta .sub { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 500; color: var(--ink2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.cta .sub:hover { color: var(--ink); }
+.note { font-size: 13px; color: var(--ink2); margin-top: 18px; }
+
+/* 3Dスマホ（CSS 3D）。位置は右カラムの中心 */
+.phone-wrap { position: absolute; left: 71.5vw; top: 56%; width: var(--pw); height: calc(var(--pw) * 2.06); margin: calc(var(--pw) * -1.03) 0 0 calc(var(--pw) * -.5); perspective: 1300px; will-change: transform; }
+.phone3d { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform, opacity; opacity: 0; }
+.phone-face { position: absolute; inset: 0; border-radius: calc(var(--pw) * .125); padding: calc(var(--pw) * .016);
+  background: linear-gradient(145deg, #eceef0 0%, #a4aaae 26%, #dfe2e4 50%, #8c9296 76%, #c8cccf 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.55), inset 0 0 0 calc(var(--pw)*.004) rgba(60,64,66,.35); transform: translateZ(0); }
+.edge { position: absolute; inset: 0; border-radius: calc(var(--pw) * .125); background: linear-gradient(145deg, #c4c8cb, #7d8387 55%, #aeb3b6); }
+.bezel { height: 100%; border-radius: calc(var(--pw) * .112); background: #0a0c0d; padding: calc(var(--pw) * .026); }
+.screen { position: relative; height: 100%; border-radius: calc(var(--pw) * .088); overflow: hidden; background: #183d39; }
+.screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.screen::after { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 38%); pointer-events: none; }
+.glow { position: absolute; inset: -34% -62%; background: radial-gradient(closest-side, rgba(41,207,174,.15), rgba(201,240,147,.09) 52%, rgba(255,255,255,0) 74%); opacity: 0; pointer-events: none; will-change: opacity; }
+.phone-shadow { position: absolute; left: 8%; right: 8%; bottom: calc(var(--pw) * -.1); height: calc(var(--pw) * .12); background: radial-gradient(closest-side, rgba(31,34,35,.22), rgba(31,34,35,0)); filter: blur(10px); opacity: 0; will-change: transform, opacity; }
+
+/* 3Dミートボー（Blender書き出し・透明） */
+.m-fade { position: absolute; inset: 0; pointer-events: none; will-change: opacity; }
+.mascot { position: absolute; width: var(--mw); aspect-ratio: 824 / 796; left: calc(71.5vw - var(--pw) / 2 - var(--mw) * .66); bottom: -8px; opacity: 0; will-change: opacity; pointer-events: none; }
+.mascot img, .mascot video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.mascot .m-anim { visibility: hidden; }
+
+.cue { opacity: var(--co, 1); position: absolute; left: var(--gx); bottom: 26px; text-align: left; font-size: 11px; letter-spacing: .24em; color: var(--ink2); }
+.cue i { display: block; width: 1px; height: 28px; margin: 8px 0 0 4px; background: var(--ink2); transform-origin: top; animation: cue 2s ease-in-out infinite; }
+@keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* 初期の隠し状態（JSが動く時だけ） */
+.js [data-in] { opacity: 0; }
+.js .top { opacity: 0; }
+
+.next { min-height: 100vh; display: grid; place-items: center; text-align: center; color: #9aa09c; font-size: 14px; letter-spacing: .08em; padding: 24px; }
+
+/* ---------- スマホ ---------- */
+@media (max-width: 819px) {
+  :root { --gx: 24px; --pw: 240px; --mw: 104px; }
+  .top { height: 56px; }
+  .nav a:not(.pill) { display: none; }
+  .copy { top: 98px; width: calc(100vw - 48px); }
+  .eyebrow { font-size: 12px; letter-spacing: .16em; margin-bottom: 12px; }
+  .lead { font-size: 15px; line-height: 1.8; margin-top: 22px; }
+  .cta { margin-top: 24px; gap: 16px; }
+  .cta .pill { min-height: 52px; padding: 0 28px; font-size: 16px; }
+  .note { font-size: 12px; margin-top: 14px; }
+  .phone-wrap { left: calc(50% + 22px); top: 548px; margin: 0 0 0 calc(var(--pw) * -.5); }
+  .mascot { left: 8px; }
+  .cue { display: none; }
+}
+@media (max-width: 819px) and (max-height: 700px) { .phone-wrap { top: 500px; } }
+@media (prefers-reduced-motion: reduce) { .cue i { animation: none; transform: scaleY(1); opacity: .5; } .pill { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="in">
+    <a class="brand" href="./"><img src="assets/icon_96.webp" alt="" width="30" height="30">パパクエ</a>
+    <nav class="nav" aria-label="メイン">
+      <a href="#features">特徴</a><a href="#howto">使い方</a><a href="#video">紹介動画</a>
+      <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="hero" aria-label="パパクエとは">
+  <div class="stage" id="stage">
+
+    <div class="copy" id="copy">
+      <p class="eyebrow" data-in="glide" data-t="0.20">毎日を冒険にする、TODOアプリ。</p>
+      <h1 aria-label="人生がパパッとクエストになる">
+        <span class="ln" data-in="glide" data-t="0.20" aria-hidden="true">人生が</span>
+        <span class="ln pp" id="pp" aria-hidden="true"><span class="c">パ</span><span class="c">パ</span><span class="c">ッ</span><span class="c">と</span></span>
+        <span class="ln" data-in="glide" data-t="1.45" aria-hidden="true">クエストになる</span>
+      </h1>
+      <p class="lead" data-in="glide" data-t="1.95">毎日のやることを、クエストに。<br>家族やパートナーとは、お願いと<br>ありがとうもやり取りできます。</p>
+      <div class="cta" data-in="glide" data-t="2.03">
+        <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
+        <a class="sub" href="/support-papakue.html">サポート</a>
+      </div>
+      <p class="note" data-in="glide" data-t="2.11">iPhone専用・iOS 15.5以降</p>
+    </div>
+
+    <div class="phone-wrap" id="phoneWrap" aria-hidden="true">
+      <div class="glow" id="glow"></div>
+      <div class="phone3d" id="phone">
+        <i class="edge" style="transform:translateZ(-2px)"></i><i class="edge" style="transform:translateZ(-4px)"></i><i class="edge" style="transform:translateZ(-6px)"></i><i class="edge" style="transform:translateZ(-8px)"></i><i class="edge" style="transform:translateZ(-10px)"></i>
+        <div class="phone-face"><div class="bezel"><div class="screen"><img src="assets/screen_board.webp" alt="" width="585" height="1266" decoding="async"></div></div></div>
+      </div>
+      <div class="phone-shadow" id="phoneShadow"></div>
+    </div>
+
+    <div class="m-fade" id="mFade" aria-hidden="true"><div class="mascot" id="mascot">
+      <img class="m-still" id="mStill" src="assets/mascot_still.webp" alt="" width="480" height="464" decoding="async">
+      <img class="m-anim" id="mAnim" alt="" width="360" height="348">
+    </div></div>
+
+    <div class="cue" id="cue" aria-hidden="true"><span data-in="fade" data-t="2.8" style="display:block">SCROLL<i></i></span></div>
+  </div>
+</section>
+
+<section class="next"><p>ファーストビューの試作はここまでです。<br>以降のセクションは、承認後に制作します。</p><i id="features"></i><i id="howto"></i><i id="video"></i></section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const smooth = t => { t = clamp(t); return t * t * (3 - 2 * t); };
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const LOW = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+  const CAN_HOVER = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const SAFARI = /Apple/.test(navigator.vendor || "") && !/Chrome|Chromium|CriOS|FxiOS|Edg/.test(navigator.userAgent);
+  const EASE = { expo: "cubic-bezier(.16,1,.3,1)", p4out: "cubic-bezier(.23,1,.32,1)", p2io: "cubic-bezier(.45,0,.55,1)", p3out: "cubic-bezier(.215,.61,.355,1)" };
+
+  const stage = $("stage"), copy = $("copy"), phone = $("phone"), phoneShadow = $("phoneShadow"), mascot = $("mascot");
+  const glow = $("glow"), cue = $("cue"), mFade = $("mFade"), mStill = $("mStill"), mAnim = $("mAnim"), pp = $("pp"), top = $("top");
+  const letters = [...pp.querySelectorAll(".c")];
+
+  /* 「パパッと」：文字ごとのグラデを、4文字をまたいで1本につなげる */
+  function paintGradient() {
+    const r0 = pp.getBoundingClientRect(), W = Math.max(1, r0.width), H = Math.max(1, r0.height);
+    letters.forEach(l => {
+      const r = l.getBoundingClientRect(), x = r.left - r0.left;
+      l.style.background = "linear-gradient(135deg,#10a98c 0%,#2e9f5f 52%,#4c8f20 100%)";
+      l.style.backgroundSize = `${W}px ${H}px`; l.style.backgroundPosition = `${-x}px 0`;
+      l.style.webkitBackgroundClip = "text"; l.style.backgroundClip = "text"; l.style.webkitTextFillColor = "transparent"; l.style.color = "transparent";
+    });
+  }
+
+  /* ---------- 読み込み時の登場（時間駆動・一度だけ） ---------- */
+  let t0 = 0;
+  const PAP = [ // PR動画 PAP.title と同じ数値（秒・px・倍・度）
+    { t: 0.00, y: 46, x: 0,   s0: .70, s1: 1.07, r: -5, d1: .22, d2: .16 },
+    { t: 0.10, y: 38, x: 0,   s0: .72, s1: 1.07, r:  4, d1: .22, d2: .16 },
+    { t: 0.22, y: 20, x: 0,   s0: .55, s1: 1.20, r:  0, d1: .18, d2: .18 },
+    { t: 0.36, y: 26, x: -22, s0: .86, s1: 1.04, r:  0, d1: .32, d2: .34 }
+  ];
+  const canAnimate = typeof Element.prototype.animate === "function";
+  function intro() {
+    document.querySelectorAll("[data-in]").forEach(el => el.style.opacity = "");
+    top.style.opacity = "";
+    if (RM || !canAnimate) { letters.forEach(l => { l.style.opacity = 1; }); mascot.style.opacity = 1; phoneState(1, 0); return; }
+    top.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: "ease-out", fill: "both" });
+    document.querySelectorAll("[data-in]").forEach(el => {
+      const d = (+el.dataset.t || 0) * 1000, glide = el.dataset.in === "glide";
+      el.animate(glide ? [{ opacity: 0, transform: "translateY(46px)" }, { opacity: 1, transform: "none" }] : [{ opacity: 0 }, { opacity: 1 }],
+        { duration: glide ? 550 : 600, delay: d, easing: EASE.expo, fill: "both" });
+    });
+    letters.forEach((l, i) => {
+      const p = PAP[i], tot = p.d1 + p.d2, o1 = p.d1 / tot;
+      l.animate([
+        { opacity: 0, transform: `translate(${p.x}px,${p.y}px) scale(${p.s0}) rotate(${p.r}deg)`, offset: 0, easing: EASE.p4out },
+        { opacity: 1, transform: `translate(0,0) scale(${p.s1}) rotate(0deg)`, offset: o1, easing: EASE.p2io },
+        { opacity: 1, transform: "translate(0,0) scale(1) rotate(0deg)", offset: 1 }
+      ], { duration: tot * 1000, delay: (0.90 + p.t) * 1000, fill: "both" });
+    });
+    mascot.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 2600, easing: "ease-out", fill: "both" });
+    phoneShadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 1900, easing: "ease-out", fill: "both" });
+    setTimeout(prepareGreeting, 800); setTimeout(playGreeting, 2650);
+  }
+
+  /* ---------- ミートボー：挨拶を一度だけ ---------- */
+  // Safari向けは滑らかさ優先(24fps・1.4MB)を標準にする。実機で重い時は ?mascot=lite（12fps・0.8MB）へ。通信が細い/データ節約でも自動で軽量版
+  const conn = navigator.connection || {};
+  const LITE = /[?&]mascot=lite/.test(location.search) || conn.saveData === true || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
+  const ANIM = LITE ? "assets/mascot_wave_360_12fps.webp" : "assets/mascot_wave_360.webp";
+  let greet = null;
+  function prepareGreeting() {                      // 登場の少し前に先読み（通信が遅くても、挨拶が遅れないように）
+    if (RM || LOW || greet) return;
+    const probe = document.createElement("video");
+    const webm = !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== "";
+    if (SAFARI || !webm) { const im = new Image(); im.src = ANIM; greet = { img: true }; }   // Safari系：アルファ付きWebMが使えないのでアニメWebP
+    else {                                           // それ以外：WebM(VP9 alpha)。videoは必要な時にだけ作る（Safariの読み込み完了を止めないため）
+      const v = document.createElement("video");
+      v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = "assets/mascot_wave.webm"; v.setAttribute("aria-hidden", "true");
+      v.load(); greet = { v };
+    }
+  }
+  function playGreeting() {
+    prepareGreeting(); if (!greet) return;           // 静止のまま（モーション削減・低性能）
+    if (greet.img) {
+      mAnim.onload = () => { mAnim.style.visibility = "visible"; mStill.style.visibility = "hidden"; };
+      mAnim.src = ANIM;                              // 1回再生で最終フレームに止まる
+    } else {
+      mascot.appendChild(greet.v);
+      greet.v.play().then(() => { mStill.style.visibility = "hidden"; }).catch(() => greet.v.remove());
+    }
+  }
+
+  /* ---------- スマホ(3D)・文字・ミートボーを、スクロールとポインタで動かす ---------- */
+  const wrap = $("phoneWrap"); let lift = 0;
+  function measureLift() { lift = Math.max(0, wrap.offsetTop + wrap.offsetHeight - (window.innerHeight - 28)); }   // スマホの下が画面から切れる分（文字が消えたあと、全体が見える所まで持ち上げる）
+  let introP = 0, px = 0, py = 0, tx = 0, ty = 0, scrollP = 0, ticking = true;
+  function phoneState(ip, sp) {
+    const ease = 1 - Math.pow(1 - ip, 3);           // power3.out
+    const s = smooth(sp);
+    const ry = -22 + 8 * ease + 14 * s + px * 4;
+    const rx = 4 * (1 - s * .5) - py * 3;
+    const y = (1 - ease) * 60 - 40 * s - lift * s;
+    phone.style.opacity = ease; glow.style.opacity = String(ease * (1 - s));
+    phone.style.transform = `translate3d(0,${y}px,0) rotateY(${ry}deg) rotateX(${rx}deg)`;
+    phoneShadow.style.transform = `translateX(${-ry * 1.2}px) scale(${1 - s * .1})`;
+  }
+  function onScroll() {
+    const vh = window.innerHeight;
+    scrollP = clamp((window.scrollY - .35 * vh) / (.35 * vh));
+  }
+  function applyScroll() {
+    const s = smooth(scrollP);
+    copy.style.transform = `translate3d(0,${-12 * s}px,0)`; copy.style.opacity = String(1 - s);
+    mFade.style.opacity = String(1 - s);
+    cue.style.setProperty("--co", String(Math.max(0, 1 - scrollP * 4)));
+  }
+  function frame(now) {
+    if (t0) {
+      const elapsed = (now - t0) / 1000;
+      introP = (RM || !canAnimate) ? 1 : clamp((elapsed - 1.55) / 1.1);
+    }
+    px += (tx - px) * .08; py += (ty - py) * .08;
+    phoneState(introP, scrollP);
+    applyScroll();
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => { onScroll(); paintGradient(); measureLift(); });
+  if (CAN_HOVER && !LOW && !RM) {
+    window.addEventListener("pointermove", e => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+  }
+
+  /* ---------- 起動 ---------- */
+  const imgs = [...document.querySelectorAll(".screen img, #mStill")];
+  const ready = Promise.all([document.fonts ? document.fonts.ready : 0, ...imgs.map(i => i.decode ? i.decode().catch(() => 0) : 0)]);
+  const timeout = new Promise(r => setTimeout(r, 2000));
+  Promise.race([ready, timeout]).then(() => {
+    paintGradient(); onScroll(); measureLift();
+    t0 = performance.now(); window.__pkT0 = t0; intro();
+  });
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
