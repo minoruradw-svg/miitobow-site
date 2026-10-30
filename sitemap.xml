@@ -410,4 +410,19 @@
     <lastmod>2026-09-17</lastmod>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://miitobow.com/bus/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/fukuoka/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/fukuoka/kitakyu/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <priority>0.7</priority>
+  </url>
 </urlset>

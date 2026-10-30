@@ -30,6 +30,7 @@ STATIC_PAGES = [
     ("/privacy/", "privacy/index.html", "0.2"),
     ("/privacy/privacy-policy", "privacy/privacy-policy.html", "0.2"),
     ("/privacy/pinterest", "privacy/pinterest.html", "0.2"),
+    ("/bus/", "bus/index.html", "0.5"),
 ]
 
 
@@ -56,6 +57,14 @@ def collect_urls():
             continue
         lastmod = git_lastmod(rel_file)
         urls.append((SITE + url_path, lastmod, priority))
+
+    # バスマップ: bus/<県>/index.html（県ページ）と bus/<県>/<地域>/index.html（地域マップ）を自動収集
+    for depth, priority in ((1, "0.5"), (2, "0.7")):
+        pattern = os.path.join(ROOT, "bus", *(["*"] * depth), "index.html")
+        for abs_file in sorted(glob.glob(pattern)):
+            rel_file = os.path.relpath(abs_file, ROOT).replace("\\", "/")
+            url_path = "/" + os.path.dirname(rel_file) + "/"
+            urls.append((SITE + url_path, git_lastmod(rel_file), priority))
 
     # articles/ 配下の全 .html（アセットフォルダは対象外）を自動収集
     articles_dir = os.path.join(ROOT, "articles")
