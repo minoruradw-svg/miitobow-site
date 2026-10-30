@@ -543,7 +543,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：天神、博多駅、大濠公園）、バス停、系統（例：26系統）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>区ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button><div class="lh">この地図に含まれる市町村（19）</div><p class="tip">福岡市・春日市・太宰府市・大野城市・筑紫野市・那珂川市・古賀市・新宮町・久山町・宇美町・粕屋町・志免町・筑前町（一部）・須恵町・篠栗町・糸島市（一部）・宮若市（一部）・飯塚市（一部）・福津市（一部）<br>（一部）は、地図の範囲の端に少しだけ入っている市町村です。</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/fukuoka/kitakyu/"><span>北九州バスマップ</span><small>北東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button><div class="lh">この地図に含まれる市町村（19）</div><p class="tip">福岡市・春日市・太宰府市・大野城市・筑紫野市・那珂川市・古賀市・新宮町・久山町・宇美町・粕屋町・志免町・筑前町（一部）・須恵町・篠栗町・糸島市（一部）・宮若市（一部）・飯塚市（一部）・福津市（一部）<br>（一部）は、地図の範囲の端に少しだけ入っている市町村です。</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/fukuoka/kitakyu/"><span>北九州バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/fukuoka/chikugo/"><span>筑後バスマップ</span><small>南　›</small></a>${NOTE}`, "バス停・系統を選んでください");
   document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex;
 }
 function routeBtn(r) {
