@@ -54,7 +54,7 @@
     afterTop = $("after").getBoundingClientRect().top + sy;
     W = innerWidth; H = innerHeight; M = W < 820; PW = ph1.offsetWidth; PH = ph1.offsetHeight; MW = mas.offsetWidth; MH = mas.offsetHeight;
     MB = {}; if (M) ["s2", "s3", "s4", "s5"].forEach(id => { const c = cards[IDX[id]]; MB[id] = 76 + (c ? c.offsetHeight : 180); });
-    G.s4 = M ? 1.0 : 1.12; G.P2x = M ? 0 : 1500; G.P2y = M ? 900 : 0;
+    G.s4 = M ? 1.0 : 1.02; G.P2x = M ? 0 : 1500; G.P2y = M ? 900 : 0;
     G.sx0 = .042 * PW; G.scrW = PW - 2 * G.sx0; G.scrH = PH - 2 * G.sx0;
     const so = screenEl.offsetTop, sl = screenEl.offsetLeft;                      // 画面(.screen)のスマホ内位置
     G.sq = { x: sl + sendQ.offsetLeft + sendQ.offsetWidth / 2 - PW / 2, y: so + sendQ.offsetTop + sendQ.offsetHeight / 2 - PH / 2, w: sendQ.offsetWidth, h: sendQ.offsetHeight };
@@ -76,7 +76,7 @@
     setCam(o, c); o.cy += 40 * s + lift * s; o.p1ry = -14 + 14 * s; o.p1rx = 4 * (1 - s * .5); o.glow = 1 - s; o.lB = 1;
     o.mx = -PW / 2 - MW * .66; o.my = c.cy + H / 2 - MH + 8; o.mop = 1 - s; o.ms = 1; return o;
   }
-  const S2P = [{ x: -330, y: -235, r: -7, dz: 1.15, sc: 1.1, sy: -.20 }, { x: -372, y: 0, r: 4, dz: 1.0, sc: 1.0, sy: .06 }, { x: -330, y: 235, r: -3, dz: .88, sc: .92, sy: .30 }];
+  const S2P = [{ x: -330, y: -178, r: -7, dz: 1.15, sc: 1.1, sy: -.20 }, { x: -372, y: 0, r: 4, dz: 1.0, sc: 1.0, sy: .06 }, { x: -330, y: 192, r: -3, dz: .88, sc: .92, sy: .30 }];
   const S2M = [{ x: -110, y: 60, r: -7, dz: 1, sc: .62, sy: -.20 }, { x: 110, y: 70, r: 6, dz: 1, sc: .62, sy: .06 }, { x: 0, y: 200, r: 0, dz: 1, sc: .62, sy: .30 }];
   const S2S = () => M ? { x: 0, y: 150 } : { x: -300, y: 40 };
   function cam2(p) { const t = io5(seg(p, .30, .62));
@@ -86,7 +86,7 @@
     o.lpar = .55 * sm(seg(p, 0, .5)) * (1 - sm(seg(p, .88, 1))); o.ca = 1 - sm(seg(p, .90, .94)); return o; }
   function DEMO() { const o = S2(1); o.p1op = 0; o.ca = 0; o.lpar = 0; return o; }
   function base3() { return M ? camFor(.5 * W, yPhone("s3", .92, 26), 1, 0, 0) : camFor(.625 * W, .5 * H, 1, 0, 0); }
-  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, 0, 0) : camFor(.64 * W, .5 * H, 1, 0, 0); }
+  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, 0, 0) : camFor(.64 * W, .5 * H + 32, 1, 0, 0); }
   function S3(p) { const o = base3 && base(), s = M ? .92 : 1.10, s1 = lerp(s, G.s4, sm(seg(p, .86, 1)));
     const A = base3(); let B, C;
     if (M) { const csM = clamp((H - MB.s3 - 24) / (PH * s), 1.0, 1.3), camM = { cx: 0, cy: -PH * s / 2 - (MB.s3 + 12 - H / 2) / csM, cs: csM, cr: 0 }; B = camM; C = camM; }
@@ -99,7 +99,7 @@
     const c = M ? { x: a.x + 170, y: (a.y + b.y) / 2 } : { x: (a.x + b.x) / 2, y: a.y - 390 }; return [a, c, b]; }
   const bez = (P, e) => { const k = 1 - e; return { x: k * k * P[0].x + 2 * k * e * P[1].x + e * e * P[2].x, y: k * k * P[0].y + 2 * k * e * P[1].y + e * e * P[2].y }; };
   const bezT = (P, e) => { const k = 1 - e; return Math.atan2(2 * k * (P[1].y - P[0].y) + 2 * e * (P[2].y - P[1].y), 2 * k * (P[1].x - P[0].x) + 2 * e * (P[2].x - P[1].x)); };
-  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, G.P2x, G.P2y) : camFor(.64 * W, .5 * H, 1, G.P2x, G.P2y); }
+  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, G.P2x, G.P2y) : camFor(.64 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
   function S4(p) { const o = base(), A = base4(), D = camD(), P = flightPts(), e = io5(seg(p, .32, .64)), ec = io5(seg(p, .35, .66));
     let cx = lerp(A.cx, D.cx, ec), cy = lerp(A.cy, D.cy, ec), cs = 1, cr = 0; const B = bez(P, e);
     if (!M) cy = lerp(A.cy, D.cy, 0) + (B.y - P[0].y) * .35 * (e > 0 && e < 1 ? 1 : (e >= 1 ? 1 : 0)); else cx = (B.x - P[0].x) * .4 * bell(e);
@@ -111,9 +111,9 @@
     setCam(o, { cx, cy, cs, cr }); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = sm(seg(p, .22, .32)) * .9; o.lB = 0; o.lP = 1; o.p2op = 1; o.p2y = G.P2y + 4 * bell(seg(p, .74, .78));
     o.lgrn = .5 * bell(seg(p, .32, .64)); o.lpar = p >= .64 ? .4 * bell(seg(p, .64, .82)) : 0; o.lparx = G.P2x; o.lpary = G.P2y; return o; }
   // S5：ハンコ→ありがとうスタンプ
-  const stampPos = () => { const s = G.s4; return { x: G.P2x + G.sq.x * s, y: G.P2y + G.sq.y * s }; };
+  const stampPos = () => { const s = G.s4, sz = M ? 180 : 260; return { x: G.P2x + G.sq.x * s + sz * .20, y: G.P2y + G.sq.y * s + sz * .14 }; };   // 実際のハンコのように、カードの角へ少しずらして押す（カード名を読めるように）
   function S5(p) { const o = base(), D = camD(), Sp = stampPos(), A = base4(), s4e = S4(1);
-    const stcs = M ? Math.max(1.1, Math.min(1.35, (H - (MB.s5 || 260) - 32) / PH)) : 1.55, st = camFor(M ? .5 * W : .66 * W, M ? MB.s5 + (H - MB.s5) * .5 : .5 * H, stcs, Sp.x, Sp.y);
+    const stcs = M ? Math.max(1.1, Math.min(1.35, (H - (MB.s5 || 260) - 32) / PH)) : 1.55, st = camFor(M ? .5 * W : .66 * W, M ? MB.s5 + (H - MB.s5) * .5 : .5 * H + 16, stcs, Sp.x, Sp.y);
     let c = { cx: s4e.cx, cy: s4e.cy, cs: s4e.cs, cr: 0 };
     c = mixCam(c, st, io5(seg(p, .04, .14))); c = mixCam(c, D, io5(seg(p, .22, .36)));
     const t3 = io5(seg(p, .36, .50)); c = mixCam(c, A, t3); c.cs *= 1 - .08 * bell(seg(p, .36, .50));
@@ -267,8 +267,8 @@
     // ---- 章テキストの出入り ----
     chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
       let a = sm(seg((scrollY - tops[i] + H * .45) / Math.max(1, hs[i] - H), 0, .07)), out = 1 - sm(seg(p, .93, 1));
-      if (ids[i] === 's4') a *= 1 - .85 * sm(seg(p, .24, .32)) * (1 - sm(seg(p, .66, .74)));
-      if (ids[i] === 's5') { const w1 = sm(seg(p, .04, .10)) * (1 - sm(seg(p, .30, .36))), w2 = sm(seg(p, .54, .60)) * (1 - sm(seg(p, .84, .90))); a *= 1 - .85 * Math.max(w1, w2); }
+      if (ids[i] === 's4') a *= 1 - .98 * sm(seg(p, .24, .30)) * (1 - sm(seg(p, .68, .74)));
+      if (ids[i] === 's5') { const w1 = sm(seg(p, .04, .10)) * (1 - sm(seg(p, .30, .36))), w2 = sm(seg(p, .54, .60)) * (1 - sm(seg(p, .84, .90))); a *= 1 - .98 * Math.max(w1, w2); }
       c.style.setProperty("--vis", (a * out).toFixed(3)); });
   }
   let s5Greeted = false;
