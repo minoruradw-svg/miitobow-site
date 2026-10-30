@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>北九州バスマップ | miitobow</title>
-<meta name="description" content="北九州市とその周辺（中間市・直方市・苅田町など）のバス停と系統を地図で眺められる非公式ページ。バス停2,028か所・201系統（2022年度版）。">
+<meta name="description" content="北九州市とその周辺のバス停と系統を地図で眺められる非公式ページ。バス停2,028か所・201系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/fukuoka/kitakyu/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="北九州バスマップ | miitobow">
-<meta property="og:description" content="北九州市とその周辺（中間市・直方市・苅田町など）のバス停と系統を地図で眺められる非公式ページ。バス停2,028か所・201系統（2022年度版）。">
+<meta property="og:description" content="北九州市とその周辺のバス停と系統を地図で眺められる非公式ページ。バス停2,028か所・201系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/fukuoka/kitakyu/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-fukuoka-kitakyu.jpg">
@@ -434,6 +434,7 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・バス停・系統：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html" target="_blank" rel="noopener">国土交通省 国土数値情報（バス停留所データ・令和4年度・CC BY 4.0）</a>を加工して作成（2022年度時点）<br>
 ・駅の位置・所在地：国土交通省 国土数値情報（鉄道駅データ N02-22・行政区域データ N03-22）を加工して作成<br>
 ・地名・施設の位置：<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地名検索</a>と<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors（ODbL）</a>の情報を突き合わせて作成した目安です（OSM由来の位置情報を含みます。出入口などの正確な位置ではありません）<br>・町名（北九州市7区）：<a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">政府統計の総合窓口（e-Stat）『令和2年国勢調査 小地域（町丁・字等）境界データ』</a>を加工して作成。町名ごとの代表地点（面積の重心）で、読み仮名では探せません（漢字・かなの表記で検索）<br>
+・この地図に含まれる市町村（13）：北九州市・直方市・苅田町・行橋市・宮若市・中間市・鞍手町・岡垣町・芦屋町・水巻町・遠賀町・みやこ町（一部）・宗像市（一部）。（一部）は、地図の範囲の端に少しだけ入っている市町村です。<br>
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図）</a><br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
@@ -457,7 +458,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：折尾駅、小敷ひびきの、黒崎）、バス停、系統（例：77系統）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>区ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/fukuoka/fukuoka-city/"><span>福岡周辺バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button><div class="lh">この地図に含まれる市町村（13）</div><p class="tip">北九州市・直方市・苅田町・行橋市・宮若市・中間市・鞍手町・岡垣町・芦屋町・水巻町・遠賀町・みやこ町（一部）・宗像市（一部）<br>（一部）は、地図の範囲の端に少しだけ入っている市町村です。</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/fukuoka/fukuoka-city/"><span>福岡周辺バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
   document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex;
 }
 function routeBtn(r) {
