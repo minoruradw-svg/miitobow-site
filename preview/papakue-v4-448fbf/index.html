@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<title>パパクエ｜人生がパパッとクエストになる</title>
+<meta name="description" content="毎日を冒険にする、TODOアプリ。毎日のやることをクエストにして、家族やパートナーとお願い・達成・ありがとうをやり取りできるiPhoneアプリ。">
+<link rel="icon" href="assets/icon_96.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+:root {
+  --bg: #fff; --ink: #1f2223; --ink2: #5e635f; --line: #e6e8e6;
+  --grad: linear-gradient(135deg, #10a98c 0%, #2e9f5f 52%, #4c8f20 100%);
+  --gx: clamp(24px, 8.33vw, 160px);
+  --pw: clamp(250px, 22.9vw, 360px);
+  --mw: clamp(118px, 10.8vw, 170px);
+  --h1: clamp(44px, 6.67vw, 104px);
+  --h2: clamp(30px, 3.4vw, 49px);
+  --green: #183d39; --parch: #f8eed9; --gold: #d6bd7b;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; line-height: 1.9; overflow-x: clip; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+p, h1, h2 { margin: 0; }
+button { font: inherit; cursor: pointer; }
+
+/* ---------- ヘッダー ---------- */
+.top { position: fixed; z-index: 30; inset: 0 0 auto 0; height: 64px; background: rgba(255,255,255,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(230,232,230,.7); }
+.top .in { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--gx); gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 800; font-size: 17px; letter-spacing: .02em; }
+.brand img { width: 30px; height: 30px; border-radius: 8px; }
+.nav { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; color: var(--ink2); }
+.nav a:not(.pill) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 8px; }
+.nav a:not(.pill):hover { color: var(--ink); }
+.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 24px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 700; font-size: 15px; white-space: nowrap; transition: background .18s, transform .18s; }
+.pill:hover { background: #2e2f31; transform: translateY(-1px); }
+.pill:active { transform: none; }
+.pill:focus-visible, a:focus-visible, button:focus-visible { outline: 3px solid #20cfaf; outline-offset: 3px; }
+.top .pill { padding: 0 20px; font-size: 14px; }
+.js .top { opacity: 0; }
+
+/* ---------- 固定レイヤー：スマホ・カード・ミートボー（章をまたいで1つの世界として動く） ---------- */
+#fx { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: clip; }
+#fx.off { visibility: hidden; }
+.glow { position: absolute; left: 0; top: 0; width: calc(var(--pw) * 2.3); height: calc(var(--pw) * 3.2); margin: calc(var(--pw) * -1.6) 0 0 calc(var(--pw) * -1.15); background: radial-gradient(closest-side, rgba(41,207,174,.15), rgba(201,240,147,.09) 52%, rgba(255,255,255,0) 74%); opacity: 0; will-change: transform, opacity; }
+.ph { position: absolute; left: 0; top: 0; width: var(--pw); height: calc(var(--pw) * 2.06); margin: calc(var(--pw) * -1.03) 0 0 calc(var(--pw) * -.5); perspective: 1300px; will-change: transform, opacity; opacity: 0; }
+.ph3 { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.face { position: absolute; inset: 0; border-radius: calc(var(--pw) * .125); padding: calc(var(--pw) * .016);
+  background: linear-gradient(145deg, #eceef0 0%, #a4aaae 26%, #dfe2e4 50%, #8c9296 76%, #c8cccf 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55), inset 0 0 0 calc(var(--pw)*.004) rgba(60,64,66,.35); }
+.edge { position: absolute; inset: 0; border-radius: calc(var(--pw) * .125); background: linear-gradient(145deg, #c4c8cb, #7d8387 55%, #aeb3b6); }
+.bezel { height: 100%; border-radius: calc(var(--pw) * .112); background: #0a0c0d; padding: calc(var(--pw) * .026); }
+.screen { position: relative; height: 100%; border-radius: calc(var(--pw) * .088); overflow: hidden; background: var(--green); font-size: calc(var(--pw) * .042); line-height: 1.4; }
+.screen::after { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 38%); pointer-events: none; z-index: 20; }
+.scr { position: absolute; inset: 0; opacity: 0; }
+.scr > img.fill { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.pshadow { position: absolute; left: 6%; right: 6%; bottom: calc(var(--pw) * -.1); height: calc(var(--pw) * .12); background: radial-gradient(closest-side, rgba(31,34,35,.22), rgba(31,34,35,0)); filter: blur(10px); }
+.tag { position: absolute; left: 50%; top: calc(var(--pw) * -.2); transform: translateX(-50%); white-space: nowrap; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 99px; background: #fff; border: 1px solid var(--line); color: var(--ink); box-shadow: 0 6px 18px rgba(31,34,35,.08); opacity: 0; }
+
+/* アプリ画面の再現（深緑・羊皮紙・金） */
+.hd { position: absolute; left: 0; right: 0; top: 0; padding: 7% 7% 3%; font-weight: 800; color: #f1e8cf; font-size: 1.15em; display: flex; justify-content: space-between; }
+.rq { position: absolute; left: 6%; right: 6%; background: var(--parch); color: #3a2b10; border-radius: 12px; padding: 4% 5%; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+.rq small { display: block; color: #8a6a2c; font-weight: 700; font-size: .8em; }
+.rq b { font-size: 1.2em; font-weight: 800; }
+.rq .bt { display: flex; gap: 6px; margin-top: 6px; }
+.rq .bt i { flex: 1; text-align: center; font-style: normal; font-weight: 800; font-size: .86em; padding: 5px 0; border-radius: 7px; background: var(--gold); color: #3a3217; transition: transform .15s, background .15s; }
+.rq .bt i.o { background: transparent; border: 1.5px solid #6b6a9a; color: #3a3a66; }
+.rq .bt i.on { transform: scale(.92); background: #c7a94a; }
+.banner { position: absolute; left: 4%; right: 4%; }
+.stampov { position: absolute; width: 40%; opacity: 0; transform: scale(2.6) rotate(-20deg); }
+.status { position: absolute; left: 6%; right: 6%; text-align: center; font-weight: 700; font-size: .95em; padding: 6px 4px; border-radius: 10px; background: rgba(214,189,123,.2); color: #f1e8cf; border: 1px solid rgba(214,189,123,.5); }
+.burst { position: absolute; inset: 0; background: repeating-conic-gradient(from 0deg at 50% 52%, rgba(255,255,255,.07) 0 8deg, rgba(0,0,0,0) 8deg 16deg), radial-gradient(circle at 50% 52%, #2a5a52 0%, #0f2a27 70%); }
+.arrive { position: absolute; left: 8%; right: 8%; top: 12%; text-align: center; color: #fff; font-weight: 700; background: rgba(0,0,0,.35); border-radius: 99px; padding: 6px 4px; font-size: .92em; }
+.thx { position: absolute; left: 50%; top: 50%; width: 62%; margin: -31% 0 0 -31%; opacity: 0; will-change: transform, opacity; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+.cap { position: absolute; left: 0; right: 0; bottom: 9%; text-align: center; color: #f1e8cf; font-weight: 700; font-size: .92em; opacity: 0; }
+
+/* カード（S2：画面から浮かび上がる巻物） */
+.qc { position: absolute; left: 0; top: 0; width: 230px; height: 215px; margin: -107px 0 0 -115px; background: url(assets/scroll.webp) center / 100% 100% no-repeat; opacity: 0; will-change: transform, opacity; filter: drop-shadow(0 18px 28px rgba(31,34,35,.22)); color: #3a2b10; }
+.qc .in { position: absolute; inset: 15% 13% 14% 14%; }
+.qc small { font-size: 11px; font-weight: 700; color: #8a6a2c; letter-spacing: .04em; }
+.qc b { display: block; font-size: 21px; font-weight: 800; line-height: 1.25; margin: 2px 0 4px; }
+.qc .tg { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 8px; border-radius: 6px; background: #ffd0b5; color: #8b3a12; }
+.qc .tg.t { background: #bdece6; color: #14564c; } .qc .tg.h { background: #ffe3a6; color: #6b4a06; }
+.qc ul { list-style: none; margin: 6px 0 0; padding: 0; font-size: 12px; line-height: 1.7; }
+.qc li::before { content: ""; display: inline-block; width: 10px; height: 10px; border: 1.5px solid #b49a63; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
+.qc .bt { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 5px; }
+.qc .bt i { flex: 1; text-align: center; font-style: normal; font-size: 11px; font-weight: 800; padding: 4px 0; border-radius: 6px; background: var(--gold); color: #3a3217; }
+.qc .bt i.o { background: transparent; border: 1.5px solid #6b6a9a; color: #3a3a66; }
+
+.mas { position: absolute; left: 0; top: 0; width: var(--mw); aspect-ratio: 824 / 796; opacity: 0; will-change: transform, opacity; }
+.mas img, .mas video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.mas .m-anim { visibility: hidden; }
+
+/* ---------- ストーリー ---------- */
+main { position: relative; z-index: 6; }
+.hero { position: relative; height: 170vh; height: 170svh; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; }
+.copy { position: absolute; left: var(--gx); top: clamp(112px, 16.7vh, 190px); width: min(720px, calc(100vw - var(--gx) * 2)); will-change: opacity, transform; }
+.eyebrow { font-size: 14px; font-weight: 700; letter-spacing: .18em; color: var(--ink2); margin-bottom: clamp(14px, 2.2vh, 22px); }
+h1 { font-size: var(--h1); font-weight: 800; line-height: 1.12; letter-spacing: .01em; font-feature-settings: "palt"; }
+h1 .ln { display: block; white-space: nowrap; }
+h1 .pp, .pp3 { font-weight: 900; }
+.c { display: inline-block; transform-origin: 50% 78%; color: #1e9a70; }
+.lead { font-size: clamp(15px, 1.25vw, 19px); line-height: 1.9; color: var(--ink2); margin-top: clamp(22px, 3.6vh, 38px); max-width: 30em; }
+.cta { display: flex; align-items: center; gap: 22px; margin-top: clamp(26px, 4.2vh, 40px); flex-wrap: wrap; }
+.cta .pill { min-height: 56px; padding: 0 32px; font-size: 17px; }
+.cta .sub { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 500; color: var(--ink2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.note { font-size: 13px; color: var(--ink2); margin-top: 18px; }
+.cue { opacity: var(--co, 1); position: absolute; left: var(--gx); bottom: 26px; font-size: 11px; letter-spacing: .24em; color: var(--ink2); }
+.cue i { display: block; width: 1px; height: 28px; margin: 8px 0 0 4px; background: var(--ink2); transform-origin: top; animation: cue 2s ease-in-out infinite; }
+@keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+.js [data-in] { opacity: 0; }
+
+.chapter { position: relative; }
+.pin { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center; padding: 0 var(--gx); }
+.card { width: min(560px, 46vw); opacity: var(--vis, 0); transform: translateY(calc((1 - var(--vis, 0)) * 22px)); will-change: opacity, transform; }
+.no { font-size: 12px; font-weight: 700; letter-spacing: .2em; color: var(--ink2); margin-bottom: 14px; }
+h2 { font-size: var(--h2); font-weight: 800; line-height: 1.22; letter-spacing: .01em; font-feature-settings: "palt"; }
+.card .txt { color: var(--ink2); font-size: clamp(15px, 1.2vw, 18px); margin-top: 18px; max-width: 24em; }
+.card .sm { color: #8a8f8b; font-size: 12px; margin-top: 14px; }
+.pp3 { display: block; font-size: calc(var(--h2) * 1.9); line-height: 1.1; margin: 4px 0 2px; white-space: nowrap; }
+.step { margin-top: 22px; font-size: 14px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 10px; min-height: 30px; }
+.step i { width: 8px; height: 8px; border-radius: 50%; background: var(--grad); display: inline-block; }
+.step span { transition: opacity .3s; }
+
+/* さわってみる（体験デモ） */
+.demo { position: relative; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 96px var(--gx) 80px; text-align: center; }
+.demo h2 { margin-bottom: 14px; }
+.demo .txt { color: var(--ink2); max-width: 28em; margin: 0 auto; }
+.dbox { margin: 34px auto 0; width: min(560px, 100%); }
+.chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.chip { min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-weight: 700; font-size: 15px; color: var(--ink2); transition: all .18s; }
+.chip:hover { border-color: var(--ink); color: var(--ink); }
+.chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.dform { margin-top: 16px; display: flex; gap: 10px; background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 8px; box-shadow: 0 10px 30px rgba(31,34,35,.06); }
+.dform input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-weight: 700; font-size: 17px; padding: 0 12px; color: var(--ink); background: transparent; }
+.dform button { min-height: 48px; padding: 0 22px; border-radius: 12px; border: 0; background: var(--ink); color: #fff; font-weight: 800; font-size: 15px; }
+.dstage { position: relative; height: 330px; margin-top: 26px; }
+.dcard { position: absolute; left: 50%; top: 0; width: 300px; height: 280px; margin-left: -150px; background: url(assets/scroll.webp) center / 100% 100% no-repeat; color: #3a2b10; text-align: left; opacity: 0; transform-origin: 50% 0; filter: drop-shadow(0 18px 28px rgba(31,34,35,.2)); }
+.dcard .in { position: absolute; inset: 16% 13% 15% 14%; }
+.dcard small { font-size: 12px; font-weight: 700; color: #8a6a2c; }
+.dcard b { display: block; font-size: 28px; font-weight: 800; line-height: 1.25; margin: 2px 0 6px; word-break: break-all; }
+.dcard .tg { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 9px; border-radius: 6px; background: #ffd0b5; color: #8b3a12; }
+.dcard .bt { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 6px; }
+.dcard .bt button { flex: 1; min-height: 50px; border: 0; border-radius: 8px; font-weight: 800; font-size: 14px; background: var(--gold); color: #3a3217; }
+.dcard .bt button.o { background: transparent; border: 1.5px solid #6b6a9a; color: #3a3a66; }
+.dcard .bt button:disabled { opacity: .55; }
+.dstamp { position: absolute; left: 50%; top: 56px; width: 150px; margin-left: -62px; opacity: 0; pointer-events: none; }
+.dnote { margin-top: 12px; font-size: 12px; color: #8a8f8b; }
+.dreset { margin-top: 10px; border: 0; background: transparent; color: var(--ink2); font-size: 14px; text-decoration: underline; text-underline-offset: 5px; min-height: 44px; opacity: 0; }
+
+/* 紹介動画・ダウンロード */
+.after { position: relative; z-index: 6; background: var(--bg); }
+.video { padding: 110px var(--gx) 90px; text-align: center; }
+.video h2 { margin-bottom: 12px; }
+.video .txt { color: var(--ink2); }
+.vframe { position: relative; margin: 40px auto 0; width: min(360px, 86vw); aspect-ratio: 9 / 16; border-radius: 40px; background: #0a0c0d; padding: 10px; box-shadow: 0 40px 80px rgba(31,34,35,.16); }
+.vframe .in { position: relative; width: 100%; height: 100%; border-radius: 31px; overflow: hidden; background: #000; }
+.vframe img, .vframe video { width: 100%; height: 100%; object-fit: cover; }
+.vplay { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; border: 0; background: rgba(255,255,255,.94); box-shadow: 0 12px 30px rgba(0,0,0,.25); display: grid; place-items: center; transition: transform .2s; }
+.vplay:hover { transform: scale(1.06); }
+.vplay svg { width: 30px; height: 30px; margin-left: 5px; }
+.closing { padding: 140px var(--gx) 120px; text-align: center; }
+.closing .app { width: 96px; height: 96px; border-radius: 24px; margin: 0 auto 26px; box-shadow: 0 24px 50px rgba(16,169,140,.28); }
+.closing h2 { font-size: clamp(32px, 4.6vw, 64px); }
+.closing p { color: var(--ink2); margin-top: 16px; }
+.closing .pill { margin-top: 34px; min-height: 58px; padding: 0 36px; font-size: 18px; }
+.closing .sub { display: block; margin-top: 18px; font-size: 13px; color: var(--ink2); }
+footer { padding: 28px var(--gx) 56px; font-size: 14px; color: var(--ink2); display: flex; flex-wrap: wrap; gap: 8px 26px; justify-content: space-between; border-top: 1px solid var(--line); }
+footer nav { display: flex; gap: 6px 22px; flex-wrap: wrap; }
+footer a { min-height: 44px; display: inline-flex; align-items: center; }
+footer a:hover { color: var(--ink); text-decoration: underline; }
+
+/* ---------- スマホ ---------- */
+@media (max-width: 819px) {
+  :root { --gx: 24px; --pw: 232px; --mw: 104px; --h2: 28px; }
+  .top { height: 56px; }
+  .nav a:not(.pill) { display: none; }
+  .copy { top: 98px; width: calc(100vw - 48px); }
+  .eyebrow { font-size: 12px; letter-spacing: .16em; margin-bottom: 12px; }
+  .lead { font-size: 15px; line-height: 1.8; margin-top: 22px; }
+  .cta { margin-top: 24px; gap: 16px; }
+  .cta .pill { min-height: 52px; padding: 0 28px; font-size: 16px; }
+  .note { font-size: 12px; margin-top: 14px; }
+  .cue { display: none; }
+  .pin { align-items: flex-start; padding-top: 76px; }
+  .card { width: 100%; }
+  .card h2 { font-size: 27px; }
+  .card .txt { font-size: 14px; margin-top: 10px; line-height: 1.75; }
+  .card .sm { margin-top: 8px; }
+  .no { margin-bottom: 8px; }
+  .pp3 { font-size: 54px; }
+  .step { margin-top: 10px; font-size: 13px; }
+  .demo { padding-top: 84px; }
+  .dstage { height: 300px; }
+  .dcard { transform: scale(.92); }
+  .video { padding-top: 80px; }
+  .closing { padding: 100px 24px 90px; }
+}
+@media (prefers-reduced-motion: reduce) { .cue i { animation: none; transform: scaleY(1); opacity: .5; } .pill { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="in">
+    <a class="brand" href="./"><img src="assets/icon_96.webp" alt="" width="30" height="30">パパクエ</a>
+    <nav class="nav" aria-label="メイン">
+      <a href="#features">特徴</a><a href="#howto">使い方</a><a href="#video">紹介動画</a>
+      <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Store</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== 固定レイヤー：章をまたいで動くスマホ・カード・ミートボー ===== -->
+<div id="fx" aria-hidden="true">
+  <div class="glow" id="glow"></div>
+
+  <div class="ph" id="ph1"><div class="ph3" id="ph1r">
+    <i class="edge" style="transform:translateZ(-2px)"></i><i class="edge" style="transform:translateZ(-4px)"></i><i class="edge" style="transform:translateZ(-6px)"></i><i class="edge" style="transform:translateZ(-8px)"></i>
+    <div class="face"><div class="bezel"><div class="screen">
+      <div class="scr" id="s1Board"><img class="fill" src="assets/screen_board.webp" alt="" width="585" height="1266" decoding="async"></div>
+      <div class="scr" id="s1Lock"><img class="fill" src="assets/lock.webp" alt="" width="585" height="1266" decoding="async" loading="lazy"><i class="ripple" id="ripple"></i></div>
+      <div class="scr" id="s1Add"><img class="fill" src="assets/screen_home.webp" alt="" width="585" height="1266" decoding="async">
+        <div class="typed" id="typed"></div><div class="gobtn" id="gobtn"></div>
+        <div class="newq rq" id="newq"><small>基本クエスト</small><b id="newqName">筋トレ</b></div>
+      </div>
+      <div class="scr" id="s1Party">
+        <div class="hd"><span>パーティ</span></div>
+        <img class="banner" src="assets/ask.webp" alt="" style="top:14%" width="520" height="173" loading="lazy">
+        <div class="rq" style="top:34%" id="sendQ"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b></div>
+        <div class="status" id="sendStatus" style="top:58%">お願いを送る</div>
+        <div class="status" id="thxBtn" style="top:68%;opacity:0;background:var(--gold);color:#3a3217;border-color:var(--gold)">ありがとうスタンプを送る</div>
+      </div>
+    </div></div></div>
+    <div class="pshadow"></div>
+  </div></div>
+
+  <div class="ph" id="ph2"><div class="ph3" id="ph2r">
+    <i class="edge" style="transform:translateZ(-2px)"></i><i class="edge" style="transform:translateZ(-4px)"></i><i class="edge" style="transform:translateZ(-6px)"></i><i class="edge" style="transform:translateZ(-8px)"></i>
+    <div class="face"><div class="bezel"><div class="screen">
+      <div class="hd"><span>パーティ</span></div>
+      <div class="scr" id="s2Idle" style="opacity:1"><div class="status" style="top:46%;background:transparent;border:0;color:#9db5ad;font-weight:500">おねがいはまだありません</div></div>
+      <div class="scr" id="s2Recv">
+        <div class="arrive" style="top:11%;background:rgba(214,189,123,.25)">お願いが届きました</div>
+        <div class="rq" id="recvQ" style="top:25%"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b><div class="bt"><i id="okBtn">了解</i><i class="o">あとで</i></div></div>
+        <img class="stampov" id="clearSt" src="assets/st-clear.webp" alt="" style="left:30%;top:34%" width="320" height="320">
+        <div class="status" id="recvStatus" style="top:60%;opacity:0">受けました</div>
+      </div>
+      <div class="scr" id="s2Arrive"><div class="burst"></div><div class="arrive">相手からスタンプが届きました！</div>
+        <img class="thx" id="thxImg" src="assets/st-thanks.webp" alt="" width="320" height="320"><div class="cap" id="thxCap">いつもありがとう</div></div>
+    </div></div></div>
+    <div class="pshadow"></div>
+  </div></div>
+  <span class="tag" id="tag1" style="position:absolute;left:0;top:0">私（お願いする）</span>
+  <span class="tag" id="tag2" style="position:absolute;left:0;top:0">相手（受け取る）</span>
+
+  <div class="qc" id="qc0"><div class="in"><small>基本クエスト</small><b>買い物</b><span class="tg">買い物</span><ul><li>にんじん</li><li>ジャガイモ</li><li>肉</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
+  <div class="qc" id="qc1"><div class="in"><small>基本クエスト</small><b>筋トレ</b><span class="tg t">健康</span><ul><li>腕立て伏せ</li><li>スクワット</li><li>プランク</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
+  <div class="qc" id="qc2"><div class="in"><small>基本クエスト</small><b>洗濯</b><span class="tg h">家事</span><ul><li>洗う</li><li>干す</li><li>たたむ</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
+  <div class="qc" id="fly" style="width:150px;height:140px;margin:-70px 0 0 -75px"><div class="in" style="inset:16% 14% 15% 15%"><small style="font-size:9px">おねがい</small><b style="font-size:15px;margin:0">ゴミ出し</b></div></div>
+
+  <div class="mas" id="mas"><img class="m-still" id="mStill" src="assets/mascot_still.webp" alt="" width="480" height="464" decoding="async"><img class="m-anim" id="mAnim" alt="" width="360" height="348"></div>
+</div>
+
+<main>
+<!-- ===== ファーストビュー ===== -->
+<section class="hero" id="hero" aria-label="パパクエとは">
+  <div class="stage" id="stage">
+    <div class="copy" id="copy">
+      <p class="eyebrow" data-in="glide" data-t="0.20">毎日を冒険にする、TODOアプリ。</p>
+      <h1 aria-label="人生がパパッとクエストになる">
+        <span class="ln" data-in="glide" data-t="0.20" aria-hidden="true">人生が</span>
+        <span class="ln pp" id="pp" aria-hidden="true"><span class="c">パ</span><span class="c">パ</span><span class="c">ッ</span><span class="c">と</span></span>
+        <span class="ln" data-in="glide" data-t="1.45" aria-hidden="true">クエストになる</span>
+      </h1>
+      <p class="lead" data-in="glide" data-t="1.95">毎日のやることを、クエストに。<br>家族やパートナーとは、お願いと<br>ありがとうもやり取りできます。</p>
+      <div class="cta" data-in="glide" data-t="2.03">
+        <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
+        <a class="sub" href="/support-papakue.html">サポート</a>
+      </div>
+      <p class="note" data-in="glide" data-t="2.11">iPhone専用・iOS 15.5以降</p>
+    </div>
+    <div class="cue" id="cue" aria-hidden="true"><span data-in="fade" data-t="2.8" style="display:block">SCROLL<i></i></span></div>
+  </div>
+</section>
+
+<!-- ===== S2 毎日のやることがクエストに ===== -->
+<section class="chapter" data-ch="s2" id="features" style="height:300vh">
+  <div class="pin"><div class="card">
+    <p class="no">01 — QUEST</p>
+    <h2>毎日のやることが、<br>クエストになる。</h2>
+    <p class="txt">買い物も、筋トレも、洗濯も。名前をつけるだけで、巻物のクエストに。達成すると、ハンコが残ります。</p>
+    <p class="sm">カードはアプリの画面を再現したイメージです。</p>
+  </div></div>
+</section>
+
+<!-- ===== 体験デモ ===== -->
+<section class="demo" data-ch="demo" aria-labelledby="demoH">
+  <div>
+    <p class="no">TRY IT</p>
+    <h2 id="demoH">さわって、クエストにしてみる。</h2>
+    <p class="txt">やることを選んで「クエストにする」。巻物が開いたら、達成を押してみてください。</p>
+    <div class="dbox">
+      <div class="chips" id="chips" role="group" aria-label="やることを選ぶ"><button class="chip on" type="button">買い物</button><button class="chip" type="button">筋トレ</button><button class="chip" type="button">洗濯</button></div>
+      <form class="dform" id="dform"><input id="dinput" value="買い物" maxlength="10" aria-label="クエストの名前" autocomplete="off"><button type="submit">クエストにする</button></form>
+      <div class="dstage" id="dstage">
+        <div class="dcard" id="dcard"><div class="in"><small>基本クエスト</small><b id="dname">買い物</b><span class="tg">いつでも</span>
+          <div class="bt"><button type="button" id="dok">達成</button><button type="button" class="o" disabled>失敗</button><button type="button" class="o" disabled>延期</button></div></div></div>
+        <img class="dstamp" id="dstamp" src="assets/st-clear.webp" alt="" width="320" height="320">
+      </div>
+      <button class="dreset" id="dreset" type="button">もう一度やる</button>
+      <p class="dnote">これは体験デモです。実際のアプリの画面・動作とは異なります。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S3 パパッと追加 ===== -->
+<section class="chapter" data-ch="s3" id="howto" style="height:340vh">
+  <div class="pin"><div class="card">
+    <p class="no">02 — ADD</p>
+    <h2>思いついたら、</h2>
+    <span class="pp3" id="pp3" aria-label="パパッと"><span class="c">パ</span><span class="c">パ</span><span class="c">ッ</span><span class="c">と</span></span>
+    <h2>追加。</h2>
+    <p class="txt">ロック画面から、すぐ追加。クエストの名前を入れて「受注」を押すだけです。</p>
+    <p class="step" aria-hidden="true"><i></i><span id="s3step">ロック画面で、タップ</span></p>
+  </div></div>
+</section>
+
+<!-- ===== S4 お願い ===== -->
+<section class="chapter" data-ch="s4" style="height:360vh">
+  <div class="pin"><div class="card">
+    <p class="no">03 — REQUEST</p>
+    <h2>家族やパートナーに、<br>お願いする。</h2>
+    <p class="txt">やってほしいことを、クエストにして送れます。届いたら、相手は返事をするだけ。</p>
+    <p class="step" aria-hidden="true"><i></i><span id="s4step">お願いを送る</span></p>
+  </div></div>
+</section>
+
+<!-- ===== S5 達成とありがとう ===== -->
+<section class="chapter" data-ch="s5" style="height:320vh">
+  <div class="pin"><div class="card">
+    <p class="no">04 — THANKS</p>
+    <h2>達成したら、<br>ありがとうを届ける。</h2>
+    <p class="txt">終わったら、ハンコがポン。お礼のスタンプとひとことを返して、気持ちも一緒に届けます。</p>
+    <p class="step" aria-hidden="true"><i></i><span id="s5step">お願いが達成された</span></p>
+  </div></div>
+</section>
+
+<div class="after" id="after">
+  <!-- ===== S6 紹介動画 ===== -->
+  <section class="video" id="video" data-ch="s6">
+    <p class="no">PR MOVIE</p>
+    <h2>43秒で、パパクエ。</h2>
+    <p class="txt">再生ボタンを押すと、紹介動画が始まります。</p>
+    <div class="vframe"><div class="in" id="vin">
+      <img src="assets/pr_poster.jpg" alt="" width="720" height="1280" loading="lazy" id="vposter">
+      <button class="vplay" id="vplay" type="button" aria-label="紹介動画を再生する（43秒）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" fill="#1f2223"/></svg></button>
+    </div></div>
+  </section>
+
+  <!-- ===== S7 ダウンロード ===== -->
+  <section class="closing" data-ch="s7">
+    <img class="app" src="assets/icon_192.webp" alt="パパクエ" width="96" height="96" loading="lazy">
+    <h2>人生が、<span class="gt">パパッと</span><br>クエストになる。</h2>
+    <p>今日のやることを、冒険の一歩に。</p>
+    <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
+    <span class="sub">iPhone専用・iOS 15.5以降</span>
+  </section>
+  <footer>
+    <nav aria-label="フッター"><a href="/support-papakue.html">サポート</a><a href="/privacy/papakue/">プライバシーポリシー</a><a href="/">miitobow.com</a></nav>
+    <span>© 2026 miitobow</span>
+  </footer>
+</div>
+</main>
+
+<style>
+/* S3・S1画面の上に重ねる部品 */
+.ripple { position: absolute; left: 74%; top: 31%; width: 14%; aspect-ratio: 1; margin: -7% 0 0 -7%; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); opacity: 0; }
+.typed { position: absolute; left: 12.5%; top: 54.4%; height: 3.6%; display: flex; align-items: center; font-weight: 800; color: #3a2b10; font-size: calc(var(--pw) * .052); white-space: nowrap; background: #efeadb; padding-right: 10%; min-width: 55%; }
+.gobtn { position: absolute; left: 71.4%; top: 53.5%; width: 20.8%; height: 5.2%; border-radius: 12px; background: #fff; opacity: 0; mix-blend-mode: soft-light; }
+.newq { top: 63%; opacity: 0; font-size: 1em; }
+.gt { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+</style>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const sm = t => { t = clamp(t); return t * t * (3 - 2 * t); };
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const seg = (p, a, b) => clamp((p - a) / (b - a));
+  const backOut = t => { const c = 1.7; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const LOW = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+  const CAN_HOVER = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const SAFARI = /Apple/.test(navigator.vendor || "") && !/Chrome|Chromium|CriOS|FxiOS|Edg/.test(navigator.userAgent);
+  const EASE = { expo: "cubic-bezier(.16,1,.3,1)", p4out: "cubic-bezier(.23,1,.32,1)", p2io: "cubic-bezier(.45,0,.55,1)" };
+  const canAnimate = typeof Element.prototype.animate === "function";
+
+  const fx = $("fx"), ph1 = $("ph1"), ph1r = $("ph1r"), ph2 = $("ph2"), ph2r = $("ph2r"), glow = $("glow"), mas = $("mas"), top = $("top"), copy = $("copy"), cue = $("cue");
+  const tag1 = $("tag1"), tag2 = $("tag2"), qcs = [$("qc0"), $("qc1"), $("qc2")], fly = $("fly");
+  const L = { B: $("s1Board"), L: $("s1Lock"), A: $("s1Add"), P: $("s1Party") };
+  let W = innerWidth, H = innerHeight, M = W < 820, PW = 330, PH = 680, MW = 155;
+
+  /* ---------- 文字ごとのグラデ ---------- */
+  function paintGradient(box) {
+    const r0 = box.getBoundingClientRect(), w = Math.max(1, r0.width), h = Math.max(1, r0.height);
+    $$(".c", box).forEach(l => { const r = l.getBoundingClientRect();
+      Object.assign(l.style, { background: "linear-gradient(135deg,#10a98c 0%,#2e9f5f 52%,#4c8f20 100%)", backgroundSize: `${w}px ${h}px`, backgroundPosition: `${-(r.left - r0.left)}px 0`, webkitBackgroundClip: "text", backgroundClip: "text", webkitTextFillColor: "transparent", color: "transparent" }); });
+  }
+  const PAP = [ // PR動画 PAP.title と同じ数値
+    { t: 0.00, y: 46, x: 0, s0: .70, s1: 1.07, r: -5, d1: .22, d2: .16 }, { t: 0.10, y: 38, x: 0, s0: .72, s1: 1.07, r: 4, d1: .22, d2: .16 },
+    { t: 0.22, y: 20, x: 0, s0: .55, s1: 1.20, r: 0, d1: .18, d2: .18 }, { t: 0.36, y: 26, x: -22, s0: .86, s1: 1.04, r: 0, d1: .32, d2: .34 }
+  ];
+  const e4 = t => 1 - Math.pow(1 - t, 4), e2io = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  function papScrub(letters, p) {          // スクロール量pで、PAP.titleをそのまま前後に動かす（途中で止めても逆走しても整合）
+    letters.forEach((l, i) => { const k = PAP[i], tot = k.d1 + k.d2, span = .55, u = clamp((p - (k.t / .7) * .45) / span) * (tot) , t1 = clamp(u / k.d1);
+      const a = e4(t1), t2 = clamp((u - k.d1) / k.d2), sc = u < k.d1 ? lerp(k.s0, k.s1, a) : lerp(k.s1, 1, e2io(t2)), op = clamp(u / (k.d1 * .5));
+      l.style.opacity = op; l.style.transform = `translate(${(1 - a) * k.x}px,${(1 - a) * k.y}px) scale(${sc}) rotate(${(1 - a) * k.r}deg)`; });
+  }
+
+  /* ---------- 計測 ---------- */
+  const chEls = $$("[data-ch]"), ids = chEls.map(e => e.dataset.ch), IDX = Object.fromEntries(ids.map((k, i) => [k, i]));
+  const cards = chEls.map(e => e.querySelector(".card"));
+  let tops = [], hs = [], scrollY = 0, afterTop = 1e9;
+  function measure() {
+    const sy = scrollY = window.scrollY;
+    tops = chEls.map(e => e.getBoundingClientRect().top + sy); hs = chEls.map(e => e.offsetHeight);
+    afterTop = $("after").getBoundingClientRect().top + sy;
+    W = innerWidth; H = innerHeight; M = W < 820; PW = ph1.offsetWidth; PH = ph1.offsetHeight; MW = mas.offsetWidth;
+  }
+  const pin = id => { const i = IDX[id]; return clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H)); };
+
+  /* ---------- 全体の状態（章ごとに定義→章の境目は補間でつなぐ） ---------- */
+  const base = () => ({ x: .715, y: .56, s: 1, ry: -14, rx: 4, yo: 0, op: 1, lB: 1, lL: 0, lA: 0, lP: 0, ca: 0, x2: .9, y2: .56, s2: .8, op2: 0, mx: 0, my: 0, mop: 0, glow: 1 });
+  function mascotXY(px, s) { return { mx: px - PW * s / 2 - MW * .66, my: H - MW * .966 + 8 }; }
+  function heroState(p) {
+    const s = sm(p), o = base(); const lift = M ? Math.max(0, (548 + PH) - (H - 28)) : 0;
+    o.x = M ? .5 + 22 / W : .715; o.y = M ? (548 + PH / 2) / H : .56; o.ry = -14 + 14 * s; o.rx = 4 * (1 - s * .5); o.yo = -40 * s - lift * s; o.glow = 1 - s;
+    Object.assign(o, mascotXY(o.x * W, 1)); o.mop = 1 - s; return o;
+  }
+  function S2(p) { const o = base();
+    o.x = M ? .5 : .76; o.y = M ? .79 : .5; o.s = M ? .9 : 1.0; o.ry = -8 + 5 * sm(p); o.rx = 2; o.ca = 1 - sm(seg(p, .86, 1)); o.glow = .8; return o; }
+  function DEMO() { const o = S2(1); o.op = 0; o.ca = 0; o.glow = 0; return o; }
+  function S3(p) { const o = base(); const z = sm(seg(p, .30, .48)) * (1 - sm(seg(p, .93, 1)));
+    o.x = M ? .5 : .74; o.y = M ? .78 : .52; o.s = (M ? .92 : 1.0) * (1 + .12 * z); o.ry = -6 * (1 - z); o.rx = 2 * (1 - z); o.glow = .8;
+    o.lB = 0; const toAdd = sm(seg(p, .34, .46)); o.lL = 1 - toAdd; o.lA = toAdd; return o; }
+  function S4(p) { const o = base(); const a = sm(seg(p, .0, .12));
+    if (M) { o.x = .285; o.y = .66; o.s = .66; o.x2 = .715; o.y2 = .66; o.s2 = .66; } else { o.x = .6; o.y = .52; o.s = .8; o.x2 = .84; o.y2 = .52; o.s2 = .8; }
+    o.ry = 6; o.rx = 2; o.lB = 0; o.lP = 1; o.lA = 0; o.lL = 0; o.op2 = a; o.x2 += (1 - a) * .05; o.glow = .6; return o; }
+  function S5(p) { const o = S4(1); o.x2 = o.x2 - 0; o.op2 = 1; const m = sm(seg(p, .6, .72)); Object.assign(o, mascotXY(o.x2 * W - 0, o.s2)); if (!M) o.mx = o.x2 * W - PW * o.s2 / 2 - MW * .7; else o.mx = o.x2 * W - PW * o.s2 / 2 - MW * .45; o.mop = m * (1 - sm(seg(p, .96, 1))); return o; }
+  function OUT() { const o = S5(1); o.op = 0; o.op2 = 0; o.mop = 0; o.glow = 0; o.ca = 0; return o; }
+  const FN = { s2: S2, demo: DEMO, s3: S3, s4: S4, s5: S5, s6: OUT, s7: OUT };
+  function mix(a, b, t) { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k], t); return o; }
+  function globalState() {
+    const heroP = clamp((scrollY - .35 * H) / (.35 * H));
+    const first = tops[0] - H;
+    if (scrollY <= first) return heroState(heroP);
+    let i = 0; for (let k = 0; k < tops.length; k++) if (scrollY >= tops[k] - H) i = k;
+    const id = ids[i], p = pin(id), enter = sm(1 - (tops[i] - scrollY) / H);
+    const cur = FN[id](p);
+    if (enter >= 1 || scrollY >= tops[i]) return cur;
+    const prev = i === 0 ? heroState(1) : FN[ids[i - 1]](1);
+    return mix(prev, FN[id](0), enter);
+  }
+
+  /* ---------- 描画 ---------- */
+  let introP = 0, t0 = 0, px = 0, py = 0, tx = 0, ty = 0;
+  function apply(S, now) {
+    const ip = (RM || !canAnimate) ? 1 : introP, ease = 1 - Math.pow(1 - ip, 3);
+    const x = S.x * W, y = S.y * H;
+    const ry = S.ry + (-8) * (1 - ease) + px * 4 * (S.op > .5 ? 1 : 0), rx = S.rx - py * 3;
+    ph1.style.opacity = S.op * ease; ph1.style.transform = `translate3d(${x}px,${y + S.yo + (1 - ease) * 60}px,0) scale(${S.s})`; ph1r.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+    glow.style.opacity = S.glow * ease; glow.style.transform = `translate3d(${x}px,${y}px,0) scale(${S.s})`;
+    L.B.style.opacity = S.lB; L.L.style.opacity = S.lL; L.A.style.opacity = S.lA; L.P.style.opacity = S.lP;
+    const x2 = S.x2 * W, y2 = S.y2 * H;
+    ph2.style.opacity = S.op2; ph2.style.transform = `translate3d(${x2}px,${y2}px,0) scale(${S.s2})`; ph2r.style.transform = `rotateY(${-6}deg) rotateX(2deg)`;
+    mas.style.opacity = S.mop; mas.style.transform = `translate3d(${S.mx}px,${S.my}px,0)`;
+    // ラベル（私／相手）
+    const tgOn = S.op2 * S.lP; const ty1 = y - PH * S.s / 2 - 34, ty2 = y2 - PH * S.s2 / 2 - 34;
+    tag1.style.opacity = tgOn; tag1.style.transform = `translate3d(${x}px,${ty1}px,0) translateX(-50%)`; tag2.style.opacity = tgOn; tag2.style.transform = `translate3d(${x2}px,${ty2}px,0) translateX(-50%)`;
+    fx.classList.toggle("off", S.op * ease < .01 && S.op2 < .01 && S.ca < .01 && S.mop < .01);
+    return { x, y };
+  }
+
+  /* ---------- 章の中身 ---------- */
+  const pp3 = $("pp3"), pp3L = $$(".c", pp3);
+  const typed = $("typed"), gobtn = $("gobtn"), newq = $("newq"), ripple = $("ripple"), s3step = $("s3step");
+  const s4step = $("s4step"), s5step = $("s5step"), sendStatus = $("sendStatus"), thxBtn = $("thxBtn");
+  const s2Recv = $("s2Recv"), s2Arrive = $("s2Arrive"), s2Idle = $("s2Idle"), clearSt = $("clearSt"), recvStatus = $("recvStatus"), okBtn = $("okBtn"), thxImg = $("thxImg"), thxCap = $("thxCap");
+  const setText = (el, t) => { if (el.textContent !== t) el.textContent = t; };
+  const CARDS = [{ dx: -.215, dy: -.24, r: -8 }, { dx: -.245, dy: .0, r: 4 }, { dx: -.215, dy: .24, r: -4 }];
+  const CARDS_M = [{ dx: -.235, dy: -.26, r: -7 }, { dx: .235, dy: -.26, r: 6 }, { dx: 0, dy: -.33, r: 0 }];
+  function chapterDetails(S, pos, now) {
+    // S2：画面から巻物のカードが浮かび上がり、広がる
+    const p2 = pin("s2");
+    qcs.forEach((c, i) => { const k = sm(seg(p2, .04 + i * .2, .30 + i * .2)), g = (M ? CARDS_M : CARDS)[i], sc0 = M ? .56 : 1;
+      const cx = pos.x + (M ? g.dx * W : g.dx * W) * k, cy = pos.y + (M ? g.dy * H : g.dy * H) * k;
+      const lift = 1 - k; c.style.opacity = String(S.ca * clamp(k * 5));
+      c.style.transform = `translate3d(${cx}px,${cy}px,0) perspective(900px) rotateX(${lift * 55}deg) rotate(${g.r * k}deg) scale(${sc0 * (.5 + .5 * k)})`; });
+    // S3：パパッと／ロック画面→追加→受注
+    const p3 = pin("s3");
+    papScrub(pp3L, p3 / .22);
+    ripple.style.opacity = String(Math.sin(clamp(seg(p3, .16, .28)) * Math.PI)); ripple.style.transform = `scale(${.4 + 1.2 * seg(p3, .16, .28)})`;
+    const name = "筋トレ", n = Math.round(clamp(seg(p3, .52, .70)) * name.length);
+    typed.textContent = p3 > .5 ? name.slice(0, n) : ""; typed.style.opacity = String(S.lA > .01 ? 1 : 0); typed.style.visibility = p3 > .5 ? "visible" : "hidden";
+    gobtn.style.opacity = String(p3 > .72 && p3 < .8 ? .9 : 0);
+    const nq = sm(seg(p3, .78, .9)); newq.style.opacity = String(nq); newq.style.transform = `translateY(${(1 - nq) * -14}px)`;
+    setText(s3step, p3 < .3 ? "ロック画面で、タップ" : p3 < .7 ? "名前を入れる" : "受注。クエストができた");
+    // S4：お願いを送る→届く→了解
+    const p4 = pin("s4");
+    setText(s4step, p4 < .34 ? "お願いを送る" : p4 < .72 ? "お願いが届く" : "受けてもらえた");
+    setText(sendStatus, p4 < .72 ? (p4 < .3 ? "お願いを送る" : "返事を待っています") : "受けてもらいました");
+    sendStatus.style.background = p4 >= .72 ? "rgba(214,189,123,.55)" : "";
+    const f = seg(p4, .30, .62); fly.style.opacity = String(f > 0 && f < 1 ? 1 : 0);
+    if (f > 0 && f < 1) { const e = sm(f), a = { x: ph1pos(S).x, y: ph1pos(S).y - PH * S.s * .12 }, b = { x: S.x2 * W, y: S.y2 * H - PH * S.s2 * .1 };
+      const mx = lerp(a.x, b.x, e), my = lerp(a.y, b.y, e) - Math.sin(e * Math.PI) * H * .12; fly.style.transform = `translate3d(${mx}px,${my}px,0) rotate(${lerp(-10, 8, e)}deg) scale(${(M ? .62 : .95) * (1 + .15 * Math.sin(e * Math.PI))})`; }
+    s2Idle.style.opacity = String(1 - sm(seg(p4, .6, .66)));
+    const recvIn = sm(seg(p4, .6, .70)), p5 = pin("s5");
+    const recvShow = p5 < .55 ? 1 : 1 - sm(seg(p5, .55, .62));
+    s2Recv.style.opacity = String(recvIn * recvShow);
+    okBtn.classList.toggle("on", p4 > .8 && p4 < .88); recvStatus.style.opacity = String(p4 > .88 || p5 > 0 ? 1 : 0); setText(recvStatus, p5 > .05 ? "達成しました" : "受けました");
+    // S5：ハンコがポン→相手がスタンプを返す→届く
+    const st = clamp(seg(p5, .06, .2)); clearSt.style.opacity = String(st > 0 ? Math.min(1, st * 5) : 0); clearSt.style.transform = `scale(${lerp(2.6, 1, e4(st))}) rotate(${lerp(-20, -10, st)}deg)`;
+    thxBtn.style.opacity = String(sm(seg(p5, .3, .38))); sendStatus.style.opacity = String(1 - sm(seg(p5, .3, .38)));
+    if (p5 > .3) setText(sendStatus, "お願いが達成されました");
+    const arr = sm(seg(p5, .56, .64)); s2Arrive.style.opacity = String(arr);
+    const land = clamp(seg(p5, .62, .78)), bk = backOut(land); thxImg.style.opacity = String(clamp(land * 6)); thxImg.style.transform = `translateY(${(1 - e4(land)) * -90}px) scale(${lerp(1.7, 1, clamp(bk))}) rotate(${(1 - e4(land)) * -16}deg)`;
+    thxCap.style.opacity = String(sm(seg(p5, .78, .86)));
+    setText(s5step, p5 < .3 ? "お願いが達成された" : p5 < .56 ? "ありがとうを送る" : "スタンプが届く");
+    // 章テキストの出入り
+    chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.dataset.ch.startsWith("s") || !chapterPinned(el)) return;
+      const p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H)); const a = sm(seg((scrollY - tops[i] + H * .45) / Math.max(1, hs[i] - H), 0, .07)), out = 1 - sm(seg(p, .93, 1)); c.style.setProperty("--vis", (a * out).toFixed(3)); });
+  }
+  const chapterPinned = el => el.classList.contains("chapter");
+  const ph1pos = S => ({ x: S.x * W, y: S.y * H + S.yo });
+
+  /* ---------- 登場（FV・時間駆動） ---------- */
+  const letters = $$("#pp .c");
+  function intro() {
+    $$("[data-in]").forEach(el => el.style.opacity = ""); top.style.opacity = "";
+    if (RM || !canAnimate) { letters.forEach(l => { l.style.opacity = 1; }); introP = 1; return; }
+    top.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: "ease-out", fill: "both" });
+    $$("[data-in]").forEach(el => { const d = (+el.dataset.t || 0) * 1000, glide = el.dataset.in === "glide";
+      el.animate(glide ? [{ opacity: 0, transform: "translateY(46px)" }, { opacity: 1, transform: "none" }] : [{ opacity: 0 }, { opacity: 1 }], { duration: glide ? 550 : 600, delay: d, easing: EASE.expo, fill: "both" }); });
+    letters.forEach((l, i) => { const p = PAP[i], tot = p.d1 + p.d2, o1 = p.d1 / tot;
+      l.animate([{ opacity: 0, transform: `translate(${p.x}px,${p.y}px) scale(${p.s0}) rotate(${p.r}deg)`, offset: 0, easing: EASE.p4out }, { opacity: 1, transform: `translate(0,0) scale(${p.s1}) rotate(0deg)`, offset: o1, easing: EASE.p2io }, { opacity: 1, transform: "none", offset: 1 }], { duration: tot * 1000, delay: (0.90 + p.t) * 1000, fill: "both" }); });
+    setTimeout(prepareGreeting, 800); setTimeout(() => playGreeting(), 2650);
+  }
+  // ミートボー（FVで1回・S5で1回）
+  const mStill = $("mStill"), mAnim = $("mAnim");
+  const conn = navigator.connection || {};
+  const LITE = /[?&]mascot=lite/.test(location.search) || conn.saveData === true || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
+  const ANIM = LITE ? "assets/mascot_wave_360_12fps.webp" : "assets/mascot_wave_360.webp";
+  let greet = null, vid = null;
+  function prepareGreeting() {
+    if (RM || LOW || greet) return;
+    const probe = document.createElement("video"), webm = !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== "";
+    if (SAFARI || !webm) { const im = new Image(); im.src = ANIM; greet = { img: true }; }
+    else { vid = document.createElement("video"); vid.muted = true; vid.playsInline = true; vid.preload = "auto"; vid.src = "assets/mascot_wave.webm"; vid.setAttribute("aria-hidden", "true"); vid.load(); greet = { v: true }; }
+  }
+  function playGreeting() {
+    prepareGreeting(); if (!greet) return;
+    if (greet.img) { mAnim.onload = () => { mAnim.style.visibility = "visible"; mStill.style.visibility = "hidden"; }; mAnim.src = ""; mAnim.src = ANIM; }
+    else { if (!vid.isConnected) mas.appendChild(vid); vid.currentTime = 0; vid.style.visibility = "visible"; vid.play().then(() => { mStill.style.visibility = "hidden"; }).catch(() => {}); }
+  }
+  let s5Greeted = false;
+
+  /* ---------- 体験デモ（さわってみる） ---------- */
+  const dcard = $("dcard"), dname = $("dname"), dok = $("dok"), dstamp = $("dstamp"), dreset = $("dreset"), dinput = $("dinput");
+  let dState = 0;
+  function dAnim(el, kf, o) { if (RM || !canAnimate) { const last = kf[kf.length - 1]; Object.assign(el.style, last); return; } el.animate(kf, { fill: "forwards", ...o }); }
+  $$("#chips .chip").forEach(b => b.onclick = () => { $$("#chips .chip").forEach(x => x.classList.toggle("on", x === b)); dinput.value = b.textContent; });
+  $("dform").onsubmit = e => { e.preventDefault(); const v = (dinput.value || "").trim().slice(0, 10) || "買い物"; dname.textContent = v; dok.disabled = false; dstamp.style.opacity = 0; dreset.style.opacity = 0;
+    dcard.getAnimations && dcard.getAnimations().forEach(a => a.cancel()); dstamp.getAnimations && dstamp.getAnimations().forEach(a => a.cancel());
+    dAnim(dcard, [{ opacity: 0, transform: "perspective(900px) rotateX(70deg) translateY(-30px) scale(.8)" }, { opacity: 1, transform: "perspective(900px) rotateX(0) translateY(0) scale(1)" }], { duration: 700, easing: EASE.expo }); dState = 1; };
+  dok.onclick = () => { if (dState !== 1) return; dState = 2; dok.disabled = true;
+    dAnim(dstamp, [{ opacity: 0, transform: "scale(3) rotate(-24deg)" }, { opacity: .96, transform: "scale(1) rotate(-12deg)", offset: .55 }, { opacity: .96, transform: "scale(1.08) rotate(-12deg)", offset: .72 }, { opacity: .96, transform: "scale(1) rotate(-12deg)" }], { duration: 650, easing: "cubic-bezier(.2,.9,.3,1)" });
+    dAnim(dcard, [{ transform: "translateY(0)" }, { transform: "translateY(6px)", offset: .55 }, { transform: "translateY(0)" }], { duration: 650 }); dreset.style.opacity = 1; };
+  dreset.onclick = () => { dState = 0; dcard.getAnimations().forEach(a => a.cancel()); dstamp.getAnimations().forEach(a => a.cancel()); dcard.style.opacity = 0; dstamp.style.opacity = 0; dreset.style.opacity = 0; dok.disabled = false; dinput.focus(); };
+  // ページを開いたとき、最初の1枚は閉じた状態（さわるまで出さない）
+
+  /* ---------- 紹介動画（押したときだけ再生） ---------- */
+  $("vplay").onclick = () => { const v = document.createElement("video"); v.controls = true; v.playsInline = true; v.preload = "auto"; v.poster = "assets/pr_poster.jpg";
+    v.innerHTML = '<source src="assets/pr_720.mp4" type="video/mp4">'; const vin = $("vin"); vin.innerHTML = ""; vin.appendChild(v); v.play().catch(() => {}); v.focus(); };
+
+  /* ---------- ループ ---------- */
+  let S = base(), sy0 = -1;
+  function frame(now) {
+    requestAnimationFrame(frame);
+    scrollY = window.scrollY;
+    if (t0) introP = (RM) ? 1 : clamp(((now - t0) / 1000 - 1.55) / 1.1);
+    px += (tx - px) * .08; py += (ty - py) * .08;
+    const heroP = clamp((scrollY - .35 * H) / (.35 * H)), hs_ = sm(heroP);
+    copy.style.transform = `translate3d(0,${-12 * hs_}px,0)`; copy.style.opacity = String(1 - hs_); cue.style.setProperty("--co", String(Math.max(0, 1 - heroP * 4)));
+    if (scrollY > afterTop - H * .2) { fx.classList.add("off"); return; }
+    S = globalState(); const pos = apply(S, now);
+    chapterDetails(S, pos, now);
+    // S5でミートボーが出たとき、手を振る
+    if (S.mop > .5 && pin("s5") > .6 && !s5Greeted && scrollY > tops[IDX.s5] - 1) { s5Greeted = true; playGreeting(); }
+    if (pin("s5") < .3 && scrollY < tops[IDX.s5] + 10) s5Greeted = false;
+  }
+  window.addEventListener("resize", () => { measure(); paintGradient($("pp")); paintGradient(pp3); });
+  if (CAN_HOVER && !LOW && !RM) window.addEventListener("pointermove", e => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+  const imgs = $$("#ph1 img, #mStill").slice(0, 3);
+  const ready = Promise.all([document.fonts ? document.fonts.ready : 0, ...imgs.map(i => i.decode ? i.decode().catch(() => 0) : 0)]);
+  Promise.race([ready, new Promise(r => setTimeout(r, 2000))]).then(() => { measure(); paintGradient($("pp")); paintGradient(pp3); t0 = performance.now(); window.__pkT0 = t0; intro(); });
+  window.addEventListener("load", () => { measure(); paintGradient($("pp")); paintGradient(pp3); });
+  requestAnimationFrame(frame);
+  window.__pk = { get S() { return S; }, tops: () => tops, pin };
+})();
+</script>
+</body>
+</html>
