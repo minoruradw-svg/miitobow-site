@@ -95,7 +95,22 @@
   .leaflet-container { font-family: inherit; }
   .leaflet-bottom { bottom: var(--cover, 0px); }
   .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
-  #tilewarn { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 10px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: flex-start;
+  /* 地図の種類の切り替え(右上)。ズームボタンと同じく、地図の上は明るい色で統一 */
+  .leaflet-top.leaflet-right { z-index: 1150; }   /* スマホでシートを最大にしても、メニューがシートの裏に隠れない(ヘッダー1300・検索候補1400より下) */
+  .basectl { position: relative; }
+  .basectl .bc-btn { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
+  .basectl .bc-btn:hover { background: #f4f4f4; }
+  .basectl .bc-btn:focus-visible, .basectl .bc-opt:focus-visible { outline: 3px solid #6fae2f; outline-offset: 2px; }
+  .bc-menu { position: absolute; right: 0; top: 50px; width: 246px; padding: 6px; border-radius: 12px; background: #fff; color: #1f2b20; border: 2px solid rgba(0,0,0,.2); box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+  .bc-menu[hidden] { display: none; }
+  .bc-opt { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+  .bc-opt:hover { background: #eef3ea; }
+  .bc-opt.on { background: rgba(111,174,47,.18); }
+  .bc-opt b { display: block; font-size: 15px; }
+  .bc-opt small { display: block; font-size: 12px; color: #55655a; line-height: 1.3; }
+  .bc-ck { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid #55655a; background: #fff; }
+  .bc-opt.on .bc-ck { border-color: #3a5d22; background: radial-gradient(circle, #3a5d22 0 45%, #fff 50%); }
+  #tilewarn { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: flex-start;
     padding: 10px 12px; border-radius: 12px; background: #fff4d6; color: #5a4300; border: 1px solid #e3c36a; font-size: 13px; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
   #tilewarn[hidden] { display: none; }
   #tilewarn button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
@@ -282,11 +297,53 @@ const mainEl = document.getElementById("main"), panel = document.getElementById(
 const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl"), homeTop = document.getElementById("homeTop");
 
 const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }), zoomAnimation: !RM, fadeAnimation: !RM, markerZoomAnimation: !RM }).setView([33.8636, 130.7118], 14);
-const tiles = L.tileLayer("https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", { minZoom: 5, maxZoom: 18, maxNativeZoom: 18, attribution: "地図：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>" }).addTo(map);
+// 地図の種類(すべて国土地理院タイル・同じ提供元)。選んだ種類は、次に開いた時も覚えておく(この端末の中だけ)
+const GSI = "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>";
+const BASE = [
+  { id: "std", label: "標準", note: "いつもの地図", url: "https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", att: "地図：" + GSI },
+  { id: "pale", label: "淡色", note: "色が薄く、点が見やすい", url: "https://maps.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png", att: "地図：" + GSI + "（淡色地図）" },
+  { id: "photo", label: "写真", note: "航空写真（撮影時期は場所で異なります）", minZoom: 9, url: "https://maps.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+    att: "写真：" + GSI + "（全国最新写真（シームレス））　データソース：Landsat8画像（GSI,TSIC,GEO Grid/AIST）, Landsat8画像（courtesy of the U.S. Geological Survey）" },
+];
+let baseId = "std"; try { const sv = localStorage.getItem("busmap.base"); if (BASE.some(b => b.id === sv)) baseId = sv; } catch (e) {}
 // タイル取得失敗の案内（数枚失敗したら表示、読み込めたら消す）
 const tw = document.getElementById("tilewarn"); let tErr = 0, tOk = 0, twDismissed = false;
-tiles.on("tileerror", () => { tOk = 0; if (++tErr >= 3 && !twDismissed) tw.hidden = false; });
-tiles.on("tileload", () => { if (tErr && ++tOk >= 4) { tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; } });
+const mkTiles = b => {
+  const l = L.tileLayer(b.url, { minZoom: b.minZoom || 5, maxZoom: 18, maxNativeZoom: 18, attribution: b.att });
+  l.on("tileerror", () => { tOk = 0; if (++tErr >= 3 && !twDismissed) tw.hidden = false; });
+  l.on("tileload", () => { if (tErr && ++tOk >= 4) { tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; } });
+  return l;
+};
+let tiles = mkTiles(BASE.find(b => b.id === baseId)).addTo(map);
+const applyMinZoom = () => { const mz = BASE.find(b => b.id === baseId).minZoom || 5; map.setMinZoom(mz); if (map.getZoom() < mz) map.setZoom(mz, { animate: false }); };   // 写真は、衛星画像のクレジットが要る低ズーム(9未満)を使わない
+applyMinZoom();
+function setBase(id) {
+  const b = BASE.find(x => x.id === id); if (!b || id === baseId) return;
+  map.removeLayer(tiles); tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; tiles = mkTiles(b).addTo(map); baseId = id; applyMinZoom();
+  try { localStorage.setItem("busmap.base", id); } catch (e) {}
+  syncBase();
+}
+let syncBase = () => {};
+L.Control.Base = L.Control.extend({
+  options: { position: "topright" },
+  onAdd() {
+    const c = L.DomUtil.create("div", "basectl"); L.DomEvent.disableClickPropagation(c); L.DomEvent.disableScrollPropagation(c);
+    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+      <div class="bc-menu" id="bcMenu" role="radiogroup" aria-label="地図の種類" hidden>${BASE.map(b => `<button type="button" role="radio" class="bc-opt" data-id="${b.id}" aria-checked="false"><span class="bc-ck" aria-hidden="true"></span><span><b>${b.label}</b><small>${b.note}</small></span></button>`).join("")}</div>`;
+    const btn = c.querySelector(".bc-btn"), menu = c.querySelector(".bc-menu"), opts = [...c.querySelectorAll(".bc-opt")];
+    const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); if (v) (opts.find(o => o.dataset.id === baseId) || opts[0]).focus(); };
+    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); btn.setAttribute("aria-label", "地図の種類を選ぶ（いま：" + BASE.find(b => b.id === baseId).label + "）"); };
+    syncBase();
+    btn.onclick = () => open(menu.hidden);
+    opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
+      o.onkeydown = e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); opts[(i + (e.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length].focus(); } else if (e.key === "Home") { e.preventDefault(); opts[0].focus(); } else if (e.key === "End") { e.preventDefault(); opts[opts.length - 1].focus(); } }; });
+    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget)) open(false); });   // Tabでメニューの外へ出たら閉じる
+    c.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { e.stopPropagation(); open(false); btn.focus(); } });
+    document.addEventListener("pointerdown", e => { if (!menu.hidden && !c.contains(e.target)) open(false); }, true);   // 地図はタップのclickを止めることがあるので、押した瞬間(pointerdown)で外側を判定する
+    return c;
+  },
+});
+new L.Control.Base().addTo(map);
 document.getElementById("tilewarnx").onclick = () => { tw.hidden = true; twDismissed = true; };
 
 // シートの高さ（3段）。地図は全面に置き、シートはその上に重ねる（開閉・ドラッグで地図の大きさは変わらない）
@@ -435,7 +492,7 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・駅の位置・所在地：国土交通省 国土数値情報（鉄道駅データ N02-22・行政区域データ N03-22）を加工して作成<br>
 ・地名・施設の位置：<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地名検索</a>と<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors（ODbL）</a>の情報を突き合わせて作成した目安です（OSM由来の位置情報を含みます。出入口などの正確な位置ではありません）<br>・町名（北九州市7区）：<a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">政府統計の総合窓口（e-Stat）『令和2年国勢調査 小地域（町丁・字等）境界データ』</a>を加工して作成。町名ごとの代表地点（面積の重心）で、読み仮名では探せません（漢字・かなの表記で検索）<br>
 ・この地図に含まれる市町村（13）：北九州市・直方市・苅田町・行橋市・宮若市・中間市・鞍手町・岡垣町・芦屋町・水巻町・遠賀町・みやこ町（一部）・宗像市（一部）。（一部）は、地図の範囲の端に少しだけ入っている市町村です。<br>
-・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図）</a><br>
+・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図・淡色地図・全国最新写真（シームレス））</a>。写真は、撮影時期が場所によって異なり、現在の様子と違うことがあります<br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
 const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
