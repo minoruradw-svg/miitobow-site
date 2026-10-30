@@ -98,7 +98,7 @@
   /* 地図の種類の切り替え(右上)。ズームボタンと同じく、地図の上は明るい色で統一 */
   .leaflet-top.leaflet-right { z-index: 1150; }   /* スマホでシートを最大にしても、メニューがシートの裏に隠れない(ヘッダー1300・検索候補1400より下) */
   .basectl { position: relative; }
-  .basectl .bc-btn { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
+  .basectl .bc-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 10px; font: 700 14px/1 "Hiragino Sans","Yu Gothic",system-ui,sans-serif; white-space: nowrap; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
   .basectl .bc-btn:hover { background: #f4f4f4; }
   .basectl .bc-btn:focus-visible, .basectl .bc-opt:focus-visible { outline: 3px solid #6fae2f; outline-offset: 2px; }
   .bc-menu { position: absolute; right: 0; top: 50px; width: 246px; padding: 6px; border-radius: 12px; background: #fff; color: #1f2b20; border: 2px solid rgba(0,0,0,.2); box-shadow: 0 6px 20px rgba(0,0,0,.22); }
@@ -130,6 +130,7 @@
     color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .back:hover { border-color: var(--brand); background: var(--brand-soft); }
   /* ホームへ一発で戻るボタン: PCはパネル内の「もどる」の隣、スマホはシート上部の右 */
+  .back, .homebtn { vertical-align: top; }   /* 『もどる』と『ホーム』の上端をそろえる(overflow:hiddenの『もどる』は、基準線が下に来て、ホームより低く並んでいた) */
   .homebtn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -4px 0 8px 8px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; white-space: nowrap; }
   .homebtn:hover { border-color: var(--brand); background: var(--brand-soft); }
   .homebtn svg { flex: none; }
@@ -328,11 +329,11 @@ L.Control.Base = L.Control.extend({
   options: { position: "topright" },
   onAdd() {
     const c = L.DomUtil.create("div", "basectl"); L.DomEvent.disableClickPropagation(c); L.DomEvent.disableScrollPropagation(c);
-    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><span class="bc-cur"></span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
       <div class="bc-menu" id="bcMenu" role="radiogroup" aria-label="地図の種類" hidden>${BASE.map(b => `<button type="button" role="radio" class="bc-opt" data-id="${b.id}" aria-checked="false"><span class="bc-ck" aria-hidden="true"></span><span><b>${b.label}</b><small>${b.note}</small></span></button>`).join("")}</div>`;
     const btn = c.querySelector(".bc-btn"), menu = c.querySelector(".bc-menu"), opts = [...c.querySelectorAll(".bc-opt")];
     const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); if (v) (opts.find(o => o.dataset.id === baseId) || opts[0]).focus(); };
-    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); btn.setAttribute("aria-label", "地図の種類を選ぶ（いま：" + BASE.find(b => b.id === baseId).label + "）"); };
+    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); const cur = BASE.find(b => b.id === baseId).label; btn.querySelector(".bc-cur").textContent = cur; btn.setAttribute("aria-label", "地図の種類を選ぶ（いま：" + cur + "）"); };   // ボタンの左に、いま表示中の地図の名前を出す
     syncBase();
     btn.onclick = () => open(menu.hidden);
     opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
