@@ -102,6 +102,11 @@
   .back { display: inline-flex; align-items: center; min-height: 44px; margin: -4px 0 8px -4px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
     color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .back:hover { border-color: var(--brand); background: var(--brand-soft); }
+  /* ホームへ一発で戻るボタン: PCはパネル内の「もどる」の隣、スマホはシート上部の右 */
+  .homebtn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -4px 0 8px 8px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .homebtn:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .homebtn svg { flex: none; }
+  .hometop { display: none; }
   .nw { white-space: nowrap; }
   #pbody h2:focus { outline: none; }
   .lh { margin: 14px 0 4px; font-size: 13px; font-weight: 700; color: var(--ink); }
@@ -149,6 +154,11 @@
     #panel.min .warn { display: none; }
     .pbody { padding: 0 16px 10px; }
     .back { float: right; margin: 0 0 0 8px; padding: 0 12px; min-height: 44px; max-width: 58%; }
+    .homebtn { display: none; }
+    .hometop { position: absolute; z-index: 3; top: 0; right: 6px; width: 60px; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px 0 0; border: 0; border-radius: 12px; background: none; color: var(--ink); cursor: pointer; font-size: 10.5px; font-weight: 700; line-height: 1.1; }
+    .hometop[hidden] { display: none; }
+    .hometop:active { background: var(--brand-soft); }
+    #panel.hashome .sheet-top #psum { max-width: calc(100% - 136px); }
     #sug { position: fixed; left: 8px; right: 8px; top: 64px; }   /* 検索欄は狭いので、候補は画面幅いっぱいに出す(topはJSで補正) */
     #sug button { flex-wrap: wrap; row-gap: 0; }
     #sug small { flex: 1 1 100%; max-width: 100%; text-align: left; }
@@ -183,6 +193,7 @@
   <div id="tilewarn" role="status" aria-live="polite" hidden><span>地図の画像を読み込めませんでした。通信状況をご確認ください。バス停の点と系統の一覧はそのまま使えます。</span><button type="button" id="tilewarnx" aria-label="閉じる">×</button></div>
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
+    <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
     <div id="pbody" class="pbody"></div>
     <div class="warn">非公式・2022年度版・時刻運賃なし｜乗車前は<a href="http://nishitetsu-ktq.jp/rosen/" target="_blank" rel="noopener">公式情報</a>で確認</div>
   </aside>
@@ -246,7 +257,7 @@ const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mqMobile = matchMedia("(max-width: 767px)");
 const isMobile = () => mqMobile.matches;
 const mainEl = document.getElementById("main"), panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
-const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl");
+const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl"), homeTop = document.getElementById("homeTop");
 
 const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }), zoomAnimation: !RM, fadeAnimation: !RM, markerZoomAnimation: !RM }).setView([33.8636, 130.7118], 14);
 const tiles = L.tileLayer("https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", { minZoom: 5, maxZoom: 18, maxNativeZoom: 18, attribution: "地図：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>" }).addTo(map);
@@ -404,9 +415,15 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図）</a><br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
+const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
+homeTop.onclick = goHome;
 function render(html, sum) {
   const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
   pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
+  const bk = pbody.querySelector(".back");
+  if (bk) { const hm = document.createElement("button"); hm.type = "button"; hm.className = "homebtn"; hm.setAttribute("aria-label", "ホーム（最初の画面）へ戻る"); hm.innerHTML = HOMEICON + "ホーム"; hm.onclick = goHome; bk.insertAdjacentElement("afterend", hm); }   // PC用（スマホはシート上部のボタン）
+  homeTop.hidden = !bk; panel.classList.toggle("hashome", !!bk);
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
