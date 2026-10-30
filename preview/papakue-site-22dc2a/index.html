@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>パパクエ｜パパッと日常をクエストに</title>
+<meta name="description" content="歯磨きも、洗濯も、今日のクエスト。やることをクエストにして、達成を冒険の記録に。ロック画面やウィジェットからパパッと確認も追加もできる、iPhoneのTODOアプリ。">
+<link rel="icon" href="img/icon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Inter:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#eef7ea; --ink:#143630; --muted:#4b6a61; --line:#cfe2d0;
+  --teal:#1f6b5d; --deep:#163a33; --mint:#3fd1b0; --lime:#a6e35f;
+  --paper:#f7ecd0; --paper2:#efdfb6; --gold:#d9b64a; --gold2:#b8912a; --red:#c8352c;
+  --grad:linear-gradient(135deg,#37cfc0 0%,#7fe0a0 55%,#b6e866 100%);
+  --shadow:0 18px 40px -18px rgba(20,54,48,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;font-weight:500;line-height:1.85;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3{margin:0;font-weight:900;line-height:1.35;text-wrap:balance}
+.num{font-family:"Inter","Zen Maru Gothic",sans-serif;font-variant-numeric:tabular-nums}
+.eyebrow{font-size:12px;letter-spacing:.22em;font-weight:700;color:var(--teal);text-transform:uppercase;font-family:"Inter",sans-serif}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* 背景の世界（冒険の野原） */
+#world{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;transition:opacity .45s}
+#world.off{opacity:0}
+
+/* ヘッダー */
+.top{position:fixed;top:0;left:0;right:0;z-index:30;transition:background .25s,box-shadow .25s}
+.top.is-solid{background:rgba(238,247,234,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.top .in{width:min(1120px,100% - 32px);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;font-size:17px}
+.brand img{width:30px;height:30px;border-radius:8px}
+.nav{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:700}
+.nav a{text-decoration:none;color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 30px;border-radius:999px;background:var(--deep);color:#f4fff6;font-weight:900;font-size:16px;text-decoration:none;box-shadow:var(--shadow);transition:transform .15s;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{transform:translateY(-2px)}
+.nav a.btn{color:#f4fff6}
+.btn.small{min-height:44px;padding:0 18px;font-size:14px;box-shadow:none}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+
+/* ストーリー */
+.story{position:relative;z-index:1}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:start center;text-align:center;padding:clamp(86px,13vh,140px) 20px 0}
+.hero .veil{position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 32%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);pointer-events:none}
+.hero > .copy{position:relative}
+.hero h1{font-size:clamp(36px,6.4vw,70px);margin:14px 0 16px;letter-spacing:.01em}
+.hero .lead{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:30em;margin-inline:auto}
+.hero .cta{margin-top:26px;display:grid;gap:10px;justify-items:center}
+.hero .note{font-size:13px;color:var(--muted)}
+.cue{position:absolute;bottom:16px;right:22px;text-align:center;font-size:10px;letter-spacing:.3em;color:var(--muted);font-family:"Inter",sans-serif;text-transform:uppercase}
+.cue i{display:block;width:1px;height:24px;margin:6px auto 0;background:linear-gradient(var(--teal),transparent);animation:cue 1.6s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+.chapter{position:relative}
+.pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding:0 max(20px,6vw)}
+.card{width:min(420px,100%);opacity:var(--vis,0);transform:translateY(calc((1 - var(--vis,0)) * 20px));will-change:opacity,transform}
+.card .no{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.2em;color:var(--teal);font-weight:700;text-transform:uppercase;font-family:"Inter",sans-serif}
+.card .no b{display:inline-grid;place-items:center;width:26px;height:26px;border:1.5px solid var(--teal);border-radius:50%;font-size:11px;letter-spacing:0}
+.card h2{font-size:clamp(27px,3.6vw,40px);margin:12px 0 14px}
+.card .txt{color:var(--muted);font-size:16px}
+
+/* HUD＝アプリ画面の小さな再現（深緑＋巻物＋金） */
+.hud{margin-top:22px}
+.board{background:linear-gradient(170deg,#1c4a41,#163a33 60%,#12302a);border-radius:22px;padding:12px;box-shadow:var(--shadow);color:#eaf6ee;border:1px solid rgba(255,255,255,.08)}
+.board .bh{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;opacity:.85;padding:2px 4px 8px}
+.board .bh span:last-child{color:#cfe9b6}
+.banner{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3.2/1;margin-bottom:10px}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.banner .bt{position:absolute;left:12px;bottom:8px;color:#fff;font-weight:900;font-size:15px;text-shadow:0 1px 6px rgba(0,0,0,.6);line-height:1.3}
+.banner .bt small{display:block;font-size:10px;font-weight:700;opacity:.9}
+.inputrow{display:flex;align-items:center;gap:8px;background:var(--paper);border-radius:12px;padding:6px 6px 6px 12px;min-height:46px;color:#3a2b10}
+.typed{font-weight:700;font-size:16px;min-height:1.4em;white-space:nowrap;overflow:hidden}
+.typed:empty::before{content:"クエスト名を入力";color:#a08f66;font-weight:500}
+.caret{width:2px;height:18px;background:var(--teal);animation:blink 1s steps(1) infinite;margin-right:auto;flex:none}
+@keyframes blink{50%{opacity:0}}
+.gold{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0 14px;min-height:34px;border-radius:10px;background:linear-gradient(180deg,#e9c95f,#cfa83a);color:#3a2b10;font-weight:900;font-size:14px;transition:transform .15s,filter .15s;flex:none;border:0;font-family:inherit;cursor:pointer;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
+.gold.on,.gold:active{transform:scale(.93);filter:brightness(.92)}
+.qs{display:grid;gap:6px;margin-top:8px}
+.q{position:relative;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:linear-gradient(180deg,#f9efd6,#efdfb6);color:#3a2b10;border:1px solid #d9c48e;box-shadow:inset 0 1px 0 #fff8e6;min-height:48px;overflow:hidden}
+.q::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#d9b64a,#b8912a)}
+.q small{font-size:10px;color:#8a6a2c;font-weight:700;display:block;line-height:1.2}
+.q strong{font-size:16px;line-height:1.25;display:block}
+.q .nm{flex:1;min-width:0}
+.q .st{position:absolute;right:8px;top:50%;width:54px;height:54px;margin-top:-27px;opacity:0;transform:scale(2.6) rotate(-20deg);transition:opacity .15s,transform .32s cubic-bezier(.2,1.5,.4,1);pointer-events:none}
+.q.clear .st{opacity:.96;transform:scale(1) rotate(-12deg)}
+.q.clear strong{color:#9a8a62;text-decoration:line-through;text-decoration-thickness:1.5px}
+.q.hid{opacity:0;transform:translateY(8px) scale(.97)}
+.q{transition:opacity .25s,transform .25s}
+.cnt{display:flex;align-items:baseline;gap:6px;font-weight:700;color:#cfe9b6;font-size:12px;padding:8px 4px 0}
+.cnt b{font-size:22px;color:#fff}
+.bar{height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin:8px 4px 2px}
+.bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:99px;transition:width .3s}
+
+.mocks{position:relative;height:214px}
+.mock{position:absolute;inset:0;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.mock.on{opacity:1;transform:none}
+.lock{background:radial-gradient(120% 90% at 20% 10%,#2d6a60,#163a33 55%,#0f2722);color:#eaf6ee;border-radius:24px;padding:16px 16px 14px;height:100%;box-shadow:var(--shadow)}
+.lock .t{font-family:"Inter",sans-serif;font-weight:500;font-size:44px;line-height:1;letter-spacing:-.02em;text-align:center}
+.lock .d{text-align:center;font-size:12px;opacity:.7;margin:4px 0 12px}
+.lock .w{background:rgba(255,255,255,.12);border-radius:14px;padding:8px 12px}
+.lock .w h4{margin:0 0 4px;font-size:11px;font-weight:700;opacity:.8;display:flex;justify-content:space-between}
+.lock .w h4 b{font-size:13px;opacity:1;color:#bff0a0}
+.lock .w div{font-size:13px;transition:opacity .25s;line-height:1.6}
+.lock .w div.x{opacity:.35;text-decoration:line-through}
+.home{display:grid;grid-template-columns:1fr 1fr;gap:10px;height:100%}
+.wg{border-radius:18px;padding:12px;box-shadow:var(--shadow);font-size:11px;font-weight:700;display:flex;flex-direction:column;justify-content:space-between}
+.wg.g{background:linear-gradient(170deg,#1f5c50,#163a33);color:#eaf6ee}
+.wg.p{background:linear-gradient(170deg,#f9efd6,#efdfb6);color:#3a2b10}
+.wg .big{font-size:30px;line-height:1;font-weight:700}
+.wg .add{display:grid;place-items:center;height:100%;font-size:14px;color:#3a2b10;text-align:center}
+.wg .add span{display:block;width:36px;height:36px;border-radius:50%;background:var(--gold);display:grid;place-items:center;margin:0 auto 6px;font-size:22px;line-height:1}
+.watch{display:grid;place-items:center;height:100%}
+.watch .face{width:150px;height:184px;border-radius:40px;background:#0b0d0f;padding:14px;box-shadow:var(--shadow),inset 0 0 0 3px #2a2d30;position:relative}
+.watch .face::after{content:"";position:absolute;right:-6px;top:52px;width:8px;height:30px;border-radius:4px;background:#2a2d30}
+.watch .scr{background:linear-gradient(170deg,#1f5c50,#12302a);border-radius:28px;height:100%;padding:12px 12px;color:#eaf6ee;font-size:11px;font-weight:700}
+.watch .scr .t{font-family:"Inter",sans-serif;font-size:26px;line-height:1;margin:2px 0 8px}
+.watch .scr div span{display:block;opacity:.85;line-height:1.6}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{padding:6px 13px;border-radius:99px;border:1.5px solid var(--line);background:rgba(255,255,255,.85);font-size:12px;font-weight:700;color:var(--muted);transition:all .25s}
+.chip.on{background:var(--deep);border-color:var(--deep);color:#f4fff6}
+
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal i{aspect-ratio:1.3;border-radius:6px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-style:normal;font-size:11px;color:transparent;transition:background .2s,color .2s}
+.cal i.on{background:#7fe0a0;color:#143630}
+.cal i.on.hi{background:var(--gold);color:#3a2b10}
+.cal-n{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#cfe9b6;font-weight:700;margin-top:10px;padding:0 4px}
+.cal-n b{font-size:20px;color:#fff;margin:0 3px}
+.unlock{display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(8px) scale(.96);transition:opacity .3s,transform .3s;padding:8px 12px;margin-top:8px;background:linear-gradient(180deg,#f9efd6,#efdfb6);border-radius:12px;color:#3a2b10;border:1px solid #d9c48e}
+.unlock.on{opacity:1;transform:none}
+.unlock img{width:50px;height:50px;object-fit:contain}
+.unlock small{display:block;font-size:10px;color:#8a6a2c;line-height:1.3;font-weight:700}
+.unlock strong{font-size:15px}
+.fps{display:flex;gap:8px;margin-left:auto}
+.fps img{width:30px;height:30px;opacity:0;transform:scale(.4);transition:opacity .25s,transform .35s cubic-bezier(.2,1.6,.4,1)}
+.fps img.on{opacity:1;transform:none}
+
+.chat{display:grid;gap:8px}
+.bub{max-width:86%;padding:8px 14px;border-radius:16px;font-weight:700;font-size:14px;opacity:0;transform:translateY(10px) scale(.96);transition:opacity .25s,transform .25s;line-height:1.5;box-shadow:var(--shadow)}
+.bub.on{opacity:1;transform:none}
+.bub.me{justify-self:end;background:linear-gradient(180deg,#f9efd6,#efdfb6);color:#3a2b10;border-bottom-right-radius:5px;border:1px solid #d9c48e}
+.bub.you{justify-self:start;background:#fff;color:var(--ink);border-bottom-left-radius:5px}
+.bub small{display:block;font-size:10px;opacity:.7;font-weight:700}
+.thx{justify-self:start;width:110px;opacity:0;transform:scale(.4) rotate(-14deg);transition:opacity .2s,transform .35s cubic-bezier(.2,1.6,.4,1);filter:drop-shadow(0 8px 10px rgba(20,54,48,.25))}
+.thx.on{opacity:1;transform:none}
+
+.finale .pin{justify-content:center;text-align:center}
+.finale .card{width:min(760px,100%);padding:24px 16px;border-radius:32px;background:radial-gradient(60% 60% at 50% 50%,rgba(238,247,234,.9),rgba(238,247,234,.55) 70%,rgba(238,247,234,0))}
+.finale h2{font-size:clamp(30px,4.8vw,54px)}
+.stats{display:flex;justify-content:center;gap:clamp(20px,6vw,70px);margin-top:26px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat span{display:block;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em}
+.stat b{font-size:clamp(38px,6vw,62px);line-height:1.1}
+.stat small{font-size:14px;color:var(--muted);margin-left:2px}
+.sample{margin-top:16px;font-size:12px;color:var(--muted)}
+
+/* ストーリーのあと */
+.after{position:relative;z-index:1;background:var(--bg)}
+.wrap{width:min(1040px,100% - 40px);margin-inline:auto}
+.after section{padding:84px 0}
+.after h2{font-size:clamp(26px,3.6vw,38px);margin:12px 0 10px}
+.after .sub{color:var(--muted);font-size:17px;max-width:36em}
+.center{text-align:center}
+.center .sub{margin-inline:auto}
+.center .eyebrow{display:block}
+
+/* 体験エリア */
+.try{background:linear-gradient(180deg,var(--bg),#e4f3e6)}
+.try .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.try .board{padding:14px}
+.try form{display:flex;gap:8px}
+.try input{flex:1;min-width:0;min-height:48px;border-radius:12px;border:2px solid transparent;background:var(--paper);padding:0 14px;font:inherit;font-weight:700;font-size:16px;color:#3a2b10}
+.try input::placeholder{color:#a08f66;font-weight:500}
+.try input:focus{border-color:var(--gold);outline:none}
+.try .gold{min-height:48px;padding:0 20px;font-size:15px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+.presets button{min-height:44px;padding:0 12px;border-radius:99px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#eaf6ee;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.presets button:hover{background:rgba(255,255,255,.16)}
+.try .qs{list-style:none;padding:0;margin:10px 0 0}
+.try .q{animation:qin .3s ease-out both}
+@keyframes qin{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.try .q .done{min-height:44px;min-width:80px;padding:0 12px;border-radius:9px;background:linear-gradient(180deg,#e9c95f,#cfa83a);color:#3a2b10;border:0;font:inherit;font-weight:900;font-size:14px;cursor:pointer;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);transition:transform .12s;flex:none}
+.try .q .done:active{transform:scale(.93)}
+.try .q.clear .done{visibility:hidden}
+.try .q .st{right:10px;width:62px;height:62px;margin-top:-31px;transition:none}
+.try .q.clear .st{animation:slam .5s cubic-bezier(.2,1.6,.4,1) both;opacity:.96}
+@keyframes slam{0%{opacity:0;transform:scale(3.2) rotate(-24deg)}35%{opacity:1}60%{transform:scale(.92) rotate(-10deg)}100%{transform:scale(1) rotate(-12deg)}}
+.try .q .ring{position:absolute;right:41px;top:50%;width:14px;height:14px;margin:-7px -7px 0 0;border-radius:50%;border:3px solid #e9c95f;opacity:0;pointer-events:none}
+.try .q.clear .ring{animation:ring .6s ease-out .08s both}
+@keyframes ring{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(7)}}
+.try .board.shake{animation:shake .32s ease-out}
+@keyframes shake{0%,100%{transform:none}25%{transform:translate(0,3px)}55%{transform:translate(0,-2px)}}
+.try .empty{color:#cfe9b6;font-size:13px;text-align:center;padding:14px 8px}
+.try .foot{display:flex;align-items:center;gap:6px;font-weight:700;color:#cfe9b6;font-size:12px;padding:10px 4px 2px}
+.try .foot b{font-size:22px;color:#fff}
+.try .foot .reset{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#eaf6ee;border-radius:99px;min-height:44px;padding:0 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.toast{display:flex;align-items:center;gap:12px;margin-top:8px;padding:8px 14px;background:linear-gradient(180deg,#f9efd6,#efdfb6);border:1px solid #d9c48e;border-radius:14px;color:#3a2b10;box-shadow:var(--shadow);opacity:0;transform:translateY(8px) scale(.96);transition:opacity .35s,transform .35s;pointer-events:none;height:0;padding-block:0;margin-top:0;overflow:hidden}
+.toast.on{opacity:1;transform:none;height:auto;padding-block:8px;margin-top:8px}
+.toast img{width:56px;height:56px;object-fit:contain}
+.toast small{display:block;font-size:11px;color:#8a6a2c;font-weight:700}
+.toast strong{font-size:16px}
+.try .hint{font-size:13px;color:var(--muted);margin-top:14px}
+
+/* 機能 */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.feat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px}
+.feat .k{font-size:11px;letter-spacing:.18em;color:var(--teal);font-family:"Inter",sans-serif;font-weight:700}
+.feat h3{font-size:18px;margin:8px 0 8px}
+.feat p{font-size:14px;color:var(--muted);line-height:1.75}
+
+/* 画面 */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:40px}
+.strip img{width:100%;height:auto;border-radius:20px;box-shadow:var(--shadow)}
+
+/* プライバシー */
+.privacy .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:30px}
+.privacy .col{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.privacy h3{font-size:17px;margin:0 0 8px}
+.privacy .col p{font-size:14px;color:var(--muted)}
+
+.faq .wrap{max-width:760px}
+details{border-bottom:1px solid var(--line);padding:16px 4px}
+summary{cursor:pointer;font-weight:900;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px;min-height:44px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--teal);flex:none}
+details[open] summary::after{content:"－"}
+details p{margin-top:10px;color:var(--muted)}
+.closing{background:var(--grad);text-align:center;padding:88px 0}
+.closing .eyebrow{color:#145247}
+.closing h2{font-size:clamp(28px,4.4vw,46px);color:#0f3a31;margin:14px 0 12px}
+.closing p{color:#19473d}
+.closing .btn{margin-top:28px;background:#0f3a31}
+.closing .icon{width:84px;height:84px;border-radius:22px;margin:0 auto 18px;box-shadow:var(--shadow)}
+footer{padding:36px 0 52px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--ink);text-decoration:underline}
+
+@media (max-width:860px){
+  .nav a.hide-s{display:none}
+  .pin{align-items:flex-start;padding:64px 12px 0}
+  .card{width:100%}
+  .card .no{font-size:11px}
+  .card .no b{width:22px;height:22px;font-size:10px}
+  .card .txt{font-size:13px;line-height:1.65}
+  .card h2{margin:6px 0 4px;font-size:24px}
+  .card.has-bg{background:rgba(238,247,234,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;padding:12px 12px 10px}
+  .hud{margin-top:10px}
+  .board{padding:8px;border-radius:16px}
+  .banner{display:none}
+  .inputrow{min-height:40px;padding:4px 4px 4px 10px}
+  .typed{font-size:14px}
+  .gold{min-height:30px;font-size:13px;padding:0 10px}
+  .qs{gap:5px;margin-top:6px}
+  .q{min-height:38px;padding:4px 10px}
+  .q small{font-size:9px}
+  .q strong{font-size:13px}
+  .q .st{width:40px;height:40px;margin-top:-20px}
+  .cnt{padding-top:6px}
+  .cnt b{font-size:18px}
+  .mocks{height:168px}
+  .lock .t{font-size:30px}
+  .lock .d{margin:2px 0 8px;font-size:11px}
+  .lock{padding:10px 12px 8px;border-radius:18px}
+  .lock .w{padding:6px 10px}
+  .lock .w div{font-size:12px;line-height:1.45}
+  .chips{margin-top:8px}
+  .chip{padding:4px 11px;font-size:11px}
+  .watch .face{width:118px;height:146px;border-radius:30px;padding:10px}
+  .watch .scr{border-radius:22px;padding:8px 10px;font-size:10px}
+  .watch .scr .t{font-size:22px}
+  .cal{gap:3px}
+  .cal i{aspect-ratio:1.9;border-radius:5px}
+  .cal-n{margin-top:6px;font-size:11px}
+  .cal-n b{font-size:17px}
+  .unlock{padding:6px 10px;margin-top:6px}
+  .unlock img{width:40px;height:40px}
+  .unlock strong{font-size:14px}
+  .bub{font-size:13px;padding:7px 12px}
+  .thx{width:92px}
+  .finale .pin{align-items:center;padding-top:0}
+  .try .grid{grid-template-columns:1fr;gap:22px}
+  .feats{grid-template-columns:1fr 1fr;gap:12px}
+  .feat{padding:16px}
+  .strip{grid-template-columns:repeat(2,1fr);gap:12px}
+  .strip img:last-child{grid-column:span 2;max-width:50%;margin:0 auto}
+  .privacy .cols{grid-template-columns:1fr}
+  .after section{padding:60px 0}
+}
+@media (max-width:420px){
+  .feats{grid-template-columns:1fr}
+  .hero h1{font-size:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cue i,.caret{animation:none}
+  .btn,.q,.bub,.thx,.unlock,.mock,.toast,.q .st,.fps img{transition:none}
+  .try .q,.try .q.clear .st,.try .q.clear .ring,.try .board.shake{animation:none}
+  .try .q.clear .st{opacity:.96;transform:scale(1) rotate(-12deg)}
+}
+</style>
+</head>
+<body>
+
+<canvas id="world" aria-hidden="true"></canvas>
+
+<header class="top" id="top">
+  <div class="in">
+    <a class="brand" href="./"><img src="img/icon.png" alt="" width="30" height="30">パパクエ</a>
+    <nav class="nav" aria-label="ページ内">
+      <a class="hide-s" href="#try">さわってみる</a>
+      <a class="hide-s" href="#features">機能</a>
+      <a class="hide-s" href="#faq">よくある質問</a>
+      <a class="btn small" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="story" id="story">
+
+  <section class="hero" id="hero">
+    <div class="veil" aria-hidden="true"></div>
+    <div class="copy">
+      <p class="eyebrow">A little quest. Every day.</p>
+      <h1>パパッと日常を、<br>冒険にする。</h1>
+      <p class="lead">歯磨きも、洗濯も、買い物も。やることをクエストにして、達成を冒険の記録に。</p>
+      <div class="cta">
+        <a class="btn" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeでダウンロード</a>
+        <span class="note">無料で始められます · 今のところiPhoneのみ</span>
+      </div>
+    </div>
+    <div class="cue" aria-hidden="true">Scroll<i></i></div>
+  </section>
+
+  <!-- 01 足す -->
+  <section class="chapter" data-ch style="height:300vh">
+    <div class="pin"><div class="card has-bg">
+      <p class="no"><b>01</b> Add a quest</p>
+      <h2>名前だけで、<br>クエストが始まる。</h2>
+      <p class="txt">地味な用事が、そのままクエストに。名前を入れて「受注」を押すだけ。</p>
+      <div class="hud" aria-hidden="true">
+        <div class="board">
+          <div class="banner"><img src="img/banner.webp" alt="" width="780" height="520"><div class="bt"><small>日常を、冒険に。</small>今日の冒険</div></div>
+          <div class="inputrow"><span class="typed" id="typed"></span><i class="caret"></i><span class="gold" id="go">▶ 受注</span></div>
+          <div class="qs" id="qs1">
+            <div class="q hid"><div class="nm"><small>基本クエスト</small><strong>歯磨き</strong></div></div>
+            <div class="q hid"><div class="nm"><small>基本クエスト</small><strong>洗濯</strong></div></div>
+            <div class="q hid"><div class="nm"><small>基本クエスト</small><strong>買い物</strong></div></div>
+          </div>
+          <div class="cnt">今日のクエスト <b class="num" id="qcount">0</b> 件</div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 02 達成 -->
+  <section class="chapter" data-ch style="height:340vh">
+    <div class="pin"><div class="card has-bg">
+      <p class="no"><b>02</b> Clear it</p>
+      <h2>終わったら、<br>ハンコをポン。</h2>
+      <p class="txt">達成か失敗かを押すだけ。終わったクエストには、達成のハンコが残ります。</p>
+      <div class="hud" aria-hidden="true">
+        <div class="board">
+          <div class="bh"><span>今日の依頼書</span><span>3件</span></div>
+          <div class="qs" id="qs2">
+            <div class="q"><div class="nm"><small>基本クエスト</small><strong>歯磨き</strong></div><span class="gold">✓ 達成</span><img class="st" src="img/st-clear.webp" alt=""></div>
+            <div class="q"><div class="nm"><small>基本クエスト</small><strong>洗濯</strong></div><span class="gold">✓ 達成</span><img class="st" src="img/st-clear.webp" alt=""></div>
+            <div class="q"><div class="nm"><small>基本クエスト</small><strong>買い物</strong></div><span class="gold">✓ 達成</span><img class="st" src="img/st-clear.webp" alt=""></div>
+          </div>
+          <div class="cnt">今日 <b class="num" id="clr">0</b> / 3 達成</div>
+          <div class="bar"><i id="clrbar"></i></div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 03 どこからでも -->
+  <section class="chapter" data-ch style="height:300vh">
+    <div class="pin"><div class="card has-bg">
+      <p class="no"><b>03</b> From anywhere</p>
+      <h2>見る。足す。<br>どこからでも。</h2>
+      <p class="txt">ロック画面に今日の残り。ホーム画面のウィジェットから追加。Apple Watchでも確認と記録ができます。</p>
+      <div class="hud" aria-hidden="true">
+        <div class="mocks">
+          <div class="mock on" id="m0"><div class="lock">
+            <div class="t num">13:01</div><div class="d">10月30日（金）</div>
+            <div class="w"><h4>今日のクエスト <b id="lk">あと3件</b></h4><div id="l0">・歯磨き</div><div id="l1">・洗濯</div><div id="l2">・買い物</div></div>
+          </div></div>
+          <div class="mock" id="m1"><div class="home">
+            <div class="wg g"><span>冒険の記録</span><div><div class="big num">14</div><span>今月のクリア</span></div></div>
+            <div class="wg p"><div class="add"><div><span>＋</span>クエスト追加</div></div></div>
+          </div></div>
+          <div class="mock" id="m2"><div class="watch"><div class="face"><div class="scr">
+            <div class="t num">13:01</div><div><span>今日 あと3件</span><span>・歯磨き</span><span>・洗濯</span></div>
+          </div></div></div></div>
+        </div>
+        <div class="chips" id="chips"><span class="chip on">ロック画面</span><span class="chip">ホーム画面ウィジェット</span><span class="chip">腕時計</span></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 04 積み上がる -->
+  <section class="chapter" data-ch style="height:400vh">
+    <div class="pin"><div class="card has-bg">
+      <p class="no"><b>04</b> It adds up</p>
+      <h2>達成は、消えない。<br>冒険の記録になる。</h2>
+      <p class="txt">カレンダーに達成が積み上がり、称号と足あとが集まります。歩いた道が、ひと目でわかります。</p>
+      <div class="hud" aria-hidden="true">
+        <div class="board">
+          <div class="bh"><span>冒険の記録</span><span class="fps"><img id="f0" src="img/fp-quest.webp" alt=""><img id="f1" src="img/fp-streak.webp" alt=""><img id="f2" src="img/fp-clear.webp" alt=""></span></div>
+          <div class="cal" id="cal"></div>
+          <div class="cal-n"><span>Day<b class="num" id="cday">1</b></span><span>達成<b class="num" id="cdone">0</b></span><span>連続<b class="num" id="cstr">0</b>日</span></div>
+          <div class="unlock" id="unlock"><img src="img/em-first.webp" alt=""><div><small>称号を獲得</small><strong>はじめの一歩</strong></div></div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 05 パーティ -->
+  <section class="chapter" data-ch style="height:340vh">
+    <div class="pin"><div class="card has-bg">
+      <p class="no"><b>05</b> Party</p>
+      <h2>電話しなくても、頼める。<br>ありがとうも、届く。</h2>
+      <p class="txt">家族やパートナーに「おねがいクエスト」。終わったら、お礼スタンプで「ありがとう」。</p>
+      <div class="hud" aria-hidden="true">
+        <div class="chat">
+          <div class="bub me" id="b0"><small>おねがいクエスト</small>ゴミ出し、お願い！</div>
+          <div class="bub you" id="b1"><small>相棒</small>受けました。いってきます</div>
+          <div class="bub you" id="b2"><small>相棒</small>達成しました</div>
+          <img class="thx" id="b3" src="img/st-thanks.webp" alt="">
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 終わりに -->
+  <section class="chapter finale" data-ch style="height:240vh">
+    <div class="pin"><div class="card">
+      <p class="eyebrow">Not just a todo. Your adventure log.</p>
+      <h2>いつもの毎日が、<br>ちょっとした冒険に変わる。</h2>
+      <div class="stats" aria-hidden="true">
+        <div class="stat"><span>達成したクエスト</span><b class="num" id="s1">0</b><small>件</small></div>
+        <div class="stat"><span>連続日数</span><b class="num" id="s2">0</b><small>日</small></div>
+        <div class="stat"><span>集めた称号</span><b class="num" id="s3">0</b><small>個</small></div>
+      </div>
+      <p class="sample">※数字はイメージです</p>
+    </div></div>
+  </section>
+
+</div>
+
+<div class="after" id="after">
+
+  <!-- 体験エリア -->
+  <section class="try" id="try">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <span class="eyebrow">Try it — まずは、ここで</span>
+          <h2>次は、あなたの番。</h2>
+          <p class="sub">名前を入れて「受注」。終わったら「達成」を押してみてください。ハンコが、ポン。</p>
+          <p class="hint">ここで足したクエストは、このページの中だけのものです。アプリには残りません。</p>
+        </div>
+        <div class="board">
+          <form id="tryForm" autocomplete="off">
+            <label class="sr" for="tryIn">クエスト名</label>
+            <input id="tryIn" type="text" maxlength="20" placeholder="クエスト名を入力" enterkeyhint="done">
+            <button type="submit" class="gold">▶ 受注</button>
+          </form>
+          <div class="presets" aria-label="よく使うクエスト">
+            <button type="button" data-q="洗濯">洗濯</button><button type="button" data-q="買い物">買い物</button><button type="button" data-q="ゴミ出し">ゴミ出し</button><button type="button" data-q="散歩">散歩</button>
+          </div>
+          <ul class="qs" id="tryList"></ul>
+          <div class="foot">今日の達成 <b class="num" id="tryN">0</b> 件 <button type="button" class="reset" id="tryReset">最初から</button></div>
+          <div class="toast" id="toast" role="status" aria-live="polite"><img src="img/em-first.webp" alt=""><div><small>称号を獲得</small><strong>はじめの一歩</strong></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap center">
+      <span class="eyebrow">Features</span>
+      <h2>毎日つかう道具として。</h2>
+      <p class="sub">冒険の気分で、やることはきちんと片づく。</p>
+      <div class="feats" style="text-align:left">
+        <div class="feat"><div class="k">01 ADD</div><h3>名前だけで受注</h3><p>思いついた用事を、名前だけでクエストに。毎日・曜日・期間限定のクエストにも対応。開始時刻の通知も。</p></div>
+        <div class="feat"><div class="k">02 CLEAR</div><h3>達成か、失敗か</h3><p>終わったら達成のハンコ。できなかった日も記録に残して、次につなげます。</p></div>
+        <div class="feat"><div class="k">03 ANYWHERE</div><h3>ロック画面とウィジェット</h3><p>ロック画面に今日の残りを表示。ホーム画面のウィジェットからクエスト追加へ。Apple Watchから確認・記録・声での追加もできます。</p></div>
+        <div class="feat"><div class="k">04 RECORD</div><h3>カレンダー「冒険の記録」</h3><p>達成の履歴を日ごとに振り返り。今日・今週・今月の達成数と連続日数が見えます。</p></div>
+        <div class="feat"><div class="k">05 COLLECT</div><h3>称号と足あと</h3><p>達成すると称号がもらえ、足あとが集まります。並べ替えやカテゴリの色分けで、クエストの整理も。</p></div>
+        <div class="feat"><div class="k">06 PARTY</div><h3>パーティで頼みあう</h3><p>招待コードでパーティを組んで、おねがいクエストを送りあい。ふたりでやるパーティクエストは、達成するとハンコが完成。お礼スタンプも送れます。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shots" id="shots">
+    <div class="wrap center">
+      <span class="eyebrow">In the app</span>
+      <h2>アプリの画面</h2>
+      <p class="sub">ミートボーと、相棒のビビちゃんが案内します。</p>
+      <div class="strip">
+        <img src="img/quest.webp" width="760" height="1651" alt="クエストボード。今日のクエストを並べて、達成か失敗かを記録する画面" loading="lazy">
+        <img src="img/widget.webp" width="760" height="1651" alt="ロック画面・ホーム画面のウィジェット・Apple Watchでクエストを確認している様子" loading="lazy">
+        <img src="img/two.webp" width="760" height="1651" alt="達成の履歴を見られるカレンダー「冒険の記録」" loading="lazy">
+        <img src="img/ask.webp" width="760" height="1651" alt="おねがいクエスト。相手に送って、受けてもらえたかが分かる画面" loading="lazy">
+        <img src="img/thanks.webp" width="760" height="1651" alt="お礼スタンプ。パートナーにスタンプとひとことを返せる画面" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section class="privacy">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Your quests. Your device.</span>
+        <h2>ひとりのクエストは、<br>あなたの端末の中に。</h2>
+      </div>
+      <div class="cols">
+        <div class="col"><h3>ひとりで使うとき</h3><p>クエストの内容と達成の記録は、お使いのiPhoneの中に保存されます。アカウント登録は不要。機種変更のときは、データの書き出し・読み込みで引き継げます。</p></div>
+        <div class="col"><h3>パーティを使うとき</h3><p>パーティを使うときだけ、Appleでサインインします。パーティの情報（表示名・おねがいの内容など）はサーバーに保存されます。アカウントは、アプリの中からいつでも削除できます。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <h2 class="center">よくある質問</h2>
+      <details><summary>どんなアプリですか？</summary><p>やることを「クエスト」にして、達成を冒険の記録として積み上げていくTODOアプリです。歯磨きや洗濯のような日々の用事を、ゲームのように続けられます。</p></details>
+      <details><summary>無料で使えますか？</summary><p>無料で始められます。ひとりで使う機能は無料です。</p></details>
+      <details><summary>対応している機種は？</summary><p>iPhone（iOS 15.5以降）に対応しています。ウィジェットとロック画面の表示はiOS 16.1以降、Apple WatchはwatchOS 10以降とiPhoneの組み合わせでご利用いただけます。</p></details>
+      <details><summary>Androidでも使えますか？</summary><p>今のところ、iPhoneのみです。</p></details>
+      <details><summary>機種変更のときは、どうすればいいですか？</summary><p>アプリ内でデータを書き出して、新しい端末で読み込むと引き継げます。</p></details>
+      <details><summary>パーティには何が必要ですか？</summary><p>Appleでサインインして、招待コードでパーティを組みます。ひとりで使う分には、サインインは不要です。</p></details>
+      <details><summary>困ったときは？</summary><p><a href="/support-papakue.html">サポートページ</a>からお問い合わせください。</p></details>
+    </div>
+  </section>
+
+  <div class="closing">
+    <div class="wrap">
+      <img class="icon" src="img/icon.png" alt="" width="84" height="84">
+      <p class="eyebrow">Your next quest</p>
+      <h2>今日の一歩を、<br>クエストにしよう。</h2>
+      <p>パパッと足して、パパッと終わらせて、毎日をちょっとした冒険に。</p>
+      <a class="btn" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeでダウンロード</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <nav aria-label="フッター"><a href="/support-papakue.html">サポート</a><a href="/privacy/papakue/">プライバシーポリシー</a><a href="/">miitobow.com</a></nav>
+      <span>© 2026 miitobow</span>
+    </div>
+  </footer>
+</div>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const sm = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const backOut = t => { const c = 1.9; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const PI = Math.PI;
+
+  /* ---------- 画像 ---------- */
+  const IMG = {};
+  [["clear", "st-clear"], ["thanks", "st-thanks"], ["scroll", "scroll"], ["emFirst", "em-first"], ["emFlame", "em-flame"], ["emMaster", "em-master"], ["fpQuest", "fp-quest"], ["fpStreak", "fp-streak"], ["fpClear", "fp-clear"]]
+    .forEach(([k, f]) => { const i = new Image(); i.src = `img/${f}.webp`; IMG[k] = i; });
+  const ok = i => i && i.complete && i.naturalWidth > 0;
+
+  /* ---------- 冒険の道（ワールド座標：x=右, y=奥） ---------- */
+  const CTRL = [[0, 0], [10, 150], [-70, 310], [-50, 480], [90, 610], [190, 790], [100, 970], [-80, 1090], [-160, 1270], [-50, 1430], [130, 1530], [240, 1710], [130, 1890], [-60, 1990], [-130, 2170], [-10, 2330], [120, 2490]];
+  const PATH = [], CUM = [0]; let TOTAL = 0;
+  (function build() {
+    const P = CTRL, n = P.length, get = i => P[clamp(i, 0, n - 1)];
+    for (let i = 0; i < n - 1; i++) for (let s = 0; s < 24; s++) {
+      const t = s / 24, p0 = get(i - 1), p1 = get(i), p2 = get(i + 1), p3 = get(i + 2);
+      const f = (a, b, c, d) => .5 * ((2 * b) + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (-a + 3 * b - 3 * c + d) * t * t * t);
+      PATH.push([f(p0[0], p1[0], p2[0], p3[0]), f(p0[1], p1[1], p2[1], p3[1])]);
+    }
+    PATH.push(CTRL[n - 1].slice());
+    for (let i = 1; i < PATH.length; i++) { TOTAL += Math.hypot(PATH[i][0] - PATH[i - 1][0], PATH[i][1] - PATH[i - 1][1]); CUM.push(TOTAL); }
+  })();
+  const at = L => {
+    L = clamp(L, 0, TOTAL); let lo = 0, hi = CUM.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (CUM[m] <= L) lo = m; else hi = m; }
+    const seg = CUM[hi] - CUM[lo] || 1, t = (L - CUM[lo]) / seg, a = PATH[lo], b = PATH[hi];
+    const dx = (b[0] - a[0]) / seg, dy = (b[1] - a[1]) / seg;
+    return { x: lerp(a[0], b[0], t), y: lerp(a[1], b[1], t), i: lo, dx, dy, nx: -dy, ny: dx };
+  };
+
+  /* ---------- 章 → 道の区間 ---------- */
+  const W = [.14, .18, .14, .28, .18, .08];
+  const CUMW = [], CUML = [], SEGL = [];
+  { let a = 0; W.forEach(w => { CUMW.push(a); CUML.push(a * TOTAL); SEGL.push(w * TOTAL); a += w; }); }
+  // 章の中で立ち止まる場所（[開始p, 長さ]）：ハンコを押す／称号が立つ／おねがいを待つ
+  const STOPS = [[], [[.22, .14], [.52, .14], [.82, .14]], [], [[.28, .1], [.56, .1], [.84, .1]], [[.1, .78]], []];
+  const walk = (ch, p) => {
+    const st = STOPS[ch]; let tot = 0, el = 0;
+    for (const [s, w] of st) { tot += w; if (p > s + w) el += w; else if (p > s) el += p - s; }
+    return clamp((p - el) / (1 - tot));
+  };
+  const headAt = (ch, p) => CUML[ch] + walk(ch, p) * SEGL[ch];
+  const chOf = G => { let i = 0; while (i < 5 && G >= CUMW[i + 1]) i++; return [i, clamp((G - CUMW[i]) / W[i])]; };
+
+  /* ---------- 世界に置かれるもの（イベント） ---------- */
+  const EV = []; let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const side = (L, off) => { const p = at(L); return { x: p.x + p.nx * off, y: p.y + p.ny * off, dir: Math.atan2(p.dy, p.dx) }; };
+  // 01：受注すると、道の先に依頼書（巻物）が置かれる／02：そこでハンコ
+  STOPS[1].forEach(([s], k) => {
+    const L = headAt(1, s) + 18, pos = side(L, (k % 2 ? -1 : 1) * 30);
+    EV.push({ ch: 0, p0: .3 + k * .25, dur: .1, type: "scroll", ...pos, size: 56, rot: 0 });
+    EV.push({ ch: 1, p0: s + .025, dur: .07, type: "clear", ...pos, size: 62, rot: (rnd() - .5) * .7, burst: true });
+  });
+  // 04：達成が積み上がる（小さなハンコ・足あとメダル・称号）
+  [.06, .16, .4, .48, .66, .74].forEach((p, k) => { const pos = side(headAt(3, p) + 6, (k % 2 ? -1 : 1) * 26); EV.push({ ch: 3, p0: p, dur: .05, type: "clear", ...pos, size: 44, rot: (rnd() - .5) * .8 }); });
+  [[.12, "fpQuest"], [.44, "fpStreak"], [.7, "fpClear"]].forEach(([p, img], k) => { const pos = side(headAt(3, p), (k % 2 ? 1 : -1) * 34); EV.push({ ch: 3, p0: p, dur: .06, type: "medal", img, ...pos, size: 40 }); });
+  [["emFirst", 84], ["emFlame", 84], ["emMaster", 72]].forEach(([img, h], k) => { const [s] = STOPS[3][k], pos = side(headAt(3, s) - (k === 2 ? 40 : 0), (k % 2 ? -1 : 1) * (k === 2 ? 64 : 46)); EV.push({ ch: 3, p0: s + .015, dur: .085, type: "emblem", img, ...pos, h }); });
+  // 05：おねがい（相棒が寄り道して達成）
+  const PSTOP = at(headAt(4, STOPS[4][0][0]));
+  const BR = [[0, 0], [60, 40], [140, 30], [220, 70]].map(([x, y]) => [PSTOP.x + x + PSTOP.nx * 0, PSTOP.y + y]);
+  const BRL = [0]; for (let i = 1; i < BR.length; i++) BRL.push(BRL[i - 1] + Math.hypot(BR[i][0] - BR[i - 1][0], BR[i][1] - BR[i - 1][1]));
+  const brAt = f => { const L = f * BRL[BRL.length - 1]; let i = 1; while (i < BRL.length - 1 && BRL[i] < L) i++; const t = (L - BRL[i - 1]) / (BRL[i] - BRL[i - 1] || 1); return { x: lerp(BR[i - 1][0], BR[i][0], t), y: lerp(BR[i - 1][1], BR[i][1], t) }; };
+  const BEND = { x: BR[3][0] + 26, y: BR[3][1] + 6 };
+  EV.push({ ch: 4, p0: .12, dur: .08, type: "scroll", ...BEND, size: 52, rot: 0 });
+  EV.push({ ch: 4, p0: .56, dur: .07, type: "clear", ...BEND, size: 58, rot: .3, burst: true });
+  // ヒーロー（時間で動く）：巻物→ハンコ
+  const HERO = { scroll: { x: 50, y: -6, size: 50 }, t0: performance.now() };
+
+  /* ---------- 風景（木・花・草地） ---------- */
+  const TREES = [], FLOWERS = [], MEADOW = [];
+  const farFromPath = (x, y, d) => { for (let i = 0; i < PATH.length; i += 6) if (Math.hypot(PATH[i][0] - x, PATH[i][1] - y) < d) return false; return true; };
+  for (let k = 0; k < 160 && TREES.length < 84; k++) { const x = (rnd() - .5) * 1700, y = -420 + rnd() * 3300; if (farFromPath(x, y, 110) && Math.hypot(x - 50, y + 6) > 90) TREES.push({ x, y, h: 70 + rnd() * 60, c: rnd() < .5 ? 0 : 1, w: .7 + rnd() * .5 }); }
+  for (let k = 0; k < 260; k++) { const x = (rnd() - .5) * 1500, y = -300 + rnd() * 3000; if (farFromPath(x, y, 40)) FLOWERS.push({ x, y, c: k % 3, r: 2.5 + rnd() * 2.5 }); }
+  for (let k = 0; k < 34; k++) MEADOW.push({ x: (rnd() - .5) * 1700, y: -300 + rnd() * 3100, rx: 160 + rnd() * 220, ry: 90 + rnd() * 130, c: k % 3 });
+
+  /* ---------- スクロール → 進み具合 ---------- */
+  const chs = $$("[data-ch]"), cards = chs.map(c => $(".card", c));
+  let tops = [], hs = [], scrollY = 0, afterTop = 1e9, H = 0, Wd = 0, DPR = 1, mobile = false;
+  let prog = chs.map(() => 0), G = 0, Gs = 0;
+  function measure() {
+    const sy = window.scrollY;
+    tops = chs.map(c => c.getBoundingClientRect().top + sy); hs = chs.map(c => c.offsetHeight);
+    afterTop = $("#after").getBoundingClientRect().top + sy;
+  }
+  function read() {
+    scrollY = window.scrollY;
+    prog = chs.map((c, i) => clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H)));
+    let gg = 0;
+    for (let i = 0; i < 6; i++) { gg = CUMW[i] + W[i] * prog[i]; if (prog[i] < 1) break; }
+    G = clamp(gg);
+    cards.forEach((el, i) => {
+      const a = sm(0, .07, (scrollY - tops[i] + H * .45) / Math.max(1, hs[i] - H));
+      const out = i === 5 ? 1 : 1 - sm(.93, 1, prog[i]);
+      el.style.setProperty("--vis", (a * out).toFixed(3));
+    });
+    $("#top").classList.toggle("is-solid", scrollY > 30);
+    huds();
+  }
+
+  /* ---------- HUD（章のカードの中の小さなアプリ画面） ---------- */
+  const typed = $("#typed"), go = $("#go"), q1 = $$("#qs1 .q"), qcount = $("#qcount");
+  const NAMES = ["歯磨き", "洗濯", "買い物"];
+  const q2 = $$("#qs2 .q"), clr = $("#clr"), clrbar = $("#clrbar");
+  const lk = $("#lk"), lrows = [$("#l0"), $("#l1"), $("#l2")], chips = $$("#chips .chip"), mocks = [$("#m0"), $("#m1"), $("#m2")];
+  const cal = $("#cal"), cday = $("#cday"), cdone = $("#cdone"), cstr = $("#cstr"), unlock = $("#unlock"), fps = [$("#f0"), $("#f1"), $("#f2")];
+  for (let i = 0; i < 28; i++) { const d = document.createElement("i"); d.textContent = "✓"; if (i % 9 === 4) d.classList.add("hi"); cal.appendChild(d); }
+  const cells = $$("i", cal);
+  const bubs = [$("#b0"), $("#b1"), $("#b2"), $("#b3")], s1 = $("#s1"), s2 = $("#s2"), s3 = $("#s3");
+  function huds() {
+    { const p = prog[0], k = Math.min(2, Math.floor(p * 3.2 / .96)), seg = clamp(p * 3.2 / .96 - k), name = NAMES[Math.min(2, k)];
+      const done = p >= .9;
+      typed.textContent = (!done && seg < .72) ? name.slice(0, Math.ceil(clamp(seg / .5) * name.length)) : "";
+      go.classList.toggle("on", !done && seg > .6 && seg < .72);
+      let c = 0; q1.forEach((el, i) => { const on = i < k || (i === k && seg > .7) || done; el.classList.toggle("hid", !on); if (on) c++; });
+      qcount.textContent = String(c); }
+    { const p = prog[1]; let n = 0;
+      q2.forEach((r, i) => { const d = p > STOPS[1][i][0] + .03; r.classList.toggle("clear", d); $(".gold", r).classList.toggle("on", p > STOPS[1][i][0] && p < STOPS[1][i][0] + .04); if (d) n++; });
+      clr.textContent = String(n); clrbar.style.width = (n / 3 * 100) + "%"; }
+    { const p = prog[2], n = p > .3 ? 3 : p > .2 ? 2 : p > .1 ? 1 : 0;
+      lrows.forEach((r, i) => r.classList.toggle("x", i < n)); lk.textContent = n >= 3 ? "ぜんぶクリア！" : `あと${3 - n}件`;
+      const a = p < .36 ? 0 : p < .68 ? 1 : 2; chips.forEach((c, i) => c.classList.toggle("on", i === a)); mocks.forEach((m, i) => m.classList.toggle("on", i === a)); }
+    { const p = prog[3], e = sm(.04, .88, p), day = Math.round(1 + e * 29), done = Math.round(day * 2.9), str = Math.round(e * 12);
+      cells.forEach((c, i) => c.classList.toggle("on", i < Math.round(e * 28)));
+      cday.textContent = day; cdone.textContent = done; cstr.textContent = str;
+      unlock.classList.toggle("on", p > .3 && p < .5 || p > .58 && p < .8 || p > .86);
+      $("img", unlock).src = p > .86 ? "img/em-master.webp" : p > .58 ? "img/em-flame.webp" : "img/em-first.webp";
+      $("strong", unlock).textContent = p > .86 ? "クエストマスター" : p > .58 ? "炎の番人" : "はじめの一歩";
+      fps.forEach((f, i) => f.classList.toggle("on", p > [.14, .46, .72][i])); }
+    { const p = prog[4]; bubs[0].classList.toggle("on", p > .1); bubs[1].classList.toggle("on", p > .22); bubs[2].classList.toggle("on", p > .6); bubs[3].classList.toggle("on", p > .76); }
+    { const e = sm(.1, .7, prog[5]); s1.textContent = Math.round(e * 128); s2.textContent = Math.round(e * 31); s3.textContent = Math.round(e * 6); }
+  }
+
+  /* ---------- カメラと投影（斜め上から見下ろす） ---------- */
+  const cv = $("#world"), cx = cv.getContext("2d");
+  if (!cx.roundRect) cx.roundRect = function (x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r); this.arcTo(x + w, y + h, x, y + h, r); this.arcTo(x, y + h, x, y, r); this.arcTo(x, y, x + w, y, r); this.closePath(); };
+  const NEAR = 24;
+  const cam = { tx: 0, ty: 0, dist: 500, pitch: .7, fl: 800, px: 0, py: 0, C: [0, 0, 0], F: [0, 1, 0], U: [0, 0, 1] };
+  function setCam(tx, ty, dist, pitch, px, py) {
+    const ct = Math.cos(pitch), st = Math.sin(pitch);
+    cam.F = [0, ct, -st]; cam.U = [0, st, ct];
+    cam.C = [tx, ty - dist * ct, dist * st];
+    cam.tx = tx; cam.ty = ty; cam.dist = dist; cam.pitch = pitch; cam.px = px; cam.py = py;
+  }
+  function proj(x, y, z = 0) {
+    const dx = x - cam.C[0], dy = y - cam.C[1], dz = z - cam.C[2];
+    const d = dy * cam.F[1] + dz * cam.F[2], v = dy * cam.U[1] + dz * cam.U[2];
+    return { x: cam.px + cam.fl * dx / d, y: cam.py - cam.fl * v / d, d };
+  }
+  const scaleAt = d => cam.fl / d;
+  // 地面に貼る画像（遠近で潰れる）
+  function decal(img, wx, wy, size, rot, alpha) {
+    if (!ok(img) || alpha <= 0) return;
+    const p = proj(wx, wy); if (p.d < NEAR) return;
+    const cr = Math.cos(rot) * size / 2, sr = Math.sin(rot) * size / 2;
+    const a = proj(wx + cr, wy + sr), b = proj(wx - sr, wy + cr);
+    const e1x = (a.x - p.x) * 2, e1y = (a.y - p.y) * 2, e2x = (b.x - p.x) * 2, e2y = (b.y - p.y) * 2;
+    cx.save(); cx.globalAlpha = alpha; cx.transform(e1x, e1y, -e2x, -e2y, p.x, p.y); cx.drawImage(img, -.5, -.5, 1, 1); cx.restore();
+  }
+  // 地面の楕円（影・光の輪）
+  function groundEllipse(wx, wy, rx, ry, style, stroke) {
+    const pts = [];
+    for (let i = 0; i < 16; i++) { const a = i / 16 * PI * 2, p = proj(wx + Math.cos(a) * rx, wy + Math.sin(a) * ry); if (p.d < NEAR) return; pts.push(p); }
+    cx.beginPath(); pts.forEach((p, i) => i ? cx.lineTo(p.x, p.y) : cx.moveTo(p.x, p.y)); cx.closePath();
+    if (stroke) { cx.strokeStyle = style; cx.lineWidth = stroke; cx.stroke(); } else { cx.fillStyle = style; cx.fill(); }
+  }
+  function clipSeg(a, b) { // 近面でクリップ
+    const pa = proj(a[0], a[1]), pb = proj(b[0], b[1]);
+    if (pa.d < NEAR && pb.d < NEAR) return null;
+    if (pa.d >= NEAR && pb.d >= NEAR) return [pa, pb];
+    const t = (NEAR - pa.d) / (pb.d - pa.d), m = [lerp(a[0], b[0], t), lerp(a[1], b[1], t)], pm = proj(m[0], m[1]);
+    return pa.d < NEAR ? [pm, pb] : [pa, pm];
+  }
+  function ribbon(pts, baseW, fill, edge) {
+    const P = []; for (const q of pts) { const p = proj(q[0], q[1]); if (p.d > NEAR) P.push(p); }
+    if (P.length < 2) return;
+    const L = [], R = [];
+    for (let i = 0; i < P.length; i++) {
+      const a = P[Math.max(0, i - 1)], b = P[Math.min(P.length - 1, i + 1)]; let nx = -(b.y - a.y), ny = b.x - a.x; const n = Math.hypot(nx, ny) || 1; nx /= n; ny /= n;
+      const w = baseW * scaleAt(P[i].d) / 2; L.push([P[i].x + nx * w, P[i].y + ny * w]); R.push([P[i].x - nx * w, P[i].y - ny * w]);
+    }
+    cx.beginPath(); L.forEach((p, i) => i ? cx.lineTo(p[0], p[1]) : cx.moveTo(p[0], p[1])); for (let i = R.length - 1; i >= 0; i--) cx.lineTo(R[i][0], R[i][1]); cx.closePath();
+    if (edge) { cx.strokeStyle = edge; cx.lineWidth = 2.5; cx.lineJoin = "round"; cx.stroke(); }
+    cx.fillStyle = fill; cx.fill();
+  }
+
+  /* ---------- キャラクター（ビルボード） ---------- */
+  function mitobo(x, y, s, phase, o) { // s: 1ワールド単位＝何px
+    const bob = Math.abs(Math.sin(phase)) * 2.2 * (o.moving ? 1 : 0) + (RM ? 0 : Math.sin(o.t * 2.2) * .8);
+    cx.save(); cx.translate(x, y); cx.scale(s, s); cx.globalAlpha = o.alpha ?? 1;
+    // 影
+    cx.fillStyle = "rgba(20,54,48,.18)"; cx.beginPath(); cx.ellipse(0, 1, 20, 6, 0, 0, PI * 2); cx.fill();
+    cx.translate(0, -bob);
+    // 靴（歩くと交互に）
+    const sw = o.moving ? Math.sin(phase) : 0;
+    cx.fillStyle = "#d6362f";
+    cx.beginPath(); cx.ellipse(-7, -2 - Math.max(0, sw) * 5, 7, 4, 0, 0, PI * 2); cx.fill();
+    cx.beginPath(); cx.ellipse(7, -2 - Math.max(0, -sw) * 5, 7, 4, 0, 0, PI * 2); cx.fill();
+    // ズボン
+    cx.fillStyle = "#2b2f33"; cx.beginPath(); cx.roundRect(-12, -20, 24, 16, 5); cx.fill();
+    // パーカー
+    cx.fillStyle = "#2f8f4e"; cx.beginPath(); cx.roundRect(-16, -42, 32, 28, 10); cx.fill();
+    cx.fillStyle = "#257a40"; cx.beginPath(); cx.roundRect(-5, -34, 10, 14, 4); cx.fill();
+    // 腕
+    cx.strokeStyle = "#2f8f4e"; cx.lineCap = "round"; cx.lineWidth = 8;
+    if (o.cheer) { cx.beginPath(); cx.moveTo(-14, -36); cx.lineTo(-24, -56); cx.moveTo(14, -36); cx.lineTo(24, -56); cx.stroke(); }
+    else { const a = o.moving ? sw * 6 : 0; cx.beginPath(); cx.moveTo(-14, -36); cx.lineTo(-20, -22 + a); cx.moveTo(14, -36); cx.lineTo(20, -22 - a); cx.stroke(); }
+    // 頭
+    const g = cx.createRadialGradient(-6, -64, 4, 0, -58, 24); g.addColorStop(0, "#c47a4a"); g.addColorStop(1, "#9a4f2a");
+    cx.fillStyle = g; cx.beginPath(); cx.arc(0, -58, 22, 0, PI * 2); cx.fill();
+    // 目
+    cx.fillStyle = "#fff"; cx.beginPath(); cx.ellipse(-8, -60, 6, 7, 0, 0, PI * 2); cx.ellipse(8, -60, 6, 7, 0, 0, PI * 2); cx.fill();
+    cx.fillStyle = "#1d1410"; cx.beginPath(); cx.arc(-7, -59, 3.4, 0, PI * 2); cx.arc(9, -59, 3.4, 0, PI * 2); cx.fill();
+    cx.fillStyle = "#fff"; cx.beginPath(); cx.arc(-8.2, -60.5, 1.2, 0, PI * 2); cx.arc(7.8, -60.5, 1.2, 0, PI * 2); cx.fill();
+    // 口
+    cx.strokeStyle = "#3a1d0e"; cx.lineWidth = 1.6; cx.beginPath(); cx.arc(0, -52, 4.5, .15 * PI, .85 * PI); cx.stroke();
+    cx.restore();
+  }
+  function bibi(x, y, s, phase, o) {
+    const bob = Math.abs(Math.sin(phase)) * 1.8 * (o.moving ? 1 : 0);
+    cx.save(); cx.translate(x, y); cx.scale(s, s); cx.globalAlpha = o.alpha ?? 1;
+    cx.fillStyle = "rgba(20,54,48,.16)"; cx.beginPath(); cx.ellipse(0, 1, 15, 4.5, 0, 0, PI * 2); cx.fill();
+    cx.translate(0, -bob);
+    const wag = RM ? 0 : Math.sin(o.t * 9) * .5;
+    // しっぽ
+    cx.strokeStyle = "#f3e4c4"; cx.lineCap = "round"; cx.lineWidth = 6; cx.beginPath(); cx.moveTo(11, -14); cx.quadraticCurveTo(18, -24 + wag * 3, 16 + wag * 4, -30); cx.stroke();
+    // 体
+    cx.fillStyle = "#f6ecd6"; cx.beginPath(); cx.ellipse(0, -11, 14, 10, 0, 0, PI * 2); cx.fill();
+    // 足
+    cx.fillStyle = "#efe0bd"; cx.beginPath(); cx.ellipse(-7, -2, 4, 3, 0, 0, PI * 2); cx.ellipse(7, -2, 4, 3, 0, 0, PI * 2); cx.fill();
+    // 耳
+    cx.fillStyle = "#efdcb6"; cx.beginPath(); cx.moveTo(-12, -22); cx.lineTo(-20, -40); cx.lineTo(-4, -30); cx.closePath(); cx.fill();
+    cx.beginPath(); cx.moveTo(12, -22); cx.lineTo(20, -40); cx.lineTo(4, -30); cx.closePath(); cx.fill();
+    // 頭
+    cx.fillStyle = "#f8f0dc"; cx.beginPath(); cx.arc(0, -24, 11, 0, PI * 2); cx.fill();
+    // 目・鼻
+    cx.fillStyle = "#1d1410"; cx.beginPath(); cx.arc(-4.5, -25, 2.2, 0, PI * 2); cx.arc(4.5, -25, 2.2, 0, PI * 2); cx.fill();
+    cx.fillStyle = "#fff"; cx.beginPath(); cx.arc(-5.2, -25.8, .8, 0, PI * 2); cx.arc(3.8, -25.8, .8, 0, PI * 2); cx.fill();
+    cx.fillStyle = "#2a1a14"; cx.beginPath(); cx.ellipse(0, -19.5, 2.2, 1.6, 0, 0, PI * 2); cx.fill();
+    cx.restore();
+  }
+  function tree(x, y, s, t, fog) {
+    cx.save(); cx.translate(x, y); cx.scale(s, s); cx.globalAlpha = 1 - fog;
+    cx.fillStyle = "rgba(20,54,48,.12)"; cx.beginPath(); cx.ellipse(0, 2, t.w * 26, 7, 0, 0, PI * 2); cx.fill();
+    cx.fillStyle = "#b08457"; cx.fillRect(-3.5, -t.h * .45, 7, t.h * .45);
+    cx.fillStyle = t.c ? "#8fd39a" : "#6fbf8a"; cx.beginPath(); cx.arc(0, -t.h * .62, t.w * 24, 0, PI * 2); cx.fill();
+    cx.fillStyle = t.c ? "#aee3b2" : "#8fd39a"; cx.beginPath(); cx.arc(-t.w * 7, -t.h * .72, t.w * 15, 0, PI * 2); cx.fill();
+    cx.restore();
+  }
+
+  /* ---------- 描画 ---------- */
+  const KEYS = [ // 章ごとのカメラ：[G, 距離, 見下ろし角(度)]
+    [0, 520, 42], [.14, 430, 48], [.3, 430, 48], [.34, 640, 37], [.46, 640, 37], [.5, 900, 56], [.72, 1250, 62], [.76, 560, 46], [.9, 560, 46], [.93, 1500, 66], [1, 2700, 74]
+  ];
+  function camKey(g) {
+    let i = 0; while (i < KEYS.length - 2 && g >= KEYS[i + 1][0]) i++;
+    const a = KEYS[i], b = KEYS[i + 1], t = sm(a[0], b[0], g);
+    return [lerp(a[1], b[1], t), lerp(a[2], b[2], t) * PI / 180];
+  }
+  let bump = 0, lastHead = 0, headL = 0, bibiPhase = 0, lastBibi = null;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2); Wd = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(Wd * DPR); cv.height = Math.round(H * DPR);
+    mobile = Wd < 860; measure(); read();
+  }
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const inStory = scrollY < afterTop - H * .3;
+    cv.classList.toggle("off", !inStory);
+    if (!inStory || document.hidden) return;
+    Gs = RM ? G : lerp(Gs, G, .1); if (Math.abs(Gs - G) < .0003) Gs = G;
+    const t = now / 1000, tH = RM ? 99 : (now - HERO.t0) / 1000;
+    const [ch, p] = chOf(Gs);
+    const progS = chs.map((_, i) => i < ch ? 1 : i > ch ? 0 : p);
+    headL = headAt(ch, p);
+    const head = at(headL), moving = Math.abs(headL - lastHead) > .05; lastHead = headL;
+
+    // カメラ
+    const heroB = 1 - sm(0, H * .75, scrollY);
+    const [dist0, pitch0] = camKey(Gs);
+    const distK = mobile ? 1.3 : 1;
+    let tx = head.x, ty = head.y, dist = dist0 * distK, pitch = pitch0;
+    let px = mobile ? Wd * .5 : Wd * .64, py = mobile ? H * .84 : H * .57;
+    if (ch === 5) { const k = sm(0, .6, p); px = lerp(px, Wd * .5, k); py = lerp(py, H * (mobile ? .78 : .64), k); ty -= 1000 * k; }
+    if (heroB > 0) {
+      tx = lerp(tx, 0, heroB); ty = lerp(ty, 60, heroB); dist = lerp(dist, 420 * (mobile ? 1.15 : 1), heroB); pitch = lerp(pitch, 25 * PI / 180, heroB);
+      px = lerp(px, Wd * .5, heroB); py = lerp(py, H * (mobile ? .86 : .82), heroB);
+    }
+    cam.fl = H * (mobile ? .9 : 1.0);
+    bump *= .86;
+    setCam(tx, ty, dist, pitch, px, py + bump);
+    cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    // 空と地面
+    const hy = cam.py - cam.fl * Math.tan(cam.pitch);
+    const warm = Math.sin(progS[2] * PI) * (ch === 2 || ch === 1 || ch === 3 ? 1 : 0); // 03章＝夕方の色
+    let sky = cx.createLinearGradient(0, 0, 0, Math.max(hy, 1));
+    sky.addColorStop(0, "#d4eeec"); sky.addColorStop(1, "#f4faf4"); cx.fillStyle = sky; cx.fillRect(0, 0, Wd, Math.max(hy, 0) + 1);
+    let gr = cx.createLinearGradient(0, hy, 0, H); gr.addColorStop(0, "#eef7ec"); gr.addColorStop(.35, "#e3f2e0"); gr.addColorStop(1, "#d6ebd6"); cx.fillStyle = gr; cx.fillRect(0, Math.max(hy, 0), Wd, H);
+    const fogOf = d => clamp((d - dist * 1.6) / (dist * 2.4));
+
+    // 草地のかたまり
+    MEADOW.forEach(m => { const c = ["rgba(63,209,176,.13)", "rgba(166,227,95,.16)", "rgba(127,224,160,.14)"][m.c]; groundEllipse(m.x, m.y, m.rx, m.ry, c); });
+    // 方眼（世界の床）
+    { const step = dist > 1400 ? 180 : 90, R = Math.max(1500, dist * 2.2), bx = Math.round(cam.tx / step) * step, by = Math.round(cam.ty / step) * step;
+      cx.lineWidth = 1; cx.lineCap = "butt";
+      for (let x = bx - R; x <= bx + R; x += step) { const s = clipSeg([x, by - R], [x, by + R]); if (!s) continue; cx.strokeStyle = "rgba(31,107,93,.10)"; cx.beginPath(); cx.moveTo(s[0].x, s[0].y); cx.lineTo(s[1].x, s[1].y); cx.stroke(); }
+      for (let y = by - R; y <= by + R; y += step) { const s = clipSeg([bx - R, y], [bx + R, y]); if (!s) continue; const f = fogOf((s[0].d + s[1].d) / 2); cx.strokeStyle = `rgba(31,107,93,${(.10 * (1 - f)).toFixed(3)})`; cx.beginPath(); cx.moveTo(s[0].x, s[0].y); cx.lineTo(s[1].x, s[1].y); cx.stroke(); }
+    }
+    // 花
+    FLOWERS.forEach(f => { const p = proj(f.x, f.y); if (p.d < NEAR || p.x < -10 || p.x > Wd + 10 || p.y < -10 || p.y > H + 10) return; const s = scaleAt(p.d); cx.fillStyle = ["rgba(255,255,255,.9)", "rgba(255,226,120,.9)", "rgba(255,170,190,.85)"][f.c]; cx.beginPath(); cx.ellipse(p.x, p.y, f.r * s, f.r * s * Math.sin(cam.pitch), 0, 0, PI * 2); cx.fill(); });
+
+    // これから進む道（点々）
+    { const dots = []; for (let L = headL + 30; L < TOTAL; L += 28) { const q = at(L), p = proj(q.x, q.y); if (p.d < NEAR) continue; dots.push(p); }
+      cx.fillStyle = "rgba(31,107,93,.34)"; dots.forEach(p => { const r = 2.6 * scaleAt(p.d); cx.beginPath(); cx.ellipse(p.x, p.y, r, r * Math.sin(cam.pitch) + .3, 0, 0, PI * 2); cx.fill(); }); }
+    // 歩いた道（石畳の色の帯）
+    if (headL > 2) {
+      const pts = []; for (let i = 0; i < PATH.length && CUM[i] <= headL; i += 2) pts.push(PATH[i]); pts.push([head.x, head.y]);
+      ribbon(pts, 30, "#eadcb0", "rgba(173,146,84,.55)");
+    }
+    // 寄り道（05章・相棒の道）
+    const pb = clamp((progS[4] - .2) / .34), pback = clamp((progS[4] - .8) / .18);
+    if (pb > 0) { const n = Math.ceil(pb * 24), pts = []; for (let i = 0; i <= n; i++) { const q = brAt(Math.min(pb, i / 24)); pts.push([q.x, q.y]); } ribbon(pts, 22, "#eadcb0", "rgba(173,146,84,.55)"); }
+
+    // 世界に置かれるもの＋キャラ（奥から手前へ）
+    const items = [];
+    const push = (x, y, fn) => { const p = proj(x, y); if (p.d < NEAR) return; items.push({ d: p.d, p, fn }); };
+    TREES.forEach(tr => push(tr.x, tr.y, p => { const f = fogOf(p.d); if (f >= 1 || p.x < -80 || p.x > Wd + 80 || p.y < -60 || p.y > H + 60) return; tree(p.x, p.y, scaleAt(p.d), tr, f); }));
+    const stampFx = (e, u) => { // ハンコの「ポン」：上から落ちて、光の輪とつぶ
+      const sc = u < .35 ? lerp(2.8, 1, sm(0, .35, u)) : 1 - .06 * Math.sin(sm(.35, .7, u) * PI);
+      const al = clamp(u / .3);
+      if (e.burst && u > .2 && u < .9) { const k = (u - .2) / .7; groundEllipse(e.x, e.y, 20 + k * 90, 20 + k * 90, `rgba(233,201,95,${(.7 * (1 - k)).toFixed(3)})`, 3 * (1 - k) + .5); }
+      if (u > .15 && u < .85) { const k = (u - .15) / .7; for (let i = 0; i < 6; i++) { const a = i / 6 * PI * 2 + .4, q = proj(e.x + Math.cos(a) * (12 + k * 60), e.y + Math.sin(a) * (12 + k * 60), 10 + k * 50 - k * k * 40); if (q.d < NEAR) continue; const s = scaleAt(q.d) * 3 * (1 - k); cx.fillStyle = `rgba(233,201,95,${(1 - k).toFixed(2)})`; cx.beginPath(); cx.moveTo(q.x, q.y - s); cx.lineTo(q.x + s, q.y); cx.lineTo(q.x, q.y + s); cx.lineTo(q.x - s, q.y); cx.closePath(); cx.fill(); } }
+      decal(IMG.clear, e.x, e.y, e.size * sc, e.rot, al * .96);
+    };
+    EV.forEach(e => {
+      const u = clamp((progS[e.ch] - e.p0) / e.dur); if (u <= 0) return;
+      if (e.type === "scroll") push(e.x, e.y, () => decal(IMG.scroll, e.x, e.y, e.size * backOut(u), e.rot, clamp(u * 2)));
+      else if (e.type === "clear") push(e.x, e.y, () => stampFx(e, u));
+      else if (e.type === "medal") push(e.x, e.y, () => { if (u < .9) groundEllipse(e.x, e.y, 30 * u + 10, 30 * u + 10, `rgba(255,255,255,${(.7 * (1 - u)).toFixed(2)})`); decal(IMG[e.img], e.x, e.y, e.size * backOut(u), .2, clamp(u * 2)); });
+      else if (e.type === "emblem") push(e.x, e.y, p => {
+        const img = IMG[e.img]; if (!ok(img)) return; const s = scaleAt(p.d), k = backOut(u), h = e.h * s * k, w = h * img.naturalWidth / img.naturalHeight, rise = (1 - u) * 20 * s;
+        const g = cx.createRadialGradient(p.x, p.y - h * .5, 0, p.x, p.y - h * .5, h * .9); g.addColorStop(0, `rgba(255,236,160,${(.75 * u).toFixed(2)})`); g.addColorStop(1, "rgba(255,236,160,0)"); cx.fillStyle = g; cx.fillRect(p.x - h, p.y - h * 1.5, h * 2, h * 2);
+        cx.fillStyle = "rgba(20,54,48,.16)"; cx.beginPath(); cx.ellipse(p.x, p.y, w * .45, h * .09, 0, 0, PI * 2); cx.fill();
+        cx.globalAlpha = clamp(u * 2); cx.drawImage(img, p.x - w / 2, p.y - h - rise + (RM ? 0 : Math.sin(t * 1.8 + e.x) * 2 * s), w, h); cx.globalAlpha = 1;
+      });
+    });
+    // ヒーロー：巻物→ハンコ（最初の3秒で「楽しい」を伝える）
+    { const us = clamp((tH - .9) / .4), uc = clamp((tH - 1.7) / .45);
+      if (us > 0) push(HERO.scroll.x, HERO.scroll.y, () => decal(IMG.scroll, HERO.scroll.x, HERO.scroll.y, HERO.scroll.size * backOut(us), 0, clamp(us * 2)));
+      if (uc > 0) push(HERO.scroll.x, HERO.scroll.y - 1, () => stampFx({ x: HERO.scroll.x, y: HERO.scroll.y, size: 56, rot: -.25, burst: true }, uc));
+      if (uc > 0 && uc < .25 && !RM) bump = Math.max(bump, 5 * Math.sin(uc / .25 * PI)); }
+    // ハンコの瞬間にカメラが少し揺れる
+    EV.forEach(e => { if (e.type !== "clear" || !e.burst) return; const u = (progS[e.ch] - e.p0) / e.dur; if (u > 0 && u < .3 && !RM) bump = Math.max(bump, 6 * Math.sin(u / .3 * PI)); });
+
+    // ミートボー（主役）と、ビビちゃん（相棒）
+    const appear = RM ? 1 : backOut(clamp((tH - .25) / .5));
+    const cheer = (tH > 2.1 && tH < 3.3) || (ch === 1 && STOPS[1].some(([s, w]) => p > s + .03 && p < s + w - .02)) || (ch === 4 && p > .76 && p < .95) || (ch === 5 && p > .55);
+    push(head.x, head.y, p0 => mitobo(p0.x, p0.y, scaleAt(p0.d) * appear, headL * .16, { moving, cheer, t }));
+    let bx, by, bmove = false;
+    if (ch === 4 && pb > 0 && pback < 1) { const f = pback > 0 ? pb * (1 - pback) : pb; const q = brAt(f); bx = q.x; by = q.y; bmove = (pb > 0 && pb < 1) || (pback > 0 && pback < 1); }
+    else { const q = at(Math.max(0, headL - 64)); bx = q.x + q.nx * 28; by = q.y + q.ny * 28; bmove = moving; }
+    if (lastBibi) { const mv = Math.hypot(bx - lastBibi[0], by - lastBibi[1]); bibiPhase += mv * .2; bmove = mv > .05; } lastBibi = [bx, by];
+    push(bx, by, p0 => bibi(p0.x, p0.y, scaleAt(p0.d) * appear, bibiPhase, { moving: bmove, t }));
+    // 05章：ありがとうスタンプが浮かぶ
+    { const u = clamp((progS[4] - .74) / .1); if (u > 0) push(head.x, head.y, p0 => { const img = IMG.thanks; if (!ok(img)) return; const s = scaleAt(p0.d), h = 72 * s * backOut(u), w = h * img.naturalWidth / img.naturalHeight; cx.globalAlpha = clamp(u * 2); cx.drawImage(img, p0.x - w / 2 + 40 * s, p0.y - 90 * s - h - (RM ? 0 : Math.sin(t * 2) * 3 * s), w, h); cx.globalAlpha = 1; }); }
+
+    items.sort((a, b) => b.d - a.d); items.forEach(it => it.fn(it.p));
+
+    // 03章：夕方の光
+    if (warm > 0) { const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, `rgba(255,186,110,${(.26 * warm).toFixed(3)})`); g.addColorStop(1, `rgba(255,150,90,${(.14 * warm).toFixed(3)})`); cx.fillStyle = g; cx.fillRect(0, 0, Wd, H); }
+    // 画面の端をやわらかく（世界に入っている感じ）
+    const vg = cx.createRadialGradient(Wd * .5, H * .55, Math.min(Wd, H) * .45, Wd * .5, H * .55, Math.max(Wd, H) * .85); vg.addColorStop(0, "rgba(238,247,234,0)"); vg.addColorStop(1, "rgba(238,247,234,.55)"); cx.fillStyle = vg; cx.fillRect(0, 0, Wd, H);
+  }
+
+  /* ---------- 体験エリア ---------- */
+  (() => {
+    const form = $("#tryForm"), input = $("#tryIn"), list = $("#tryList"), n = $("#tryN"), toast = $("#toast"), board = form.closest(".board");
+    let done = 0, shown = false, timer = 0;
+    const add = name => {
+      name = (name || "").trim().slice(0, 20); if (!name) { input.focus(); return; }
+      const em = $(".empty", list); if (em) em.remove();
+      if (list.children.length >= 6) list.firstElementChild.remove();
+      const li = document.createElement("li"); li.className = "q";
+      li.innerHTML = '<div class="nm"><small>基本クエスト</small><strong></strong></div><button type="button" class="done">✓ 達成</button><i class="ring"></i><img class="st" src="img/st-clear.webp" alt="達成のハンコ">';
+      $("strong", li).textContent = name; list.appendChild(li); input.value = "";
+    };
+    form.addEventListener("submit", e => { e.preventDefault(); add(input.value); });
+    $$(".presets button").forEach(b => b.addEventListener("click", () => add(b.dataset.q)));
+    list.addEventListener("click", e => {
+      const b = e.target.closest(".done"); if (!b) return; const li = b.closest(".q"); if (li.classList.contains("clear")) return;
+      li.classList.add("clear"); b.disabled = true; done++; n.textContent = String(done);
+      if (!RM) { board.classList.remove("shake"); void board.offsetWidth; board.classList.add("shake"); }
+      if (!shown) { shown = true; clearTimeout(timer); setTimeout(() => toast.classList.add("on"), 350); timer = setTimeout(() => toast.classList.remove("on"), 4200); }
+    });
+    $("#tryReset").addEventListener("click", () => { list.innerHTML = ""; done = 0; n.textContent = "0"; shown = false; toast.classList.remove("on"); add("歯磨き"); });
+    add("歯磨き");
+  })();
+
+  /* ---------- 起動 ---------- */
+  let tick = false;
+  window.addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(() => { tick = false; read(); }); } }, { passive: true });
+  window.addEventListener("resize", resize);
+  if (document.fonts) document.fonts.ready.then(() => { measure(); read(); });
+  window.addEventListener("load", () => { measure(); read(); });
+  resize(); Gs = G; requestAnimationFrame(frame);
+  window.__pk = { get G() { return G; }, get Gs() { return Gs; }, get prog() { return prog; }, get headL() { return headL; }, TOTAL };
+})();
+</script>
+</body>
+</html>
