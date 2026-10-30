@@ -338,7 +338,7 @@ L.Control.Base = L.Control.extend({
     btn.onclick = () => open(menu.hidden);
     opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
       o.onkeydown = e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); opts[(i + (e.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length].focus(); } else if (e.key === "Home") { e.preventDefault(); opts[0].focus(); } else if (e.key === "End") { e.preventDefault(); opts[opts.length - 1].focus(); } }; });
-    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget)) open(false); });   // Tabでメニューの外へ出たら閉じる
+    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget) && !e.relatedTarget.contains(c)) open(false); });   // iPhoneのSafariは、項目の文字部分を押すと一度、親の地図へフォーカスが移る→それは「外へ出た」ではない   // Tabでメニューの外へ出たら閉じる
     c.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { e.stopPropagation(); open(false); btn.focus(); } });
     document.addEventListener("pointerdown", e => { if (!menu.hidden && !c.contains(e.target)) open(false); }, true);   // 地図はタップのclickを止めることがあるので、押した瞬間(pointerdown)で外側を判定する
     return c;
