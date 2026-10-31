@@ -32,7 +32,7 @@ h1 { font-size: clamp(28px, 6vw, 40px); margin: 0 0 8px; line-height: 1.25; }
 h2 { font-size: 18px; margin: 32px 0 10px; }
 .lead { margin: 0 0 16px; color: var(--ink-soft); text-wrap: pretty; word-break: auto-phrase; }
 .hero-img { margin: 0; background: var(--surface-soft); border-bottom: 1px solid var(--border); }   /* 左右いっぱい(隙間なし)・ヘッダー直下 */
-.hero-img img { display: block; width: 100%; max-width: 1400px; height: auto; margin: 0 auto; }   /* 画像は切らない。1400pxを超える超ワイド画面だけ両脇に淡い余白 */
+.hero-img img { display: block; width: 100%; height: auto; }   /* 画面の幅に合わせて拡大縮小。切らない・左右に隙間を作らない */
 .hero-img .ph { display: grid; place-items: center; min-height: 200px; color: var(--ink-soft); }
 .card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 0 0 12px; }
 .card h3 { margin: 0 0 4px; font-size: 20px; }
