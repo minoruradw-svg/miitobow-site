@@ -244,7 +244,7 @@
     tag1.style.transform = `translate3d(${0}px,${-PH * s / 2 - (M ? 28 : 34) - 8 * (1 - o4(seg(p4, 0, .08)))}px,0) translateX(-50%)`; tag2.style.transform = `translate3d(${G.P2x}px,${G.P2y - PH * s / 2 - (M ? 28 : 34)}px,0) translateX(-50%)`;
     const st4 = p4 < .30 ? 0 : p4 < .80 ? 1 : 2;
     if (st4 !== lastSt4) { lastSt4 = st4; [s4steps, s4barSteps].forEach(ol => [...ol.children].forEach((li, i) => { li.className = i === st4 ? "on" : (i < st4 ? "done" : ""); })); }
-    s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .70, .74))) * (p5 === 0 ? 1 : 0));
+    s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
     setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「了解」して、受けてもらえた");
     // ---- S5：CLEARハンコ→紙吹雪→ありがとうスタンプ ----
     const Sp = stampPos(), sz = M ? 180 : 330, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
