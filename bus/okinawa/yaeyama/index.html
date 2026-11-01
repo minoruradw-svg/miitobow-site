@@ -74,6 +74,15 @@
   #sug button span { flex: 1 1 auto; min-width: 0; overflow-wrap: break-word; }
   #sug .empty { padding: 16px 14px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
   #sug .empty b { color: var(--ink); }
+  #sug span .en { display: block; flex: none; max-width: 100%; text-align: left; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+  #sug .scats { display: flex; gap: 6px; padding: 8px 14px 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #sug .scats::-webkit-scrollbar { display: none; }
+  #sug .scats .scat { flex: none; width: auto; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  #sug .scats .scat small { flex: none; max-width: none; font-weight: 400; color: var(--ink-soft); margin: 0; text-align: left; }
+  #sug .scats .scat[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
+  #sug .more { color: var(--accent-dark); font-weight: 700; }
+  .enname { margin: -2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .rt .enm { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; }
   .chips { display: flex; gap: 6px; flex-wrap: nowrap; font-size: 13px; }
   .chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 44px; padding: 0 12px; border-radius: 999px;
     border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; user-select: none; }
@@ -252,6 +261,7 @@
 const D = {"ops":["東運輸","西表島交通","（有）カリー観光","（有）竹富島交通"],"routes":[[0,"系統5　平野折返伊原間線"],[0,"系統6　平野線"],[0,"系統2　西回一周線"],[0,"系統3　東回一周線"],[0,"系統8　西回伊原間線"],[0,"系統9　川平リゾート線"],[0,"系統11　米原キャンプ場線"],[0,"系統7　吉原線"],[1,"白浜行き"],[1,"豊原行き"],[0,"系統1　川原線"],[2,"離島ターミナル→石垣空港"],[2,"石垣空港→離島ターミナル"],[0,"系統13　八重山病院線"],[1,"夏期臨時便（大原港ー由布水牛車乗場）"],[1,"夏期臨時便（由布水牛車乗場ー大原港）"],[3,"竹富東港巡回型路線・系統1番"]],"stops":[["ANAインターコンチネンタル",24.33632,124.18895,0,[6]],["おもと",24.4127,124.2016,0,[6]],["かねひで前",24.33744,124.16938,0,[0,1,2,3,10,13]],["にいむら病院前",24.33527,124.17861,0,[6]],["ばすきなよお入口",24.35189,124.23354,0,[0,1,2,3]],["まちなみ館",24.32995,124.08664,3,[16]],["みね屋工房前",24.38356,124.13564,0,[5]],["みんさー工芸館",24.34117,124.17062,0,[6]],["アートホテル石垣島",24.34731,124.15999,0,[5,6]],["カイジ浜",24.32027,124.07736,3,[16]],["クラブメッド",24.47917,124.11998,0,[5,6]],["グランヴィリオリゾート石垣島",24.35794,124.12418,0,[5]],["コンドイビーチ",24.32536,124.0788,3,[16]],["サッカーパーク赤馬",24.42558,124.21183,0,[6]],["サンエー前",24.33796,124.18311,0,[0,1,2,3,6,10]],["シーサイドホテル",24.47153,124.12631,0,[5,6]],["タカミネ",24.33159,124.08468,3,[16]],["ドン・キホーテ前",24.34134,124.1926,0,[0,1,2,3,10]],["バスターミナル",24.33803,124.15627,0,[0,1,2,3,4,5,6,7,10,13]],["バラビドー",24.37262,124.18392,0,[6,7]],["ビーチホテルサンシャイン",24.35909,124.12216,0,[5]],["フサキビーチリゾート",24.37164,124.11649,0,[5]],["フーネ",24.41977,124.13383,0,[2,3,4,5,7]],["ホテルパイヌマヤ前",24.38187,123.90825,1,[8,9]],["マックスバリュ新川店前",24.34853,124.14744,0,[13]],["ヤシ林入口",24.45402,124.195,0,[2,3,4,6]],["ヨーン",24.44907,124.13311,0,[2,3,4,5,6,7]],["ロイヤルマリンパレス",24.35567,124.13642,0,[5]],["三和",24.39096,124.21194,0,[10]],["三和入口",24.39363,124.21301,0,[6]],["上原",24.41766,123.79894,1,[8,9]],["上原小学校前",24.42734,123.79104,1,[8,9]],["上原港",24.4179,123.79964,1,[8,9]],["上多良間",24.49316,124.23384,0,[2,3,4]],["下地",24.49788,124.23678,0,[2,3,4]],["下地脳神経外科",24.33782,124.16706,0,[10,13]],["下多良間",24.49662,124.23405,0,[2,3,4]],["中央運動公園入口",24.34118,124.17543,0,[6]],["中野",24.43069,123.78792,1,[8,9]],["久宇良",24.56147,124.2898,0,[0,1]],["仲筋",24.44587,124.15108,0,[2,3,4,6,7]],["仲筋井戸",24.32741,124.08658,3,[16]],["仲筋幸本屋",24.32518,124.08616,3,[16]],["伊原間",24.50973,124.28304,0,[0,1,2,3,4]],["伊土名",24.48374,124.22723,0,[2,3,4]],["伊野田三班",24.4667,124.25017,0,[0,1,2,3]],["伊野田二班",24.46267,124.25035,0,[0,1,2,3]],["伊野田校",24.45458,124.24847,0,[0,1,2,3]],["住吉",24.4307,123.77192,1,[8,9]],["作原橋西",24.35345,124.14469,0,[13]],["健康福祉センター",24.34777,124.17176,0,[6]],["元名蔵",24.40549,124.14563,0,[2,3,4,7]],["八重守の塔",24.3683,124.15721,0,[2,3,4,7]],["八重山平和祈念館前",24.34915,124.14651,0,[13]],["八重山毎日新聞社前",24.33676,124.1652,0,[0,1,2,3,10]],["八重山病院前",24.34339,124.18273,0,[13]],["八重山自然村入口",24.36246,124.1569,0,[2,3,4,7]],["公設市場前",24.33942,124.15885,0,[13]],["兼城",24.49946,124.2452,0,[2,3,4]],["南川原",24.38227,124.20813,0,[10]],["南星野",24.43432,124.24855,0,[0,1,2,3]],["博物館前",24.33832,124.15965,0,[0,1,2,3,10]],["古見",24.32042,123.90837,1,[8,9,14,15]],["吉原",24.4473,124.15479,0,[2,3,4,6,7]],["吉野",24.57271,124.30067,0,[0,1]],["名蔵",24.39573,124.15636,0,[2,3,4,7]],["名蔵校",24.39252,124.16252,0,[7]],["唐人の墓",24.36502,124.11348,0,[5]],["大原",24.27366,123.88036,1,[8,9,14,15]],["大原港",24.27216,123.88257,1,[8,9,14,15]],["大原診療所前",24.26942,123.87998,1,[8,9]],["大同",24.39081,124.17648,0,[7]],["大富",24.28315,123.88139,1,[8,9,14,15]],["大嵩",24.43961,124.13547,0,[2,3,4,6,7]],["大嵩西入口",24.44665,124.12723,0,[2,3,4,5,7]],["大浜",24.34473,124.19712,0,[0,1,2,3,10]],["大浜信泉記念館前",24.33648,124.15911,0,[6]],["大浜農協前",24.34257,124.19571,0,[0,1,2,3,10]],["大田",24.45405,124.2175,0,[2,3,4]],["大見謝ロードパーク",24.3943,123.86447,1,[8,9]],["大里",24.41921,124.24438,0,[0,1,2,3]],["大野",24.47383,124.25593,0,[0,1,2,3]],["太陽の里",24.35633,124.20508,0,[0,1,2,3]],["宮良団地前",24.35736,124.2085,0,[0,1,2,3]],["宮良東",24.35186,124.22342,0,[0,1,2,3]],["宮良橋",24.35889,124.21258,0,[0,1,2,3]],["宮良西",24.35288,124.22153,0,[0,1,2,3]],["富野",24.45338,124.20346,0,[2,3,4,6]],["山原",24.44805,124.168,0,[2,3,4,6]],["崎枝",24.43919,124.11863,0,[2,3,4,5,7]],["嵩田",24.39364,124.16928,0,[7]],["川原",24.39129,124.20693,0,[10]],["川平ロータリー",24.46285,124.13809,0,[2,3,4,5,6,7]],["川平公園前",24.46143,124.14215,0,[2,3,4,5,6,7]],["川平郵便局前",24.45908,124.14039,0,[2,3,4,5,6,7]],["干立",24.3936,123.75543,1,[8,9]],["平久保",24.58561,124.30905,0,[0,1]],["平得",24.33815,124.17486,0,[0,1,2,3,10,13]],["平得北",24.33968,124.17853,0,[6]],["平得東",24.33776,124.1793,0,[0,1,2,3,10]],["平野",24.60108,124.326,0,[0,1]],["徳山",24.48043,124.26149,0,[0,1,2,3]],["徳洲会病院前",24.34041,124.18988,0,[0,1,2,3,10]],["新川五町内",24.34872,124.15065,0,[13]],["新川公園前",24.35154,124.14787,0,[13]],["新川団地前",24.35484,124.14213,0,[13]],["新川小学校前",24.34722,124.14939,0,[13]],["新栄町",24.34416,124.1526,0,[13]],["旧ビジターセンター",24.33129,124.08159,3,[16]],["明石",24.53995,124.29981,0,[0,1]],["星砂の浜",24.43476,123.77811,1,[8,9]],["星野",24.43845,124.24905,0,[0,1,2,3]],["星野リゾート西表島ホテル",24.42178,123.77536,1,[8,9]],["栄",24.50703,124.25216,0,[2,3,4]],["桃林寺前",24.34333,124.15577,0,[13]],["桟橋通り",24.34021,124.16099,0,[2,3,4,5,7,10,13]],["沖縄県八重山合同庁舎前",24.33972,124.18778,0,[0,1,2,3,10]],["浦内",24.42304,123.77769,1,[8,9]],["浦内川",24.40459,123.77779,1,[8,9]],["浦田原",24.39225,124.15546,0,[2,3,4,7]],["特別支援学校前",24.35146,124.22571,0,[0,1,2,3]],["玉取",24.48967,124.27974,0,[0,1,2,3]],["由布水牛車乗場",24.34534,123.92637,1,[8,9,14,15]],["登野城二町内",24.34079,124.16266,0,[10,13]],["登野城五町内",24.33862,124.1656,0,[10,13]],["登野城小学校前",24.34291,124.16352,0,[2,3,4,5,7]],["登野城漁港前",24.33436,124.16287,0,[6]],["白保",24.35529,124.24178,0,[0,1,2,3]],["白保中学校前",24.35204,124.23592,0,[0,1,2,3]],["白保小学校前",24.35307,124.23968,0,[0,1,2,3]],["白浜",24.3598,123.74738,1,[8,9]],["盛山北",24.39804,124.24062,0,[0,1,2,3,6]],["盛山南",24.3844,124.24394,0,[0,1,2,3,6]],["真喜良",24.35258,124.14344,0,[5,13]],["真喜良第二団地前",24.35427,124.1399,0,[5]],["真喜良郵便局前",24.35393,124.14091,0,[5,13]],["真地橋",24.34908,124.16494,0,[2,3,4,6,7]],["真栄里公園",24.33239,124.16856,0,[6]],["真栄里東",24.33616,124.18617,0,[6]],["石垣の塩工房前",24.37766,124.12869,0,[5]],["石垣やいま村入口",24.40338,124.14158,0,[5]],["石垣中学校前",24.34696,124.15335,0,[13]],["石垣市役所",24.34394,124.1845,0,[13]],["石垣港離島ターミナル",24.33747,124.1555,0,[5,11,12,13]],["石垣空港",24.39125,124.24665,0,[0,1,2,3,6,11,12]],["磯辺",24.35515,124.20152,0,[0,1,2,3]],["磯辺（川原方面）",24.35703,124.20052,0,[10]],["祖納",24.39015,123.74795,1,[8,9]],["竹富東港",24.33557,124.09341,3,[16]],["米原キャンプ場",24.45302,124.18655,0,[2,3,4,6]],["給油所前",24.34783,124.16884,0,[7]],["美原",24.34546,123.92452,1,[8,9,14,15]],["美崎町",24.34069,124.15616,0,[13]],["舟蔵の里",24.35667,124.13015,0,[5]],["舟越",24.5062,124.28058,0,[0,1,2,3,4]],["船浦",24.41004,123.80746,1,[8,9]],["荒川",24.44804,124.18118,0,[2,3,4,6]],["荒引橋",24.35167,124.14486,0,[5,13]],["裁判所前",24.33597,124.1622,0,[0,1,2,3,10]],["豊原",24.25933,123.86389,1,[8,9]],["野原",24.44689,124.24841,0,[0,1,2,3]],["野生生物保護センター",24.32564,123.91112,1,[8,9,14,15]],["長間橋",24.35123,124.15903,0,[2,3,4,6,7]],["開南",24.39978,124.19461,0,[6]],["開南入口",24.38773,124.19171,0,[6,7]]]};
 // 場所（駅・地名・施設）。build/work/places/ で作る別データ。バス停データには手を加えない。 [名前, 種類, 緯度, 経度, 所在地, 補足, 別名]
 const PLACES = [["上原港","交通",24.41796,123.79979,"八重山郡竹富町","","うえはらこう"],["南ぬ島石垣空港","交通",24.38947,124.24623,"石垣市","","いしがきくうこう くうこう 新石垣空港 ishigaki airport"],["石垣港離島ターミナル","交通",24.33755,124.15553,"石垣市","","りとうたーみなる 石垣港"],["竹富東港","交通",24.33568,124.1002,"竹富郡竹富町","","たけとみひがしこう"],["バンナ公園","公園",24.37812,124.16533,"石垣市","","ばんなこうえん"],["上原","地名",24.42185,123.78659,"八重山郡竹富町","",""],["伊原間","地名",24.50902,124.28313,"石垣市","","いばるま"],["八島町","地名",24.3322,124.16591,"石垣市","1〜2丁目",""],["南ぬ浜町","地名",24.33123,124.14847,"石垣市","",""],["南風見","地名",24.26864,123.8767,"八重山郡竹富町","",""],["南風見仲","地名",24.28315,123.88139,"八重山郡竹富町","",""],["古見","地名",24.33422,123.9176,"八重山郡竹富町","",""],["名蔵","地名",24.40805,124.15565,"石垣市","",""],["大川","地名",24.34379,124.16166,"石垣市","",""],["大浜","地名",24.36021,124.20094,"石垣市","",""],["宮良","地名",24.36101,124.21746,"石垣市","",""],["小浜","地名",24.34053,123.98164,"八重山郡竹富町","",""],["崎山","地名",24.29989,123.69235,"八重山郡竹富町","",""],["崎枝","地名",24.42948,124.12623,"石垣市","",""],["川平","地名",24.44705,124.14634,"石垣市","",""],["平久保","地名",24.58022,124.30638,"石垣市","",""],["平得","地名",24.39704,124.18835,"石垣市","",""],["新城","地名",24.22546,123.93794,"八重山郡竹富町","",""],["新川","地名",24.35854,124.13618,"石垣市","",""],["新栄町","地名",24.34539,124.14938,"石垣市","",""],["桃里","地名",24.45121,124.24471,"石垣市","",""],["桴海","地名",24.45242,124.20672,"石垣市","",""],["浜崎町","地名",24.33989,124.14971,"石垣市","1〜3丁目",""],["登野城","地名",24.39102,124.17625,"石垣市","",""],["白保","地名",24.3547,124.24097,"石垣市","","しらほ"],["真栄里","地名",24.34556,124.18413,"石垣市","",""],["石垣","地名",24.3672,124.15487,"石垣市","",""],["竹富","地名",24.32505,124.08806,"八重山郡竹富町","",""],["美崎町","地名",24.33881,124.15554,"石垣市","",""],["西表","地名",24.38118,123.75025,"八重山郡竹富町","",""],["野底","地名",24.49265,124.24423,"石垣市","",""],["高那","地名",24.38187,123.90825,"八重山郡竹富町","",""],["鳩間","地名",24.47254,123.82003,"八重山郡竹富町","",""],["黒島","地名",24.23778,124.01024,"八重山郡竹富町","",""],["石垣市役所","役所",24.34439,124.18522,"石垣市","","いしがきしやくしょ しやくしょ"],["竹富町役場","役所",24.33954,124.15446,"石垣市","","たけとみちょう やくば"],["沖縄県立八重山病院","病院",24.34326,124.18367,"石垣市","","やえやまびょういん"],["唐人墓","観光",24.36573,124.11347,"石垣市","","とうじんばか"],["川平湾","観光",24.45004,124.14265,"石垣市","","かびらわん 川平"],["平久保崎","観光",24.612,124.31639,"石垣市","","ひらくぼざき"],["底地ビーチ","観光",24.46613,124.12443,"石垣市","","すくじびーち"],["星砂の浜","観光",24.4365,123.77722,"八重山郡竹富町","","ほしずなのはま"],["浦内川","観光",24.37736,123.78595,"八重山郡竹富町","","うらうちがわ"],["玉取崎展望台","観光",24.49056,124.27905,"石垣市","","たまとりざき"],["由布島","観光",24.34396,123.93441,"竹富郡竹富町","","ゆぶじま 水牛車"],["石垣やいま村","観光",24.40412,124.14452,"石垣市","","やいまむら"],["石垣市立八重山博物館","観光",24.33806,124.15959,"石垣市","","やえやまはくぶつかん"],["米原ビーチ","観光",24.45418,124.18633,"石垣市","","よねはらびーち"]];
+const HASSPOT = PLACES.some(a => a[7]);   // 観光・店舗(分類cat付き)を持つ地域だけ、おすすめ・一覧・英語の案内を出す
 // 駅の路線別の並び。[事業者, 路線名, [PLACESの番号(駅)…]] 。路線順は駅の位置から作った目安(build/work/places/make_places.py)
 const LINES = [];
 // 市町村の範囲表(県ページの市町村ボタンから ?at=<市町村コード> で開いた時に、地図をその範囲へ寄せる)。[コード, 名前, 緯度小, 経度小, 緯度大, 経度大]
@@ -526,6 +536,7 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・地名・施設の位置：<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地名検索</a>と<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors（ODbL）</a>の情報を突き合わせて作成した目安です（OSM由来の位置情報を含みます。出入口などの正確な位置ではありません）<br>・町名（石垣市・八重山郡竹富町（西表島・竹富島））：<a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">政府統計の総合窓口（e-Stat）『令和2年国勢調査 小地域（町丁・字等）境界データ』</a>を加工して作成。町名ごとの代表地点（面積の重心）で、読み仮名では探せません（漢字・かなの表記で検索）<br>
 ・竹富町のバス停は西表島（24か所）と竹富島（8か所）のみです。小浜島・黒島・波照間島・鳩間島と与那国町のバス停は元データにありません<br>・西表島交通には夏期臨時便の系統が含まれています<br>・八重山に鉄道はないため、「駅から探す」はありません<br>・竹富町役場は石垣市内（石垣港の近く）にあります<br>・東運輸の公式サイトは証明書の都合で http で載せています<br>
 ・この地図に含まれる市町村（2）：石垣市・竹富町。<br>
+${HASSPOT ? `・観光地・店舗の位置：国土地理院・OSM・Wikipediaの情報を突き合わせた所在地の目安です（掲載時点：）。店舗は閉店・移転・休業することがあります。本ページは掲載の店舗・施設とは無関係で、宣伝ではありません。「外国人に人気」は、訪日ラボのランキングや英語のガイドへの掲載などを根拠にした非公式の目安です<br>` : ""}
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図・淡色地図・全国最新写真（シームレス））</a>。写真は、撮影時期が場所によって異なり、現在の様子と違うことがあります<br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
@@ -549,8 +560,8 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：石垣空港、離島ターミナル、川平湾）、バス停、系統（例：川平リゾート線）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button><div class="lh">この地図に含まれる市町村（2）</div><p class="tip">石垣市・竹富町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/okinawa/miyako/"><span>宮古島バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/okinawa/okinawa-main/"><span>沖縄本島バスマップ</span><small>北東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
-  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex;
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（2）</div><p class="tip">石垣市・竹富町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/okinawa/miyako/"><span>宮古島バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/okinawa/okinawa-main/"><span>沖縄本島バスマップ</span><small>北東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {
   return `<button class="rt" type="button" data-r="${r.i}"><span>${esc(routeLabel(r))}</span><small>${r.n}か所</small></button>`;
@@ -579,16 +590,16 @@ function showStop(s, opt) {
 }
 
 // ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
-const PTYPE_ZOOM = { 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
 const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
-const PTYPE_ORDER =["地名", "駅", "役所", "観光", "商業", "公園", "病院", "交通", "施設"];
-const places = PLACES.map(a => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6] }));
-const pnorm = s => s.normalize("NFKC").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け");   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
-const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: pnorm([p.name, p.name.replace(/駅$/, ""), p.alias].join(" ")) }));
+const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
+const places = PLACES.map(a => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "" }));
+const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
+const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : [])].map(pnorm).join("|") }));
 // 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
-const pkind = p => p.type === "地名" ? "代表地点" : p.type === "駅" ? "駅の位置" : "所在地";
-const ptip = p => p.type === "地名" ? "地図をこの地域の代表地点へ動かしました。範囲の中心とは限りません。" : p.type === "駅" ? "地図を駅の付近へ動かしました（位置は目安です）。" : "地図を施設の所在地付近へ動かしました。出入口の位置とは限りません。";
-const placeSub = p => [p.type, p.sub, p.area].filter(Boolean).join("・");
+const pkind = p => p.type === "地名" ? "代表地点" : p.type === "駅" ? "駅の位置" : p.type === "店舗" ? "店の場所" : "所在地";
+const ptip = p => p.type === "地名" ? "地図をこの地域の代表地点へ動かしました。範囲の中心とは限りません。" : p.type === "駅" ? "地図を駅の付近へ動かしました（位置は目安です）。" : p.type === "店舗" ? "地図を店の所在地付近へ動かしました（位置は目安です）。店は閉店・移転・休業していることがあります。営業は公式情報でご確認ください。" : "地図を施設の所在地付近へ動かしました。出入口の位置とは限りません。";
+const placeSub = p => [p.type === "店舗" ? "お店" : p.type, p.cat, p.sub, p.area].filter(Boolean).join("・");
 function setPin(p) {
   clearPin();
   placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
@@ -628,6 +639,47 @@ function showAreaPlaces(a) {
   document.getElementById("bk").onclick = showAreaIndex;
   pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
 }
+// ---- 観光・グルメ（placesの cat 付き）：検索窓のおすすめパネルと、ホームの一覧 ----
+const SPOT_EN_HINT = "";
+const RECO = [["外国人に人気", "Popular", p => p.foreign], ["観光名所", "Sights", p => p.type === "観光"], ["グルメ", "Food", p => p.cat === "グルメ"], ["買い物", "Shopping", p => p.cat === "買い物"], ["寺社", "Shrines", p => p.cat === "寺社"]];
+const recoSort = (a, b) => (b.foreign - a.foreign) || jaCmp(a.name, b.name);
+let recoCat = null;
+function showReco() {
+  const cats = RECO.filter(c => places.some(c[2]));
+  if (!cats.length) { showSug(false); return; }
+  if (!recoCat || !cats.some(c => c[0] === recoCat)) recoCat = cats[0][0];
+  const cur = cats.find(c => c[0] === recoCat), list = places.filter(cur[2]).sort(recoSort).slice(0, 8);
+  hit = list.map(p => ({ t: "p", p })).concat([{ t: "idx" }]); act = -1; sug.dataset.mode = "reco";
+  sug.innerHTML = `<div class="sh" role="presentation">おすすめ　Popular places</div>
+  <div class="scats" role="group" aria-label="種類で絞る">${cats.map(c => `<button type="button" class="scat" data-cat="${esc(c[0])}" aria-pressed="${c[0] === recoCat}">${esc(c[0])}<small>${c[1]}</small></button>`).join("")}</div>
+  ${list.map((p, k) => `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(p.name)}${p.en ? `<small class="en">${esc(p.en)}</small>` : ""}</span><small>${esc(placeSub(p))}</small></button>`).join("")}
+  <button type="button" role="option" id="sug-${list.length}" data-k="${list.length}" class="more"><span>観光・グルメの一覧を見る　›</span></button>
+  <div class="empty" style="padding:8px 14px">English names work: try “${esc(SPOT_EN_HINT)}”</div>`;
+  sug.querySelectorAll(".scat").forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { recoCat = b.dataset.cat; showReco(); }; });
+  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+function showSpotIndex() {
+  browseOpen(); placeBack = null;
+  const cats = ["寺社", "歴史", "自然", "温泉", "夜景", "アニメ・文化", "体験", "グルメ", "買い物"].filter(c => places.some(p => p.cat === c));
+  const fo = places.filter(p => p.foreign).length;
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">観光・グルメから探す</h2><p class="enname">Sightseeing &amp; food</p>
+  <p class="tip">種類を選ぶと一覧が出ます。名前を押すと、地図がその場所へ動いて、近くのバス停が出ます。位置は所在地の目安です。<b>店舗は閉店・移転・休業していることがあります</b>。営業は公式情報でご確認ください。</p>
+  ${fo ? `<button class="rt" type="button" data-c="*"><span>外国人に人気<span class="enm">Popular with visitors</span></span><small>${fo}件　›</small></button>` : ""}
+  ${cats.map(c => `<button class="rt" type="button" data-c="${esc(c)}"><span>${esc(c)}</span><small>${places.filter(p => p.cat === c).length}件　›</small></button>`).join("")}${NOTE}`, "観光・グルメ");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-c]").forEach(b => b.onclick = () => showSpotCat(b.dataset.c));
+}
+function showSpotCat(c) {
+  browseOpen(); const list = places.filter(c === "*" ? (p => p.foreign) : (p => p.cat === c)).sort((x, y) => jaCmp(x.name, y.name)), ttl = c === "*" ? "外国人に人気" : c;
+  placeBack = { label: `← ${ttl}にもどる`, fn: () => showSpotCat(c) };
+  render(`<button class="back" id="bk" type="button">← 種類の一覧</button><h2 class="head">${esc(ttl)}</h2>
+  <p class="tip">${list.length}件。並びは名前順です。位置は所在地の目安で、店舗は閉店・移転・休業していることがあります。</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${esc(p.name)}${p.en ? `<span class="enm">${esc(p.en)}</span>` : ""}</span><small>${esc([p.type === "店舗" ? "お店" : "", p.cat, p.sub || p.area].filter(Boolean).join("・"))}</small></button>`).join("")}${NOTE}`, `${ttl}・${list.length}件`);
+  document.getElementById("bk").onclick = showSpotIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
 function showLineIndex() {
   browseOpen(); placeBack = null;
   let cur = "", html = "";
@@ -655,8 +707,8 @@ function showPlace(p, opt) {
   if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
   else ensureVisible(pll);
   const ns = nearStops(p);
-  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(p.name)}</h2>
-  <div class="meta"><span class="pill">${esc(p.type)}・${pkind(p)}</span><span class="nw">${esc([p.sub, p.area].filter(Boolean).join("・"))}</span></div>
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(p.name)}</h2>${p.en ? `<p class="enname">${esc(p.en)}</p>` : ""}
+  <div class="meta"><span class="pill">${esc(p.type === "店舗" ? "お店" : p.type)}・${p.cat ? esc(p.cat) + "・" : ""}${pkind(p)}</span><span class="nw">${esc([p.sub, p.area].filter(Boolean).join("・"))}</span></div>
   <p class="tip">${ptip(p)}近くのバス停を押すと、通る系統が出ます。</p>
   <div class="lh">${ns.far ? "近くにバス停は多くありません（最も近い順）" : "周辺のバス停（近い順）"}</div>
   ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${esc(x.s.name)}</span><small>約${Math.max(10, Math.round(x.d / 10) * 10)}m・${x.s.rts.length}系統</small></button>`).join("")}${NOTE}`,
@@ -739,6 +791,7 @@ let hit = [], act = -1;
 const showSug = v => { sug.hidden = !v; q.setAttribute("aria-expanded", String(v)); if (!v) q.removeAttribute("aria-activedescendant"); };
 function pick(it) {
   showSug(false); q.value = ""; qclear.hidden = true; act = -1; placeBack = null;
+  if (it.t === "idx") { showSpotIndex(); return; }
   if (it.t === "p") { showPlace(it.p); return; }
   lastPlace = null; clearPin();     // 場所から離れて、検索で別のバス停・系統を選んだ時
   it.t === "r" ? showRoute(it.r) : (showStop(it.s, { center: true, zoom: 16 }), ensureVisible(L.latLng(it.s.lat, it.s.lon)));
@@ -749,7 +802,8 @@ function setAct(k) {
 }
 function search() {
   const raw = q.value.trim(), v = kana(raw); act = -1; qclear.hidden = !q.value;
-  if (!v) { showSug(false); return; }
+  if (!v) { if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  sug.dataset.mode = "";
   hit = items.filter(it => it.key.includes(v));
   hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || (a.key.startsWith(v) ? 0 : 1) - (b.key.startsWith(v) ? 0 : 1));
   hit = hit.slice(0, 40);
@@ -759,13 +813,13 @@ function search() {
     .sort((a, b) => a.sc - b.sc || PTYPE_ORDER.indexOf(a.it.p.type) - PTYPE_ORDER.indexOf(b.it.p.type) || a.it.p.name.length - b.it.p.name.length || areaRank(a.it.p.area) - areaRank(b.it.p.area)).slice(0, 8).map(x => x.it);
   hit = ph.concat(hit);
   if (!hit.length) {
-    sug.innerHTML = `<div class="empty"><b>「${esc(raw)}」</b>に合う場所・バス停・系統は見つかりませんでした。<br>・駅名・町名・地名・施設名（例：石垣空港、離島ターミナル、川平）<br>・停留所名の一部（例：離島ターミナル）<br>・系統の数字（例：系統9）<br>で試してみてください。</div>`;
+    sug.innerHTML = `<div class="empty"><b>「${esc(raw)}」</b>に合う場所・バス停・系統は見つかりませんでした。<br>・駅名・町名・地名・施設名（例：石垣空港、離島ターミナル、川平）<br>・停留所名の一部（例：離島ターミナル）<br>・系統の数字（例：系統9）<br>で試してみてください。${HASSPOT ? `<br>English names work: try “${esc(SPOT_EN_HINT)}”` : ""}</div>`;
   } else {
     let html = "", cur = "";
     hit.forEach((it, k) => {
       if (it.t !== cur) { cur = it.t; html += `<div class="sh" role="presentation">${it.t === "p" ? "場所" : it.t === "r" ? "系統" : "バス停"}</div>`; }
       html += it.t === "p"
-        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.p.name)}</span><small>${esc(placeSub(it.p))}</small></button>`
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.p.name)}${it.p.en ? `<small class="en">${esc(it.p.en)}</small>` : ""}</span><small>${esc(placeSub(it.p))}</small></button>`
         : it.t === "r"
         ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(routeLabel(it.r))}</span><small>${esc(OPNAME(it.r.op))}・${it.r.n}か所</small></button>`
         : `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.s.name)}</span><small>${esc(OPNAME(it.s.op))}・${it.s.rts.length}系統</small></button>`;
@@ -777,7 +831,7 @@ function search() {
   showSug(true);
 }
 q.oninput = search;
-q.onfocus = () => { if (q.value.trim()) search(); };
+q.onfocus = () => { if (q.value.trim() || HASSPOT) search(); };
 qclear.onclick = () => { q.value = ""; qclear.hidden = true; showSug(false); act = -1; q.focus(); };
 q.onkeydown = e => {
   if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換確定のEnterでは候補を開かない
@@ -788,8 +842,8 @@ q.onkeydown = e => {
   // ↑↓で選んだ候補があればそれを開く。何も選んでいない時は従来どおり「バス停・系統の先頭候補」を開く（バス停・系統の候補が1つも無い語の時だけ、先頭の場所）
   else if (e.key === "Enter") { e.preventDefault(); pick(act >= 0 ? hit[act] : (hit.find(h => h.t !== "p") || hit[0])); }
 };
-document.addEventListener("click", e => { if (!e.target.closest(".searchwrap")) showSug(false); });
-const setPh = () => { q.placeholder = isMobile() ? "場所・バス停・系統" : "場所・バス停・系統を検索"; };   // 狭い画面では短く
+document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
+const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "場所・バス停・系統 / Search" : "場所・バス停・系統を検索 / Search places") : isMobile() ? "場所・バス停・系統" : "場所・バス停・系統を検索"; };   // 狭い画面では短く
 setPh(); mqMobile.addEventListener("change", setPh);
 home();
 applySheet();

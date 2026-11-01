@@ -560,4 +560,44 @@
     <lastmod>2026-11-01</lastmod>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/chikugo/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/chikuho/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/fukuoka-city/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/keichiku/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/kitakyu/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/fukuoka/munakata/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/bus/en/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.5</priority>
+  </url>
 </urlset>
