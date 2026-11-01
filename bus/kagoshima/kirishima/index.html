@@ -6,6 +6,11 @@
 <title>霧島周辺バスマップ | miitobow</title>
 <meta name="description" content="霧島市・姶良市・曽於市・伊佐市・湧水町のバス停と系統を地図で眺められる非公式ページ。バス停1,854か所・165系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/kagoshima/kirishima/">
+<link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/kagoshima/kirishima/">
+<link rel="alternate" hreflang="en" href="https://miitobow.com/bus/en/kagoshima/kirishima/">
+<link rel="alternate" hreflang="x-default" href="https://miitobow.com/bus/kagoshima/kirishima/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
 <meta property="og:title" content="霧島周辺バスマップ | miitobow">
 <meta property="og:description" content="霧島市・姶良市・曽於市・伊佐市・湧水町のバス停と系統を地図で眺められる非公式ページ。バス停1,854か所・165系統（2022年度版）。">
@@ -230,13 +235,22 @@
     .brk { display: block; order: 2; flex: 0 0 100%; height: 0; } .searchwrap { order: 3; } .chips { order: 4; } }
   @media (max-width: 767px) and (max-height: 500px) { header h1, .crumb, .brk { display: none; } }
   @media (min-width: 768px) and (max-width: 1023px) { .hub .ht { display: none; } .hub { width: 44px; justify-content: center; padding: 0; } }
+  .lang { display: inline-flex; align-items: center; justify-content: center; flex: none; min-height: 40px; min-width: 44px; padding: 0 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .lang:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .lsp { display: none; }
+  @media (max-width: 767px) { .lpc { display: none; } .lsp { display: inline-flex; order: 1; min-height: 40px; padding: 0 9px; border-radius: 10px; border-width: 1.5px; font-size: 13px; } }
+  @media (max-width: 767px) and (max-height: 500px) { .lsp { display: none; } }
+  #langhint { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--surface); color: var(--ink); border: 2px solid var(--brand); font-size: 14px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #langhint a { color: var(--accent-dark); font-weight: 700; }
+  #langhint button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
   @media (max-width: 767px) { header { flex-wrap: wrap; row-gap: 4px; } .searchwrap { flex: 1 1 100%; order: 3; } .chips { order: 4; flex: 1 1 100%; flex-wrap: wrap; padding-bottom: 2px; } .chip { flex: none; } }
 </style>
 </head>
 <body>
 <header>
   <a class="hub" href="/bus/" aria-label="バスマップのホーム（地域一覧）へ"><span class="ha" aria-hidden="true">‹</span><span class="ht"> 地域一覧</span></a>
-  <nav class="crumb" aria-label="パンくず"><a href="/bus/">‹ ホーム</a><a href="/bus/kagoshima/">鹿児島県</a></nav><span class="brk" aria-hidden="true"></span>
+  <a class="lang lpc" href="/bus/en/kagoshima/kirishima/" hreflang="en" lang="en" aria-label="English version">EN</a>
+  <nav class="crumb" aria-label="パンくず"><a href="/bus/">‹ ホーム</a><a href="/bus/kagoshima/">鹿児島県</a></nav><a class="lang lsp" href="/bus/en/kagoshima/kirishima/" hreflang="en" lang="en" aria-label="English version">EN</a><span class="brk" aria-hidden="true"></span>
   <h1 class="head">霧島周辺バスマップ</h1>
   <div class="searchwrap">
     <input id="q" type="search" placeholder="場所・バス停・系統を検索" autocomplete="off" enterkeyhint="search" aria-label="場所・バス停名・系統名で探す" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list">
@@ -853,6 +867,15 @@ map.invalidateSize();
   if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
   map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
   const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">鹿児島県ページから「${esc(mu[1])}」を開きました。地図はその市町村のバス停の範囲です。</p>`); })();
+// 言語の切り替えボタンは、今の ?at= などを引き継ぐ
+document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
+// ブラウザの言語が英語の人に、英語版があることを1回だけ案内する(閉じたらこの端末では出さない・自動では移動しない)
+(() => { let k = null; try { k = localStorage.getItem("busmap.langHint"); } catch (e) {} if (k || !/^en\b/i.test(navigator.language || "")) return;
+  const d = document.createElement("div"); d.id = "langhint"; d.setAttribute("role", "status"); d.lang = "en";
+  d.innerHTML = '<span>This map is also available in English. <a href="/bus/en/kagoshima/kirishima/" hreflang="en">Open English version</a></span><button type="button" aria-label="Close">×</button>';
+  d.querySelector("a").href += location.search;
+  d.querySelector("button").onclick = () => { d.remove(); try { localStorage.setItem("busmap.langHint", "1"); } catch (e) {} };
+  mainEl.appendChild(d); })();
 </script>
 </body>
 </html>
