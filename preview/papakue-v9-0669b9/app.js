@@ -123,7 +123,7 @@
   const popC5 = () => ({ x: G.P2x, y: G.P2y - .04 * PH * G.s4 });
   const stampPos = () => { const c = popC5(), k = kP(); return { x: c.x + .21 * 230 * k, y: c.y - (M ? 16 : 0) }; };   // 実際のハンコのように、カードの角へ少しずらして押す（カード名を読めるように）
   function S5(p) { const o = base(), xs = G.XL / W, D = M ? camD() : camFor(xs * W, .5 * H + 32, 1, G.P2x, G.P2y), Sp = stampPos(), A = M ? base4() : camFor(xs * W, .5 * H + 32, 1, 0, 0), s4e = S4(1);
-    const stcs = 1, C5 = popC5(), st = camFor(M ? .5 * W : G.XL, M ? MB.s5 + (H - MB.s5) * .5 : .5 * H, stcs, C5.x, C5.y);
+    const stcs = 1, C5 = popC5(), st = camFor(M ? .5 * W : G.XL, M ? MB.s5 + (H - MB.s5) * .5 + 18 : .5 * H, stcs, C5.x, C5.y);
     let c = { cx: s4e.cx, cy: s4e.cy, cs: s4e.cs, cr: 0 };
     c = mixCam(c, st, io5(seg(p, .04, .14))); c = mixCam(c, D, io5(seg(p, .22, .36)));
     const t3 = io5(seg(p, .36, .50)); c = mixCam(c, A, t3); c.cs *= 1 - .08 * bell(seg(p, .36, .50));
