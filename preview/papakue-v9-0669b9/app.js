@@ -191,7 +191,7 @@
   const cfRnd = (() => { let s = 11; const r = () => (s = (s * 16807) % 2147483647) / 2147483647; return Array.from({ length: M ? 24 : 36 }, () => ({ th: -Math.PI / 2 + (r() - .5) * 2.4, v: 520 + r() * 260, rot: 540 + r() * 360, w: 10 + r() * 6, h: 6 + r() * 3, c: r() })); })();
   const CFC = ["#D6BD7B", "#D6BD7B", "#D6BD7B", "#D6BD7B", "#F8EED9", "#F8EED9", "#F8EED9", "#2E9F5F", "#2E9F5F", "#B3362B"];
   function drawConfetti(t) {
-    if (LOW || RM) return; const key = Math.round(t * 400) / 400; if (key === cfLast) return; cfLast = key;
+    if (LOW || RM) return; const key = Math.round(t * 400) / 400; if (key === cfLast) return; cfLast = key; t = key;   // 丸めた値そのもので描く（順方向・逆方向で同じ絵になる）
     const g = cf.getContext("2d"), n = cf.width, sc = n / 720; g.clearRect(0, 0, n, n); if (t <= 0 || t >= 1) return;
     cfRnd.forEach((q, i) => { const x = n / 2 + Math.cos(q.th) * q.v * t * sc * .6, y = n * .45 + (Math.sin(q.th) * q.v * t + 900 * t * t) * sc * .6, a = 1 - sm((t - .65) / .35); if (a <= 0) return;
       g.save(); g.translate(x, y); g.rotate((q.rot * t) * Math.PI / 180); g.globalAlpha = a; g.fillStyle = CFC[Math.floor(q.c * 10)]; g.fillRect(-q.w / 2, -q.h / 2, q.w, q.h); g.restore(); });
@@ -355,7 +355,7 @@
   function frame(now) {
     requestAnimationFrame(frame);
     const real = window.scrollY;
-    if (RM || !lastT) smY = real; else { smY += (real - smY) * (1 - Math.exp(-Math.min(.05, (now - lastT) / 1000) * 13)); if (Math.abs(real - smY) < .4) smY = real; }
+    if (RM || !lastT) smY = real; else { smY += (real - smY) * (1 - Math.exp(-Math.min(.3, (now - lastT) / 1000) * 22)); if (Math.abs(real - smY) < .5) smY = real; }
     lastT = now; scrollY = smY;
     if (t0) introP = RM ? 1 : clamp(((now - t0) / 1000 - 1.55) / 1.1);
     px += (tx - px) * .08; py += (ty - py) * .08;
@@ -372,5 +372,5 @@
   Promise.race([ready, new Promise(r => setTimeout(r, 2000))]).then(() => { measure(); paintGradient($("pp")); paintGradient(pp3); t0 = performance.now(); window.__pkT0 = t0; intro(); });
   window.addEventListener("load", () => { measure(); paintGradient($("pp")); paintGradient(pp3); });
   requestAnimationFrame(frame);
-  window.__pk = { get S() { return S; }, tops: () => tops, pin };
+  window.__pk = { get S() { return S; }, get smY() { return smY; }, get cfLast() { return cfLast; }, pin5: () => pin('s5'), tops: () => tops, pin };
 })();
