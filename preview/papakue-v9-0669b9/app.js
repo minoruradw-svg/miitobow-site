@@ -268,9 +268,9 @@
     stampBig.firstElementChild.style.filter = `drop-shadow(0 ${lerp(40, 2, fall)}px ${lerp(50, 4, fall)}px rgba(120,20,15,${lerp(.25, .35, fall)}))`;
     const u185 = seg(p5, .185, .26); ink.style.opacity = String(p5 > .185 ? lerp(.25, 0, u185) * gone : 0); ink.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0) scale(${lerp(.6, 1.3, u185)})`;
     flash.style.opacity = String(p5 > .185 && p5 < .23 ? (1 - seg(p5, .185, .23)) * .28 : 0);
-    { const pre5 = clamp((scrollY - (tops[IDX.s5] - H * .8)) / (H * .8)), u5 = Math.max(o4(seg(p5, 0, .10)), o4(pre5)), out5 = io3(seg(p5, .30, .36)), k = kP(), C5 = popC5(), rqx = G.P2x + G.rq.x * G.s4, rqy = G.P2y + G.rq.y * G.s4;
+    { const pre5 = clamp((scrollY - (tops[IDX.s5] - H * .8)) / (H * .8)), u5 = Math.max(o4(seg(p5, 0, .10)), o4(seg(pre5, .35, 1))), out5 = io3(seg(p5, .30, .36)), k = kP(), C5 = popC5(), rqx = G.P2x + G.rq.x * G.s4, rqy = G.P2y + G.rq.y * G.s4;
       const pk = lerp(.35, k, u5) * lerp(1, .35, out5), qx = lerp(lerp(rqx, C5.x, u5), rqx, out5), qy = lerp(lerp(rqy, C5.y, u5), rqy, out5);
-      pop5.style.display = (p5 > 0 || pre5 > 0) && p5 < .365 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))));
+      pop5.style.display = (p5 > 0 || pre5 > .35) && p5 < .365 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))));
       pop5.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u5)}% - 70px) -70px)`; pop5.style.transform = `translate3d(${qx}px,${qy + 3 * bell(seg(p5, .185, .21)) * k}px,0) perspective(900px) rotateX(${24 * (1 - u5)}deg) scale(${pk})`;
       pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); recvQ.style.opacity = String(1 - sm(clamp(u5 * 1.6)) * (1 - sm(seg(p5, .35, .37)))); }
     ltGld.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0)`; ltGrn.style.transform = `translate3d(${M ? 0 : G.P2x / 2}px,${M ? 450 : -200}px,0)`;
