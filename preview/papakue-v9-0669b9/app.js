@@ -18,11 +18,11 @@
   const canAnimate = typeof Element.prototype.animate === "function";
 
   const fx = $("fx"), world = $("world"), ph1 = $("ph1"), ph1r = $("ph1r"), ph2 = $("ph2"), ph2r = $("ph2r"), glow = $("glow"), mas = $("mas"), top = $("top"), copy = $("copy"), cue = $("cue");
-  const tag1 = $("tag1"), tag2 = $("tag2"), qcs = [$("qc0"), $("qc1"), $("qc2")], fly = $("fly"), thxFly = $("thxFly"), stampBig = $("stampBig"), ink = $("ink"), cf = $("confetti"), hand = $("hand");
+  const tag1 = $("tag1"), tag2 = $("tag2"), qcs = [$("qc0"), $("qc1"), $("qc2")], fly = $("fly"), thxFly = $("thxFly"), stampBig = $("stampBig"), ink = $("ink"), cf = $("confetti"), hand = $("hand"), pop3 = $("pop3"), pop5 = $("pop5"), pop5ok = $("pop5ok"), sheet = $("sheet"), car0 = $("car0"), car1 = $("car1"), curl = $("curl"), nchips = $("nchips"), sbtn = $("sbtn"), askRip = $("askRip"), sendRip = $("sendRip"), thxBtnEl = $("thxBtn");
   const ctam = $("ctam"), gridc = $("gridc"), ltPar = $("ltPar"), ltGrn = $("ltGrn"), ltGld = $("ltGld");
   const L = { B: $("s1Board"), L: $("s1Lock"), A: $("s1Add"), P: $("s1Party") };
-  let W = innerWidth, H = innerHeight, M = W < 820, PW = 330, PH = 680, MW = 155, MH = 150, MB = {};
-  const G = { P2x: 1500, P2y: 0, s4: 1.12, sx0: 0, scrW: 0, scrH: 0, sq: { x: 0, y: -60, w: 200, h: 80 }, wg: { x: 80, y: -130 }, ig: { x: -20, y: 30 } };
+  let W = innerWidth, H = innerHeight, M = W < 1000, PW = 330, PH = 680, MW = 155, MH = 150, MB = {};
+  const G = { XL: 0, car: { x: 0, y: 60 }, rq: { x: 0, y: 0 }, P2x: 1500, P2y: 0, s4: 1.12, sx0: 0, scrW: 0, scrH: 0, sq: { x: 0, y: -60, w: 200, h: 80 }, wg: { x: 80, y: -130 }, ig: { x: -20, y: 30 } };
 
   /* ---------- 文字ごとのグラデ ---------- */
   function paintGradient(box) {
@@ -50,15 +50,19 @@
   function measure() {
     ph1.style.display = ph2.style.display = mas.style.display = "";   // 寸法を測る間だけ表示に戻す（次のフレームで必要なものだけ隠す）
     const dc0 = $("dcard"); hand.style.width = dc0.offsetWidth + "px"; hand.style.height = dc0.offsetHeight + "px"; hand.style.margin = `${-dc0.offsetHeight / 2}px 0 0 ${-dc0.offsetWidth / 2}px`;
+    { const px = parseFloat(getComputedStyle(document.querySelector('.pin')).paddingLeft) || 0, cw = cards[IDX.s3] ? cards[IDX.s3].offsetWidth : 520; G.XL = (px + (W - px - cw - 28)) / 2; }
+    G.tl5 = cards[IDX.s5] ? cards[IDX.s5].getBoundingClientRect().left : W * .6;
     const sy = scrollY = window.scrollY;
     tops = chEls.map(e => e.getBoundingClientRect().top + sy); hs = chEls.map(e => e.offsetHeight);
     afterTop = $("after").getBoundingClientRect().top + sy;
-    W = innerWidth; H = innerHeight; M = W < 820; PW = ph1.offsetWidth; PH = ph1.offsetHeight; MW = mas.offsetWidth; MH = mas.offsetHeight;
+    W = innerWidth; H = innerHeight; M = W < 1000; PW = ph1.offsetWidth; PH = ph1.offsetHeight; MW = mas.offsetWidth; MH = mas.offsetHeight;
     MB = {}; if (M) ["s2", "s3", "s4", "s5"].forEach(id => { const c = cards[IDX[id]]; MB[id] = 76 + (c ? c.offsetHeight : 180); });
     G.s4 = M ? 1.0 : 1.02; G.P2x = M ? 0 : 1500; G.P2y = M ? 900 : 0;
     G.sx0 = .042 * PW; G.scrW = PW - 2 * G.sx0; G.scrH = PH - 2 * G.sx0;
     const so = screenEl.offsetTop, sl = screenEl.offsetLeft;                      // 画面(.screen)のスマホ内位置
     G.sq = { x: sl + sendQ.offsetLeft + sendQ.offsetWidth / 2 - PW / 2, y: so + sendQ.offsetTop + sendQ.offsetHeight / 2 - PH / 2, w: sendQ.offsetWidth, h: sendQ.offsetHeight };
+    { const rq = $("recvQ"); G.rq = { x: sl + rq.offsetLeft + rq.offsetWidth / 2 - PW / 2, y: so + rq.offsetTop + rq.offsetHeight / 2 - PH / 2 }; }
+    { sheet.style.transform = 'none'; const c = $("car"); G.car = { x: sl + sheet.offsetLeft + c.offsetLeft + c.offsetWidth / 2 - PW / 2, y: so + sheet.offsetTop + c.offsetTop + c.offsetHeight / 2 - PH / 2 }; sheet.style.transform = ''; }
     G.wg = { x: G.sx0 + .74 * G.scrW - PW / 2, y: G.sx0 + .31 * G.scrH - PH / 2 };
     G.ig = { x: G.sx0 + .40 * G.scrW - PW / 2, y: G.sx0 + .562 * G.scrH - PH / 2 };
     const sz = M ? 480 : 720; if (cf.width !== sz) { cf.width = cf.height = sz; cfLast = -1; }
@@ -76,7 +80,7 @@
   function heroState(p) {
     const s = sm(p), o = base(), c = heroCam(), lift = M ? Math.max(0, (MFV + PH) - (H - 28)) : 0;
     setCam(o, c); o.cy += 40 * s + lift * s; o.p1ry = -14 + 14 * s; o.p1rx = 4 * (1 - s * .5); o.glow = 1 - s; o.lB = 1;
-    if (M) { o.mx = PW * .52 - MW / 2; o.my = -PH / 2 + 16 - MH * .97; } else { o.mx = -PW / 2 - MW * .66; o.my = c.cy + H / 2 - MH + 8; }   // スマホ版：ボタンの横に立ち、スマホの上端に足を乗せる／PC版：スマホの左下の外
+    if (M) { o.mx = PW * .52 - MW / 2; o.my = -PH / 2 + 16 - MH * .97; } else { o.mx = -PW / 2 - MW * .86; o.my = c.cy + H / 2 - MH + 8; }   // スマホ版：ボタンの横に立ち、スマホの上端に足を乗せる／PC版：スマホの左下の外
     o.mop = 1 - s; o.ms = 1; return o;
   }
   const S2P = [{ x: -332, y: 6, r: -3, dz: 1.2, sc: 1.5, sy: -.20 }, { x: -215, y: -232, r: 6, dz: .95, sc: .92, sy: .06 }, { x: -258, y: 262, r: -5, dz: .9, sc: .92, sy: .30 }];
@@ -86,14 +90,14 @@
     if (M) { const cs = lerp(1, 1.06, t), y0 = yPhone("s2", .9, 30); return { cx: 0, cy: -(y0 - H / 2) / cs - 20 * t, cs, cr: 0 }; }
     const a = camFor(.78 * W, .5 * H, 1, 0, 0), b = camFor(.78 * W, .5 * H, 1.08, 0, 40); return { cx: lerp(a.cx, b.cx, t), cy: lerp(a.cy, b.cy, t), cs: lerp(1, 1.08, t), cr: 0 }; }
   function S2(p) { const o = base(); setCam(o, cam2(p)); o.p1s = M ? .9 : .94; o.p1ry = lerp(-8, 0, sm(seg(p, 0, .3))); o.p1dim = .8 * sm(seg(p, .06, .30)); o.p1op = 1 - sm(seg(p, .86, 1));
-    o.lpar = .55 * sm(seg(p, 0, .5)) * (1 - sm(seg(p, .88, 1))); o.ca = 1 - sm(seg(p, .90, .94)); return o; }
+    o.lpar = .55 * sm(seg(p, 0, .5)) * (1 - sm(seg(p, .88, 1))); o.ca = 1 - sm(seg(p, .84, .93)); return o; }
   function DEMO() { const o = S2(1); o.p1op = 0; o.ca = 0; o.lpar = 0; return o; }
-  function base3() { return M ? camFor(.5 * W, yPhone("s3", .92, 26), 1, 0, 0) : camFor(.37 * W, .5 * H, 1, 0, 0); }
+  function base3() { return M ? camFor(.5 * W, yPhone("s3", .92, 26), 1, 0, 0) : camFor(G.XL, .5 * H, 1, 0, 0); }
   function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, 0, 0) : camFor(.64 * W, .5 * H + 32, 1, 0, 0); }
   function S3(p) { const o = base3 && base(), s = M ? .92 : 1.10, s1 = lerp(s, G.s4, sm(seg(p, .86, 1)));
     const A = base3(); let B, C;
     if (M) { const csM = clamp((H - MB.s3 - 24) / (PH * s), 1.0, 1.3), camM = { cx: 0, cy: -PH * s / 2 - (MB.s3 + 12 - H / 2) / csM, cs: csM, cr: 0 }; B = camM; C = camM; }
-    else { const fx_ = .31 * W, fy_ = .5 * H; B = Object.assign(camFor(fx_, fy_, 1.45, G.wg.x * s, G.wg.y * s), { cr: RM ? 0 : -1 }); C = camFor(fx_, fy_, 1.30, G.ig.x * s, G.ig.y * s); }
+    else { const fx_ = G.XL - .06 * W, fy_ = .5 * H; B = Object.assign(camFor(fx_, fy_, 1.45, G.wg.x * s, G.wg.y * s), { cr: RM ? 0 : -1 }); C = camFor(fx_, fy_, 1.30, G.ig.x * s, G.ig.y * s); }
     let c = mixCam(A, B, io5(seg(p, .18, .36))); c = mixCam(c, C, io3(seg(p, .34, .46))); c = mixCam(c, A, io5(seg(p, .62, .70))); c = mixCam(c, base4(), io3(seg(p, .86, 1)));
     setCam(o, c); o.p1s = s1; o.p1ry = -6 * (1 - sm(seg(p, .2, .34))); o.p1rx = 2 * (1 - sm(seg(p, .2, .34))); o.lB = 0; const to = sm(seg(p, .34, .46)), tp = sm(seg(p, .86, 1));
     o.lL = 1 - to; o.lA = to * (1 - tp); o.lP = tp; o.lpar = .45 * bell(seg(p, .70, .82)); return o; }
@@ -110,25 +114,29 @@
     if (p >= .64) { cs = lerp(M ? .96 : .94, 1, io3(seg(p, .64, .74))); }
     if (!RM && !M) cr = p < .64 ? -1.2 + 2.4 * e : lerp(1.2, 0, io3(seg(p, .64, .74)));
     if (!M && p >= .64) cy = lerp(cy, 0, io3(seg(p, .64, .74)));
-    const z = io3(seg(p, .74, .84)); cs = lerp(cs, M ? 1.1 : 1.15, z); if (!M) cy = lerp(cy, -60, z);
+    const z = io3(seg(p, .74, .84)); cs = lerp(cs, M ? 1 : 1.15, z); if (!M) cy = lerp(cy, -60, z);
     setCam(o, { cx, cy, cs, cr }); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = sm(seg(p, .22, .32)) * .9; o.lB = 0; o.lP = 1; o.p2op = 1; o.p2y = G.P2y + 4 * bell(seg(p, .74, .78));
     o.lgrn = .5 * bell(seg(p, .32, .64)); o.lpar = p >= .64 ? .4 * bell(seg(p, .64, .82)) : 0; o.lparx = G.P2x; o.lpary = G.P2y; return o; }
   // S5：ハンコ→ありがとうスタンプ
-  const stampPos = () => { const s = G.s4, sz = M ? 180 : 330; return { x: G.P2x + G.sq.x * s + sz * .20, y: G.P2y + G.sq.y * s + sz * .14 }; };   // 実際のハンコのように、カードの角へ少しずらして押す（カード名を読めるように）
-  function S5(p) { const o = base(), xs = .36, D = M ? camD() : camFor(xs * W, .5 * H + 32, 1, G.P2x, G.P2y), Sp = stampPos(), A = M ? base4() : camFor(xs * W, .5 * H + 32, 1, 0, 0), s4e = S4(1);
-    const stcs = M ? Math.max(1.1, Math.min(1.35, (H - (MB.s5 || 260) - 32) / PH)) : 1.18, st = camFor(M ? .5 * W : .34 * W, M ? MB.s5 + (H - MB.s5) * .5 : .5 * H + 16, stcs, Sp.x, Sp.y);
+  const w5 = x => x < .28 ? x / .28 * .34 : x < .80 ? .34 + (x - .28) / .52 * .60 : .94 + (x - .80) / .20 * .06;   // 外側のスクロール量→内部の進行（「ありがとう」の場面に長い尺）
+  const kP = () => M ? Math.min(1.3, (W - 36) / 230) : Math.max(1.1, Math.min(1.9, 2 * (G.tl5 - 24 - G.XL) / 230));
+  const popC5 = () => ({ x: G.P2x, y: G.P2y - .04 * PH * G.s4 });
+  const stampPos = () => { const c = popC5(), k = kP(); return { x: c.x + .21 * 230 * k, y: c.y - (M ? 16 : 0) }; };   // 実際のハンコのように、カードの角へ少しずらして押す（カード名を読めるように）
+  function S5(p) { const o = base(), xs = G.XL / W, D = M ? camD() : camFor(xs * W, .5 * H + 32, 1, G.P2x, G.P2y), Sp = stampPos(), A = M ? base4() : camFor(xs * W, .5 * H + 32, 1, 0, 0), s4e = S4(1);
+    const stcs = 1, C5 = popC5(), st = camFor(M ? .5 * W : G.XL, M ? MB.s5 + (H - MB.s5) * .5 : .5 * H, stcs, C5.x, C5.y);
     let c = { cx: s4e.cx, cy: s4e.cy, cs: s4e.cs, cr: 0 };
     c = mixCam(c, st, io5(seg(p, .04, .14))); c = mixCam(c, D, io5(seg(p, .22, .36)));
     const t3 = io5(seg(p, .36, .50)); c = mixCam(c, A, t3); c.cs *= 1 - .08 * bell(seg(p, .36, .50));
-    const t4 = io5(seg(p, .60, .82)); c = mixCam(c, D, t4); c.cs *= 1 - .14 * bell(t4); if (!RM && !M) c.cr = -1 + 2 * t4 * (p > .58 ? 1 : 0); if (p < .58) c.cr = 0;
-    if (p > .80) { c.cs = lerp(c.cs, 1.08, o4(seg(p, .80, .88))); c.cy = lerp(c.cy, D.cy - 10, o4(seg(p, .80, .88))); c.cr = lerp(c.cr, 0, o4(seg(p, .80, .88))); }
-    if (p > .96) c.cs = lerp(c.cs, 1, sm(seg(p, .96, 1)));
+    { const zm = io3(seg(p, .46, .53)) * (1 - io3(seg(p, .74, .79))); c.cs *= 1 + (M ? .14 : .34) * zm; c.cy += zm * (M ? .08 : .10) * PH; }   // スタンプを選ぶ場面は、画面の文字が読める大きさまで寄る
+    const t4 = io5(seg(p, .78, .92)); c = mixCam(c, D, t4); c.cs *= 1 - .14 * bell(t4); if (!RM && !M) c.cr = -1 + 2 * t4 * (p > .76 ? 1 : 0); if (p < .76) c.cr = 0;
+    if (p > .92) { c.cs = lerp(c.cs, 1.04, o4(seg(p, .92, .97))); c.cy = lerp(c.cy, D.cy - 10, o4(seg(p, .92, .97))); c.cr = lerp(c.cr, 0, o4(seg(p, .92, .97))); }
+    if (p > .985) c.cs = lerp(c.cs, 1, sm(seg(p, .985, 1)));
     if (!RM) { const u = seg(p, .185, .23); if (u > 0 && u < 1) c.cy += Math.sin(u * 3 * Math.PI) * (1 - u) * 4; }
     setCam(o, c); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = 0; o.lB = 0; o.lP = 1; o.p2op = 1;
     o.lgld = (.5 * sm(seg(p, .185, .22)) * lerp(1, .4, sm(seg(p, .22, .40)))) * (1 - sm(seg(p, .94, 1))); o.lgrn = Math.min(.5, .4 * bell(seg(p, .36, .50)) + .5 * bell(seg(p, .58, .80)));
-    o.mx = G.P2x - PW * G.s4 / 2 - MW * .66; o.my = G.P2y + PH * G.s4 / 2 - MH * .85 + 4; o.mop = sm(seg(p, .88, .96)) * (1 - sm(seg(p, .97, 1))); o.ms = .85; return o; }
+    o.mx = G.P2x - PW * G.s4 / 2 - MW * .66; o.my = G.P2y + PH * G.s4 / 2 - MH * .85 + 4; o.mop = sm(seg(p, .95, .985)); o.ms = .85; return o; }
   function OUT() { const o = S5(1); o.p1op = 0; o.p2op = 0; o.mop = 0; o.ca = 0; o.lgld = 0; o.lgrn = 0; return o; }
-  const FN = { s2: S2, demo: DEMO, s3: S3, s4: S4, s5: S5, s6: OUT, s7: OUT };
+  const FN = { s2: S2, demo: DEMO, s3: S3, s4: S4, s5: p => S5(w5(p)), s6: OUT, s7: OUT };
   function mix(a, b, t) { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k], t); return o; }
   function globalState() {
     const heroP = clamp((scrollY - .35 * H) / (.35 * H)), first = tops[0] - H;
@@ -190,13 +198,13 @@
   }
   let sqSwap = false;
   function details(S, now) {
-    const p2 = pin("s2"), p3 = pin("s3"), p4 = pin("s4"), p5 = pin("s5");
+    const p2 = pin("s2"), p3 = pin("s3"), p4 = pin("s4"), p5 = w5(pin("s5"));
     // ---- S2：スマホ画面から巻物が浮かび、ほどけ、奥行きをもって広がり、1本に巻き戻る ----
     const cam = { cx: S.cx, cy: S.cy };
     qcs.forEach((c, i) => { const g = (M ? S2M : S2P)[i], k = o4(seg(p2, .06 + .16 * i, .30 + .16 * i)), ku = sm(seg(k, 0, .3)), rb = io3(seg(p2, .78 + .03 * i, .90 + .03 * i)), Sv = S2S();
       const sx = 0, sy = g.sy * PH * (M ? .9 : 1), fxp = g.x + cam.cx * (1 - g.dz), fyp = g.y + cam.cy * (1 - g.dz);
       const x = lerp(lerp(sx, fxp, k), Sv.x, rb), y = lerp(lerp(sy, fyp, k), Sv.y, rb), sc = lerp(lerp(.8, g.sc, k), (M ? .5 : .78), rb);
-      const roll = 62 * clamp((1 - ku) + rb), rx = 28 * (1 - ku) - 6 * bell(seg(k, .2, 1)) + 28 * rb, sh = k;
+      const roll = 62 * clamp(1 - ku), rx = 28 * (1 - ku) - 6 * bell(seg(k, .2, 1)), sh = k;   // 終わりは切らずに、すっと消える（体験デモの巻物は押すまで出さない）
       c.style.zIndex = String(3 - i); c.style.display = S.ca * clamp(k * 6) > .01 ? "" : "none"; c.style.opacity = String(S.ca * clamp(k * 6)); c.style.clipPath = `inset(-70px -70px calc(${roll}% - 70px) -70px)`;
       c.style.transform = `translate3d(${x}px,${y}px,0) perspective(900px) rotateX(${rx}deg) rotate(${g.r * k * (1 - rb)}deg) scale(${sc})`;
       });
@@ -206,9 +214,9 @@
     const s2End = tops[IDX.s2] + hs[IDX.s2] - H, uH = clamp((scrollY - s2End) / (.5 * H)), dcardEl = $("dcard"), dTop = $("dstage").getBoundingClientRect().top + scrollY;
     const handIn = sm(seg(p2, .92, .96)), st = (() => { const Sv = S2S(), cs = S.cs; return { x: W / 2 + (Sv.x - S.cx) * cs, y: H / 2 + (Sv.y - S.cy) * cs }; })();
     const toDemo = sm(uH), dyScreen = dTop - scrollY + dcardEl.offsetHeight / 2, hx = lerp(lerp(st.x, W / 2, io3(seg(p2, .92, 1))), W / 2, 1), hy = lerp(lerp(st.y, .70 * H, io3(seg(p2, .92, 1))), dyScreen, toDemo);
-    handOp = scrollY >= tops[IDX.s2] && uH < 1 && p2 > .92 ? handIn : 0; const dsc = M ? .92 : 1;
+    handOp = 0; const dsc = M ? .92 : 1;
     hand.style.opacity = String(handOp); hand.style.transform = `translate3d(${hx}px,${hy}px,0) scale(${lerp(.5, 1, toDemo)})`;
-    if (dState === 0) dcardEl.style.opacity = uH >= 1 ? "1" : "0";
+    if (dState === 0) dcardEl.style.opacity = "0";
     // ---- S3 ----
     papScrub(pp3L, p3 / .22); pp3.style.transform = `scale(${1 - .04 * bell(seg(p3, .16, .28))})`;
     ripple.style.opacity = String(Math.sin(seg(p3, .16, .28) * Math.PI)); ripple.style.transform = `scale(${.4 + 1.2 * seg(p3, .16, .28)})`;
@@ -221,7 +229,12 @@
     } else wordfly.style.opacity = "0";
     typed.textContent = p3 >= .60 ? "筋トレ" : ""; typed.style.visibility = p3 >= .60 ? "visible" : "hidden";
     gobtn.style.opacity = String(p3 > .64 && p3 < .70 ? .9 : 0);
-    const nq = o4(seg(p3, .70, .86)); newq.style.opacity = String(nq > 0 ? 1 : 0); newq.style.clipPath = `inset(0 0 ${62 * (1 - nq)}% 0)`; newq.style.transform = `perspective(600px) rotateX(${28 * (1 - nq)}deg)`;
+    newq.style.opacity = "0";
+    { const u3 = o4(seg(p3, .70, .80)), out3 = io3(seg(p3, .84, .90)), sc3 = S.p1s, cs3 = S.cs, phX = W / 2 + (0 - S.cx) * cs3, tl = cards[IDX.s3].getBoundingClientRect().left;
+      const kmax = M ? Math.min(1.3, (W - 36) / (230 * cs3)) : Math.max(.9, Math.min(1.9, 2 * Math.min(tl - 24 - phX, phX - 16) / (230 * cs3)));
+      const k3 = lerp(.35, kmax, u3) * lerp(1, .35, out3), sx = G.ig.x * sc3, sy = G.ig.y * sc3, ex = 0, ey = -.03 * PH * sc3, px3 = lerp(lerp(sx, ex, u3), sx, out3), py3 = lerp(lerp(sy, ey, u3), sy, out3);
+      pop3.style.display = p3 > .70 && p3 < .91 ? "" : "none"; pop3.style.opacity = String(clamp(u3 * 3) * (1 - sm(seg(p3, .87, .905))));
+      pop3.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u3)}% - 70px) -70px)`; pop3.style.transform = `translate3d(${px3}px,${py3}px,0) perspective(900px) rotateX(${24 * (1 - u3)}deg) scale(${k3})`; }
     setText(s3step, p3 < .3 ? "ロック画面で、タップ" : p3 < .7 ? "名前を入れる" : "受注。クエストができた");
     // ---- S4：1枚のカードが私→相手へ。カメラが追う ----
     const P = flightPts(), s = G.s4, takeoff = o4(seg(p4, .22, .32)), e = io5(seg(p4, .32, .64)), land = o5(seg(p4, .64, .74));
@@ -247,36 +260,48 @@
     s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
     setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「了解」して、受けてもらえた");
     // ---- S5：CLEARハンコ→紙吹雪→ありがとうスタンプ ----
-    const Sp = stampPos(), sz = M ? 180 : 330, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
+    const Sp = stampPos(), sz = M ? 150 : 190, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
     stampBig.style.width = stampBig.style.height = sz + "px"; stampBig.style.margin = `${-sz / 2}px 0 0 ${-sz / 2}px`;
-    const gone = 1 - sm(seg(p5, .78, .84)); stampBig.style.opacity = String(clamp(seg(p5, .12, .135)) * gone); stampBig.style.display = (p5 > .1 && gone > .01) ? "" : "none"; ink.style.display = (p5 > .18 && gone > .01) ? "" : "none"; cf.style.display = (p5 >= .19 && p5 <= .44) ? "" : "none";
-    const kk = sm(seg(p5, .26, .36));   // 着弾後は、カードの内容が読めるよう角へ小さく収まる
+    const gone = 1 - sm(seg(p5, .30, .35)); stampBig.style.opacity = String(clamp(seg(p5, .12, .135)) * gone); stampBig.style.display = (p5 > .1 && gone > .01) ? "" : "none"; ink.style.display = (p5 > .18 && gone > .01) ? "" : "none"; cf.style.display = (p5 >= .19 && p5 <= .44) ? "" : "none";
+    const kk = 0;
     stampBig.style.transform = `translate3d(${Sp.x + sz * .14 * kk}px,${Sp.y + sz * .09 * kk}px,0) scale(${lerp(3, 1, fall) * (1 + .04 * bell(land5)) * lerp(1, .6, kk)}) rotate(${lerp(-24, -12, fall)}deg)`;
     stampBig.firstElementChild.style.filter = `drop-shadow(0 ${lerp(40, 2, fall)}px ${lerp(50, 4, fall)}px rgba(120,20,15,${lerp(.25, .35, fall)}))`;
     const u185 = seg(p5, .185, .26); ink.style.opacity = String(p5 > .185 ? lerp(.25, 0, u185) * gone : 0); ink.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0) scale(${lerp(.6, 1.3, u185)})`;
     flash.style.opacity = String(p5 > .185 && p5 < .23 ? (1 - seg(p5, .185, .23)) * .28 : 0);
-    recvQ.style.transform = `translateY(${5 * bell(seg(p5, .185, .21))}px)`;
+    { const u5 = o4(seg(p5, 0, .10)), out5 = io3(seg(p5, .30, .36)), k = kP(), C5 = popC5(), rqx = G.P2x + G.rq.x * G.s4, rqy = G.P2y + G.rq.y * G.s4;
+      const pk = lerp(.35, k, u5) * lerp(1, .35, out5), qx = lerp(lerp(rqx, C5.x, u5), rqx, out5), qy = lerp(lerp(rqy, C5.y, u5), rqy, out5);
+      pop5.style.display = p5 > 0 && p5 < .365 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))));
+      pop5.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u5)}% - 70px) -70px)`; pop5.style.transform = `translate3d(${qx}px,${qy + 3 * bell(seg(p5, .185, .21)) * k}px,0) perspective(900px) rotateX(${24 * (1 - u5)}deg) scale(${pk})`;
+      pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); recvQ.style.opacity = String(1 - sm(seg(p5, 0, .05)) * (1 - sm(seg(p5, .35, .37)))); }
     ltGld.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0)`; ltGrn.style.transform = `translate3d(${M ? 0 : G.P2x / 2}px,${M ? 450 : -200}px,0)`;
     cf.style.transform = `translate3d(${Sp.x - cf.width / 2}px,${Sp.y - cf.height * .45}px,0)`; drawConfetti(p5 >= .19 && p5 <= .44 ? seg(p5, .19, .44) : 0);
-    $("thxBtn").style.opacity = String(sm(seg(p5, .46, .52))); sendStatus.style.opacity = String(p5 > 0 ? 1 - sm(seg(p5, .44, .50)) : 1);
+    // ---- 後半：いいね・ありがとうを伝える → スタンプを選ぶ → 押す → 相手に届く ----
+    const askIn = sm(seg(p5, .42, .47)), up = io5(seg(p5, .50, .57)), down = io5(seg(p5, .76, .80)), shW = up * (1 - down);
+    thxBtnEl.style.opacity = String(askIn * (1 - sm(seg(p5, .50, .52)))); thxBtnEl.classList.toggle("on", p5 > .485 && p5 < .505);
+    askRip.style.opacity = String(Math.sin(seg(p5, .475, .51) * Math.PI)); askRip.style.transform = `scale(${.4 + 1.2 * seg(p5, .475, .51)})`;
+    sheet.style.transform = `translateY(${(1 - shW) * 103}%)`;
+    const pg = io3(seg(p5, .60, .68)); car0.style.transform = `translateX(${-pg * 11}em) scale(${lerp(1, .66, pg)})`; car0.style.opacity = String(lerp(1, .5, pg));
+    car1.style.transform = `translateX(${(1 - pg) * 11}em) scale(${lerp(.66, 1, pg)})`; car1.style.opacity = String(lerp(.5, 1, pg)); setText(curl, pg > .5 ? "ありがとう" : "いいね");
+    nchips.children[1].classList.toggle("on", p5 > .69); sbtn.classList.toggle("on", p5 > .735 && p5 < .765);
+    sendRip.style.opacity = String(Math.sin(seg(p5, .725, .765) * Math.PI)); sendRip.style.transform = `scale(${.4 + 1.2 * seg(p5, .725, .765)})`;
+    sendStatus.style.opacity = String(p5 > 0 ? 1 - sm(seg(p5, .44, .46)) : 1);
     if (p5 > .44) setText(sendStatus, "お願いが達成されました");
     rv.style.backgroundPosition = `${100 * (1 - o4(seg(p5, .44, .56)))}% 0`;
-    const P5 = flightPts(), e5 = io5(seg(p5, .58, .80)), tk = o4(seg(p5, .52, .58)), sizeT = .62 * G.scrW * G.s4, ls = settle(seg(p5, .80, .86)), start = { x: 0, y: .05 * PH * G.s4 };
+    const P5 = flightPts(), e5 = io5(seg(p5, .79, .90)), tk = o4(seg(p5, .765, .80)), sizeT = .62 * G.scrW * G.s4, start = { x: G.car.x * G.s4, y: G.car.y * G.s4 };
     thxFly.style.width = thxFly.style.height = sizeT + "px"; thxFly.style.margin = `${-sizeT / 2}px 0 0 ${-sizeT / 2}px`;
-    const tp = p5 < .58 ? { x: start.x, y: start.y } : bez([start, P5[1], { x: G.P2x, y: G.P2y }], e5);
-    const ts = p5 < .58 ? lerp(.6, 1, tk) : (p5 < .80 ? 1 + .15 * bell(e5) : lerp(1, 1, 1) * (1 + (ls - 1) * .0)), vis = p5 >= .52 && p5 < .86;
-    thxFly.style.display = vis ? "" : "none"; thxFly.style.opacity = vis ? String(clamp(seg(p5, .52, .54))) : "0"; thxFly.style.transform = `translate3d(${tp.x}px,${tp.y}px,0) scale(${ts}) rotate(${p5 >= .58 && p5 < .8 ? Math.sin(e5 * 2 * Math.PI) * 4 : 0}deg)`;
-    s2Arrive.style.opacity = String(sm(seg(p5, .80, .86))); thxCap.style.opacity = String(sm(seg(p5, .88, .94)));
-    const land2 = settle(seg(p5, .80, .86)); thxImg.style.opacity = String(sm(seg(p5, .86, .88))); thxImg.style.transform = `translateY(0) scale(${p5 > .86 ? 1 : 1}) rotate(0deg)`;
-    thxBtn.style.transform = `scale(${p5 > .52 && p5 < .55 ? .96 : 1})`;
-    setText(s5step, p5 < .30 ? "お願いが達成された" : p5 < .56 ? "ありがとうを送る" : "スタンプが届く");
-    if (S.mop > .5 && p5 > .9 && !s5Greeted) { s5Greeted = true; playGreeting(); }
+    const tp = p5 < .79 ? start : bez([start, P5[1], { x: G.P2x, y: G.P2y }], e5);
+    const ts = p5 < .79 ? lerp(.6, 1, tk) : 1 + .15 * bell(e5), vis = p5 >= .765 && p5 < .93;
+    thxFly.style.display = vis ? "" : "none"; thxFly.style.opacity = vis ? String(clamp(seg(p5, .765, .78))) : "0"; thxFly.style.transform = `translate3d(${tp.x}px,${tp.y}px,0) scale(${ts}) rotate(${p5 >= .79 && p5 < .90 ? Math.sin(e5 * 2 * Math.PI) * 4 : 0}deg)`;
+    s2Arrive.style.opacity = String(sm(seg(p5, .90, .94))); thxCap.style.opacity = String(sm(seg(p5, .95, .985)));
+    thxImg.style.opacity = String(sm(seg(p5, .93, .95))); thxImg.style.transform = "none";
+    setText(s5step, p5 < .30 ? "お願いが達成された" : p5 < .56 ? "ありがとうを伝える" : "スタンプが届く");
+    if (S.mop > .5 && p5 > .955 && !s5Greeted) { s5Greeted = true; playGreeting(); }
     if (p5 < .5) s5Greeted = false;
     // ---- 章テキストの出入り ----
     chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
-      let a = sm(seg((scrollY - tops[i] + H * .45) / Math.max(1, hs[i] - H), 0, .07)), out = 1 - sm(seg(p, .93, 1));
+      let a = sm(clamp((scrollY - tops[i] + H * .14) / (H * .14))), out = ids[i] === 's5' ? 1 - sm(seg(p, .97, 1)) : 1 - sm(seg(p, .86, .91));
       if (ids[i] === 's4') a *= 1 - .98 * sm(seg(p, .24, .30)) * (1 - sm(seg(p, .68, .74)));
-      if (ids[i] === 's5') { const w1 = sm(seg(p, .04, .10)) * (1 - sm(seg(p, .30, .36))), w2 = sm(seg(p, .54, .60)) * (1 - sm(seg(p, .84, .90))); a *= 1 - .98 * Math.max(w1, w2); }
+      if (ids[i] === 's5') { const q = w5(p); a *= q < .43 ? sm(seg(q, .21, .26)) * (1 - sm(seg(q, .33, .38))) : Math.min(sm(seg(q, .47, .52)), 1 - .98 * sm(seg(q, .76, .80)) * (1 - sm(seg(q, .945, .975)))); const sa = $('s5a'), sb = $('s5b'); sa.style.display = q < .43 ? '' : 'none'; sb.style.display = q < .43 ? 'none' : ''; }
       c.style.setProperty("--vis", (a * out).toFixed(3)); });
   }
   let s5Greeted = false;
@@ -321,14 +346,17 @@
   dok.onclick = () => { if (dState !== 1) return; dState = 2; dok.disabled = true; $("dform").parentElement.classList.add("done"); dtxt.textContent = "達成！";
     dAnim(dstamp, [{ opacity: 0, transform: "scale(2.8) rotate(-24deg)" }, { opacity: .96, transform: "scale(1) rotate(-12deg)", offset: .6 }, { opacity: .96, transform: "scale(1.04) rotate(-12deg)", offset: .78 }, { opacity: .96, transform: "scale(1) rotate(-12deg)" }], { duration: 650, easing: "cubic-bezier(.2,.9,.3,1)" });
     dAnim(dcard, [{ transform: "translateY(0)" }, { transform: "translateY(5px)", offset: .6 }, { transform: "translateY(0)" }], { duration: 650 }); dreset.style.opacity = 1; };
-  dreset.onclick = () => { dState = 0; $("dform").parentElement.classList.remove("opened", "done"); dtxt.textContent = "「クエストにする」を押す"; dcard.getAnimations().forEach(a => a.cancel()); dstamp.getAnimations().forEach(a => a.cancel()); dcard.style.clipPath = "inset(0 0 62% 0)"; dcard.style.opacity = "1"; dcard.style.transform = ""; dstamp.style.opacity = 0; dreset.style.opacity = 0; dok.disabled = false; dinput.focus(); };
+  dreset.onclick = () => { dState = 0; $("dform").parentElement.classList.remove("opened", "done"); dtxt.textContent = "「クエストにする」を押す"; dcard.getAnimations().forEach(a => a.cancel()); dstamp.getAnimations().forEach(a => a.cancel()); dcard.style.clipPath = "inset(0 0 62% 0)"; dcard.style.opacity = "0"; dcard.style.transform = ""; dstamp.style.opacity = 0; dreset.style.opacity = 0; dok.disabled = false; dinput.focus(); };
   $("vplay").onclick = () => { const v = document.createElement("video"); v.controls = true; v.playsInline = true; v.preload = "auto"; v.poster = "assets/pr_poster.jpg";
     v.innerHTML = '<source src="assets/pr_720.mp4" type="video/mp4">'; const vin = $("vin"); vin.innerHTML = ""; vin.appendChild(v); v.play().catch(() => {}); v.focus(); };
 
   /* ---------- ループ ---------- */
+  let smY = window.scrollY, lastT = 0;   // 描画に使うスクロール位置：実際の位置へなめらかに追従（止めると余韻でぴたっと止まる。逆スクロールも同じ道をたどる）
   function frame(now) {
     requestAnimationFrame(frame);
-    scrollY = window.scrollY;
+    const real = window.scrollY;
+    if (RM || !lastT) smY = real; else { smY += (real - smY) * (1 - Math.exp(-Math.min(.05, (now - lastT) / 1000) * 13)); if (Math.abs(real - smY) < .4) smY = real; }
+    lastT = now; scrollY = smY;
     if (t0) introP = RM ? 1 : clamp(((now - t0) / 1000 - 1.55) / 1.1);
     px += (tx - px) * .08; py += (ty - py) * .08;
     const heroP = clamp((scrollY - .35 * H) / (.35 * H)), hs_ = sm(heroP);
