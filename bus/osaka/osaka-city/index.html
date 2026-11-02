@@ -584,7 +584,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：大阪駅、なんば、天王寺）、バス停、系統（例：62）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（10）</div><p class="tip">大阪市・堺市・吹田市・豊中市・東大阪市・摂津市・八尾市・守口市・門真市・松原市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（10）</div><p class="tip">大阪市・堺市・吹田市・豊中市・東大阪市・摂津市・八尾市・守口市・門真市・松原市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/osaka/kita-osaka/"><span>北摂・北河内バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/osaka/minami-kawachi/"><span>南河内バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/osaka/senshu/"><span>泉州・堺南部バスマップ</span><small>南　›</small></a>${NOTE}`, "バス停・系統を選んでください");
   document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {

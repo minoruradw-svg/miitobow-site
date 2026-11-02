@@ -584,7 +584,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：広島駅、紙屋町、宮島口）、バス停、系統（例：宇品線）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（5）</div><p class="tip">広島市・廿日市市・海田町・府中町・坂町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（5）</div><p class="tip">広島市・廿日市市・海田町・府中町・坂町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hiroshima/hatsukaichi-otake/"><span>廿日市・大竹バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/hiroshima/higashihiroshima/"><span>東広島・三原バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/hiroshima/hiroshima-north/"><span>広島県北部バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/hiroshima/kure/"><span>呉・江田島バスマップ</span><small>南東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
   document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {
