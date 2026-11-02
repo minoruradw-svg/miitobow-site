@@ -229,6 +229,8 @@
   .hub:hover { border-color: var(--brand); background: var(--brand-soft); }
   .hub .ha { font-size: 18px; line-height: 1; }
   a.rt { color: inherit; text-decoration: none; }
+  .leaflet-tooltip.extlbl { background: var(--surface); color: var(--ink); border: 1px solid var(--border); box-shadow: none; font-size: 12px; font-weight: 700; padding: 2px 8px; }
+  .leaflet-tooltip-bottom.extlbl::before { display: none; }
   .crumb, .brk { display: none; }
   @media (max-width: 767px) { .hub { display: none; } header { flex-wrap: wrap; row-gap: 2px; padding-top: 4px; } header h1 { position: static; width: auto; height: auto; clip: auto; overflow: hidden; text-overflow: ellipsis; order: 0; flex: 1 1 0; min-width: 0; font-size: 16px; }
     .crumb { display: flex; order: 1; flex: none; gap: 2px; } .crumb a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; border-radius: 10px; color: var(--accent-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; border: 1.5px solid var(--border); background: var(--surface); }
@@ -289,7 +291,7 @@ const GORDER = ["azuma", "iriomote", "taketomi", "other"];
 const GNUMSORT = [];   // 系統番号の順に並べるグループ
 const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
 const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
-const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], stops: [], g: GROUP(r[0]) }));
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
 stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
 routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; r.set = new Set(r.stops); });
 const routeLabel = r => r.name;
@@ -531,6 +533,13 @@ function drawRings() {
     s.m.bringToFront(); });
 }
 map.on("zoomend", paint);
+// ---- この地図の範囲(設計 D-2)：ズーム12以下の時だけ、データの範囲を破線の長方形で示す(これより外の停留所・系統は載っていない) ----
+const EXT = [24.24, 123.72, 24.62, 124.35];   // [緯度小, 経度小, 緯度大, 経度大]
+const extRect = L.rectangle([[EXT[0], EXT[1]], [EXT[2], EXT[3]]], { interactive: false, dashArray: "6 6", weight: 2, opacity: .7, fill: false });
+const extTip = L.circleMarker([EXT[2], (EXT[1] + EXT[3]) / 2], { radius: 0, opacity: 0, fill: false, interactive: false }).bindTooltip("この地図の範囲", { permanent: true, direction: "bottom", className: "extlbl", interactive: false });
+const extLayer = L.layerGroup([extRect, extTip]);
+const syncExtent = () => { const on = map.getZoom() <= 12; if (on) extRect.setStyle({ color: css("ink") }); if (on && !map.hasLayer(extLayer)) extLayer.addTo(map); else if (!on && map.hasLayer(extLayer)) map.removeLayer(extLayer); };
+map.on("zoomend", syncExtent); syncExtent(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncExtent);
 // 選択中のバス停（地図・一覧で共通）を差し替える。点の再描画は変わった分だけ
 function setCur(list, scroll = true) {
   const old = curStops; curStops = list || [];
@@ -550,6 +559,7 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・地名・施設の位置：<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地名検索</a>と<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors（ODbL）</a>の情報を突き合わせて作成した目安です（OSM由来の位置情報を含みます。出入口などの正確な位置ではありません）<br>・町名（石垣市・八重山郡竹富町（西表島・竹富島））：<a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">政府統計の総合窓口（e-Stat）『令和2年国勢調査 小地域（町丁・字等）境界データ』</a>を加工して作成。町名ごとの代表地点（面積の重心）で、読み仮名では探せません（漢字・かなの表記で検索）<br>
 ・竹富町のバス停は西表島（24か所）と竹富島（8か所）のみです。小浜島・黒島・波照間島・鳩間島と与那国町のバス停は元データにありません<br>・西表島交通には夏期臨時便の系統が含まれています<br>・八重山に鉄道はないため、「駅から探す」はありません<br>・竹富町役場は石垣市内（石垣港の近く）にあります<br>・東運輸の公式サイトは証明書の都合で http で載せています<br>
 ・この地図に含まれる市町村（2）：石垣市・竹富町。<br>
+・この地図の範囲：おおよそ北緯24.24〜24.62・東経123.72〜124.35（石垣市・竹富町）。範囲の外の停留所・系統は載せていません。範囲の中でも、となりの地図に載せている市町村のバス停は、この地図には入れていません。<br>
 ${HASSPOT ? `・観光地・店舗の位置：国土地理院・OSM・Wikipediaの情報を突き合わせた所在地の目安です（掲載時点：2026-11-01）。店舗は閉店・移転・休業することがあります。本ページは掲載の店舗・施設とは無関係で、宣伝ではありません。「外国人に人気」は、訪日ラボのランキングや英語のガイドへの掲載などを根拠にした非公式の目安です<br>` : ""}
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図・淡色地図・全国最新写真（シームレス））</a>。写真は、撮影時期が場所によって異なり、現在の様子と違うことがあります<br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
@@ -738,9 +748,9 @@ function showRoute(r) {
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
   const back = lastStop ? `← ${esc(lastStop.name)}にもどる` : "← もどる";
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
-  <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span><span>データ上の停留所 <b>${r.n}</b>か所</span></div>
+  <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">停留所一覧（位置からの推定順）</div>
-  <p class="tip">※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。${r.total ? "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。" : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="停留所を順に見る（推定順）"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="地図の点に推定順の番号を出す">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);
