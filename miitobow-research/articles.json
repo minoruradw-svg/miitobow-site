@@ -795,5 +795,16 @@
     "url": "https://miitobow.com/articles/research-skillet",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-skillet/theme.png"
+  },
+  {
+    "id": "campcoffee",
+    "title": "キャンプ用コーヒー器具",
+    "category": "camp",
+    "model": "campcoffee",
+    "summary": "21候補を調査して選ぶ5商品",
+    "content": "折りたたみドリッパー・パーコレーター・手挽きミル・エアロプレス・携帯エスプレッソまで、キャンプコーヒーの器具21候補を調査。使い方が重複しない5商品を、向き不向きと低評価つきで比較しました。",
+    "url": "https://miitobow.com/articles/research-campcoffee",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-campcoffee/theme.png"
   }
 ]
