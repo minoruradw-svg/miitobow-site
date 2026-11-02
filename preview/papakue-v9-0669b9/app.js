@@ -62,7 +62,7 @@
     const so = screenEl.offsetTop, sl = screenEl.offsetLeft;                      // 画面(.screen)のスマホ内位置
     G.sq = { x: sl + sendQ.offsetLeft + sendQ.offsetWidth / 2 - PW / 2, y: so + sendQ.offsetTop + sendQ.offsetHeight / 2 - PH / 2, w: sendQ.offsetWidth, h: sendQ.offsetHeight };
     { const rq = $("recvQ"); G.rq = { x: sl + rq.offsetLeft + rq.offsetWidth / 2 - PW / 2, y: so + rq.offsetTop + rq.offsetHeight / 2 - PH / 2 }; }
-    { sheet.style.transform = 'none'; const c = $("car"); G.car = { x: sl + sheet.offsetLeft + c.offsetLeft + c.offsetWidth / 2 - PW / 2, y: so + sheet.offsetTop + c.offsetTop + c.offsetHeight / 2 - PH / 2 }; sheet.style.transform = ''; }
+    { sheet.style.display = ''; sheet.style.transform = 'none'; const c = $("car"); G.car = { x: sl + sheet.offsetLeft + c.offsetLeft + c.offsetWidth / 2 - PW / 2, y: so + sheet.offsetTop + c.offsetTop + c.offsetHeight / 2 - PH / 2 }; sheet.style.transform = ''; }
     G.wg = { x: G.sx0 + .74 * G.scrW - PW / 2, y: G.sx0 + .31 * G.scrH - PH / 2 };
     G.ig = { x: G.sx0 + .40 * G.scrW - PW / 2, y: G.sx0 + .562 * G.scrH - PH / 2 };
     const sz = M ? 480 : 720; if (cf.width !== sz) { cf.width = cf.height = sz; cfLast = -1; }
@@ -280,7 +280,7 @@
     const askIn = sm(seg(p5, .42, .47)), up = io5(seg(p5, .50, .57)), down = io5(seg(p5, .76, .80)), shW = up * (1 - down);
     thxBtnEl.style.opacity = String(askIn * (1 - sm(seg(p5, .50, .52)))); thxBtnEl.classList.toggle("on", p5 > .485 && p5 < .505);
     askRip.style.opacity = String(Math.sin(seg(p5, .475, .51) * Math.PI)); askRip.style.transform = `scale(${.4 + 1.2 * seg(p5, .475, .51)})`;
-    sheet.style.transform = `translateY(${(1 - shW) * 103}%)`;
+    sheet.style.display = shW > .002 ? "" : "none"; sheet.style.transform = `translateY(${(1 - shW) * 103}%)`;   // 出番以外は描かない
     const pg = io3(seg(p5, .60, .68)); car0.style.transform = `translateX(${-pg * 11}em) scale(${lerp(1, .66, pg)})`; car0.style.opacity = String(lerp(1, .5, pg));
     car1.style.transform = `translateX(${(1 - pg) * 11}em) scale(${lerp(.66, 1, pg)})`; car1.style.opacity = String(lerp(.5, 1, pg)); setText(curl, pg > .5 ? "ありがとう" : "いいね");
     nchips.children[1].classList.toggle("on", p5 > .69); sbtn.classList.toggle("on", p5 > .735 && p5 < .765);

@@ -510,7 +510,7 @@ img { height: auto; }   /* 幅だけ指定した画像が、属性の高さで�
 .dbox:not(.opened) .dstage { height: 36px; }
 @media (min-width: 1000px) { .dbox.opened .dstage { height: 460px; } }
 @media (prefers-reduced-motion: reduce) { .dbox.opened:not(.done) #dok:not(:disabled) { animation: none; box-shadow: 0 0 0 4px rgba(201,166,74,.55); } }
-.qc.pop { z-index: 2; will-change: auto; } .qc .bt i.on { transform: scale(.92); background: #c7a94a; }
+.qc.pop { z-index: 2; will-change: auto; filter: drop-shadow(0 8px 14px rgba(31,34,35,.22)); } .qc .bt i.on { transform: scale(.92); background: #c7a94a; }
 .status.okb.on { box-shadow: 0 0 0 4px rgba(214,189,123,.5); }
 .s4bar { display: flex; position: fixed; left: var(--gx); top: calc(50% + 70px); z-index: 5; opacity: 0; pointer-events: none; } .s4bar .s4steps { margin: 0; }
 @media (max-width: 999px) { .s4bar { display: flex; position: fixed; left: 0; right: 0; top: 56px; justify-content: center; padding: 8px 0 12px; z-index: 5; background: linear-gradient(#fff 70%, rgba(255,255,255,0)); opacity: 0; pointer-events: none; } .s4bar .s4steps { margin: 0; } }
