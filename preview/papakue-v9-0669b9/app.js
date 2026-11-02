@@ -93,7 +93,7 @@
     o.lpar = .55 * sm(seg(p, 0, .5)) * (1 - sm(seg(p, .88, 1))); o.ca = 1 - sm(seg(p, .84, .93)); return o; }
   function DEMO() { const o = S2(1); o.p1op = 0; o.ca = 0; o.lpar = 0; return o; }
   function base3() { return M ? camFor(.5 * W, yPhone("s3", .92, 26), 1, 0, 0) : camFor(G.XL, .5 * H, 1, 0, 0); }
-  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, 0, 0) : camFor(.64 * W, .5 * H + 32, 1, 0, 0); }
+  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, 0, 0) : camFor(.64 * W, .5 * H + 32, 1, 0, 0); }
   function S3(p) { const o = base3 && base(), s = M ? .92 : 1.10, s1 = lerp(s, G.s4, sm(seg(p, .86, 1)));
     const A = base3(); let B, C;
     if (M) { const csM = clamp((H - MB.s3 - 24) / (PH * s), 1.0, 1.3), camM = { cx: 0, cy: -PH * s / 2 - (MB.s3 + 12 - H / 2) / csM, cs: csM, cr: 0 }; B = camM; C = camM; }
@@ -106,7 +106,7 @@
     const c = M ? { x: a.x + 110, y: (a.y + b.y) / 2 } : { x: (a.x + b.x) / 2, y: a.y - 390 }; return [a, c, b]; }
   const bez = (P, e) => { const k = 1 - e; return { x: k * k * P[0].x + 2 * k * e * P[1].x + e * e * P[2].x, y: k * k * P[0].y + 2 * k * e * P[1].y + e * e * P[2].y }; };
   const bezT = (P, e) => { const k = 1 - e; return Math.atan2(2 * k * (P[1].y - P[0].y) + 2 * e * (P[2].y - P[1].y), 2 * k * (P[1].x - P[0].x) + 2 * e * (P[2].x - P[1].x)); };
-  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 54), 1, G.P2x, G.P2y) : camFor(.64 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
+  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, G.P2x, G.P2y) : camFor(.64 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
   function S4(p) { const o = base(), A = base4(), D = camD(), P = flightPts(), e = io5(seg(p, .32, .64)), ec = io5(seg(p, .35, .66));
     let cx = lerp(A.cx, D.cx, ec), cy = lerp(A.cy, D.cy, ec), cs = 1, cr = 0; const B = bez(P, e);
     if (!M) cy = lerp(A.cy, D.cy, 0) + (B.y - P[0].y) * .35 * (e > 0 && e < 1 ? 1 : (e >= 1 ? 1 : 0)); else cx = (B.x - P[0].x) * .4 * bell(e);
@@ -254,10 +254,11 @@
     const tg = true;
     tag1.style.opacity = String(tg ? sm(seg(p4, 0, .08)) * (1 - sm(seg(p4, .26, .32))) * (p5 === 0 ? 1 : 0) * (scrollY > tops[IDX.s4] - H * .5 ? 1 : 0) : 0);
     tag2.style.opacity = String(tg ? sm(seg(p4, .60, .68)) * (1 - sm(seg(p5, .04, .10))) : 0);
-    tag1.style.transform = `translate3d(${0}px,${-PH * s / 2 - (M ? 28 : 34) - 8 * (1 - o4(seg(p4, 0, .08)))}px,0) translateX(-50%)`; tag2.style.transform = `translate3d(${G.P2x}px,${G.P2y - PH * s / 2 - (M ? 28 : 34)}px,0) translateX(-50%)`;
+    tag1.style.transform = `translate3d(${0}px,${-PH * s / 2 - 48 - 8 * (1 - o4(seg(p4, 0, .08)))}px,0) translateX(-50%)`; tag2.style.transform = `translate3d(${G.P2x}px,${G.P2y - PH * s / 2 - 48}px,0) translateX(-50%)`;
     const st4 = p4 < .30 ? 0 : p4 < .80 ? 1 : 2;
     if (st4 !== lastSt4) { lastSt4 = st4; [s4steps, s4barSteps].forEach(ol => [...ol.children].forEach((li, i) => { li.className = i === st4 ? "on" : (i < st4 ? "done" : ""); })); }
-    s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
+    if (M) { updateCaps(p4, s4Vis); s4bar.style.opacity = String(s4Vis * (p5 === 0 ? 1 : 0)); s4bar.style.top = (MB.s4 - 8) + "px"; }
+    else s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
     setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「了解」して、受けてもらえた");
     // ---- S5：CLEARハンコ→紙吹雪→ありがとうスタンプ ----
     const Sp = stampPos(), sz = M ? 150 : 190, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
@@ -300,11 +301,12 @@
     // ---- 章テキストの出入り ----
     chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
       let a = sm(clamp((scrollY - tops[i] + H * .14) / (H * .14))), out = ids[i] === 's5' ? 1 - sm(seg(p, .97, 1)) : ids[i] === 's3' ? 1 - sm(seg(p, .86, .91)) : 1 - sm(seg(p, .93, 1));
-      if (ids[i] === 's4') a *= 1 - .98 * sm(seg(p, .24, .30)) * (1 - sm(seg(p, .68, .74)));
+      if (ids[i] === 's4') { s4Vis = a * out; a *= 1 - .98 * sm(seg(p, .24, .30)) * (M ? 1 : 1 - sm(seg(p, .68, .74))); }
       if (ids[i] === 's5') { const q = w5(p); a *= q < .43 ? sm(seg(q, .21, .26)) * (1 - sm(seg(q, .33, .38))) : Math.min(sm(seg(q, .47, .52)), 1 - .98 * sm(seg(q, .76, .80)) * (1 - sm(seg(q, .915, .94)))); const sa = $('s5a'), sb = $('s5b'); sa.style.display = q < .43 ? '' : 'none'; sb.style.display = q < .43 ? 'none' : ''; }
       c.style.setProperty("--vis", (a * out).toFixed(3)); });
   }
   let s5Greeted = false;
+  if (!RM) $$(".card h2").forEach(h2 => { let n = 0; h2.setAttribute("aria-label", h2.textContent); [...h2.childNodes].forEach(nd => { if (nd.nodeType !== 3) return; const f = document.createDocumentFragment(); [...nd.textContent].forEach(ch => { const s = document.createElement("span"); s.className = "ch" + (ch === " " ? " sp" : ""); s.setAttribute("aria-hidden", "true"); s.style.setProperty("--i", n++); s.textContent = ch === " " ? "\u00a0" : ch; f.appendChild(s); }); nd.replaceWith(f); }); });
 
   /* ---------- 登場（FV・時間駆動） ---------- */
   const letters = $$("#pp .c");
@@ -335,6 +337,16 @@
   }
 
   /* ---------- 体験デモ ---------- */
+  const CAPS = [["あなた", "が、", "お願い", "を送る"], ["相手の画面", "に、", "届く", ""], ["相手が", "「", "了解", "」。受けてもらえた"]];
+  let capEls = null, s4Vis = 0;
+  function buildCaps() { const box = $("capstack"); if (!box || capEls) return; capEls = CAPS.map(([a1, a2, k, a3]) => { const d = document.createElement("div"); d.className = "cl"; d.innerHTML = `${a1}${a2}<span class="mk">${k}</span>${a3}`; box.appendChild(d); return d; }); }
+  const expo = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * clamp(x));
+  function updateCaps(p4, vis) {
+    buildCaps(); const e1 = expo(seg(p4, .26, .36)), e2 = expo(seg(p4, .76, .86));
+    capEls.forEach((el, i) => { const enter = i === 0 ? expo(vis) : i === 1 ? e1 : e2, depth = i === 0 ? e1 + e2 : i === 1 ? e2 : 0;
+      el.style.transform = `translateY(${((1 - enter) * 36 - depth * 30).toFixed(1)}px) scale(${Math.pow(.76, depth).toFixed(3)})`;
+      el.style.opacity = (clamp(enter * 1.4) * clamp(1.9 - depth) * Math.max(.35, 1 - .62 * depth)).toFixed(3);
+      el.style.color = depth > .5 ? "#7d857f" : "#1f2223"; el.style.setProperty("--mk", (enter * (1 - clamp(depth * 1.4))).toFixed(3)); }); }
   let lastSt4 = -1; const dtxt = $("dtxt");
   const dcard = $("dcard"), dname = $("dname"), dok = $("dok"), dstamp = $("dstamp"), dreset = $("dreset"), dinput = $("dinput");
   let dState = 0;
