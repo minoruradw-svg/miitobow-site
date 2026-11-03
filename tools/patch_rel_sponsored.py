@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-"""記事HTML内の Amazon アフィリエイトリンク（<a ... amazon.co.jp ...>）の rel に sponsored を足す。
+"""記事HTML内の Amazon アフィリエイトリンク（<a ... amazon.co.jp ... tag=...>）の rel に sponsored を足す。
 
 方針（2026-11-03 承認）:
+  - 対象は affiliate tag（tag=）付きの amazon.co.jp リンクだけ。tag の無い Amazon リンク（商品レビューページへの参照）は広告ではないので触らない。
   - 変えるのは rel 属性の値だけ。既存のトークン（noopener / noreferrer / nofollow など）は削除せず、末尾に ` sponsored` を足す。
   - href・tag・ASIN・class・target・属性の順序・改行コード（CRLF/LF）・その他のバイトは変えない。
   - 既に sponsored があれば何もしない（何度実行しても同じ結果＝冪等）。
@@ -27,7 +28,9 @@ HREF_RE = re.compile(rb"""\bhref=(["'])(.*?)\1""", re.I)
 
 
 def is_amazon(tag):
-    return b"amazon.co.jp" in tag
+    """アフィリエイトリンク＝amazon.co.jp 宛てで affiliate tag（tag=）が付いているもの。
+    tag の無い Amazon リンク（商品レビューページへの参照リンクなど）は広告ではないので対象外。"""
+    return b"amazon.co.jp" in tag and b"tag=" in tag
 
 
 def fix_tag(tag):
