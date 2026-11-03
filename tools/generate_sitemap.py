@@ -128,13 +128,15 @@ def collect_urls():
             priority = "0.9"
         add(f"/articles/{slug}", rel_file, priority)
 
-    # 同じURLを2回出さない（深さのパターンが重なった場合の保険）
+    # 同じURLを2回出さない（深さのパターンが重なった場合の保険）。
+    # 既にサイトマップにあるURLの priority は、手で調整された値を尊重して変えない。
+    keep = current_priorities()
     seen, uniq = set(), []
-    for u in urls:
-        if u[0] in seen:
+    for loc, lastmod, priority in urls:
+        if loc in seen:
             continue
-        seen.add(u[0])
-        uniq.append(u)
+        seen.add(loc)
+        uniq.append((loc, lastmod, keep.get(loc, priority)))
     return uniq, skipped
 
 
@@ -150,6 +152,15 @@ def build_xml(urls):
         lines.append("  </url>")
     lines.append("</urlset>")
     return "\n".join(lines) + "\n"
+
+
+def current_priorities():
+    """現在の sitemap.xml の {URL: priority}。"""
+    try:
+        with open(SITEMAP, encoding="utf-8") as f:
+            return dict(re.findall(r"<loc>(.*?)</loc>\s*(?:<lastmod>.*?</lastmod>\s*)?<priority>(.*?)</priority>", f.read()))
+    except OSError:
+        return {}
 
 
 def current_locs():
