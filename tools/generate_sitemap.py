@@ -10,12 +10,24 @@
   2. <meta name="robots"> に noindex を含むページは入らない。
   3. EXCLUDED に理由つきで書いたページは入らない。
 
+lastmod の決め方（2026-11-03・実質的な内容の更新だけを反映する）:
+  - 調査記事（articles/research-*.html）: 「本文テキスト＋title＋description」が最後に変わったコミットの日付。
+    rel属性・href・class・CSS・JS・画像パスだけの変更（形式的な変更）と、サイト共通の「こんな記事も書いてます」ブロックの
+    変更では動かない。既にサイトマップにある日付より古い／同じなら、既存の日付を維持する（再生成しても変わらない）。
+  - それ以外のページ（トップ・バスマップ・LINEスタンプ記事など）: 共通のナビ・フッター等の変更と内容の更新を機械的に
+    区別できないので、既にサイトマップにある日付をそのまま維持する。新規に追加するページは lastmod を省略する。
+    内容を実際に更新した時は `--touch /URLパス ...` でそのURLの lastmod を今日にする（意図して更新を宣言する）。
+
 使い方:
-  python tools/generate_sitemap.py          # sitemap.xml を再生成する
-  python tools/generate_sitemap.py --check  # ファイルは書かず、現在の sitemap.xml と「あるべき内容」を比べる。
-                                            # 差があれば差分を表示して終了コード1（デプロイ前チェック用）
+  python tools/generate_sitemap.py                   # sitemap.xml を再生成する
+  python tools/generate_sitemap.py --touch /bus/     # 指定URLの lastmod を今日にして再生成（内容を更新した時）
+  python tools/generate_sitemap.py --check           # ファイルは書かず、現在の sitemap.xml と「あるべき内容」を比べる。
+                                                     # URLの過不足・lastmodの古さがあれば差分を表示して終了コード1（デプロイ前チェック用）
 """
+import datetime
 import glob
+import hashlib
+import html
 import os
 import re
 import subprocess
@@ -76,23 +88,69 @@ def is_noindex(rel_file):
         return False
 
 
-def git_lastmod(path):
-    """git の最終コミット日付をlastmodに使う（無ければファイルのmtime）。"""
+# サイト共通の「こんな記事も書いてます」ブロック（旧：リンク1本のリスト／新：関連記事カード5枚＋調査部屋リンク）。本文ではないので指紋から外す。
+_RELATED_RE = re.compile(
+    r"<h2>こんな記事も書いてます</h2>\s*(?:<ul class=\"related-list\">.*?</ul>|<div class=\"related-grid\">.*?class=\"related-hub-link\".*?</a>)", re.S)
+
+
+def content_signature(data, article=True):
+    """本文テキスト＋title＋description の指紋。形式的な変更（属性・CSS・JS・共通の関連記事ブロック）は含めない。"""
+    t = data.decode("utf-8", "replace")
+    title = (re.search(r"<title[^>]*>(.*?)</title>", t, re.S | re.I) or [None, ""])[1]
+    desc = (re.search(r"""<meta[^>]+name=["']description["'][^>]*content=["'](.*?)["']""", t, re.S | re.I) or [None, ""])[1]
+    if article:
+        t = _RELATED_RE.sub(" ", t)
+    t = re.sub(r"<!--.*?-->|<script.*?</script>|<style.*?</style>", " ", t, flags=re.S | re.I)
+    t = html.unescape(re.sub(r"<[^>]+>", " ", t))
+    t = re.sub(r"\s+", "", t)
+    return hashlib.sha1((title + "|" + desc + "|" + t).encode("utf-8")).hexdigest()
+
+
+def content_lastmod(path):
+    """そのファイルの『本文の指紋』が最後に変わったコミットの日付（無ければ None）。"""
+    log = subprocess.run(["git", "log", "--format=%H %cs", "--", path], cwd=ROOT, capture_output=True, text=True).stdout
+    prev, last = None, None
+    for line in reversed([l.split() for l in log.splitlines() if l.strip()]):
+        sha, day = line
+        blob = subprocess.run(["git", "show", f"{sha}:{path}"], cwd=ROOT, capture_output=True).stdout
+        sig = content_signature(blob)
+        if sig != prev:
+            last = day
+        prev = sig
+    return last
+
+
+def current_lastmods():
+    """現在の sitemap.xml の {URL: lastmod}（lastmod が無いURLは載せない）。"""
     try:
-        out = subprocess.run(
-            ["git", "log", "-1", "--format=%cs", "--", path],
-            cwd=ROOT, capture_output=True, text=True, check=True,
-        ).stdout.strip()
-        if out:
-            return out
-    except Exception:
-        pass
-    return None
+        with open(SITEMAP, encoding="utf-8") as f:
+            items = re.findall(r"<url>(.*?)</url>", f.read(), re.S)
+    except OSError:
+        return {}
+    out = {}
+    for it in items:
+        loc = re.search(r"<loc>(.*?)</loc>", it)
+        lm = re.search(r"<lastmod>(.*?)</lastmod>", it)
+        if loc and lm:
+            out[loc.group(1)] = lm.group(1)
+    return out
 
 
-def collect_urls():
+def decide_lastmod(loc, rel_file, prev, touch):
+    if loc in touch:
+        return datetime.date.today().isoformat()
+    if os.path.basename(rel_file).startswith("research-") and rel_file.startswith("articles/"):
+        day = content_lastmod(rel_file)
+        if loc in prev and (not day or day <= prev[loc]):
+            return prev[loc]
+        return day
+    return prev.get(loc)   # 既存は維持。新規の非記事ページは省略（None）
+
+
+def collect_urls(touch=()):
     """(loc, lastmod, priority) のリストと、除外したもの [(相対パス, 理由)] を返す。"""
     tracked = tracked_files()
+    prev = current_lastmods()
     urls = []
     skipped = []
 
@@ -105,7 +163,7 @@ def collect_urls():
         elif is_noindex(rel_file):
             skipped.append((rel_file, "noindex"))
         else:
-            urls.append((SITE + url_path, git_lastmod(rel_file), priority))
+            urls.append((SITE + url_path, decide_lastmod(SITE + url_path, rel_file, prev, set(touch)), priority))
 
     for url_path, rel_file, priority in STATIC_PAGES:
         if os.path.exists(os.path.join(ROOT, rel_file)):
@@ -171,8 +229,15 @@ def current_locs():
         return []
 
 
+NL = chr(10)
+
+
+def _lines(head, items):
+    return head + NL + NL.join("  " + x for x in items)
+
+
 def check():
-    """現在の sitemap.xml が「あるべき内容」と同じURL集合か。違えば差分を出して1を返す。"""
+    """現在の sitemap.xml が「あるべき内容」と同じか。URLの過不足・lastmodの古さがあれば差分を出して1を返す。"""
     urls, skipped = collect_urls()
     want = [u[0] for u in urls]
     have = current_locs()
@@ -183,21 +248,35 @@ def check():
     missing = sorted(set(want) - set(have))
     extra = sorted(set(have) - set(want))
     if missing:
-        problems.append(f"sitemap.xml に載っていない公開ページが {len(missing)} 件ある（再生成が必要）:\n  " + "\n  ".join(missing))
+        problems.append(_lines(f"sitemap.xml に載っていない公開ページが {len(missing)} 件ある（再生成が必要）:", missing))
     if extra:
-        problems.append(f"sitemap.xml に載っているが、あるべき内容に無いURLが {len(extra)} 件ある（未コミット・noindex・除外リスト・ファイル無しのいずれか）:\n  " + "\n  ".join(extra))
+        problems.append(_lines(f"sitemap.xml に載っているが、あるべき内容に無いURLが {len(extra)} 件ある（未コミット・noindex・除外リスト・ファイル無しのいずれか）:", extra))
+    prev = current_lastmods()
+    stale = sorted(f"{loc}  現在={prev.get(loc)} → あるべき={lm}" for loc, lm, _ in urls if loc in have and lm != prev.get(loc))
+    if stale:
+        problems.append(_lines(f"本文が更新されたのに lastmod が古い（または不要）ページが {len(stale)} 件ある:", stale))
     if problems:
         print("NG: sitemap.xml が最新ではありません。`python tools/generate_sitemap.py` で再生成してください。")
-        print("\n".join(problems))
+        print(NL.join(problems))
         return 1
-    print(f"OK: sitemap.xml はあるべき内容と一致（{len(have)} URL、除外 {len(skipped)} 件）")
+    print(f"OK: sitemap.xml はあるべき内容と一致（{len(have)} URL、lastmodも一致、除外 {len(skipped)} 件）")
     return 0
 
 
 def main():
-    if "--check" in sys.argv[1:]:
+    args = sys.argv[1:]
+    if "--check" in args:
         sys.exit(check())
-    urls, skipped = collect_urls()
+    touch = []
+    if "--touch" in args:
+        for a in args[args.index("--touch") + 1:]:
+            if a.startswith("--"):
+                break
+            touch.append(SITE + (a if a.startswith("/") else "/" + a))
+    urls, skipped = collect_urls(touch)
+    unknown = [u for u in touch if u not in {x[0] for x in urls}]
+    if unknown:
+        print("警告: --touch に指定されたURLがサイトマップの対象に無い:", unknown)
     xml = build_xml(urls)
     with open(SITEMAP, "w", encoding="utf-8", newline="") as f:
         f.write(xml)
