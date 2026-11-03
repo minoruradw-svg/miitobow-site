@@ -16,11 +16,12 @@ lastmod の決め方（2026-11-03・実質的な内容の更新だけを反映�
     変更では動かない。既にサイトマップにある日付より古い／同じなら、既存の日付を維持する（再生成しても変わらない）。
   - それ以外のページ（トップ・バスマップ・LINEスタンプ記事など）: 共通のナビ・フッター等の変更と内容の更新を機械的に
     区別できないので、既にサイトマップにある日付をそのまま維持する。新規に追加するページは lastmod を省略する。
-    内容を実際に更新した時は `--touch /URLパス ...` でそのURLの lastmod を今日にする（意図して更新を宣言する）。
+    内容を実際に更新した時は `--touch URLパス ...` でそのURLの lastmod を今日にする（意図して更新を宣言する）。
 
 使い方:
   python tools/generate_sitemap.py                   # sitemap.xml を再生成する
-  python tools/generate_sitemap.py --touch /bus/     # 指定URLの lastmod を今日にして再生成（内容を更新した時）
+  python tools/generate_sitemap.py --touch bus/      # 指定URLの lastmod を今日にして再生成（内容を更新した時）。
+                                                     # Git Bash では先頭の / がパスに変換されるので `bus/` のように / を付けずに書く（完全なURLでも可）
   python tools/generate_sitemap.py --check           # ファイルは書かず、現在の sitemap.xml と「あるべき内容」を比べる。
                                                      # URLの過不足・lastmodの古さがあれば差分を表示して終了コード1（デプロイ前チェック用）
 """
@@ -195,6 +196,9 @@ def collect_urls(touch=()):
             continue
         seen.add(loc)
         uniq.append((loc, lastmod, keep.get(loc, priority)))
+    # 並び順は現在の sitemap.xml の順を保つ（新しいURLは末尾）。再生成しても差分が最小になる。
+    pos = {loc: i for i, loc in enumerate(current_locs())}
+    uniq.sort(key=lambda u: pos.get(u[0], len(pos)))   # sort は安定なので、新URL同士は生成順のまま
     return uniq, skipped
 
 
@@ -272,7 +276,7 @@ def main():
         for a in args[args.index("--touch") + 1:]:
             if a.startswith("--"):
                 break
-            touch.append(SITE + (a if a.startswith("/") else "/" + a))
+            touch.append(a if a.startswith("http") else SITE + (a if a.startswith("/") else "/" + a))
     urls, skipped = collect_urls(touch)
     unknown = [u for u in touch if u not in {x[0] for x in urls}]
     if unknown:
