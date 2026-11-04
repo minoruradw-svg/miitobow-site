@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sado Bus Map | miitobow</title>
+<meta name="description" content="Unofficial map of bus stops and routes in Sado. 413 bus stops and 14 routes (FY2022 data).">
+<link rel="canonical" href="https://miitobow.com/bus/en/niigata/sado/">
+<link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/niigata/sado/">
+<link rel="alternate" hreflang="en" href="https://miitobow.com/bus/en/niigata/sado/">
+<link rel="alternate" hreflang="x-default" href="https://miitobow.com/bus/niigata/sado/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sado Bus Map | miitobow">
+<meta property="og:description" content="Unofficial map of bus stops and routes in Sado. 413 bus stops and 14 routes (FY2022 data).">
+<meta property="og:url" content="https://miitobow.com/bus/en/niigata/sado/">
+<link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://miitobow.com/bus/assets/og-niigata-sado.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sado Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
+<style>
+  :root {
+    --bg: #f6f9f4; --surface: #ffffff; --surface-soft: #eef3ea;
+    --ink: #1f2b20; --ink-soft: #55655a; --ink-faint: #5f6e5c;
+    /* 文字・リンクは濃い緑（コントラスト確保）。ブランドの #6fae2f は枠・塗り・選択状態にだけ使う */
+    --accent-dark: #3a5d22; --brand: #6fae2f; --brand-soft: rgba(111,174,47,.18);
+    --border: #dde6d8; --op1: #2f8a4e; --other: #5a7fa8;
+    --hdr: 60px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+      --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #8c9c88;
+      --accent-dark: #b4e68f; --brand: #82c455; --brand-soft: rgba(130,196,85,.22);
+      --border: #2b3625; --op1: #5fc080; --other: #86a9d0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overscroll-behavior: none; }
+  @supports (height: 100dvh) { html, body { height: 100dvh; } }
+  body { background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
+    font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif; -webkit-font-smoothing: antialiased; }
+  .head { font-family: "M PLUS Rounded 1c","Hiragino Sans",sans-serif; font-weight: 900; letter-spacing: .02em; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+
+  /* ---- ヘッダー ---- */
+  header { position: relative; z-index: 1300; min-height: var(--hdr); padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+    padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  header h1 { margin: 0; font-size: 18px; color: var(--accent-dark); white-space: nowrap; }
+  .searchwrap { position: relative; flex: 1 1 260px; max-width: 460px; }
+  #q { width: 100%; height: 42px; padding: 0 44px 0 14px; font-size: 16px; border: 2px solid var(--border); border-radius: 12px;
+    background: var(--surface-soft); color: var(--ink); -webkit-appearance: none; appearance: none; }
+  #q::-webkit-search-cancel-button { display: none; }
+  #q:focus { border-color: var(--brand); outline: none; background: var(--surface); box-shadow: 0 0 0 3px var(--brand-soft); }
+  #qclear { position: absolute; right: 2px; top: 0; width: 42px; height: 42px; border: 0; background: none; color: var(--ink-soft);
+    font-size: 22px; line-height: 1; cursor: pointer; border-radius: 12px; }
+  #qclear[hidden] { display: none; }
+  #qclear:hover { color: var(--ink); background: var(--brand-soft); }
+  #sug { position: absolute; z-index: 1400; left: 0; right: 0; top: calc(100% + 6px); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; max-height: min(60dvh, 440px); overflow: auto; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+    overscroll-behavior: contain; padding-bottom: 4px; }
+  #sug[hidden] { display: none; }
+  #sug .sh { position: sticky; top: 0; padding: 7px 14px 5px; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--accent-dark);
+    background: var(--surface-soft); border-bottom: 1px solid var(--border); }
+  #sug button { display: flex; width: 100%; min-height: 48px; text-align: left; gap: 10px; padding: 10px 14px; background: none; border: 0;
+    border-bottom: 1px solid var(--border); color: var(--ink); font-size: 15px; cursor: pointer; align-items: center; justify-content: space-between; }
+  #sug button:hover { background: var(--brand-soft); }
+  #sug button.act { background: var(--brand-soft); box-shadow: inset 4px 0 0 var(--brand); }
+  #sug small { color: var(--ink-soft); font-size: 12px; flex: 0 1 46%; max-width: 50%; text-align: right; line-height: 1.4; }
+  #sug button span { flex: 1 1 auto; min-width: 0; overflow-wrap: break-word; }
+  #sug .empty { padding: 16px 14px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+  #sug .empty b { color: var(--ink); }
+  #sug span .en { display: block; flex: none; max-width: 100%; text-align: left; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+  #sug .scats { display: flex; gap: 6px; padding: 8px 14px 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #sug .scats::-webkit-scrollbar { display: none; }
+  #sug .scats .scat { flex: none; width: auto; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  #sug .scats .scat small { flex: none; max-width: none; font-weight: 400; color: var(--ink-soft); margin: 0; text-align: left; }
+  #sug .scats .scat[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
+  #sug .more { color: var(--accent-dark); font-weight: 700; }
+  .enname { margin: -2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .rt .enm { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; }
+  .chips { display: flex; gap: 6px; flex-wrap: nowrap; font-size: 13px; }
+  .chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 44px; padding: 0 12px; border-radius: 999px;
+    border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; user-select: none; }
+  .chip i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .chip[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); font-weight: 700; }
+  .chip[aria-pressed="false"] { color: var(--ink-faint); }
+  .chip[aria-pressed="false"] i { opacity: .4; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .placepin span { display: block; width: 26px; height: 26px; margin: 3px; border-radius: 50% 50% 50% 0; background: var(--brand); border: 3px solid #1f2b20; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .placepin span::after { content: ""; position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+  .placetip { font-weight: 700; font-size: 13px; color: #1f2b20; background: #fff; border: 2px solid #1f2b20; border-radius: 8px; }
+  .tgl { margin-left: auto; min-height: 40px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .tgl:hover { border-color: var(--brand); background: var(--brand-soft); }
+
+  /* ---- 地図とパネル ---- */
+  main { flex: 1; position: relative; min-height: 0; display: flex; --cover: 0px; }
+  #map { flex: 1; min-width: 0; position: relative; }
+  .leaflet-container { font-family: inherit; }
+  .leaflet-bottom { bottom: var(--cover, 0px); }
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
+  /* 地図の種類の切り替え(右上)。ズームボタンと同じく、地図の上は明るい色で統一 */
+  .leaflet-top.leaflet-right { z-index: 1150; }   /* スマホでシートを最大にしても、メニューがシートの裏に隠れない(ヘッダー1300・検索候補1400より下) */
+  .basectl { position: relative; }
+  .basectl .bc-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 10px; font: 700 14px/1 "Hiragino Sans","Yu Gothic",system-ui,sans-serif; white-space: nowrap; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
+  .basectl .bc-btn:hover { background: #f4f4f4; }
+  .basectl .bc-btn:focus-visible, .basectl .bc-opt:focus-visible { outline: 3px solid #6fae2f; outline-offset: 2px; }
+  .bc-menu { position: absolute; right: 0; top: 50px; width: 246px; padding: 6px; border-radius: 12px; background: #fff; color: #1f2b20; border: 2px solid rgba(0,0,0,.2); box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+  .bc-menu[hidden] { display: none; }
+  .bc-opt { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+  .bc-opt:hover { background: #eef3ea; }
+  .bc-opt.on { background: rgba(111,174,47,.18); }
+  .bc-opt b { display: block; font-size: 15px; }
+  .bc-opt small { display: block; font-size: 12px; color: #55655a; line-height: 1.3; }
+  .bc-ck { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid #55655a; background: #fff; }
+  .bc-opt.on .bc-ck { border-color: #3a5d22; background: radial-gradient(circle, #3a5d22 0 45%, #fff 50%); }
+  #tilewarn { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px; border-radius: 12px; background: #fff4d6; color: #5a4300; border: 1px solid #e3c36a; font-size: 13px; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #tilewarn[hidden] { display: none; }
+  #tilewarn button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+
+  #panel { width: clamp(320px, 28vw, 400px); display: flex; flex-direction: column; background: var(--surface); border-left: 1px solid var(--border); min-height: 0; }
+  @media (min-width: 1024px) { #panel { width: clamp(360px, 26vw, 400px); } }
+  @media (min-width: 768px) { main.pclosed #panel { display: none; } }
+  .sheet-top { display: none; }
+  .pbody { flex: 1; min-height: 0; overflow: auto; padding: 14px 16px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
+  .pbody h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+  .pbody p { margin: 0 0 10px; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+  .meta .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); }
+  .meta .pill i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .meta b { color: var(--ink); }
+  .back { display: inline-flex; align-items: center; min-height: 44px; margin: -4px 0 8px -4px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .back:hover { border-color: var(--brand); background: var(--brand-soft); }
+  /* ホームへ一発で戻るボタン: PCはパネル内の「もどる」の隣、スマホはシート上部の右 */
+  .back, .homebtn { vertical-align: top; }   /* 『もどる』と『ホーム』の上端をそろえる(overflow:hiddenの『もどる』は、基準線が下に来て、ホームより低く並んでいた) */
+  .homebtn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -4px 0 8px 8px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .homebtn:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .homebtn svg { flex: none; }
+  .hometop { display: none; }
+  .nw { white-space: nowrap; }
+  #pbody h2:focus { outline: none; }
+  .lh { margin: 14px 0 4px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .tip { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+  .rt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 44px; text-align: left; margin: 0 0 6px; padding: 8px 12px; border-radius: 10px; font-size: 14px;
+    border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); cursor: pointer; }
+  .rt:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .rt small { color: var(--ink-soft); font-size: 12px; flex: none; }
+  .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 5px; margin: 6px 0 8px; padding: 6px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .rbar button { flex: 1 1 0; min-width: 44px; min-height: 44px; padding: 0 4px; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  @media (hover: hover) { .rbar button:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); } }   /* 指で押した後に「押されたまま」に見えないよう、カーソルのある端末だけ */
+  .rbar button:disabled { opacity: .4; cursor: default; }
+  .rbar button[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); }
+  .rbar button[aria-pressed="true"]::before { content: "✓ "; font-weight: 800; }   /* オンの目印(色だけに頼らない) */
+  .rbar #rPos { flex: none; min-width: 72px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .stnum { width: auto !important; min-width: 16px; padding: 0 4px; border: 1.5px solid #1f2b20; border-radius: 8px; background: rgba(255,255,255,.94); color: #1f2b20; font: 700 11px/13px system-ui, sans-serif; text-align: center; pointer-events: none; box-sizing: border-box; }
+  .stoplist { list-style: none; counter-reset: st; padding: 0; margin: 0; }
+  .stoplist li { counter-increment: st; display: flex; align-items: center; }
+  .stoplist li::before { content: counter(st); flex: none; width: 2.4em; text-align: right; padding-right: .7em; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .stoplist button { display: block; flex: 1; min-height: 44px; text-align: left; padding: 6px 10px; font-size: 14px; line-height: 1.4; color: var(--ink); background: none; border: 0; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; }
+  .stoplist button:hover, .stoplist button.hl { background: var(--brand-soft); }
+  .stoplist button.cur { background: var(--brand-soft); border-left-color: var(--brand); font-weight: 700; }
+  .warn { flex: none; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); font-size: 12.5px; line-height: 1.5; color: var(--ink); background: #fff7e0; border-top: 1px solid #ecd9a0; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .warn { background: #2b2610; border-top-color: #4b4217; } }
+  .warn a { color: var(--accent-dark); font-weight: 700; }
+  details.note { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 4px; font-size: 12px; line-height: 1.7; color: var(--ink-soft); }
+  details.note summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--accent-dark); }
+  details.note a { color: var(--accent-dark); }
+
+  /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
+  @media (max-width: 767px) {
+    header { flex-wrap: nowrap; gap: 6px; padding: 6px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+    header h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .tgl { display: none; }
+    .searchwrap { order: 0; flex: 1 1 auto; min-width: 0; max-width: none; }
+    #q { height: 44px; padding-left: 12px; }
+    #q:placeholder-shown { padding-right: 8px; }
+    #q::placeholder { font-size: 14px; }
+    #qclear { width: 44px; height: 44px; }
+    .chips { flex: none; margin-left: 0; gap: 4px; }
+    .chip { min-height: 44px; min-width: 44px; padding: 0 7px; gap: 3px; font-size: 13px; }
+    .chip .long { display: none; }
+    #panel { position: absolute; z-index: 1100; left: 0; right: 0; bottom: 0; width: auto; height: var(--sh, 40%); border-left: 0; border-top: 1px solid var(--border);
+      border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(0,0,0,.22); transition: height .22s ease; overflow: hidden; }
+    #panel.drag { transition: none; }
+    .sheet-top { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 3px; flex: none; width: 100%; min-height: 44px; padding: 6px 16px 2px;
+      border: 0; background: none; color: var(--ink); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border-radius: 18px 18px 0 0; }
+    .sheet-top .bar { width: 44px; height: 5px; border-radius: 3px; background: var(--brand); }
+    .sheet-top #psum { max-width: 100%; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #panel.min .pbody, #panel.min .warn { visibility: hidden; }
+    #panel.min .warn { display: none; }
+    .pbody { padding: 0 16px 10px; }
+    .back { float: right; margin: 0 0 0 8px; padding: 0 12px; min-height: 44px; max-width: 58%; }
+    .homebtn { display: none; }
+    .hometop { position: absolute; z-index: 3; top: 0; right: 6px; width: 60px; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px 0 0; border: 0; border-radius: 12px; background: none; color: var(--ink); cursor: pointer; font-size: 10.5px; font-weight: 700; line-height: 1.1; }
+    .hometop[hidden] { display: none; }
+    .hometop:active { background: var(--brand-soft); }
+    #panel.hashome .sheet-top #psum { max-width: calc(100% - 136px); }
+    #sug { position: fixed; left: 8px; right: 8px; top: 64px; }   /* 検索欄は狭いので、候補は画面幅いっぱいに出す(topはJSで補正) */
+    #sug button { flex-wrap: wrap; row-gap: 0; }
+    #sug small { flex: 1 1 100%; max-width: 100%; text-align: left; }
+    .pbody h2 { font-size: 18px; margin: 6px 0 4px; }
+    .meta { margin-bottom: 6px; }
+    .lh { margin-top: 8px; }
+    .grp { margin: 6px 0 4px; }
+    .rt { margin-bottom: 4px; }
+    .warn { white-space: nowrap; overflow: hidden; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
+  }
+  @media (max-width: 767px) and (max-height: 500px) { header h1 { display: none; } .searchwrap { order: 0; flex: 1 1 200px; } }
+  @media (min-width: 768px) { .chip .short { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .chip .long { display: none; } .chip .short { display: inline; } header h1 { font-size: 16px; } .tgl .tl { display: none; } .searchwrap { flex-basis: 200px; } .chip { padding: 0 9px; } }
+  .chip .tiny { display: none; }
+  @media (max-width: 359px) { .chip .short { display: none; } .chip .tiny { display: inline; } .chip { min-width: 44px; padding: 0 6px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  .hub { display: inline-flex; align-items: center; flex: none; min-height: 40px; padding: 0 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .hub:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .hub .ha { font-size: 18px; line-height: 1; }
+  a.rt { color: inherit; text-decoration: none; }
+  .leaflet-tooltip.extlbl { background: var(--surface); color: var(--ink); border: 1px solid var(--border); box-shadow: none; font-size: 12px; font-weight: 700; padding: 2px 8px; }
+  .leaflet-tooltip-bottom.extlbl::before { display: none; }
+  .crumb, .brk { display: none; }
+  @media (max-width: 767px) { .hub { display: none; } header { flex-wrap: wrap; row-gap: 2px; padding-top: 4px; } header h1 { position: static; width: auto; height: auto; clip: auto; overflow: hidden; text-overflow: ellipsis; order: 0; flex: 1 1 0; min-width: 0; font-size: 16px; }
+    .crumb { display: flex; order: 1; flex: none; gap: 2px; } .crumb a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; border-radius: 10px; color: var(--accent-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; border: 1.5px solid var(--border); background: var(--surface); }
+    .brk { display: block; order: 2; flex: 0 0 100%; height: 0; } .searchwrap { order: 3; } .chips { order: 4; } }
+  @media (max-width: 767px) and (max-height: 500px) { header h1, .crumb, .brk { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .hub .ht { display: none; } .hub { width: 44px; justify-content: center; padding: 0; } }
+  .lang { display: inline-flex; align-items: center; justify-content: center; flex: none; min-height: 40px; min-width: 44px; padding: 0 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .lang:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .lsp { display: none; }
+  @media (max-width: 767px) { .lpc { display: none; } .lsp { display: inline-flex; order: 1; min-height: 40px; padding: 0 9px; border-radius: 10px; border-width: 1.5px; font-size: 13px; } }
+  @media (max-width: 767px) and (max-height: 500px) { .lsp { display: none; } }
+  #langhint { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--surface); color: var(--ink); border: 2px solid var(--brand); font-size: 14px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #langhint a { color: var(--accent-dark); font-weight: 700; }
+  #langhint button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+  .ja { display: block; font-size: 13px; font-weight: 400; color: var(--ink-soft); line-height: 1.35; }
+  .ja.jm { font-size: inherit; color: inherit; font-weight: inherit; }
+  .pbody h2 .ja { font-size: 15px; font-weight: 700; margin-top: 2px; font-family: "Hiragino Sans","Yu Gothic",system-ui,sans-serif; letter-spacing: 0; }
+  .ap { font-style: normal; font-weight: 700; color: var(--ink-soft); margin-left: 3px; cursor: help; }
+  .stoplist button .ja { font-size: 12px; }
+  .rt > span { min-width: 0; }
+  #sug span .ja { font-size: 12px; }
+  .leaflet-tooltip .ja { display: inline; font-size: 12px; }
+  .meta .nw { white-space: normal; }
+  .rbar { gap: 4px; } .rbar button { font-size: 12px; padding: 0 3px; } .rbar #rAll { white-space: normal; line-height: 1.15; } .rbar #rPos { min-width: 0; font-size: 12px; }
+  header h1.cut .h1b { display: none; }
+  @media (max-width: 767px) { header h1 { font-size: 14.5px; letter-spacing: 0; } }
+  @media (max-width: 767px) { .warn { font-size: clamp(10px, 2.85vw, 12px); } }
+</style>
+</head>
+<body>
+<header>
+  <a class="hub" href="/bus/en/" aria-label="Go to the Bus Maps home (all maps)"><span class="ha" aria-hidden="true">‹</span><span class="ht"> All maps</span></a>
+  <a class="lang lpc" href="/bus/niigata/sado/" hreflang="ja" lang="ja" aria-label="日本語版">日本語</a>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/bus/en/">‹ Home</a><a href="/bus/en/niigata/">Niigata</a></nav><a class="lang lsp" href="/bus/niigata/sado/" hreflang="ja" lang="ja" aria-label="日本語版">日本語</a><span class="brk" aria-hidden="true"></span>
+  <h1 class="head"><span class="h1n" data-short="Sado">Sado</span><span class="h1b"> Bus Map</span></h1>
+  <div class="searchwrap">
+    <input id="q" type="search" placeholder="Search places, stops, routes" autocomplete="off" enterkeyhint="search" aria-label="Search by place, stop or route name" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list">
+    <button id="qclear" type="button" aria-label="Clear search" hidden>×</button>
+    <div id="sug" role="listbox" aria-label="Search suggestions" hidden></div>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Filter by operator"></div>
+  <button id="tgl" class="tgl" type="button" aria-controls="panel" aria-expanded="true" aria-label="Close panel"><span class="tl">Close panel</span><span class="ta">▶</span></button>
+</header>
+<main id="main">
+  <div id="map" role="application" aria-label="Map of bus stops in Sado"></div>
+  <div id="tilewarn" role="status" aria-live="polite" hidden><span>Map images could not be loaded. Please check your connection. The bus stop dots and route lists still work.</span><button type="button" id="tilewarnx" aria-label="Close">×</button></div>
+  <aside id="panel" aria-label="Bus stop and route details">
+    <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
+    <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
+    <div id="pbody" class="pbody"></div>
+    <div class="warn">Unofficial · FY2022 data · no timetables/fares · check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first</div>
+  </aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
+<script>
+const D = {"ops":["新潟交通佐渡"],"routes":[[0,"内海府線"],[0,"海府線"],[0,"南線"],[0,"東海岸線"],[0,"本線"],[0,"横宿線"],[0,"七浦海岸線"],[0,"小木線"],[0,"国仲・金丸線"],[0,"金丸線"],[0,"赤泊線"],[0,"岩首線"],[0,"前浜線"],[0,"宿根木線"]],"stops":[["おぎの湯前",37.81627,138.26928,0,[13]],["きらりうむ佐渡",38.0301,138.24087,0,[1,4,6]],["ゴールドパーク",37.89824,138.2958,0,[7]],["セントラルタウン前",38.00485,138.31468,0,[4]],["トキの森公園",38.03671,138.42073,0,[2]],["ファミリーオ佐渡相川",38.06346,138.23924,0,[1]],["一の宮入口",37.84992,138.31834,0,[7,10,12,13]],["三ツ屋",37.83208,138.21397,0,[13]],["三宮",37.97982,138.37451,0,[2,8,9]],["三瀬川",38.05427,138.39718,0,[4]],["上小倉",37.95749,138.43542,0,[11]],["上小川",38.062,138.23868,0,[1]],["上山田",37.85892,138.31102,0,[7]],["上川茂",37.9035,138.38831,0,[10]],["上町十字路",38.08774,138.43209,0,[0,2,3,4,5]],["下大野",38.00452,138.41349,0,[2,5,8,9]],["下小川",38.05796,138.23738,0,[1]],["下川茂",37.9042,138.38304,0,[10]],["下新穂",38.01464,138.40888,0,[8,9]],["両尾",38.07061,138.51503,0,[3]],["両尾学校前",38.07076,138.51046,0,[3]],["両尾東",38.07104,138.51899,0,[3]],["両津埠頭",38.08149,138.43654,0,[5]],["両津局前",38.08364,138.43503,0,[2,3]],["両津文化会館",38.09529,138.43035,0,[0,2,3]],["両津港佐渡汽船",38.08183,138.43767,0,[0,2,3,4]],["両津病院",38.08763,138.43043,0,[0,3]],["中野坪",38.20406,138.35176,0,[1]],["丸山",37.9083,138.45832,0,[11]],["丸山平泉寺前",37.9144,138.45335,0,[11]],["丸山柳久保",37.91707,138.45598,0,[11]],["二ツ亀",38.32818,138.48723,0,[0]],["二見",37.97808,138.25752,0,[6]],["二見元村",37.97458,138.25813,0,[6]],["二見北",37.97998,138.25879,0,[6]],["五十浦",38.25521,138.43057,0,[1]],["五十里",38.00752,138.28517,0,[1,4,6]],["五十里城ノ下",38.00764,138.2879,0,[1,4,6]],["井尻",37.82647,138.3023,0,[7,10,12,13]],["仙道",37.99792,138.40532,0,[2,8,9]],["住吉",38.06973,138.45559,0,[3]],["住吉公民館前",38.0705,138.45226,0,[3]],["住吉北",38.07176,138.4484,0,[3]],["住吉温泉前",38.06759,138.46133,0,[3]],["佐和田BS",38.00385,138.31391,0,[1,2,4,6,7,8,9,10,11]],["佐和田商工会館前",38.00406,138.31689,0,[4]],["佐渡中等教育学校前",38.09709,138.42911,0,[0,2,3]],["佐渡博物館前",37.9851,138.3464,0,[2,7,8,9,10]],["佐渡市両津支所",38.08052,138.43549,0,[0,2,3,4,5]],["佐渡歴史伝説館",37.95371,138.34688,0,[2,7]],["佐渡版画村",38.03544,138.24087,0,[4,6]],["佐渡病院",38.02001,138.36532,0,[4,6,7,8,9,10,11]],["佐渡総合高校前",38.002,138.40968,0,[2,5,8,9]],["佐渡金山前",38.04183,138.25635,0,[4,6]],["倉谷",37.91846,138.29336,0,[7]],["入崎",38.19689,138.32762,0,[1]],["入川中",38.18669,138.32134,0,[1]],["入川北",38.18871,138.32356,0,[1]],["入川南",38.18454,138.32062,0,[1]],["入桑",38.07687,138.53421,0,[3]],["八幡",37.99232,138.33544,0,[2,7,10]],["八幡学校前",37.99075,138.33706,0,[2,7,10]],["八幡新町",37.99637,138.33025,0,[2,7,10]],["八幡温泉前",37.9859,138.34364,0,[2,7,10]],["八幡町",37.99783,138.3283,0,[2,7,10]],["内巻",38.03475,138.41574,0,[5]],["出又橋",37.95315,138.43758,0,[11]],["前浜中学校前",38.07883,138.57029,0,[3]],["北五十里",38.13001,138.44263,0,[0]],["北小浦",38.27607,138.5078,0,[0]],["北川内",38.17437,138.31448,0,[1]],["北川内中",38.17155,138.31353,0,[1]],["北川内南",38.16932,138.31228,0,[1]],["北松ヶ崎",38.17924,138.47518,0,[0]],["北片辺",38.15403,138.30278,0,[1]],["北片辺公民館前",38.15621,138.30045,0,[1]],["北狄",38.09258,138.25635,0,[1]],["北田ノ浦",38.20024,138.34429,0,[1]],["北田ノ浦中山",38.19898,138.34204,0,[1]],["北立島",38.18194,138.31842,0,[1]],["北立島南",38.17996,138.31755,0,[1]],["北鵜島",38.30667,138.45389,0,[0]],["千本南",38.19403,138.32725,0,[1]],["千畳敷入口",38.04274,138.23605,0,[1]],["南片辺",38.15097,138.30249,0,[1]],["台ヶ鼻灯台",37.96793,138.25141,0,[6]],["吉井",38.04839,138.39413,0,[4]],["吉井学校前",38.05194,138.39608,0,[4]],["吉住",38.11809,138.43583,0,[0]],["吉岡",37.97136,138.35396,0,[2,8,9]],["向山",37.89167,138.40828,0,[10]],["吾潟藤堂前",38.05267,138.44812,0,[2]],["吾潟観音堂前",38.0477,138.44456,0,[2]],["和木倉庫前",38.1649,138.46205,0,[0]],["和木北",38.16985,138.46838,0,[0]],["和木南",38.16824,138.46567,0,[0]],["唐乱木",37.89581,138.46501,0,[12]],["四日町",37.97948,138.3475,0,[2,7,8,9,10]],["国分寺",37.96616,138.36856,0,[2]],["坊ヶ崎",38.1576,138.45892,0,[0]],["坊ヶ浦",37.98599,138.40473,0,[11]],["境",38.08032,138.41817,0,[4,5]],["壇風城前",37.97473,138.36165,0,[2,8,9]],["外城橋",38.08548,138.42445,0,[4,5]],["多田",37.91293,138.48234,0,[3,11,12]],["多田西",37.91403,138.47528,0,[11]],["大倉",38.23367,138.38952,0,[1]],["大和",38.045,138.3894,0,[4]],["大川",38.08061,138.54875,0,[3]],["大杉",37.83617,138.36558,0,[10,12]],["大橋",37.82864,138.30657,0,[7,10,12,13]],["大泊",37.82533,138.32942,0,[10,12]],["大浦",38.00967,138.23178,0,[6]],["大浦の里前",38.01547,138.22527,0,[6]],["大浦東",38.00717,138.23393,0,[6]],["大浦西",38.01325,138.22726,0,[6]],["大石",37.82836,138.31535,0,[10,12]],["大石山田入口",37.8274,138.3191,0,[10,12]],["大立",37.92638,138.30064,0,[7]],["大立南",37.92233,138.29742,0,[7]],["大膳神社",37.97438,138.36837,0,[2]],["大野亀",38.31979,138.46652,0,[0]],["大間",38.03878,138.23667,0,[1]],["大須",37.938,138.3079,0,[7]],["天王下",38.04236,138.44277,0,[2]],["太鼓体験交流館",37.82208,138.23276,0,[13]],["夫婦岩前",37.99626,138.23582,0,[6]],["夷本町",38.08535,138.43316,0,[0,2,3,4,5]],["妙宣寺",37.97197,138.3742,0,[2]],["姫津",38.08183,138.24591,0,[1]],["姫津北",38.08352,138.24663,0,[1]],["姫津南",38.08076,138.24682,0,[1]],["宇賀神社前",38.0698,138.50883,0,[3]],["安田",38.1832,138.31957,0,[1]],["宮川",37.98497,138.3839,0,[2,8,9]],["宮橋",37.99468,138.36234,0,[8,9]],["家畜市場前",38.17675,138.31553,0,[1]],["宿根木新田",37.80926,138.25031,0,[13]],["寺田入口",37.99616,138.39505,0,[11]],["小倉",37.96536,138.42747,0,[11]],["小倉白山前",37.97329,138.41537,0,[11]],["小倉鳥越",37.97094,138.41793,0,[11]],["小木",37.81505,138.27979,0,[7,10,12,13]],["小木入口",37.81827,138.28435,0,[7,10,12,13]],["小木山本町",37.81673,138.28113,0,[7,10,12,13]],["小木本町",37.81716,138.27746,0,[13]],["小木民俗博物館",37.80754,138.24529,0,[13]],["小木温泉前",37.82009,138.28718,0,[7,10,12,13]],["小木港佐渡汽船",37.81671,138.28182,0,[7,10,12,13]],["小松",38.14617,138.44979,0,[0]],["小河",38.13344,138.44618,0,[0]],["小河内",37.95071,138.34386,0,[10]],["小泊",37.87923,138.29377,0,[7]],["小泊中山",37.87367,138.30316,0,[7]],["小熊",37.87735,138.42514,0,[12]],["小田",38.2289,138.38207,0,[1]],["小田農協支所前",38.23085,138.38608,0,[1]],["小石",37.88658,138.44392,0,[12]],["小立",37.93425,138.30496,0,[7]],["小野見北",38.21163,138.36351,0,[1]],["小野見南",38.21085,138.36116,0,[1]],["尖閣湾揚島遊園",38.09313,138.25255,0,[1]],["尖閣湾達者",38.0766,138.24978,0,[1]],["尾畑酒造前",37.96398,138.34462,0,[2]],["岡田入口",37.83622,138.31233,0,[7,10,12,13]],["岩谷口",38.26077,138.43696,0,[0,1]],["岩谷口南",38.25851,138.43472,0,[1]],["岩首",37.94267,138.50252,0,[3,11]],["川茂峠",37.90989,138.36438,0,[10]],["差輪",37.98352,138.23547,0,[6]],["市振崎",37.82147,138.2954,0,[7,10,12,13]],["市野沢",38.00945,138.34041,0,[1,4,6,7,8,9,10,11]],["平松",38.189,138.48092,0,[0]],["平松熊野神社前",38.19241,138.48101,0,[0]],["平根崎",38.12124,138.2719,0,[1]],["平沢",38.09634,138.43382,0,[0]],["平沢北",38.10159,138.4369,0,[0]],["強清水",37.81045,138.22859,0,[13]],["強清水口",37.8084,138.23157,0,[13]],["待鶴荘前",37.99626,138.40341,0,[2,8,9]],["後尾",38.16831,138.31131,0,[1]],["御番所橋",38.02505,138.23615,0,[6]],["徳和中央",37.88688,138.41781,0,[10]],["戦道",37.89637,138.40107,0,[10]],["戸中公民館前",38.11899,138.27332,0,[1]],["戸中南",38.11671,138.27304,0,[1]],["戸地",38.11064,138.26857,0,[1]],["戸地北",38.11278,138.27165,0,[1]],["新保",38.02903,138.37075,0,[4]],["新保",37.84976,138.38743,0,[10,12]],["新保東",37.85225,138.3905,0,[10,12]],["新町学校前",37.96841,138.34784,0,[2,8,9]],["新町本町",37.96481,138.34518,0,[2,7,10]],["新町集落センター前",37.96228,138.34338,0,[2,7,10]],["新穂",38.01459,138.42124,0,[2]],["新穂商工会館前",38.01663,138.42101,0,[5]],["新穂小学校前",38.01452,138.41623,0,[2,5,8,9]],["旅行村瓜生屋",38.0191,138.42973,0,[2]],["旭局前",38.0422,138.41017,0,[5]],["春日崎",38.02148,138.22371,0,[6]],["春日町",38.09031,138.43236,0,[0,2,3]],["曼荼羅寺前",37.98922,138.26567,0,[6]],["月布施北",38.03276,138.55524,0,[3]],["月布施南",38.03064,138.55318,0,[3]],["木戸",37.85324,138.30816,0,[7]],["本光寺前",37.9827,138.37972,0,[2,8,9]],["本竜寺前",37.89098,138.45039,0,[12]],["本行寺前",37.9211,138.49808,0,[3,11]],["本間家能舞台",38.04518,138.44465,0,[2]],["杉野浦",37.84019,138.37511,0,[10,12]],["杉野浦東",37.84272,138.37872,0,[10,12]],["杉野浦西",37.83825,138.37137,0,[10,12]],["材木町",38.03561,138.23746,0,[1,4,6]],["村山",37.86319,138.30473,0,[7]],["村山学校前",37.86838,138.30095,0,[7]],["東光寺前",37.89605,138.41066,0,[10]],["東大通",38.00417,138.33041,0,[1,4,6,7,8,9,10,11]],["東強清水",38.00819,138.5461,0,[3]],["東立島",38.00591,138.54315,0,[3]],["東鵜島",37.95186,138.50801,0,[3,11]],["松ヶ崎東",37.92061,138.49419,0,[3,11]],["松ヶ崎西",37.92034,138.49155,0,[3,11]],["柳沢",37.85666,138.39638,0,[10,12]],["柴町",38.04088,138.23634,0,[1]],["柿野浦",37.96135,138.51233,0,[3,11]],["根本寺前",38.00939,138.41495,0,[2,5,8,9]],["椎崎温泉前",38.07016,138.44069,0,[2]],["椎泊公民館前",38.06635,138.49872,0,[3]],["椎泊東",38.06727,138.50262,0,[3]],["椎泊西",38.0646,138.49365,0,[3]],["椿",38.12468,138.43924,0,[0]],["椿尾",37.88749,138.29076,0,[7]],["横山",38.06197,138.40227,0,[4,5]],["横山西",38.05924,138.39949,0,[4]],["横谷",38.04238,138.38355,0,[4]],["橘",37.97869,138.23335,0,[6]],["橘長手岬",37.98129,138.23312,0,[6]],["欠向",37.96153,138.43144,0,[11]],["歌見",38.20807,138.4922,0,[0]],["歌見北",38.21158,138.49287,0,[0]],["水津",38.07355,138.5693,0,[3]],["水津北",38.07479,138.56968,0,[3]],["水渡田",38.04901,138.40366,0,[5]],["江積",37.83712,138.22652,0,[13]],["沢崎",37.82193,138.20712,0,[13]],["沢根学校前",38.00549,138.27835,0,[1,4,6]],["沢根質場",38.00238,138.27347,0,[1,4,6]],["河内",37.91424,138.47031,0,[11]],["河内入口",37.93471,138.45599,0,[11]],["河内男神下",37.92675,138.46009,0,[11]],["河原田本町",38.00153,138.32016,0,[1,2,4,6,7,8,9,10,11]],["河原田諏訪町",38.0023,138.31768,0,[1,2,4,6,7,8,9,10,11]],["河崎",38.06297,138.47441,0,[3]],["河崎学校前",38.06382,138.47226,0,[3]],["河崎民芸館前",38.06124,138.48037,0,[3]],["河崎郵便局前",38.06171,138.47674,0,[3]],["泉",38.01168,138.34452,0,[1,4,6,7,8,9,10,11]],["浅生",37.88708,138.40925,0,[10]],["浜梅津",38.10561,138.43693,0,[0]],["浦ノ河内",37.91737,138.48602,0,[3,11]],["浦川北",38.20221,138.49018,0,[0]],["浦川南",38.20211,138.48766,0,[0]],["浦津",37.87173,138.41548,0,[10,12]],["海士町",38.02495,138.23971,0,[1,4,6]],["海岸通",38.08409,138.43472,0,[0,4,5]],["深浦",37.81716,138.21817,0,[13]],["清水",37.87791,138.4171,0,[10]],["滝脇",37.94915,138.32895,0,[7]],["潟上",38.0306,138.43761,0,[2]],["潟上坂上",38.03337,138.43883,0,[2]],["片野尾",38.05235,138.56545,0,[3]],["片野尾東",38.0488,138.56389,0,[3]],["片野尾西",38.05479,138.56667,0,[3]],["犬神平",37.81318,138.21836,0,[13]],["玉崎",38.1527,138.45469,0,[0]],["琴平神社前",37.81771,138.27359,0,[13]],["琴浦",37.80519,138.25101,0,[13]],["琴浦入口",37.81088,138.25603,0,[13]],["田切須",37.91055,138.28826,0,[7]],["田切須南",37.903,138.28516,0,[7]],["畑野十字路",37.99229,138.39978,0,[2,8,9,11]],["畑野学校前",37.99036,138.39762,0,[2,8,9]],["畑野西町",37.98735,138.39211,0,[2,8,9]],["白木",37.82799,138.20752,0,[13]],["白瀬",38.13826,138.44841,0,[0]],["皆川",38.0146,138.38721,0,[8,9,11]],["監督署前",38.07482,138.44244,0,[0,2,3,4,5]],["目黒町",38.00281,138.38963,0,[11]],["目黒町南",37.99914,138.39289,0,[11]],["相川",38.03314,138.23934,0,[1,4,6]],["相川下戸",38.02774,138.23901,0,[1,4,6]],["相川中学校前",38.02345,138.24262,0,[6]],["相川分校前",38.0381,138.23835,0,[1,4,6]],["相川博物館前",38.03727,138.24007,0,[1,4,6]],["相川病院",38.03586,138.24022,0,[1]],["真更川",38.28899,138.44521,0,[0]],["真木",38.06043,138.48674,0,[3]],["真木山医院前",37.9716,138.34759,0,[2,7,8,10]],["真浦",37.86088,138.40009,0,[10,12]],["真浦東",37.86189,138.40367,0,[10,12]],["真野宮前",37.95638,138.34369,0,[10]],["真野御陵入口",37.96039,138.34231,0,[2,7,10]],["真野新町",37.96947,138.34709,0,[2,7,8,9,10]],["矢島入口",37.81302,138.26713,0,[13]],["矢島遊園前",37.8111,138.26294,0,[13]],["矢柄",38.24258,138.39662,0,[1]],["石名中",38.21697,138.36992,0,[1]],["石名北",38.21862,138.37206,0,[1]],["石名南",38.21557,138.36829,0,[1]],["石畑",37.86131,138.30968,0,[7]],["石花北",38.16273,138.30384,0,[1]],["石花南",38.15977,138.30428,0,[1]],["福浦",38.08676,138.42858,0,[4,5]],["秋津",38.06772,138.40744,0,[4,5]],["秋津東",38.07751,138.41646,0,[4,5]],["稲鯨",37.97398,138.24024,0,[6]],["稲鯨東",37.97245,138.24422,0,[6]],["稲鯨西",37.97593,138.23686,0,[6]],["窪田",38.00771,138.30084,0,[1,4,6]],["窪田東",38.00711,138.30451,0,[1,4,6]],["窪田西",38.00772,138.29395,0,[1,4,6]],["立間",37.9849,138.52748,0,[3]],["竹の沢",37.91766,138.35572,0,[10]],["竹の花",38.01493,138.39697,0,[8,9]],["竹田橋",37.97638,138.36585,0,[2,8,9]],["管理センター前",38.19746,138.33312,0,[1]],["米郷",37.96929,138.24834,0,[6]],["糸崎",37.97231,138.51974,0,[3]],["紅葉山",37.9239,138.45352,0,[11]],["紅葉橋",38.00575,138.2622,0,[1,4]],["羽二生",38.07269,138.52593,0,[3]],["羽二生",37.99344,138.27008,0,[6]],["羽茂商工会前",37.84756,138.31488,0,[7,10,12,13]],["羽茂本郷",37.85144,138.31895,0,[7]],["羽茂高校前",37.84357,138.31349,0,[7,10,12,13]],["背合",37.94554,138.321,0,[7]],["腰細",37.88094,138.4291,0,[12]],["腰細川",37.88204,138.43441,0,[12]],["至誠堂前",38.00514,138.31024,0,[1,4,6]],["舟下入口",38.01424,138.40486,0,[8,9]],["船場町",38.09322,138.43284,0,[0,2,3]],["若宮通",38.07687,138.43965,0,[0,2,3,4,5]],["莚場",37.89318,138.45386,0,[12]],["菅原神社入口",37.84541,138.31376,0,[7,10,12,13]],["落合橋",37.99042,138.3513,0,[8,9]],["藤津橋",38.0138,138.35463,0,[1,4,6,7,8,9,10,11]],["藻浦",38.33101,138.50434,0,[0]],["藻浦入口",38.32856,138.51277,0,[0]],["虫崎",38.24895,138.5051,0,[0]],["蚫",38.00088,138.53799,0,[3]],["蝦夷塚",37.82498,138.32386,0,[10,12]],["行谷",38.02713,138.43454,0,[2]],["西ヶ平入口",37.94527,138.44712,0,[11]],["西三川",37.89803,138.29094,0,[7]],["西竜寺入口",37.9114,138.46609,0,[11]],["見立入口",38.29032,138.50779,0,[0]],["諏訪入口",37.98371,138.40634,0,[11]],["豊岡中央",37.97583,138.52033,0,[3]],["豊岡尾戸",37.97802,138.52091,0,[3]],["豊岡葛倉",37.98056,138.52304,0,[3]],["豊田",37.95668,138.33791,0,[7]],["貝塚",38.03506,138.37647,0,[4]],["赤岩",37.82955,138.35124,0,[10,12]],["赤泊中学前",37.86464,138.40908,0,[10,12]],["赤泊中町",37.86846,138.41018,0,[10,12]],["赤泊埠頭前",37.86623,138.40954,0,[3,10,12]],["赤泊漁協前",37.86981,138.41167,0,[10,12]],["赤玉中",37.99354,138.533,0,[3]],["赤玉北",37.99469,138.53407,0,[3]],["赤玉南",37.99094,138.53048,0,[3]],["越戸橋",38.05803,138.44764,0,[2]],["農業技術センター",38.01514,138.35976,0,[1,4,6,7,8,9,10,11]],["運動公園前",38.03101,138.37238,0,[4]],["野坂",37.99929,138.26882,0,[6]],["野城",38.08221,138.56,0,[3]],["野崎",38.06549,138.46735,0,[3]],["野崎",37.82696,138.34049,0,[10,12]],["野浦北",38.02486,138.55116,0,[3]],["野浦南",38.02264,138.55057,0,[3]],["金丸",37.99282,138.3569,0,[8,9]],["金井",38.01972,138.36261,0,[1,4,6,7,8,9,10,11]],["金井学校前",38.02371,138.36609,0,[4]],["金山茶屋前",38.03836,138.2531,0,[4,6]],["鉄砲鼻",37.89997,138.2876,0,[7]],["鍛冶屋",37.88059,138.41909,0,[10]],["鍛冶町中原",38.00314,138.32377,0,[1,4,6,7,8,9,10,11]],["長木",38.00681,138.33609,0,[1,4,6,7,8,9,10,11]],["長江入口",38.07454,138.41328,0,[4,5]],["長畝",38.02553,138.42158,0,[5]],["長石",37.9757,138.34759,0,[2,7,8,9,10]],["長谷",37.9758,138.41647,0,[11]],["関",38.25035,138.41423,0,[1]],["関南",38.24942,138.41121,0,[1]],["青山斎場前",38.06275,138.44343,0,[2]],["青木",38.02323,138.43068,0,[2]],["静平",37.9237,138.34772,0,[10]],["静平倉庫前",37.91567,138.35641,0,[10]],["願",38.32141,138.47204,0,[0]],["風島",38.06317,138.57168,0,[3]],["馬首",38.1731,138.47084,0,[0]],["駒坂",38.11209,138.43513,0,[0]],["高下北",38.19759,138.33947,0,[1]],["高下南",38.19733,138.33589,0,[1]],["高崎",37.89458,138.28986,0,[7]],["高瀬",37.99363,138.23546,0,[6]],["高瀬北",38.00045,138.23476,0,[6]],["高瀬西",37.99114,138.23445,0,[6]],["高野",37.88309,138.44055,0,[12]],["鷲崎",38.31955,138.51351,0,[0]],["鷲崎漁港",38.32031,138.5168,0,[0]],["鹿伏",38.02335,138.22914,0,[6]],["黒姫",38.22755,138.49629,0,[0]],["黒根",37.90978,138.47995,0,[12]]]};
+// 場所（駅・地名・施設）。build/work/places/ で作る別データ。バス停データには手を加えない。 [名前, 種類, 緯度, 経度, 所在地, 補足, 別名]
+const PLACES = [["三宮","地名",37.98379,138.36997,"佐渡市","","","",0,""],["三川","地名",37.88149,138.43176,"佐渡市","","","",0,""],["三瀬川上","地名",38.05358,138.39644,"佐渡市","","","",0,""],["三瀬川下","地名",38.05129,138.39917,"佐渡市","","","",0,""],["三瀬川吉井上町","地名",38.05046,138.39518,"佐渡市","","","",0,""],["三瀬川晴和","地名",38.05288,138.41152,"佐渡市","","","",0,""],["三瀬川松才","地名",38.05336,138.40387,"佐渡市","","","",0,""],["上川茂","地名",37.90429,138.39053,"佐渡市","","","",0,""],["上新穂","地名",38.01452,138.41623,"佐渡市","","","",0,""],["上横山","地名",38.06692,138.39504,"佐渡市","","","",0,""],["上矢馳","地名",38.01145,138.33205,"佐渡市","","","",0,""],["上長木","地名",38.00741,138.33333,"佐渡市","","","",0,""],["下久知","地名",38.06466,138.46981,"佐渡市","","","",0,""],["下川茂","地名",37.9008,138.37439,"佐渡市","","","",0,""],["下新穂","地名",38.01464,138.40888,"佐渡市","","","",0,""],["下横山","地名",38.0587,138.40663,"佐渡市","","","",0,""],["下相川","地名",38.04274,138.23605,"佐渡市","","","",0,""],["下長木","地名",38.00712,138.3367,"佐渡市","","","",0,""],["下黒山","地名",37.904,138.33911,"佐渡市","","","",0,""],["両尾","地名",38.07055,138.51333,"佐渡市","","","",0,""],["両津大川","地名",38.08141,138.55437,"佐渡市","","","",0,""],["両津夷","地名",38.08554,138.43354,"佐渡市","","","",0,""],["両津夷新","地名",38.08639,138.43135,"佐渡市","","","",0,""],["両津湊","地名",38.07847,138.43957,"佐渡市","","","",0,""],["両津福浦","地名",38.08663,138.42653,"佐渡市","1〜3丁目","","",0,""],["中原","地名",38.00595,138.3198,"佐渡市","","","",0,""],["中興上野口","地名",38.03544,138.35248,"佐渡市","","","",0,""],["中興下野口","地名",38.02559,138.35366,"佐渡市","","","",0,""],["中興丹下坂","地名",38.02245,138.35877,"佐渡市","","","",0,""],["中興岩野","地名",38.0102,138.36291,"佐渡市","","","",0,""],["中興木戸沢","地名",38.02586,138.36046,"佐渡市","","","",0,""],["中興無人区","地名",38.06245,138.34377,"佐渡市","","","",0,""],["中興町小路","地名",38.01855,138.36092,"佐渡市","","","",0,""],["中興藤津","地名",38.01685,138.35366,"佐渡市","","","",0,""],["中興鳥越","地名",38.00746,138.35774,"佐渡市","","","",0,""],["丸山","地名",37.91342,138.45894,"佐渡市","","","",0,""],["久知河内","地名",38.03965,138.47059,"佐渡市","","","",0,""],["二宮東二宮","地名",38.02185,138.32324,"佐渡市","","","",0,""],["二宮西二宮","地名",38.02164,138.31751,"佐渡市","","","",0,""],["二見","地名",37.97694,138.25621,"佐渡市","","","",0,""],["五十浦","地名",38.25521,138.43057,"佐渡市","","","",0,""],["井坪","地名",37.83455,138.25907,"佐渡市","","","",0,""],["住吉","地名",38.06556,138.45399,"佐渡市","","","",0,""],["入川","地名",38.18578,138.32127,"佐渡市","","","",0,""],["八幡中川","地名",37.995,138.33466,"佐渡市","","","",0,""],["八幡坂","地名",37.99242,138.33853,"佐渡市","","","",0,""],["八幡岩野","地名",37.99211,138.33217,"佐渡市","","","",0,""],["八幡新田","地名",37.98936,138.33489,"佐渡市","","","",0,""],["八幡新町","地名",37.99412,138.32935,"佐渡市","","","",0,""],["八幡新町団地","地名",37.99662,138.33243,"佐渡市","","","",0,""],["八幡田望","地名",37.99794,138.3424,"佐渡市","","","",0,""],["八幡町","地名",37.99676,138.32659,"佐渡市","","","",0,""],["八幡硲","地名",37.99373,138.33671,"佐渡市","","","",0,""],["八幡荒城","地名",38.00069,138.32911,"佐渡市","","","",0,""],["八幡辰巳","地名",37.98477,138.34139,"佐渡市","","","",0,""],["八幡野町","地名",37.99022,138.34075,"佐渡市","","","",0,""],["加茂歌代","地名",38.0829,138.42131,"佐渡市","","","",0,""],["加茂湖","地名",38.06746,138.4335,"佐渡市","","","",0,""],["北五十里","地名",38.13001,138.44263,"佐渡市","","","",0,""],["北小浦","地名",38.27607,138.5078,"佐渡市","","","",0,""],["北川内","地名",38.173,138.31395,"佐渡市","","","",0,""],["北松ヶ崎","地名",38.17924,138.47518,"佐渡市","","","",0,""],["北片辺","地名",38.15512,138.30162,"佐渡市","","","",0,""],["北狄","地名",38.09286,138.25445,"佐渡市","","","",0,""],["北田野浦","地名",38.20109,138.34603,"佐渡市","","","",0,""],["北立島","地名",38.18095,138.31799,"佐渡市","","","",0,""],["北鵜島","地名",38.30667,138.45389,"佐渡市","","","",0,""],["千種中央","地名",38.02136,138.36395,"佐渡市","","","",0,""],["千種中津","地名",38.01252,138.36809,"佐渡市","","","",0,""],["千種別当沢","地名",38.03262,138.37509,"佐渡市","","","",0,""],["千種大和田","地名",38.03667,138.36036,"佐渡市","","","",0,""],["千種尾花東","地名",38.02216,138.36699,"佐渡市","","","",0,""],["千種木戸沢","地名",38.02433,138.3618,"佐渡市","","","",0,""],["千種本屋敷","地名",38.0267,138.36316,"佐渡市","","","",0,""],["千種無人区","地名",38.05759,138.35846,"佐渡市","","","",0,""],["千種西方","地名",38.0376,138.36679,"佐渡市","","","",0,""],["千種関根","地名",38.03008,138.36752,"佐渡市","","","",0,""],["南新保","地名",37.85565,138.38035,"佐渡市","","","",0,""],["南片辺","地名",38.15097,138.30249,"佐渡市","","","",0,""],["原黒","地名",38.06891,138.44408,"佐渡市","","","",0,""],["吉井","地名",38.04808,138.39488,"佐渡市","","","",0,""],["吉井本郷","地名",38.045,138.3894,"佐渡市","","","",0,""],["吉岡","地名",37.96784,138.35486,"佐渡市","","","",0,""],["名古屋","地名",37.97146,138.35051,"佐渡市","","","",0,""],["吾潟","地名",38.04951,138.45358,"佐渡市","","","",0,""],["和木","地名",38.16824,138.46567,"佐渡市","","","",0,""],["四日町","地名",37.98113,138.3498,"佐渡市","","","",0,""],["国分寺","地名",37.96128,138.37365,"佐渡市","","","",0,""],["坊ケ浦","地名",37.98194,138.40867,"佐渡市","","","",0,""],["城腰","地名",38.05717,138.46362,"佐渡市","","","",0,""],["外山","地名",37.91509,138.39926,"佐渡市","","","",0,""],["多田","地名",37.9113,138.47821,"佐渡市","","","",0,""],["大久保","地名",37.96623,138.40453,"佐渡市","","","",0,""],["大倉","地名",38.23367,138.38952,"佐渡市","","","",0,""],["大倉谷","地名",37.91904,138.29844,"佐渡市","","","",0,""],["大和中島","地名",38.03112,138.39136,"佐渡市","","","",0,""],["大和横谷","地名",38.04407,138.38077,"佐渡市","","","",0,""],["大和舟津","地名",38.03657,138.39359,"佐渡市","","","",0,""],["大和馬場","地名",38.04119,138.39388,"佐渡市","","","",0,""],["大小","地名",37.93613,138.30643,"佐渡市","","","",0,""],["大杉","地名",37.8399,138.36032,"佐渡市","","","",0,""],["大須","地名",37.93894,138.31647,"佐渡市","","","",0,""],["姫津","地名",38.0828,138.24232,"佐渡市","","","",0,""],["安養寺","地名",38.06071,138.38218,"佐渡市","","","",0,""],["宮川","地名",37.97585,138.38503,"佐渡市","","","",0,""],["宿根木","地名",37.81166,138.24438,"佐渡市","","","",0,""],["寺田","地名",37.99489,138.39284,"佐渡市","","","",0,""],["小倉","地名",37.94419,138.44939,"佐渡市","","","",0,""],["小川","地名",38.06114,138.23843,"佐渡市","","","",0,""],["小木","地名",37.81511,138.25898,"佐渡市","","","",0,""],["小木堂釜","地名",37.83939,138.26946,"佐渡市","","","",0,""],["小木大浦","地名",37.83162,138.25067,"佐渡市","","","",0,""],["小木強清水","地名",37.81307,138.22867,"佐渡市","","","",0,""],["小木木野浦","地名",37.82754,138.2798,"佐渡市","","","",0,""],["小木町","地名",37.81977,138.27072,"佐渡市","","","",0,""],["小木金田新田","地名",37.82151,138.24039,"佐渡市","","","",0,""],["小比叡","地名",37.83999,138.28236,"佐渡市","","","",0,""],["小田","地名",38.22987,138.38407,"佐渡市","","","",0,""],["小野見","地名",38.21124,138.36234,"佐渡市","","","",0,""],["山田東山田","地名",38.02355,138.30758,"佐渡市","","","",0,""],["山田無人区","地名",38.05082,138.3044,"佐渡市","","","",0,""],["山田西山田","地名",38.02302,138.3045,"佐渡市","","","",0,""],["岩谷口","地名",38.25964,138.43584,"佐渡市","","","",0,""],["岩首","地名",37.94267,138.50252,"佐渡市","","","",0,""],["市野沢嶋の腰","地名",38.00862,138.33973,"佐渡市","","","",0,""],["市野沢市野沢","地名",38.02016,138.33177,"佐渡市","","","",0,""],["平松","地名",38.19112,138.47392,"佐渡市","","","",0,""],["平清水岩田","地名",38.03942,138.33499,"佐渡市","","","",0,""],["平清水東平清水","地名",38.03616,138.34266,"佐渡市","","","",0,""],["平清水無人区","地名",38.04595,138.3372,"佐渡市","","","",0,""],["平清水西野","地名",38.03346,138.33416,"佐渡市","","","",0,""],["後尾","地名",38.16831,138.31131,"佐渡市","","","",0,""],["徳和","地名",37.89451,138.41083,"佐渡市","","","",0,""],["戸中","地名",38.11899,138.27332,"佐渡市","","","",0,""],["戸地","地名",38.11171,138.27011,"佐渡市","","","",0,""],["新穂","地名",38.01465,138.42156,"佐渡市","","","",0,""],["新穂井内","地名",38.01291,138.43327,"佐渡市","","","",0,""],["新穂北方","地名",38.01786,138.41471,"佐渡市","","","",0,""],["新穂大野","地名",38.00625,138.42308,"佐渡市","","","",0,""],["新穂正明寺","地名",38.02422,138.44239,"佐渡市","","","",0,""],["新穂武井","地名",38.00659,138.40773,"佐渡市","","","",0,""],["新穂潟上","地名",38.03884,138.43909,"佐渡市","","","",0,""],["新穂瓜生屋","地名",38.01641,138.43539,"佐渡市","","","",0,""],["新穂田野沢","地名",38.03241,138.45421,"佐渡市","","","",0,""],["新穂皆川","地名",38.01381,138.38646,"佐渡市","","","",0,""],["新穂舟下","地名",38.01074,138.39458,"佐渡市","","","",0,""],["新穂長畝","地名",38.03241,138.41817,"佐渡市","","","",0,""],["新穂青木","地名",38.02323,138.43068,"佐渡市","","","",0,""],["旭","地名",38.04219,138.41656,"佐渡市","","","",0,""],["春日","地名",38.09044,138.43222,"佐渡市","","","",0,""],["月布施","地名",38.0376,138.5469,"佐渡市","","","",0,""],["木流","地名",37.8319,138.24089,"佐渡市","","","",0,""],["杉野浦","地名",37.84639,138.37093,"佐渡市","","","",0,""],["東大通","地名",38.00417,138.32995,"佐渡市","","","",0,""],["東強清水","地名",38.01362,138.53983,"佐渡市","","","",0,""],["東立島","地名",38.00591,138.54315,"佐渡市","","","",0,""],["東鵜島","地名",37.95371,138.50123,"佐渡市","","","",0,""],["松ケ崎","地名",37.91997,138.48976,"佐渡市","","","",0,""],["柳沢","地名",37.85666,138.39638,"佐渡市","","","",0,""],["柿野浦","地名",37.96523,138.50332,"佐渡市","","","",0,""],["栗野江","地名",37.99873,138.40614,"佐渡市","","","",0,""],["梅津","地名",38.09819,138.43332,"佐渡市","","","",0,""],["椎泊","地名",38.06607,138.49833,"佐渡市","","","",0,""],["椿","地名",38.12468,138.43924,"佐渡市","","","",0,""],["椿尾","地名",37.88749,138.29076,"佐渡市","","","",0,""],["橘","地名",37.98472,138.24165,"佐渡市","","","",0,""],["歌見","地名",38.20807,138.4922,"佐渡市","","","",0,""],["水津","地名",38.07285,138.56539,"佐渡市","","","",0,""],["水渡田","地名",38.03945,138.41229,"佐渡市","","","",0,""],["水渡田晴和","地名",38.04935,138.41554,"佐渡市","","","",0,""],["水渡田水渡田北","地名",38.04745,138.40453,"佐渡市","","","",0,""],["水渡田水渡田南","地名",38.04069,138.40559,"佐渡市","","","",0,""],["江積","地名",37.83046,138.22175,"佐渡市","","","",0,""],["沢崎","地名",37.82311,138.21341,"佐渡市","","","",0,""],["沢根中山","地名",38.0096,138.26855,"佐渡市","","","",0,""],["沢根五十里城ノ下","地名",38.00764,138.2871,"佐渡市","","","",0,""],["沢根五十里東野","地名",38.01707,138.28981,"佐渡市","","","",0,""],["沢根五十里無人区","地名",38.02597,138.28203,"佐渡市","","","",0,""],["沢根五十里田中","地名",38.01397,138.27931,"佐渡市","","","",0,""],["沢根五十里田中町","地名",38.00702,138.28314,"佐渡市","","","",0,""],["沢根五十里西野","地名",38.01473,138.28448,"佐渡市","","","",0,""],["沢根五十里鶴子","地名",38.01133,138.27564,"佐渡市","","","",0,""],["沢根河内","地名",38.00388,138.2666,"佐渡市","","","",0,""],["沢根炭屋町","地名",38.00791,138.29053,"佐渡市","","","",0,""],["沢根無人区","地名",38.00806,138.25831,"佐渡市","","","",0,""],["沢根田上","地名",38.00733,138.27586,"佐渡市","","","",0,""],["沢根町上町","地名",38.00375,138.27451,"佐渡市","","","",0,""],["沢根町下町","地名",38.00498,138.27735,"佐渡市","","","",0,""],["沢根篭町","地名",38.00614,138.28018,"佐渡市","","","",0,""],["沢根羽二生","地名",37.99303,138.26647,"佐渡市","","","",0,""],["沢根野坂","地名",37.99985,138.26351,"佐渡市","","","",0,""],["沢根須川","地名",37.99779,138.2709,"佐渡市","","","",0,""],["河原田本町下町","地名",37.99891,138.32159,"佐渡市","","","",0,""],["河原田本町佐高通り","地名",38.00208,138.32241,"佐渡市","","","",0,""],["河原田本町本町","地名",38.00085,138.31969,"佐渡市","","","",0,""],["河原田本町田町","地名",37.99931,138.32383,"佐渡市","","","",0,""],["河原田本町高浜町","地名",37.99693,138.32342,"佐渡市","","","",0,""],["河原田諏訪町上組","地名",38.00288,138.31487,"佐渡市","","","",0,""],["河原田諏訪町下組","地名",38.00157,138.31764,"佐渡市","","","",0,""],["河原田諏訪町中組","地名",38.00225,138.31651,"佐渡市","","","",0,""],["河原田諏訪町大上組","地名",38.00361,138.31311,"佐渡市","","","",0,""],["河崎","地名",38.06197,138.47717,"佐渡市","","","",0,""],["泉無人区","地名",38.06217,138.33006,"佐渡市","","","",0,""],["泉第一","地名",38.02741,138.34568,"佐渡市","","","",0,""],["泉第三","地名",38.01849,138.34774,"佐渡市","","","",0,""],["泉第二","地名",38.02527,138.33791,"佐渡市","","","",0,""],["泉第五","地名",38.00897,138.35066,"佐渡市","","","",0,""],["泉第四","地名",38.01469,138.34184,"佐渡市","","","",0,""],["浜河内","地名",37.9197,138.46305,"佐渡市","","","",0,""],["浜田","地名",38.08777,138.43033,"佐渡市","","","",0,""],["浦川","地名",38.20216,138.48892,"佐渡市","","","",0,""],["深浦","地名",37.81662,138.21881,"佐渡市","","","",0,""],["滝脇","地名",37.94915,138.32895,"佐渡市","","","",0,""],["潟端","地名",38.05258,138.42625,"佐渡市","","","",0,""],["片野尾","地名",38.05423,138.55624,"佐渡市","","","",0,""],["犬神平","地名",37.81379,138.2197,"佐渡市","","","",0,""],["猿八","地名",37.94566,138.41226,"佐渡市","","","",0,""],["玉崎","地名",38.15515,138.45681,"佐渡市","","","",0,""],["琴浦","地名",37.80802,138.25419,"佐渡市","","","",0,""],["田切須","地名",37.90933,138.29108,"佐渡市","","","",0,""],["田野浦","地名",37.83186,138.23231,"佐渡市","","","",0,""],["畉田","地名",37.98643,138.37208,"佐渡市","","","",0,""],["畑野","地名",37.99,138.3965,"佐渡市","","","",0,""],["白瀬","地名",38.13929,138.44813,"佐渡市","","","",0,""],["目黒町","地名",38.00222,138.39179,"佐渡市","","","",0,""],["相川一町目","地名",38.03168,138.24143,"佐渡市","","","",0,""],["相川一町目浜町","地名",38.03159,138.24063,"佐渡市","","","",0,""],["相川一町目裏町","地名",38.03168,138.24245,"佐渡市","","","",0,""],["相川三町目","地名",38.02954,138.24147,"佐渡市","","","",0,""],["相川三町目新浜町","地名",38.02975,138.23995,"佐渡市","","","",0,""],["相川三町目浜町","地名",38.02968,138.2407,"佐渡市","","","",0,""],["相川上京町","地名",38.03516,138.2451,"佐渡市","","","",0,""],["相川上寺町","地名",38.0334,138.24863,"佐渡市","","","",0,""],["相川下京町","地名",38.03482,138.24208,"佐渡市","","","",0,""],["相川下寺町","地名",38.03263,138.2454,"佐渡市","","","",0,""],["相川下山之神町","地名",38.03828,138.25647,"佐渡市","","","",0,""],["相川下戸村","地名",38.02294,138.2475,"佐渡市","","","",0,""],["相川下戸浜町","地名",38.0282,138.23881,"佐渡市","","","",0,""],["相川下戸炭屋浜町","地名",38.0256,138.23714,"佐渡市","","","",0,""],["相川下戸炭屋町","地名",38.02612,138.23844,"佐渡市","","","",0,""],["相川下戸炭屋裏町","地名",38.02583,138.23889,"佐渡市","","","",0,""],["相川下戸町","地名",38.02724,138.23933,"佐渡市","","","",0,""],["相川中京町","地名",38.03494,138.24341,"佐渡市","","","",0,""],["相川中寺町","地名",38.03389,138.24962,"佐渡市","","","",0,""],["相川二町目","地名",38.03057,138.24163,"佐渡市","","","",0,""],["相川二町目新浜町","地名",38.03068,138.24032,"佐渡市","","","",0,""],["相川二町目浜町","地名",38.03061,138.24084,"佐渡市","","","",0,""],["相川五郎左衛門町","地名",38.03017,138.24234,"佐渡市","","","",0,""],["相川会津町","地名",38.03436,138.2428,"佐渡市","","","",0,""],["相川八百屋町","地名",38.03405,138.24142,"佐渡市","","","",0,""],["相川六右衛門町","地名",38.03438,138.24649,"佐渡市","","","",0,""],["相川北沢町","地名",38.0367,138.24125,"佐渡市","","","",0,""],["相川南沢町","地名",38.03381,138.24622,"佐渡市","","","",0,""],["相川味噌屋町","地名",38.03472,138.24077,"佐渡市","","","",0,""],["相川四十物町","地名",38.0357,138.24282,"佐渡市","","","",0,""],["相川四町目","地名",38.02849,138.24116,"佐渡市","","","",0,""],["相川四町目浜町","地名",38.02863,138.24039,"佐渡市","","","",0,""],["相川坂下町","地名",38.03743,138.23996,"佐渡市","","","",0,""],["相川塩屋町","地名",38.03387,138.23928,"佐渡市","","","",0,""],["相川夕白町","地名",38.03565,138.24441,"佐渡市","","","",0,""],["相川大工町","地名",38.03522,138.24906,"佐渡市","","","",0,""],["相川大床屋町","地名",38.03384,138.24526,"佐渡市","","","",0,""],["相川大浦","地名",38.01063,138.23714,"佐渡市","","","",0,""],["相川大間町","地名",38.03777,138.23682,"佐渡市","","","",0,""],["相川小六町","地名",38.03609,138.23796,"佐渡市","","","",0,""],["相川左門町","地名",38.03456,138.24506,"佐渡市","","","",0,""],["相川市町","地名",38.02879,138.24017,"佐渡市","","","",0,""],["相川広間町","地名",38.03593,138.23988,"佐渡市","","","",0,""],["相川弥十郎町","地名",38.03601,138.2436,"佐渡市","","","",0,""],["相川新五郎町","地名",38.03543,138.24621,"佐渡市","","","",0,""],["相川新材木町","地名",38.03355,138.23916,"佐渡市","","","",0,""],["相川新浜町","地名",38.02897,138.23962,"佐渡市","","","",0,""],["相川新西坂町","地名",38.03549,138.2387,"佐渡市","","","",0,""],["相川材木町","地名",38.03488,138.23797,"佐渡市","","","",0,""],["相川板町","地名",38.0365,138.23707,"佐渡市","","","",0,""],["相川柴町","地名",38.04012,138.23634,"佐渡市","","","",0,""],["相川栄町","地名",38.03398,138.23778,"佐渡市","","","",0,""],["相川水金町","地名",38.0415,138.23705,"佐渡市","","","",0,""],["相川江戸沢町","地名",38.03329,138.24271,"佐渡市","","","",0,""],["相川海士町","地名",38.02516,138.23873,"佐渡市","","","",0,""],["相川濁川町","地名",38.03699,138.23811,"佐渡市","","","",0,""],["相川炭屋町","地名",38.03803,138.23844,"佐渡市","","","",0,""],["相川石扣町","地名",38.0347,138.2386,"佐渡市","","","",0,""],["相川米屋町","地名",38.03529,138.24215,"佐渡市","","","",0,""],["相川紙屋町","地名",38.0377,138.23743,"佐渡市","","","",0,""],["相川羽田村","地名",38.03391,138.26195,"佐渡市","","","",0,""],["相川羽田町","地名",38.03302,138.24071,"佐渡市","","","",0,""],["相川西坂町","地名",38.03477,138.23986,"佐渡市","","","",0,""],["相川諏訪町","地名",38.03564,138.25107,"佐渡市","","","",0,""],["相川長坂町","地名",38.03436,138.24024,"佐渡市","","","",0,""],["相川馬町","地名",38.02765,138.24096,"佐渡市","","","",0,""],["相川鹿伏","地名",38.01945,138.23539,"佐渡市","","","",0,""],["真光寺仲野","地名",38.03273,138.32213,"佐渡市","","","",0,""],["真光寺沢","地名",38.039,138.31704,"佐渡市","","","",0,""],["真光寺高野","地名",38.03523,138.32685,"佐渡市","","","",0,""],["真更川","地名",38.28899,138.44521,"佐渡市","","","",0,""],["真木","地名",38.05737,138.49304,"佐渡市","","","",0,""],["真浦","地名",37.86676,138.39342,"佐渡市","","","",0,""],["真野","地名",37.95504,138.34528,"佐渡市","","","",0,""],["真野大川","地名",37.97367,138.37873,"佐渡市","","","",0,""],["真野新町","地名",37.96531,138.34583,"佐渡市","","","",0,""],["矢柄","地名",38.24258,138.39662,"佐渡市","","","",0,""],["石名","地名",38.21705,138.37009,"佐渡市","","","",0,""],["石田","地名",38.01085,138.32437,"佐渡市","","","",0,""],["石花","地名",38.16125,138.30406,"佐渡市","","","",0,""],["秋津","地名",38.06741,138.41746,"佐渡市","","","",0,""],["稲鯨","地名",37.97732,138.24602,"佐渡市","","","",0,""],["窪田中窪田","地名",38.00984,138.30404,"佐渡市","","","",0,""],["窪田東窪田","地名",38.00749,138.31001,"佐渡市","","","",0,""],["窪田西窪田","地名",38.00855,138.29693,"佐渡市","","","",0,""],["立野","地名",38.0644,138.38903,"佐渡市","","","",0,""],["立間","地名",37.9849,138.52748,"佐渡市","","","",0,""],["竹田","地名",37.97516,138.36529,"佐渡市","","","",0,""],["米郷","地名",37.96987,138.24963,"佐渡市","","","",0,""],["羽二生","地名",38.07687,138.53421,"佐渡市","","","",0,""],["羽吉","地名",38.11209,138.43513,"佐渡市","","","",0,""],["羽茂三瀬","地名",37.83146,138.34294,"佐渡市","","","",0,""],["羽茂上山田","地名",37.86433,138.31576,"佐渡市","","","",0,""],["羽茂亀脇","地名",37.8684,138.29063,"佐渡市","","","",0,""],["羽茂大崎","地名",37.87521,138.35202,"佐渡市","","","",0,""],["羽茂大橋","地名",37.82553,138.30142,"佐渡市","","","",0,""],["羽茂大石","地名",37.83184,138.32094,"佐渡市","","","",0,""],["羽茂小泊","地名",37.87974,138.30567,"佐渡市","","","",0,""],["羽茂本郷","地名",37.84852,138.3146,"佐渡市","","","",0,""],["羽茂村山","地名",37.85766,138.30087,"佐渡市","","","",0,""],["羽茂滝平","地名",37.88856,138.35198,"佐渡市","","","",0,""],["羽茂飯岡","地名",37.85877,138.32985,"佐渡市","","","",0,""],["背合","地名",37.9436,138.32315,"佐渡市","","","",0,""],["莚場","地名",37.9013,138.4497,"佐渡市","","","",0,""],["虫崎","地名",38.24884,138.4935,"佐渡市","","","",0,""],["蚫","地名",38.00494,138.52991,"佐渡市","","","",0,""],["西三川","地名",37.8977,138.29105,"佐渡市","","","",0,""],["見立","地名",38.29187,138.50019,"佐渡市","","","",0,""],["豊岡","地名",37.97822,138.51234,"佐渡市","","","",0,""],["豊田","地名",37.95668,138.33791,"佐渡市","","","",0,""],["貝塚第一","地名",38.03747,138.37891,"佐渡市","","","",0,""],["貝塚第二","地名",38.02941,138.38435,"佐渡市","","","",0,""],["赤泊","地名",37.86729,138.41012,"佐渡市","","","",0,""],["赤玉","地名",37.99354,138.533,"佐渡市","","","",0,""],["達者","地名",38.07321,138.2678,"佐渡市","","","",0,""],["達者達者","地名",38.07614,138.24839,"佐渡市","","","",0,""],["達者達者大林","地名",38.08143,138.24586,"佐渡市","","","",0,""],["野浦","地名",38.02486,138.55116,"佐渡市","","","",0,""],["金丸","地名",37.99475,138.35912,"佐渡市","","","",0,""],["金井新保仲小路","地名",38.02817,138.37569,"佐渡市","","","",0,""],["金井新保出崎","地名",38.02522,138.3804,"佐渡市","","","",0,""],["金井新保別当沢","地名",38.03618,138.37318,"佐渡市","","","",0,""],["金井新保唐崎","地名",38.03085,138.37095,"佐渡市","","","",0,""],["金井新保壇塔","地名",38.02393,138.37087,"佐渡市","","","",0,""],["金井新保宮の下","地名",38.03327,138.37232,"佐渡市","","","",0,""],["金井新保寺沢","地名",38.03038,138.37715,"佐渡市","","","",0,""],["金井新保無人区","地名",38.01784,138.37575,"佐渡市","","","",0,""],["金井新保納内","地名",38.02584,138.37455,"佐渡市","","","",0,""],["金井新保自衛隊区","地名",38.08232,138.35306,"佐渡市","","","",0,""],["金井新保西方","地名",38.04921,138.36964,"佐渡市","","","",0,""],["金井新保関根","地名",38.02918,138.3676,"佐渡市","","","",0,""],["鍛冶町","地名",38.0051,138.32613,"佐渡市","","","",0,""],["長木","地名",38.00671,138.33123,"佐渡市","","","",0,""],["長江","地名",38.08711,138.37976,"佐渡市","","","",0,""],["長石","地名",37.97416,138.34707,"佐渡市","","","",0,""],["長谷","地名",37.97672,138.41589,"佐渡市","","","",0,""],["関","地名",38.24988,138.41272,"佐渡市","","","",0,""],["阿佛坊","地名",37.97725,138.37313,"佐渡市","","","",0,""],["青野","地名",38.01655,138.30653,"佐渡市","","","",0,""],["静平","地名",37.91748,138.35272,"佐渡市","","","",0,""],["願","地名",38.3206,138.46928,"佐渡市","","","",0,""],["飯持","地名",37.97644,138.39964,"佐渡市","","","",0,""],["馬首","地名",38.1731,138.47084,"佐渡市","","","",0,""],["高千","地名",38.17351,138.36393,"佐渡市","","","",0,""],["高千千本","地名",38.19518,138.32796,"佐渡市","","","",0,""],["高千高下","地名",38.19731,138.33734,"佐渡市","","","",0,""],["高瀬","地名",37.99624,138.24082,"佐渡市","","","",0,""],["鷲崎","地名",38.32552,138.50693,"佐渡市","","","",0,""],["黒姫","地名",38.22755,138.49629,"佐渡市","","","",0,""]];
+const HASSPOT = PLACES.some(a => a[7]);   // 観光・店舗(分類cat付き)を持つ地域だけ、おすすめ・一覧・英語の案内を出す
+// 駅の路線別の並び。[事業者, 路線名, [PLACESの番号(駅)…]] 。路線順は駅の位置から作った目安(build/work/places/make_places.py)
+const LINES = [];
+// 市町村の範囲表(県ページの市町村ボタンから ?at=<市町村コード> で開いた時に、地図をその範囲へ寄せる)。[コード, 名前, 緯度小, 経度小, 緯度大, 経度大]
+const MUNI = [["15224","Sado City",37.80519,138.20712,38.33101,138.57168]];
+const OPNAME = i => OPS_EN[i] || D.ops[i];
+const GROUP = i => { const n = D.ops[i]; return n.startsWith("新潟交通佐渡") ? "op1" : "other"; };
+const GLABEL = { op1: "Niigata Kotsu Sado", other: "Other operators" };
+const GSHORT = { op1: "Niigata Kotsu Sado", other: "Others" };
+const GTINY = { op1: "NKS", other: "Oth." };   // 320px級の超狭幅用
+const GORDER = ["op1", "other"];
+const GNUMSORT = ["op1"];   // 系統番号の順に並べるグループ
+const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
+const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, seq: r[3] || null, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
+stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
+routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; r.set = new Set(r.stops); });
+const routeLabel = r => r.en || r.name;
+// ---- 英語版：名前の英語(バス停＝stops_en.json・場所＝places_en.json・系統＝規則＋辞書)。日本語(標識の表記)は併記する。≈＝機械のローマ字(未確認) ----
+const P = (n, one, other) => n === 1 ? one : other;
+const SEN_ = ["~Ogino Yunomae","Kirariumu Sado","Gorudo Park","Central Town","Toki-no-mori Park","Famirio Sado Aikawa","~Ichinomiya Entrance","~Mitsuya","Sangu","Sansegawa","~Kamiogura","~Kamiogawa","Kamiyamada","Kamikawamo","~Kamimachi Jujiro","~Shimoono","~Shimoogawa","Shimokawamo","Shimoniibo","Moro","Moro School","Moro-higashi","~Ryotsu Pier","~Ryotsu Post Office","~Ryotsu Culture Hall","~Ryotsu Port Sado Kisen","~Ryotsu Hospital","~Nakanotsubo","Maruyama","~Maruyama Hiraizumi-ji","~Maruyamayanagi Kubo","~Nitsukame","Futami","~Futami Motomura","Futami-kita","Ikaura","Ikari","~Ikarishiro-no-shita","Ijiri","~Sendo","Sumiyoshi","Sumiyoshi Community Center","Sumiyoshi-kita","Sumiyoshi Onsen","~Sa Wada BS","~Sawatashoko Hall","~Sado Chutokyoiku School","Sado Museum","~Sado City Ryotsu Branch Office","~Sado Rekishi Densetsukan","~Sado Hanga-mura","Sado Hospital","Sado General High School","~Sado Kanayama","~Kuratani","~Nyusaki","~Nyugawa Jr. High School","Nyugawa-kita","Nyugawa-minami","~Nyukuwa","Yahata","Yahata School","Yahatashin-machi","Yahata Onsen","Yahata-machi","~Naikan","~Shutsumata-bashi","~Maehama Jr. High School","Kita-Ikari","Kita-Kora","Kita-Kawachi","~Kita-Kawachi Jr. High School","Kita-Kawachi-minami","Kita-Matsugasaki","Kita-Katabe","Kita-Katabe Community Center","Kitaebisu","Kitada-no-ura","~Kitadanora Nakayama","Kita-Tatsushima","Kita-Tatsushima-minami","Kita-Ushima","~Senbon-minami","~Senjojiki Entrance","Minami-Katabe","~Daigahana Lighthouse","Yoshii","Yoshii School","~Yoshizumi","Yoshioka","~Mukaiyama","~Agata Todo","Agata Kannondo","Waki Warehouse","Waki-kita","Waki-minami","~Toranki","Yokka-machi","Kokubunji","~Bogasaki","Bogaura","~Sakai","~Dankazeshiro","~Tojocho-bashi","Ota","Ota-nishi","Okura","Yamato","~Okawa","Osugi","Ohashi","~Odomari","Oura","~Oura-no-satomae","Oura-higashi","Oura-nishi","Oishi","~Oishi Yamada Entrance","~Otachi","~Otachi-minami","~Daizen Shrine","~Onokame","~Ohazama","Ozu","~Tennoshita","~Taikotaikenkoryukan","~Fufuiwa","~Ebisu Honcho","~Myosen-ji","Himezu","Himezu-kita","Himezu-minami","~Uga Shrine","Yasuda","Miyakawa","~Miyahashi","~Kachiku Market","~Shukunegi Shinden","Terada Entrance","Ogura","~Ogura Hakusan","Ogura Torigoe","Ogi","Ogi Entrance","~Ogi Yamamoto-cho","~Ogi Honcho","~Ogi Minzoku Museum","Ogi Onsen","~Ogi Port Sado Kisen","Komatsu","~Ogawa","~Sho Kawauchi","~Kodomari","~Kodomari Nakayama","~Oguma","Koda","Koda JA Branch Office","~Koishi","~Shoritsu","Onomi-kita","Onomi-minami","~Senkakuwanyoshimayuen","~Senkakuwan Tassha","~Obatashuzo","~Okada Entrance","Iwayaguchi","Iwayaguchi-minami","Iwakubi","~Kawashigeru Pass","~Sawa","~Ichiburisaki","Ichinosawa","Hiramatsu","~Hiramatsu Kumano Shrine","~Hiranesaki","Hirasawa","Hirasawa-kita","~Kyo Shimizu","~Kyo Shimizu-guchi","~Taitsuruso","Ushiro","~Obansho-bashi","Tokuwa Chuo","~Senmichi","Tochu Community Center","Tochu-minami","Toji","Toji-kita","~Shinbo","~Shinbo","~Shinbo-higashi","~Shinmachi School","~Shinmachi Honcho","~Shinmachi Village Center","Niibo","~Niibo Chamber of Commerce Tatemae","Niibo Elem. School","~Ryokomurauryuya","~Asahikyoku","~Kasugasaki","~Kasuga-cho","~Mandara-ji","Tsukifuse-kita","Tsukifuse-minami","Kido","~Honhikari-ji","~Honryu-ji","~Hongyo-ji","~Honmaieno Butai","Suginora","Suginora-higashi","Suginora-nishi","~Zaimoku-cho","Murayama","Murayama School","Tokoji","Higashi-Odori","Higashi-Kowashimizu","Higashi-Tatsushima","Higashi-Ushima","Matsugasaki-higashi","Matsugasaki-nishi","Yanagisawa","~Shibamachi","Kakinora","~Konpon-ji","~Shiizaki Onsen","Shiidomari Community Center","Shiidomari-higashi","Shiidomari-nishi","Tsubaki","Tsubakio","Yokoyama","Yokoyama-nishi","~Yokotani","Tachibana","~Tachibananagatemisaki","~Ketsuko","Utami","Utami-kita","Suizu","Suizu-kita","Mitoda","Ettsumi","Sawasaki","Sawaneikari School","~Sawaneikari Shitsuba","~Kawauchi","~Kawauchi Entrance","~Kawauchi Otokogamishita","Kawaharadahon-machi","Kawaharadasuwa-machi","Kawasaki","Kawasaki School","~Kawasaki Mingeikan","Kawasaki Post Office","Izumi","Aso","~Hama Umezu","~Ura-no-kawauchi","Uragawa-kita","Uragawa-minami","~Uratsu","~Kaishi-machi","~Coast Tori","Fukaura","~Shimizu","Takiwaki","~Katagami","~Katagami Sakaue","Katano","Katano-higashi","Katano-nishi","Inukamidaira","Tamasaki","~Kotohira Shrine","Kotora","Kotora Entrance","Tagirisu","Tagirisu-minami","Hatano Jujiro","Hatano School","~Hatano Nishimachi","~Shiraki","Shirose","~Minagawa","~Kantokusho","Meguro-machi","Meguro-machi-minami","Aikawa","~Aikawageko","Aikawa Jr. High School","~Aikawafun School","Aikawa Museum","Aikawa Hospital","Masaragawa","Maki","~Magiyama Clinic","Maura","Maura-higashi","Mano Miyamae","~Mano Goryo Entrance","Manoshin-machi","Yajima Entrance","~Yajima Yuen","Yagara","~Ishina Jr. High School","Ishina-kita","Ishina-minami","~Ishihata","Ishige-kita","Ishige-minami","Fukura","Akitsu","Akitsu-higashi","Inakujira","Inakujira-higashi","Inakujira-nishi","Kubota","Kubota-higashi","Kubota-nishi","Tatsuma","~Take-no-sawa","~Take-no-hana","Takeda-bashi","~Kanri Center","Yonago","~Itosaki","~Koyoyama","~Koyo-bashi","~Haniu","~Haniu","~Hamochi Chamber of Commerce","Hamochi Hongo","~Hamochi High School","Senago","~Koshiboso","~Koshibosokawa","~Shiseido","~Funeshita Entrance","~Funaba-cho","Wakamiya-dori","Mushiroba","~Sugawara Shrine Entrance","Ochiai-bashi","~Fujitsu-bashi","~Mora","~Mora Entrance","Mushizaki","Awabi","~Ezotsuka","~Namegaya","~Nishigataira Entrance","Nishi-Mikawa","~Nishiryutera Entrance","Mitate Entrance","Suwa Entrance","Toyoka Chuo","~Toyoka Oko","~Toyoka Kuzukura","Toyota","Kaizuka","~Akaiwa","Akadomari Jr. High School","~Akadomari Nakamachi","Akadomari Pier","~Akadomari Gyokyo","~Akadama Jr. High School","Akadama-kita","Akadama-minami","~Koshido-bashi","~Nogyo Gijutsu Center","Sports Park","Nosaka","~Noshiro","~Nozaki","~Nozaki","Nora-kita","Nora-minami","Kanamaru","Kanai","Kanai School","~Kanayama Chaya","~Teppohana","Kajiya","Kaji-machi Nakahara","Nagaki","Nagae Entrance","~Choune","Nagaishi","Hase","Seki","~Kanminami","Aoyama Funeral Hall","~Aoki","Shizudaira","Shizudaira Warehouse","Negai","~Kazeshima","Umakubi","~Komasaka","~Koge-kita","~Koge-minami","Takasaki","Takose","Takose-kita","Takose-nishi","~Takano","Washizaki","Washizaki Fishing Port","~Shikafuku","Kurohime","~Kurone"];   // 先頭の ~ ＝等級C(機械のローマ字・≈を付ける)。容量を抑えるため等級A/Bは名前だけ
+stops.forEach((s, i) => { const e = SEN_[i]; s.eg = e[0] === "~" ? "C" : "AB"; s.en = s.eg === "C" ? e.slice(1) : e; });
+const REN = ["~Utsumifu Line","~Kaifu Line","Minami Line","Higashi Coast Line","Main Line","~Yokoyado Line","Nanaura Coast Line","Ogi Line","~Kuninaka / Kanamaru Line","Kanamaru Line","Akadomari Line","Iwakubi Line","~Maehama Line","Shukunegi Line"];   // 先頭の ~ ＝等級C(≈)
+routes.forEach((r, i) => { const e = REN[i] || ""; r.eg = e[0] === "~" ? "C" : "B"; r.en = r.eg === "C" ? e.slice(1) : e; });
+const OPS_EN = ["Niigata Kotsu Sado"];
+const PEN = ["Sangu","Mikawa","~Sansegawaue","~Sansegawashita","~Sansegawa Yoshii Kamimachi","~Sansegawa Seiwa","~Sansegawa Matsusai","Kamikawamo","Kaminiibo","Kamiyokoyama","Kamiyabase","Kaminagaki","Shimokuji","Shimokawamo","Shimoniibo","Shimoyokoyama","Shimoaikawa","Shimonagaki","Shimokuroyama","Moro","Ryotsu Ogawa","Ryotsu","Ryotsu Ebisushin","Ryotsu Minato","Ryotsu Fukura","Nakahara","~Nakaoki Ueno-guchi","~Nakaokishita Noguchi","~Nakaoki Tangesaka",["Nakaoki Iwano","","","B"],"~Nakaoki Kidosawa","~Nakaoki Mujinku","~Nakaoki Machikoji","~Nakaoki Fujitsu",["Nakaoki Torigoe","","","B"],"Maruyama","Kujikawachi",["Niku-higashi Niku","","","B"],["Niku-nishi Niku","","","B"],"Futami","Ikaura","Itsubo","Sumiyoshi","Nyugawa","~Yahata Nakagawa","~Yahatasaka",["Yahata Iwano","","","B"],"~Yawatashinden","Yahatashin-machi",["Yahatashin-machi Danchi","","","B"],"~Yahata Tabo","Yahata-machi","~Yahatahazama","~Yahata Kojo","~Yahata Tatsumi","~Yahata Nomachi","Kamotashiro",["Kamo Lake","","","B"],"Kita-Ikari","Kita-Kora","Kita-Kawachi","Kita-Matsugasaki","Kita-Katabe","Kitaebisu","Kita-Tanora","Kita-Tatsushima","Kita-Ushima",["Chigusa Chuo","","","B"],["Chigusa Nakatsu","","","B"],"~Chigusa Bettosawa","~Chigusa Yamatota","~Chigusa Obana-higashi","~Chigusa Kidosawa","~Chigusa Motoyashiki","~Chigusa Mujinku","~Chigusa Saiho",["Chigusa Sekine","","","B"],"Minami-Shinbo","Minami-Katabe","Harakuro","Yoshii","Yoshiihongo","Yoshioka","Nagoya","Agata","Waki","Yokka-machi","Kokubunji","Bogaura","Jonokoshi","Toyama","Ota","Okubo","Okura","Okuratani","~Yamato Nakajima","~Yamato Yokotani","~Yamato Funatsu","~Yamato Baba","Daisho","Osugi","Ozu","Himezu","Anyoji","Miyakawa","Shukunegi","Terada","Ogura","Ogawa","Ogi","Ogi Donokama","Ogi Oura","Ogi Kowashimizu","Ogi Kinora","Ogi-machi","Ogi Kanetashinden","Kobie","Koda","Onomi",["Yamada-higashi Yamada","","","B"],"~Yamada Mujinku",["Yamada-nishi Yamada","","","B"],"Iwayaguchi","Iwakubi","~Ichinosawashima-no-koshi",["Ichinosawa Ichinosawa","","","B"],"Hiramatsu","~Hirashimizu Iwada",["Hirashimizu-higashi Hirashimizu","","","B"],"~Hirashimizu Mujinku",["Hirashimizu Nishino","","","B"],"Ushiro","Tokuwa","Tochu","Toji","Niibo","Niibo Inai","Niibo Kitagata","Niibo Ono","Niibo Shomyoji","Niibo Takei","Niibo Katagami","Niibo Uryuya","Niibo Tanosawa","Niibo Minagawa","Niibo Funashimo","Niibo Nagaune","Niibo Aoki","Asahi","Kasuga","Tsukifuse","Konagase","Suginora","Higashi-Odori","Higashi-Kowashimizu","Higashi-Tatsushima","Higashi-Ushima","Matsugasaki","Yanagisawa","Kakinora","Kurinoe","Umezu","Shiidomari","Tsubaki","Tsubakio","Tachibana","Utami","Suizu","Mitoda","~Mitoda Seiwa",["Mitoda Mitoda-kita","","","B"],["Mitoda Mitoda-minami","","","B"],"Ettsumi","Sawasaki","~Sawaneikari Nakayama","~Sawaneikarishiro-no-shita","~Sawaneikari Higashino","~Sawaneikari Mujinku",["Sawaneikari Tanaka","","","B"],"~Sawaneikari Tanaka-machi",["Sawaneikari Nishino","","","B"],"~Sawaneikari Tsuruko","~Sawaneikari Kawauchi","Sawanesumiya-machi","~Sawaneikari Mujinku",["Sawaneikari Tagami","","","B"],"~Sawane-machi Kamimachi","~Sawane-machi Shimomachi","Sawanekago-machi","~Sawaneikari Haniu",["Sawaneikari Nosaka","","","B"],"~Sawaneikari Sugawa","~Kawaharadahon-machi Shimomachi","~Kawaharadahon-machi Sataka-dori","~Kawaharadahon-machi Honcho","~Kawaharadahon-machi Tamachi","~Kawaharadahon-machitaka Hamacho",["Kawaharadasuwa-machi Kamigumi","","","B"],["Kawaharadasuwa-machi Shimogumi","","","B"],"~Kawaharadasuwa-machi Nakakumi","~Kawaharadasuwa-machidai Kamigumi","Kawasaki","~Izumimujinku","~Izumi No. 1","~Izumi No. 3","~Izumi No. 2","~Izumi No. 5","~Izumi No. 4","Hamakawachi","Hamada","Uragawa","Fukaura","Takiwaki","Katabata","Katano","Inukamidaira","Saruhachi","Tamasaki","Kotora","Tagirisu","Tanora","Futa","Hatano","Shirose","Meguro-machi","Aikawa Itchome","Aikawa Itchomehamamachi","Aikawa Itchomeuramachi","Aikawa Sanchome","Aikawa Sanchomeshinhamamachi","Aikawa Sanchomehamamachi","Aikawa Kamikyomachi","~Aikawaue Teramachi","Aikawa Shimokyomachi","Aikawa Shimoteramachi","Aikawa Shimoyamanokamimachi","Aikawa Oritomura","Aikawa Oritohamamachi","Aikawa Oritosumiyahamamachi","Aikawa Oritosumiyamachi","Aikawa Oritosumiyauramachi","Aikawa Oritomachi","Aikawa Nakakyomachi","Aikawa Nakateramachi","Aikawa Nichome","Aikawa Nichomeshinhamamachi","Aikawa Nichomehamamachi","Aikawa Gorozaemonmachi","Aikawa Aizumachi","Aikawa Yaoyamachi","Aikawa Rokuemonmachi","Aikawa Kitazawamachi","Aikawa Minamizawamachi","Aikawa Misoyamachi","Aikawa Aimonomachi","Aikawa Yonchome","Aikawa Yonchomehamamachi","Aikawa Sakashitamachi","Aikawa Shioyamachi","Aikawa Yuhakumachi","Aikawa Daikumachi","Aikawa Otokoyamachi","Aikawa Oura","Aikawa Omamachi","Aikawa Korokumachi","Aikawa Samonmachi","Aikawa Ichimachi","Aikawa Hiromamachi","Aikawa Yajuromachi","Aikawa Shingoromachi","Aikawa Shinzaimokumachi","Aikawa Shinhamamachi","Aikawa Shinnishizakamachi","Aikawa Zaimokumachi","Aikawa Itamachi","Aikawa Shibamachi","Aikawa Sakaemachi","Aikawa Mizukanemachi","Aikawa Edozawamachi","Aikawa Amamachi","Aikawa Nigorikawamachi","Aikawa Sumiyamachi","Aikawa Ishihatakimachi","Aikawa Komeyamachi","Aikawa Kamiyamachi","Aikawa Hanedamura","Aikawa Hanedamachi","Aikawa Nishizakamachi","Aikawa Suwamachi","Aikawa Nagasakamachi","Aikawa Umamachi","Aikawa Kabuse","~Shinkoji Nakano","~Shinkojisawa","~Shinkoji Takano","Masaragawa","Maki","Maura","Mano","Manookawa","Manoshin-machi","Yagara","Ishina","Ishida","Ishige","Akitsu","Inakujira","~Kubotanaka Kubota",["Kubota-higashi Kubota","","","B"],["Kubota-nishi Kubota","","","B"],"Tateno","Tatsuma","Takeda","Yonago","Haniu","Hayoshi","Hamochi Sanse","Hamochi Kamiyamada","Hamochi Kamewaki","Hamochi Osaki","Hamochi Ohashi","Hamochi Oishi","Hamochi Kodomari","Hamochi Hongo","Hamochi Murayama","Hamochi Takidaira","Hamochi Iioka","Senago","Mushiroba","Mushizaki","Awabi","Nishi-Mikawa","Mitate","Toyoka","Toyota",["Kaizuka No. 1","","","B"],["Kaizuka No. 2","","","B"],"Akadomari","Akadama","Tassha",["Tassha Tassha","","","B"],["Tassha Tassha Obayashi","","","B"],"Nora","Kanamaru","~Kanaishinbo Nakakoji","~Kanaishinbo Shutsusaki","~Kanaishinbo Bettosawa","~Kanaishinbo Karasaki","~Kanaishinbo Danto","~Kanaishinbomiya-no-shita","~Kanaishinbo Terazawa","~Kanaishinbo Mujinku","~Kanaishinbo Nonai","~Kanaishinbo JSDF Ku","~Kanaishinbo Saiho",["Kanaishinbo Sekine","","","B"],"Kaji-machi","Nagaki","Nagae","Nagaishi","Hase","Seki","~Abutsubo","Aono","Shizudaira","Negai","Iimochi","Umakubi","Takachi","~Takachi Senbon","~Takachi Koge","Takose","Washizaki","Kurohime"].map(x => typeof x === "string" ? (x[0] === "~" ? [x.slice(1), "", "", "C"] : [x]) : x);   // 容量を抑えるため、名前だけ＝文字列・名前＋等級Cだけ＝先頭 ~ の文字列(2026-11-01)
+const LOPD = {}, LEND = {}, AEND = {"佐渡市":"Sado City"};
+const PT_EN = {"地名":"Area","駅":"Station","役所":"Public office","観光":"Sightseeing","店舗":"Shop","商業":"Shopping center","公園":"Park","病院":"Hospital","交通":"Transport","施設":"Facility","大学":"University"}, CAT_EN = {"寺社":"Temples & shrines","歴史":"History","グルメ":"Food","買い物":"Shopping","自然":"Nature","温泉":"Hot springs","夜景":"Night views","アニメ・文化":"Anime & culture","体験":"Experiences"};
+const LOP = o => LOPD[o] || o, LEN = (l, o) => LEND[o + "|" + l] || LEND[l] || l, AEN = a => AEND[a] || a;
+const SNM = new Map(); stops.forEach(s => { if (!SNM.has(s.name)) SNM.set(s.name, s); });
+const SEN = n => (SNM.get(n) || { en: n }).en;
+const enCmp = new Intl.Collator("en").compare;
+const esc_ = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));   // esc と同じ(地図の点を作る時に使うので、esc より前に置く)
+const AP = '<i class="ap" title="Romanization is automatic and not verified" aria-hidden="true">≈</i><span class="vh"> (romanization not verified)</span>';
+const nm = s => `<b class="en1">${esc_(s.en)}</b>${s.eg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(s.name)}</span>`;
+const tnm = s => `${esc_(s.en)}${s.eg === "C" ? " ≈" : ""}<br><span class="ja" lang="ja">${esc_(s.name)}</span>`;
+const snm = n => { const s = SNM.get(n); return s ? nm(s) : esc_(n); };
+const pnm = p => `<b class="en1">${esc_(p.pe)}</b>${p.pg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(p.name)}</span>`;
+const rnm = r => r.en ? `<b class="en1">${esc_(r.en)}</b>${r.eg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(r.name)}</span>` : `<span class="ja jm" lang="ja">${esc_(r.name)}</span>`;
+const PE = p => p.pe;
+const subEn = p => { if (p.sen) return p.sen; const s = p.sub || "", m = s.match(/^(\d+)〜(\d+)丁目$/); return m ? `${m[1]}-${m[2]} chome` : s ? s.split("・").map(LOP).join(" / ") : ""; };   // 補足(丁目の範囲・駅の鉄道事業者)。places_en.json の英語を優先
+const kpre = (it, v, pv) => (it.key.startsWith(v) || (pv && it.key.includes("|" + pv))) ? 0 : 1;   // 英語名の先頭一致も「前方一致」として先に
+// 系統のバス停を移動順に並べる（位置からの推定。GTFS由来の系統だけ実際の停車順）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
+function orderRoute(r) {
+  if (r.seq) { const have = new Set(r.names), o = r.seq.filter(x => have.has(x)); r.names.forEach(x => { if (!o.includes(x)) o.push(x); }); return o; }   // GTFS由来の系統：データに実際の停車順(第4要素)がある
+  const by = new Map();
+  r.stops.forEach(s => { const a = by.get(s.name) || { name: s.name, la: 0, lo: 0, c: 0, st: [] }; a.la += s.lat; a.lo += s.lon; a.c++; a.st.push(s); by.set(s.name, a); });
+  const P = [...by.values()].map(a => ({ name: a.name, x: (a.lo / a.c) * 91, y: (a.la / a.c) * 111, st: a.st }));
+  const n = P.length; if (n <= 2) return P.sort((a, b) => a.x - b.x).map(p => p.name);
+  const d = (a, b) => Math.hypot(P[a].x - P[b].x, P[a].y - P[b].y);
+  // Prim法で最小全域木
+  const par = new Array(n).fill(-1), best = new Array(n).fill(Infinity), inT = new Array(n).fill(false), adj = P.map(() => []);
+  best[0] = 0;
+  for (let k = 0; k < n; k++) {
+    let u = -1; for (let i = 0; i < n; i++) if (!inT[i] && (u < 0 || best[i] < best[u])) u = i;
+    inT[u] = true; if (par[u] >= 0) { adj[u].push(par[u]); adj[par[u]].push(u); }
+    for (let v = 0; v < n; v++) if (!inT[v]) { const w = d(u, v); if (w < best[v]) { best[v] = w; par[v] = u; } }
+  }
+  const bfs = src => { const dist = new Array(n).fill(-1), prev = new Array(n).fill(-1); dist[src] = 0; const q = [src];
+    for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (dist[v] < 0) { dist[v] = dist[u] + 1; prev[v] = u; q.push(v); } }); }
+    return { dist, prev }; };
+  const far = res => res.dist.indexOf(Math.max(...res.dist));
+  const A = far(bfs(0)); const rb = bfs(A); const B = far(rb);
+  let path = []; for (let v = B; v >= 0; v = rb.prev[v]) path.push(v);   // B→A
+  path.reverse();                                                       // A→B
+  if (P[path[0]].x > P[path[path.length - 1]].x) path.reverse();        // 西の端から始める
+  // 軸に乗らないバス停は、軸に最短でつながる地点の直後に入れる
+  const onPath = new Map(path.map((v, i) => [v, i])), anchor = new Array(n).fill(-1), depth = new Array(n).fill(0), q = [];
+  path.forEach((v, i) => { anchor[v] = i; q.push(v); });
+  for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (anchor[v] < 0) { anchor[v] = anchor[u]; depth[v] = depth[u] + 1; q.push(v); } }); }
+  const groups = path.map(() => []); for (let v = 0; v < n; v++) if (!onPath.has(v)) groups[anchor[v]].push(v);
+  const out = []; path.forEach((v, i) => { out.push(v); groups[i].sort((a, b) => depth[a] - depth[b] || d(v, a) - d(v, b)).forEach(x => out.push(x)); });
+  return out.map(i => P[i].name);
+}
+routes.forEach(r => { r.order = orderRoute(r); });
+const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
+const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (GNUMSORT.includes(a.g) ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
+
+// ---- 画面モード（スマホ=ボトムシート／それ以外=右パネル）----
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mqMobile = matchMedia("(max-width: 767px)");
+const isMobile = () => mqMobile.matches;
+const mainEl = document.getElementById("main"), panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
+const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl"), homeTop = document.getElementById("homeTop");
+
+const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }), zoomAnimation: !RM, fadeAnimation: !RM, markerZoomAnimation: !RM }).setView([38.0151, 138.3756], 10);
+// 地図の種類(すべて国土地理院タイル・同じ提供元)。選んだ種類は、次に開いた時も覚えておく(この端末の中だけ)
+const GSI = "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>GSI Japan</a>";
+const BASE = [
+  { id: "std", label: "Standard", note: "Regular map", url: "https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", att: "Map: " + GSI },
+  { id: "pale", label: "Pale", note: "Light colors, dots stand out", url: "https://maps.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png", att: "Map: " + GSI + " (Pale map)" },
+  { id: "photo", label: "Aerial", note: "Aerial photos (dates vary by area)", minZoom: 9, url: "https://maps.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+    att: "Photo: " + GSI + " (Seamless latest aerial photos)  Data source: Landsat 8 imagery (GSI, TSIC, GEO Grid/AIST), Landsat 8 imagery (courtesy of the U.S. Geological Survey)" },
+];
+let baseId = "std"; try { const sv = localStorage.getItem("busmap.base"); if (BASE.some(b => b.id === sv)) baseId = sv; } catch (e) {}
+// タイル取得失敗の案内（数枚失敗したら表示、読み込めたら消す）
+const tw = document.getElementById("tilewarn"); let tErr = 0, tOk = 0, twDismissed = false;
+const mkTiles = b => {
+  const l = L.tileLayer(b.url, { minZoom: b.minZoom || 5, maxZoom: 18, maxNativeZoom: 18, attribution: b.att });
+  l.on("tileerror", () => { tOk = 0; if (++tErr >= 3 && !twDismissed) tw.hidden = false; });
+  l.on("tileload", () => { if (tErr && ++tOk >= 4) { tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; } });
+  return l;
+};
+let tiles = mkTiles(BASE.find(b => b.id === baseId)).addTo(map);
+const applyMinZoom = () => { const mz = BASE.find(b => b.id === baseId).minZoom || 5; map.setMinZoom(mz); if (map.getZoom() < mz) map.setZoom(mz, { animate: false }); };   // 写真は、衛星画像のクレジットが要る低ズーム(9未満)を使わない
+applyMinZoom();
+function setBase(id) {
+  const b = BASE.find(x => x.id === id); if (!b || id === baseId) return;
+  map.removeLayer(tiles); tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; tiles = mkTiles(b).addTo(map); baseId = id; applyMinZoom();
+  try { localStorage.setItem("busmap.base", id); } catch (e) {}
+  syncBase();
+}
+let syncBase = () => {};
+L.Control.Base = L.Control.extend({
+  options: { position: "topright" },
+  onAdd() {
+    const c = L.DomUtil.create("div", "basectl"); L.DomEvent.disableClickPropagation(c); L.DomEvent.disableScrollPropagation(c);
+    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><span class="bc-cur"></span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+      <div class="bc-menu" id="bcMenu" role="radiogroup" aria-label="Map type" hidden>${BASE.map(b => `<button type="button" role="radio" class="bc-opt" data-id="${b.id}" aria-checked="false"><span class="bc-ck" aria-hidden="true"></span><span><b>${b.label}</b><small>${b.note}</small></span></button>`).join("")}</div>`;
+    const btn = c.querySelector(".bc-btn"), menu = c.querySelector(".bc-menu"), opts = [...c.querySelectorAll(".bc-opt")];
+    const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); if (v) (opts.find(o => o.dataset.id === baseId) || opts[0]).focus(); };
+    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); const cur = BASE.find(b => b.id === baseId).label; btn.querySelector(".bc-cur").textContent = cur; btn.setAttribute("aria-label", "Choose map type (current: " + cur + ")"); };   // ボタンの左に、いま表示中の地図の名前を出す
+    syncBase();
+    btn.onclick = () => open(menu.hidden);
+    opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
+      o.onkeydown = e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); opts[(i + (e.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length].focus(); } else if (e.key === "Home") { e.preventDefault(); opts[0].focus(); } else if (e.key === "End") { e.preventDefault(); opts[opts.length - 1].focus(); } }; });
+    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget) && !e.relatedTarget.contains(c)) open(false); });   // iPhoneのSafariは、項目の文字部分を押すと一度、親の地図へフォーカスが移る→それは「外へ出た」ではない   // Tabでメニューの外へ出たら閉じる
+    c.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { e.stopPropagation(); open(false); btn.focus(); } });
+    document.addEventListener("pointerdown", e => { if (!menu.hidden && !c.contains(e.target)) open(false); }, true);   // 地図はタップのclickを止めることがあるので、押した瞬間(pointerdown)で外側を判定する
+    return c;
+  },
+});
+new L.Control.Base().addTo(map);
+document.getElementById("tilewarnx").onclick = () => { tw.hidden = true; twDismissed = true; };
+
+// シートの高さ（3段）。地図は全面に置き、シートはその上に重ねる（開閉・ドラッグで地図の大きさは変わらない）
+const SORDER = ["min", "mid", "max"];
+// 標準段は46%。画面が低い端末(375×667など)は地図が狭くなりすぎない範囲で50%に
+const shRatio = st => { const H = mainEl.clientHeight; return st === "min" ? .13 : st === "max" ? .88 : H < 640 ? .50 : .46; };
+let sheetState = "mid";
+const sheetPx = st => { const H = mainEl.clientHeight; return st === "min" ? Math.max(72, Math.round(H * shRatio(st))) : Math.round(H * shRatio(st)); };
+const cover = () => isMobile() ? sheetPx(sheetState) : 0;      // 地図の下側がシートで隠れるpx
+function applySheet() {
+  if (!isMobile()) { panel.style.height = ""; mainEl.style.setProperty("--cover", "0px"); panel.classList.remove("min"); return; }
+  const h = sheetPx(sheetState);
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px");
+  panel.classList.toggle("min", sheetState === "min");
+  grip.setAttribute("aria-expanded", String(sheetState !== "min"));
+}
+const setSheet = st => { sheetState = st; applySheet(); };
+// 地図の見えている部分（シートの上側）の中央に、その地点が来るようにする
+function focusTo(ll, z) {
+  const zz = z == null ? map.getZoom() : z, p = map.project(ll, zz); p.y += cover() / 2;
+  map.setView(map.unproject(p, zz), zz, { animate: !RM });
+}
+function ensureVisible(ll) {
+  const c = cover(); if (!c) return;
+  const size = map.getSize(), pt = map.latLngToContainerPoint(ll);
+  if (pt.y > size.y - c - 44 || pt.y < 44 || pt.x < 30 || pt.x > size.x - 30) focusTo(ll);
+}
+// シートのドラッグ（取っ手だけがスワイプを受ける。地図とパネル内のスクロールには干渉しない）
+let drag = null;
+grip.addEventListener("pointerdown", e => {
+  if (!isMobile() || (e.pointerType === "mouse" && e.button !== 0)) return;
+  drag = { y0: e.clientY, h0: panel.getBoundingClientRect().height, moved: false, last: e.clientY, lt: e.timeStamp, v: 0 };
+  grip.setPointerCapture(e.pointerId); panel.classList.add("drag");
+});
+grip.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dy = drag.y0 - e.clientY; if (Math.abs(dy) > 6) drag.moved = true;
+  if (!drag.moved) return;
+  const h = Math.max(sheetPx("min"), Math.min(sheetPx("max"), drag.h0 + dy));
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px"); panel.classList.remove("min");
+  const dt = e.timeStamp - drag.lt; if (dt > 0) drag.v = (drag.last - e.clientY) / dt; drag.last = e.clientY; drag.lt = e.timeStamp;
+});
+function endDrag(e) {
+  if (!drag) return; const d = drag; drag = null; panel.classList.remove("drag");
+  if (e.type === "pointercancel" && !d.moved) { applySheet(); return; }
+  if (!d.moved) { setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); return; }
+  const h = panel.getBoundingClientRect().height, px = SORDER.map(sheetPx);
+  let k = px.reduce((b, p, i) => Math.abs(p - h) < Math.abs(px[b] - h) ? i : b, 0);
+  if (d.v > .45) k = Math.max(k, px.findIndex(p => p > h + 4) < 0 ? 2 : px.findIndex(p => p > h + 4));
+  else if (d.v < -.45) { const lo = px.map((p, i) => p < h - 4 ? i : -1).filter(i => i >= 0); k = Math.min(k, lo.length ? lo[lo.length - 1] : 0); }
+  setSheet(SORDER[k]);
+}
+grip.addEventListener("pointerup", endDrag); grip.addEventListener("pointercancel", endDrag);
+grip.addEventListener("click", e => { if (e.detail === 0) setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); });   // キーボード(Enter/Space)
+grip.addEventListener("keydown", e => {
+  const k = SORDER.indexOf(sheetState);
+  if (e.key === "ArrowUp") { e.preventDefault(); setSheet(SORDER[Math.min(2, k + 1)]); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); setSheet(SORDER[Math.max(0, k - 1)]); }
+});
+// PC・タブレットのパネル開閉（マーカーは作り直さず、地図の大きさだけ取り直す）
+function openPanel(v) {
+  mainEl.classList.toggle("pclosed", !v);
+  tgl.querySelector(".tl").textContent = v ? "Close panel" : "Open panel"; tgl.querySelector(".ta").textContent = v ? "▶" : "◀";
+  tgl.setAttribute("aria-label", v ? "Close panel" : "Open panel"); tgl.setAttribute("aria-expanded", String(v));
+  map.invalidateSize();
+}
+tgl.onclick = () => openPanel(mainEl.classList.contains("pclosed"));
+// 画面サイズが変わっても、選択・検索の状態は保ったまま配置だけ取り直す
+let rzT = 0;
+new ResizeObserver(() => {
+  map.invalidateSize(); applySheet();
+  clearTimeout(rzT); rzT = setTimeout(() => { if (curStops[0] && !hoverList.length) ensureVisible(L.latLng(curStops[0].lat, curStops[0].lon)); }, 200);
+}).observe(mainEl);
+
+const on = Object.fromEntries(GORDER.map(g => [g, true]));
+let selRoute = null, lastStop = null, lastPlace = null, curStops = [], curRings = [], placePin = null;
+const colorOf = g => css(g);
+const isSel = s => !selRoute || selRoute.set.has(s);
+const baseR = () => { const z = map.getZoom(); return z <= 12 ? 3 : z <= 14 ? 4.5 : z <= 15 ? 5.5 : 7; };
+const markers = stops.map(s => {
+  const m = L.circleMarker([s.lat, s.lon], { radius: 5, weight: 2, color: "#fff", fillColor: colorOf(s.g), fillOpacity: .95 });
+  m.on("click", () => { if (isSel(s)) { showStop(s); ensureVisible(L.latLng(s.lat, s.lon)); } });   // 薄くした点は押せない（誤タップ防止）
+  m.bindTooltip(tnm(s), { direction: "top", offset: [0, -4] });
+  m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
+  m.on("mouseover", () => { if (isSel(s)) hoverOn([s], true); });
+  m.on("mouseout", () => { if (!touchOnly()) hoverOff(); });   // 指で押した時に出る疑似mouseoutで、選択中の輪を消さない
+  s.m = m; return m;
+});
+
+// カーソルを合わせたバス停を強調（大きな黄色の輪）。リストの名前に合わせた時も、地図の点に合わせた時も同じ見え方
+let hoverRings = [], hoverList = [];
+function hoverOn(list, fromMap) {
+  hoverOff(); hoverList = list.slice();
+  list.forEach(s => {
+    if (!s.m._map) return;
+    hoverRings.push(L.circleMarker([s.lat, s.lon], { radius: baseR() + 13, color: "#1f2b20", weight: 4, fillColor: "#ffd400", fillOpacity: .6, interactive: false }).addTo(map));
+    s.m.bringToFront();
+  });
+  if (list[0] && list[0].m._map) list[0].m.openTooltip();
+  const li = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(list[0].name)}"]`);
+  if (li && fromMap) li.classList.add("hl");
+}
+function hoverOff() {
+  hoverRings.forEach(r => r.remove()); hoverRings = [];
+  hoverList.forEach(s => s.m.closeTooltip()); hoverList = [];
+  pbody.querySelectorAll(".stoplist button.hl").forEach(b => b.classList.remove("hl"));
+}
+
+function styleOne(s, r0) {
+  const inSel = isSel(s);
+  // 系統を選んでいる間は、その系統が通るバス停を事業者フィルタに関係なく出す
+  const vis = on[s.g] || (selRoute && inSel);
+  if (!vis) { if (s.m._map) s.m.remove(); return; }
+  if (!s.m._map) s.m.addTo(map);
+  const cur = curStops.includes(s);
+  s.m.setStyle({ fillColor: colorOf(s.g), fillOpacity: inSel ? .95 : .12, opacity: inSel ? 1 : .15,
+    radius: cur ? r0 + 4 : selRoute && inSel ? r0 + 2 : r0, weight: cur ? 3 : selRoute && inSel ? 2.5 : 2 });
+  if ((selRoute && inSel) || cur) s.m.bringToFront();
+}
+// 系統を選んでいる間、地図の点に『推定順の番号』を出す（切り替え可・この端末に覚える）。低ズームでは、1・5の倍数・最後だけ
+const touchOnly = () => isMobile() || matchMedia("(hover: none)").matches;   // カーソルを合わせられない端末(スマホ・タブレット)
+let numOn = true; try { numOn = localStorage.getItem("busmap.num") !== "0"; } catch (e) {}
+const numLayer = L.layerGroup().addTo(map);
+function drawNums() {
+  numLayer.clearLayers();
+  if (!selRoute || !numOn) return;
+  const z = map.getZoom(), n = selRoute.order.length, pos = new Map(selRoute.order.map((nm, i) => [nm, i + 1]));
+  const sel = curStops[0] ? curStops[0].name : null, items = [];
+  selRoute.stops.forEach(s => { const k = pos.get(s.name); if (!k) return;
+    const pri = s.name === sel ? 0 : (k === 1 || k === n) ? 1 : k % 5 === 0 ? 2 : 3;
+    if (z < 13 && pri > 2) return;
+    items.push({ s, k, pri, p: map.latLngToContainerPoint([s.lat, s.lon]) }); });
+  items.sort((a, b) => a.pri - b.pri || a.k - b.k);
+  const kept = [];   // 画面上で重なる番号は、優先度の高い方だけ残す(選択中・最初/最後・5の倍数 → その他)
+  items.forEach(it => { if (kept.some(o => Math.abs(o.p.x - it.p.x) < 26 && Math.abs(o.p.y - it.p.y) < 18)) return; kept.push(it);
+    L.marker([it.s.lat, it.s.lon], { icon: L.divIcon({ className: "stnum", html: String(it.k), iconSize: [22, 16], iconAnchor: [-4, 21] }), interactive: false, keyboard: false, zIndexOffset: 400 }).addTo(numLayer); });
+}
+function paint() { const r0 = baseR(); stops.forEach(s => styleOne(s, r0)); drawRings(); drawNums(); }
+// 選択中のバス停の外周リング（白い縁取り＋濃い輪＋ブランドグリーンの塗り）
+function drawRings() {
+  curRings.forEach(r => r.remove()); curRings = [];
+  curStops.forEach(s => { if (!s.m._map) return;
+    const R = baseR() + 9;
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R + 2, color: "#fff", weight: 7, fill: false, interactive: false }).addTo(map));
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R, color: "#1f2b20", weight: 3, fillColor: "#6fae2f", fillOpacity: .28, interactive: false }).addTo(map));
+    s.m.bringToFront(); });
+}
+map.on("zoomend", paint);
+// ---- この地図の範囲(設計 D-2)：ズーム12以下の時だけ、データの範囲を破線の長方形で示す(これより外の停留所・系統は載っていない) ----
+const EXT = [37.7932, 138.1951, 38.343, 138.5837];   // [緯度小, 経度小, 緯度大, 経度大]
+const extRect = L.rectangle([[EXT[0], EXT[1]], [EXT[2], EXT[3]]], { interactive: false, dashArray: "6 6", weight: 2, opacity: .7, fill: false });
+const extTip = L.circleMarker([EXT[2], (EXT[1] + EXT[3]) / 2], { radius: 0, opacity: 0, fill: false, interactive: false }).bindTooltip("Map coverage", { permanent: true, direction: "bottom", className: "extlbl", interactive: false });
+const extLayer = L.layerGroup([extRect, extTip]);
+const syncExtent = () => { const on = map.getZoom() <= 12; if (on) extRect.setStyle({ color: css("ink") }); if (on && !map.hasLayer(extLayer)) extLayer.addTo(map); else if (!on && map.hasLayer(extLayer)) map.removeLayer(extLayer); };
+map.on("zoomend", syncExtent); syncExtent(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncExtent);
+// 選択中のバス停（地図・一覧で共通）を差し替える。点の再描画は変わった分だけ
+function setCur(list, scroll = true) {
+  const old = curStops; curStops = list || [];
+  const r0 = baseR(); old.concat(curStops).forEach(s => styleOne(s, r0)); drawRings();
+  pbody.querySelectorAll(".stoplist button.cur").forEach(b => b.classList.remove("cur"));
+  if (curStops[0]) { const b = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(curStops[0].name)}"]`); if (b) { b.classList.add("cur"); if (scroll) b.scrollIntoView({ block: "nearest" }); } }
+}
+
+const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const NOTE = `<details class="note"><summary>About this page · Sources · Disclaimer</summary>
+• This is an <b>unofficial</b> page made by an individual as a hobby. It is not an official product of Sado, the bus operators or the Ministry of Land, Infrastructure, Transport and Tourism or any other organization.<br>
+• The content may contain errors, omissions or outdated information. Use it at your own risk. Always check the operator's official information (<a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">Ministry of Land, Infrastructure, Transport and Tourism, Road Transport Bureau (Japanese)</a>, <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11.html" target="_blank" rel="noopener">National Land Numerical Information: bus stop data (Japanese)</a>, etc.) before you ride.<br>
+• Timetables and fares are not included. The source data has no stop order, so the order of stops on a route is <b>estimated</b> from their locations and may differ from reality. Some routes list only some of their stops.<br>
+<b>Sources</b><br>
+• Bus stops and routes: processed from <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html" target="_blank" rel="noopener">Ministry of Land, Infrastructure, Transport and Tourism (MLIT), National Land Numerical Information “Bus Stop Data” (FY2022, CC BY 4.0)</a><br>
+• Station locations and municipalities: processed from MLIT National Land Numerical Information (Railway Station Data N02-22 and Administrative Area Data N03-22)<br>
+• Locations of places and facilities: approximate positions made by cross-checking the <a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">GSI Japan place-name search</a> and <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors (ODbL)</a> (includes location data from OSM; not exact positions such as entrances)<br>• Town names (Sado): processed from <a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">e-Stat (Portal Site of Official Statistics of Japan), 2020 Census small-area (town/chome) boundary data</a>. Each town is shown at a representative point (the centroid of its area).<br>• English and romanized names: generated from open data (<a href="https://github.com/geolonia/japanese-addresses" target="_blank" rel="noopener">Geolonia japanese-addresses</a>, CC BY 4.0; © OpenStreetMap contributors, ODbL; bus stop readings from GTFS-JP open data published by bus operators and municipalities, e.g. Sanko Bus, Kumamoto Bus, Kumamoto Toshi Bus, Kumamoto Dentetsu, Kagoshima City, via the <a href="https://gtfs-data.jp/" target="_blank" rel="noopener">GTFS Data Repository</a>, CC BY 4.0; place-name dictionaries) and automatic kana conversion. Names marked “≈” are machine-romanized and may be misread. The Japanese name is the one shown at the stop. Corrections are welcome via <a href="https://miitobow.com/">miitobow.com</a>.<br>
+• Operators listed under a municipality's name are municipal community buses and shared taxis<br>• Check each operator's or municipality's official information for timetables, fares and the latest routes<br>• Routes that leave the map area show only the stops inside it<br>
+• Municipalities in this map (1): Sado City. <br>
+• Map coverage: roughly 37.79–38.34°N, 138.20–138.58°E (Sado City). Stops and routes outside this area are not shown. Even inside this area, stops in municipalities covered by a neighboring map are not included here.<br>
+${HASSPOT ? `• Locations of sights and shops: approximate addresses made by cross-checking GSI Japan, OSM and Wikipedia (as of ). Shops may close, move or suspend business. This page is not affiliated with any listed shop or facility and is not advertising. “Popular with visitors” is an unofficial guide based on sources such as Honichi Lab rankings and listings in English travel guides.<br>` : ""}
+• Map: <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">GSI Japan map tiles (Standard, Pale, Seamless latest aerial photos)</a>. Aerial photo dates vary by area and may not show the current situation.<br>
+• Map display: <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
+const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
+const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
+homeTop.onclick = goHome;
+function render(html, sum) {
+  const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
+  pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
+  const bk = pbody.querySelector(".back");
+  if (bk) { const hm = document.createElement("button"); hm.type = "button"; hm.className = "homebtn"; hm.setAttribute("aria-label", "Back to home (start screen)"); hm.innerHTML = HOMEICON + "Home"; hm.onclick = goHome; bk.insertAdjacentElement("afterend", hm); }   // PC用（スマホはシート上部のボタン）
+  homeTop.hidden = !bk; panel.classList.toggle("hashome", !!bk);
+  const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
+}
+
+function home() {
+  hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
+  selRoute = null; lastStop = null; paint(); map.closePopup();
+  render(`<h2 class="head">Tap a bus stop</h2>
+  <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
+  <p>Use the search box to find stations, towns, places and facilities (e.g. Sado City Ryotsu Branch Office), bus stops, and routes (e.g. Kaifu).</p>
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p>
+  <div class="lh">Browse</div>
+  <button class="rt" id="bArea" type="button"><span>Find by area</span><small>by ward or municipality ›</small></button>
+  <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}<div class="lh">Municipalities in this map (1)</div><p class="tip">Sado City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/niigata/agano-sanjo/"><span>Agano-Sanjo Area Bus Map</span><small>SE ›</small></a><a class="rt" href="/bus/en/niigata/nagaoka-minamiuonuma/"><span>Nagaoka-Minamiuonuma Area Bus Map</span><small>SE ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+}
+function routeBtn(r) {
+  return `<button class="rt" type="button" data-r="${r.i}"><span>${rnm(r)}</span><small>${r.n} ${P(r.n, "stop", "stops")}</small></button>`;
+}
+function groupedRoutes(rs) {
+  let out = "", cur = "";
+  rs.slice().sort(routeCmp).forEach(r => {
+    if (r.g !== cur) { cur = r.g; out += `<div class="grp"><i style="background:var(--${r.g})"></i>${GLABEL[r.g]}</div>`; }
+    out += routeBtn(r);
+  });
+  return out;
+}
+function showStop(s, opt) {
+  hoverOff(); selRoute = null; lastStop = s; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([s]);
+  if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
+  const rs = s.rts.map(i => routes[i]);
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${nm(s)}</h2>
+  <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b> ${P(rs.length, "route", "routes")}</span></div>
+  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${NOTE}`,
+  `${s.en} · ${rs.length} ${P(rs.length, "route", "routes")}`);
+  paint();   // 系統表示から戻った時の薄表示を解除
+  bind();
+  if (lastPlace) { const bk = document.getElementById("bk"), pl = lastPlace; bk.textContent = `← Back to ${PE(pl)}`; bk.onclick = () => showPlace(pl, { noMove: true }); }
+}
+
+// ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
+const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
+const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
+const places = PLACES.map((a, i) => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "", pe: (PEN[i] && PEN[i][0]) || a[9] || a[0], aen: (PEN[i] && PEN[i][1]) || AEN(a[4]), sen: (PEN[i] && PEN[i][2]) || "", pg: (PEN[i] && PEN[i][3]) || "" }));
+const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
+const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : []), p.pe, p.pe.replace(/\bSta\./g, "Station")].map(pnorm).join("|") }));
+// 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
+const pkind = p => p.type === "地名" ? "Representative point" : p.type === "駅" ? "approx. location" : p.type === "店舗" ? "Shop location" : "Address";
+const ptip = p => p.type === "地名" ? "Moved the map to this area's representative point (not necessarily its center). " : p.type === "駅" ? "Moved the map to the station (approximate location). " : p.type === "店舗" ? "Moved the map near the shop (approximate location). Shops may have closed, moved or be temporarily closed; check official information for opening hours. " : "Moved the map near the facility (not necessarily its entrance). ";
+const placeSub = p => [PT_EN[p.type] || p.type, CAT_EN[p.cat] || p.cat, subEn(p), p.aen].filter(Boolean).join(" · ");
+function setPin(p) {
+  clearPin();
+  placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
+  placePin.bindTooltip(esc(p.pe) + "<br><span class=\"ja\" lang=\"ja\">" + esc(p.name) + "</span>", { permanent: true, direction: "top", offset: [0, -30], className: "placetip" }).openTooltip();
+}
+function clearPin() { if (placePin) { placePin.remove(); placePin = null; } }
+function nearStops(p) {
+  const by = new Map();
+  stops.forEach(s => { const d = Math.hypot((s.lon - p.lon) * 91000, (s.lat - p.lat) * 111000), o = by.get(s.name);
+    if (!o || d < o.d) by.set(s.name, { s, d }); });
+  const all = [...by.values()].sort((a, b) => a.d - b.d);
+  const near = all.filter(x => x.d <= 700).slice(0, 8);
+  return near.length ? { list: near, far: false } : { list: all.slice(0, 3), far: true };
+}
+// ---- 一覧から探す：地名＝区ごと／駅＝路線ごと。選ぶと showPlace と同じ表示になり、「もどる」で一覧へ戻る ----
+let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻り先
+places.forEach((p, i) => p.i = i);
+const AREA_ORDER = ["佐渡市"];
+const jaCmp = new Intl.Collator("ja").compare;
+function browseOpen(sheet) { hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
+function showAreaIndex() {
+  browseOpen(); placeBack = null;
+  const m = areaMap(), keys = [...m.keys()].sort((a, b) => (AREA_ORDER.indexOf(a) + 1 || 99) - (AREA_ORDER.indexOf(b) + 1 || 99) || jaCmp(a, b));
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Find by area</h2>
+  <p class="tip">Choose a ward or municipality to list its place names (towns, etc.). Choose a place to move the map there and see nearby bus stops.</p>
+  ${keys.map(k => `<button class="rt" type="button" data-a="${esc(k)}"><span>${esc(AEN(k))}<span class="ja" lang="ja">${esc(k)}</span></span><small>${m.get(k).length} ›</small></button>`).join("")}${NOTE}`, "Places by ward or municipality");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-a]").forEach(b => b.onclick = () => showAreaPlaces(b.dataset.a));
+}
+function showAreaPlaces(a) {
+  browseOpen(); const list = (areaMap().get(a) || []).slice().sort((x, y) => enCmp(x.pe, y.pe));
+  placeBack = { label: `← Back to ${AEN(a)}`, fn: () => showAreaPlaces(a) };
+  render(`<button class="back" id="bk" type="button">← All areas</button><h2 class="head">${esc(AEN(a))}<span class="ja" lang="ja">${esc(a)}</span></h2>
+  <p class="tip">${list.length} place ${P(list.length, "name", "names")} (towns, etc.). Locations are approximate representative points. Tap a name to move the map there. Sorted alphabetically by English name. If you cannot find a place, use the search box.</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${pnm(p)}</span><small>${esc(subEn(p))}</small></button>`).join("")}${NOTE}`, `${AEN(a)} · ${list.length} ${P(list.length, "place", "places")}`);
+  document.getElementById("bk").onclick = showAreaIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+// ---- 観光・グルメ（placesの cat 付き）：検索窓のおすすめパネルと、ホームの一覧 ----
+const SPOT_EN_HINT = "Sado City Ryotsu Branch Office";
+const RECO = [["外国人に人気", "Popular", p => p.foreign], ["観光名所", "Sights", p => p.type === "観光"], ["グルメ", "Food", p => p.cat === "グルメ"], ["買い物", "Shopping", p => p.cat === "買い物"], ["寺社", "Shrines", p => p.cat === "寺社"]];
+const recoSort = (a, b) => (b.foreign - a.foreign) || jaCmp(a.name, b.name);
+let recoCat = null;
+function showReco() {
+  const cats = RECO.filter(c => places.some(c[2]));
+  if (!cats.length) { showSug(false); return; }
+  if (!recoCat || !cats.some(c => c[0] === recoCat)) recoCat = cats[0][0];
+  const cur = cats.find(c => c[0] === recoCat), list = places.filter(cur[2]).sort(recoSort).slice(0, 8);
+  hit = list.map(p => ({ t: "p", p })).concat([{ t: "idx" }]); act = -1; sug.dataset.mode = "reco";
+  sug.innerHTML = `<div class="sh" role="presentation">Popular places</div>
+  <div class="scats" role="group" aria-label="Filter by type">${cats.map(c => `<button type="button" class="scat" data-cat="${esc(c[0])}" aria-pressed="${c[0] === recoCat}">${esc(c[1])}</button>`).join("")}</div>
+  ${list.map((p, k) => `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(p.pe)}<small class="en ja" lang="ja">${esc(p.name)}</small></span><small>${esc(placeSub(p))}</small></button>`).join("")}
+  <button type="button" role="option" id="sug-${list.length}" data-k="${list.length}" class="more"><span>See all sights &amp; food ›</span></button>
+  <div class="empty" style="padding:8px 14px">Search in English or Japanese, e.g. “${esc(SPOT_EN_HINT)}”</div>`;
+  sug.querySelectorAll(".scat").forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { recoCat = b.dataset.cat; showReco(); }; });
+  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+function showSpotIndex() {
+  browseOpen(); placeBack = null;
+  const cats = ["寺社", "歴史", "自然", "温泉", "夜景", "アニメ・文化", "体験", "グルメ", "買い物"].filter(c => places.some(p => p.cat === c));
+  const fo = places.filter(p => p.foreign).length;
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Sightseeing &amp; food</h2>
+  <p class="tip">Choose a type to see the list. Tap a name to move the map there and see nearby bus stops. Locations are approximate. <b>Shops may have closed, moved or be temporarily closed</b>; check official information for opening hours.</p>
+  ${fo ? `<button class="rt" type="button" data-c="*"><span>Popular with visitors</span><small>${fo} ›</small></button>` : ""}
+  ${cats.map(c => `<button class="rt" type="button" data-c="${esc(c)}"><span>${esc(CAT_EN[c] || c)}</span><small>${places.filter(p => p.cat === c).length} ›</small></button>`).join("")}${NOTE}`, "Sights & food");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-c]").forEach(b => b.onclick = () => showSpotCat(b.dataset.c));
+}
+function showSpotCat(c) {
+  browseOpen(); const list = places.filter(c === "*" ? (p => p.foreign) : (p => p.cat === c)).sort((x, y) => enCmp(x.pe, y.pe)), ttl = c === "*" ? "Popular with visitors" : (CAT_EN[c] || c);
+  placeBack = { label: `← Back to ${ttl}`, fn: () => showSpotCat(c) };
+  render(`<button class="back" id="bk" type="button">← All types</button><h2 class="head">${esc(ttl)}</h2>
+  <p class="tip">${list.length} ${P(list.length, "place", "places")}, sorted by name. Locations are approximate; shops may have closed, moved or be temporarily closed.</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${esc(p.pe)}<span class="enm ja" lang="ja">${esc(p.name)}</span></span><small>${esc([p.type === "店舗" ? "Shop" : "", CAT_EN[p.cat] || p.cat, subEn(p) || p.aen].filter(Boolean).join(" · "))}</small></button>`).join("")}${NOTE}`, `${ttl} · ${list.length}`);
+  document.getElementById("bk").onclick = showSpotIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showLineIndex() {
+  browseOpen(); placeBack = null;
+  let cur = "", html = "";
+  LINES.forEach((l, i) => { if (l[0] !== cur) { cur = l[0]; html += `<div class="grp">${esc(LOP(cur))}</div>`; } html += `<button class="rt" type="button" data-l="${i}"><span>${esc(LEN(l[1], l[0]))}<span class="ja" lang="ja">${esc(l[1])}</span></span><small>${l[2].length} ${P(l[2].length, "station", "stations")} ›</small></button>`; });
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Find by station</h2>
+  <p class="tip">Choose a line to list its stations in order (stations within this map; the order is approximate, based on station locations). Choose a station to see nearby bus stops.</p>${html}${NOTE}`, "Stations by line");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-l]").forEach(b => b.onclick = () => showLine(+b.dataset.l));
+}
+function showLine(i) {
+  browseOpen(); const l = LINES[i], label = `${LOP(l[0])} ${LEN(l[1], l[0])}`;
+  placeBack = { label: LEN(l[1], l[0]).length > 22 ? "← Back to line" : `← Back to ${LEN(l[1], l[0])}`, fn: () => showLine(i) };   // 長い路線名は、スマホの『もどる』ボタンで見切れるので短くする
+  render(`<button class="back" id="bk" type="button">← All lines</button><h2 class="head">${esc(LEN(l[1], l[0]))}<span class="ja" lang="ja">${esc(l[1])}</span></h2>
+  <div class="meta"><span class="pill">${esc(LOP(l[0]))}</span><span><b>${l[2].length}</b> ${P(l[2].length, "station", "stations")} within this map</span></div>
+  <ol class="stoplist">${l[2].map(k => { const p = places[k]; return `<li><button type="button" data-i="${k}">${pnm(p)}</button></li>`; }).join("")}</ol>${NOTE}`, `${label} · ${l[2].length} ${P(l[2].length, "station", "stations")}`);
+  document.getElementById("bk").onclick = showLineIndex;
+  if (!isMobile() && l[2].length > 1) map.fitBounds(L.latLngBounds(l[2].map(k => [places[k].lat, places[k].lon])), { padding: [40, 40], maxZoom: 14, animate: !RM });
+  pbody.querySelectorAll(".stoplist button[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showPlace(p, opt) {
+  hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([]); paint(); setPin(p); map.closePopup();
+  const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
+  if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
+  else ensureVisible(pll);
+  const ns = nearStops(p);
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${pnm(p)}</h2>
+  <div class="meta"><span class="pill">${esc(PT_EN[p.type] || p.type)} · ${p.cat ? esc(CAT_EN[p.cat] || p.cat) + " · " : ""}${pkind(p)}</span><span class="nw">${esc([subEn(p), p.aen].filter(Boolean).join(", "))}</span></div>
+  <p class="tip">${ptip(p)}Tap a nearby stop to see its routes.</p>
+  <div class="lh">${ns.far ? "Few bus stops nearby (nearest first)" : "Nearby bus stops (nearest first)"}</div>
+  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${nm(x.s)}</span><small>approx. ${Math.max(10, Math.round(x.d / 10) * 10)} m · ${x.s.rts.length} ${P(x.s.rts.length, "route", "routes")}</small></button>`).join("")}${NOTE}`,
+  `${p.pe} · nearby stops`);
+  const pbk = document.getElementById("bk");
+  if (placeBack) { pbk.textContent = placeBack.label; pbk.onclick = placeBack.fn; } else pbk.onclick = home;   // 一覧から開いた時は、その一覧へ戻る
+  pbody.querySelectorAll(".rt[data-s]").forEach(b => b.onclick = () => { const s = stops[+b.dataset.s]; showStop(s, { center: true, zoom: Math.max(map.getZoom(), 16) }); ensureVisible(L.latLng(s.lat, s.lon)); });
+}
+function showRoute(r) {
+  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup();
+  setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
+  paint();
+  map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const back = lastStop ? `← Back to ${esc(lastStop.en)}` : "← Back";
+  render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
+  <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
+  <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
+  <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
+  `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);
+  if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
+  document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  // ---- 停留所を順に見る（推定順）。スマホは『押しても拡大しない』：印を付けるだけ。近くを見たい時は『拡大』 ----
+  const fitAll = () => map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const same = n => r.stops.filter(x => x.name === n);
+  const rPrev = document.getElementById("rPrev"), rNext = document.getElementById("rNext"), rZoom = document.getElementById("rZoom"), rPos = document.getElementById("rPos"), rAllBtn = document.getElementById("rAll");
+  let idx = curStops[0] ? r.order.indexOf(curStops[0].name) : -1;
+  const sync = () => {
+    rPos.innerHTML = r.seq ? `Order ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh"> ${idx < 0 ? "none selected" : esc(SEN(r.order[idx]))}</span>` : `Est. ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh"> ${idx < 0 ? "none selected" : esc(SEN(r.order[idx]))}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
+    const ae = document.activeElement; rPrev.disabled = idx <= 0; rNext.disabled = idx >= r.order.length - 1; rZoom.disabled = idx < 0;
+    if (ae && ae.disabled) (ae === rPrev ? rNext : ae === rNext ? rPrev : rAllBtn).focus();   // 押せなくなったボタンにフォーカスが残って、キーボード操作が途切れないように
+    pbody.querySelectorAll(".stoplist button").forEach(b => { if (idx >= 0 && b.dataset.n === r.order[idx]) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+  };
+  const mark = (i, zoomIn) => {   // i番目のバス停に印(黄色の輪＋名前)を付ける。zoomIn=trueの時だけ寄せる。それ以外は、隠れている時だけ最小限に動かす
+    const list = same(r.order[i]); if (!list[0]) return; idx = i;
+    if (isMobile() && sheetState !== "mid") setSheet("mid");
+    setCur(list); hoverOn(list); sync();
+    if (zoomIn) focusTo(L.latLng(list[0].lat, list[0].lon), Math.max(map.getZoom(), 16)); else ensureVisible(L.latLng(list[0].lat, list[0].lon));
+  };
+  sync();
+  rPrev.onclick = () => mark(Math.max(0, idx - 1), false);
+  rNext.onclick = () => mark(Math.min(r.order.length - 1, idx + 1), false);
+  rZoom.onclick = () => { if (idx >= 0) mark(idx, true); };
+  document.getElementById("rAll").onclick = () => { hoverOff(); fitAll(); };
+  document.getElementById("rNum").onclick = e => { numOn = !numOn; try { localStorage.setItem("busmap.num", numOn ? "1" : "0"); } catch (x) {} e.currentTarget.setAttribute("aria-pressed", String(numOn)); drawNums(); };
+  pbody.querySelectorAll(".stoplist button").forEach(b => {
+    b.onclick = () => {
+      const i = r.order.indexOf(b.dataset.n), s = same(b.dataset.n)[0]; if (!s || i < 0) return;
+      if (touchOnly()) { mark(i, false); return; }   // スマホ・タブレット(カーソルを合わせられない端末)は、拡大しない
+      idx = i; sync();
+      if (isMobile()) setSheet("mid");           // 一覧のタップ→標準段へ。選んだ地点はシートの裏に隠れない位置へ寄せる
+      setCur(same(b.dataset.n)); focusTo(L.latLng(s.lat, s.lon), Math.max(map.getZoom(), 15)); hoverOn(same(b.dataset.n));
+    };
+    if (!touchOnly()) { b.onmouseenter = () => hoverOn(same(b.dataset.n)); b.onmouseleave = () => hoverOff(); b.onfocus = () => hoverOn(same(b.dataset.n)); b.onblur = () => hoverOff(); }   // スマホは、地図を押すとフォーカスが外れて黄色い輪が消えるので、focus連動にしない
+  });
+}
+function bind() {
+  pbody.querySelectorAll(".rt").forEach(b => b.onclick = () => showRoute(routes[+b.dataset.r]));
+  const bk = document.getElementById("bk"); if (bk) bk.onclick = home;
+}
+
+// フィルタ
+const chips = document.getElementById("chips"), chipEls = {};
+GORDER.forEach(g => {
+  const c = document.createElement("button"); c.className = "chip"; c.type = "button"; c.setAttribute("aria-pressed", "true");
+  c.innerHTML = `<i style="background:var(--${g})"></i><span class="long">${GLABEL[g]}</span><span class="short">${GSHORT[g]}</span><span class="tiny">${GTINY[g]}</span>`;
+  c.setAttribute("aria-label", "Show " + GLABEL[g] + " stops");
+  c.onclick = () => { on[g] = !on[g]; syncChips(); map.closePopup(); paint(); };
+  chips.appendChild(c); chipEls[g] = c;
+});
+function syncChips() { GORDER.forEach(g => chipEls[g].setAttribute("aria-pressed", on[g])); }
+
+// 検索（Enter／↑↓／Escに対応。判定ロジックは従来どおり）
+const q = document.getElementById("q"), sug = document.getElementById("sug"), qclear = document.getElementById("qclear");
+const kana = t => t.normalize("NFKC").toLowerCase();
+const items = [...routes.map(r => ({ t: "r", r, key: kana(r.name + " " + D.ops[r.op]) + "|" + kana(routeLabel(r) + " " + OPNAME(r.op)) + "|" + pnorm(routeLabel(r)) })),
+  ...stops.map(s => ({ t: "s", s, key: kana(s.name) + "|" + pnorm(s.en) + "|" + pnorm(s.en.replace(/\bSta\./g, "Station")) }))];
+let hit = [], act = -1;
+const showSug = v => { sug.hidden = !v; q.setAttribute("aria-expanded", String(v)); if (!v) q.removeAttribute("aria-activedescendant"); };
+function pick(it) {
+  showSug(false); q.value = ""; qclear.hidden = true; act = -1; placeBack = null;
+  if (it.t === "idx") { showSpotIndex(); return; }
+  if (it.t === "p") { showPlace(it.p); return; }
+  lastPlace = null; clearPin();     // 場所から離れて、検索で別のバス停・系統を選んだ時
+  it.t === "r" ? showRoute(it.r) : (showStop(it.s, { center: true, zoom: 16 }), ensureVisible(L.latLng(it.s.lat, it.s.lon)));
+}
+function setAct(k) {
+  act = k; if (k >= 0) q.setAttribute("aria-activedescendant", "sug-" + k);
+  sug.querySelectorAll("button[data-k]").forEach((b, i) => { b.classList.toggle("act", i === act); b.setAttribute("aria-selected", i === act); if (i === act) b.scrollIntoView({ block: "nearest" }); });
+}
+function search() {
+  const raw = q.value.trim(), v = kana(raw); act = -1; qclear.hidden = !q.value;
+  if (!v) { if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  sug.dataset.mode = "";
+  hit = (pv0 => { const h = items.filter(it => it.key.includes(v) || (pv0.length > 1 && it.key.includes(pv0))); const opOnly = it => it.t === "r" && !(kana(it.r.name + " " + routeLabel(it.r)).includes(v) || (pv0.length > 1 && pnorm(routeLabel(it.r)).includes(pv0))); return h.some(it => it.t === "s") && h.filter(it => it.t === "r").length > 20 ? h.filter(it => !opOnly(it)) : h; })(pnorm(raw));
+  hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || kpre(a, v, pnorm(raw)) - kpre(b, v, pnorm(raw)) || (a.t === "s" && b.t === "s" ? a.s.en.length - b.s.en.length : 0));
+  hit = hit.slice(0, 40);
+  // 場所（駅・地名・施設）は別の候補群として先頭に追加。既存のバス停・系統の判定と並びは変えない
+  const pv = pnorm(raw);
+  const ph = placeItems.filter(it => it.key.includes(pv)).map(it => ({ it, sc: it.name === pv ? 0 : it.name.startsWith(pv) ? 1 : 2 }))
+    .sort((a, b) => a.sc - b.sc || PTYPE_ORDER.indexOf(a.it.p.type) - PTYPE_ORDER.indexOf(b.it.p.type) || a.it.p.name.length - b.it.p.name.length || areaRank(a.it.p.area) - areaRank(b.it.p.area)).slice(0, 8).map(x => x.it);
+  hit = ph.concat(hit);
+  if (!hit.length) {
+    sug.innerHTML = `<div class="empty">No places, stops or routes match <b>“${esc(raw)}”</b>.<br>Try:<br>• a station, town, place or facility name (e.g. Sado City Ryotsu Branch Office)<br>• part of a stop name (e.g. Sado City Ryotsu Branch Office)<br>• a route number (e.g. Kaifu)${HASSPOT ? `<br>Search in English or Japanese, e.g. “${esc(SPOT_EN_HINT)}”` : ""}</div>`;
+  } else {
+    let html = "", cur = "";
+    hit.forEach((it, k) => {
+      if (it.t !== cur) { cur = it.t; html += `<div class="sh" role="presentation">${it.t === "p" ? "Places" : it.t === "r" ? "Routes" : "Bus stops"}</div>`; }
+      html += it.t === "p"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.p.pe)}<small class="en ja" lang="ja">${esc(it.p.name)}</small></span><small>${esc(placeSub(it.p))}</small></button>`
+        : it.t === "r"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${rnm(it.r)}</span><small>${esc(OPNAME(it.r.op))} · ${it.r.n} ${P(it.r.n, "stop", "stops")}</small></button>`
+        : `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${nm(it.s)}</span><small>${esc(OPNAME(it.s.op))} · ${it.s.rts.length} ${P(it.s.rts.length, "route", "routes")}</small></button>`;
+    });
+    sug.innerHTML = html;
+    sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  }
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+q.oninput = search;
+q.onfocus = () => { if (q.value.trim() || HASSPOT) search(); };
+qclear.onclick = () => { q.value = ""; qclear.hidden = true; showSug(false); act = -1; q.focus(); };
+q.onkeydown = e => {
+  if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換確定のEnterでは候補を開かない
+  if (e.key === "Escape") { e.preventDefault(); if (!sug.hidden) showSug(false); else if (q.value) { q.value = ""; qclear.hidden = true; } return; }
+  if (sug.hidden || !hit.length) return;
+  if (e.key === "ArrowDown") { e.preventDefault(); setAct((act + 1) % hit.length); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setAct((act - 1 + hit.length) % hit.length); }
+  // ↑↓で選んだ候補があればそれを開く。何も選んでいない時は従来どおり「バス停・系統の先頭候補」を開く（バス停・系統の候補が1つも無い語の時だけ、先頭の場所）
+  else if (e.key === "Enter") { e.preventDefault(); pick(act >= 0 ? hit[act] : (hit.find(h => h.t !== "p") || hit[0])); }
+};
+document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
+const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "Search places & stops" : "Search places, stops, routes") : isMobile() ? "Search places & stops" : "Search places, stops, routes"; };   // 狭い画面では短く
+setPh(); mqMobile.addEventListener("change", setPh);
+home();
+applySheet();
+map.invalidateSize();
+// ?at=<市町村コード> で開いた時は、その市町村のバス停の範囲へ地図を寄せる(県ページの市町村ボタン)。不明なコードは無視して既定の表示。
+(() => { const at = new URLSearchParams(location.search).get("at"), mu = at && MUNI.find(m => m[0] === at);
+  if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
+  map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
+  const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">Opened “${esc(mu[1])}” from the Niigata page. The map shows the area of its bus stops.</p>`); })();
+// 言語の切り替えボタンは、今の ?at= などを引き継ぐ
+document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
+// 見出し(地域名＋Bus Map)が収まらない狭い画面では「Bus Map」を省く
+// それでも収まらない時は、地域名を短い名前(en.short)にする(2026-11-01・Okinawa Main Island 等)
+const fitH1 = () => { const h = document.querySelector("header h1"); if (!h) return; const n = h.querySelector(".h1n"); if (n) { n.dataset.full = n.dataset.full || n.textContent; n.textContent = n.dataset.full; } h.classList.remove("cut"); if (h.scrollWidth > h.clientWidth + 1) { h.classList.add("cut"); if (n && h.scrollWidth > h.clientWidth + 1) n.textContent = n.dataset.short; } };
+fitH1(); addEventListener("resize", fitH1);
+</script>
+</body>
+</html>
