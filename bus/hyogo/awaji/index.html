@@ -584,7 +584,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：福良）、バス停、系統（例：舞子・福良線）を探せます。</p>
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（3）</div><p class="tip">南あわじ市・淡路市・洲本市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hyogo/kobe/"><span>神戸・西宮・明石バスマップ</span><small>北東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（3）</div><p class="tip">南あわじ市・淡路市・洲本市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hyogo/kobe/"><span>神戸・西宮・明石バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/tokushima/tokushima-all/"><span>徳島バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
   document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {

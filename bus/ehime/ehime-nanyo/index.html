@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>南予バスマップ | miitobow</title>
+<meta name="description" content="宇和島市・八幡浜市・大洲市・西予市・内子町・愛南町など愛媛県南部（南予）のバス停と系統を地図で眺められる非公式ページ。バス停994か所・73系統（2022年度版）。">
+<link rel="canonical" href="https://miitobow.com/bus/ehime/ehime-nanyo/">
+<link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/ehime/ehime-nanyo/">
+<link rel="alternate" hreflang="en" href="https://miitobow.com/bus/en/ehime/ehime-nanyo/">
+<link rel="alternate" hreflang="x-default" href="https://miitobow.com/bus/ehime/ehime-nanyo/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="南予バスマップ | miitobow">
+<meta property="og:description" content="宇和島市・八幡浜市・大洲市・西予市・内子町・愛南町など愛媛県南部（南予）のバス停と系統を地図で眺められる非公式ページ。バス停994か所・73系統（2022年度版）。">
+<meta property="og:url" content="https://miitobow.com/bus/ehime/ehime-nanyo/">
+<link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://miitobow.com/bus/assets/og-ehime-ehime-nanyo.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="南予バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
+<style>
+  :root {
+    --bg: #f6f9f4; --surface: #ffffff; --surface-soft: #eef3ea;
+    --ink: #1f2b20; --ink-soft: #55655a; --ink-faint: #5f6e5c;
+    /* 文字・リンクは濃い緑（コントラスト確保）。ブランドの #6fae2f は枠・塗り・選択状態にだけ使う */
+    --accent-dark: #3a5d22; --brand: #6fae2f; --brand-soft: rgba(111,174,47,.18);
+    --border: #dde6d8; --uwajima: #2f8a4e; --iyotetsunanyo: #d9822b; --iyotetsu: #1a8a8a; --community: #9b4dca; --other: #5a7fa8;
+    --hdr: 60px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+      --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #8c9c88;
+      --accent-dark: #b4e68f; --brand: #82c455; --brand-soft: rgba(130,196,85,.22);
+      --border: #2b3625; --uwajima: #5fc080; --iyotetsunanyo: #f0a35e; --iyotetsu: #4fc3c3; --community: #c58be8; --other: #86a9d0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overscroll-behavior: none; }
+  @supports (height: 100dvh) { html, body { height: 100dvh; } }
+  body { background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
+    font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif; -webkit-font-smoothing: antialiased; }
+  .head { font-family: "M PLUS Rounded 1c","Hiragino Sans",sans-serif; font-weight: 900; letter-spacing: .02em; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+
+  /* ---- ヘッダー ---- */
+  header { position: relative; z-index: 1300; min-height: var(--hdr); padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+    padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  header h1 { margin: 0; font-size: 18px; color: var(--accent-dark); white-space: nowrap; }
+  .searchwrap { position: relative; flex: 1 1 260px; max-width: 460px; }
+  #q { width: 100%; height: 42px; padding: 0 44px 0 14px; font-size: 16px; border: 2px solid var(--border); border-radius: 12px;
+    background: var(--surface-soft); color: var(--ink); -webkit-appearance: none; appearance: none; }
+  #q::-webkit-search-cancel-button { display: none; }
+  #q:focus { border-color: var(--brand); outline: none; background: var(--surface); box-shadow: 0 0 0 3px var(--brand-soft); }
+  #qclear { position: absolute; right: 2px; top: 0; width: 42px; height: 42px; border: 0; background: none; color: var(--ink-soft);
+    font-size: 22px; line-height: 1; cursor: pointer; border-radius: 12px; }
+  #qclear[hidden] { display: none; }
+  #qclear:hover { color: var(--ink); background: var(--brand-soft); }
+  #sug { position: absolute; z-index: 1400; left: 0; right: 0; top: calc(100% + 6px); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; max-height: min(60dvh, 440px); overflow: auto; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+    overscroll-behavior: contain; padding-bottom: 4px; }
+  #sug[hidden] { display: none; }
+  #sug .sh { position: sticky; top: 0; padding: 7px 14px 5px; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--accent-dark);
+    background: var(--surface-soft); border-bottom: 1px solid var(--border); }
+  #sug button { display: flex; width: 100%; min-height: 48px; text-align: left; gap: 10px; padding: 10px 14px; background: none; border: 0;
+    border-bottom: 1px solid var(--border); color: var(--ink); font-size: 15px; cursor: pointer; align-items: center; justify-content: space-between; }
+  #sug button:hover { background: var(--brand-soft); }
+  #sug button.act { background: var(--brand-soft); box-shadow: inset 4px 0 0 var(--brand); }
+  #sug small { color: var(--ink-soft); font-size: 12px; flex: 0 1 46%; max-width: 50%; text-align: right; line-height: 1.4; }
+  #sug button span { flex: 1 1 auto; min-width: 0; overflow-wrap: break-word; }
+  #sug .empty { padding: 16px 14px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+  #sug .empty b { color: var(--ink); }
+  #sug span .en { display: block; flex: none; max-width: 100%; text-align: left; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+  #sug .scats { display: flex; gap: 6px; padding: 8px 14px 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #sug .scats::-webkit-scrollbar { display: none; }
+  #sug .scats .scat { flex: none; width: auto; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  #sug .scats .scat small { flex: none; max-width: none; font-weight: 400; color: var(--ink-soft); margin: 0; text-align: left; }
+  #sug .scats .scat[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
+  #sug .more { color: var(--accent-dark); font-weight: 700; }
+  .enname { margin: -2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .rt .enm { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; }
+  .chips { display: flex; gap: 6px; flex-wrap: nowrap; font-size: 13px; }
+  .chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 44px; padding: 0 12px; border-radius: 999px;
+    border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; user-select: none; }
+  .chip i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .chip[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); font-weight: 700; }
+  .chip[aria-pressed="false"] { color: var(--ink-faint); }
+  .chip[aria-pressed="false"] i { opacity: .4; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .placepin span { display: block; width: 26px; height: 26px; margin: 3px; border-radius: 50% 50% 50% 0; background: var(--brand); border: 3px solid #1f2b20; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .placepin span::after { content: ""; position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+  .placetip { font-weight: 700; font-size: 13px; color: #1f2b20; background: #fff; border: 2px solid #1f2b20; border-radius: 8px; }
+  .tgl { margin-left: auto; min-height: 40px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .tgl:hover { border-color: var(--brand); background: var(--brand-soft); }
+
+  /* ---- 地図とパネル ---- */
+  main { flex: 1; position: relative; min-height: 0; display: flex; --cover: 0px; }
+  #map { flex: 1; min-width: 0; position: relative; }
+  .leaflet-container { font-family: inherit; }
+  .leaflet-bottom { bottom: var(--cover, 0px); }
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
+  /* 地図の種類の切り替え(右上)。ズームボタンと同じく、地図の上は明るい色で統一 */
+  .leaflet-top.leaflet-right { z-index: 1150; }   /* スマホでシートを最大にしても、メニューがシートの裏に隠れない(ヘッダー1300・検索候補1400より下) */
+  .basectl { position: relative; }
+  .basectl .bc-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 10px; font: 700 14px/1 "Hiragino Sans","Yu Gothic",system-ui,sans-serif; white-space: nowrap; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
+  .basectl .bc-btn:hover { background: #f4f4f4; }
+  .basectl .bc-btn:focus-visible, .basectl .bc-opt:focus-visible { outline: 3px solid #6fae2f; outline-offset: 2px; }
+  .bc-menu { position: absolute; right: 0; top: 50px; width: 246px; padding: 6px; border-radius: 12px; background: #fff; color: #1f2b20; border: 2px solid rgba(0,0,0,.2); box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+  .bc-menu[hidden] { display: none; }
+  .bc-opt { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+  .bc-opt:hover { background: #eef3ea; }
+  .bc-opt.on { background: rgba(111,174,47,.18); }
+  .bc-opt b { display: block; font-size: 15px; }
+  .bc-opt small { display: block; font-size: 12px; color: #55655a; line-height: 1.3; }
+  .bc-ck { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid #55655a; background: #fff; }
+  .bc-opt.on .bc-ck { border-color: #3a5d22; background: radial-gradient(circle, #3a5d22 0 45%, #fff 50%); }
+  #tilewarn { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px; border-radius: 12px; background: #fff4d6; color: #5a4300; border: 1px solid #e3c36a; font-size: 13px; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #tilewarn[hidden] { display: none; }
+  #tilewarn button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+
+  #panel { width: clamp(320px, 28vw, 400px); display: flex; flex-direction: column; background: var(--surface); border-left: 1px solid var(--border); min-height: 0; }
+  @media (min-width: 1024px) { #panel { width: clamp(360px, 26vw, 400px); } }
+  @media (min-width: 768px) { main.pclosed #panel { display: none; } }
+  .sheet-top { display: none; }
+  .pbody { flex: 1; min-height: 0; overflow: auto; padding: 14px 16px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
+  .pbody h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+  .pbody p { margin: 0 0 10px; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+  .meta .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); }
+  .meta .pill i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .meta b { color: var(--ink); }
+  .back { display: inline-flex; align-items: center; min-height: 44px; margin: -4px 0 8px -4px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .back:hover { border-color: var(--brand); background: var(--brand-soft); }
+  /* ホームへ一発で戻るボタン: PCはパネル内の「もどる」の隣、スマホはシート上部の右 */
+  .back, .homebtn { vertical-align: top; }   /* 『もどる』と『ホーム』の上端をそろえる(overflow:hiddenの『もどる』は、基準線が下に来て、ホームより低く並んでいた) */
+  .homebtn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -4px 0 8px 8px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .homebtn:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .homebtn svg { flex: none; }
+  .hometop { display: none; }
+  .nw { white-space: nowrap; }
+  #pbody h2:focus { outline: none; }
+  .lh { margin: 14px 0 4px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .tip { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+  .rt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 44px; text-align: left; margin: 0 0 6px; padding: 8px 12px; border-radius: 10px; font-size: 14px;
+    border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); cursor: pointer; }
+  .rt:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .rt small { color: var(--ink-soft); font-size: 12px; flex: none; }
+  .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 5px; margin: 6px 0 8px; padding: 6px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .rbar button { flex: 1 1 0; min-width: 44px; min-height: 44px; padding: 0 4px; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  @media (hover: hover) { .rbar button:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); } }   /* 指で押した後に「押されたまま」に見えないよう、カーソルのある端末だけ */
+  .rbar button:disabled { opacity: .4; cursor: default; }
+  .rbar button[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); }
+  .rbar button[aria-pressed="true"]::before { content: "✓ "; font-weight: 800; }   /* オンの目印(色だけに頼らない) */
+  .rbar #rPos { flex: none; min-width: 72px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .stnum { width: auto !important; min-width: 16px; padding: 0 4px; border: 1.5px solid #1f2b20; border-radius: 8px; background: rgba(255,255,255,.94); color: #1f2b20; font: 700 11px/13px system-ui, sans-serif; text-align: center; pointer-events: none; box-sizing: border-box; }
+  .stoplist { list-style: none; counter-reset: st; padding: 0; margin: 0; }
+  .stoplist li { counter-increment: st; display: flex; align-items: center; }
+  .stoplist li::before { content: counter(st); flex: none; width: 2.4em; text-align: right; padding-right: .7em; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .stoplist button { display: block; flex: 1; min-height: 44px; text-align: left; padding: 6px 10px; font-size: 14px; line-height: 1.4; color: var(--ink); background: none; border: 0; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; }
+  .stoplist button:hover, .stoplist button.hl { background: var(--brand-soft); }
+  .stoplist button.cur { background: var(--brand-soft); border-left-color: var(--brand); font-weight: 700; }
+  .warn { flex: none; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); font-size: 12.5px; line-height: 1.5; color: var(--ink); background: #fff7e0; border-top: 1px solid #ecd9a0; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .warn { background: #2b2610; border-top-color: #4b4217; } }
+  .warn a { color: var(--accent-dark); font-weight: 700; }
+  details.note { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 4px; font-size: 12px; line-height: 1.7; color: var(--ink-soft); }
+  details.note summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--accent-dark); }
+  details.note a { color: var(--accent-dark); }
+
+  /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
+  @media (max-width: 767px) {
+    header { flex-wrap: nowrap; gap: 6px; padding: 6px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+    header h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .tgl { display: none; }
+    .searchwrap { order: 0; flex: 1 1 auto; min-width: 0; max-width: none; }
+    #q { height: 44px; padding-left: 12px; }
+    #q:placeholder-shown { padding-right: 8px; }
+    #q::placeholder { font-size: 14px; }
+    #qclear { width: 44px; height: 44px; }
+    .chips { flex: none; margin-left: 0; gap: 4px; }
+    .chip { min-height: 44px; min-width: 44px; padding: 0 7px; gap: 3px; font-size: 13px; }
+    .chip .long { display: none; }
+    #panel { position: absolute; z-index: 1100; left: 0; right: 0; bottom: 0; width: auto; height: var(--sh, 40%); border-left: 0; border-top: 1px solid var(--border);
+      border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(0,0,0,.22); transition: height .22s ease; overflow: hidden; }
+    #panel.drag { transition: none; }
+    .sheet-top { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 3px; flex: none; width: 100%; min-height: 44px; padding: 6px 16px 2px;
+      border: 0; background: none; color: var(--ink); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border-radius: 18px 18px 0 0; }
+    .sheet-top .bar { width: 44px; height: 5px; border-radius: 3px; background: var(--brand); }
+    .sheet-top #psum { max-width: 100%; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #panel.min .pbody, #panel.min .warn { visibility: hidden; }
+    #panel.min .warn { display: none; }
+    .pbody { padding: 0 16px 10px; }
+    .back { float: right; margin: 0 0 0 8px; padding: 0 12px; min-height: 44px; max-width: 58%; }
+    .homebtn { display: none; }
+    .hometop { position: absolute; z-index: 3; top: 0; right: 6px; width: 60px; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px 0 0; border: 0; border-radius: 12px; background: none; color: var(--ink); cursor: pointer; font-size: 10.5px; font-weight: 700; line-height: 1.1; }
+    .hometop[hidden] { display: none; }
+    .hometop:active { background: var(--brand-soft); }
+    #panel.hashome .sheet-top #psum { max-width: calc(100% - 136px); }
+    #sug { position: fixed; left: 8px; right: 8px; top: 64px; }   /* 検索欄は狭いので、候補は画面幅いっぱいに出す(topはJSで補正) */
+    #sug button { flex-wrap: wrap; row-gap: 0; }
+    #sug small { flex: 1 1 100%; max-width: 100%; text-align: left; }
+    .pbody h2 { font-size: 18px; margin: 6px 0 4px; }
+    .meta { margin-bottom: 6px; }
+    .lh { margin-top: 8px; }
+    .grp { margin: 6px 0 4px; }
+    .rt { margin-bottom: 4px; }
+    .warn { white-space: nowrap; overflow: hidden; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
+  }
+  @media (max-width: 767px) and (max-height: 500px) { header h1 { display: none; } .searchwrap { order: 0; flex: 1 1 200px; } }
+  @media (min-width: 768px) { .chip .short { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .chip .long { display: none; } .chip .short { display: inline; } header h1 { font-size: 16px; } .tgl .tl { display: none; } .searchwrap { flex-basis: 200px; } .chip { padding: 0 9px; } }
+  .chip .tiny { display: none; }
+  @media (max-width: 359px) { .chip .short { display: none; } .chip .tiny { display: inline; } .chip { min-width: 44px; padding: 0 6px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  .hub { display: inline-flex; align-items: center; flex: none; min-height: 40px; padding: 0 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .hub:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .hub .ha { font-size: 18px; line-height: 1; }
+  a.rt { color: inherit; text-decoration: none; }
+  .leaflet-tooltip.extlbl { background: var(--surface); color: var(--ink); border: 1px solid var(--border); box-shadow: none; font-size: 12px; font-weight: 700; padding: 2px 8px; }
+  .leaflet-tooltip-bottom.extlbl::before { display: none; }
+  .crumb, .brk { display: none; }
+  @media (max-width: 767px) { .hub { display: none; } header { flex-wrap: wrap; row-gap: 2px; padding-top: 4px; } header h1 { position: static; width: auto; height: auto; clip: auto; overflow: hidden; text-overflow: ellipsis; order: 0; flex: 1 1 0; min-width: 0; font-size: 16px; }
+    .crumb { display: flex; order: 1; flex: none; gap: 2px; } .crumb a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; border-radius: 10px; color: var(--accent-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; border: 1.5px solid var(--border); background: var(--surface); }
+    .brk { display: block; order: 2; flex: 0 0 100%; height: 0; } .searchwrap { order: 3; } .chips { order: 4; } }
+  @media (max-width: 767px) and (max-height: 500px) { header h1, .crumb, .brk { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .hub .ht { display: none; } .hub { width: 44px; justify-content: center; padding: 0; } }
+  .lang { display: inline-flex; align-items: center; justify-content: center; flex: none; min-height: 40px; min-width: 44px; padding: 0 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .lang:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .lsp { display: none; }
+  @media (max-width: 767px) { .lpc { display: none; } .lsp { display: inline-flex; order: 1; min-height: 40px; padding: 0 9px; border-radius: 10px; border-width: 1.5px; font-size: 13px; } }
+  @media (max-width: 767px) and (max-height: 500px) { .lsp { display: none; } }
+  #langhint { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--surface); color: var(--ink); border: 2px solid var(--brand); font-size: 14px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #langhint a { color: var(--accent-dark); font-weight: 700; }
+  #langhint button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+  @media (max-width: 767px) { header { flex-wrap: wrap; row-gap: 4px; } .searchwrap { flex: 1 1 100%; order: 3; } .chips { order: 4; flex: 1 1 100%; flex-wrap: wrap; padding-bottom: 2px; } .chip { flex: none; } }
+</style>
+</head>
+<body>
+<header>
+  <a class="hub" href="/bus/" aria-label="バスマップのホーム（地域一覧）へ"><span class="ha" aria-hidden="true">‹</span><span class="ht"> 地域一覧</span></a>
+  <a class="lang lpc" href="/bus/en/ehime/ehime-nanyo/" hreflang="en" lang="en" aria-label="English version">EN</a>
+  <nav class="crumb" aria-label="パンくず"><a href="/bus/">‹ ホーム</a><a href="/bus/ehime/">愛媛県</a></nav><a class="lang lsp" href="/bus/en/ehime/ehime-nanyo/" hreflang="en" lang="en" aria-label="English version">EN</a><span class="brk" aria-hidden="true"></span>
+  <h1 class="head">南予バスマップ</h1>
+  <div class="searchwrap">
+    <input id="q" type="search" placeholder="場所・バス停・系統を検索" autocomplete="off" enterkeyhint="search" aria-label="場所・バス停名・系統名で探す" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list">
+    <button id="qclear" type="button" aria-label="検索文字を消す" hidden>×</button>
+    <div id="sug" role="listbox" aria-label="検索候補" hidden></div>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="事業者で絞り込む"></div>
+  <button id="tgl" class="tgl" type="button" aria-controls="panel" aria-expanded="true" aria-label="パネルを閉じる"><span class="tl">パネルを閉じる</span><span class="ta">▶</span></button>
+</header>
+<main id="main">
+  <div id="map" role="application" aria-label="愛媛県南部（南予：宇和島・八幡浜・大洲・西予）のバス停の地図"></div>
+  <div id="tilewarn" role="status" aria-live="polite" hidden><span>地図の画像を読み込めませんでした。通信状況をご確認ください。バス停の点と系統の一覧はそのまま使えます。</span><button type="button" id="tilewarnx" aria-label="閉じる">×</button></div>
+  <aside id="panel" aria-label="バス停・系統の情報">
+    <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
+    <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
+    <div id="pbody" class="pbody"></div>
+    <div class="warn">非公式・2022年度版・時刻運賃なし｜乗車前は<a href="https://www.city.uwajima.ehime.jp/" target="_blank" rel="noopener">公式情報</a>で確認</div>
+  </aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
+<script>
+const D = {"ops":["伊予鉄南予バス","伊予鉄バス","肱南トラベル","宇和島自動車","西予市"],"routes":[[0,"長浜～磯崎線"],[0,"長浜～八幡浜港線"],[1,"八幡浜・三崎特急線",55],[2,"空港シャトルバス",5],[3,"大洲・野村支線　新大洲病院前～鹿野川行"],[0,"市内循環バス（ぐるりんおおず）右回り"],[0,"市内循環バス（ぐるりんおおず）左回り"],[3,"松山線　特急　松山～道の駅みま～城辺営業所行",39],[3,"松山線　特急　城辺営業所～松山行",44],[3,"大洲・野村支線　野村出張所～大洲インター口行"],[3,"松山線　急行　城辺営業所～宇和島～松山行",94],[0,"八幡浜～三崎・加周・伊方方面行"],[4,"生活交通バス「河成～惣川小学校前線（河成-惣川小学校前間）」"],[4,"生活交通バス「河成～惣川小学校前線（三島-天神-川戸間）」"],[3,"八幡浜支線・三瓶支線　八幡浜市内線"],[3,"八幡浜支線・三瓶支線　八幡浜市立病院前～下泊行"],[3,"八幡浜支線・三瓶支線　八幡浜市立病院前～穴井行"],[3,"八幡浜支線・三瓶支線　周木～三瓶～八幡浜市立病院前行"],[4,"生活交通バス「小振～奈良野～長谷～汗嵐線」"],[4,"生活交通バス「奥白髭～長谷～河西線」"],[3,"大洲・野村支線　白髭～畜産試験場行"],[4,"生活交通バス「舟坂線」"],[4,"生活交通バス「堂野窪線」"],[4,"あさぎりバス「三石橋線」"],[4,"あさぎりバス「野村・榎・三石橋線」"],[4,"生活交通バス「西～栗木～瀬間行線」"],[4,"あさぎりバス「榎線」"],[4,"生活交通バス「中通川～大西～岡成～道野々線」"],[3,"大洲・野村支線　野村病院～上辰の口行"],[4,"生活交通バス「大領地～坂石～植木線」"],[4,"生活交通バス「蔵良本村線」"],[4,"生活交通バス「岩本～吉之沢～野村病院線」"],[4,"生活交通バス「岩本～杭～土居診療所線」"],[4,"生活交通バス「田野中～西予市民病院線」"],[4,"生活交通バス「田野中～游の里～板ヶ谷線」"],[4,"生活交通バス「松尾瀬～成穂～野村病院線」"],[4,"生活交通バス「松尾瀬～成穂～土居診療所線」"],[4,"あさぎりバス「阿下釜川線」"],[4,"生活交通バス「本村～杭～野村病院線」"],[4,"生活交通バス「次の川線」"],[4,"生活交通バス「植木線」"],[3,"大洲・野村支線　東高校前～野村病院行"],[4,"生活交通バス「下相～伏越～土居診療所線」"],[4,"生活交通バス「魚成中津川～今田～土居診療所線」"],[4,"生活交通バス「西予市民病院～游の里～板ヶ谷線」"],[4,"生活交通バス「西予市民病院～游の里線」"],[4,"生活交通バス「伊賀上～西予市民病院線」"],[4,"生活交通バス「仁土線」"],[3,"八幡浜支線・三瓶支線　周木～歴史博物館前行"],[3,"八幡浜支線・三瓶支線　西予市民病院～俵津車庫前行"],[3,"八幡浜支線・三瓶支線　西予市民病院～野村～城川支所前行"],[3,"大洲・野村支線　西予市民病院～野村出張所行"],[4,"生活交通バス「伏越～下相～野村病院線」"],[4,"生活交通バス「大暮線」"],[4,"生活交通バス「深山線」"],[4,"生活交通バス「今田～魚成中津川～野村病院線」"],[4,"生活交通バス「伊賀上～游の里～板ヶ谷線」"],[4,"生活交通バス「田之浜～下泊線」"],[3,"吉田支線　宇和島～俵津・田之浜線"],[3,"吉田支線　岩松～宇和島～立間線　立間駅前～岩松～福浦行"],[3,"鬼北線　宇和島～道の駅みま～迫目～虹の森公園前線"],[3,"吉田支線　岩松～宇和島～立間線　バスセンター～吉田高校行"],[3,"吉田支線　宇和島～船間線"],[3,"宇和島市内線　出口～柿原職業訓練所前行"],[3,"宇和島市内線　薬師谷渓谷～赤松行"],[3,"宇和島市内線　柿の木～堀端町～赤松行"],[3,"松山線　宇和島～城辺・宿毛行"],[3,"三浦半島線　宇和島～本九島線"],[3,"三浦半島線　きさいや広場～蒋渕行"],[3,"三浦半島線　宇和島～石応～蕨・平浦線"],[3,"宇和島市内線　薬師谷渓谷～堀端町行"],[3,"三浦半島線　下波東～水産試験場前行"],[3,"岩松支線　岩松～脇～嵐線"]],"stops":[["Aコープ三間",33.28884,132.60486,3,[60]],["JR八幡浜駅",33.45878,132.43586,2,[3]],["JR大洲駅",33.51843,132.54508,2,[3]],["お茶撰橋",33.22271,132.56481,3,[41,58,59,60,61,62,63,64,65,66,67,68,69]],["きさいや広場",33.22207,132.55829,3,[67,68,69]],["くじら病院前",33.42599,132.39225,3,[16]],["さくら保育所前",33.24725,132.67058,3,[41]],["どんぶり館前",33.35552,132.52766,4,[34,44,45,56]],["はず瀬",33.46569,132.67864,3,[4]],["ひびの江",33.12283,132.51124,3,[59]],["ふれあいセンター前",33.36256,132.51371,4,[33,34,46,56]],["ほわいとファーム",33.35805,132.63447,4,[54]],["まちの駅あさもや",33.50635,132.54683,0,[5,6]],["アクトピア大洲",33.51632,132.54588,3,[4,9]],["アクトピア大洲",33.51544,132.54406,0,[5,6]],["オズメッセ21",33.52959,132.5731,0,[1,4,5,6,9]],["カギウラ",33.39299,132.74988,4,[32,38]],["クアテルメ宝泉坊前",33.36526,132.79171,3,[41]],["ゴルフ場前（大洲市）",33.47789,132.54352,3,[9,10]],["シュウトウ",33.40617,132.74186,4,[31,32]],["ショッパーズ伊方店前",33.49202,132.35913,0,[11]],["ジェイコー宇和島病院前",33.21624,132.56973,3,[64]],["ドロマイト前",33.36862,132.67231,3,[41,50]],["バスセンター（宇和島市）",33.22001,132.56661,3,[7,8,10,41,58,59,60,61,62,63,64,65,66,67,68,69]],["パルティ・フジ南宇和",32.96272,132.57505,3,[10,66]],["フィッシングセンター",33.31365,132.46718,3,[58]],["フジグラン北浜",33.46148,132.42135,0,[11]],["フジグラン北浜前",33.46146,132.42133,3,[15,16]],["フジ北宇和島店前",33.23495,132.56799,3,[8,10,58,59,60,61,62]],["フレスポ大洲",33.53236,132.57769,0,[5,6]],["マルナカ",33.52353,132.55892,0,[5,6]],["一本松温泉前",32.96868,132.65832,3,[66]],["一本松病院前",32.96224,132.64914,3,[66]],["一本松荘入口",32.95768,132.64325,3,[66]],["一本松（愛南町）",32.96127,132.64773,3,[66]],["七の頭",33.17471,132.46025,3,[68]],["万年橋（愛媛県）",33.19512,132.57001,3,[64,70]],["三の丸",33.50762,132.54064,0,[4,5,6]],["三島",33.47463,132.79002,4,[12]],["三島橋（愛媛県）",33.37726,132.77275,3,[41]],["三島神社前",33.48434,132.40035,0,[2,11]],["三島診療所",33.30671,132.74189,3,[41]],["三崎",33.39017,132.11992,0,[2,11]],["三崎港口",33.39139,132.11827,1,[2]],["三崎高校前",33.38685,132.12938,0,[11]],["三本松（愛媛県）",33.45706,132.53306,3,[9,10]],["三楽園前",33.3584,132.42007,3,[15]],["三浦大内",33.16737,132.4805,3,[68]],["三浦小学校前",33.16964,132.50577,3,[68]],["三浦東保育所前",33.17115,132.51588,3,[68]],["三瓶出張所",33.37914,132.42059,3,[15,17,48]],["三瓶南公民館前",33.35586,132.42375,3,[15]],["三瓶支所前",33.3829,132.4235,3,[15,17,48]],["三田成",33.39005,132.74344,4,[32,38]],["三石橋",33.42312,132.68911,4,[23,24]],["三笠通り二",33.51259,132.54573,0,[1]],["三笠通三丁目",33.51383,132.54648,3,[4,9,10]],["三笠通二丁目",33.51248,132.54566,3,[4,9]],["三間小学校前",33.28986,132.60419,3,[60]],["上伊賀上",33.34832,132.51557,3,[49]],["上保田（愛媛県）",33.1861,132.54819,3,[10,59,65,66]],["上吉波",33.27381,132.62744,3,[60]],["上大野上組",33.32459,132.79451,3,[41]],["上大野橋",33.32152,132.79375,3,[41]],["上宇和駅前",33.3803,132.50289,3,[9,48,49,50,51]],["上川（バス）",33.26554,132.72402,3,[41]],["上成",33.34273,132.57354,4,[34,44,45,56]],["上成（愛媛県）",33.34271,132.5737,3,[9,50,51]],["上旭（愛媛県）",33.39707,132.58895,3,[20]],["上東（愛媛県）",33.50961,132.5957,3,[4]],["上松渓",33.41764,132.59035,3,[20]],["上松葉",33.38323,132.50328,3,[9,10,48,49,50,51]],["上氏宮",33.38159,132.6488,3,[41,50]],["上泊",33.42576,132.39984,3,[16]],["上狭間",33.38235,132.4643,3,[48]],["上組",33.39663,132.67997,4,[37]],["上谷口（愛媛県）",33.14216,132.52593,3,[10,59,66]],["上辰の口（愛媛県）",33.40548,132.73507,3,[28]],["上鍵山",33.34106,132.79113,3,[41]],["上高野子",33.35117,132.79374,3,[41]],["下の町",33.36147,132.5141,4,[34,44,45,56]],["下の町（愛媛県）",33.36147,132.5141,3,[9,48,49,50,51]],["下五味",33.39417,132.73545,4,[31,32]],["下古用",33.30587,132.75945,3,[41]],["下土居（西予市）",33.3829,132.76758,3,[41]],["下坂戸共立電気前",33.38786,132.50482,3,[9]],["下大野橋",33.30658,132.72069,3,[41]],["下宇和口",33.34966,132.53422,3,[9,50,51]],["下宇和駅",33.34983,132.53138,3,[34,44,45,51,56]],["下小越（愛媛県）",33.31219,132.7673,3,[41]],["下川",33.34326,132.54766,4,[34,44,45,56]],["下川（愛媛県）",33.34326,132.54766,3,[9,50,51]],["下広見",33.29345,132.72029,3,[41]],["下惣川",33.36314,132.73502,4,[42,52]],["下惣川三叉路",33.36893,132.73397,4,[42,52]],["下惣川集会所",33.36664,132.73445,4,[42,52]],["下東",33.51636,132.58787,3,[4]],["下松渓",33.41186,132.59273,3,[20]],["下松葉",33.37253,132.50579,3,[9,48,49,50,51]],["下泊",33.33743,132.38818,3,[15]],["下泊診療所",33.33743,132.38818,4,[57]],["下波東",33.17141,132.46481,3,[68,71]],["下波柿の浦",33.19293,132.44749,3,[68]],["下波柿の浦口",33.19074,132.44754,3,[68]],["下波西",33.16803,132.45683,3,[71]],["下波診療所前",33.16971,132.46324,3,[71]],["下清詰",33.30532,132.72508,3,[41]],["下相上組",33.37698,132.75065,3,[41]],["下相下公民館",33.3774,132.74123,4,[42,52]],["下相橋",33.37938,132.74278,4,[42,52]],["下野",33.38846,132.66046,4,[37]],["与村井",33.31618,132.52188,3,[58]],["中の川トンネル口",32.95289,132.62641,3,[66]],["中の浦（愛媛県）",33.37026,132.3967,3,[17,48]],["中の谷（愛媛県）",33.29994,132.53831,3,[58]],["中下川",33.34259,132.551,3,[9,34,44,45,50,51,56]],["中久保",33.46865,132.77622,4,[12]],["中小浦",33.1999,132.40596,3,[68]],["中新城",33.38243,132.53149,4,[33,34]],["中日提",33.12031,132.47757,3,[72]],["中津",33.45366,132.74509,4,[12]],["中津川",33.36119,132.68283,4,[43,55]],["中津川三叉路",33.36475,132.69143,4,[43,55]],["中津川集会所",33.3632,132.69452,4,[43,55]],["中畑（愛媛県）",33.26777,132.58301,3,[60]],["中筋",33.4137,132.63574,4,[24,26]],["中通川御堂",33.41622,132.66298,4,[27]],["中通川集会所",33.41056,132.67341,4,[27]],["中野",33.39461,132.64973,4,[21]],["中野（大洲市）",33.4586,132.6783,3,[4]],["中鍵山",33.33723,132.79298,3,[41]],["中高野子",33.35415,132.79564,3,[41]],["久保谷（愛媛県）",33.37356,132.65797,3,[41,50]],["久保（西予市）",33.44446,132.52342,3,[9]],["久米小学校前",33.50489,132.52887,0,[4,5,6]],["乙亥会館",33.37844,132.64409,4,[18,19,21,22,25,27,29,30,31,35,38,39,40,52,53,54,55]],["二及",33.37604,132.4044,3,[17,48]],["二及本浦",33.37705,132.4064,3,[17,48]],["二名津口",33.39444,132.13764,1,[2]],["二本松（バス）",33.36578,132.41069,3,[15]],["五十崎口",33.54219,132.65033,1,[2]],["五十崎駅前",33.53739,132.63545,1,[2]],["五反田橋（愛媛県）",33.44606,132.43865,3,[15,17]],["五反田（愛媛県）",33.44813,132.43618,3,[15,17]],["五郎下渡",33.53971,132.56564,0,[1]],["五郎駅前",33.54257,132.56966,0,[1]],["井関整形外科",33.37256,132.64328,4,[31,35,38,52,55]],["京町（愛媛県）",33.21556,132.56872,3,[64]],["人加志",33.44663,132.42693,3,[16]],["仁土集会所",33.33254,132.44736,4,[47]],["今在家（愛媛県）",33.24752,132.65318,3,[41]],["今田",33.37504,132.72466,4,[43,52,55]],["今田公民館",33.37801,132.72418,4,[55]],["今田（愛媛県）",33.37747,132.71868,3,[41,50]],["伊予銀行前",33.32014,132.4335,3,[58]],["伊吹町郵便局前",33.23482,132.57588,3,[63]],["伊崎",33.39555,132.53042,4,[33,34]],["伊崎口",33.39164,132.5319,4,[33,34]],["伊崎（愛媛県）",33.27094,132.49607,3,[62]],["伊方ビジターズハウス",33.48109,132.30983,0,[11]],["伊方ビジターズハウス前",33.48133,132.31045,1,[2]],["伊方中学校前",33.49109,132.35714,0,[11]],["伊方峠",33.48349,132.32219,1,[2]],["伊方町役場前",33.48822,132.35387,0,[11]],["伊賀上",33.35264,132.51599,3,[49]],["伊賀上日之地",33.35045,132.50826,4,[46,56]],["伊賀上蔭之地",33.34737,132.50742,4,[46,56]],["伊賀上農事集会所下",33.34997,132.51442,4,[46,56]],["伏越",33.36847,132.76851,4,[42,52]],["住吉小学校前（愛媛県）",33.22969,132.55589,3,[64,65]],["住吉町（愛媛県）",33.2266,132.55592,3,[64,65]],["保内庁舎前",33.48306,132.40005,0,[11]],["保堂",33.42125,132.63698,4,[21]],["保木（愛媛県）",33.27111,132.63993,3,[60]],["保田（愛媛県）",33.18959,132.5479,3,[7,8,10,59,65,66]],["信里",33.43364,132.5155,3,[9]],["俵津",33.32544,132.49283,3,[49,58]],["俵津伊ノ浦団地前",33.31859,132.49659,3,[58]],["俵津大浦",33.32222,132.49578,3,[58]],["俵津車庫前",33.32531,132.49105,3,[49,58]],["倉谷",33.35503,132.59008,4,[34,44,45,56]],["倉谷橋",33.40588,132.64474,4,[24,26]],["元屋敷〔宇和島自動車〕",33.1367,132.45504,3,[59]],["元結掛口",33.21021,132.55867,3,[10,59,63,64,65,66,68,70]],["光満",33.26499,132.58244,3,[60]],["八代団地前（愛媛県）",33.44504,132.4237,3,[16]],["八代（愛媛県）",33.44864,132.43087,3,[16]],["八千代橋（愛媛県）",33.38028,132.72931,3,[41,50]],["八多喜駅前",33.56356,132.53988,0,[1]],["八尾・椎の森",33.50736,132.53619,0,[5,6]],["八幡橋（愛媛県）",33.35844,132.79841,3,[41]],["八幡浜みなっと",33.45806,132.41818,3,[14]],["八幡浜営業所〔宇和島自動車〕",33.45824,132.42301,3,[14,15,16,17]],["八幡浜市立病院前",33.46775,132.42448,3,[14,15,16,17]],["八幡浜港",33.45866,132.4162,1,[2]],["八幡浜港",33.45747,132.41785,0,[1,11,14]],["八幡浜駅",33.4581,132.43559,3,[14,15,16,17]],["八幡浜駅前",33.45864,132.43546,0,[1,2,11]],["八幡浜高校前",33.46139,132.4407,3,[14]],["八幡野（愛媛県）",32.96349,132.55956,3,[10,66]],["八百坂",32.9854,132.52208,3,[7,8,10,66]],["八百坂峠",32.98127,132.52559,3,[10,66]],["公会堂前（西予市）",33.37635,132.42622,3,[48]],["内場",33.38609,132.60668,3,[20]],["内子",33.54968,132.65235,1,[2]],["内子インター口（五十崎口バス停）",33.54227,132.65034,2,[3]],["出口（宇和島市）",33.19587,132.54636,3,[10,59,63,64,65,66,70]],["出合大橋",33.3626,132.61677,3,[9,20,50,51]],["出合橋（愛媛県）",33.45605,132.43158,3,[15,16,17]],["出海",33.55796,132.43262,0,[0]],["出目下組",33.25236,132.6933,3,[41]],["出目峠",33.24634,132.69633,3,[60]],["出目新田",33.251,132.69929,3,[41]],["出目（バス）",33.2529,132.69073,3,[41,60]],["出石駅前",33.59561,132.49913,0,[1]],["別当団地入口",33.21352,132.54375,3,[69]],["利根口",33.30059,132.71621,3,[41]],["前石",33.38774,132.68762,4,[37]],["加周",33.4644,132.28827,0,[11]],["加周口",33.46918,132.28125,1,[2]],["加茂（愛媛県）",33.40247,132.50885,3,[9,10]],["動木（愛媛県）",33.35795,132.52329,3,[9,50,51]],["勘定",33.46032,132.41395,3,[14]],["務田公民館前",33.28473,132.59637,3,[60]],["務田（バス）",33.28232,132.59877,3,[60]],["北只",33.49005,132.54015,3,[9,10]],["北宇和病院",33.25789,132.68562,3,[41,60]],["北小路（愛媛県）",33.28216,132.54053,3,[61,62]],["北川（愛媛県）",33.24538,132.63204,3,[41]],["十夜ヶ橋",33.53164,132.5748,3,[4]],["十夜野",33.38568,132.65548,4,[37]],["千丈住宅前",33.46548,132.45668,3,[14]],["千丈小学校前",33.46393,132.4502,3,[14]],["千丈駅前",33.46567,132.45703,0,[1,2]],["千丈（バス）",33.46548,132.45668,3,[14]],["千代浦",33.17246,132.51499,3,[68]],["南レク御荘公園前",32.96544,132.55144,3,[7,8,10,66]],["南久米農協前",33.49317,132.54309,3,[9]],["南予文化会館前",33.22075,132.56608,3,[41,58,59,60,62,63,64,65,67,68,69]],["南宇和高校前",32.96296,132.57079,3,[10,66]],["南愛媛病院前",33.25123,132.69192,3,[60]],["南柏（バス）",33.46208,132.44238,3,[14]],["南楽園",33.13409,132.5055,3,[59]],["南楽園前",33.1336,132.5027,3,[59]],["南部小学校前（愛媛県）",33.11991,132.47341,3,[72]],["卯之町営業所",33.36099,132.51619,3,[7,8,9,10,48,49,50,51]],["友浜",33.26749,132.53861,3,[62]],["古市",33.38816,132.64208,4,[30]],["古市（愛媛県）",33.3761,132.71482,3,[41,50]],["古浦（愛媛県）",33.27498,132.48295,3,[62]],["古用",33.30737,132.764,3,[41]],["台組",33.45781,132.76671,4,[12]],["合田",33.43911,132.41237,3,[16]],["吉之沢三叉路",33.39919,132.74102,4,[31,32]],["吉之沢口",33.39584,132.73579,4,[31,32]],["吉田出張所（愛媛県）",33.27827,132.53829,3,[8,10,58,59,62]],["吉田支所前",33.27983,132.54063,3,[61,62]],["吉田町図書館前",33.28211,132.53917,3,[8,10,58,59,62]],["吉田農協前",33.27337,132.54024,3,[62]],["吉田駅前（愛媛県）",33.2731,132.54135,3,[58,59,61,62]],["吉田高校",33.28323,132.54047,3,[61]],["名切（愛媛県）",33.16479,132.48484,3,[68]],["名本口",32.95456,132.63638,3,[66]],["向灘郵便局前",33.4654,132.42326,3,[14,15,16,17]],["君ヶ浦",33.2686,132.54277,3,[58,59,61,62]],["呉野々",33.38819,132.76987,3,[41]],["周利下",33.43071,132.72185,4,[12]],["周木",33.37285,132.38929,3,[17,48]],["和泉口",33.39974,132.42918,3,[15,17]],["和泉河内",33.40289,132.42856,3,[15,17]],["和田（西予市）",33.37996,132.48155,3,[48]],["和霊中町",33.23101,132.57078,3,[63]],["和霊元町",33.22917,132.56782,3,[58,59,60,61,62,63]],["和霊大橋元",33.23163,132.56831,3,[58,59,60,61,62]],["和霊神社前",33.22816,132.56612,3,[58,59,60,61,62,63]],["和霊神苑前",33.22704,132.56556,3,[63,64,65]],["善願寺下三叉路",33.3949,132.74615,4,[32,38]],["喜多医師会病院",33.53194,132.57142,0,[5,6]],["喜多酪農前",33.52471,132.55941,3,[4,9]],["喜木",33.48403,132.41396,0,[2,11]],["四道",33.34734,132.58964,4,[34,44,45,56]],["四道（愛媛県）",33.34734,132.58964,3,[9,50,51]],["四郎谷",33.3863,132.60389,3,[20]],["四郎谷上",33.39222,132.60898,4,[19]],["団地前（愛媛県）",33.19613,132.55207,3,[64,70]],["国延",33.13878,132.48439,3,[59]],["国永",33.14162,132.47975,3,[59]],["土居仲",33.28065,132.61591,3,[60]],["土居仲西組",33.28118,132.61257,3,[60]],["土居古市",33.37083,132.77695,3,[41]],["土居町（愛媛県）",33.387,132.76851,3,[41]],["土居診療所",33.38809,132.76762,4,[32,36,42,43]],["坂下津",33.21559,132.54358,3,[69]],["坂下津工業団地前",33.21783,132.55077,3,[67,69]],["坂戸（愛媛県）",33.39216,132.50546,3,[9,10]],["坂石",33.41481,132.71069,3,[28]],["坂石詰所",33.41293,132.71245,4,[29]],["坊屋敷",33.48393,132.65102,3,[4]],["坪の内橋",32.9515,132.61202,3,[66]],["坪井（愛媛県）",33.37318,132.40286,3,[17,48]],["垣内〔宇和島自動車〕",32.94756,132.60397,3,[66]],["垣生（西予市）",33.38451,132.41101,3,[17,48]],["城の下",33.40002,132.69104,4,[37]],["城南中学校前（愛媛県）",33.21518,132.55974,3,[10,59,63,64,65,66,68,70]],["城川中学校下",33.38065,132.74513,3,[41,42,50,52]],["城川公園前",33.3827,132.76348,3,[41]],["城川支所前",33.37944,132.74984,3,[32,36,41,42,43,50,52]],["城川町農協前",33.38067,132.74739,3,[41,50]],["城辺古町",32.9607,132.57738,3,[7,8,10,66]],["城辺営業所",32.95934,132.5828,3,[7,8,10,66]],["堀切〔北宇和郡〕",33.32736,132.79576,3,[41]],["堀切〔宇和島自動車〕",33.16664,132.48242,3,[68]],["堀切大橋",33.44785,132.25653,1,[2]],["堀端町（愛媛県）",33.21768,132.56728,3,[41,58,59,60,62,63,65,66,67,68,69,70]],["堂野窪口",33.42342,132.72275,4,[12]],["堂野窪集会所",33.42817,132.73127,4,[22]],["塩屋（宇和島市）",33.19186,132.50132,3,[69]],["増田橋（愛媛県）",32.9706,132.66922,3,[66]],["増田（愛媛県）",32.97345,132.66115,3,[66]],["変電所前（宇和島市）",33.23754,132.58316,3,[63]],["変電所前（西予市）",33.38422,132.42701,3,[15,17]],["夏秋",33.1746,132.51233,3,[68]],["外勘定",33.45925,132.41023,3,[14]],["外場",33.38644,132.6015,3,[20]],["外室手",33.00504,132.50775,3,[10,66]],["夜昼パークタウン前",33.47856,132.50595,0,[1,2]],["夢産地前",33.33075,132.7981,3,[41]],["大下口",33.4677,132.47157,3,[14]],["大久保（宇和島市）",33.23509,132.55357,3,[64,65]],["大久口",33.41947,132.19907,1,[2]],["大内浦",33.46232,132.41862,3,[14]],["大小浜",33.20554,132.50751,3,[69]],["大崎灯台前",33.32357,132.37561,4,[57]],["大師前（宇和島市）",33.24869,132.56865,3,[58,59,61,62]],["大成",33.44624,132.72356,4,[12]],["大日提",33.11965,132.48298,3,[72]],["大早津民宿前",33.31248,132.44253,3,[58]],["大暮",33.37952,132.67188,4,[53]],["大月真珠前",33.2164,132.53562,3,[69]],["大本神社前",33.26291,132.65515,3,[60]],["大正町（愛媛県）",33.45744,132.42949,3,[14,15,16,17]],["大江（愛媛県）",33.4094,132.5103,3,[9,10]],["大池",33.39488,132.71863,4,[35,36]],["大池（宇和島市）",33.20638,132.43106,3,[68]],["大池（西予市）",33.3683,132.67707,3,[41,50]],["大泉寺下",33.36956,132.64018,3,[9,20,50,51]],["大洲インター口",33.53063,132.57425,3,[4,7,8,9]],["大洲中央病院",33.51534,132.55066,0,[5,6]],["大洲北中学校前",33.51622,132.55459,0,[5,6]],["大洲営業所",33.50398,132.52471,0,[1,2,5,6]],["大洲城前",33.50798,132.54187,0,[5,6]],["大洲本町",33.50696,132.545,0,[1,2,4,5,6,9,10]],["大洲病院前",33.50408,132.52392,0,[1]],["大洲県地方局前",33.52009,132.55211,3,[4,9]],["大洲記念病院",33.53136,132.58372,0,[4,5,6]],["大洲農高口",33.51831,132.54917,0,[1,4,5,6,9]],["大洲駅前",33.51843,132.54508,0,[1,2,4,5,6,9,10]],["大洲駅前案内所",33.51782,132.54729,3,[4,9,10]],["大洲高校肱川分校",33.47158,132.68204,3,[4]],["大浜（宇和島市）",33.1451,132.44777,3,[59]],["大浜（愛南町）",33.02477,132.48521,3,[10,66]],["大浦〔宇和島自動車〕",33.23777,132.55348,3,[64,65]],["大滝橋",33.3109,132.79184,3,[41]],["大田",33.36856,132.64557,4,[54]],["大福浦",33.21404,132.53743,3,[69]],["大窪",33.45455,132.7561,4,[12]],["大街道口（西予市）",33.38154,132.41988,3,[15,17,48]],["大西農協",33.39775,132.67494,3,[28]],["大西農協前",33.3981,132.67537,4,[23,24]],["大西集会所",33.39982,132.67011,4,[27]],["大釜（愛媛県）",33.4217,132.38871,3,[16]],["大門（愛媛県）",33.08513,132.50516,3,[7,8,10,66]],["大領地集会所",33.40429,132.73224,4,[29]],["大黒橋（愛媛県）",33.19485,132.55724,3,[64,70]],["天神",33.47571,132.78015,4,[13]],["天赦園前",33.21642,132.56224,3,[58,62,64]],["奈良の下",33.42849,132.72228,4,[12]],["奈良の木（西予市）",33.38022,132.74034,3,[41,50]],["奈良下組",33.24653,132.66646,3,[41]],["奈良中組",33.24757,132.65984,3,[41]],["奈良野",33.4732,132.78706,4,[13]],["奈良野（駄馬）",33.4329,132.71966,4,[18]],["奥南保育園前",33.27049,132.49273,3,[62]],["奥南小学校前",33.27311,132.4877,3,[62]],["奥浦（愛媛県）",33.27417,132.48694,3,[62]],["奥白髭",33.43807,132.5677,4,[19]],["宇和中学校前",33.36939,132.50706,3,[9,48,49,50,51]],["宇和島警察署前",33.20705,132.55671,3,[7,8,10,59,63,64,65,66,68,70]],["宇和島駅前",33.22552,132.56806,3,[7,8,10,41,58,59,60,61,62,63,64,65,66,67,68,69]],["宇和川",33.47357,132.67661,3,[4]],["宇和海支所前",33.19192,132.44517,3,[68]],["宇和高校前",33.36283,132.52152,3,[33,34,48,49]],["宇都宮内科",33.3732,132.64466,4,[31,35,38,52,55]],["安土西",33.37781,132.41959,3,[15]],["安家谷集会所",33.36566,132.74046,4,[42,52]],["安米",33.16848,132.47892,3,[68]],["宗清",33.13805,132.49052,3,[59]],["宝泉坊温泉前",33.36469,132.79401,3,[41]],["室手",33.00209,132.51398,3,[10,66]],["宮の串",33.30759,132.42269,3,[58]],["宮の浜（愛媛県）",33.12077,132.50184,3,[72]],["宮成",33.47803,132.79535,4,[12]],["宮本",33.39941,132.68926,4,[37]],["宮本三叉路",33.39303,132.73043,4,[36]],["宮野々",33.27152,132.72306,3,[41]],["家次",33.14119,132.46754,3,[59]],["宿茂",33.57762,132.66141,1,[2]],["寄松",33.20249,132.5525,3,[59,63,64,65,68,70]],["寄松橋",33.20023,132.54527,3,[68]],["寺上",33.47835,132.78406,4,[13]],["寺下",33.47726,132.78687,4,[13]],["小倉",33.44949,132.73157,4,[12]],["小倉（愛媛県）",33.27803,132.72102,3,[41]],["小名",33.30695,132.53626,3,[58]],["小型桟橋前",33.45912,132.41947,3,[15,16]],["小島津",33.17161,132.45235,3,[71]],["小振",33.44224,132.72829,4,[18]],["小日提",33.11531,132.47132,3,[72]],["小松橋（愛媛県）",33.30812,132.73856,3,[41]],["小池小学校前",33.19978,132.50485,3,[69]],["小浜（宇和島市）",33.20258,132.50338,3,[69]],["小浦（愛媛県）",33.37821,132.40855,3,[17,48]],["小深浦",33.31825,132.51037,3,[58]],["小滝",33.42422,132.63136,4,[21]],["小矢の浦",33.19001,132.45698,3,[68]],["小網代（愛媛県）",33.40779,132.39397,3,[16]],["小西野々",33.27516,132.72199,3,[41]],["小西集会所",33.4153,132.68995,4,[25]],["小赤松",33.23417,132.55006,3,[64,65]],["小越",33.30971,132.77013,3,[41]],["小込",33.41691,132.693,4,[23,24]],["小長早",33.45784,132.40768,3,[14]],["尻貝農協",33.13965,132.45291,3,[59]],["尻貝（宇和島市）",33.1422,132.45246,3,[59]],["山の下（愛媛県）",33.22957,132.70365,3,[60]],["山田（西予市）",33.38015,132.47346,3,[48]],["岡",33.41372,132.62285,4,[24,26]],["岡成集会所",33.39803,132.66411,4,[27]],["岡町",33.56059,132.65798,1,[2]],["岩井（愛媛県）",33.30792,132.41172,3,[58]],["岩本",33.41108,132.7459,4,[31,32]],["岩本茶堂",33.4066,132.74979,4,[31,32]],["岩本集会所下",33.40828,132.74814,4,[31,32]],["岩松出張所",33.12415,132.52102,3,[7,8,10,59,66,72]],["岩谷（愛媛県）",33.26014,132.71087,3,[41]],["峠口（愛媛県）",33.19608,132.56484,3,[64,70]],["峰（愛媛県）",33.37799,132.65209,3,[41,50]],["島津（愛媛県）",33.17179,132.45013,3,[71]],["嵐",33.0761,132.48632,3,[7,8,10,66,72]],["川上横山",33.30909,132.78859,3,[41]],["川之内",33.46722,132.47968,0,[1]],["川之内橋",33.46694,132.47701,3,[14]],["川之内（八幡浜市）",33.46722,132.47968,3,[14]],["川之浜口",33.43219,132.21328,1,[2]],["川内口",33.20495,132.555,3,[10,59,63,64,65,66,68,70]],["川名津",33.42388,132.40658,3,[16]],["川向（愛媛県）",33.37485,132.70185,3,[41,50]],["川戸",33.47708,132.79329,4,[12,13]],["川舞",33.44225,132.44198,3,[15,17]],["工場前（宇和島市）",33.23803,132.5676,3,[58,59,60,61,62]],["市ヶ成",33.26398,132.72009,3,[41]],["市営平曽団地口",33.52034,132.5694,0,[5,6]],["市役所前（八幡浜市）",33.46317,132.42303,3,[14,15,16,17]],["市役所前（宇和島市）",33.22353,132.56131,3,[67,68,69]],["市立図書館",33.52848,132.56569,0,[5,6]],["市立大洲病院",33.50405,132.52379,0,[5,6]],["市立病院",33.4674,132.42461,0,[11]],["市立病院前",33.46598,132.42566,1,[2]],["市立病院前（宇和島市）",33.21688,132.56487,3,[41,58,59,60,62,63,65,66,67,68,69,70]],["市立病院南口",33.21519,132.56483,3,[64]],["布喜川",33.42549,132.44112,3,[15,17]],["布喜川橋",33.43503,132.44569,3,[15,17]],["布喜川西口",33.42258,132.43704,3,[15,17]],["常磐町3丁目",33.51401,132.54562,0,[5,6]],["干拓地",33.12644,132.50486,3,[59]],["平井〔北宇和郡〕",33.26445,132.65147,3,[60]],["平城札所前",32.96308,132.56309,3,[7,8,10,66]],["平山（愛媛県）",32.97506,132.53783,3,[7,8,10,66]],["平治",33.38822,132.64683,4,[30]],["平浦",33.1918,132.49782,3,[69]],["平浦口",33.19569,132.50721,3,[69]],["平畑（愛媛県）",32.96697,132.6553,3,[66]],["平野",33.49618,132.51883,0,[1,2]],["平野",33.40325,132.64615,4,[30]],["平野",33.39733,132.53624,4,[33,34]],["平野橋",33.40191,132.64934,4,[24,26]],["平野運動公園口",33.49074,132.51682,1,[2]],["広田",33.37564,132.7382,4,[42,52]],["広田三叉路",33.37663,132.74029,4,[42,52]],["庄崎",33.43165,132.40458,3,[16]],["延川",33.30654,132.75368,3,[41]],["弁天（愛媛県）",33.37664,132.71036,3,[41,50]],["弓立",33.08273,132.47313,3,[72]],["御子谷",33.35409,132.5321,3,[9,34,44,45,50,51,56]],["御幸町（愛媛県）",33.22642,132.56374,3,[64,65]],["御番所前",33.41256,132.63707,4,[24,26]],["御荘",32.96328,132.56743,3,[7,8,10,66]],["徳の森公園入口",33.52005,132.5868,3,[4]],["徳の森（大洲市）",33.52439,132.58705,3,[4]],["徳の森（宇和島市）",33.26355,132.5685,3,[58,59,61,62]],["徳森中山東",33.52877,132.57909,0,[5,6]],["徳森中山西",33.52478,132.58007,0,[5,6]],["徳森公園口",33.52219,132.57781,0,[5,6]],["徳用",33.44041,132.44406,3,[15,17]],["恵美須町（宇和島市）",33.22446,132.56499,3,[7,8,10,41,58,59,60,61,62,63,64,65,66,67,68,69]],["惣ヶ浦",33.23706,132.53796,3,[64,65]],["惣川小学校前",33.48039,132.79624,4,[12]],["惣財久",33.4078,132.63798,4,[21]],["愛宕下",33.39048,132.67379,4,[37]],["慈眼堂口",33.36673,132.63386,3,[9,20,50,51]],["戎山",33.21927,132.54807,3,[67,69]],["戎橋",33.39181,132.67483,4,[37]],["成川〔北宇和郡〕",33.24621,132.63745,3,[41]],["成穂",33.41311,132.62931,4,[24,26]],["成穂上組三叉路",33.38367,132.71143,4,[35]],["成穂橋",33.38124,132.72434,3,[41,50]],["成穂集会所",33.38498,132.71976,4,[35,36]],["成能",33.48529,132.6405,3,[4]],["成見橋",33.50474,132.6198,3,[4]],["手都合",33.39588,132.64306,4,[30]],["抜獄",33.41956,132.68884,4,[23,24]],["掛網代",33.1337,132.45401,3,[59]],["撰果場前（宇和島市）",33.16942,132.46068,3,[71]],["撰果場前（西予市）",33.38412,132.41907,3,[17,48]],["改善センター魚成前",33.3767,132.70742,3,[41,50]],["文京町（愛媛県）",33.21675,132.56018,3,[67,69]],["文化会館前（愛媛県）",33.38193,132.42479,3,[15,17,48]],["新伊方",33.49299,132.36058,0,[2,11]],["新名取口",33.39787,132.16142,1,[2]],["新城",33.38023,132.53139,4,[33,34]],["新大洲病院前",33.50437,132.52354,3,[4]],["新屋敷（愛媛県）",33.27358,132.58967,3,[60]],["新川永田",33.48715,132.33734,1,[2]],["新横平",33.41624,132.43153,3,[15,17]],["新田坂",33.25088,132.70213,3,[41]],["新町角",33.45733,132.42406,3,[14,15,16,17]],["新町銀座",33.45731,132.4244,0,[1,2,11]],["新谷",33.53544,132.59981,1,[2]],["新足成口",33.4639,132.27189,1,[2]],["新開町（愛媛県）",33.46739,132.46156,3,[14]],["新開（西予市）",33.38323,132.77016,3,[41]],["於泥",33.10627,132.51169,3,[7,8,10,66]],["日の浦団地",33.43315,132.44688,3,[17]],["日切地蔵前（愛媛県）",33.30438,132.73323,3,[41]],["日吉崎",33.38061,132.42289,3,[48]],["日吉診療所",33.33531,132.79564,3,[41]],["旧宇和病院前",33.36748,132.50803,4,[33,44,45,46]],["早馬",33.41143,132.64078,4,[24,26]],["旭（愛媛県）",33.39081,132.59143,3,[20]],["明倫橋",33.21365,132.55925,3,[7,8,10,59,63,64,65,66,68,70]],["明倫町",33.21804,132.55619,3,[67,69]],["明浜東中学校前",33.32342,132.48827,3,[58]],["明浜漁協前",33.31886,132.47187,3,[58]],["明浜西中学校前",33.31637,132.42705,3,[58]],["明浜郵便局",33.31791,132.43464,3,[58]],["明石",33.37127,132.52797,4,[33,34]],["明石集会所前",33.36399,132.52743,4,[33,34]],["明越口",33.18208,132.46028,3,[68]],["明間",33.34499,132.58051,3,[9,34,44,45,50,51,56]],["明間小学校",33.34625,132.58396,3,[9,50,51]],["明間小学校前",33.34622,132.58392,4,[34,44,45,56]],["更生",33.4204,132.63214,4,[21]],["有太刀",33.36233,132.41547,3,[15]],["有屋下",33.42018,132.72115,4,[12]],["有網代",33.37522,132.41388,3,[15]],["朝日町二丁目（愛媛県）",33.22659,132.56171,3,[64,65]],["木材市場前（愛媛県）",33.2775,132.61995,3,[60]],["木村チェーン",33.37579,132.50449,4,[47]],["木浦松",33.14026,132.46567,3,[59]],["木落",33.36271,132.63915,4,[54]],["本九島",33.22188,132.52294,3,[67]],["本村組",33.3965,132.72367,4,[35,36]],["本村茶堂前",33.39252,132.74288,4,[32,38]],["本町追手",33.21907,132.56834,3,[63,64,65]],["本町（八幡浜市）",33.45724,132.42688,3,[14,15,16,17]],["本社前",33.22498,132.56735,3,[41,63,64,65]],["札場橋",33.23643,132.5814,3,[63]],["札掛",33.46986,132.54525,3,[9,10]],["朴",33.39016,132.42928,3,[15,17]],["杉の瀬",33.37894,132.73363,3,[41,50]],["杉之瀬診療所前",33.3783,132.73504,4,[32,36,38,43]],["杖の浦",33.46139,132.41607,3,[14]],["杖野々",33.36303,132.79848,3,[41]],["杭茶堂",33.38821,132.73748,4,[32,38]],["東中浦",33.46401,132.42195,3,[14]],["東仲（愛媛県）",33.26892,132.64946,3,[60]],["東公民館前（愛媛県）",33.38687,132.42868,3,[15,17]],["東南君",33.27019,132.50129,3,[62]],["東古市（愛媛県）",33.36909,132.78145,3,[41]],["東多田",33.4255,132.51129,3,[9,10]],["東大洲",33.53024,132.57088,0,[2,4,5,6,9,10]],["東大洲天満",33.51838,132.5538,0,[5,6]],["東大洲河内",33.517,132.55056,0,[5,6]],["東小山（愛媛県）",32.97202,132.67723,3,[66]],["東高校前（愛媛県）",33.21734,132.56243,3,[8,10,41,58,59,60,62,63,65,66,67,68,69,70]],["松ヶ花",33.53314,132.58181,0,[2,4,5,6]],["松ヶ鼻（愛媛県）",33.17937,132.55056,3,[10,59,65,66]],["松丸（愛媛県）",33.22802,132.70826,3,[60]],["松尾",33.42117,132.72511,4,[22]],["松尾トンネル口",33.14655,132.52918,3,[10,59,66]],["松尾入口（愛媛県）",33.49614,132.54542,3,[9,10]],["松尾瀬",33.40235,132.73234,4,[35,36]],["松尾（愛媛県）",33.46503,132.45196,3,[14]],["松崎橋（愛媛県）",33.3067,132.78053,3,[41]],["松柏中学校前",33.46349,132.44562,3,[14]],["松柏（八幡浜市）",33.46008,132.43834,3,[14]],["松渓",33.41557,132.59247,3,[20]],["松葉団地",33.37792,132.50105,3,[48]],["松野町役場前",33.22701,132.71061,3,[60]],["板ヶ谷",33.33827,132.61707,4,[34,44,56]],["板ヶ谷下組",33.34917,132.6163,4,[34,44,56]],["板島橋",33.21709,132.55329,3,[67,69]],["枝浦",33.3188,132.46695,3,[58]],["枯井",33.34514,132.39433,3,[15]],["柏（愛媛県）",33.01847,132.49763,3,[7,8,10,66]],["柚の木（愛媛県）",33.49972,132.54586,3,[9]],["柚木",33.49931,132.54712,0,[5,6]],["柿の木（愛媛県）",33.16658,132.54974,3,[10,59,66]],["柿の木［旧道］（愛媛県）",33.16575,132.54743,3,[65]],["柿の浦",33.05959,132.4832,3,[7,8,10,66]],["柿原トンネル口",33.23804,132.58923,3,[41]],["柿原職業訓練所前",33.24033,132.58677,3,[63]],["柿原（愛媛県）",33.23935,132.58439,3,[63]],["柿木",33.4137,132.61965,4,[24,26]],["栗の木",33.41004,132.70871,4,[23,24]],["栗の木（愛媛県）",33.41098,132.70968,3,[28]],["栗木川平",33.41129,132.70267,4,[25]],["栗木本村集会所",33.41825,132.69978,4,[25]],["根無川",33.24365,132.57124,3,[60]],["桜ヶ峠トンネル口",33.37206,132.66129,3,[41,50]],["桜橋（愛媛県）",33.27772,132.54077,3,[61,62]],["桜町（愛媛県）",33.21542,132.56356,3,[64]],["桜谷（愛媛県）",33.37232,132.44046,3,[48]],["桝形",33.50739,132.54273,0,[1,5,6]],["桝形（愛媛県）",33.50759,132.54276,3,[4]],["桧本",33.23706,132.70196,3,[60]],["梅の堂前",33.45327,132.43229,3,[15,16,17]],["梅林口（愛媛県）",33.25929,132.57964,3,[60]],["森ヶ鼻",33.28898,132.59763,3,[60]],["植木集会所",33.39171,132.70033,4,[29,40]],["榎",33.41787,132.61417,4,[24,26]],["榎峠",33.44427,132.42167,3,[16]],["権現",33.38286,132.65055,4,[23,24,26,37]],["権現（愛媛県）",33.38296,132.65067,3,[20,28]],["横吹（愛媛県）",33.23993,132.61825,3,[41]],["横山",33.44202,132.72455,4,[12]],["横林支所前",33.41572,132.71751,4,[12]],["横浦（愛媛県）",33.08289,132.47938,3,[72]],["横畑下",33.47145,132.46735,3,[14]],["櫛生",33.57329,132.44318,0,[0]],["次の川",33.39462,132.62943,4,[39]],["正信",33.43841,132.51824,3,[9,10]],["歯長峠口",33.33917,132.55809,3,[9,34,44,45,50,51,56]],["歴史博物館前（愛媛県）",33.36478,132.51924,3,[48]],["殿町",33.511,132.54474,0,[5,6]],["氏宮",33.38062,132.64672,3,[20,23,24,26,28,37,41,50]],["水ヶ浦（宇和島市）",33.20583,132.45597,3,[68]],["水分（愛媛県）",33.24242,132.62667,3,[41]],["水産試験場前（愛媛県）",33.16892,132.43998,3,[71]],["永野市",33.25424,132.68848,3,[41,60]],["永長",33.37853,132.49874,3,[48]],["永長口",33.37634,132.50429,3,[9,10,48,49,50,51]],["汗嵐集会所",33.41708,132.70504,4,[18]],["江戸岡",33.45813,132.43308,3,[14,15,16,17]],["江戸岡交差点前",33.45792,132.43206,3,[14,15,16,17]],["江湖",33.23641,132.55059,3,[64,65]],["江良",33.3567,132.51903,4,[46,56]],["江良（愛媛県）",33.3567,132.51903,3,[49]],["池の浦（愛媛県）",33.31399,132.50116,3,[58]],["池野々",33.36619,132.78818,3,[41]],["沖の堂",33.36999,132.68431,3,[41,50]],["沢屋",33.45774,132.76124,4,[12]],["河成",33.41339,132.71761,3,[12,28]],["河成小学校前",33.41761,132.71964,4,[12]],["河西集会所",33.3651,132.60442,4,[19]],["泉町（愛媛県）",33.23352,132.57165,3,[63]],["法ヶ津",33.31941,132.5189,3,[58]],["波切（愛媛県）",33.4012,132.39478,3,[16]],["泥目水",33.08526,132.46807,3,[72]],["津の浦",33.20092,132.44561,3,[68]],["津の浦口",33.20003,132.44772,3,[68]],["津の浦回転場",33.20056,132.44695,3,[68]],["津島やすらぎの里",33.13979,132.52173,3,[8]],["津島やすらぎの里入口",33.13989,132.52532,3,[7,10,59,66]],["津島大橋",33.11769,132.51953,3,[10,66,72]],["津島支所前",33.12699,132.52251,3,[10,59,66]],["津島田の浜",33.10759,132.4752,3,[72]],["津島病院前",33.12242,132.52036,3,[10,66,72]],["浅川（愛媛県）",33.26404,132.52836,3,[62]],["浜崎水産前",33.26188,132.52126,3,[62]],["浦知",33.06456,132.48847,3,[7,8,10,66]],["深山",33.34702,132.64737,4,[54]],["深山本谷",33.33768,132.63933,4,[54]],["深浦上組",33.31728,132.50523,3,[58]],["深田（愛媛県）",33.26153,132.66097,3,[60]],["清水川",33.38305,132.73356,4,[32,38]],["清水（宇和島市）",33.17513,132.55235,3,[7,8,10,59,65,66]],["清流の里ひじかわ",33.46081,132.67651,3,[4]],["清詰",33.30104,132.72768,3,[41]],["渓寿寺前",33.5048,132.61543,3,[4]],["渡場（愛媛県）",33.51014,132.5455,3,[4,9]],["渡江",33.31959,132.48068,3,[58]],["游の里",33.35714,132.6151,4,[34,44,45,56]],["満倉（愛媛県）",32.94865,132.60885,3,[66]],["滝山",33.40881,132.64261,4,[30]],["漁火トンネル口",33.14154,132.47104,3,[59]],["瀬倉",33.16505,132.48997,3,[68]],["瀬戸（西予市）",33.41887,132.51037,3,[9]],["瀬間行",33.40915,132.69905,4,[25]],["無月",33.1861,132.51078,3,[68]],["照護寺前",33.23497,132.57815,3,[63]],["片川",33.38853,132.6312,4,[39]],["片川橋",33.19429,132.56007,3,[64,70]],["牛の浦",33.13935,132.4623,3,[59]],["牛川",33.26539,132.51802,3,[62]],["牛川農協前",33.26537,132.51613,3,[62]],["特産開発センター前",33.47972,132.66354,3,[4]],["犬寄橋三叉路",33.39628,132.72763,4,[35,36]],["狩津",33.16779,132.44221,3,[71]],["狩浜（愛媛県）",33.3162,132.46456,3,[58]],["狭間（愛媛県）",33.38205,132.46966,3,[48]],["玉ヶ月〔宇和島市住吉町〕",33.23092,132.55479,3,[64,65]],["玉ヶ月〔宇和島市津島町〕",33.12042,132.49931,3,[72]],["玉津保育園",33.31794,132.52018,3,[58]],["玉津宮の浦",33.31853,132.51328,3,[58]],["玉津深浦",33.31515,132.50424,3,[58]],["王子の森公園",33.44998,132.43436,3,[15,17]],["甘崎（宇和島市）",33.19211,132.45455,3,[68]],["田の浦橋",33.42535,132.40213,3,[16]],["田之浜",33.31959,132.3934,4,[57]],["田之浜診療所前",33.3189,132.39505,3,[58]],["田之浜（愛媛県）",33.31962,132.39327,3,[58]],["田之筋公民館前",33.38376,132.53162,4,[33,34]],["田口山根",33.51775,132.55874,0,[5,6]],["田口神宮",33.51886,132.56279,0,[5,6]],["田穂",33.37036,132.68647,3,[41,50]],["田穂下組",33.37308,132.69328,3,[41,50]],["田穂中組",33.37012,132.68186,3,[41,50]],["田穂運動公園",33.37035,132.68987,4,[55]],["田部越",33.41902,132.18416,1,[2]],["田野中農事集会所前",33.4025,132.53709,4,[33,34]],["田颪",33.09008,132.46935,3,[72]],["申生田",33.24386,132.56825,3,[58,59,61,62]],["男河内集会所",33.39651,132.72541,4,[35,36]],["畑ヶ谷",33.39673,132.6712,4,[23,24]],["畑ヶ谷（愛媛県）",33.39685,132.67122,3,[28]],["畑地",33.08774,132.51525,3,[7,8,10,66]],["畜産試験場",33.38446,132.65256,4,[37]],["畜産試験場（愛媛県）",33.38452,132.65262,3,[20]],["番匠（愛媛県）",33.19525,132.45496,3,[68]],["番城小学校前",33.20121,132.55122,3,[7,8,10,59,63,64,65,66,68,70]],["病院前（旧宇和病院）",33.36744,132.50804,3,[9,10,48,49,50,51]],["登立",33.60713,132.68114,1,[2]],["白岩（愛媛県）",33.42559,132.58544,3,[20]],["白浜通",33.46427,132.42406,3,[14,15,16,17]],["白浜（宇和島市）",33.21358,132.52565,3,[69]],["白浦〔吉田〕",33.30986,132.52831,3,[58]],["白浦〔石応〕",33.21444,132.53185,3,[69]],["白滝駅前",33.57799,132.52668,0,[1]],["白石（愛媛県）",33.42981,132.40675,3,[16]],["白髭",33.43788,132.57803,3,[20]],["百之浦",33.22291,132.52744,3,[67]],["皆楽園前",33.34872,132.41099,3,[15]],["皆江",33.34334,132.41125,3,[15]],["皆田",33.34473,132.53805,3,[9,34,44,45,50,51,56]],["県八幡浜支局前",33.46157,132.42299,3,[14,15,16,17]],["県土木事務所前",33.52012,132.55215,0,[5,6]],["県界（愛媛県）",32.97057,132.68922,3,[66]],["真珠会社前",33.2359,132.5437,3,[64,65]],["真穴学校前",33.40362,132.39125,3,[16]],["真網代",33.41342,132.39411,3,[16]],["真網代入口",33.41458,132.39069,3,[16]],["真網代撰果場",33.41145,132.39458,3,[16]],["矢の浦",33.1869,132.45753,3,[68]],["矢の浦集会所前",33.18842,132.45789,3,[68]],["知永",33.2617,132.54262,3,[62]],["知永峠",33.2634,132.54577,3,[58,59,61,62]],["知清橋",33.55136,132.65528,1,[2]],["知野",33.45741,132.7714,4,[12]],["石丸（愛媛県）",33.18104,132.54957,3,[10,59,65,66]],["石引",33.19566,132.53725,3,[68]],["石応",33.21294,132.51816,3,[69]],["石応保育園前",33.21352,132.52087,3,[69]],["石応小学校前",33.2129,132.51421,3,[69]],["磯崎",33.54125,132.41602,0,[0]],["磯（愛媛県）",33.12273,132.51739,3,[59]],["祇園橋（愛媛県）",33.45085,132.43299,3,[15,16,17]],["神子の浦",33.34061,132.39276,3,[15]],["神崎口",33.4039,132.17054,1,[2]],["神崎（愛媛県）",33.19031,132.44318,3,[68]],["神田橋",33.36572,132.7018,4,[43,55]],["神田橋（宇和島市）",33.21453,132.56713,3,[64]],["福浦（宇和島市）",33.15451,132.43519,3,[59]],["福祉センター前",33.36184,132.51555,4,[33,34,46,56]],["稲生（愛媛県）",33.35501,132.52877,3,[9,50,51]],["稲谷",33.47288,132.78195,4,[13]],["穴井（愛媛県）",33.39862,132.39718,3,[16]],["窪",33.39511,132.53537,4,[33,34]],["立川",33.59765,132.67601,1,[2]],["立川橋",33.58656,132.66706,1,[2]],["立目（愛媛県）",33.26546,132.51295,3,[62]],["立間駅前",33.29582,132.53955,3,[8,10,58,59]],["立間（バス）",33.29297,132.53984,3,[58,59]],["竜の浜",33.12041,132.50532,3,[72]],["竹城下",33.28992,132.54024,3,[58,59]],["竹崎",33.4695,132.78483,4,[12]],["等妙寺橋",33.25117,132.67617,3,[41]],["篭松",33.43322,132.5804,3,[20]],["細木運河",33.20589,132.40595,3,[68]],["結出",33.16792,132.45963,3,[71]],["網代（宇和島市）",33.1423,132.47678,3,[59]],["総合福祉センター",33.52128,132.55518,0,[5,6]],["総合福祉センター前（宇和島市）",33.22631,132.55813,3,[64,65]],["繁浦",33.17311,132.46281,3,[68]],["肱南トラベル本社営業所前",33.52819,132.56918,2,[3]],["脇（愛媛県）",33.09853,132.48096,3,[72]],["臥龍の湯前",33.50288,132.54869,0,[5,6]],["興野々橋",33.25429,132.70719,3,[41]],["舌田",33.44196,132.41562,3,[16]],["舌間",33.44357,132.41622,3,[16]],["舟の川",33.27249,132.63282,3,[60]],["舟坂",33.42966,132.62444,4,[21]],["船戸橋",33.41499,132.71825,4,[12]],["船間",33.27313,132.48109,3,[62]],["船隠（愛媛県）",33.18193,132.50995,3,[68]],["芒ヶ原",33.35841,132.63911,4,[54]],["芝（愛媛県）",33.43024,132.51473,3,[9]],["芳原",33.11063,132.51487,3,[10,66]],["芳組",33.25639,132.70764,3,[41]],["若宮口",33.52328,132.55722,0,[4,5,6,9,10]],["茅場",33.44581,132.72862,4,[12]],["茶堂〔南宇和郡〕",32.95298,132.63195,3,[66]],["草木（愛媛県）",33.17166,132.55308,3,[10,59,65,66]],["荷刺",33.39031,132.65384,3,[23,24,26,28]],["菅田下町",33.5129,132.58791,3,[4]],["菅田農協前",33.50998,132.59088,3,[4]],["菊川小学校前",32.99001,132.5174,3,[10,66]],["菊川（愛媛県）",32.99493,132.5135,3,[7,8,10,66]],["萩の尾（愛媛県）",33.4794,132.65955,3,[4]],["蒋渕",33.19974,132.40884,3,[68]],["蓮乗寺（愛媛県）",32.95516,132.5861,3,[66]],["蔭之地集会所",33.37185,132.70678,4,[43,55]],["蔵良地中",33.41248,132.64983,4,[30]],["蔵良本村",33.40689,132.65292,4,[30]],["蔵貫村",33.35471,132.42736,3,[15]],["蔵貫（愛媛県）",33.35657,132.42057,3,[15]],["蕨（バス）",33.19429,132.50865,3,[69]],["薬師谷渓谷",33.19275,132.57274,3,[64,70]],["薬師谷（愛媛県）",33.19489,132.56173,3,[64,70]],["藤の川（愛媛県）",33.50446,132.62713,3,[4]],["藤野々〔北宇和郡〕",33.28879,132.72074,3,[41]],["虹の森公園前",33.22987,132.70986,3,[60]],["蛤（愛媛県）",33.22398,132.53119,3,[67]],["裁判所前（八幡浜市）",33.46595,132.4256,3,[14,15,16]],["西クロッケー場",33.42237,132.68281,4,[25]],["西上",33.4797,132.78022,4,[13]],["西下集会所",33.47765,132.78094,4,[13]],["西中浦",33.46312,132.42022,3,[14]],["西予市役所",33.36317,132.51118,4,[33,34,44,45,46,47,56]],["西予市役所前",33.36333,132.51098,3,[9,10,48,49,50,51]],["西予市民病院",33.38471,132.49627,3,[33,44,45,46,47,48,49,50,51]],["西仲（愛媛県）",33.27106,132.64657,3,[60]],["西南君",33.27017,132.49995,3,[62]],["西大洲",33.50606,132.53208,0,[5,6]],["西大洲〔路線バス〕",33.50619,132.53226,3,[4]],["西集会所",33.42099,132.68493,4,[25]],["見返橋（愛媛県）",33.22798,132.55683,3,[64,65]],["診療所前（西予市）",33.41487,132.71496,3,[28]],["譲葉（愛媛県）",33.49469,132.63534,3,[4]],["谷入口（愛媛県）",33.41091,132.43179,3,[15,17]],["豊之浦",33.47018,132.32281,0,[11]],["豊正園前",33.16986,132.51285,3,[68]],["豊浦（愛媛県）",33.17015,132.50092,3,[68]],["豊真寺前",33.24175,132.69783,3,[60]],["貝塚（愛媛県）",32.96408,132.55711,3,[10,66]],["赤岩（愛媛県）",33.47214,132.67842,3,[4]],["赤松（愛媛県）",33.23827,132.53697,3,[64,65]],["轟橋（愛媛県）",33.28705,132.7185,3,[41]],["辰己",33.11881,132.51077,3,[72]],["辰己団地前",33.11744,132.51371,3,[72]],["農事センター前",33.38747,132.12229,1,[2]],["近家",33.12955,132.50331,3,[59]],["近永南町",33.25581,132.67899,3,[41,60]],["近永小学校前",33.2495,132.67209,3,[41]],["近永新町",33.25294,132.67665,3,[41]],["近永本町",33.25672,132.674,3,[60]],["近永駅前",33.25637,132.67699,3,[41,60]],["近永（バス）",33.25474,132.67633,3,[41]],["迫目",33.28212,132.60476,3,[60]],["遊子診療所前",33.19355,132.45537,3,[68]],["道の駅みま",33.28604,132.59529,3,[7,60]],["道の駅八幡浜みなっと",33.45805,132.4181,1,[2]],["道木",33.35825,132.52278,4,[34,44,45,46,56]],["道野々集会所",33.39449,132.66085,4,[27]],["郷公民館前",33.46995,132.47048,3,[14]],["郷（八幡浜市）",33.46967,132.46402,3,[14]],["野井〔宇和島自動車〕",33.16381,132.54808,3,[10,59,66]],["野地",33.4215,132.73652,4,[22]],["野地（愛媛県）",33.30558,132.77749,3,[41]],["野村",33.37656,132.64244,4,[23,24,26,37]],["野村ダム",33.36209,132.63122,3,[9,20,50,51]],["野村出張所",33.3768,132.64236,3,[9,20,28,41,50,51]],["野村営業所",33.37665,132.64241,4,[21,30,39,53,54]],["野村大橋",33.37952,132.64369,3,[20,23,24,26,28,37,41,50]],["野村小学校",33.37408,132.64278,4,[24,26,37]],["野村小学校前",33.37437,132.64281,3,[9,20,28,41,50,51]],["野村支所",33.37599,132.64265,4,[21,30,39,53,54]],["野村日切地蔵前",33.35863,132.60992,3,[9,50,51]],["野村病院",33.37225,132.64187,4,[18,19,21,22,24,25,26,27,29,30,31,35,37,38,39,40,52,53,54,55]],["野村病院前",33.3723,132.64254,3,[9,20,50,51]],["野村病院（愛媛県）",33.37225,132.64178,3,[28,41]],["野村高校前",33.38548,132.65115,3,[23,24,26,28]],["野田口（愛媛県）",33.36564,132.50878,3,[9,48,49,50,51]],["野田花",33.52998,132.5846,3,[4]],["金剛橋",33.09964,132.51126,3,[10,66]],["金輪渕",33.35081,132.59519,3,[9,50,51]],["金集",33.42252,132.62901,4,[21]],["針木（愛媛県）",33.06775,132.48587,3,[10,66]],["鉄砲町（大洲市）",33.50766,132.5385,3,[4]],["銀行前（愛媛県）",33.4598,132.42302,3,[14,15,16,17]],["鍛冶屋",33.39823,132.68401,4,[37]],["鍛冶屋（西予市）",33.40755,132.59184,3,[20]],["鎌ケ崎",33.27016,132.4886,3,[62]],["鎌田",33.40198,132.68642,4,[23,24]],["鎌田集会所",33.40615,132.68323,4,[25]],["鎌田（西予市）",33.40198,132.68642,3,[28]],["長堀橋（愛媛県）",33.21175,132.55878,3,[59,63,64,65,68,70]],["長崎〔南宇和郡〕",32.96657,132.54646,3,[7,8,10,66]],["長早",33.37098,132.40028,3,[17,48]],["長早工場跡",33.36832,132.39252,3,[17,48]],["長栄橋",33.27515,132.54047,3,[58,59,61,62]],["長洲橋",32.97204,132.54353,3,[10,66]],["長浜",33.61572,132.48093,0,[0]],["長浜町役場前",33.61365,132.47964,0,[0]],["長浜駅前",33.61507,132.48617,0,[0,1]],["長浜駒手町",33.60961,132.48422,0,[0]],["長浦（愛媛県）",33.23344,132.55363,3,[64,65]],["長瀬〔北宇和郡〕",33.31752,132.79335,3,[41]],["長田（宇和島市）",33.26799,132.50392,3,[62]],["長谷集会所",33.41978,132.70991,4,[18]],["長谷集会所",33.3812,132.57424,4,[19]],["関平集会所",33.38147,132.72844,4,[36]],["阿下上",33.38628,132.66952,4,[37]],["阿下本村",33.38961,132.67154,4,[37]],["阿部（愛媛県）",33.50826,132.60921,3,[4]],["除家",33.50912,132.59829,3,[4]],["静愁苑前",33.18949,132.52791,3,[68]],["須の川",33.03985,132.48795,3,[7,8,10,66]],["須の川灘",33.03199,132.48384,3,[10,66]],["須崎観音前",33.36676,132.39049,3,[17,48]],["須沢",33.58957,132.45717,0,[0]],["須賀川ダム",33.24124,132.59155,3,[41]],["馬地",33.38087,132.63123,4,[39]],["馬場集会所",33.40113,132.67917,4,[25]],["馬根",33.27818,132.59154,3,[60]],["駄馬下",33.43389,132.7214,4,[12]],["高光本村",33.26614,132.56222,3,[58,59,61,62]],["高光農協前",33.25533,132.57346,3,[8,10,58,59,61,62]],["高助（愛媛県）",33.20038,132.40323,3,[68]],["高城（八幡浜市）",33.46616,132.42334,3,[14,15,16,17]],["高山宮の浦",33.31439,132.42512,3,[58]],["高山宮の浦住宅前",33.31206,132.42594,3,[58]],["高山本浦",33.3203,132.43164,3,[58]],["高木（宇和島市）",33.20176,132.40271,3,[68]],["高橋",33.40725,132.64273,4,[24,26]],["高田（愛媛県）",33.13506,132.52449,3,[7,8,10,59,66]],["鬼ケ窪（愛媛県）",33.35895,132.52021,3,[9,50,51]],["鬼ヶ窪",33.35889,132.52034,4,[34,44,45,46,56]],["鬼北町役場前",33.25572,132.68318,3,[41,60]],["鬼北町役場日吉支所前",33.33374,132.79663,3,[41]],["鬼窪",33.36055,132.52031,3,[33,34,48,49]],["魚成橋",33.38173,132.73123,3,[41,50]],["魚泊（愛媛県）",33.19766,132.45706,3,[68]],["魚病センター前",33.21948,132.54271,3,[67,69]],["鮎返（宇和島市）",33.23986,132.60434,3,[41]],["鮎返（西予市）",33.37327,132.6098,3,[20]],["鳥坂トンネル",33.45409,132.53284,3,[9,10]],["鳥越トンネル",33.05015,132.48224,3,[7,8,10,66]],["鳥越（愛媛県）",33.2545,132.57617,3,[60]],["鳥首",33.48296,132.65397,3,[4]],["鳥鹿野",33.4033,132.58765,3,[20]],["鴨田（愛媛県）",33.09557,132.51601,3,[10,66]],["鴫山口",33.4079,132.43194,3,[15,17]],["鵜の浜",33.13825,132.49756,3,[59]],["鵜の浜口",33.13788,132.4948,3,[59]],["鶴島小学校前",33.21885,132.56078,3,[67,69]],["鶴島町",33.22597,132.56589,3,[63,64,65]],["鶴間（バス）",33.26983,132.53834,3,[62]],["鹿野川",33.45479,132.68432,3,[4]],["鹿野川大橋",33.4551,132.67953,3,[4]],["鼓尾",33.49734,132.37626,0,[11]],["鼠鳴",33.08456,132.47815,3,[72]],["龍徳",33.45927,132.77364,4,[12]],["龍沢寺入口",33.36215,132.70824,4,[43,55]]]};
+// 場所（駅・地名・施設）。build/work/places/ で作る別データ。バス停データには手を加えない。 [名前, 種類, 緯度, 経度, 所在地, 補足, 別名]
+const PLACES = [["上宇和駅","駅",33.37996,132.50138,"西予市","四国旅客鉄道","上宇和","",0,""],["下宇和駅","駅",33.34978,132.53108,"西予市","四国旅客鉄道","下宇和","",0,""],["二名駅","駅",33.29151,132.62903,"宇和島市","四国旅客鉄道","二名","",0,""],["五十崎駅","駅",33.53808,132.63635,"喜多郡内子町","四国旅客鉄道","五十崎","",0,""],["五郎駅","駅",33.54133,132.57053,"大洲市","四国旅客鉄道","五郎","",0,""],["伊予出石駅","駅",33.59636,132.49885,"大洲市","四国旅客鉄道","伊予出石","",0,""],["伊予吉田駅","駅",33.27341,132.54431,"宇和島市","四国旅客鉄道","伊予吉田","",0,""],["伊予大洲駅","駅",33.51855,132.54484,"大洲市","四国旅客鉄道","伊予大洲","",0,""],["伊予宮野下駅","駅",33.2888,132.60586,"宇和島市","四国旅客鉄道","伊予宮野下","",0,""],["伊予平野駅","駅",33.49561,132.51812,"大洲市","四国旅客鉄道","伊予平野","",0,""],["伊予白滝駅","駅",33.57844,132.52653,"大洲市","四国旅客鉄道","伊予白滝","",0,""],["伊予石城駅","駅",33.39159,132.47305,"西予市","四国旅客鉄道","伊予石城","",0,""],["伊予立川駅","駅",33.60075,132.6773,"喜多郡内子町","四国旅客鉄道","伊予立川","",0,""],["伊予長浜駅","駅",33.61501,132.48707,"大洲市","四国旅客鉄道","伊予長浜","",0,""],["八多喜駅","駅",33.56245,132.54077,"大洲市","四国旅客鉄道","八多喜","",0,""],["八幡浜駅","駅",33.45803,132.43618,"八幡浜市","四国旅客鉄道","八幡浜","",0,""],["内子駅","駅",33.54948,132.64626,"喜多郡内子町","四国旅客鉄道","内子","",0,""],["出目駅","駅",33.2518,132.69194,"北宇和郡鬼北町","四国旅客鉄道","出目","",0,""],["務田駅","駅",33.28286,132.60061,"宇和島市","四国旅客鉄道","務田","",0,""],["北宇和島駅","駅",33.23924,132.56972,"宇和島市","四国旅客鉄道","北宇和島","",0,""],["千丈駅","駅",33.46543,132.45734,"八幡浜市","四国旅客鉄道","千丈","",0,""],["卯之町駅","駅",33.36317,132.50977,"西予市","四国旅客鉄道","卯之町","",0,""],["双岩駅","駅",33.42428,132.45789,"八幡浜市","四国旅客鉄道","双岩","",0,""],["吉野生駅","駅",33.22451,132.72931,"北宇和郡松野町","四国旅客鉄道","吉野生","",0,""],["喜多山駅","駅",33.53342,132.61144,"大洲市","四国旅客鉄道","喜多山","",0,""],["大内駅","駅",33.28731,132.64176,"宇和島市","四国旅客鉄道","大内","",0,""],["宇和島駅","駅",33.22619,132.56771,"宇和島市","四国旅客鉄道","宇和島","",0,""],["新谷駅","駅",33.53415,132.59853,"大洲市","四国旅客鉄道","新谷","",0,""],["春賀駅","駅",33.55565,132.55531,"大洲市","四国旅客鉄道","春賀","",0,""],["松丸駅","駅",33.22825,132.70889,"北宇和郡松野町","四国旅客鉄道","松丸","",0,""],["深田駅","駅",33.26763,132.66039,"北宇和郡鬼北町","四国旅客鉄道","深田","",0,""],["真土駅","駅",33.22409,132.74515,"北宇和郡松野町","四国旅客鉄道","真土","",0,""],["立間駅","駅",33.29673,132.53947,"宇和島市","四国旅客鉄道","立間","",0,""],["西大洲駅","駅",33.50818,132.52713,"大洲市","四国旅客鉄道","西大洲","",0,""],["近永駅","駅",33.25566,132.67639,"北宇和郡鬼北町","四国旅客鉄道","近永","",0,""],["高光駅","駅",33.25598,132.57351,"宇和島市","四国旅客鉄道","高光","",0,""],["伊予大洲駅","交通",33.51869,132.54325,"大洲市","","いよおおずえき","",0,""],["八幡浜駅","交通",33.45809,132.43615,"八幡浜市","","やわたはまえき","",0,""],["内子駅","交通",33.54914,132.64628,"喜多郡内子町","","うちこえき","",0,""],["卯之町駅","交通",33.36282,132.50873,"西予市","","うのまちえき","",0,""],["宇和島駅","交通",33.22596,132.56774,"宇和島市","","うわじまえき","",0,""],["近永駅","交通",33.25577,132.67626,"北宇和郡鬼北町","","ちかながえき","",0,""],["一本松","地名",32.96134,132.64931,"南宇和郡愛南町","","","",0,""],["三崎","地名",33.39065,132.11699,"西宇和郡伊方町","","","",0,""],["三机","地名",33.45438,132.25143,"西宇和郡伊方町","","","",0,""],["三浦東","地名",33.17142,132.51077,"宇和島市","","","",0,""],["三浦西","地名",33.16733,132.48502,"宇和島市","","","",0,""],["三瓶町下泊","地名",33.3339,132.38812,"西予市","","","",0,""],["三瓶町二及","地名",33.37925,132.40186,"西予市","","","",0,""],["三瓶町周木","地名",33.379,132.39011,"西予市","","","",0,""],["三瓶町和泉","地名",33.40148,132.43913,"西予市","","","",0,""],["三瓶町垣生","地名",33.39109,132.41029,"西予市","","","",0,""],["三瓶町安土","地名",33.37611,132.41917,"西予市","","","",0,""],["三瓶町有太刀","地名",33.3646,132.41786,"西予市","","","",0,""],["三瓶町有網代","地名",33.36975,132.41401,"西予市","","","",0,""],["三瓶町朝立","地名",33.38949,132.42991,"西予市","","","",0,""],["三瓶町津布理","地名",33.37217,132.4341,"西予市","","","",0,""],["三瓶町皆江","地名",33.33556,132.41124,"西予市","","","",0,""],["三瓶町蔵貫","地名",33.35471,132.42736,"西予市","","","",0,""],["三瓶町蔵貫浦","地名",33.35451,132.42104,"西予市","","","",0,""],["三瓶町長早","地名",33.37065,132.3954,"西予市","","","",0,""],["三瓶町鴫山","地名",33.40839,132.4198,"西予市","","","",0,""],["三間町三間中間","地名",33.28568,132.66687,"宇和島市","","","",0,""],["三間町中野中","地名",33.29122,132.62964,"宇和島市","","","",0,""],["三間町元宗","地名",33.29018,132.62273,"宇和島市","","","",0,""],["三間町兼近","地名",33.27986,132.65155,"宇和島市","","","",0,""],["三間町則","地名",33.31507,132.57749,"宇和島市","","","",0,""],["三間町務田","地名",33.28348,132.59574,"宇和島市","","","",0,""],["三間町北増穂","地名",33.3059,132.61498,"宇和島市","","","",0,""],["三間町古藤田","地名",33.29253,132.64209,"宇和島市","","","",0,""],["三間町土居中","地名",33.2738,132.6142,"宇和島市","","","",0,""],["三間町土居垣内","地名",33.28528,132.6352,"宇和島市","","","",0,""],["三間町増田","地名",33.28163,132.62143,"宇和島市","","","",0,""],["三間町大内","地名",33.28747,132.64936,"宇和島市","","","",0,""],["三間町大藤","地名",33.31602,132.59071,"宇和島市","","","",0,""],["三間町宮野下","地名",33.29405,132.60913,"宇和島市","","","",0,""],["三間町小沢川","地名",33.30118,132.62301,"宇和島市","","","",0,""],["三間町川之内","地名",33.31915,132.6293,"宇和島市","","","",0,""],["三間町成家","地名",33.29713,132.59089,"宇和島市","","","",0,""],["三間町戸雁","地名",33.29633,132.60081,"宇和島市","","","",0,""],["三間町是延","地名",33.27909,132.63753,"宇和島市","","","",0,""],["三間町是能","地名",33.28519,132.57349,"宇和島市","","","",0,""],["三間町曽根","地名",33.29406,132.58175,"宇和島市","","","",0,""],["三間町波岡","地名",33.29824,132.62943,"宇和島市","","","",0,""],["三間町田川","地名",33.31037,132.64098,"宇和島市","","","",0,""],["三間町迫目","地名",33.27707,132.6059,"宇和島市","","","",0,""],["三間町金銅","地名",33.29514,132.63603,"宇和島市","","","",0,""],["三間町音地","地名",33.31481,132.65764,"宇和島市","","","",0,""],["三間町黒井地","地名",33.31823,132.60773,"宇和島市","","","",0,""],["三間町黒川","地名",33.29746,132.65339,"宇和島市","","","",0,""],["上大道","地名",32.96781,132.61877,"南宇和郡愛南町","","","",0,""],["上大野","地名",33.31992,132.79385,"北宇和郡鬼北町","","","",0,""],["上家地","地名",33.18172,132.72405,"北宇和郡松野町","","","",0,""],["上川","地名",33.26214,132.7282,"北宇和郡鬼北町","","","",0,""],["上田渡","地名",33.61274,132.78815,"喜多郡内子町","","","",0,""],["上鍵山","地名",33.34106,132.79113,"北宇和郡鬼北町","","","",0,""],["上須戒","地名",33.53803,132.50002,"大洲市","","","",0,""],["下久家","地名",32.93669,132.51333,"南宇和郡愛南町","","","",0,""],["下大野","地名",33.30658,132.72069,"北宇和郡鬼北町","","","",0,""],["下波","地名",33.17318,132.44989,"宇和島市","","","",0,""],["下鍵山","地名",33.33365,132.797,"北宇和郡鬼北町","","","",0,""],["並松","地名",33.20662,132.55716,"宇和島市","1〜2丁目","","",0,""],["中之浜","地名",33.4827,132.36914,"西宇和郡伊方町","","","",0,""],["中央町","地名",33.22091,132.56792,"宇和島市","1〜2丁目","","",0,""],["中川","地名",32.94693,132.63439,"南宇和郡愛南町","","","",0,""],["中村","地名",33.51457,132.54448,"大洲市","","","",0,""],["中沢町","地名",33.20845,132.55665,"宇和島市","1〜2丁目","","",0,""],["中泊","地名",32.93428,132.48393,"南宇和郡愛南町","","","",0,""],["中津川","地名",33.43671,132.47131,"八幡浜市","","","",0,""],["中浦","地名",33.49358,132.3449,"西宇和郡伊方町","","","",0,""],["中浦","地名",32.96976,132.49683,"南宇和郡愛南町","","","",0,""],["中田渡","地名",33.60045,132.78964,"喜多郡内子町","","","",0,""],["中野川","地名",33.23783,132.67029,"北宇和郡鬼北町","","","",0,""],["丸之内","地名",33.21954,132.56448,"宇和島市","1〜5丁目","","",0,""],["丸穂町","地名",33.22376,132.57542,"宇和島市","1〜4丁目","","",0,""],["久保","地名",33.29377,132.7344,"北宇和郡鬼北町","","","",0,""],["久家","地名",32.93845,132.50233,"南宇和郡愛南町","","","",0,""],["久良","地名",32.93836,132.55263,"南宇和郡愛南町","","","",0,""],["九町","地名",33.47958,132.31091,"西宇和郡伊方町","","","",0,""],["亀浦","地名",33.49606,132.32969,"西宇和郡伊方町","","","",0,""],["二名津","地名",33.39988,132.14109,"西宇和郡伊方町","","","",0,""],["二見","地名",33.46724,132.28334,"西宇和郡伊方町","","","",0,""],["五十崎","地名",33.53739,132.63545,"喜多郡内子町","","","",0,""],["五反田","地名",33.4429,132.44436,"八幡浜市","","","",0,""],["五百木","地名",33.57522,132.68799,"喜多郡内子町","","","",0,""],["五郎","地名",33.54114,132.56765,"大洲市","","","",0,""],["井野浦","地名",33.36782,132.10842,"西宇和郡伊方町","","","",0,""],["京町","地名",33.21553,132.56788,"宇和島市","","","",0,""],["仁田之浜","地名",33.48476,132.36013,"西宇和郡伊方町","","","",0,""],["伊吹町","地名",33.23621,132.57279,"宇和島市","","","",0,""],["伊方越","地名",33.50521,132.3503,"西宇和郡伊方町","","","",0,""],["住吉町","地名",33.22907,132.55578,"宇和島市","1〜3丁目","","",0,""],["佐伯町","地名",33.2144,132.56126,"宇和島市","1〜2丁目","","",0,""],["佐田","地名",33.37735,132.11647,"西宇和郡伊方町","","","",0,""],["保手","地名",33.21284,132.55118,"宇和島市","1〜5丁目","","",0,""],["保田","地名",33.18931,132.54611,"宇和島市","","","",0,""],["僧都","地名",33.02715,132.56589,"南宇和郡愛南町","","","",0,""],["元城団地","地名",33.44665,132.43596,"八幡浜市","","","",0,""],["元結掛","地名",33.21131,132.56155,"宇和島市","1〜2丁目","","",0,""],["光満","地名",33.26712,132.58835,"宇和島市","","","",0,""],["八代","地名",33.43969,132.42889,"八幡浜市","","","",0,""],["八多喜町","地名",33.56366,132.54334,"大洲市","","","",0,""],["内子","地名",33.55196,132.64526,"喜多郡内子町","","","",0,""],["内泊","地名",32.93708,132.49297,"南宇和郡愛南町","","","",0,""],["内深田","地名",33.26106,132.65805,"北宇和郡鬼北町","","","",0,""],["出目","地名",33.25716,132.69846,"北宇和郡鬼北町","","","",0,""],["別当","地名",33.21016,132.54744,"宇和島市","1〜6丁目","","",0,""],["北只","地名",33.49215,132.53758,"大洲市","","","",0,""],["北川","地名",33.23993,132.61825,"北宇和郡鬼北町","","","",0,""],["北浜","地名",33.46272,132.42223,"八幡浜市","","","",0,""],["北表","地名",33.51799,132.70516,"喜多郡内子町","","","",0,""],["北裏","地名",33.45608,132.50558,"大洲市","","","",0,""],["南山","地名",33.54561,132.78836,"喜多郡内子町","","","",0,""],["古月","地名",32.94603,132.5744,"南宇和郡愛南町","","","",0,""],["古町","地名",33.45359,132.43036,"八幡浜市","1〜2丁目","","",0,""],["只海","地名",33.53322,132.70974,"喜多郡内子町","","","",0,""],["合田","地名",33.43532,132.41544,"八幡浜市","","","",0,""],["吉波","地名",33.27124,132.63007,"北宇和郡鬼北町","","","",0,""],["吉田町北小路","地名",33.28396,132.54102,"宇和島市","","","",0,""],["吉田町南君","地名",33.26873,132.50925,"宇和島市","","","",0,""],["吉田町奥浦","地名",33.27783,132.4856,"宇和島市","","","",0,""],["吉田町本町","地名",33.27567,132.54184,"宇和島市","","","",0,""],["吉田町東小路","地名",33.27937,132.54117,"宇和島市","","","",0,""],["吉田町沖村","地名",33.28655,132.52421,"宇和島市","","","",0,""],["吉田町河内","地名",33.28601,132.50617,"宇和島市","","","",0,""],["吉田町法花津","地名",33.31913,132.51649,"宇和島市","","","",0,""],["吉田町浅川","地名",33.26702,132.52787,"宇和島市","","","",0,""],["吉田町深浦","地名",33.31547,132.50354,"宇和島市","","","",0,""],["吉田町白浦","地名",33.30986,132.52831,"宇和島市","","","",0,""],["吉田町知永","地名",33.25692,132.54223,"宇和島市","","","",0,""],["吉田町立間","地名",33.29712,132.53884,"宇和島市","","","",0,""],["吉田町立間尻","地名",33.27681,132.54895,"宇和島市","","","",0,""],["吉田町裡町","地名",33.2759,132.54312,"宇和島市","","","",0,""],["吉田町西小路","地名",33.27899,132.53882,"宇和島市","","","",0,""],["吉田町魚棚","地名",33.27503,132.54089,"宇和島市","","","",0,""],["吉田町鶴間","地名",33.27536,132.53388,"宇和島市","","","",0,""],["吉田町鶴間新","地名",33.2845,132.53403,"宇和島市","","","",0,""],["吉野","地名",33.2132,132.73358,"北宇和郡松野町","","","",0,""],["吉野川","地名",33.58758,132.77748,"喜多郡内子町","","","",0,""],["名取","地名",33.40089,132.16598,"西宇和郡伊方町","","","",0,""],["向灘","地名",33.46352,132.40914,"八幡浜市","","","",0,""],["和霊中町","地名",33.23036,132.56985,"宇和島市","1〜3丁目","","",0,""],["和霊元町","地名",33.2282,132.56757,"宇和島市","1〜4丁目","","",0,""],["和霊公園","地名",33.22845,132.56569,"宇和島市","","","",0,""],["和霊東町","地名",33.22962,132.57315,"宇和島市","1〜3丁目","","",0,""],["和霊町","地名",33.23242,132.56587,"宇和島市","","","",0,""],["喜多山","地名",33.55701,132.62526,"大洲市","","","",0,""],["喜木","地名",33.48452,132.41002,"八幡浜市","","","",0,""],["喜木津","地名",33.52794,132.39377,"八幡浜市","","","",0,""],["国木","地名",33.45047,132.45415,"八幡浜市","","","",0,""],["国遠","地名",33.26764,132.68183,"北宇和郡鬼北町","","","",0,""],["坂下津","地名",33.21788,132.54408,"宇和島市","","","",0,""],["垣内","地名",32.94896,132.59878,"南宇和郡愛南町","","","",0,""],["城川町下相","地名",33.36403,132.74206,"西予市","","","",0,""],["城川町古市","地名",33.36958,132.77441,"西予市","","","",0,""],["城川町嘉喜尾","地名",33.39891,132.74621,"西予市","","","",0,""],["城川町土居","地名",33.3881,132.76611,"西予市","","","",0,""],["城川町田穂","地名",33.36469,132.68065,"西予市","","","",0,""],["城川町男河内","地名",33.39605,132.7253,"西予市","","","",0,""],["城川町窪野","地名",33.41081,132.79902,"西予市","","","",0,""],["城川町遊子谷","地名",33.42634,132.75804,"西予市","","","",0,""],["城川町野井川","地名",33.44163,132.7997,"西予市","","","",0,""],["城川町高野子","地名",33.36209,132.80145,"西予市","","","",0,""],["城川町魚成","地名",33.36831,132.70896,"西予市","","","",0,""],["城廻","地名",33.57185,132.66473,"喜多郡内子町","","","",0,""],["城辺乙","地名",32.96667,132.58046,"南宇和郡愛南町","","","",0,""],["城辺甲","地名",32.95987,132.58847,"南宇和郡愛南町","","","",0,""],["堀端町","地名",33.2172,132.56748,"宇和島市","","","",0,""],["塩成","地名",33.44287,132.25476,"西宇和郡伊方町","","","",0,""],["増田","地名",32.97034,132.66424,"南宇和郡愛南町","","","",0,""],["夏目ヶ市","地名",33.20411,132.55267,"宇和島市","","","",0,""],["夏目町","地名",33.20644,132.55315,"宇和島市","1〜3丁目","","",0,""],["外泊","地名",32.93658,132.4744,"南宇和郡愛南町","","","",0,""],["多田","地名",33.54438,132.54679,"大洲市","","","",0,""],["大久","地名",33.41972,132.19555,"西宇和郡伊方町","","","",0,""],["大久喜","地名",33.51134,132.65464,"喜多郡内子町","","","",0,""],["大佐田","地名",33.36944,132.12192,"西宇和郡伊方町","","","",0,""],["大宮町","地名",33.22104,132.57132,"宇和島市","1〜3丁目","","",0,""],["大宿","地名",33.33652,132.68301,"北宇和郡鬼北町","","","",0,""],["大小浜","地名",33.20431,132.51135,"宇和島市","","","",0,""],["大島","地名",33.37529,132.35534,"八幡浜市","","","",0,""],["大平","地名",33.47065,132.43143,"八幡浜市","","","",0,""],["大成川","地名",32.92993,132.50566,"南宇和郡愛南町","","","",0,""],["大江","地名",33.44618,132.23093,"西宇和郡伊方町","","","",0,""],["大洲","地名",33.50622,132.54334,"大洲市","","","",0,""],["大浜","地名",33.47699,132.37317,"西宇和郡伊方町","","","",0,""],["大浦","地名",33.23601,132.54749,"宇和島市","","","",0,""],["大瀬中央","地名",33.58676,132.7223,"喜多郡内子町","","","",0,""],["大瀬北","地名",33.61145,132.74279,"喜多郡内子町","","","",0,""],["大瀬南","地名",33.54942,132.73251,"喜多郡内子町","","","",0,""],["大瀬東","地名",33.58094,132.75107,"喜多郡内子町","","","",0,""],["大谷口","地名",33.45152,132.42314,"八幡浜市","1〜2丁目","","",0,""],["大超寺奥","地名",33.20002,132.59003,"宇和島市","","","",0,""],["天神町","地名",33.22626,132.57014,"宇和島市","","","",0,""],["天赦公園","地名",33.21584,132.56093,"宇和島市","","","",0,""],["奈良","地名",33.24706,132.65494,"北宇和郡鬼北町","","","",0,""],["奥野川","地名",33.24811,132.76861,"北宇和郡松野町","","","",0,""],["妙典寺前","地名",33.20899,132.5688,"宇和島市","","","",0,""],["宇和川","地名",33.46291,132.64284,"大洲市","","","",0,""],["宇和津町","地名",33.21509,132.57623,"宇和島市","1〜3丁目","","",0,""],["宇和町ひまわり","地名",33.37059,132.50469,"西予市","","","",0,""],["宇和町れんげ","地名",33.38548,132.49839,"西予市","","","",0,""],["宇和町上松葉","地名",33.38171,132.50894,"西予市","","","",0,""],["宇和町下川","地名",33.34557,132.55465,"西予市","","","",0,""],["宇和町下松葉","地名",33.37545,132.50508,"西予市","","","",0,""],["宇和町久保","地名",33.44556,132.51902,"西予市","","","",0,""],["宇和町久枝","地名",33.36541,132.49746,"西予市","","","",0,""],["宇和町伊崎","地名",33.39566,132.52638,"西予市","","","",0,""],["宇和町伊延","地名",33.42151,132.48939,"西予市","","","",0,""],["宇和町伊賀上","地名",33.34632,132.50801,"西予市","","","",0,""],["宇和町信里","地名",33.4341,132.51616,"西予市","","","",0,""],["宇和町加茂","地名",33.39931,132.51533,"西予市","","","",0,""],["宇和町卯之町","地名",33.36269,132.51322,"西予市","1〜5丁目","","",0,""],["宇和町坂戸","地名",33.39044,132.50974,"西予市","","","",0,""],["宇和町大江","地名",33.40841,132.51471,"西予市","","","",0,""],["宇和町小原","地名",33.39174,132.48349,"西予市","","","",0,""],["宇和町小野田","地名",33.36407,132.48883,"西予市","","","",0,""],["宇和町山田","地名",33.35625,132.46445,"西予市","","","",0,""],["宇和町岡山","地名",33.4196,132.50166,"西予市","","","",0,""],["宇和町岩木","地名",33.39864,132.47145,"西予市","","","",0,""],["宇和町常定寺","地名",33.38751,132.53379,"西予市","","","",0,""],["宇和町平野","地名",33.39733,132.53624,"西予市","","","",0,""],["宇和町新城","地名",33.37933,132.53822,"西予市","","","",0,""],["宇和町明石","地名",33.3709,132.52904,"西予市","","","",0,""],["宇和町明間","地名",33.34524,132.59203,"西予市","","","",0,""],["宇和町杢所","地名",33.39973,132.49551,"西予市","","","",0,""],["宇和町東多田","地名",33.42526,132.51478,"西予市","","","",0,""],["宇和町永長","地名",33.37853,132.49874,"西予市","","","",0,""],["宇和町河内","地名",33.4369,132.49851,"西予市","","","",0,""],["宇和町清沢","地名",33.39248,132.49364,"西予市","","","",0,""],["宇和町瀬戸","地名",33.41716,132.51497,"西予市","","","",0,""],["宇和町田苗真土","地名",33.40566,132.49699,"西予市","","","",0,""],["宇和町田野中","地名",33.4025,132.53709,"西予市","","","",0,""],["宇和町皆田","地名",33.34418,132.53427,"西予市","","","",0,""],["宇和町神領","地名",33.36467,132.50365,"西予市","","","",0,""],["宇和町稲生","地名",33.36119,132.538,"西予市","","","",0,""],["宇和町窪","地名",33.39511,132.53537,"西予市","","","",0,""],["宇和町西山田","地名",33.38152,132.46914,"西予市","","","",0,""],["宇和町郷内","地名",33.38815,132.45569,"西予市","","","",0,""],["宇和町野田","地名",33.35495,132.48446,"西予市","","","",0,""],["宮下","地名",33.20493,132.53633,"宇和島市","","","",0,""],["宮内","地名",33.48434,132.40035,"八幡浜市","","","",0,""],["家串","地名",33.05079,132.46714,"南宇和郡愛南町","","","",0,""],["宿間","地名",33.51761,132.66972,"喜多郡内子町","","","",0,""],["寄松","地名",33.19695,132.53576,"宇和島市","","","",0,""],["富岡","地名",33.20333,132.7077,"北宇和郡松野町","","","",0,""],["寺村","地名",33.56895,132.79139,"喜多郡内子町","","","",0,""],["寿町","地名",33.22456,132.56061,"宇和島市","1〜2丁目","","",0,""],["小中浦","地名",33.49254,132.35001,"西宇和郡伊方町","","","",0,""],["小倉","地名",33.27803,132.72102,"北宇和郡鬼北町","","","",0,""],["小山","地名",32.95475,132.66729,"南宇和郡愛南町","","","",0,""],["小島","地名",33.44213,132.19589,"西宇和郡伊方町","","","",0,""],["小成川","地名",32.92808,132.50096,"南宇和郡愛南町","","","",0,""],["小松","地名",33.30511,132.73329,"北宇和郡鬼北町","","","",0,""],["小池","地名",33.19602,132.5027,"宇和島市","","","",0,""],["小浜","地名",33.20408,132.50399,"宇和島市","","","",0,""],["小浦","地名",32.95011,132.52543,"南宇和郡愛南町","","","",0,""],["小田","地名",33.56755,132.80671,"喜多郡内子町","","","",0,""],["小西野々","地名",33.27389,132.71548,"北宇和郡鬼北町","","","",0,""],["山際","地名",33.20836,132.56068,"宇和島市","1〜4丁目","","",0,""],["山鳥坂","地名",33.527,132.73027,"喜多郡内子町","","","",0,""],["岩水","地名",32.93734,132.61013,"南宇和郡愛南町","","","",0,""],["岩谷","地名",33.26684,132.71069,"北宇和郡鬼北町","","","",0,""],["川上","地名",33.30996,132.77214,"北宇和郡鬼北町","","","",0,""],["川上町上泊","地名",33.4237,132.39923,"八幡浜市","","","",0,""],["川上町川名津","地名",33.42089,132.41456,"八幡浜市","","","",0,""],["川上町白石","地名",33.42993,132.40859,"八幡浜市","","","",0,""],["川中","地名",33.60748,132.69038,"喜多郡内子町","","","",0,""],["川之内","地名",33.46713,132.47879,"八幡浜市","","","",0,""],["川之浜","地名",33.43219,132.21328,"西宇和郡伊方町","","","",0,""],["川之石","地名",33.46918,132.40129,"八幡浜市","","","",0,""],["川内","地名",33.19361,132.56378,"宇和島市","","","",0,""],["川永田","地名",33.48325,132.3362,"西宇和郡伊方町","","","",0,""],["市木","地名",33.51767,132.57198,"大洲市","","","",0,""],["布喜川","地名",33.42501,132.43931,"八幡浜市","","","",0,""],["常磐町","地名",33.5143,132.54595,"大洲市","","","",0,""],["平岡","地名",33.53598,132.66444,"喜多郡内子町","","","",0,""],["平浦","地名",33.19344,132.49928,"宇和島市","","","",0,""],["平碆","地名",33.04843,132.47808,"南宇和郡愛南町","","","",0,""],["平礒","地名",33.41243,132.14502,"西宇和郡伊方町","","","",0,""],["平野町平地","地名",33.49953,132.48845,"大洲市","","","",0,""],["平野町野田","地名",33.47839,132.50992,"大洲市","","","",0,""],["広小路","地名",33.21623,132.56762,"宇和島市","","","",0,""],["広早","地名",33.51636,132.37364,"八幡浜市","","","",0,""],["広瀬","地名",33.45353,132.42693,"八幡浜市","1〜3丁目","","",0,""],["広見","地名",32.97326,132.63593,"南宇和郡愛南町","","","",0,""],["広見","地名",33.29524,132.721,"北宇和郡鬼北町","","","",0,""],["延川","地名",33.30654,132.75368,"北宇和郡鬼北町","","","",0,""],["延野々","地名",33.22987,132.70986,"北宇和郡松野町","","","",0,""],["弁天町","地名",33.22351,132.557,"宇和島市","1〜3丁目","","",0,""],["弓立","地名",32.94927,132.53072,"南宇和郡愛南町","","","",0,""],["御幸町","地名",33.22709,132.5639,"宇和島市","1〜2丁目","","",0,""],["御徒町","地名",33.21414,132.56332,"宇和島市","","","",0,""],["御殿町","地名",33.2163,132.56399,"宇和島市","","","",0,""],["御荘和口","地名",32.99267,132.55757,"南宇和郡愛南町","","","",0,""],["御荘平城","地名",32.96159,132.5592,"南宇和郡愛南町","","","",0,""],["御荘平山","地名",32.97832,132.5338,"南宇和郡愛南町","","","",0,""],["御荘深泥","地名",32.95537,132.54052,"南宇和郡愛南町","","","",0,""],["御荘菊川","地名",33.00251,132.52263,"南宇和郡愛南町","","","",0,""],["御荘長月","地名",32.99182,132.57654,"南宇和郡愛南町","","","",0,""],["御荘長洲","地名",32.97204,132.54353,"南宇和郡愛南町","","","",0,""],["徳森","地名",33.5241,132.58575,"大洲市","","","",0,""],["志津","地名",33.44011,132.21788,"西宇和郡伊方町","","","",0,""],["恋木","地名",33.55786,132.60918,"大洲市","","","",0,""],["恵美須町","地名",33.22447,132.5647,"宇和島市","1〜2丁目","","",0,""],["愛宕町","地名",33.21625,132.5712,"宇和島市","1〜3丁目","","",0,""],["成能","地名",33.48461,132.64576,"大洲市","","","",0,""],["成藤","地名",33.28092,132.67985,"北宇和郡鬼北町","","","",0,""],["戒川","地名",33.60023,132.53921,"大洲市","","","",0,""],["戸島","地名",33.20628,132.36671,"宇和島市","","","",0,""],["手成","地名",33.58083,132.5465,"大洲市","","","",0,""],["敦盛","地名",32.93543,132.59799,"南宇和郡愛南町","","","",0,""],["文京町","地名",33.21637,132.55917,"宇和島市","","","",0,""],["新田町","地名",33.21291,132.55738,"宇和島市","1〜4丁目","","",0,""],["新町","地名",33.22272,132.56665,"宇和島市","1〜2丁目","","",0,""],["新谷","地名",33.53718,132.60424,"大洲市","","","",0,""],["新谷町","地名",33.53829,132.59819,"大洲市","","","",0,""],["日土町","地名",33.50988,132.44449,"八幡浜市","","","",0,""],["日振島","地名",33.1551,132.29788,"宇和島市","","","",0,""],["日野川","地名",33.58832,132.81089,"喜多郡内子町","","","",0,""],["明倫町","地名",33.21816,132.55706,"宇和島市","1〜5丁目","","",0,""],["明浜町俵津","地名",33.32222,132.49578,"西予市","","","",0,""],["明浜町宮野浦","地名",33.31307,132.41639,"西予市","","","",0,""],["明浜町渡江","地名",33.32379,132.47883,"西予市","","","",0,""],["明浜町狩浜","地名",33.32195,132.46165,"西予市","","","",0,""],["明浜町田之浜","地名",33.32134,132.39144,"西予市","","","",0,""],["明浜町高山","地名",33.32312,132.43635,"西予市","","","",0,""],["明神","地名",33.40603,132.12463,"西宇和郡伊方町","","","",0,""],["春賀","地名",33.55477,132.55547,"大洲市","","","",0,""],["曙町","地名",33.22305,132.56042,"宇和島市","","","",0,""],["朝日町","地名",33.2267,132.56078,"宇和島市","1〜4丁目","","",0,""],["本九島","地名",33.22968,132.52061,"宇和島市","","","",0,""],["本川内","地名",33.20221,132.56417,"宇和島市","","","",0,""],["本町追手","地名",33.21893,132.56966,"宇和島市","1〜2丁目","","",0,""],["村前","地名",33.55607,132.69556,"喜多郡内子町","","","",0,""],["東仲","地名",33.26999,132.64801,"北宇和郡鬼北町","","","",0,""],["東大洲","地名",33.5264,132.56628,"大洲市","","","",0,""],["東宇山","地名",33.55933,132.57092,"大洲市","","","",0,""],["東若宮","地名",33.52951,132.56506,"大洲市","","","",0,""],["松","地名",33.40581,132.11001,"西宇和郡伊方町","","","",0,""],["松丸","地名",33.22739,132.71456,"北宇和郡松野町","","","",0,""],["松尾","地名",33.47703,132.55435,"大洲市","","","",0,""],["松柏","地名",33.46748,132.44717,"八幡浜市","","","",0,""],["柏","地名",33.02162,132.49142,"南宇和郡愛南町","","","",0,""],["柏崎","地名",33.01661,132.48798,"南宇和郡愛南町","","","",0,""],["柚木","地名",33.50106,132.55263,"大洲市","","","",0,""],["柳沢","地名",33.5886,132.60123,"大洲市","","","",0,""],["柴","地名",33.57003,132.51124,"大洲市","","","",0,""],["柿原","地名",33.23903,132.5956,"宇和島市","","","",0,""],["栄町港","地名",33.22286,132.56162,"宇和島市","1〜3丁目","","",0,""],["栗野浦","地名",33.44853,132.41019,"八幡浜市","","","",0,""],["桜町","地名",33.21521,132.56433,"宇和島市","","","",0,""],["桝形町","地名",33.22021,132.56087,"宇和島市","1〜3丁目","","",0,""],["梅川","地名",33.45362,132.55833,"大洲市","","","",0,""],["森山","地名",33.48296,132.65397,"大洲市","","","",0,""],["横平","地名",33.41723,132.43069,"八幡浜市","","","",0,""],["横野","地名",33.44199,132.55061,"大洲市","","","",0,""],["樫月","地名",32.95161,132.52074,"南宇和郡愛南町","","","",0,""],["樽見","地名",32.93242,132.51448,"南宇和郡愛南町","","","",0,""],["正木","地名",32.97057,132.68922,"南宇和郡愛南町","","","",0,""],["永野市","地名",33.24922,132.68564,"北宇和郡鬼北町","","","",0,""],["江戸岡","地名",33.45779,132.43509,"八幡浜市","1〜2丁目","","",0,""],["沢松","地名",33.27565,132.66013,"北宇和郡鬼北町","","","",0,""],["河内","地名",33.49651,132.36526,"西宇和郡伊方町","","","",0,""],["河内","地名",33.59187,132.63937,"喜多郡内子町","","","",0,""],["河辺町三嶋","地名",33.49899,132.78294,"大洲市","","","",0,""],["河辺町北平","地名",33.52267,132.80969,"大洲市","","","",0,""],["河辺町山鳥坂","地名",33.49957,132.72232,"大洲市","","","",0,""],["河辺町川上","地名",33.52544,132.77004,"大洲市","","","",0,""],["河辺町川崎","地名",33.51701,132.75001,"大洲市","","","",0,""],["河辺町植松","地名",33.48419,132.74274,"大洲市","","","",0,""],["河辺町横山","地名",33.50885,132.73383,"大洲市","","","",0,""],["河辺町河都","地名",33.49735,132.75985,"大洲市","","","",0,""],["油袋","地名",33.04701,132.44861,"南宇和郡愛南町","","","",0,""],["泉町","地名",33.23342,132.57174,"宇和島市","1〜4丁目","","",0,""],["津島町上畑地","地名",33.08643,132.5102,"宇和島市","","","",0,""],["津島町下畑地","地名",33.10049,132.51299,"宇和島市","","","",0,""],["津島町北灘","地名",33.14266,132.46746,"宇和島市","","","",0,""],["津島町坪井","地名",33.07658,132.47013,"宇和島市","","","",0,""],["津島町塩定","地名",33.05918,132.49186,"宇和島市","","","",0,""],["津島町増穂","地名",33.09159,132.54972,"宇和島市","","","",0,""],["津島町山財","地名",33.13826,132.59398,"宇和島市","","","",0,""],["津島町岩松","地名",33.11847,132.52505,"宇和島市","","","",0,""],["津島町岩渕","地名",33.13737,132.55143,"宇和島市","","","",0,""],["津島町嵐","地名",33.07675,132.49106,"宇和島市","","","",0,""],["津島町平井","地名",33.05634,132.45332,"宇和島市","","","",0,""],["津島町弓立","地名",33.08366,132.47218,"宇和島市","","","",0,""],["津島町後","地名",33.04117,132.39766,"宇和島市","","","",0,""],["津島町御内","地名",33.10662,132.63421,"宇和島市","","","",0,""],["津島町成","地名",33.05989,132.42631,"宇和島市","","","",0,""],["津島町曲鳥","地名",33.05873,132.46921,"宇和島市","","","",0,""],["津島町曽根","地名",33.09903,132.47486,"宇和島市","","","",0,""],["津島町柿之浦","地名",33.05285,132.48819,"宇和島市","","","",0,""],["津島町槇川","地名",33.07801,132.62406,"宇和島市","","","",0,""],["津島町横浦","地名",33.08261,132.48301,"宇和島市","","","",0,""],["津島町泥目水","地名",33.08654,132.46639,"宇和島市","","","",0,""],["津島町浦知","地名",33.06551,132.49417,"宇和島市","","","",0,""],["津島町漁家","地名",33.05629,132.44281,"宇和島市","","","",0,""],["津島町田之浜","地名",33.10678,132.47715,"宇和島市","","","",0,""],["津島町田颪","地名",33.09016,132.47169,"宇和島市","","","",0,""],["津島町竹ケ島","地名",33.10758,132.41539,"宇和島市","","","",0,""],["津島町脇","地名",33.09651,132.4823,"宇和島市","","","",0,""],["津島町近家","地名",33.13388,132.50762,"宇和島市","","","",0,""],["津島町針木","地名",33.06949,132.48693,"宇和島市","","","",0,""],["津島町須下","地名",33.06586,132.41325,"宇和島市","","","",0,""],["津島町高田","地名",33.1419,132.52673,"宇和島市","","","",0,""],["津島町鼡鳴","地名",33.0874,132.48003,"宇和島市","","","",0,""],["深浦","地名",32.94751,132.58767,"南宇和郡愛南町","","","",0,""],["清延","地名",33.26471,132.67052,"北宇和郡鬼北町","","","",0,""],["清水","地名",33.30547,132.68508,"北宇和郡鬼北町","","","",0,""],["湊浦","地名",33.4919,132.35565,"西宇和郡伊方町","","","",0,""],["満倉","地名",32.95239,132.61068,"南宇和郡愛南町","","","",0,""],["火道","地名",32.96332,132.48715,"南宇和郡愛南町","","","",0,""],["父野川下","地名",33.30082,132.81334,"北宇和郡鬼北町","","","",0,""],["猿鳴","地名",32.97226,132.48478,"南宇和郡愛南町","","","",0,""],["生田","地名",33.31635,132.69262,"北宇和郡鬼北町","","","",0,""],["産業通","地名",33.45425,132.43228,"八幡浜市","","","",0,""],["田処","地名",33.60832,132.58819,"大洲市","","","",0,""],["田口","地名",33.51305,132.55946,"大洲市","","","",0,""],["田部","地名",33.43022,132.18203,"西宇和郡伊方町","","","",0,""],["畔屋","地名",33.3075,132.67402,"北宇和郡鬼北町","","","",0,""],["白浜","地名",33.21113,132.53041,"宇和島市","","","",0,""],["白滝","地名",33.58576,132.5223,"大洲市","","","",0,""],["百之浦","地名",33.22362,132.52626,"宇和島市","","","",0,""],["目黒","地名",33.17265,132.67954,"北宇和郡松野町","","","",0,""],["真網代","地名",33.413,132.39711,"八幡浜市","","","",0,""],["矢野町","地名",33.45051,132.43408,"八幡浜市","","","",0,""],["知清","地名",33.54998,132.66126,"喜多郡内子町","","","",0,""],["石応","地名",33.20814,132.51956,"宇和島市","","","",0,""],["石畳","地名",33.63305,132.63007,"喜多郡内子町","","","",0,""],["磯崎","地名",33.53499,132.42048,"八幡浜市","","","",0,""],["祝森","地名",33.17279,132.56275,"宇和島市","","","",0,""],["神崎","地名",33.42517,132.16583,"西宇和郡伊方町","","","",0,""],["神田川原","地名",33.21337,132.56423,"宇和島市","","","",0,""],["福岡","地名",33.50423,132.67456,"喜多郡内子町","","","",0,""],["稲積","地名",33.46084,132.5273,"大洲市","","","",0,""],["穴井","地名",33.39476,132.39675,"八幡浜市","","","",0,""],["立山","地名",33.59368,132.66722,"喜多郡内子町","","","",0,""],["立石","地名",33.55965,132.76463,"喜多郡内子町","","","",0,""],["笹町","地名",33.21425,132.57079,"宇和島市","1〜2丁目","","",0,""],["築地町","地名",33.22504,132.55361,"宇和島市","1〜2丁目","","",0,""],["米津","地名",33.57206,132.53946,"大洲市","","","",0,""],["網代","地名",33.02777,132.39823,"南宇和郡愛南町","","","",0,""],["緑丙","地名",33.02929,132.6046,"南宇和郡愛南町","","","",0,""],["緑甲","地名",32.99911,132.61295,"南宇和郡愛南町","","","",0,""],["肱川町中居谷","地名",33.50245,132.69908,"大洲市","","","",0,""],["肱川町中津","地名",33.45996,132.73967,"大洲市","","","",0,""],["肱川町予子林","地名",33.4365,132.70185,"大洲市","","","",0,""],["肱川町名荷谷","地名",33.48533,132.68763,"大洲市","","","",0,""],["肱川町大谷","地名",33.43438,132.66184,"大洲市","","","",0,""],["肱川町宇和川","地名",33.46851,132.67479,"大洲市","","","",0,""],["肱川町山鳥坂","地名",33.45479,132.68432,"大洲市","","","",0,""],["肱川町西","地名",33.42873,132.68939,"大洲市","","","",0,""],["脇本","地名",32.93231,132.64518,"南宇和郡愛南町","","","",0,""],["興野々","地名",33.25343,132.71691,"北宇和郡鬼北町","","","",0,""],["舌間","地名",33.44374,132.41079,"八幡浜市","","","",0,""],["船越","地名",32.95076,132.50736,"南宇和郡愛南町","","","",0,""],["芝","地名",33.24251,132.67831,"北宇和郡鬼北町","","","",0,""],["若宮","地名",33.52196,132.55077,"大洲市","","","",0,""],["若山","地名",33.42211,132.45781,"八幡浜市","","","",0,""],["菅田町大竹","地名",33.48246,132.58152,"大洲市","","","",0,""],["菅田町宇津","地名",33.49993,132.6194,"大洲市","","","",0,""],["菅田町菅田","地名",33.50761,132.58664,"大洲市","","","",0,""],["蒋渕","地名",33.19568,132.40576,"宇和島市","","","",0,""],["蓮乗寺","地名",32.95338,132.58595,"南宇和郡愛南町","","","",0,""],["蔵川","地名",33.45275,132.60771,"大洲市","","","",0,""],["蕨","地名",33.196,132.51249,"宇和島市","","","",0,""],["蕨生","地名",33.23097,132.74982,"北宇和郡松野町","","","",0,""],["藤江","地名",33.23212,132.56103,"宇和島市","","","",0,""],["藤縄","地名",33.57192,132.5928,"大洲市","","","",0,""],["蛤","地名",33.22569,132.53147,"宇和島市","","","",0,""],["袋口","地名",33.61034,132.64514,"喜多郡内子町","","","",0,""],["西仲","地名",33.27315,132.64333,"北宇和郡鬼北町","","","",0,""],["西大洲","地名",33.50143,132.53035,"大洲市","","","",0,""],["西野々","地名",33.28926,132.70189,"北宇和郡鬼北町","","","",0,""],["論田","地名",33.57144,132.64298,"喜多郡内子町","","","",0,""],["谷","地名",33.41248,132.4425,"八幡浜市","","","",0,""],["豊之浦","地名",33.47395,132.32922,"西宇和郡伊方町","","","",0,""],["豊岡","地名",33.23613,132.70115,"北宇和郡松野町","","","",0,""],["豊茂","地名",33.55551,132.46998,"大洲市","","","",0,""],["賀古町","地名",33.21504,132.56906,"宇和島市","1〜2丁目","","",0,""],["赤水","地名",32.95734,132.52667,"南宇和郡愛南町","","","",0,""],["越田","地名",32.94702,132.53987,"南宇和郡愛南町","","","",0,""],["足成","地名",33.47066,132.26782,"西宇和郡伊方町","","","",0,""],["近永","地名",33.25611,132.67642,"北宇和郡鬼北町","","","",0,""],["遊子","地名",33.19318,132.45438,"宇和島市","","","",0,""],["郷","地名",33.47283,132.46684,"八幡浜市","","","",0,""],["重松","地名",33.53541,132.68199,"喜多郡内子町","","","",0,""],["野佐来","地名",33.4747,132.54272,"大洲市","","","",0,""],["野川","地名",33.20207,132.62673,"宇和島市","","","",0,""],["野村町中通川","地名",33.41641,132.66528,"西予市","","","",0,""],["野村町予子林","地名",33.43299,132.7264,"西予市","","","",0,""],["野村町四郎谷","地名",33.38341,132.60411,"西予市","","","",0,""],["野村町坂石","地名",33.40946,132.71414,"西予市","","","",0,""],["野村町大西","地名",33.40439,132.66913,"西予市","","","",0,""],["野村町富野川","地名",33.41679,132.61221,"西予市","","","",0,""],["野村町平野","地名",33.39979,132.64073,"西予市","","","",0,""],["野村町惣川","地名",33.47243,132.7946,"西予市","","","",0,""],["野村町旭","地名",33.39382,132.58902,"西予市","","","",0,""],["野村町松渓","地名",33.41694,132.59131,"西予市","","","",0,""],["野村町栗ノ木","地名",33.4118,132.69895,"西予市","","","",0,""],["野村町河西","地名",33.36531,132.60655,"西予市","","","",0,""],["野村町片川","地名",33.3917,132.6274,"西予市","","","",0,""],["野村町白髭","地名",33.43485,132.57313,"西予市","","","",0,""],["野村町舟戸","地名",33.46097,132.7653,"西予市","","","",0,""],["野村町蔵良","地名",33.40208,132.65732,"西予市","","","",0,""],["野村町西","地名",33.41926,132.68418,"西予市","","","",0,""],["野村町野村","地名",33.35754,132.64163,"西予市","","","",0,""],["野村町釜川","地名",33.39461,132.69442,"西予市","","","",0,""],["野村町鎌田","地名",33.40597,132.68378,"西予市","","","",0,""],["野村町長谷","地名",33.38002,132.57097,"西予市","","","",0,""],["野村町阿下","地名",33.38229,132.66942,"西予市","","","",0,""],["野村町高瀬","地名",33.42545,132.63236,"西予市","","","",0,""],["野村町鳥鹿野","地名",33.4033,132.58765,"西予市","","","",0,""],["釜倉","地名",33.40978,132.46547,"八幡浜市","","","",0,""],["釜木","地名",33.40592,132.16123,"西宇和郡伊方町","","","",0,""],["錦町","地名",33.22623,132.56827,"宇和島市","","","",0,""],["長堀","地名",33.20973,132.55344,"宇和島市","1〜3丁目","","",0,""],["長浜","地名",33.61141,132.4855,"大洲市","","","",0,""],["長浜町上老松","地名",33.60204,132.50168,"大洲市","","","",0,""],["長浜町下須戒","地名",33.5891,132.49529,"大洲市","","","",0,""],["長浜町仁久","地名",33.60602,132.4858,"大洲市","","","",0,""],["長浜町今坊","地名",33.6206,132.5239,"大洲市","","","",0,""],["長浜町出海","地名",33.55796,132.43262,"大洲市","","","",0,""],["長浜町大越","地名",33.59764,132.51111,"大洲市","","","",0,""],["長浜町拓海","地名",33.6262,132.50523,"大洲市","","","",0,""],["長浜町晴海","地名",33.62086,132.49595,"大洲市","","","",0,""],["長浜町櫛生","地名",33.57103,132.45154,"大洲市","","","",0,""],["長浜町沖浦","地名",33.59998,132.47455,"大洲市","","","",0,""],["長浜町穂積","地名",33.58234,132.47995,"大洲市","","","",0,""],["長浜町須沢","地名",33.58544,132.46042,"大洲市","","","",0,""],["長浜町黒田","地名",33.61364,132.4973,"大洲市","","","",0,""],["長谷","地名",33.45346,132.53971,"大洲市","","","",0,""],["防城成川","地名",32.96151,132.5352,"南宇和郡愛南町","","","",0,""],["阿蔵","地名",33.51277,132.53135,"大洲市","","","",0,""],["須ノ川","地名",33.03723,132.49254,"南宇和郡愛南町","","","",0,""],["須川","地名",33.48403,132.41396,"八幡浜市","","","",0,""],["須賀通","地名",33.22872,132.5605,"宇和島市","","","",0,""],["高串","地名",33.26191,132.56686,"宇和島市","","","",0,""],["高山","地名",33.51501,132.51577,"大洲市","","","",0,""],["高浦","地名",33.37872,132.1238,"西宇和郡伊方町","","","",0,""],["高畑","地名",32.96041,132.51435,"南宇和郡愛南町","","","",0,""],["高茂","地名",33.43141,132.19719,"西宇和郡伊方町","","","",0,""],["高野地","地名",33.47923,132.44588,"八幡浜市","","","",0,""],["魚神山","地名",33.05533,132.41476,"南宇和郡愛南町","","","",0,""],["鯆越","地名",32.94536,132.57993,"南宇和郡愛南町","","","",0,""],["鶴島町","地名",33.22623,132.56563,"宇和島市","","","",0,""],["鹿島","地名",32.94301,132.43838,"南宇和郡愛南町","","","",0,""],["黒島","地名",33.45597,132.34877,"西宇和郡伊方町","","","",0,""],["黒木","地名",33.47827,132.53205,"大洲市","","","",0,""],["伊方町役場","役所",33.48857,132.35416,"西宇和郡伊方町","","いかたちょうやくば","",0,""],["八幡浜市役所","役所",33.46289,132.42335,"八幡浜市","","やわたはましやくしょ","",0,""],["内子町役場","役所",33.53297,132.6581,"喜多郡内子町","","うちこちょうやくば","",0,""],["大洲市役所","役所",33.50624,132.54458,"大洲市","","おおずしやくしょ","",0,""],["宇和島市役所","役所",33.22325,132.5609,"宇和島市","","うわじましやくしょ","",0,""],["愛南町役場","役所",32.96246,132.58357,"南宇和郡愛南町","","あいなんちょうやくば","",0,""],["松野町役場","役所",33.22711,132.7113,"北宇和郡松野町","","まつのちょうやくば","",0,""],["西予市役所","役所",33.36267,132.51087,"西予市","","せいよしやくしょ","",0,""],["鬼北町役場","役所",33.25588,132.68411,"北宇和郡鬼北町","","きほくちょうやくば","",0,""],["内子座","観光",33.55159,132.64902,"喜多郡内子町","","うちこざ|uchikoza theater|uchiko|内子|歌舞伎|kabuki|uchikoza","アニメ・文化",0,"Uchikoza Theater"],["大洲城","観光",33.51059,132.54135,"大洲市","","おおずじょう|ozu castle|肱川|大洲|宿泊","歴史",0,"Ozu Castle"],["宇和島城","観光",33.22027,132.56458,"宇和島市","","うわじまじょう|uwajima castle|天守|城山","歴史",0,"Uwajima Castle"],["臥龍山荘","観光",33.50633,132.55038,"大洲市","","がりゅうさんそう|garyu sanso|garyu|臥龍|大洲|villa","歴史",0,"Garyu Sanso"],["開明学校","観光",33.36436,132.51371,"西予市","","かいめいがっこう|kaimei school|kaimei|卯之町|旧開明学校|西予","歴史",0,"Kaimei School"]];
+const HASSPOT = PLACES.some(a => a[7]);   // 観光・店舗(分類cat付き)を持つ地域だけ、おすすめ・一覧・英語の案内を出す
+// 駅の路線別の並び。[事業者, 路線名, [PLACESの番号(駅)…]] 。路線順は駅の位置から作った目安(build/work/places/make_places.py)
+const LINES = [["四国旅客鉄道","予讃線",[12,16,27,4,28,14,10,5,13,7,33,9,20,15,22,11,0,21,1,32,6,35,19,26]],["四国旅客鉄道","予土線",[19,18,8,2,25,30,34,17,29,23,31]],["四国旅客鉄道","内子線",[16,3,24,27]]];
+// 市町村の範囲表(県ページの市町村ボタンから ?at=<市町村コード> で開いた時に、地図をその範囲へ寄せる)。[コード, 名前, 緯度小, 経度小, 緯度大, 経度大]
+const MUNI = [["38214","西予市",33.30759,132.37561,33.48039,132.79848],["38203","宇和島市",33.05959,132.40271,33.31941,132.61995],["38207","大洲市",33.44949,132.43262,33.61572,132.74509],["38204","八幡浜市",33.39862,132.37626,33.54125,132.47968],["38488","鬼北町",33.23993,132.61825,33.34106,132.7981],["38506","愛南町",32.94756,132.48224,33.05015,132.68922],["38442","伊方町",33.38685,132.11827,33.49299,132.36058],["38422","内子町",33.53739,132.63545,33.60713,132.68114],["38484","松野町",33.22701,132.69783,33.24175,132.71061]];
+const OPNAME = i => D.ops[i];
+const GROUP = i => { const n = D.ops[i]; return n.startsWith("宇和島自動車") ? "uwajima" : n.startsWith("伊予鉄南予バス") ? "iyotetsunanyo" : n.startsWith("伊予鉄バス") ? "iyotetsu" : n === "西予市" ? "community" : "other"; };
+const GLABEL = { uwajima: "宇和島自動車", iyotetsunanyo: "伊予鉄南予バス", iyotetsu: "伊予鉄バス", community: "市町村のコミュニティバス・乗合タクシー", other: "その他の事業者" };
+const GSHORT = { uwajima: "宇和島", iyotetsunanyo: "伊予鉄南予", iyotetsu: "伊予鉄", community: "市町村", other: "その他" };
+const GTINY = { uwajima: "宇和島", iyotetsunanyo: "南予", iyotetsu: "伊予鉄", community: "市町村", other: "他" };   // 320px級の超狭幅用
+const GORDER = ["uwajima", "iyotetsunanyo", "iyotetsu", "community", "other"];
+const GNUMSORT = ["uwajima"];   // 系統番号の順に並べるグループ
+const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
+const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, seq: r[3] || null, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
+stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
+routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; r.set = new Set(r.stops); });
+const routeLabel = r => r.name;
+// 系統のバス停を移動順に並べる（位置からの推定。GTFS由来の系統だけ実際の停車順）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
+function orderRoute(r) {
+  if (r.seq) { const have = new Set(r.names), o = r.seq.filter(x => have.has(x)); r.names.forEach(x => { if (!o.includes(x)) o.push(x); }); return o; }   // GTFS由来の系統：データに実際の停車順(第4要素)がある
+  const by = new Map();
+  r.stops.forEach(s => { const a = by.get(s.name) || { name: s.name, la: 0, lo: 0, c: 0, st: [] }; a.la += s.lat; a.lo += s.lon; a.c++; a.st.push(s); by.set(s.name, a); });
+  const P = [...by.values()].map(a => ({ name: a.name, x: (a.lo / a.c) * 91, y: (a.la / a.c) * 111, st: a.st }));
+  const n = P.length; if (n <= 2) return P.sort((a, b) => a.x - b.x).map(p => p.name);
+  const d = (a, b) => Math.hypot(P[a].x - P[b].x, P[a].y - P[b].y);
+  // Prim法で最小全域木
+  const par = new Array(n).fill(-1), best = new Array(n).fill(Infinity), inT = new Array(n).fill(false), adj = P.map(() => []);
+  best[0] = 0;
+  for (let k = 0; k < n; k++) {
+    let u = -1; for (let i = 0; i < n; i++) if (!inT[i] && (u < 0 || best[i] < best[u])) u = i;
+    inT[u] = true; if (par[u] >= 0) { adj[u].push(par[u]); adj[par[u]].push(u); }
+    for (let v = 0; v < n; v++) if (!inT[v]) { const w = d(u, v); if (w < best[v]) { best[v] = w; par[v] = u; } }
+  }
+  const bfs = src => { const dist = new Array(n).fill(-1), prev = new Array(n).fill(-1); dist[src] = 0; const q = [src];
+    for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (dist[v] < 0) { dist[v] = dist[u] + 1; prev[v] = u; q.push(v); } }); }
+    return { dist, prev }; };
+  const far = res => res.dist.indexOf(Math.max(...res.dist));
+  const A = far(bfs(0)); const rb = bfs(A); const B = far(rb);
+  let path = []; for (let v = B; v >= 0; v = rb.prev[v]) path.push(v);   // B→A
+  path.reverse();                                                       // A→B
+  if (P[path[0]].x > P[path[path.length - 1]].x) path.reverse();        // 西の端から始める
+  // 軸に乗らないバス停は、軸に最短でつながる地点の直後に入れる
+  const onPath = new Map(path.map((v, i) => [v, i])), anchor = new Array(n).fill(-1), depth = new Array(n).fill(0), q = [];
+  path.forEach((v, i) => { anchor[v] = i; q.push(v); });
+  for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (anchor[v] < 0) { anchor[v] = anchor[u]; depth[v] = depth[u] + 1; q.push(v); } }); }
+  const groups = path.map(() => []); for (let v = 0; v < n; v++) if (!onPath.has(v)) groups[anchor[v]].push(v);
+  const out = []; path.forEach((v, i) => { out.push(v); groups[i].sort((a, b) => depth[a] - depth[b] || d(v, a) - d(v, b)).forEach(x => out.push(x)); });
+  return out.map(i => P[i].name);
+}
+routes.forEach(r => { r.order = orderRoute(r); });
+const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
+const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (GNUMSORT.includes(a.g) ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
+
+// ---- 画面モード（スマホ=ボトムシート／それ以外=右パネル）----
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mqMobile = matchMedia("(max-width: 767px)");
+const isMobile = () => mqMobile.matches;
+const mainEl = document.getElementById("main"), panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
+const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl"), homeTop = document.getElementById("homeTop");
+
+const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }), zoomAnimation: !RM, fadeAnimation: !RM, markerZoomAnimation: !RM }).setView([33.371, 132.5514], 10);
+// 地図の種類(すべて国土地理院タイル・同じ提供元)。選んだ種類は、次に開いた時も覚えておく(この端末の中だけ)
+const GSI = "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>国土地理院</a>";
+const BASE = [
+  { id: "std", label: "標準", note: "いつもの地図", url: "https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", att: "地図：" + GSI },
+  { id: "pale", label: "淡色", note: "色が薄く、点が見やすい", url: "https://maps.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png", att: "地図：" + GSI + "（淡色地図）" },
+  { id: "photo", label: "写真", note: "航空写真（撮影時期は場所で異なります）", minZoom: 9, url: "https://maps.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+    att: "写真：" + GSI + "（全国最新写真（シームレス））　データソース：Landsat8画像（GSI,TSIC,GEO Grid/AIST）, Landsat8画像（courtesy of the U.S. Geological Survey）" },
+];
+let baseId = "std"; try { const sv = localStorage.getItem("busmap.base"); if (BASE.some(b => b.id === sv)) baseId = sv; } catch (e) {}
+// タイル取得失敗の案内（数枚失敗したら表示、読み込めたら消す）
+const tw = document.getElementById("tilewarn"); let tErr = 0, tOk = 0, twDismissed = false;
+const mkTiles = b => {
+  const l = L.tileLayer(b.url, { minZoom: b.minZoom || 5, maxZoom: 18, maxNativeZoom: 18, attribution: b.att });
+  l.on("tileerror", () => { tOk = 0; if (++tErr >= 3 && !twDismissed) tw.hidden = false; });
+  l.on("tileload", () => { if (tErr && ++tOk >= 4) { tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; } });
+  return l;
+};
+let tiles = mkTiles(BASE.find(b => b.id === baseId)).addTo(map);
+const applyMinZoom = () => { const mz = BASE.find(b => b.id === baseId).minZoom || 5; map.setMinZoom(mz); if (map.getZoom() < mz) map.setZoom(mz, { animate: false }); };   // 写真は、衛星画像のクレジットが要る低ズーム(9未満)を使わない
+applyMinZoom();
+function setBase(id) {
+  const b = BASE.find(x => x.id === id); if (!b || id === baseId) return;
+  map.removeLayer(tiles); tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; tiles = mkTiles(b).addTo(map); baseId = id; applyMinZoom();
+  try { localStorage.setItem("busmap.base", id); } catch (e) {}
+  syncBase();
+}
+let syncBase = () => {};
+L.Control.Base = L.Control.extend({
+  options: { position: "topright" },
+  onAdd() {
+    const c = L.DomUtil.create("div", "basectl"); L.DomEvent.disableClickPropagation(c); L.DomEvent.disableScrollPropagation(c);
+    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><span class="bc-cur"></span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+      <div class="bc-menu" id="bcMenu" role="radiogroup" aria-label="地図の種類" hidden>${BASE.map(b => `<button type="button" role="radio" class="bc-opt" data-id="${b.id}" aria-checked="false"><span class="bc-ck" aria-hidden="true"></span><span><b>${b.label}</b><small>${b.note}</small></span></button>`).join("")}</div>`;
+    const btn = c.querySelector(".bc-btn"), menu = c.querySelector(".bc-menu"), opts = [...c.querySelectorAll(".bc-opt")];
+    const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); if (v) (opts.find(o => o.dataset.id === baseId) || opts[0]).focus(); };
+    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); const cur = BASE.find(b => b.id === baseId).label; btn.querySelector(".bc-cur").textContent = cur; btn.setAttribute("aria-label", "地図の種類を選ぶ（いま：" + cur + "）"); };   // ボタンの左に、いま表示中の地図の名前を出す
+    syncBase();
+    btn.onclick = () => open(menu.hidden);
+    opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
+      o.onkeydown = e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); opts[(i + (e.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length].focus(); } else if (e.key === "Home") { e.preventDefault(); opts[0].focus(); } else if (e.key === "End") { e.preventDefault(); opts[opts.length - 1].focus(); } }; });
+    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget) && !e.relatedTarget.contains(c)) open(false); });   // iPhoneのSafariは、項目の文字部分を押すと一度、親の地図へフォーカスが移る→それは「外へ出た」ではない   // Tabでメニューの外へ出たら閉じる
+    c.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { e.stopPropagation(); open(false); btn.focus(); } });
+    document.addEventListener("pointerdown", e => { if (!menu.hidden && !c.contains(e.target)) open(false); }, true);   // 地図はタップのclickを止めることがあるので、押した瞬間(pointerdown)で外側を判定する
+    return c;
+  },
+});
+new L.Control.Base().addTo(map);
+document.getElementById("tilewarnx").onclick = () => { tw.hidden = true; twDismissed = true; };
+
+// シートの高さ（3段）。地図は全面に置き、シートはその上に重ねる（開閉・ドラッグで地図の大きさは変わらない）
+const SORDER = ["min", "mid", "max"];
+// 標準段は46%。画面が低い端末(375×667など)は地図が狭くなりすぎない範囲で50%に
+const shRatio = st => { const H = mainEl.clientHeight; return st === "min" ? .13 : st === "max" ? .88 : H < 640 ? .50 : .46; };
+let sheetState = "mid";
+const sheetPx = st => { const H = mainEl.clientHeight; return st === "min" ? Math.max(72, Math.round(H * shRatio(st))) : Math.round(H * shRatio(st)); };
+const cover = () => isMobile() ? sheetPx(sheetState) : 0;      // 地図の下側がシートで隠れるpx
+function applySheet() {
+  if (!isMobile()) { panel.style.height = ""; mainEl.style.setProperty("--cover", "0px"); panel.classList.remove("min"); return; }
+  const h = sheetPx(sheetState);
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px");
+  panel.classList.toggle("min", sheetState === "min");
+  grip.setAttribute("aria-expanded", String(sheetState !== "min"));
+}
+const setSheet = st => { sheetState = st; applySheet(); };
+// 地図の見えている部分（シートの上側）の中央に、その地点が来るようにする
+function focusTo(ll, z) {
+  const zz = z == null ? map.getZoom() : z, p = map.project(ll, zz); p.y += cover() / 2;
+  map.setView(map.unproject(p, zz), zz, { animate: !RM });
+}
+function ensureVisible(ll) {
+  const c = cover(); if (!c) return;
+  const size = map.getSize(), pt = map.latLngToContainerPoint(ll);
+  if (pt.y > size.y - c - 44 || pt.y < 44 || pt.x < 30 || pt.x > size.x - 30) focusTo(ll);
+}
+// シートのドラッグ（取っ手だけがスワイプを受ける。地図とパネル内のスクロールには干渉しない）
+let drag = null;
+grip.addEventListener("pointerdown", e => {
+  if (!isMobile() || (e.pointerType === "mouse" && e.button !== 0)) return;
+  drag = { y0: e.clientY, h0: panel.getBoundingClientRect().height, moved: false, last: e.clientY, lt: e.timeStamp, v: 0 };
+  grip.setPointerCapture(e.pointerId); panel.classList.add("drag");
+});
+grip.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dy = drag.y0 - e.clientY; if (Math.abs(dy) > 6) drag.moved = true;
+  if (!drag.moved) return;
+  const h = Math.max(sheetPx("min"), Math.min(sheetPx("max"), drag.h0 + dy));
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px"); panel.classList.remove("min");
+  const dt = e.timeStamp - drag.lt; if (dt > 0) drag.v = (drag.last - e.clientY) / dt; drag.last = e.clientY; drag.lt = e.timeStamp;
+});
+function endDrag(e) {
+  if (!drag) return; const d = drag; drag = null; panel.classList.remove("drag");
+  if (e.type === "pointercancel" && !d.moved) { applySheet(); return; }
+  if (!d.moved) { setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); return; }
+  const h = panel.getBoundingClientRect().height, px = SORDER.map(sheetPx);
+  let k = px.reduce((b, p, i) => Math.abs(p - h) < Math.abs(px[b] - h) ? i : b, 0);
+  if (d.v > .45) k = Math.max(k, px.findIndex(p => p > h + 4) < 0 ? 2 : px.findIndex(p => p > h + 4));
+  else if (d.v < -.45) { const lo = px.map((p, i) => p < h - 4 ? i : -1).filter(i => i >= 0); k = Math.min(k, lo.length ? lo[lo.length - 1] : 0); }
+  setSheet(SORDER[k]);
+}
+grip.addEventListener("pointerup", endDrag); grip.addEventListener("pointercancel", endDrag);
+grip.addEventListener("click", e => { if (e.detail === 0) setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); });   // キーボード(Enter/Space)
+grip.addEventListener("keydown", e => {
+  const k = SORDER.indexOf(sheetState);
+  if (e.key === "ArrowUp") { e.preventDefault(); setSheet(SORDER[Math.min(2, k + 1)]); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); setSheet(SORDER[Math.max(0, k - 1)]); }
+});
+// PC・タブレットのパネル開閉（マーカーは作り直さず、地図の大きさだけ取り直す）
+function openPanel(v) {
+  mainEl.classList.toggle("pclosed", !v);
+  tgl.querySelector(".tl").textContent = v ? "パネルを閉じる" : "パネルを開く"; tgl.querySelector(".ta").textContent = v ? "▶" : "◀";
+  tgl.setAttribute("aria-label", v ? "パネルを閉じる" : "パネルを開く"); tgl.setAttribute("aria-expanded", String(v));
+  map.invalidateSize();
+}
+tgl.onclick = () => openPanel(mainEl.classList.contains("pclosed"));
+// 画面サイズが変わっても、選択・検索の状態は保ったまま配置だけ取り直す
+let rzT = 0;
+new ResizeObserver(() => {
+  map.invalidateSize(); applySheet();
+  clearTimeout(rzT); rzT = setTimeout(() => { if (curStops[0] && !hoverList.length) ensureVisible(L.latLng(curStops[0].lat, curStops[0].lon)); }, 200);
+}).observe(mainEl);
+
+const on = Object.fromEntries(GORDER.map(g => [g, true]));
+let selRoute = null, lastStop = null, lastPlace = null, curStops = [], curRings = [], placePin = null;
+const colorOf = g => css(g);
+const isSel = s => !selRoute || selRoute.set.has(s);
+const baseR = () => { const z = map.getZoom(); return z <= 12 ? 3 : z <= 14 ? 4.5 : z <= 15 ? 5.5 : 7; };
+const markers = stops.map(s => {
+  const m = L.circleMarker([s.lat, s.lon], { radius: 5, weight: 2, color: "#fff", fillColor: colorOf(s.g), fillOpacity: .95 });
+  m.on("click", () => { if (isSel(s)) { showStop(s); ensureVisible(L.latLng(s.lat, s.lon)); } });   // 薄くした点は押せない（誤タップ防止）
+  m.bindTooltip(s.name, { direction: "top", offset: [0, -4] });
+  m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
+  m.on("mouseover", () => { if (isSel(s)) hoverOn([s], true); });
+  m.on("mouseout", () => { if (!touchOnly()) hoverOff(); });   // 指で押した時に出る疑似mouseoutで、選択中の輪を消さない
+  s.m = m; return m;
+});
+
+// カーソルを合わせたバス停を強調（大きな黄色の輪）。リストの名前に合わせた時も、地図の点に合わせた時も同じ見え方
+let hoverRings = [], hoverList = [];
+function hoverOn(list, fromMap) {
+  hoverOff(); hoverList = list.slice();
+  list.forEach(s => {
+    if (!s.m._map) return;
+    hoverRings.push(L.circleMarker([s.lat, s.lon], { radius: baseR() + 13, color: "#1f2b20", weight: 4, fillColor: "#ffd400", fillOpacity: .6, interactive: false }).addTo(map));
+    s.m.bringToFront();
+  });
+  if (list[0] && list[0].m._map) list[0].m.openTooltip();
+  const li = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(list[0].name)}"]`);
+  if (li && fromMap) li.classList.add("hl");
+}
+function hoverOff() {
+  hoverRings.forEach(r => r.remove()); hoverRings = [];
+  hoverList.forEach(s => s.m.closeTooltip()); hoverList = [];
+  pbody.querySelectorAll(".stoplist button.hl").forEach(b => b.classList.remove("hl"));
+}
+
+function styleOne(s, r0) {
+  const inSel = isSel(s);
+  // 系統を選んでいる間は、その系統が通るバス停を事業者フィルタに関係なく出す
+  const vis = on[s.g] || (selRoute && inSel);
+  if (!vis) { if (s.m._map) s.m.remove(); return; }
+  if (!s.m._map) s.m.addTo(map);
+  const cur = curStops.includes(s);
+  s.m.setStyle({ fillColor: colorOf(s.g), fillOpacity: inSel ? .95 : .12, opacity: inSel ? 1 : .15,
+    radius: cur ? r0 + 4 : selRoute && inSel ? r0 + 2 : r0, weight: cur ? 3 : selRoute && inSel ? 2.5 : 2 });
+  if ((selRoute && inSel) || cur) s.m.bringToFront();
+}
+// 系統を選んでいる間、地図の点に『推定順の番号』を出す（切り替え可・この端末に覚える）。低ズームでは、1・5の倍数・最後だけ
+const touchOnly = () => isMobile() || matchMedia("(hover: none)").matches;   // カーソルを合わせられない端末(スマホ・タブレット)
+let numOn = true; try { numOn = localStorage.getItem("busmap.num") !== "0"; } catch (e) {}
+const numLayer = L.layerGroup().addTo(map);
+function drawNums() {
+  numLayer.clearLayers();
+  if (!selRoute || !numOn) return;
+  const z = map.getZoom(), n = selRoute.order.length, pos = new Map(selRoute.order.map((nm, i) => [nm, i + 1]));
+  const sel = curStops[0] ? curStops[0].name : null, items = [];
+  selRoute.stops.forEach(s => { const k = pos.get(s.name); if (!k) return;
+    const pri = s.name === sel ? 0 : (k === 1 || k === n) ? 1 : k % 5 === 0 ? 2 : 3;
+    if (z < 13 && pri > 2) return;
+    items.push({ s, k, pri, p: map.latLngToContainerPoint([s.lat, s.lon]) }); });
+  items.sort((a, b) => a.pri - b.pri || a.k - b.k);
+  const kept = [];   // 画面上で重なる番号は、優先度の高い方だけ残す(選択中・最初/最後・5の倍数 → その他)
+  items.forEach(it => { if (kept.some(o => Math.abs(o.p.x - it.p.x) < 26 && Math.abs(o.p.y - it.p.y) < 18)) return; kept.push(it);
+    L.marker([it.s.lat, it.s.lon], { icon: L.divIcon({ className: "stnum", html: String(it.k), iconSize: [22, 16], iconAnchor: [-4, 21] }), interactive: false, keyboard: false, zIndexOffset: 400 }).addTo(numLayer); });
+}
+function paint() { const r0 = baseR(); stops.forEach(s => styleOne(s, r0)); drawRings(); drawNums(); }
+// 選択中のバス停の外周リング（白い縁取り＋濃い輪＋ブランドグリーンの塗り）
+function drawRings() {
+  curRings.forEach(r => r.remove()); curRings = [];
+  curStops.forEach(s => { if (!s.m._map) return;
+    const R = baseR() + 9;
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R + 2, color: "#fff", weight: 7, fill: false, interactive: false }).addTo(map));
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R, color: "#1f2b20", weight: 3, fillColor: "#6fae2f", fillOpacity: .28, interactive: false }).addTo(map));
+    s.m.bringToFront(); });
+}
+map.on("zoomend", paint);
+// ---- この地図の範囲(設計 D-2)：ズーム12以下の時だけ、データの範囲を破線の長方形で示す(これより外の停留所・系統は載っていない) ----
+const EXT = [32.928, 132.098, 33.636, 132.818];   // [緯度小, 経度小, 緯度大, 経度大]
+const extRect = L.rectangle([[EXT[0], EXT[1]], [EXT[2], EXT[3]]], { interactive: false, dashArray: "6 6", weight: 2, opacity: .7, fill: false });
+const extTip = L.circleMarker([EXT[2], (EXT[1] + EXT[3]) / 2], { radius: 0, opacity: 0, fill: false, interactive: false }).bindTooltip("この地図の範囲", { permanent: true, direction: "bottom", className: "extlbl", interactive: false });
+const extLayer = L.layerGroup([extRect, extTip]);
+const syncExtent = () => { const on = map.getZoom() <= 12; if (on) extRect.setStyle({ color: css("ink") }); if (on && !map.hasLayer(extLayer)) extLayer.addTo(map); else if (!on && map.hasLayer(extLayer)) map.removeLayer(extLayer); };
+map.on("zoomend", syncExtent); syncExtent(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncExtent);
+// 選択中のバス停（地図・一覧で共通）を差し替える。点の再描画は変わった分だけ
+function setCur(list, scroll = true) {
+  const old = curStops; curStops = list || [];
+  const r0 = baseR(); old.concat(curStops).forEach(s => styleOne(s, r0)); drawRings();
+  pbody.querySelectorAll(".stoplist button.cur").forEach(b => b.classList.remove("cur"));
+  if (curStops[0]) { const b = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(curStops[0].name)}"]`); if (b) { b.classList.add("cur"); if (scroll) b.scrollIntoView({ block: "nearest" }); } }
+}
+
+const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const NOTE = `<details class="note"><summary>このページについて・出典・免責</summary>
+・個人が趣味で調べて作った<b>非公式</b>のページです。宇和島市・八幡浜市・大洲市・西予市・内子町・伊方町・松野町・鬼北町・愛南町・宇和島自動車・伊予鉄南予バス・国土交通省などの公式なものではありません。<br>
+・内容に誤り・抜け・古い情報がある可能性があります。ご利用は自己責任でお願いします。乗車前は必ず事業者の公式情報（<a href="https://www.city.uwajima.ehime.jp/" target="_blank" rel="noopener">宇和島市（市のホームページ）</a>、<a href="https://www.city.yawatahama.ehime.jp/" target="_blank" rel="noopener">八幡浜市（市のホームページ）</a>、<a href="https://www.city.ozu.ehime.jp/" target="_blank" rel="noopener">大洲市（市のホームページ）</a>など）でご確認ください。<br>
+・時刻・運賃は含みません。系統のバス停の順番は、元データに無いため位置からの<b>推定</b>で、実際とずれることがあります。系統によっては一部のバス停しか載っていません。<br>
+<b>出典</b><br>
+・バス停・系統：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html" target="_blank" rel="noopener">国土交通省 国土数値情報（バス停留所データ・令和4年度・CC BY 4.0）</a>を加工して作成（2022年度時点）<br>
+・駅の位置・所在地：国土交通省 国土数値情報（鉄道駅データ N02-22・行政区域データ N03-22）を加工して作成<br>
+・地名・施設の位置：<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地名検索</a>と<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors（ODbL）</a>の情報を突き合わせて作成した目安です（OSM由来の位置情報を含みます。出入口などの正確な位置ではありません）<br>・町名（宇和島市・八幡浜市・大洲市・西予市・喜多郡内子町・西宇和郡伊方町・北宇和郡（松野町・鬼北町）・南宇和郡愛南町）：<a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">政府統計の総合窓口（e-Stat）『令和2年国勢調査 小地域（町丁・字等）境界データ』</a>を加工して作成。町名ごとの代表地点（面積の重心）で、読み仮名では探せません（漢字・かなの表記で検索）<br>
+・「西予市」などと表記されている事業者は、市のコミュニティバス・乗合タクシーです<br>・宇和島自動車は宇和島・愛南・鬼北・八幡浜方面、伊予鉄南予バスは大洲・内子・八幡浜方面を走ります<br>・松山・今治・新居浜・西条は松山・東予バスマップに載っています<br>・宇和島城・大洲城・内子座・卯之町の町並みは、バスで行ける最寄りの停留所から探せます。八幡浜港などのフェリーは載っていません<br>
+・この地図に含まれる市町村（9）：西予市・宇和島市・大洲市・八幡浜市・鬼北町・愛南町・伊方町・内子町・松野町。<br>
+・この地図の範囲：おおよそ北緯32.93〜33.64・東経132.10〜132.82（西予市・宇和島市・大洲市・八幡浜市・鬼北町など）。範囲の外の停留所・系統は載せていません。範囲の中でも、となりの地図に載せている市町村のバス停は、この地図には入れていません。<br>
+${HASSPOT ? `・観光地・店舗の位置：国土地理院・OSM・Wikipediaの情報を突き合わせた所在地の目安です（掲載時点：2026-11-03）。店舗は閉店・移転・休業することがあります。本ページは掲載の店舗・施設とは無関係で、宣伝ではありません。「外国人に人気」は、訪日ラボのランキングや英語のガイドへの掲載などを根拠にした非公式の目安です<br>` : ""}
+・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図・淡色地図・全国最新写真（シームレス））</a>。写真は、撮影時期が場所によって異なり、現在の様子と違うことがあります<br>
+・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
+const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
+const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
+homeTop.onclick = goHome;
+function render(html, sum) {
+  const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
+  pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
+  const bk = pbody.querySelector(".back");
+  if (bk) { const hm = document.createElement("button"); hm.type = "button"; hm.className = "homebtn"; hm.setAttribute("aria-label", "ホーム（最初の画面）へ戻る"); hm.innerHTML = HOMEICON + "ホーム"; hm.onclick = goHome; bk.insertAdjacentElement("afterend", hm); }   // PC用（スマホはシート上部のボタン）
+  homeTop.hidden = !bk; panel.classList.toggle("hashome", !!bk);
+  const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
+}
+
+function home() {
+  hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
+  selRoute = null; lastStop = null; paint(); map.closePopup();
+  render(`<h2 class="head">バス停を押してみてください</h2>
+  <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
+  <p>上の検索で、駅・町名・地名・施設（例：宇和島駅、八幡浜駅、大洲駅）、バス停、系統（例：宇和島）を探せます。</p>
+  <div class="lh">一覧から探す</div>
+  <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（9）</div><p class="tip">西予市・宇和島市・大洲市・八幡浜市・鬼北町・愛南町・伊方町・内子町・松野町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/ehime/ehime-chuyo/"><span>松山・東予バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/kochi/kochi-west/"><span>高知西部・幡多バスマップ</span><small>南東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+}
+function routeBtn(r) {
+  return `<button class="rt" type="button" data-r="${r.i}"><span>${esc(routeLabel(r))}</span><small>${r.n}か所</small></button>`;
+}
+function groupedRoutes(rs) {
+  let out = "", cur = "";
+  rs.slice().sort(routeCmp).forEach(r => {
+    if (r.g !== cur) { cur = r.g; out += `<div class="grp"><i style="background:var(--${r.g})"></i>${GLABEL[r.g]}</div>`; }
+    out += routeBtn(r);
+  });
+  return out;
+}
+function showStop(s, opt) {
+  hoverOff(); selRoute = null; lastStop = s; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([s]);
+  if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
+  const rs = s.rts.map(i => routes[i]);
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(s.name)}</h2>
+  <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b>系統</span></div>
+  ${rs.length ? `<div class="lh">このバス停を通る系統</div>` + groupedRoutes(rs) : `<p>系統の情報がありません</p>`}${NOTE}`,
+  `${s.name}・${rs.length}系統`);
+  paint();   // 系統表示から戻った時の薄表示を解除
+  bind();
+  if (lastPlace) { const bk = document.getElementById("bk"), pl = lastPlace; bk.textContent = `← ${pl.name}にもどる`; bk.onclick = () => showPlace(pl, { noMove: true }); }
+}
+
+// ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
+const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
+const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
+const places = PLACES.map(a => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "" }));
+const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
+const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : [])].map(pnorm).join("|") }));
+// 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
+const pkind = p => p.type === "地名" ? "代表地点" : p.type === "駅" ? "駅の位置" : p.type === "店舗" ? "店の場所" : "所在地";
+const ptip = p => p.type === "地名" ? "地図をこの地域の代表地点へ動かしました。範囲の中心とは限りません。" : p.type === "駅" ? "地図を駅の付近へ動かしました（位置は目安です）。" : p.type === "店舗" ? "地図を店の所在地付近へ動かしました（位置は目安です）。店は閉店・移転・休業していることがあります。営業は公式情報でご確認ください。" : "地図を施設の所在地付近へ動かしました。出入口の位置とは限りません。";
+const placeSub = p => [p.type === "店舗" ? "お店" : p.type, p.cat, p.sub, p.area].filter(Boolean).join("・");
+function setPin(p) {
+  clearPin();
+  placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
+  placePin.bindTooltip(p.name, { permanent: true, direction: "top", offset: [0, -30], className: "placetip" }).openTooltip();
+}
+function clearPin() { if (placePin) { placePin.remove(); placePin = null; } }
+function nearStops(p) {
+  const by = new Map();
+  stops.forEach(s => { const d = Math.hypot((s.lon - p.lon) * 91000, (s.lat - p.lat) * 111000), o = by.get(s.name);
+    if (!o || d < o.d) by.set(s.name, { s, d }); });
+  const all = [...by.values()].sort((a, b) => a.d - b.d);
+  const near = all.filter(x => x.d <= 700).slice(0, 8);
+  return near.length ? { list: near, far: false } : { list: all.slice(0, 3), far: true };
+}
+// ---- 一覧から探す：地名＝区ごと／駅＝路線ごと。選ぶと showPlace と同じ表示になり、「もどる」で一覧へ戻る ----
+let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻り先
+places.forEach((p, i) => p.i = i);
+const AREA_ORDER = ["西予市", "宇和島市", "大洲市", "八幡浜市", "北宇和郡鬼北町", "南宇和郡愛南町", "西宇和郡伊方町", "喜多郡内子町", "北宇和郡松野町"];
+const jaCmp = new Intl.Collator("ja").compare;
+function browseOpen(sheet) { hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
+function showAreaIndex() {
+  browseOpen(); placeBack = null;
+  const m = areaMap(), keys = [...m.keys()].sort((a, b) => (AREA_ORDER.indexOf(a) + 1 || 99) - (AREA_ORDER.indexOf(b) + 1 || 99) || jaCmp(a, b));
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">地名から探す</h2>
+  <p class="tip">区・市町村を選ぶと、その中の地名（町名など）の一覧が出ます。地名を選ぶと、地図がその地域へ動いて、近くのバス停が出ます。</p>
+  ${keys.map(k => `<button class="rt" type="button" data-a="${esc(k)}"><span>${esc(k)}</span><small>${m.get(k).length}件　›</small></button>`).join("")}${NOTE}`, "市町村ごとの地名");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-a]").forEach(b => b.onclick = () => showAreaPlaces(b.dataset.a));
+}
+function showAreaPlaces(a) {
+  browseOpen(); const list = (areaMap().get(a) || []).slice().sort((x, y) => jaCmp(x.name, y.name));
+  placeBack = { label: `← ${a}にもどる`, fn: () => showAreaPlaces(a) };
+  render(`<button class="back" id="bk" type="button">← 区の一覧</button><h2 class="head">${esc(a)}</h2>
+  <p class="tip">地名・町名（${list.length}件）。位置は代表地点の目安です。名前を押すと、地図がその地域へ動きます。並びは読み仮名順ではなく漢字の機械的な順です。見つからない時は、上の検索をお使いください。</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${esc(p.name)}</span><small>${esc(p.sub || "")}</small></button>`).join("")}${NOTE}`, `${a}・地名${list.length}件`);
+  document.getElementById("bk").onclick = showAreaIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+// ---- 観光・グルメ（placesの cat 付き）：検索窓のおすすめパネルと、ホームの一覧 ----
+const SPOT_EN_HINT = "Uwajima Castle, Ozu Castle, Uchikoza Theater";
+const RECO = [["外国人に人気", "Popular", p => p.foreign], ["観光名所", "Sights", p => p.type === "観光"], ["グルメ", "Food", p => p.cat === "グルメ"], ["買い物", "Shopping", p => p.cat === "買い物"], ["寺社", "Shrines", p => p.cat === "寺社"]];
+const recoSort = (a, b) => (b.foreign - a.foreign) || jaCmp(a.name, b.name);
+let recoCat = null;
+function showReco() {
+  const cats = RECO.filter(c => places.some(c[2]));
+  if (!cats.length) { showSug(false); return; }
+  if (!recoCat || !cats.some(c => c[0] === recoCat)) recoCat = cats[0][0];
+  const cur = cats.find(c => c[0] === recoCat), list = places.filter(cur[2]).sort(recoSort).slice(0, 8);
+  hit = list.map(p => ({ t: "p", p })).concat([{ t: "idx" }]); act = -1; sug.dataset.mode = "reco";
+  sug.innerHTML = `<div class="sh" role="presentation">おすすめ　Popular places</div>
+  <div class="scats" role="group" aria-label="種類で絞る">${cats.map(c => `<button type="button" class="scat" data-cat="${esc(c[0])}" aria-pressed="${c[0] === recoCat}">${esc(c[0])}<small>${c[1]}</small></button>`).join("")}</div>
+  ${list.map((p, k) => `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(p.name)}${p.en ? `<small class="en">${esc(p.en)}</small>` : ""}</span><small>${esc(placeSub(p))}</small></button>`).join("")}
+  <button type="button" role="option" id="sug-${list.length}" data-k="${list.length}" class="more"><span>観光・グルメの一覧を見る　›</span></button>
+  <div class="empty" style="padding:8px 14px">English names work: try “${esc(SPOT_EN_HINT)}”</div>`;
+  sug.querySelectorAll(".scat").forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { recoCat = b.dataset.cat; showReco(); }; });
+  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+function showSpotIndex() {
+  browseOpen(); placeBack = null;
+  const cats = ["寺社", "歴史", "自然", "温泉", "夜景", "アニメ・文化", "体験", "グルメ", "買い物"].filter(c => places.some(p => p.cat === c));
+  const fo = places.filter(p => p.foreign).length;
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">観光・グルメから探す</h2><p class="enname">Sightseeing &amp; food</p>
+  <p class="tip">種類を選ぶと一覧が出ます。名前を押すと、地図がその場所へ動いて、近くのバス停が出ます。位置は所在地の目安です。<b>店舗は閉店・移転・休業していることがあります</b>。営業は公式情報でご確認ください。</p>
+  ${fo ? `<button class="rt" type="button" data-c="*"><span>外国人に人気<span class="enm">Popular with visitors</span></span><small>${fo}件　›</small></button>` : ""}
+  ${cats.map(c => `<button class="rt" type="button" data-c="${esc(c)}"><span>${esc(c)}</span><small>${places.filter(p => p.cat === c).length}件　›</small></button>`).join("")}${NOTE}`, "観光・グルメ");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-c]").forEach(b => b.onclick = () => showSpotCat(b.dataset.c));
+}
+function showSpotCat(c) {
+  browseOpen(); const list = places.filter(c === "*" ? (p => p.foreign) : (p => p.cat === c)).sort((x, y) => jaCmp(x.name, y.name)), ttl = c === "*" ? "外国人に人気" : c;
+  placeBack = { label: `← ${ttl}にもどる`, fn: () => showSpotCat(c) };
+  render(`<button class="back" id="bk" type="button">← 種類の一覧</button><h2 class="head">${esc(ttl)}</h2>
+  <p class="tip">${list.length}件。並びは名前順です。位置は所在地の目安で、店舗は閉店・移転・休業していることがあります。</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${esc(p.name)}${p.en ? `<span class="enm">${esc(p.en)}</span>` : ""}</span><small>${esc([p.type === "店舗" ? "お店" : "", p.cat, p.sub || p.area].filter(Boolean).join("・"))}</small></button>`).join("")}${NOTE}`, `${ttl}・${list.length}件`);
+  document.getElementById("bk").onclick = showSpotIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showLineIndex() {
+  browseOpen(); placeBack = null;
+  let cur = "", html = "";
+  LINES.forEach((l, i) => { if (l[0] !== cur) { cur = l[0]; html += `<div class="grp">${esc(cur)}</div>`; } html += `<button class="rt" type="button" data-l="${i}"><span>${esc(l[1])}</span><small>${l[2].length}駅　›</small></button>`; });
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">駅から探す</h2>
+  <p class="tip">路線を選ぶと、その路線の駅が順に出ます（この地図の範囲にある駅。順番は駅の位置から作った目安です）。駅を選ぶと、近くのバス停が出ます。</p>${html}${NOTE}`, "路線ごとの駅");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-l]").forEach(b => b.onclick = () => showLine(+b.dataset.l));
+}
+function showLine(i) {
+  browseOpen(); const l = LINES[i], label = `${l[0]} ${l[1]}`;
+  placeBack = { label: l[1].length > 7 ? "← 路線にもどる" : `← ${l[1]}にもどる`, fn: () => showLine(i) };   // 長い路線名は、スマホの『もどる』ボタンで見切れるので短くする
+  render(`<button class="back" id="bk" type="button">← 路線の一覧</button><h2 class="head">${esc(l[1])}</h2>
+  <div class="meta"><span class="pill">${esc(l[0])}</span><span><b>${l[2].length}</b>駅（この地図の範囲）</span></div>
+  <ol class="stoplist">${l[2].map(k => { const p = places[k]; return `<li><button type="button" data-i="${k}">${esc(p.name)}</button></li>`; }).join("")}</ol>${NOTE}`, `${label}・${l[2].length}駅`);
+  document.getElementById("bk").onclick = showLineIndex;
+  if (!isMobile() && l[2].length > 1) map.fitBounds(L.latLngBounds(l[2].map(k => [places[k].lat, places[k].lon])), { padding: [40, 40], maxZoom: 14, animate: !RM });
+  pbody.querySelectorAll(".stoplist button[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showPlace(p, opt) {
+  hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([]); paint(); setPin(p); map.closePopup();
+  const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
+  if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
+  else ensureVisible(pll);
+  const ns = nearStops(p);
+  render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(p.name)}</h2>${p.en ? `<p class="enname">${esc(p.en)}</p>` : ""}
+  <div class="meta"><span class="pill">${esc(p.type === "店舗" ? "お店" : p.type)}・${p.cat ? esc(p.cat) + "・" : ""}${pkind(p)}</span><span class="nw">${esc([p.sub, p.area].filter(Boolean).join("・"))}</span></div>
+  <p class="tip">${ptip(p)}近くのバス停を押すと、通る系統が出ます。</p>
+  <div class="lh">${ns.far ? "近くにバス停は多くありません（最も近い順）" : "周辺のバス停（近い順）"}</div>
+  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${esc(x.s.name)}</span><small>約${Math.max(10, Math.round(x.d / 10) * 10)}m・${x.s.rts.length}系統</small></button>`).join("")}${NOTE}`,
+  `${p.name}・周辺のバス停`);
+  const pbk = document.getElementById("bk");
+  if (placeBack) { pbk.textContent = placeBack.label; pbk.onclick = placeBack.fn; } else pbk.onclick = home;   // 一覧から開いた時は、その一覧へ戻る
+  pbody.querySelectorAll(".rt[data-s]").forEach(b => b.onclick = () => { const s = stops[+b.dataset.s]; showStop(s, { center: true, zoom: Math.max(map.getZoom(), 16) }); ensureVisible(L.latLng(s.lat, s.lon)); });
+}
+function showRoute(r) {
+  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup();
+  setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
+  paint();
+  map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const back = lastStop ? `← ${esc(lastStop.name)}にもどる` : "← もどる";
+  render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
+  <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
+  <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
+  <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
+  `${routeLabel(r)}・${r.n}か所`);
+  if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
+  document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  // ---- 停留所を順に見る（推定順）。スマホは『押しても拡大しない』：印を付けるだけ。近くを見たい時は『拡大』 ----
+  const fitAll = () => map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const same = n => r.stops.filter(x => x.name === n);
+  const rPrev = document.getElementById("rPrev"), rNext = document.getElementById("rNext"), rZoom = document.getElementById("rZoom"), rPos = document.getElementById("rPos"), rAllBtn = document.getElementById("rAll");
+  let idx = curStops[0] ? r.order.indexOf(curStops[0].name) : -1;
+  const sync = () => {
+    rPos.innerHTML = r.seq ? `運行順 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>` : `推定 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
+    const ae = document.activeElement; rPrev.disabled = idx <= 0; rNext.disabled = idx >= r.order.length - 1; rZoom.disabled = idx < 0;
+    if (ae && ae.disabled) (ae === rPrev ? rNext : ae === rNext ? rPrev : rAllBtn).focus();   // 押せなくなったボタンにフォーカスが残って、キーボード操作が途切れないように
+    pbody.querySelectorAll(".stoplist button").forEach(b => { if (idx >= 0 && b.dataset.n === r.order[idx]) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+  };
+  const mark = (i, zoomIn) => {   // i番目のバス停に印(黄色の輪＋名前)を付ける。zoomIn=trueの時だけ寄せる。それ以外は、隠れている時だけ最小限に動かす
+    const list = same(r.order[i]); if (!list[0]) return; idx = i;
+    if (isMobile() && sheetState !== "mid") setSheet("mid");
+    setCur(list); hoverOn(list); sync();
+    if (zoomIn) focusTo(L.latLng(list[0].lat, list[0].lon), Math.max(map.getZoom(), 16)); else ensureVisible(L.latLng(list[0].lat, list[0].lon));
+  };
+  sync();
+  rPrev.onclick = () => mark(Math.max(0, idx - 1), false);
+  rNext.onclick = () => mark(Math.min(r.order.length - 1, idx + 1), false);
+  rZoom.onclick = () => { if (idx >= 0) mark(idx, true); };
+  document.getElementById("rAll").onclick = () => { hoverOff(); fitAll(); };
+  document.getElementById("rNum").onclick = e => { numOn = !numOn; try { localStorage.setItem("busmap.num", numOn ? "1" : "0"); } catch (x) {} e.currentTarget.setAttribute("aria-pressed", String(numOn)); drawNums(); };
+  pbody.querySelectorAll(".stoplist button").forEach(b => {
+    b.onclick = () => {
+      const i = r.order.indexOf(b.dataset.n), s = same(b.dataset.n)[0]; if (!s || i < 0) return;
+      if (touchOnly()) { mark(i, false); return; }   // スマホ・タブレット(カーソルを合わせられない端末)は、拡大しない
+      idx = i; sync();
+      if (isMobile()) setSheet("mid");           // 一覧のタップ→標準段へ。選んだ地点はシートの裏に隠れない位置へ寄せる
+      setCur(same(b.dataset.n)); focusTo(L.latLng(s.lat, s.lon), Math.max(map.getZoom(), 15)); hoverOn(same(b.dataset.n));
+    };
+    if (!touchOnly()) { b.onmouseenter = () => hoverOn(same(b.dataset.n)); b.onmouseleave = () => hoverOff(); b.onfocus = () => hoverOn(same(b.dataset.n)); b.onblur = () => hoverOff(); }   // スマホは、地図を押すとフォーカスが外れて黄色い輪が消えるので、focus連動にしない
+  });
+}
+function bind() {
+  pbody.querySelectorAll(".rt").forEach(b => b.onclick = () => showRoute(routes[+b.dataset.r]));
+  const bk = document.getElementById("bk"); if (bk) bk.onclick = home;
+}
+
+// フィルタ
+const chips = document.getElementById("chips"), chipEls = {};
+GORDER.forEach(g => {
+  const c = document.createElement("button"); c.className = "chip"; c.type = "button"; c.setAttribute("aria-pressed", "true");
+  c.innerHTML = `<i style="background:var(--${g})"></i><span class="long">${GLABEL[g]}</span><span class="short">${GSHORT[g]}</span><span class="tiny">${GTINY[g]}</span>`;
+  c.setAttribute("aria-label", GLABEL[g] + "のバス停を表示");
+  c.onclick = () => { on[g] = !on[g]; syncChips(); map.closePopup(); paint(); };
+  chips.appendChild(c); chipEls[g] = c;
+});
+function syncChips() { GORDER.forEach(g => chipEls[g].setAttribute("aria-pressed", on[g])); }
+
+// 検索（Enter／↑↓／Escに対応。判定ロジックは従来どおり）
+const q = document.getElementById("q"), sug = document.getElementById("sug"), qclear = document.getElementById("qclear");
+const kana = t => t.normalize("NFKC").toLowerCase();
+const items = [...routes.map(r => ({ t: "r", r, key: kana(routeLabel(r) + " " + OPNAME(r.op)) })),
+  ...stops.map(s => ({ t: "s", s, key: kana(s.name) }))];
+let hit = [], act = -1;
+const showSug = v => { sug.hidden = !v; q.setAttribute("aria-expanded", String(v)); if (!v) q.removeAttribute("aria-activedescendant"); };
+function pick(it) {
+  showSug(false); q.value = ""; qclear.hidden = true; act = -1; placeBack = null;
+  if (it.t === "idx") { showSpotIndex(); return; }
+  if (it.t === "p") { showPlace(it.p); return; }
+  lastPlace = null; clearPin();     // 場所から離れて、検索で別のバス停・系統を選んだ時
+  it.t === "r" ? showRoute(it.r) : (showStop(it.s, { center: true, zoom: 16 }), ensureVisible(L.latLng(it.s.lat, it.s.lon)));
+}
+function setAct(k) {
+  act = k; if (k >= 0) q.setAttribute("aria-activedescendant", "sug-" + k);
+  sug.querySelectorAll("button[data-k]").forEach((b, i) => { b.classList.toggle("act", i === act); b.setAttribute("aria-selected", i === act); if (i === act) b.scrollIntoView({ block: "nearest" }); });
+}
+function search() {
+  const raw = q.value.trim(), v = kana(raw); act = -1; qclear.hidden = !q.value;
+  if (!v) { if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  sug.dataset.mode = "";
+  hit = items.filter(it => it.key.includes(v));
+  hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || (a.key.startsWith(v) ? 0 : 1) - (b.key.startsWith(v) ? 0 : 1));
+  hit = hit.slice(0, 40);
+  // 場所（駅・地名・施設）は別の候補群として先頭に追加。既存のバス停・系統の判定と並びは変えない
+  const pv = pnorm(raw);
+  const ph = placeItems.filter(it => it.key.includes(pv)).map(it => ({ it, sc: it.name === pv ? 0 : it.name.startsWith(pv) ? 1 : 2 }))
+    .sort((a, b) => a.sc - b.sc || PTYPE_ORDER.indexOf(a.it.p.type) - PTYPE_ORDER.indexOf(b.it.p.type) || a.it.p.name.length - b.it.p.name.length || areaRank(a.it.p.area) - areaRank(b.it.p.area)).slice(0, 8).map(x => x.it);
+  hit = ph.concat(hit);
+  if (!hit.length) {
+    sug.innerHTML = `<div class="empty"><b>「${esc(raw)}」</b>に合う場所・バス停・系統は見つかりませんでした。<br>・駅名・町名・地名・施設名（例：宇和島城、大洲城、内子座）<br>・停留所名の一部（例：宇和島駅）<br>・系統の数字（例：宇和島）<br>で試してみてください。${HASSPOT ? `<br>English names work: try “${esc(SPOT_EN_HINT)}”` : ""}</div>`;
+  } else {
+    let html = "", cur = "";
+    hit.forEach((it, k) => {
+      if (it.t !== cur) { cur = it.t; html += `<div class="sh" role="presentation">${it.t === "p" ? "場所" : it.t === "r" ? "系統" : "バス停"}</div>`; }
+      html += it.t === "p"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.p.name)}${it.p.en ? `<small class="en">${esc(it.p.en)}</small>` : ""}</span><small>${esc(placeSub(it.p))}</small></button>`
+        : it.t === "r"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(routeLabel(it.r))}</span><small>${esc(OPNAME(it.r.op))}・${it.r.n}か所</small></button>`
+        : `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.s.name)}</span><small>${esc(OPNAME(it.s.op))}・${it.s.rts.length}系統</small></button>`;
+    });
+    sug.innerHTML = html;
+    sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  }
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+q.oninput = search;
+q.onfocus = () => { if (q.value.trim() || HASSPOT) search(); };
+qclear.onclick = () => { q.value = ""; qclear.hidden = true; showSug(false); act = -1; q.focus(); };
+q.onkeydown = e => {
+  if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換確定のEnterでは候補を開かない
+  if (e.key === "Escape") { e.preventDefault(); if (!sug.hidden) showSug(false); else if (q.value) { q.value = ""; qclear.hidden = true; } return; }
+  if (sug.hidden || !hit.length) return;
+  if (e.key === "ArrowDown") { e.preventDefault(); setAct((act + 1) % hit.length); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setAct((act - 1 + hit.length) % hit.length); }
+  // ↑↓で選んだ候補があればそれを開く。何も選んでいない時は従来どおり「バス停・系統の先頭候補」を開く（バス停・系統の候補が1つも無い語の時だけ、先頭の場所）
+  else if (e.key === "Enter") { e.preventDefault(); pick(act >= 0 ? hit[act] : (hit.find(h => h.t !== "p") || hit[0])); }
+};
+document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
+const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "場所・バス停・系統 / Search" : "場所・バス停・系統を検索 / Search places") : isMobile() ? "場所・バス停・系統" : "場所・バス停・系統を検索"; };   // 狭い画面では短く
+setPh(); mqMobile.addEventListener("change", setPh);
+home();
+applySheet();
+map.invalidateSize();
+// ?at=<市町村コード> で開いた時は、その市町村のバス停の範囲へ地図を寄せる(県ページの市町村ボタン)。不明なコードは無視して既定の表示。
+(() => { const at = new URLSearchParams(location.search).get("at"), mu = at && MUNI.find(m => m[0] === at);
+  if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
+  map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
+  const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">愛媛県ページから「${esc(mu[1])}」を開きました。地図はその市町村のバス停の範囲です。</p>`); })();
+// 言語の切り替えボタンは、今の ?at= などを引き継ぐ
+document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
+// ブラウザの言語が英語の人に、英語版があることを1回だけ案内する(閉じたらこの端末では出さない・自動では移動しない)
+(() => { let k = null; try { k = localStorage.getItem("busmap.langHint"); } catch (e) {} if (k || !/^en\b/i.test(navigator.language || "")) return;
+  const d = document.createElement("div"); d.id = "langhint"; d.setAttribute("role", "status"); d.lang = "en";
+  d.innerHTML = '<span>This map is also available in English. <a href="/bus/en/ehime/ehime-nanyo/" hreflang="en">Open English version</a></span><button type="button" aria-label="Close">×</button>';
+  d.querySelector("a").href += location.search;
+  d.querySelector("button").onclick = () => { d.remove(); try { localStorage.setItem("busmap.langHint", "1"); } catch (e) {} };
+  mainEl.appendChild(d); })();
+</script>
+</body>
+</html>
