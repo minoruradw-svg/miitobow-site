@@ -291,12 +291,13 @@ const GORDER = ["nangoku", "kakotsu", "jrkbus", "community", "other"];
 const GNUMSORT = ["nangoku", "kakotsu"];   // 系統番号の順に並べるグループ
 const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
 const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
-const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, seq: r[3] || null, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
 stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
 routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; r.set = new Set(r.stops); });
 const routeLabel = r => r.name;
-// 系統のバス停を移動順に並べる（位置からの推定）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
+// 系統のバス停を移動順に並べる（位置からの推定。GTFS由来の系統だけ実際の停車順）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
 function orderRoute(r) {
+  if (r.seq) { const have = new Set(r.names), o = r.seq.filter(x => have.has(x)); r.names.forEach(x => { if (!o.includes(x)) o.push(x); }); return o; }   // GTFS由来の系統：データに実際の停車順(第4要素)がある
   const by = new Map();
   r.stops.forEach(s => { const a = by.get(s.name) || { name: s.name, la: 0, lo: 0, c: 0, st: [] }; a.la += s.lat; a.lo += s.lon; a.c++; a.st.push(s); by.set(s.name, a); });
   const P = [...by.values()].map(a => ({ name: a.name, x: (a.lo / a.c) * 91, y: (a.la / a.c) * 111, st: a.st }));
@@ -749,9 +750,9 @@ function showRoute(r) {
   const back = lastStop ? `← ${esc(lastStop.name)}にもどる` : "← もどる";
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
-  <div class="lh">停留所一覧（位置からの推定順）</div>
-  <p class="tip">※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。${r.total ? "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。" : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
-  <div class="rbar" role="group" aria-label="停留所を順に見る（推定順）"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="地図の点に推定順の番号を出す">番号</button></div>
+  <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);
   if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
@@ -762,7 +763,7 @@ function showRoute(r) {
   const rPrev = document.getElementById("rPrev"), rNext = document.getElementById("rNext"), rZoom = document.getElementById("rZoom"), rPos = document.getElementById("rPos"), rAllBtn = document.getElementById("rAll");
   let idx = curStops[0] ? r.order.indexOf(curStops[0].name) : -1;
   const sync = () => {
-    rPos.innerHTML = `推定 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
+    rPos.innerHTML = r.seq ? `運行順 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>` : `推定 ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh">　${idx < 0 ? "未選択" : esc(r.order[idx])}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
     const ae = document.activeElement; rPrev.disabled = idx <= 0; rNext.disabled = idx >= r.order.length - 1; rZoom.disabled = idx < 0;
     if (ae && ae.disabled) (ae === rPrev ? rNext : ae === rNext ? rPrev : rAllBtn).focus();   // 押せなくなったボタンにフォーカスが残って、キーボード操作が途切れないように
     pbody.querySelectorAll(".stoplist button").forEach(b => { if (idx >= 0 && b.dataset.n === r.order[idx]) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });

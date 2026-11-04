@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Southern Nara (Yoshino-Gojo-Uda) Bus Map | miitobow</title>
+<meta name="description" content="Unofficial map of bus stops and routes in Totsukawa, Gojo, Yoshino, Oyodo, Higashiyoshino, Uda, Kawakami, Shimoichi and more. 786 bus stops and 76 routes (FY2022 data).">
+<link rel="canonical" href="https://miitobow.com/bus/en/nara/nara-south/">
+<link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/nara/nara-south/">
+<link rel="alternate" hreflang="en" href="https://miitobow.com/bus/en/nara/nara-south/">
+<link rel="alternate" hreflang="x-default" href="https://miitobow.com/bus/nara/nara-south/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Southern Nara (Yoshino-Gojo-Uda) Bus Map | miitobow">
+<meta property="og:description" content="Unofficial map of bus stops and routes in Totsukawa, Gojo, Yoshino, Oyodo, Higashiyoshino, Uda, Kawakami, Shimoichi and more. 786 bus stops and 76 routes (FY2022 data).">
+<meta property="og:url" content="https://miitobow.com/bus/en/nara/nara-south/">
+<link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://miitobow.com/bus/assets/og-nara-nara-south.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Southern Nara (Yoshino-Gojo-Uda) Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
+<style>
+  :root {
+    --bg: #f6f9f4; --surface: #ffffff; --surface-soft: #eef3ea;
+    --ink: #1f2b20; --ink-soft: #55655a; --ink-faint: #5f6e5c;
+    /* 文字・リンクは濃い緑（コントラスト確保）。ブランドの #6fae2f は枠・塗り・選択状態にだけ使う */
+    --accent-dark: #3a5d22; --brand: #6fae2f; --brand-soft: rgba(111,174,47,.18);
+    --border: #dde6d8; --narakotsu: #2f8a4e; --community: #a0792c; --other: #5a7fa8;
+    --hdr: 60px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c;
+      --ink: #eaf1e5; --ink-soft: #a7b8a2; --ink-faint: #8c9c88;
+      --accent-dark: #b4e68f; --brand: #82c455; --brand-soft: rgba(130,196,85,.22);
+      --border: #2b3625; --narakotsu: #5fc080; --community: #d9b45a; --other: #86a9d0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overscroll-behavior: none; }
+  @supports (height: 100dvh) { html, body { height: 100dvh; } }
+  body { background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
+    font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif; -webkit-font-smoothing: antialiased; }
+  .head { font-family: "M PLUS Rounded 1c","Hiragino Sans",sans-serif; font-weight: 900; letter-spacing: .02em; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+
+  /* ---- ヘッダー ---- */
+  header { position: relative; z-index: 1300; min-height: var(--hdr); padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+    padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  header h1 { margin: 0; font-size: 18px; color: var(--accent-dark); white-space: nowrap; }
+  .searchwrap { position: relative; flex: 1 1 260px; max-width: 460px; }
+  #q { width: 100%; height: 42px; padding: 0 44px 0 14px; font-size: 16px; border: 2px solid var(--border); border-radius: 12px;
+    background: var(--surface-soft); color: var(--ink); -webkit-appearance: none; appearance: none; }
+  #q::-webkit-search-cancel-button { display: none; }
+  #q:focus { border-color: var(--brand); outline: none; background: var(--surface); box-shadow: 0 0 0 3px var(--brand-soft); }
+  #qclear { position: absolute; right: 2px; top: 0; width: 42px; height: 42px; border: 0; background: none; color: var(--ink-soft);
+    font-size: 22px; line-height: 1; cursor: pointer; border-radius: 12px; }
+  #qclear[hidden] { display: none; }
+  #qclear:hover { color: var(--ink); background: var(--brand-soft); }
+  #sug { position: absolute; z-index: 1400; left: 0; right: 0; top: calc(100% + 6px); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; max-height: min(60dvh, 440px); overflow: auto; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+    overscroll-behavior: contain; padding-bottom: 4px; }
+  #sug[hidden] { display: none; }
+  #sug .sh { position: sticky; top: 0; padding: 7px 14px 5px; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--accent-dark);
+    background: var(--surface-soft); border-bottom: 1px solid var(--border); }
+  #sug button { display: flex; width: 100%; min-height: 48px; text-align: left; gap: 10px; padding: 10px 14px; background: none; border: 0;
+    border-bottom: 1px solid var(--border); color: var(--ink); font-size: 15px; cursor: pointer; align-items: center; justify-content: space-between; }
+  #sug button:hover { background: var(--brand-soft); }
+  #sug button.act { background: var(--brand-soft); box-shadow: inset 4px 0 0 var(--brand); }
+  #sug small { color: var(--ink-soft); font-size: 12px; flex: 0 1 46%; max-width: 50%; text-align: right; line-height: 1.4; }
+  #sug button span { flex: 1 1 auto; min-width: 0; overflow-wrap: break-word; }
+  #sug .empty { padding: 16px 14px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+  #sug .empty b { color: var(--ink); }
+  #sug span .en { display: block; flex: none; max-width: 100%; text-align: left; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+  #sug .scats { display: flex; gap: 6px; padding: 8px 14px 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #sug .scats::-webkit-scrollbar { display: none; }
+  #sug .scats .scat { flex: none; width: auto; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  #sug .scats .scat small { flex: none; max-width: none; font-weight: 400; color: var(--ink-soft); margin: 0; text-align: left; }
+  #sug .scats .scat[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
+  #sug .more { color: var(--accent-dark); font-weight: 700; }
+  .enname { margin: -2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .rt .enm { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; }
+  .chips { display: flex; gap: 6px; flex-wrap: nowrap; font-size: 13px; }
+  .chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 44px; padding: 0 12px; border-radius: 999px;
+    border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; user-select: none; }
+  .chip i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .chip[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); font-weight: 700; }
+  .chip[aria-pressed="false"] { color: var(--ink-faint); }
+  .chip[aria-pressed="false"] i { opacity: .4; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .placepin span { display: block; width: 26px; height: 26px; margin: 3px; border-radius: 50% 50% 50% 0; background: var(--brand); border: 3px solid #1f2b20; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .placepin span::after { content: ""; position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+  .placetip { font-weight: 700; font-size: 13px; color: #1f2b20; background: #fff; border: 2px solid #1f2b20; border-radius: 8px; }
+  .tgl { margin-left: auto; min-height: 40px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .tgl:hover { border-color: var(--brand); background: var(--brand-soft); }
+
+  /* ---- 地図とパネル ---- */
+  main { flex: 1; position: relative; min-height: 0; display: flex; --cover: 0px; }
+  #map { flex: 1; min-width: 0; position: relative; }
+  .leaflet-container { font-family: inherit; }
+  .leaflet-bottom { bottom: var(--cover, 0px); }
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
+  /* 地図の種類の切り替え(右上)。ズームボタンと同じく、地図の上は明るい色で統一 */
+  .leaflet-top.leaflet-right { z-index: 1150; }   /* スマホでシートを最大にしても、メニューがシートの裏に隠れない(ヘッダー1300・検索候補1400より下) */
+  .basectl { position: relative; }
+  .basectl .bc-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 10px; font: 700 14px/1 "Hiragino Sans","Yu Gothic",system-ui,sans-serif; white-space: nowrap; border: 2px solid rgba(0,0,0,.2); border-radius: 8px; background: #fff; color: #1f2b20; cursor: pointer; box-shadow: none; }
+  .basectl .bc-btn:hover { background: #f4f4f4; }
+  .basectl .bc-btn:focus-visible, .basectl .bc-opt:focus-visible { outline: 3px solid #6fae2f; outline-offset: 2px; }
+  .bc-menu { position: absolute; right: 0; top: 50px; width: 246px; padding: 6px; border-radius: 12px; background: #fff; color: #1f2b20; border: 2px solid rgba(0,0,0,.2); box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+  .bc-menu[hidden] { display: none; }
+  .bc-opt { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+  .bc-opt:hover { background: #eef3ea; }
+  .bc-opt.on { background: rgba(111,174,47,.18); }
+  .bc-opt b { display: block; font-size: 15px; }
+  .bc-opt small { display: block; font-size: 12px; color: #55655a; line-height: 1.3; }
+  .bc-ck { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid #55655a; background: #fff; }
+  .bc-opt.on .bc-ck { border-color: #3a5d22; background: radial-gradient(circle, #3a5d22 0 45%, #fff 50%); }
+  #tilewarn { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px; border-radius: 12px; background: #fff4d6; color: #5a4300; border: 1px solid #e3c36a; font-size: 13px; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #tilewarn[hidden] { display: none; }
+  #tilewarn button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+
+  #panel { width: clamp(320px, 28vw, 400px); display: flex; flex-direction: column; background: var(--surface); border-left: 1px solid var(--border); min-height: 0; }
+  @media (min-width: 1024px) { #panel { width: clamp(360px, 26vw, 400px); } }
+  @media (min-width: 768px) { main.pclosed #panel { display: none; } }
+  .sheet-top { display: none; }
+  .pbody { flex: 1; min-height: 0; overflow: auto; padding: 14px 16px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
+  .pbody h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+  .pbody p { margin: 0 0 10px; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+  .meta .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); }
+  .meta .pill i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .meta b { color: var(--ink); }
+  .back { display: inline-flex; align-items: center; min-height: 44px; margin: -4px 0 8px -4px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface);
+    color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .back:hover { border-color: var(--brand); background: var(--brand-soft); }
+  /* ホームへ一発で戻るボタン: PCはパネル内の「もどる」の隣、スマホはシート上部の右 */
+  .back, .homebtn { vertical-align: top; }   /* 『もどる』と『ホーム』の上端をそろえる(overflow:hiddenの『もどる』は、基準線が下に来て、ホームより低く並んでいた) */
+  .homebtn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -4px 0 8px 8px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .homebtn:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .homebtn svg { flex: none; }
+  .hometop { display: none; }
+  .nw { white-space: nowrap; }
+  #pbody h2:focus { outline: none; }
+  .lh { margin: 14px 0 4px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .tip { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+  .rt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 44px; text-align: left; margin: 0 0 6px; padding: 8px 12px; border-radius: 10px; font-size: 14px;
+    border: 1px solid var(--border); background: var(--surface-soft); color: var(--ink); cursor: pointer; }
+  .rt:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .rt small { color: var(--ink-soft); font-size: 12px; flex: none; }
+  .grp { margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .grp i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 5px; margin: 6px 0 8px; padding: 6px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .rbar button { flex: 1 1 0; min-width: 44px; min-height: 44px; padding: 0 4px; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  @media (hover: hover) { .rbar button:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); } }   /* 指で押した後に「押されたまま」に見えないよう、カーソルのある端末だけ */
+  .rbar button:disabled { opacity: .4; cursor: default; }
+  .rbar button[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); }
+  .rbar button[aria-pressed="true"]::before { content: "✓ "; font-weight: 800; }   /* オンの目印(色だけに頼らない) */
+  .rbar #rPos { flex: none; min-width: 72px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .stnum { width: auto !important; min-width: 16px; padding: 0 4px; border: 1.5px solid #1f2b20; border-radius: 8px; background: rgba(255,255,255,.94); color: #1f2b20; font: 700 11px/13px system-ui, sans-serif; text-align: center; pointer-events: none; box-sizing: border-box; }
+  .stoplist { list-style: none; counter-reset: st; padding: 0; margin: 0; }
+  .stoplist li { counter-increment: st; display: flex; align-items: center; }
+  .stoplist li::before { content: counter(st); flex: none; width: 2.4em; text-align: right; padding-right: .7em; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .stoplist button { display: block; flex: 1; min-height: 44px; text-align: left; padding: 6px 10px; font-size: 14px; line-height: 1.4; color: var(--ink); background: none; border: 0; border-left: 4px solid transparent; border-radius: 6px; cursor: pointer; }
+  .stoplist button:hover, .stoplist button.hl { background: var(--brand-soft); }
+  .stoplist button.cur { background: var(--brand-soft); border-left-color: var(--brand); font-weight: 700; }
+  .warn { flex: none; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); font-size: 12.5px; line-height: 1.5; color: var(--ink); background: #fff7e0; border-top: 1px solid #ecd9a0; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .warn { background: #2b2610; border-top-color: #4b4217; } }
+  .warn a { color: var(--accent-dark); font-weight: 700; }
+  details.note { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 4px; font-size: 12px; line-height: 1.7; color: var(--ink-soft); }
+  details.note summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--accent-dark); }
+  details.note a { color: var(--accent-dark); }
+
+  /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
+  @media (max-width: 767px) {
+    header { flex-wrap: nowrap; gap: 6px; padding: 6px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+    header h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .tgl { display: none; }
+    .searchwrap { order: 0; flex: 1 1 auto; min-width: 0; max-width: none; }
+    #q { height: 44px; padding-left: 12px; }
+    #q:placeholder-shown { padding-right: 8px; }
+    #q::placeholder { font-size: 14px; }
+    #qclear { width: 44px; height: 44px; }
+    .chips { flex: none; margin-left: 0; gap: 4px; }
+    .chip { min-height: 44px; min-width: 44px; padding: 0 7px; gap: 3px; font-size: 13px; }
+    .chip .long { display: none; }
+    #panel { position: absolute; z-index: 1100; left: 0; right: 0; bottom: 0; width: auto; height: var(--sh, 40%); border-left: 0; border-top: 1px solid var(--border);
+      border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(0,0,0,.22); transition: height .22s ease; overflow: hidden; }
+    #panel.drag { transition: none; }
+    .sheet-top { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 3px; flex: none; width: 100%; min-height: 44px; padding: 6px 16px 2px;
+      border: 0; background: none; color: var(--ink); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border-radius: 18px 18px 0 0; }
+    .sheet-top .bar { width: 44px; height: 5px; border-radius: 3px; background: var(--brand); }
+    .sheet-top #psum { max-width: 100%; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #panel.min .pbody, #panel.min .warn { visibility: hidden; }
+    #panel.min .warn { display: none; }
+    .pbody { padding: 0 16px 10px; }
+    .back { float: right; margin: 0 0 0 8px; padding: 0 12px; min-height: 44px; max-width: 58%; }
+    .homebtn { display: none; }
+    .hometop { position: absolute; z-index: 3; top: 0; right: 6px; width: 60px; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px 0 0; border: 0; border-radius: 12px; background: none; color: var(--ink); cursor: pointer; font-size: 10.5px; font-weight: 700; line-height: 1.1; }
+    .hometop[hidden] { display: none; }
+    .hometop:active { background: var(--brand-soft); }
+    #panel.hashome .sheet-top #psum { max-width: calc(100% - 136px); }
+    #sug { position: fixed; left: 8px; right: 8px; top: 64px; }   /* 検索欄は狭いので、候補は画面幅いっぱいに出す(topはJSで補正) */
+    #sug button { flex-wrap: wrap; row-gap: 0; }
+    #sug small { flex: 1 1 100%; max-width: 100%; text-align: left; }
+    .pbody h2 { font-size: 18px; margin: 6px 0 4px; }
+    .meta { margin-bottom: 6px; }
+    .lh { margin-top: 8px; }
+    .grp { margin: 6px 0 4px; }
+    .rt { margin-bottom: 4px; }
+    .warn { white-space: nowrap; overflow: hidden; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
+  }
+  @media (max-width: 767px) and (max-height: 500px) { header h1 { display: none; } .searchwrap { order: 0; flex: 1 1 200px; } }
+  @media (min-width: 768px) { .chip .short { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .chip .long { display: none; } .chip .short { display: inline; } header h1 { font-size: 16px; } .tgl .tl { display: none; } .searchwrap { flex-basis: 200px; } .chip { padding: 0 9px; } }
+  .chip .tiny { display: none; }
+  @media (max-width: 359px) { .chip .short { display: none; } .chip .tiny { display: inline; } .chip { min-width: 44px; padding: 0 6px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  .hub { display: inline-flex; align-items: center; flex: none; min-height: 40px; padding: 0 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .hub:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .hub .ha { font-size: 18px; line-height: 1; }
+  a.rt { color: inherit; text-decoration: none; }
+  .leaflet-tooltip.extlbl { background: var(--surface); color: var(--ink); border: 1px solid var(--border); box-shadow: none; font-size: 12px; font-weight: 700; padding: 2px 8px; }
+  .leaflet-tooltip-bottom.extlbl::before { display: none; }
+  .crumb, .brk { display: none; }
+  @media (max-width: 767px) { .hub { display: none; } header { flex-wrap: wrap; row-gap: 2px; padding-top: 4px; } header h1 { position: static; width: auto; height: auto; clip: auto; overflow: hidden; text-overflow: ellipsis; order: 0; flex: 1 1 0; min-width: 0; font-size: 16px; }
+    .crumb { display: flex; order: 1; flex: none; gap: 2px; } .crumb a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; border-radius: 10px; color: var(--accent-dark); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; border: 1.5px solid var(--border); background: var(--surface); }
+    .brk { display: block; order: 2; flex: 0 0 100%; height: 0; } .searchwrap { order: 3; } .chips { order: 4; } }
+  @media (max-width: 767px) and (max-height: 500px) { header h1, .crumb, .brk { display: none; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .hub .ht { display: none; } .hub { width: 44px; justify-content: center; padding: 0; } }
+  .lang { display: inline-flex; align-items: center; justify-content: center; flex: none; min-height: 40px; min-width: 44px; padding: 0 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .lang:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .lsp { display: none; }
+  @media (max-width: 767px) { .lpc { display: none; } .lsp { display: inline-flex; order: 1; min-height: 40px; padding: 0 9px; border-radius: 10px; border-width: 1.5px; font-size: 13px; } }
+  @media (max-width: 767px) and (max-height: 500px) { .lsp { display: none; } }
+  #langhint { position: absolute; z-index: 1050; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--surface); color: var(--ink); border: 2px solid var(--brand); font-size: 14px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  #langhint a { color: var(--accent-dark); font-weight: 700; }
+  #langhint button { flex: none; min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+  .ja { display: block; font-size: 13px; font-weight: 400; color: var(--ink-soft); line-height: 1.35; }
+  .ja.jm { font-size: inherit; color: inherit; font-weight: inherit; }
+  .pbody h2 .ja { font-size: 15px; font-weight: 700; margin-top: 2px; font-family: "Hiragino Sans","Yu Gothic",system-ui,sans-serif; letter-spacing: 0; }
+  .ap { font-style: normal; font-weight: 700; color: var(--ink-soft); margin-left: 3px; cursor: help; }
+  .stoplist button .ja { font-size: 12px; }
+  .rt > span { min-width: 0; }
+  #sug span .ja { font-size: 12px; }
+  .leaflet-tooltip .ja { display: inline; font-size: 12px; }
+  .meta .nw { white-space: normal; }
+  .rbar { gap: 4px; } .rbar button { font-size: 12px; padding: 0 3px; } .rbar #rAll { white-space: normal; line-height: 1.15; } .rbar #rPos { min-width: 0; font-size: 12px; }
+  header h1.cut .h1b { display: none; }
+  @media (max-width: 767px) { header h1 { font-size: 14.5px; letter-spacing: 0; } }
+  @media (max-width: 767px) { .warn { font-size: clamp(10px, 2.85vw, 12px); } }
+</style>
+</head>
+<body>
+<header>
+  <a class="hub" href="/bus/en/" aria-label="Go to the Bus Maps home (all maps)"><span class="ha" aria-hidden="true">‹</span><span class="ht"> All maps</span></a>
+  <a class="lang lpc" href="/bus/nara/nara-south/" hreflang="ja" lang="ja" aria-label="日本語版">日本語</a>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/bus/en/">‹ Home</a><a href="/bus/en/nara/">Nara</a></nav><a class="lang lsp" href="/bus/nara/nara-south/" hreflang="ja" lang="ja" aria-label="日本語版">日本語</a><span class="brk" aria-hidden="true"></span>
+  <h1 class="head"><span class="h1n" data-short="Southern Nara">Southern Nara (Yoshino-Gojo-Uda)</span><span class="h1b"> Bus Map</span></h1>
+  <div class="searchwrap">
+    <input id="q" type="search" placeholder="Search places, stops, routes" autocomplete="off" enterkeyhint="search" aria-label="Search by place, stop or route name" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list">
+    <button id="qclear" type="button" aria-label="Clear search" hidden>×</button>
+    <div id="sug" role="listbox" aria-label="Search suggestions" hidden></div>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Filter by operator"></div>
+  <button id="tgl" class="tgl" type="button" aria-controls="panel" aria-expanded="true" aria-label="Close panel"><span class="tl">Close panel</span><span class="ta">▶</span></button>
+</header>
+<main id="main">
+  <div id="map" role="application" aria-label="Map of bus stops in Southern Nara (Yoshino-Gojo-Uda)"></div>
+  <div id="tilewarn" role="status" aria-live="polite" hidden><span>Map images could not be loaded. Please check your connection. The bus stop dots and route lists still work.</span><button type="button" id="tilewarnx" aria-label="Close">×</button></div>
+  <aside id="panel" aria-label="Bus stop and route details">
+    <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
+    <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
+    <div id="pbody" class="pbody"></div>
+    <div class="warn">Unofficial · FY2022 data · no timetables/fares · check <a href="https://www.narakotsu.co.jp/" target="_blank" rel="noopener">official info</a> first</div>
+  </aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
+<script>
+const D = {"ops":["名張市","奈良交通","三重交通","宇陀地域公共交通活性化協議会","津市","東吉野村","吉野町","大淀町","御所市","川上村","南部地域公共交通活性化協議会","五條市","五條・十津川地域公共交通活性化協議会","吉野大峯ケーブル自動車","高野町","南海りんかんバス","十津川村"],"routes":[[0,"ほっとバス錦"],[1,"44　室生口大野駅ー室生龍穴神社"],[2,"20曽爾香落渓線"],[2,"21曽爾香落渓線"],[1,"2　天満台東三丁目ー大宇陀"],[1,"20　榛原駅ー天満台東三丁目"],[1,"23　榛原駅ー針インター",21],[1,"24　榛原駅ー山辺高校",8],[1,"【文】榛原駅ー吐山",3],[1,"52　榛原駅ー与喜浦",6],[3,"宇陀地域連携コミュニティバス（奥宇陀わくわくバス）"],[1,"1　榛原駅ー大宇陀"],[1,"10　榛原駅ー菟田野"],[1,"15　東吉野村役場ー榛原駅"],[2,"31奥津線"],[4,"美杉西ルート"],[4,"美杉南ルート"],[4,"美杉循環ルート"],[1,"71　桜井駅南口ー大宇陀",20],[5,"杉谷方面"],[5,"四郷方面"],[5,"新子方面"],[6,"吉野町コミュニティバス（スマイルバス）小名・入野→上市駅・吉野病院"],[1,"51　大和八木駅（南）ー下市口駅",25],[1,"52　大和八木駅ー下市口",26],[7,"よどりバス（巡回ルート）"],[8,"御所市コミュニティバス「ひまわり号」東コース",42],[7,"よどりバス（幹線ルート）"],[1,"【文】吉野高校（大和上市駅）"],[6,"吉野町コミュニティバス（スマイルバス）鈴の音橋西詰・南国栖・樫尾→上市駅・吉野病院"],[9,"やまぶきバス"],[10,"南部地域連携コミュニティバス（R169ゆうゆうバス）"],[1,"【広域通院】十津川温泉ー福神駅"],[1,"【広域通院】福神駅ー十津川温泉"],[11,"南奈良総合医療センター通院ライン"],[12,"五條・十津川地域連携コミュニティバス（広域通院ライン）"],[1,"60　近鉄大和高田駅ー五條バスセンター",34],[1,"66　近鉄大和高田駅ー五條バスセンター（テクノ東通り中経由）",38],[1,"70　近鉄大和高田駅ー五條バスセンター（かもきみの湯経由）",35],[1,"76　五條バスセンターー近鉄大和高田駅",39],[1,"161　五條バスセンターー大和八木駅",41],[1,"301　大和八木駅ー新宮駅",131],[1,"302　新宮駅ー大和八木駅",131],[1,"2　大淀バスセンターー洞川温泉"],[13,"路線バス【吉野山奥千本口ライン】上り①"],[1,"4　下市口駅ー笠木"],[1,"7　下市口駅ー中庵住"],[1,"8　下市口駅ー岩森（下市温泉）"],[1,"22　下市口駅ー平原"],[11,"五條駅・田園方面ライン"],[1,"366　岩森（下市温泉）⇒才谷"],[1,"10　城戸ー五條バスセンター"],[1,"11　城戸ー五條バスセンター"],[1,"12　城戸ー五條バスセンター"],[14,"下筒香～五條イオン線"],[1,"【文】西吉野農業高校"],[15,"11　急行立里線（高野龍神スカイライン）"],[16,"旭線"],[16,"谷瀬線"],[16,"本線"],[16,"神納川線"],[16,"上湯川線"],[16,"瀞八丁線"],[16,"大野線"],[16,"高滝・武蔵線"],[16,"那知合線"],[16,"迫西川線"],[16,"迫西川線（本串崎経由）"],[16,"西中大谷橋線"],[16,"今西・松柱線"],[16,"高森線"],[16,"内原線"],[16,"二津野線"],[16,"七色・本宮線"],[16,"果無線"],[16,"樫原線"]],"stops":[["あかね台住宅",34.53343,135.9498,1,[6,7,9]],["たかすみの里",34.43945,136.06023,5,[19]],["なつみ台一丁目",34.34835,135.66785,11,[49]],["なつみ台一丁目北",34.35025,135.6695,11,[49]],["なつみ台二丁目",34.34566,135.66928,11,[49]],["ひよしのさとマルシェ",34.42328,135.99176,1,[13,19,20,21]],["ふれあいセンター",34.29449,136.00302,9,[30]],["ふれあい活動センター",34.38832,135.78732,7,[25]],["やはた温泉",34.37552,136.01976,5,[20]],["やまぶきホール",34.33403,135.9582,9,[30]],["わさび谷",34.23584,135.99084,10,[31]],["わーくさぽーとPono",34.39027,135.78347,7,[25]],["エルベタウン",34.38357,135.71967,1,[33,34]],["グリーンポリス入口",34.39258,135.7697,7,[27,31]],["テクノ中央通り中",34.38427,135.7253,1,[37,39]],["テクノ中央通り東",34.38532,135.72632,1,[37,39]],["テクノ東通り中",34.38506,135.7277,1,[37,39]],["テクノ東通り北",34.38616,135.72547,1,[32,34,35,37,39]],["ホテル昴",33.93919,135.75442,1,[41]],["リバーフィールドよしの",34.39475,135.85367,1,[22,28,29,31]],["リバーフィールド吉野",34.39475,135.85367,9,[30]],["一の谷（東吉野）",34.41353,135.97604,1,[13]],["一ノ谷",34.41353,135.97604,5,[19,20,21]],["七色",33.88958,135.75856,1,[41,42,72,73]],["万代橋",34.41225,135.97363,1,[13,19,20,21]],["三尾",34.37863,135.99278,5,[20]],["三尾上出垣内口",34.37673,135.9886,5,[20]],["三尾口",34.37899,135.99336,5,[20]],["三尾大橋",34.3769,135.99416,5,[20]],["三尾日裏出垣内口",34.37889,135.99048,5,[20]],["三浦口",34.03472,135.69946,16,[60]],["三田谷",34.03725,135.69322,16,[60]],["三社ノ森",34.55835,136.02316,1,[1]],["三茶屋",34.42119,135.93775,6,[22]],["上三軒家",34.44785,136.06493,5,[19]],["上中黒",34.39363,135.94791,5,[21]],["上丹原",34.32439,135.7023,1,[32,33,35,41,42,51,52,53]],["上井足",34.51087,135.94978,1,[12,13]],["上井足中",34.51379,135.94958,1,[12,13]],["上今井",34.36089,135.71374,1,[32,33,34,35,36,37,38,39,40,41,42]],["上内牧",34.48839,136.01742,3,[10]],["上出垣内",34.38237,136.02139,5,[20]],["上出橋",34.40305,135.99694,5,[20]],["上北山中学校前",34.15032,135.99104,10,[31]],["上北山郵便局前",34.13475,136.00124,10,[31]],["上和田",34.29314,135.72403,1,[32,33,35,41,42,51,52,53]],["上多古",34.292,135.99889,9,[30,31]],["上多古口",34.29415,136.00134,9,[30,31]],["上小川",33.97061,135.8477,16,[62]],["上小栗栖",34.39483,135.96195,5,[21]],["上市",34.39441,135.84707,1,[22,28,29,30,31]],["上市局前",34.39494,135.85578,1,[22,28,29,30,31]],["上市橋",34.39445,135.85102,1,[22,28,29,30,31]],["上市水泳場",34.39589,135.86057,1,[22,28,29,30,31]],["上市駅",34.39544,135.84584,6,[22,27,29,30,31]],["上庵住",34.19659,135.80425,1,[46]],["上柳",34.41942,135.92745,6,[22]],["上栃原",34.34145,135.78178,1,[48]],["上栃尾",34.20566,135.82507,1,[46]],["上桑原",34.00794,135.97873,10,[31]],["上桧垣本",34.39064,135.7951,1,[23,25]],["上楢井",34.38355,135.88651,6,[29,30,31]],["上沢原",34.23581,135.84755,1,[46]],["上湯",33.93144,135.73254,16,[71]],["上湯之原",34.00561,135.79301,1,[32,33,35,41,42]],["上猿飼",33.9421,135.78013,16,[70]],["上田医院前",34.37631,135.99205,5,[20]],["上田口弁天",34.48307,136.04784,3,[10]],["上矢治",34.378,135.91023,6,[29,30]],["上立石",34.35428,135.83429,1,[50]],["上笠木",34.28233,135.83609,1,[43,46]],["上色生",34.41496,135.93467,6,[22]],["上葛川",33.96236,135.87217,16,[62]],["上葛川口",33.96238,135.86308,16,[62]],["上野地",34.09908,135.76215,1,[32,33,35,41,42,57,58,59,60,61]],["上阪",34.36652,135.7919,1,[43,45,47]],["上陰地",34.41243,136.02014,5,[19]],["上鷲家",34.42295,135.99677,5,[19]],["下上野地",34.0966,135.76254,1,[32,33,35,41,42,59,60,61]],["下中黒",34.38259,135.94396,5,[21]],["下井戸",34.31878,135.9727,9,[30,31]],["下井足",34.52009,135.95168,1,[12,13]],["下井足口",34.52794,135.95334,1,[4,11,12]],["下内牧",34.49499,136.00169,3,[10]],["下出",34.39313,135.97431,5,[20]],["下切橋",34.11499,135.79761,16,[57]],["下千本駐車場",34.37538,135.85202,13,[44]],["下向",33.97252,135.70633,16,[66,67]],["下和田",34.1967,135.81318,1,[46]],["下地",34.05377,135.79269,16,[59,61]],["下多古",34.30618,135.99185,9,[30,31]],["下天辻",34.2104,135.73196,1,[32,33,35,41,42]],["下小坪瀬",33.96535,135.68661,16,[66,67]],["下小川",33.96614,135.84446,16,[62]],["下小栗栖",34.39543,135.95813,5,[21]],["下市中学校",34.36504,135.79105,1,[43,45,46,47,48]],["下市今在家",34.37327,135.78821,1,[43,45,46,47,48]],["下市口駅",34.38336,135.78778,1,[23,24,25,27,43,45,46,47,48]],["下市本町",34.37446,135.7878,1,[43,45,46,47,48]],["下市田中",34.36668,135.79023,1,[46,48]],["下市町役場",34.36101,135.79258,1,[43,45,46,47]],["下平野",34.43812,136.05959,5,[19]],["下柳",34.41736,135.91517,6,[22]],["下栃原",34.35436,135.7858,1,[48]],["下栃尾",34.20179,135.82141,1,[46]],["下桂原",34.29936,135.82585,1,[43,45,46]],["下桑原",34.01488,135.97898,10,[31]],["下楢井",34.3881,135.88149,6,[29,30,31]],["下永谷",34.24671,135.73468,1,[32,33,35,41,42]],["下深瀬",34.0034,135.9761,10,[31]],["下湯",33.92996,135.74958,16,[71]],["下湯口",33.93357,135.74968,16,[71]],["下田",34.17686,136.00386,10,[31]],["下矢治",34.38694,135.90654,6,[29,30]],["下立石",34.35624,135.82378,1,[50]],["下笠木",34.2903,135.83078,1,[43,45,46]],["下色生",34.40894,135.93036,6,[22]],["下葛川",33.94364,135.86581,16,[62]],["下葛川口",33.94205,135.87133,16,[62]],["下込之上",33.94543,135.79003,1,[32,33,35,41,42,59,62,63,67]],["下阪",34.36846,135.79134,1,[43,45,47]],["下阪本",34.20446,135.73315,1,[32,33,35,41,42]],["下香束",34.41549,135.90099,6,[22]],["下龍口",34.57322,136.06009,0,[0]],["不動峠口",33.99994,135.95812,10,[31]],["不動窟",34.28182,136.00339,9,[30,31]],["世界遺産石碑前",33.93074,135.75841,16,[74]],["中串",33.96961,135.71087,16,[66,67]],["中井口",34.3701,135.94143,9,[30]],["中井戸",34.3188,135.97603,9,[30,31]],["中切",34.10738,135.75699,16,[58]],["中和田",34.19644,135.81848,1,[46]],["中央橋",34.09345,135.97919,10,[31]],["中屋",34.41591,136.02012,5,[19]],["中庵住",34.19411,135.79966,1,[46]],["中村垣内",34.41599,136.06395,5,[19]],["中果無",33.92891,135.7579,16,[74]],["中武蔵",33.99369,135.81117,16,[64]],["中色生",34.41157,135.93404,6,[22]],["中西",34.52627,135.94829,1,[4,11]],["中谷",34.23848,135.84926,1,[46]],["中谷",34.11541,135.80029,16,[57]],["中越",34.2446,135.86092,1,[43]],["中黒",34.38966,135.94305,5,[21]],["串崎",33.94621,135.74383,16,[66,67,68,69]],["丹原",34.3292,135.70124,1,[32,33,35,41,42,51,52,53]],["丹生",34.30409,135.81482,1,[43,45,46]],["丹生口",34.30716,135.80681,1,[43,45,46]],["丹生橋",34.30437,135.81832,1,[43,45,46]],["久保谷",33.96594,135.73925,16,[66,67,68,69]],["九尾",34.21323,135.83252,1,[46]],["乳屋辻",34.34612,135.80917,1,[43,45,46]],["二の滝",33.93845,135.87511,16,[62]],["二津野",33.90494,135.77602,1,[41,42,72,73]],["五十軒",34.48888,135.92928,1,[4,11,18]],["五味原",34.5288,135.96725,3,[10]],["五条駅",34.35538,135.69887,1,[32,33,35,41,42,49,51,52,53]],["五條イオン前",34.35359,135.70293,14,[54]],["五條バスセンター",34.35351,135.70085,1,[32,33,34,35,36,37,38,39,40,41,42,49,51,52,53]],["五條市役所",34.3565,135.69619,11,[49]],["五條町",34.35224,135.69713,1,[32,33,35,41,42,49,51,52,53]],["五條病院",34.3413,135.69839,14,[54]],["五條病院前",34.34031,135.69885,1,[32,33,35,41,42,51,52,53]],["五條病院玄関口",34.3413,135.69839,1,[32,33,35,41,42,52,53,55]],["五條西中学校",34.36308,135.66813,11,[49]],["五條駅北口",34.35641,135.69873,11,[49]],["五條高校",34.36916,135.69293,11,[49]],["五津",34.51831,135.9393,1,[4,11]],["五百瀬",34.03603,135.69693,16,[60]],["人知",34.33177,135.96734,9,[30,31]],["今井",34.50905,136.1203,2,[3]],["今井",34.35675,135.7076,1,[32,33,34,35,36,37,38,39,40,41,42]],["今戸",33.95606,135.8,1,[35,41,42,59,62,63,67]],["仲谷口",33.93194,135.6548,16,[71]],["伃邑",34.35556,135.81538,1,[50]],["伊賀見大橋",34.53456,136.14424,2,[2,3]],["伯母谷口",34.26454,136.00414,9,[30,31]],["住吉",34.01104,135.94941,10,[31]],["住宅前",34.0285,135.78718,16,[59]],["住川",34.38233,135.71618,1,[32,33,34,35,36,37,38,39,40,41,42]],["佐々羅",34.40878,135.8779,6,[22]],["佐倉",34.45337,135.98264,1,[13]],["佐倉峠",34.44001,135.98131,1,[13]],["佐倉正光寺",34.44931,135.98114,1,[13]],["佐田",34.00239,135.96721,10,[31]],["佐田公民館前",34.00489,135.96718,10,[31]],["健康づくりセンター前",34.40059,135.8221,7,[25,27]],["健民グランド前",34.39256,135.80016,7,[25]],["光蔵寺",34.4117,136.01957,5,[19]],["光野垣内",33.97912,135.71964,16,[66,67]],["光野垣内下",33.97773,135.72106,16,[66,67]],["入之波",34.26318,136.03722,9,[30]],["入谷口",34.04571,135.71766,16,[60]],["入谷口",33.93067,135.67784,16,[71]],["入野",34.4004,135.92665,6,[22]],["八滝",34.50674,135.99231,3,[10]],["八辻橋",34.49604,136.10737,2,[3,10]],["六田駅",34.39033,135.82346,7,[27,31]],["内原",34.49457,135.93017,1,[4,11,18]],["内原",34.06188,135.80556,16,[59,61]],["内原橋",34.06184,135.80713,16,[59,61]],["内牧",34.4932,136.00519,3,[10]],["内牧口",34.49924,135.99472,3,[10]],["内牧東口",34.48984,136.01078,3,[10]],["内牧西口",34.49705,135.99655,3,[10]],["内牧郵便局",34.4912,136.00907,3,[10]],["内野",34.04256,135.71172,16,[60]],["内野下",34.04406,135.70978,16,[60]],["出谷小原",33.93089,135.7229,16,[71]],["前久保谷",33.94417,135.87023,16,[62]],["前田橋（伊賀）",34.4876,136.09408,2,[3]],["前鬼口",34.06917,135.96764,10,[31]],["勝手神社前",34.3647,135.86279,13,[44]],["北六田",34.39096,135.827,7,[27,31]],["北又",33.90887,135.86186,16,[62]],["北和田",34.29363,136.0019,9,[30]],["北和田口",34.29064,135.9994,9,[30,31]],["北塩谷口",34.34278,135.95226,9,[30,31]],["北野北公民館",34.40149,135.82487,7,[25,27]],["北野台1丁目",34.39472,135.82251,7,[25,27]],["北野台2丁目",34.39652,135.81902,7,[25,27]],["北野台3丁目",34.3985,135.82098,7,[25,27]],["北野台5丁目",34.40193,135.82797,7,[25,27]],["北野台6丁目",34.39982,135.82532,7,[25,27]],["北野台7丁目",34.39622,135.82394,7,[25,27]],["北野台口",34.39102,135.82195,7,[27]],["北野台西",34.39353,135.81702,7,[25]],["十津川小原",33.98302,135.79556,1,[35,41,42,59,62,63,64]],["十津川役場前",33.9893,135.7925,16,[59,62,63,64,65]],["十津川村役場",33.9893,135.7925,1,[32,33,35,41,42]],["十津川温泉",33.94141,135.76796,1,[32,33,35,41,42,59,62,63,65,66,67,68,69,70,71,72,73,74,75]],["千代橋",34.40515,135.96871,1,[13,19,20,21]],["千石橋南詰",34.37825,135.78739,1,[43,45,46,47,48]],["南和病院前",34.39343,135.75357,7,[27,31]],["南国栖",34.38,135.92834,6,[29,30]],["南国栖自治会館",34.37946,135.9283,6,[29]],["南国栖隋道口",34.38343,135.92995,9,[30]],["南国栖隧道口",34.38343,135.92995,6,[29]],["南坂",34.16045,135.99671,10,[31]],["南垣内",34.02434,135.95431,10,[31]],["南大和1丁目",34.39563,135.8016,7,[25]],["南大和2丁目",34.39848,135.80273,7,[25]],["南大和3丁目",34.40174,135.80336,7,[25]],["南大和一丁目",34.39563,135.8016,1,[24]],["南大和三丁目",34.40174,135.80336,1,[24]],["南大和二丁目",34.39848,135.80273,1,[24]],["南大野",34.38934,135.92044,6,[29,30]],["南奈良総合医療センター",34.39428,135.75031,10,[31]],["南奈良総合医療センター",34.39273,135.75047,1,[27,32,33,34,35]],["南日裏",34.22662,135.84084,1,[46]],["南日裏口",34.22781,135.84204,1,[46]],["原谷口",34.35389,135.80238,1,[43,45,46,47]],["古代",34.07235,135.97162,10,[31]],["古市場地蔵の辻",34.47294,135.97247,1,[12,13]],["古市場水分神社",34.47448,135.96877,1,[12,13]],["古野向",33.94913,135.76406,16,[65]],["古野向口",33.94693,135.76376,16,[65]],["吉野大橋南詰",34.39149,135.84045,6,[22,29,30]],["吉野山駅",34.37234,135.85539,13,[44]],["吉野平下（防火水槽前）",34.39596,135.7912,7,[25]],["吉野平中央",34.39709,135.78918,7,[25]],["吉野平入口",34.39626,135.79385,7,[25]],["吉野渡場",34.38609,135.91644,6,[29,30]],["吉野生コンクリート前",34.38795,135.78456,7,[25]],["吉野町役場",34.39541,135.85817,1,[28]],["吉野町役場前",34.39541,135.85817,6,[22,29,30,31]],["吉野病院",34.3901,135.84709,6,[22,29,30]],["吉野神宮",34.38489,135.84655,13,[44]],["吉野高校",34.39454,135.86183,1,[28]],["向地",34.05848,135.79172,16,[59,61]],["和佐又口",34.2179,135.99768,10,[31]],["和佐羅",34.37991,136.03796,5,[20]],["和田向",33.96034,135.76465,16,[65]],["唐戸山",34.5222,136.19401,2,[14]],["善城",34.3564,135.79533,1,[43,45,46,47]],["善城口",34.35832,135.79329,1,[43,45,46,47]],["国栖",34.38506,135.93275,6,[29,30]],["国栖東",34.38436,135.93666,6,[29]],["国道三在",34.36921,135.7168,1,[32,33,34,35,36,37,38,39,40,41,42]],["土田",34.38944,135.79861,1,[24]],["土田（西部農協前）",34.38944,135.79861,7,[25]],["地原",34.00245,135.97997,10,[31]],["地蔵",34.35858,135.78403,1,[48]],["地蔵前",34.41545,135.91331,6,[22]],["坂巻",34.26919,135.74408,1,[32,33,35,41,42]],["坪内",34.22112,135.84018,1,[46]],["垣の瀬",34.37391,135.92707,9,[30]],["垣内地",33.93205,135.65278,16,[71]],["城戸",34.28162,135.74831,1,[32,33,35,41,42,51,52,53]],["堂ノ瀬",34.39494,135.96386,5,[21]],["塩川原橋",34.27517,135.74823,1,[32,33,35,41,42]],["塩鶴",34.14013,135.75534,1,[32,33,35,41,42]],["増口",34.39374,135.84074,7,[27,30,31]],["大久保口",34.2624,135.73912,1,[32,33,35,41,42]],["大又",34.37714,136.03333,5,[20]],["大又口",34.37615,136.02733,5,[20]],["大和上市駅",34.39544,135.84584,1,[28]],["大和龍口",34.56516,136.06569,0,[0]],["大塔支所",34.17132,135.75635,1,[32,33,35,41,42]],["大塔温泉夢乃湯",34.15064,135.74548,1,[32,33,35,41,42]],["大宇陀",34.47621,135.93266,1,[4,11,18]],["大宇陀高校",34.47955,135.92878,1,[4,11,18]],["大峯町",34.36966,135.79056,1,[43,45,47]],["大川橋南詰",34.34643,135.69613,1,[32,33,35,41,42,51,52,53]],["大日川",34.28646,135.72574,1,[32,33,35,41,42,51,52,53]],["大杉",34.33731,135.81344,1,[43,45,46]],["大槍曽",33.93012,135.66904,16,[71]],["大津古",34.3475,135.93965,9,[30,31]],["大津越",33.9447,135.74774,16,[66,67,68,69]],["大淀バスセンター",34.38839,135.79579,1,[23,24,25,27,31,43]],["大淀町役場",34.39103,135.79004,10,[31]],["大淀町役場",34.38946,135.78899,7,[25,27]],["大渡",33.93156,135.87892,16,[62]],["大滝",34.35637,135.92376,9,[30,31]],["大滝ダム学べる防災ステーション",34.35422,135.92983,10,[31]],["大豆生",34.37819,136.01656,5,[20]],["大豆生大橋",34.37901,136.01668,5,[20]],["大辺垣内",34.39915,135.96446,5,[21]],["大迫ダム",34.27316,136.01146,9,[30,31]],["大迫口",34.27546,136.00755,9,[30,31]],["大野",34.39162,135.92224,6,[29,30]],["大野",33.98655,135.83197,16,[62,63]],["大野出合",33.96588,135.8259,16,[62,63]],["大野在所",33.98884,135.83197,16,[62,63]],["大野寺",34.56286,136.0159,1,[1]],["大野新田東",34.38632,135.74267,1,[32,33,34,35]],["大野新田西",34.38618,135.73508,1,[32,33,34,35]],["大野片川",34.00345,135.84252,16,[62,63]],["大阿太高原東",34.39302,135.76563,7,[27,31]],["天が瀬",34.1906,135.99359,10,[31]],["天の川温泉",34.2218,135.84078,1,[46]],["天川和田",34.19482,135.81927,1,[46]],["天川川合",34.24573,135.8553,1,[43,46]],["天川西谷口",34.19769,135.80759,1,[46]],["天河大弁財天社",34.22308,135.84118,1,[46]],["天満台東三丁目",34.54914,135.97919,1,[4,5]],["天満台東二丁目",34.54693,135.97458,1,[4,5]],["天満台西二丁目",34.54192,135.96668,1,[4,5]],["天満台西四丁目",34.54446,135.97025,1,[4,5]],["天辻",34.21918,135.73474,1,[32,33,35,41,42]],["太良路",34.52744,136.14094,2,[2,3]],["太良路公民館前",34.52373,136.13968,2,[2,3]],["失尾",34.12823,135.99873,10,[31]],["奥千本口",34.34524,135.88,13,[44]],["奥果無",33.9252,135.76809,16,[74]],["奥武蔵",33.99371,135.81234,16,[64]],["奥片川",33.98055,135.6906,16,[66]],["奥狭戸",34.37248,136.00435,5,[20]],["奥越部",34.40403,135.80644,7,[25]],["奥里",34.05305,135.81178,16,[59,61]],["奥高橋",34.36824,136.03006,5,[20]],["奥高滝",33.96595,135.81376,16,[64]],["如意輪寺口",34.36062,135.86469,13,[44]],["学べる防災ステーション",34.35322,135.93196,9,[30]],["学園前",34.38551,135.78928,7,[25,27]],["孫入峰",33.94486,135.76385,16,[65]],["宇井",34.1547,135.74483,1,[32,33,35,41,42]],["宇井口",34.15604,135.74596,1,[32,33,35,41,42]],["宇賀志",34.46074,135.98255,1,[13]],["宇野",34.36589,135.71635,1,[32,33,34,35,36,37,38,39,40,41,42]],["宇陀市立病院",34.53123,135.96153,3,[10]],["宇陀市総合体育館",34.54087,135.95622,1,[6,7]],["宇陀平尾",34.508,135.934,1,[4,11]],["宇陀藤井",34.48496,135.96048,1,[12,13]],["宇陀警察署",34.53728,135.95188,1,[6,7,8]],["宗川野橋",34.26469,135.74589,1,[32,33,35,41,42]],["室生口大野駅",34.56551,136.01451,1,[1]],["室生寺",34.53684,136.03808,1,[1]],["室生郵便局",34.53636,136.04382,1,[1]],["室生龍穴神社",34.53488,136.04635,1,[1]],["宮の平",34.33435,135.95686,9,[30,31]],["宮の平",33.97217,135.73515,16,[66,67,68]],["宮前橋",34.31591,135.80561,1,[43,45,46]],["宮滝",34.37767,135.89381,6,[29,30,31]],["寺内",34.371,135.78824,1,[46,48]],["寺垣内",34.00487,135.95493,10,[31]],["寺垣内",33.93445,135.64871,16,[71]],["寺垣内駐在所前",34.00823,135.95186,10,[31]],["寺尾",34.34713,135.94464,9,[30,31]],["導水路前",34.06248,135.80142,16,[59,61]],["小井",34.01202,135.79623,1,[32,33,35,41,42,59,62]],["小代下",34.19762,135.73122,1,[32,33,35,41,42]],["小原",33.99139,135.79504,16,[64]],["小原口",33.93258,135.72716,16,[71]],["小名",34.42292,135.95294,6,[22]],["小名口",34.42259,135.94877,6,[22]],["小坪瀬",33.96234,135.68535,16,[66,67]],["小壁",33.92811,135.69629,16,[71]],["小壁上",33.928,135.68832,16,[71]],["小太郎岩",34.54958,136.14047,2,[2,3]],["小屋",34.51439,136.21517,4,[15,16,17]],["小山",34.39246,135.71484,1,[36,37,38,39,40,41,42]],["小山手",33.9722,135.70956,16,[66,67]],["小村",34.39094,135.97856,5,[20]],["小村大橋",34.39141,135.98137,5,[20]],["小栗栖",34.10468,135.76857,1,[32,33,35,41,42,57,58]],["小森出合",33.98716,135.78752,16,[65]],["小辺路",33.93567,135.7596,16,[74]],["小辺路",33.92852,135.75948,16,[74]],["小長尾橋",34.50741,136.11763,2,[3]],["小附",34.4908,135.92958,1,[4,11,18]],["居伝町",34.3876,135.71474,1,[32,34,35,36,37,38,39,40,41,42]],["山口",34.41353,135.89074,6,[22]],["山天口",34.0409,135.70714,16,[60]],["山崎大橋",34.02559,135.78481,1,[32,33,35,41,42,59]],["山手",33.95465,135.76425,16,[65]],["山手谷",33.93671,135.79743,16,[70]],["山本茶屋",34.23843,135.9938,10,[31]],["山粕",34.48791,136.09764,2,[3]],["山粕",34.48789,136.09381,3,[10]],["山粕局前",34.48821,136.09706,3,[10]],["山粕東口",34.49005,136.10174,2,[3,10]],["山粕西",34.4883,136.09169,2,[3]],["山粕西口",34.48842,136.09056,3,[10]],["山食前",34.39831,135.81687,7,[25]],["岡",34.36287,135.69693,11,[49]],["岡崎町",34.38093,135.78696,1,[23,24,25,27,43,45,46,47,48]],["岩崎東口",34.4758,135.96526,1,[12,13]],["岩崎橋",34.47731,135.96476,1,[12,13]],["岩村橋",34.02855,135.78096,1,[32,33,35,41,42]],["岩森（下市温泉）",34.35257,135.80725,1,[43,45,46,47,50]],["岩森（国道）",34.35337,135.80507,1,[43,45,46,47]],["岩阪橋",34.30536,135.81219,1,[43,45,46]],["峰寺",34.40831,135.87661,6,[22]],["峰寺口",34.40058,135.87254,6,[22]],["嶽見橋",34.51926,136.13021,2,[3]],["川上村役場",34.33812,135.95402,9,[30,31]],["川上診療所",34.33876,135.95274,9,[30]],["川津",34.05967,135.74817,1,[32,33,35,41,42,59,60,61]],["川津大橋",34.05487,135.74481,16,[60]],["川津西",34.06158,135.74498,1,[32,33,35,41,42,59,60,61]],["市原",34.26286,135.74295,1,[32,33,35,41,42]],["市原口",33.9305,135.6752,16,[71]],["平原",34.33138,135.77724,1,[48]],["平原口",34.33939,135.78216,1,[48]],["平地",34.10583,135.76103,16,[58]],["平畑集会所前",34.39292,135.78856,7,[25]],["平谷口",33.94064,135.77223,1,[32,33,35,41,42,59,62,63,67]],["平野口",34.43434,136.05708,5,[19]],["広橋峠",34.33504,135.81309,1,[43,45,46]],["庄屋辻",34.332,135.8166,1,[43,45,46]],["弁天前",34.54282,136.14606,2,[2,3]],["弁財天",34.48263,136.04194,3,[10]],["忍者橋東",34.56608,136.06153,0,[0]],["志賀",34.40739,135.87169,6,[22]],["惣坂",34.34211,135.81202,1,[43,45,46]],["惣坂口",34.34665,135.81055,1,[43,45,46]],["戎神社前",34.35067,135.69565,1,[32,33,35,41,42,51,52,53]],["所谷",33.93057,135.70913,16,[71]],["才谷",34.34724,135.84749,1,[50]],["折立",33.94892,135.80348,1,[32,33,35,41,42,59,62,63,67]],["折立口",33.95159,135.80086,1,[35,41,42,59,62,63,67]],["折立山崎",33.9457,135.80412,1,[32,33,35,41,42,59,62,63,67]],["掛",34.49954,136.11469,2,[3,10]],["掛東口",34.50157,136.11637,2,[3,10]],["掛西",34.49855,136.11239,2,[3]],["掛西口",34.49855,136.11239,3,[10]],["損保橋",34.21358,135.72839,1,[32,33,35]],["敷津",34.5163,136.20187,2,[14,15,16,17]],["新子",34.38618,135.92976,5,[21,29,30]],["新子局前",34.3873,135.92683,6,[29,30]],["新宅本店前",34.53132,136.14049,2,[2,3]],["新嶽見橋",34.51708,136.13068,2,[3]],["新田",34.40235,135.73966,8,[26]],["新町",34.38121,135.78942,7,[27]],["新野",34.38829,135.81641,7,[27,31]],["新野稲荷前",34.38648,135.8085,7,[27,31]],["日浦",33.94964,135.72794,16,[69]],["旧中竜門小",34.41835,135.91979,6,[22]],["旧吉北小",34.41025,135.8852,6,[22]],["旧大淀病院前",34.38395,135.78325,7,[25]],["旭口",34.11448,135.77161,16,[57]],["旭橋",34.11378,135.77246,1,[32,33,35,41,42,57]],["星のくに",34.21278,135.73284,1,[32,33,35,41,42]],["昴の郷",33.93919,135.75442,16,[66,67,68,69]],["曽爾",34.50969,136.12174,3,[10]],["曽爾学校前",34.50731,136.11756,3,[10]],["曽爾弁天橋",34.54479,136.14594,2,[2,3]],["曽爾役場前",34.51092,136.12409,2,[3]],["曽爾村役場",34.51078,136.12389,3,[10]],["曽爾横輪",34.51438,136.1286,2,[3]],["曽爾長野",34.50451,136.11641,3,[10]],["曽爾高原",34.52207,136.15874,2,[2]],["曽爾高原ファームガーデン",34.5233,136.15006,2,[2,3]],["月谷口",34.09134,135.75505,1,[32,33,35,41,42,59,60,61]],["木工の里",34.36395,135.93084,9,[30]],["木津",34.42253,136.03898,5,[19]],["木津上垣内",34.42363,136.03147,5,[19]],["木津下垣内",34.42432,136.01995,5,[19]],["木津中垣内",34.42411,136.02493,5,[19]],["木津名滝",34.4245,136.03614,5,[19]],["木津峠",34.42302,136.01535,5,[19]],["木津川交流センター前",34.40028,135.99445,5,[20]],["木綿橋",34.5174,135.9498,1,[12,13]],["本串崎",33.943,135.74322,16,[67]],["本二津野",33.91503,135.78904,16,[72]],["本小壁",33.92829,135.69169,16,[71]],["本高滝",33.96703,135.81248,16,[64]],["札の辻",34.37142,135.789,1,[43,45,47]],["杉清",34.03934,135.68548,16,[60]],["杉谷",34.41408,136.06305,5,[19]],["杉谷出合橋",34.42426,136.04438,5,[19]],["村営住宅前",34.37475,135.98979,5,[20]],["東中",33.95422,135.85709,16,[62]],["東中上",33.95774,135.85873,16,[62]],["東中下",33.95228,135.85694,16,[62]],["東吉野小学校前",34.4019,135.97173,5,[20]],["東吉野村役場",34.40366,135.96816,1,[13,19,20,21]],["松久保宅前",34.41357,136.02036,5,[19]],["松井天神社",34.46993,135.98094,1,[12,13]],["松井橋",34.46863,135.98211,1,[12,13]],["松井西",34.47233,135.97691,1,[12,13]],["松柱",33.9538,135.70972,16,[69]],["松柱口",33.95188,135.71026,16,[69]],["松葉垣内",34.01435,135.95251,10,[31]],["果無隧道口",33.92389,135.77156,1,[41,42,72,73]],["柏木",34.28786,136.00126,9,[30,31]],["柳",34.41911,135.92179,6,[22]],["柳瀬",34.37199,135.93737,9,[30]],["栂ノ本",34.11806,135.78203,16,[57]],["栃原",34.34819,135.78405,1,[48]],["栃尾",34.20369,135.82236,1,[46]],["栃尾",33.96469,135.69984,16,[66,67]],["栃本口",34.34629,135.80685,1,[43,45,46]],["栄山寺口",34.35801,135.71013,1,[32,33,34,35,36,37,38,39,40,41,42]],["栢森宅前",34.5556,136.02597,1,[1]],["桂原",34.29643,135.82678,1,[43,45,46]],["桃木",34.35124,135.7831,1,[48]],["桑畑",33.91611,135.77632,1,[41,42,72,73]],["桑畑小井",33.9308,135.77434,1,[41,42,72,73]],["桑畑隧道口",33.91531,135.77938,1,[41,42,72,73]],["桜実神社",34.4448,135.98147,1,[13]],["桧垣本",34.38326,135.79395,1,[23,24,43]],["桧垣本市場",34.39727,135.79375,1,[23]],["桧垣本（中央公民館前）",34.38326,135.79395,7,[27]],["桧牧",34.52718,135.97373,3,[10]],["桧牧市場",34.52409,135.97481,3,[10]],["梅の木",34.49906,135.92461,1,[18]],["梶屋垣内",34.42388,136.02379,5,[19]],["森",33.97636,135.82717,16,[62,63]],["森在所",33.97947,135.82503,16,[62,63]],["森林植物公園",33.96387,135.84958,16,[62]],["椎平",33.95369,135.73843,16,[66,67,68,69]],["楢井",34.38452,135.88223,6,[29,30,31]],["榛原大橋",34.5267,135.95156,1,[4,11,12,13]],["榛原駅",34.52948,135.95486,1,[4,5,10,11,12,13]],["榛原駅（北口）",34.53053,135.9542,1,[6,7,8,9]],["槻ノ木橋",34.53925,136.14658,2,[2,3]],["樫尾",34.37669,135.9081,9,[30,31]],["檪砂古",33.93202,135.76202,16,[72,73]],["櫟砂古",33.93202,135.76202,1,[41,42]],["武木",34.31405,135.98973,9,[30,31]],["武蔵尾上",33.99132,135.80368,16,[64]],["武蔵尾下",33.99148,135.80269,16,[64]],["武蔵谷口",33.99274,135.79874,16,[64]],["殿井",33.92747,135.71096,16,[71]],["殿井下",33.92586,135.7147,16,[71]],["殿井口",33.95799,135.76384,16,[65]],["殿原",33.95655,135.7397,16,[66,67,68,69]],["母里",34.49238,135.95482,1,[12,13]],["母里南",34.48796,135.95797,1,[12,13]],["比布",34.4961,135.95002,1,[12,13]],["比曽口",34.39267,135.83592,7,[27,31]],["水尻",34.10541,135.99062,10,[31]],["水沢口",34.3681,135.6737,11,[49]],["永井",33.96956,135.73642,16,[66,67,68,69]],["永井口",33.96742,135.73611,16,[66,67,68,69]],["永井日裏",33.96831,135.7351,16,[66,67,68,69]],["永谷",34.24146,135.73035,1,[32,33,35,41,42]],["池上",34.50563,135.94982,1,[12,13]],["池原",34.04376,135.95797,10,[31]],["池原ダム",34.04995,135.97052,10,[31]],["池原大橋",34.04135,135.95819,10,[31]],["池峯",34.02766,135.95584,10,[31]],["池峯公園",34.02998,135.95579,10,[31]],["池穴",34.02121,135.78103,16,[59]],["池穴南口",34.02333,135.7861,1,[32,33,35,41,42,59]],["沖金",34.24158,135.85344,1,[46]],["沢出",34.41559,136.01581,5,[19]],["沢原",34.23316,135.8466,1,[46]],["河原屋",34.39286,135.87107,6,[29,30]],["河合",34.13637,136.00145,10,[31]],["河津谷",34.08738,135.7565,1,[35,41,42,59,60,61]],["洞川温泉",34.2662,135.87737,1,[43]],["津越谷",34.06334,135.7543,1,[32,33,35,59,61]],["津越野橋",33.97845,135.71291,16,[66,67]],["津風呂湖北口",34.41135,135.88779,6,[22]],["津風呂湖口",34.39227,135.87246,6,[29,30,31]],["浦向",34.00182,135.95576,10,[31]],["消防署北",34.3783,135.89935,6,[29]],["深山",34.37101,135.93422,9,[30]],["深瀬",34.08691,135.97455,10,[31]],["湯之原",33.99873,135.79378,1,[32,33,35,41,42,59,62]],["湯之野",33.96522,135.65596,16,[66,67]],["湯之野橋",33.9661,135.66518,16,[66,67]],["湯盛温泉杉の湯",34.3366,135.95483,9,[30,31]],["滝",33.97494,135.80162,1,[35,41,42,59,62,63,64,67]],["滝の湯",33.98797,135.79026,16,[65]],["滝口",33.97436,135.80154,16,[62,63,64]],["滝川",34.05542,135.79431,16,[59,61]],["滝川口",34.05178,135.78567,1,[32,33,35,41,42,59,61]],["瀞八丁",33.91016,135.88142,16,[62]],["瀬戸",33.96919,135.70554,16,[66,67]],["烏原",34.39637,135.97287,5,[20]],["片川",33.97012,135.69123,16,[66]],["片川口",33.96649,135.69193,16,[66,67]],["片谷橋",33.94281,135.749,16,[66,67,68,69]],["狭戸",34.3763,135.99777,5,[20]],["狭戸上出",34.37783,136.00076,5,[20]],["狭戸飛石",34.37788,136.01055,5,[20]],["猪谷橋",33.96589,135.7632,16,[65]],["玉垣内",33.97211,135.73778,16,[66,67,68,69]],["玉立橋",34.54586,135.95994,1,[6,7]],["玉置山登山口",33.96266,135.85881,16,[62]],["玉置川",33.9057,135.84994,16,[62]],["玉置川下",33.90681,135.8537,16,[62]],["生子",34.31393,135.70745,1,[32,33,35,41,42,51,52,53]],["田ノ岡",33.96402,135.69542,16,[66,67]],["田中口",34.36903,135.7883,1,[46,48]],["田園一丁目",34.36943,135.68653,11,[49]],["田園三丁目",34.36726,135.68284,11,[49]],["田園二丁目",34.36825,135.6816,11,[49]],["田園五丁目",34.37292,135.67559,11,[49]],["田園五丁目中",34.37082,135.67611,11,[49]],["田園五丁目南",34.36824,135.67738,11,[49]],["田園四丁目",34.36668,135.68543,11,[49]],["田戸",34.00086,135.97661,10,[31]],["田戸橋",33.91633,135.88228,16,[62]],["畑屋",34.40652,135.80055,1,[24]],["畑屋口",34.40433,135.79588,1,[23]],["白屋",34.33057,135.96533,9,[30,31]],["白川",34.10821,135.9942,10,[31]],["白川渡",34.30096,135.99795,9,[30,31]],["白川発電所前",34.12051,135.99614,10,[31]],["県営南和団地口",34.38722,135.72081,1,[32,34,35]],["真砂瀬",33.94027,135.75183,16,[66,67,68,69]],["矢治若山",34.37634,135.91488,6,[29,30]],["矢走口",34.40157,135.79392,1,[23]],["石舟橋",34.3944,135.97576,5,[20]],["神武垣内",34.42353,136.02147,5,[19]],["神野",34.30248,135.7144,1,[32,33,35,41,42,51,52,53]],["福地",34.53209,135.96225,1,[4,5]],["福神駅",34.39458,135.75041,1,[27,31,32,33,34,35]],["窪垣内",34.39129,135.92673,6,[29,30]],["窪垣内下",34.39214,135.9262,6,[29]],["窪垣内宮の下",34.38935,135.92638,6,[29,30]],["立里",34.15782,135.66354,15,[56]],["立里荒神前",34.16001,135.65521,15,[56]],["立野",34.39616,135.86483,1,[22,28,29,30,31]],["立野口",34.39435,135.86762,1,[22,28,29,30,31]],["竜和谷口",34.423,136.05208,5,[19]],["竜安橋前",34.42829,136.00587,5,[19]],["竹林院前",34.36032,135.86426,13,[44]],["竹谷",33.93193,135.65735,16,[71]],["笛吹",34.41687,135.93559,6,[22]],["笠木",34.28717,135.83067,1,[43,45,46]],["笠松",34.41523,136.00815,5,[19]],["篠楽",34.52357,135.94156,1,[4,11]],["美吉野台入口",34.39263,135.7777,7,[27,31]],["美吉野園前",34.38795,135.78156,7,[25]],["美吉野橋",34.39128,135.83079,7,[27,31]],["老野",34.31383,135.71088,1,[32,33,35,41,42,51,52,53]],["老野南口",34.31086,135.71234,1,[32,33,35,41,42,51,52,53]],["自明",34.52005,135.9805,3,[10]],["芦原",34.41408,135.79599,1,[23,24]],["花吉野ガーデンヒルズ",34.39505,135.74764,7,[27]],["花吉野ハーブ公園前",34.39095,135.74655,7,[27]],["花吉野中央公園前",34.39331,135.74483,7,[27]],["花屋下",33.96151,135.66517,16,[66,67]],["若宮橋",34.56628,136.0559,0,[0]],["草谷口",34.35366,135.81268,1,[50]],["荒神口",34.17281,135.6364,15,[56]],["菊屋前",33.94937,135.71518,16,[69]],["菜摘",34.38367,135.89998,6,[29,30]],["菟田野",34.46683,135.9819,1,[12,13]],["萩原",34.41279,135.9977,5,[19]],["落合（伊賀）",34.55344,136.13077,2,[2,3]],["葛",34.52383,136.13619,2,[3]],["蔭地",34.35728,135.82855,1,[50]],["蕨尾",33.93791,135.76112,1,[41,42,66,67,68,69,71,72,73,74]],["蕨尾口",33.93919,135.76336,1,[41,42,66,67,68,69,71,72,73,74]],["薮内橋",34.49826,136.10992,3,[10]],["藤内橋",34.44856,136.06435,5,[19]],["藪内橋",34.49826,136.10992,2,[3]],["蛇が谷",34.30462,135.82339,1,[43,45,46]],["蟻通",34.38994,135.98763,5,[20]],["衛生センター",33.97112,135.80853,16,[62,63]],["衣引",34.36783,135.93965,9,[30]],["西中",33.97598,135.72665,16,[66,67,68]],["西中口",33.97271,135.73084,16,[66,67,68]],["西中大谷橋",33.97854,135.72689,16,[66,67,68]],["西原",34.18061,136.00573,10,[31]],["西吉野農業高校",34.30415,135.72478,1,[35,52,55]],["西坊",34.10361,135.75437,16,[58]],["西山",34.48389,135.92801,1,[4,11,18]],["西川出合",33.93871,135.75702,16,[66,67,68,69,71]],["西河",34.36147,135.921,9,[30,31]],["西河口",34.35808,135.92651,9,[30,31]],["西谷",34.56287,136.0541,0,[0]],["西谷口",34.40947,135.88042,6,[22]],["西迎院前",34.37624,135.78824,1,[43,45,46,47,48]],["観音峰登山口",34.24488,135.87035,1,[43]],["角柄",34.53256,135.93895,1,[9]],["谷の口",33.95097,135.71904,16,[69]],["谷垣内",33.96914,135.76323,16,[65]],["豆市",33.94558,135.78369,1,[32,33,35,41,42,59,62,63,67]],["賀名生和田",34.29659,135.72173,1,[32,33,35,41,42,51,52,53]],["賀名生和田北口",34.29771,135.72045,1,[32,33,35,41,42,51,52,53]],["賀名生農協前",34.29485,135.72364,1,[32,33,35,41,42,51,52,53]],["赤埴口",34.51095,135.99404,3,[10]],["越部駅",34.38643,135.80361,7,[27,31]],["轟",34.39622,135.86209,1,[22,28,29,30,31]],["辻堂",34.16781,135.75786,1,[32,33,35,41,42]],["辻堂南",34.16596,135.75809,1,[32,33,35,41,42]],["辻堂口",34.17305,135.75432,1,[32,33,35,41,42]],["込之上",33.94323,135.79396,1,[32,33,35,41,42,59,62,63,67]],["迫西川",33.9715,135.65262,16,[66,67]],["迫西川口",33.97717,135.65205,16,[66,67]],["追野谷",33.93153,135.69832,16,[71]],["運動公園",34.41257,135.8919,6,[22]],["道須",34.00329,135.96079,10,[31]],["那知合",33.97288,135.76481,16,[65]],["重里",33.96265,135.73768,16,[66,67,68,69]],["重里口",33.95836,135.73676,16,[66,67,68,69]],["野々谷口",33.92719,135.76183,16,[74]],["野依",34.49849,135.92948,1,[4,11,18]],["野原南口",34.34262,135.69796,1,[32,33,35,51,52,53]],["野原（国道）",34.34426,135.69651,1,[33,35,41,42,51,52]],["野原（旧道）",34.34425,135.69803,1,[32,35,53]],["野尻",34.03752,135.7881,1,[32,33,35,41,42,59]],["野尻口",34.03343,135.78286,1,[32,33,35,41,42,59]],["野広瀬",34.05673,135.76493,1,[32,33,35,59,61]],["野見",34.43065,136.01282,5,[19]],["野迫川村役場前",34.16675,135.63308,15,[56]],["金刀比羅神社口",34.26125,135.73134,1,[32,33,35]],["金峯山寺前",34.36908,135.85888,13,[44]],["鈴の音橋西詰",34.37905,135.9264,6,[29]],["鈴入",33.94286,135.77643,1,[32,33,35,41,42,59,62,63,67]],["長峯公民館",34.53923,135.96772,1,[4,5]],["長崎",34.38369,135.89023,6,[29,30,31]],["長殿",34.13587,135.7638,1,[32,33,35,41,42]],["長殿発電所前",34.13118,135.76712,1,[32,33,35,41,42]],["長谷",34.30595,135.80214,1,[43,45,46]],["長谷口",34.30987,135.80349,1,[43,45,46]],["長野（伊賀）",34.50597,136.11721,2,[3]],["閉君",34.15891,135.75238,1,[35,41,42]],["阪本",34.20551,135.73682,1,[32,33,35,41,42]],["阿田峯公園",34.38166,135.72747,1,[33,34]],["霊安寺",34.33535,135.69745,1,[32,33,35,41,42,51,52,53]],["音枝",34.05468,135.9692,10,[31]],["須恵",34.3519,135.69494,11,[49]],["風屋",34.04363,135.78176,1,[32,33,35,41,42,59,61]],["風屋花園",34.05039,135.78771,1,[32,33,35,41,42,59]],["香束",34.4163,135.90536,6,[22]],["香梨台",34.3925,135.77315,7,[27,31]],["馬佐入口",34.40411,135.81879,7,[25]],["馬佐口",34.38738,135.81236,7,[27,31]],["高井",34.51344,135.99179,3,[10]],["高佐",34.37203,135.94184,9,[30]],["高城山展望台",34.34942,135.8782,13,[44]],["高塚",34.50159,135.94797,1,[12,13]],["高岡",34.03578,135.69039,16,[60]],["高森の郷",33.9346,135.76496,16,[70]],["高樋橋",34.42193,136.05514,5,[19]],["高橋東",34.38349,135.9374,6,[29]],["高津",34.08248,135.75781,1,[32,33,35,41,42,59,60,61]],["高津下",34.08134,135.75412,1,[32,33,35,41,42,59,60,61]],["高滝下",33.97317,135.80428,16,[62,63,64]],["高滝中",33.96852,135.81186,16,[64]],["高滝口",33.96554,135.79842,16,[59,62,63,67]],["高田和",34.20376,135.99811,10,[31]],["高石",34.48948,136.08898,3,[10]],["高見平野",34.44156,136.06151,5,[19]],["高見登山口",34.41943,136.06134,5,[19]],["高見診療所",34.42407,136.02933,5,[19]],["高野橋",34.32292,135.8107,1,[43,45,46]],["鷲家",34.42242,135.98696,1,[13,19,20,21]],["鷲家口",34.40391,135.96961,1,[13,19,20,21]],["鷲家谷",34.41529,135.98185,1,[13,19,20,21]],["麦谷",34.37077,136.02748,5,[20]],["麦谷口",34.37643,136.02468,5,[20]],["麻生田",34.50186,135.91545,1,[18]],["黒渕",34.29067,135.73369,1,[32,33,35,41,42,51,52,53]],["黒渕口",34.28425,135.7458,1,[32,33,35,41,42,51,52,53]],["黒滝案内センター",34.30657,135.82282,1,[43,45,46]],["龍門郵便局",34.40956,135.88348,6,[22]]]};
+// 場所（駅・地名・施設）。build/work/places/ で作る別データ。バス停データには手を加えない。 [名前, 種類, 緯度, 経度, 所在地, 補足, 別名]
+const PLACES = [["三本松駅","駅",34.57855,136.03585,"宇陀市","近鉄","三本松","",0,""],["下市口駅","駅",34.38402,135.7869,"吉野郡大淀町","近鉄","下市口","",0,""],["五条駅","駅",34.35574,135.69869,"五條市","JR西日本","五条","",0,""],["六田駅","駅",34.39008,135.82299,"吉野郡大淀町","近鉄","六田","",0,""],["北宇智駅","駅",34.38229,135.71447,"五條市","JR西日本","北宇智","",0,""],["吉野神宮駅","駅",34.39019,135.84817,"吉野郡吉野町","近鉄","吉野神宮","",0,""],["吉野駅","駅",34.377,135.85356,"吉野郡吉野町","近鉄","吉野","",0,""],["大和上市駅","駅",34.39563,135.84571,"吉野郡吉野町","近鉄","大和上市","",0,""],["大和二見駅","駅",34.34612,135.68444,"五條市","JR西日本","大和二見","",0,""],["大阿太駅","駅",34.3884,135.76643,"吉野郡大淀町","近鉄","大阿太","",0,""],["室生口大野駅","駅",34.56613,136.01528,"宇陀市","近鉄","室生口大野","",0,""],["榛原駅","駅",34.52983,135.95461,"宇陀市","近鉄","榛原","",0,""],["福神駅","駅",34.39543,135.75023,"吉野郡大淀町","近鉄","福神","",0,""],["薬水駅","駅",34.40778,135.74329,"吉野郡大淀町","近鉄","薬水","",0,""],["越部駅","駅",34.38612,135.80288,"吉野郡大淀町","近鉄","越部","",0,""],["なつみ台","地名",34.34746,135.66726,"五條市","1〜4丁目","","",0,""],["よ邑岩森","地名",34.35598,135.80945,"吉野郡下市町","","","",0,""],["よ邑稲貝","地名",34.34475,135.81493,"吉野郡下市町","","","",0,""],["よ邑草谷","地名",34.34899,135.81994,"吉野郡下市町","","","",0,""],["よ邑間戸","地名",34.35576,135.81582,"吉野郡下市町","","","",0,""],["よ邑高原","地名",34.33976,135.82234,"吉野郡下市町","","","",0,""],["七色","地名",33.89726,135.76729,"吉野郡十津川村","","","",0,""],["三在町","地名",34.37261,135.72366,"五條市","","","",0,""],["三尾","地名",34.3696,135.98922,"吉野郡東吉野村","","","",0,""],["三津","地名",34.44569,135.88257,"吉野郡吉野町","","","",0,""],["三浦","地名",34.02688,135.70864,"吉野郡十津川村","","","",0,""],["三茶屋","地名",34.42678,135.93278,"吉野郡吉野町","","","",0,""],["上","地名",34.20426,135.64595,"吉野郡野迫川村","","","",0,""],["上之町","地名",34.3681,135.6737,"五條市","","","",0,""],["上多古","地名",34.29308,136.00011,"吉野郡川上村","","","",0,""],["上市字上ノ町","地名",34.39929,135.85849,"吉野郡吉野町","","","",0,""],["上市字六軒町","地名",34.39525,135.85259,"吉野郡吉野町","","","",0,""],["上市字尾仁山","地名",34.39624,135.84745,"吉野郡吉野町","","","",0,""],["上市字本町","地名",34.39638,135.85448,"吉野郡吉野町","","","",0,""],["上市字横町","地名",34.3979,135.85624,"吉野郡吉野町","","","",0,""],["上桑原","地名",34.0016,135.98075,"吉野郡下北山村","","","",0,""],["上池原","地名",34.04502,135.96223,"吉野郡下北山村","","","",0,""],["上湯川","地名",33.93167,135.66225,"吉野郡十津川村","","","",0,""],["上葛川","地名",33.96247,135.86469,"吉野郡十津川村","","","",0,""],["上谷","地名",34.26229,135.98516,"吉野郡川上村","","","",0,""],["上野地","地名",34.09454,135.76943,"吉野郡十津川村","","","",0,""],["上野町","地名",34.33667,135.67089,"五條市","","","",0,""],["下之町","地名",34.35158,135.68731,"五條市","","","",0,""],["下多古","地名",34.30618,135.99185,"吉野郡川上村","","","",0,""],["下市上阪","地名",34.36705,135.79332,"吉野郡下市町","","","",0,""],["下市下阪","地名",34.36854,135.79169,"吉野郡下市町","","","",0,""],["下市今在家","地名",34.37293,135.78939,"吉野郡下市町","","","",0,""],["下市北口","地名",34.37593,135.7884,"吉野郡下市町","","","",0,""],["下市堀毛","地名",34.35793,135.78924,"吉野郡下市町","","","",0,""],["下市堂垣内","地名",34.3778,135.78856,"吉野郡下市町","","","",0,""],["下市大峯","地名",34.37021,135.79242,"吉野郡下市町","","","",0,""],["下市天神","地名",34.37718,135.79014,"吉野郡下市町","","","",0,""],["下市宮ノ向","地名",34.37165,135.78667,"吉野郡下市町","","","",0,""],["下市寺内","地名",34.36966,135.78626,"吉野郡下市町","","","",0,""],["下市山崎","地名",34.37925,135.78996,"吉野郡下市町","","","",0,""],["下市惣上","地名",34.37091,135.7897,"吉野郡下市町","","","",0,""],["下市新町","地名",34.37549,135.78911,"吉野郡下市町","","","",0,""],["下市明大","地名",34.36816,135.78986,"吉野郡下市町","","","",0,""],["下市本町","地名",34.37462,135.78802,"吉野郡下市町","","","",0,""],["下市栄町","地名",34.36338,135.79536,"吉野郡下市町","","","",0,""],["下市桧皮蔵","地名",34.3762,135.79123,"吉野郡下市町","","","",0,""],["下市植木","地名",34.37485,135.79004,"吉野郡下市町","","","",0,""],["下市田中","地名",34.36429,135.78565,"吉野郡下市町","","","",0,""],["下市秋津","地名",34.37351,135.78661,"吉野郡下市町","","","",0,""],["下市青葉台","地名",34.37387,135.79144,"吉野郡下市町","","","",0,""],["下桑原","地名",34.01488,135.97898,"吉野郡下北山村","","","",0,""],["下池原","地名",34.03809,135.96908,"吉野郡下北山村","","","",0,""],["下渕","地名",34.38825,135.78325,"吉野郡大淀町","","","",0,""],["中","地名",34.20507,135.66104,"吉野郡野迫川村","","","",0,""],["中之町","地名",34.3628,135.67747,"五條市","","","",0,""],["中増","地名",34.4113,135.85031,"吉野郡大淀町","","","",0,""],["中奥","地名",34.31458,136.04149,"吉野郡川上村","","","",0,""],["中戸字上中戸","地名",34.30504,135.86518,"吉野郡黒滝村","","","",0,""],["中戸字上平","地名",34.30688,135.87479,"吉野郡黒滝村","","","",0,""],["中戸字川戸","地名",34.29324,135.85779,"吉野郡黒滝村","","","",0,""],["中戸字雫","地名",34.30574,135.85891,"吉野郡黒滝村","","","",0,""],["中津川","地名",34.15799,135.70754,"吉野郡野迫川村","","","",0,""],["中町","地名",34.33269,135.67842,"五條市","","","",0,""],["中谷","地名",34.23848,135.84926,"吉野郡天川村","","","",0,""],["中越","地名",34.24488,135.8638,"吉野郡天川村","","","",0,""],["中黒","地名",34.38651,135.95025,"吉野郡東吉野村","","","",0,""],["丹原町","地名",34.32547,135.69982,"五條市","","","",0,""],["丹治","地名",34.3901,135.84709,"吉野郡吉野町","","","",0,""],["丹生","地名",34.29622,135.81223,"吉野郡下市町","","","",0,""],["久留野町","地名",34.39214,135.69014,"五條市","","","",0,""],["九尾","地名",34.21323,135.83252,"吉野郡天川村","","","",0,""],["二見","地名",34.34267,135.68554,"五條市","1〜7丁目","","",0,""],["五條","地名",34.34991,135.70176,"五條市","1〜4丁目","","",0,""],["五百瀬","地名",34.03538,135.69819,"吉野郡十津川村","","","",0,""],["五色","地名",34.22931,135.84824,"吉野郡天川村","","","",0,""],["井光","地名",34.33624,136.01272,"吉野郡川上村","","","",0,""],["井戸","地名",34.31086,135.97023,"吉野郡川上村","","","",0,""],["人知","地名",34.32502,135.96561,"吉野郡川上村","","","",0,""],["今井","地名",34.35563,135.70752,"五條市","1〜5丁目","","",0,""],["今井","地名",34.51198,136.12488,"宇陀郡曽爾村","","","",0,""],["今井","地名",34.20205,135.69201,"吉野郡野迫川村","","","",0,""],["今井町","地名",34.36408,135.7079,"五條市","","","",0,""],["今木","地名",34.39258,135.7697,"吉野郡大淀町","","","",0,""],["今西","地名",34.0046,135.7383,"吉野郡十津川村","","","",0,""],["伊豆尾","地名",34.40955,136.02525,"吉野郡東吉野村","","","",0,""],["伊賀見","地名",34.54195,136.14716,"宇陀郡曽爾村","","","",0,""],["伯母谷","地名",34.24358,135.99308,"吉野郡川上村","","","",0,""],["住川町","地名",34.38199,135.72152,"五條市","","","",0,""],["佐々羅","地名",34.40873,135.88074,"吉野郡吉野町","","","",0,""],["佐名伝","地名",34.38505,135.7656,"吉野郡大淀町","","","",0,""],["佐田","地名",34.0001,135.96827,"吉野郡下北山村","","","",0,""],["入之波","地名",34.26318,136.03722,"吉野郡川上村","","","",0,""],["入之波筏場","地名",34.23669,136.07843,"吉野郡川上村","","","",0,""],["入野","地名",34.40067,135.92036,"吉野郡吉野町","","","",0,""],["八田町","地名",34.37136,135.76519,"五條市","","","",0,""],["六倉町","地名",34.35146,135.73116,"五條市","","","",0,""],["六田","地名",34.3756,135.83432,"吉野郡吉野町","","","",0,""],["内原","地名",34.05892,135.80816,"吉野郡十津川村","","","",0,""],["内野","地名",34.04418,135.71891,"吉野郡十津川村","","","",0,""],["出屋敷町","地名",34.39532,135.70832,"五條市","","","",0,""],["出谷","地名",33.92983,135.71447,"吉野郡十津川村","","","",0,""],["前鬼","地名",34.08334,135.92832,"吉野郡下北山村","","","",0,""],["北今西","地名",34.09842,135.60857,"吉野郡野迫川村","","","",0,""],["北今西大股","地名",34.08948,135.63102,"吉野郡野迫川村","","","",0,""],["北六田","地名",34.3935,135.82763,"吉野郡大淀町","","","",0,""],["北和田","地名",34.29455,136.01137,"吉野郡川上村","","","",0,""],["北塩谷","地名",34.3506,135.95582,"吉野郡川上村","","","",0,""],["北小原","地名",34.23252,135.85422,"吉野郡天川村","","","",0,""],["北山町","地名",34.39087,135.67837,"五條市","","","",0,""],["北股","地名",34.15782,135.66354,"吉野郡野迫川村","","","",0,""],["北股上垣内","地名",34.16435,135.63355,"吉野郡野迫川村","","","",0,""],["北角","地名",34.20808,135.90388,"吉野郡天川村","","","",0,""],["北野","地名",34.39766,135.82176,"吉野郡大淀町","","","",0,""],["千股","地名",34.41711,135.86,"吉野郡吉野町","","","",0,""],["南国栖","地名",34.37818,135.9281,"吉野郡吉野町","","","",0,""],["南大野","地名",34.38463,135.91887,"吉野郡吉野町","","","",0,""],["南日裏","地名",34.22954,135.83518,"吉野郡天川村","","","",0,""],["南角","地名",34.23472,135.86185,"吉野郡天川村","","","",0,""],["南阿田町","地名",34.36802,135.75443,"五條市","","","",0,""],["原町","地名",34.36135,135.7446,"五條市","","","",0,""],["原谷杣谷","地名",34.34717,135.79744,"吉野郡下市町","","","",0,""],["原谷椎原","地名",34.34154,135.79153,"吉野郡下市町","","","",0,""],["吉野山上町","地名",34.35269,135.87533,"吉野郡吉野町","","","",0,""],["吉野山下町","地名",34.37415,135.85753,"吉野郡吉野町","","","",0,""],["吉野山中町","地名",34.3645,135.85987,"吉野郡吉野町","","","",0,""],["和田","地名",34.19599,135.81698,"吉野郡天川村","","","",0,""],["善城上之町","地名",34.35742,135.79586,"吉野郡下市町","","","",0,""],["善城下之町","地名",34.35877,135.79489,"吉野郡下市町","","","",0,""],["善城東之町","地名",34.36008,135.80383,"吉野郡下市町","","","",0,""],["善城稲荷町","地名",34.3558,135.79919,"吉野郡下市町","","","",0,""],["善城西之町","地名",34.35271,135.79505,"吉野郡下市町","","","",0,""],["喜佐谷","地名",34.35821,135.89341,"吉野郡吉野町","","","",0,""],["国栖","地名",34.38441,135.93614,"吉野郡吉野町","","","",0,""],["土屋原中村","地名",34.48707,136.13379,"宇陀郡御杖村","","","",0,""],["土屋原堂前","地名",34.48374,136.1388,"宇陀郡御杖村","","","",0,""],["土屋原大野","地名",34.45854,136.13527,"宇陀郡御杖村","","","",0,""],["土屋原峯","地名",34.48041,136.12864,"宇陀郡御杖村","","","",0,""],["土屋原水口","地名",34.48663,136.12637,"宇陀郡御杖村","","","",0,""],["土屋原畑井","地名",34.48818,136.1233,"宇陀郡御杖村","","","",0,""],["土屋原笹及","地名",34.48857,136.14571,"宇陀郡御杖村","","","",0,""],["土田","地名",34.39377,135.8009,"吉野郡大淀町","","","",0,""],["坪内","地名",34.222,135.84071,"吉野郡天川村","","","",0,""],["堂原","地名",34.30193,135.83877,"吉野郡黒滝村","","","",0,""],["塩井","地名",34.50239,136.13715,"宇陀郡曽爾村","","","",0,""],["塩谷","地名",34.22078,135.75442,"吉野郡天川村","","","",0,""],["塩野","地名",34.21994,135.76623,"吉野郡天川村","","","",0,""],["増口","地名",34.39625,135.84121,"吉野郡大淀町","","","",0,""],["大塔町中井傍示","地名",34.15228,135.77929,"五條市","","","",0,""],["大塔町中原","地名",34.186,135.71299,"五條市","","","",0,""],["大塔町中原開拓","地名",34.19324,135.72882,"五條市","","","",0,""],["大塔町堂平","地名",34.17505,135.73998,"五條市","","","",0,""],["大塔町天辻","地名",34.2194,135.73002,"五條市","","","",0,""],["大塔町宇井","地名",34.1523,135.74823,"五條市","","","",0,""],["大塔町小代","地名",34.19762,135.73122,"五條市","","","",0,""],["大塔町引土","地名",34.16103,135.74043,"五條市","","","",0,""],["大塔町惣谷","地名",34.15189,135.80382,"五條市","","","",0,""],["大塔町殿野","地名",34.17795,135.77203,"五條市","","","",0,""],["大塔町清水","地名",34.14788,135.73541,"五條市","","","",0,""],["大塔町篠原","地名",34.16515,135.85432,"五條市","","","",0,""],["大塔町簾","地名",34.22264,135.74315,"五條市","","","",0,""],["大塔町赤谷","地名",34.11003,135.70805,"五條市","","","",0,""],["大塔町辻堂","地名",34.17026,135.76108,"五條市","","","",0,""],["大塔町閉君","地名",34.15931,135.75805,"五條市","","","",0,""],["大塔町阪本","地名",34.20648,135.72916,"五條市","","","",0,""],["大塔町飛養曽","地名",34.16753,135.7298,"五條市","","","",0,""],["大宇陀万六","地名",34.47461,135.93409,"宇陀市","","","",0,""],["大宇陀上中","地名",34.48144,135.93294,"宇陀市","","","",0,""],["大宇陀上品","地名",34.45831,135.96127,"宇陀市","","","",0,""],["大宇陀上新","地名",34.47865,135.93255,"宇陀市","","","",0,""],["大宇陀上本","地名",34.48312,135.93259,"宇陀市","","","",0,""],["大宇陀上片岡","地名",34.44068,135.95963,"宇陀市","","","",0,""],["大宇陀下中","地名",34.48178,135.93227,"宇陀市","","","",0,""],["大宇陀下出口","地名",34.48164,135.93157,"宇陀市","","","",0,""],["大宇陀下品","地名",34.46198,135.96108,"宇陀市","","","",0,""],["大宇陀下宮奥","地名",34.45824,135.92516,"宇陀市","","","",0,""],["大宇陀下本","地名",34.48275,135.93144,"宇陀市","","","",0,""],["大宇陀下片岡","地名",34.45037,135.95807,"宇陀市","","","",0,""],["大宇陀下竹","地名",34.48852,135.93174,"宇陀市","","","",0,""],["大宇陀下茶","地名",34.48397,135.93206,"宇陀市","","","",0,""],["大宇陀中庄","地名",34.47865,135.92549,"宇陀市","","","",0,""],["大宇陀中新","地名",34.47991,135.93265,"宇陀市","","","",0,""],["大宇陀五津","地名",34.51635,135.94043,"宇陀市","","","",0,""],["大宇陀内原","地名",34.4983,135.92947,"宇陀市","","","",0,""],["大宇陀出新","地名",34.47601,135.93395,"宇陀市","","","",0,""],["大宇陀半阪","地名",34.49196,135.90479,"宇陀市","","","",0,""],["大宇陀口今井","地名",34.5056,135.92614,"宇陀市","","","",0,""],["大宇陀和田","地名",34.4666,135.96376,"宇陀市","","","",0,""],["大宇陀塚脇","地名",34.48858,135.94734,"宇陀市","","","",0,""],["大宇陀大東","地名",34.46952,135.93602,"宇陀市","","","",0,""],["大宇陀大熊","地名",34.44344,135.97037,"宇陀市","","","",0,""],["大宇陀嬉河原","地名",34.48813,135.91287,"宇陀市","","","",0,""],["大宇陀守道","地名",34.4675,135.94981,"宇陀市","","","",0,""],["大宇陀宮奥","地名",34.45351,135.90424,"宇陀市","","","",0,""],["大宇陀小出口","地名",34.4806,135.93177,"宇陀市","","","",0,""],["大宇陀小和田","地名",34.4542,135.96806,"宇陀市","","","",0,""],["大宇陀小附","地名",34.4943,135.92883,"宇陀市","","","",0,""],["大宇陀山口","地名",34.45694,135.94984,"宇陀市","","","",0,""],["大宇陀岩室","地名",34.48923,135.92466,"宇陀市","","","",0,""],["大宇陀岩清水","地名",34.48053,135.94502,"宇陀市","","","",0,""],["大宇陀平尾","地名",34.51045,135.93526,"宇陀市","","","",0,""],["大宇陀才ケ辻","地名",34.47763,135.95597,"宇陀市","","","",0,""],["大宇陀拾生","地名",34.47507,135.93206,"宇陀市","","","",0,""],["大宇陀春日","地名",34.4842,135.93631,"宇陀市","","","",0,""],["大宇陀本郷","地名",34.47475,135.90413,"宇陀市","","","",0,""],["大宇陀東平尾","地名",34.44816,135.96608,"宇陀市","","","",0,""],["大宇陀栗野","地名",34.44856,135.93245,"宇陀市","","","",0,""],["大宇陀牧","地名",34.43346,135.93664,"宇陀市","","","",0,""],["大宇陀田原","地名",34.44071,135.94837,"宇陀市","","","",0,""],["大宇陀白鳥居","地名",34.45402,135.95314,"宇陀市","","","",0,""],["大宇陀芝生","地名",34.49343,135.91778,"宇陀市","","","",0,""],["大宇陀藤井","地名",34.48318,135.95793,"宇陀市","","","",0,""],["大宇陀西山","地名",34.48421,135.92306,"宇陀市","","","",0,""],["大宇陀調子","地名",34.48715,135.95225,"宇陀市","","","",0,""],["大宇陀迫間","地名",34.4811,135.91865,"宇陀市","","","",0,""],["大宇陀野依","地名",34.5013,135.93541,"宇陀市","","","",0,""],["大宇陀関戸","地名",34.46221,135.93246,"宇陀市","","","",0,""],["大宇陀馬取柿","地名",34.49551,135.91212,"宇陀市","","","",0,""],["大宇陀麻生田","地名",34.50069,135.91394,"宇陀市","","","",0,""],["大宇陀黒木","地名",34.46589,135.9193,"宇陀市","","","",0,""],["大岩","地名",34.41544,135.76587,"吉野郡大淀町","","","",0,""],["大津町","地名",34.32948,135.67298,"五條市","","","",0,""],["大深町","地名",34.28227,135.68797,"五條市","","","",0,""],["大滝","地名",34.35577,135.92178,"吉野郡川上村","","","",0,""],["大滝小滝","地名",34.35422,135.92983,"吉野郡川上村","","","",0,""],["大滝白屋区","地名",34.35322,135.93196,"吉野郡川上村","","","",0,""],["大澤町","地名",34.36308,135.66813,"五條市","","","",0,""],["大瀬","地名",34.06193,135.96842,"吉野郡下北山村","","","",0,""],["大豆生","地名",34.37731,136.01777,"吉野郡東吉野村","","","",0,""],["大迫","地名",34.2697,136.01494,"吉野郡川上村","","","",0,""],["大野","地名",33.98693,135.83173,"吉野郡十津川村","","","",0,""],["大野新田町","地名",34.38506,135.74188,"五條市","","","",0,""],["大野町","地名",34.3267,135.6891,"五條市","","","",0,""],["太良路","地名",34.51925,136.15181,"宇陀郡曽爾村","","","",0,""],["宇宮原","地名",34.11625,135.76904,"吉野郡十津川村","","","",0,""],["宇野町","地名",34.36379,135.7216,"五條市","","","",0,""],["室生","地名",34.53376,136.03533,"宇陀市","","","",0,""],["室生三本松","地名",34.57577,136.03282,"宇陀市","","","",0,""],["室生下田口","地名",34.5173,136.05997,"宇陀市","","","",0,""],["室生向渕","地名",34.58356,136.0019,"宇陀市","","","",0,""],["室生多田","地名",34.59417,135.9897,"宇陀市","","","",0,""],["室生大野","地名",34.56012,136.01011,"宇陀市","","","",0,""],["室生深野","地名",34.59398,136.04038,"宇陀市","","","",0,""],["室生瀧谷","地名",34.55821,136.0451,"宇陀市","","","",0,""],["室生無山","地名",34.58802,135.97724,"宇陀市","","","",0,""],["室生田口元上田口","地名",34.49114,136.05002,"宇陀市","","","",0,""],["室生田口元角川","地名",34.50943,136.06292,"宇陀市","","","",0,""],["室生砥取","地名",34.5573,136.03476,"宇陀市","","","",0,""],["室生竜口","地名",34.56768,136.0608,"宇陀市","","","",0,""],["室生西谷","地名",34.56287,136.0541,"宇陀市","","","",0,""],["室生黒岩","地名",34.50013,136.07169,"宇陀市","","","",0,""],["宮滝","地名",34.37854,135.89504,"吉野郡吉野町","","","",0,""],["寺垣内","地名",34.01343,135.94262,"吉野郡下北山村","","","",0,""],["寺尾","地名",34.3458,135.94552,"吉野郡川上村","","","",0,""],["寺戸","地名",34.31028,135.84723,"吉野郡黒滝村","","","",0,""],["小","地名",34.39039,135.9872,"吉野郡東吉野村","","","",0,""],["小井","地名",34.01202,135.79623,"吉野郡十津川村","","","",0,""],["小原","地名",33.98101,135.79367,"吉野郡十津川村","","","",0,""],["小名","地名",34.42711,135.96018,"吉野郡吉野町","","","",0,""],["小和町","地名",34.39257,135.69822,"五條市","","","",0,""],["小坪瀬","地名",33.96384,135.68598,"吉野郡十津川村","","","",0,""],["小山手","地名",33.97235,135.69974,"吉野郡十津川村","","","",0,""],["小山町","地名",34.39249,135.7146,"五條市","","","",0,""],["小島町","地名",34.35775,135.71966,"五條市","","","",0,""],["小川","地名",33.97098,135.8466,"吉野郡十津川村","","","",0,""],["小川","地名",34.41005,135.97411,"吉野郡東吉野村","","","",0,""],["小栗栖","地名",34.39479,135.9605,"吉野郡東吉野村","","","",0,""],["小森","地名",33.98716,135.78752,"吉野郡十津川村","","","",0,""],["小橡","地名",34.16996,136.05026,"吉野郡上北山村","","","",0,""],["小路","地名",34.3664,135.81697,"吉野郡下市町","","","",0,""],["小長尾","地名",34.50736,136.11759,"宇陀郡曽爾村","","","",0,""],["居伝町","地名",34.38728,135.71282,"五條市","","","",0,""],["山口","地名",34.41651,135.89298,"吉野郡吉野町","","","",0,""],["山天","地名",34.0409,135.70714,"吉野郡十津川村","","","",0,""],["山崎","地名",34.02755,135.78432,"吉野郡十津川村","","","",0,""],["山手","地名",33.95064,135.75962,"吉野郡十津川村","","","",0,""],["山手谷","地名",33.92587,135.79323,"吉野郡十津川村","","","",0,""],["山田町","地名",34.36631,135.73705,"五條市","","","",0,""],["山粕","地名",34.48689,136.08782,"宇陀郡曽爾村","","","",0,""],["山西","地名",34.19186,135.77716,"吉野郡天川村","","","",0,""],["山陰町","地名",34.32471,135.68279,"五條市","","","",0,""],["岡口","地名",34.35636,135.69707,"五條市","1〜2丁目","","",0,""],["岡町","地名",34.36744,135.69391,"五條市","","","",0,""],["岩壷","地名",34.40623,135.78052,"吉野郡大淀町","","","",0,""],["峰寺","地名",34.40197,135.87975,"吉野郡吉野町","","","",0,""],["島野町","地名",34.35477,135.73758,"五條市","","","",0,""],["川合","地名",34.24573,135.8553,"吉野郡天川村","","","",0,""],["川津","地名",34.05461,135.74296,"吉野郡十津川村","","","",0,""],["左曽","地名",34.38103,135.84338,"吉野郡吉野町","","","",0,""],["平","地名",34.10089,135.65469,"吉野郡野迫川村","","","",0,""],["平原","地名",34.33359,135.77644,"吉野郡下市町","","","",0,""],["平尾","地名",34.40729,135.8908,"吉野郡吉野町","","","",0,""],["平谷","地名",33.94137,135.76436,"吉野郡十津川村","","","",0,""],["平野","地名",34.44262,136.06838,"吉野郡東吉野村","","","",0,""],["広橋中村","地名",34.33242,135.82325,"吉野郡下市町","","","",0,""],["広橋峯出","地名",34.33079,135.80974,"吉野郡下市町","","","",0,""],["広橋広瀬谷","地名",34.3247,135.81627,"吉野郡下市町","","","",0,""],["広橋惣坂","地名",34.34005,135.80986,"吉野郡下市町","","","",0,""],["広橋清水","地名",34.33936,135.83037,"吉野郡下市町","","","",0,""],["広瀬","地名",34.2132,135.77901,"吉野郡天川村","","","",0,""],["庵住","地名",34.18662,135.80062,"吉野郡天川村","","","",0,""],["御吉野","地名",34.31188,135.83549,"吉野郡黒滝村","","","",0,""],["御園","地名",34.3741,135.88693,"吉野郡吉野町","","","",0,""],["御山町","地名",34.33226,135.69326,"五條市","","","",0,""],["志賀","地名",34.40739,135.87169,"吉野郡吉野町","","","",0,""],["才谷中","地名",34.34671,135.85857,"吉野郡下市町","","","",0,""],["才谷殿出","地名",34.35247,135.85538,"吉野郡下市町","","","",0,""],["才谷谷","地名",34.33897,135.84811,"吉野郡下市町","","","",0,""],["折立","地名",33.94721,135.81307,"吉野郡十津川村","","","",0,""],["持尾","地名",34.41551,135.78695,"吉野郡大淀町","","","",0,""],["掛","地名",34.49726,136.1108,"宇陀郡曽爾村","","","",0,""],["新住幸町","地名",34.37791,135.78523,"吉野郡下市町","","","",0,""],["新住新住","地名",34.37445,135.7783,"吉野郡下市町","","","",0,""],["新住都町","地名",34.37611,135.78651,"吉野郡下市町","","","",0,""],["新子","地名",34.38509,135.92912,"吉野郡吉野町","","","",0,""],["新町","地名",34.34861,135.69024,"五條市","1〜3丁目","","",0,""],["新野","地名",34.38917,135.81444,"吉野郡大淀町","","","",0,""],["日裏","地名",34.39662,136.02828,"吉野郡東吉野村","","","",0,""],["旭","地名",34.11615,135.79331,"吉野郡十津川村","","","",0,""],["木ノ原町","地名",34.35266,135.67397,"五條市","","","",0,""],["木津","地名",34.42328,136.03268,"吉野郡東吉野村","","","",0,""],["木津川","地名",34.4028,135.99743,"吉野郡東吉野村","","","",0,""],["本町","地名",34.35261,135.69337,"五條市","1〜3丁目","","",0,""],["杉清","地名",34.03746,135.6897,"吉野郡十津川村","","","",0,""],["杉谷","地名",34.41131,136.06451,"吉野郡東吉野村","","","",0,""],["東ノ川","地名",34.09344,136.06736,"吉野郡上北山村","","","",0,""],["東中","地名",33.95108,135.85025,"吉野郡十津川村","","","",0,""],["東川","地名",34.36835,135.92917,"吉野郡川上村","","","",0,""],["東川中井","地名",34.3645,135.96107,"吉野郡川上村","","","",0,""],["東川安場","地名",34.37435,135.94109,"吉野郡川上村","","","",0,""],["東川柳瀬","地名",34.37294,135.93656,"吉野郡川上村","","","",0,""],["東川深山","地名",34.37111,135.93426,"吉野郡川上村","","","",0,""],["東川衣引","地名",34.36691,135.93838,"吉野郡川上村","","","",0,""],["東川高佐","地名",34.37121,135.94081,"吉野郡川上村","","","",0,""],["東阿田町","地名",34.37976,135.75167,"五條市","","","",0,""],["枌尾","地名",34.30307,136.02349,"吉野郡川上村","","","",0,""],["林","地名",34.08322,135.73256,"吉野郡十津川村","","","",0,""],["柏木","地名",34.28228,136.00015,"吉野郡川上村","","","",0,""],["柞原","地名",34.21121,135.67458,"吉野郡野迫川村","","","",0,""],["柳字上柳","地名",34.42039,135.92802,"吉野郡吉野町","","","",0,""],["柳字中央","地名",34.41792,135.92173,"吉野郡吉野町","","","",0,""],["柳字中村","地名",34.42213,135.92167,"吉野郡吉野町","","","",0,""],["柳字別所","地名",34.43571,135.91251,"吉野郡吉野町","","","",0,""],["柳字田尻","地名",34.4198,135.91315,"吉野郡吉野町","","","",0,""],["栃原栃原東","地名",34.34682,135.78082,"吉野郡下市町","","","",0,""],["栃原栃原西","地名",34.3576,135.77612,"吉野郡下市町","","","",0,""],["栃尾","地名",34.20371,135.82295,"吉野郡天川村","","","",0,""],["栃本","地名",34.34001,135.80474,"吉野郡下市町","","","",0,""],["桂原","地名",34.29696,135.82638,"吉野郡黒滝村","","","",0,""],["桃俣上出","地名",34.4723,136.11522,"宇陀郡御杖村","","","",0,""],["桃俣井出","地名",34.46867,136.09589,"宇陀郡御杖村","","","",0,""],["桃俣備後","地名",34.47721,136.11689,"宇陀郡御杖村","","","",0,""],["桃俣奥山","地名",34.45453,136.10523,"宇陀郡御杖村","","","",0,""],["桃俣町屋上","地名",34.48749,136.1123,"宇陀郡御杖村","","","",0,""],["桃俣町屋下","地名",34.49178,136.11999,"宇陀郡御杖村","","","",0,""],["桃俣菖蒲","地名",34.48218,136.11363,"宇陀郡御杖村","","","",0,""],["桃俣西出","地名",34.47645,136.09912,"宇陀郡御杖村","","","",0,""],["桑畑","地名",33.91931,135.75962,"吉野郡十津川村","","","",0,""],["梨子堂","地名",34.33697,135.79197,"吉野郡下市町","","","",0,""],["楢井","地名",34.38414,135.88286,"吉野郡吉野町","","","",0,""],["榛原あかね台","地名",34.53498,135.94822,"宇陀市","1〜2丁目","","",0,""],["榛原ひのき坂","地名",34.53693,135.96007,"宇陀市","1〜3丁目","","",0,""],["榛原三宮寺","地名",34.48702,135.96317,"宇陀市","","","",0,""],["榛原上井足","地名",34.51296,135.95619,"宇陀市","","","",0,""],["榛原下井足","地名",34.52399,135.95112,"宇陀市","","","",0,""],["榛原八滝","地名",34.50108,135.98511,"宇陀市","","","",0,""],["榛原内牧","地名",34.48797,136.01557,"宇陀市","","","",0,""],["榛原大貝","地名",34.49808,135.96668,"宇陀市","","","",0,""],["榛原天満台東","地名",34.54755,135.97692,"宇陀市","1〜4丁目","","",0,""],["榛原天満台西","地名",34.54382,135.96953,"宇陀市","1〜4丁目","","",0,""],["榛原安田","地名",34.51846,135.92646,"宇陀市","","","",0,""],["榛原山路","地名",34.50074,135.96257,"宇陀市","","","",0,""],["榛原山辺三","地名",34.54905,135.9889,"宇陀市","","","",0,""],["榛原戒場","地名",34.5616,135.98218,"宇陀市","","","",0,""],["榛原柳","地名",34.52849,135.93622,"宇陀市","","","",0,""],["榛原栗谷","地名",34.50215,135.95306,"宇陀市","","","",0,""],["榛原桜が丘","地名",34.53384,135.95871,"宇陀市","","","",0,""],["榛原桧牧","地名",34.52623,135.97693,"宇陀市","","","",0,""],["榛原榛見が丘","地名",34.53101,135.94884,"宇陀市","1〜2丁目","","",0,""],["榛原母里","地名",34.49059,135.95545,"宇陀市","","","",0,""],["榛原比布","地名",34.49497,135.94467,"宇陀市","","","",0,""],["榛原池上","地名",34.50514,135.94937,"宇陀市","","","",0,""],["榛原澤","地名",34.49358,135.97162,"宇陀市","","","",0,""],["榛原石田","地名",34.49884,135.95656,"宇陀市","","","",0,""],["榛原福地","地名",34.53392,135.96567,"宇陀市","","","",0,""],["榛原福西","地名",34.50184,135.94189,"宇陀市","","","",0,""],["榛原笠間","地名",34.51318,135.91826,"宇陀市","","","",0,""],["榛原篠楽","地名",34.52348,135.94104,"宇陀市","","","",0,""],["榛原自明","地名",34.51356,135.97891,"宇陀市","","","",0,""],["榛原荷阪","地名",34.53434,136.00705,"宇陀市","","","",0,""],["榛原萩乃里","地名",34.52576,135.9548,"宇陀市","","","",0,""],["榛原萩原","地名",34.54186,135.95263,"宇陀市","","","",0,""],["榛原角柄","地名",34.53481,135.94165,"宇陀市","","","",0,""],["榛原諸木野","地名",34.50041,136.02064,"宇陀市","","","",0,""],["榛原赤埴","地名",34.51023,136.01043,"宇陀市","","","",0,""],["榛原赤瀬","地名",34.55294,135.9608,"宇陀市","","","",0,""],["榛原足立","地名",34.50797,135.94529,"宇陀市","","","",0,""],["榛原長峯","地名",34.53929,135.97251,"宇陀市","","","",0,""],["榛原雨師","地名",34.52096,135.93102,"宇陀市","","","",0,""],["榛原額井","地名",34.55392,135.97219,"宇陀市","","","",0,""],["榛原高井","地名",34.51525,135.99331,"宇陀市","","","",0,""],["榛原高塚","地名",34.50191,135.94617,"宇陀市","","","",0,""],["榛原高萩台","地名",34.53072,135.95307,"宇陀市","","","",0,""],["槙尾","地名",34.32667,135.88767,"吉野郡黒滝村","","","",0,""],["樫原","地名",33.95944,135.78771,"吉野郡十津川村","","","",0,""],["樫尾","地名",34.36832,135.91073,"吉野郡吉野町","","","",0,""],["樫辻町","地名",34.3042,135.69937,"五條市","","","",0,""],["橋屋","地名",34.39075,135.84157,"吉野郡吉野町","","","",0,""],["檜垣本","地名",34.39554,135.7932,"吉野郡大淀町","","","",0,""],["武木","地名",34.31405,135.98973,"吉野郡川上村","","","",0,""],["武蔵","地名",33.99136,135.81324,"吉野郡十津川村","","","",0,""],["殿川","地名",34.41505,135.9539,"吉野郡吉野町","","","",0,""],["比曽","地名",34.41152,135.83167,"吉野郡大淀町","","","",0,""],["永井","地名",33.97047,135.74719,"吉野郡十津川村","","","",0,""],["池峰","地名",34.02733,135.95531,"吉野郡下北山村","","","",0,""],["池津川","地名",34.17448,135.66633,"吉野郡野迫川村","","","",0,""],["池穴","地名",34.01762,135.77448,"吉野郡十津川村","","","",0,""],["沖金","地名",34.24343,135.8518,"吉野郡天川村","","","",0,""],["沢原","地名",34.23448,135.84708,"吉野郡天川村","","","",0,""],["沢谷","地名",34.2401,135.85621,"吉野郡天川村","","","",0,""],["河原屋","地名",34.39316,135.87038,"吉野郡吉野町","","","",0,""],["河合","地名",34.14048,135.99791,"吉野郡上北山村","","","",0,""],["沼田原","地名",34.1447,135.7683,"吉野郡十津川村","","","",0,""],["洞川","地名",34.25554,135.87386,"吉野郡天川村","","","",0,""],["浦向","地名",34.00168,135.95822,"吉野郡下北山村","","","",0,""],["湯之原","地名",34.00544,135.80027,"吉野郡十津川村","","","",0,""],["湯谷市塚町","地名",34.34831,135.75543,"五條市","","","",0,""],["滝尾","地名",34.20468,135.7625,"吉野郡天川村","","","",0,""],["滝川","地名",34.05754,135.79503,"吉野郡十津川村","","","",0,""],["滝町","地名",34.35803,135.75718,"五條市","","","",0,""],["滝畑","地名",34.43461,135.86238,"吉野郡吉野町","","","",0,""],["滝野","地名",34.46898,136.06068,"吉野郡東吉野村","","","",0,""],["瀬戸","地名",34.32966,136.07991,"吉野郡川上村","","","",0,""],["火打町","地名",34.32203,135.67033,"五條市","","","",0,""],["牧町","地名",34.34717,135.72611,"五條市","","","",0,""],["犬飼町","地名",34.33925,135.67702,"五條市","","","",0,""],["狭戸","地名",34.37099,136.00478,"吉野郡東吉野村","","","",0,""],["猿飼","地名",33.9335,135.78008,"吉野郡十津川村","","","",0,""],["玉垣内","地名",33.97851,135.73887,"吉野郡十津川村","","","",0,""],["玉置川","地名",33.90853,135.84114,"吉野郡十津川村","","","",0,""],["生子町","地名",34.31221,135.70725,"五條市","","","",0,""],["田園","地名",34.36876,135.6836,"五條市","1〜5丁目","","",0,""],["田殿町","地名",34.3046,135.67097,"五條市","","","",0,""],["畑屋","地名",34.41184,135.80312,"吉野郡大淀町","","","",0,""],["畑田町","地名",34.33711,135.66155,"五條市","","","",0,""],["白屋","地名",34.33715,135.974,"吉野郡川上村","","","",0,""],["白川","地名",34.10215,135.98644,"吉野郡上北山村","","","",0,""],["白川渡","地名",34.30412,135.9994,"吉野郡川上村","","","",0,""],["相谷町","地名",34.33146,135.66519,"五條市","","","",0,""],["矢治","地名",34.38256,135.91049,"吉野郡吉野町","","","",0,""],["矢走","地名",34.40777,135.78964,"吉野郡大淀町","","","",0,""],["石堂谷","地名",34.32568,135.79033,"吉野郡下市町","","","",0,""],["神下","地名",33.93722,135.87595,"吉野郡十津川村","","","",0,""],["神之谷","地名",34.28268,136.06599,"吉野郡川上村","","","",0,""],["神之谷三之公","地名",34.25455,136.0959,"吉野郡川上村","","","",0,""],["神末上村","地名",34.46875,136.19787,"宇陀郡御杖村","","","",0,""],["神末中村","地名",34.48991,136.2024,"宇陀郡御杖村","","","",0,""],["神末小屋","地名",34.52035,136.21169,"宇陀郡御杖村","","","",0,""],["神末川合","地名",34.50731,136.19085,"宇陀郡御杖村","","","",0,""],["神末敷津","地名",34.51257,136.20168,"宇陀郡御杖村","","","",0,""],["神末東町","地名",34.49789,136.20503,"宇陀郡御杖村","","","",0,""],["神末西町","地名",34.4961,136.1884,"宇陀郡御杖村","","","",0,""],["福神","地名",34.39406,135.74866,"吉野郡大淀町","","","",0,""],["窪垣内","地名",34.39326,135.92812,"吉野郡吉野町","","","",0,""],["立石上立石","地名",34.35392,135.83872,"吉野郡下市町","","","",0,""],["立石下立石","地名",34.35605,135.82347,"吉野郡下市町","","","",0,""],["立石陰地","地名",34.35725,135.82962,"吉野郡下市町","","","",0,""],["立里","地名",34.13812,135.69535,"吉野郡野迫川村","","","",0,""],["立野","地名",34.39756,135.86788,"吉野郡吉野町","","","",0,""],["立野字轟","地名",34.39822,135.86194,"吉野郡吉野町","","","",0,""],["竹筒","地名",33.87798,135.86598,"吉野郡十津川村","","","",0,""],["笠木","地名",34.28293,135.83702,"吉野郡黒滝村","","","",0,""],["篭山","地名",34.19769,135.80759,"吉野郡天川村","","","",0,""],["粟飯谷","地名",34.32327,135.83712,"吉野郡黒滝村","","","",0,""],["脇川","地名",34.31798,135.8631,"吉野郡黒滝村","","","",0,""],["色生","地名",34.41137,135.93171,"吉野郡吉野町","","","",0,""],["芦原","地名",34.41525,135.79602,"吉野郡大淀町","","","",0,""],["菅野上郷","地名",34.46442,136.16764,"宇陀郡御杖村","","","",0,""],["菅野中村","地名",34.49134,136.17292,"宇陀郡御杖村","","","",0,""],["菅野中野","地名",34.48411,136.16809,"宇陀郡御杖村","","","",0,""],["菅野前谷","地名",34.48882,136.15651,"宇陀郡御杖村","","","",0,""],["菅野庄谷","地名",34.49815,136.16325,"宇陀郡御杖村","","","",0,""],["菅野東郷","地名",34.49907,136.17246,"宇陀郡御杖村","","","",0,""],["菅野泰原","地名",34.50784,136.18323,"宇陀郡御杖村","","","",0,""],["菅野西川","地名",34.49634,136.15819,"宇陀郡御杖村","","","",0,""],["菅野長尾","地名",34.51256,136.16863,"宇陀郡御杖村","","","",0,""],["菅野際土良","地名",34.50459,136.17791,"宇陀郡御杖村","","","",0,""],["菜摘","地名",34.38169,135.90089,"吉野郡吉野町","","","",0,""],["菟田野上芳野","地名",34.46376,136.0165,"宇陀市","","","",0,""],["菟田野下芳野","地名",34.47086,136.00233,"宇陀市","","","",0,""],["菟田野佐倉","地名",34.44779,135.98048,"宇陀市","","","",0,""],["菟田野入谷","地名",34.47827,135.99543,"宇陀市","","","",0,""],["菟田野別所","地名",34.48098,135.96525,"宇陀市","","","",0,""],["菟田野古市場","地名",34.47276,135.96879,"宇陀市","","","",0,""],["菟田野大沢","地名",34.47819,135.97473,"宇陀市","","","",0,""],["菟田野大神","地名",34.48104,135.98892,"宇陀市","","","",0,""],["菟田野宇賀志","地名",34.46074,135.98255,"宇陀市","","","",0,""],["菟田野岩崎","地名",34.47597,135.96162,"宇陀市","","","",0,""],["菟田野岩端","地名",34.46932,136.03613,"宇陀市","","","",0,""],["菟田野平井","地名",34.48866,135.9816,"宇陀市","","","",0,""],["菟田野東郷","地名",34.46973,135.98673,"宇陀市","","","",0,""],["菟田野松井","地名",34.47125,135.97899,"宇陀市","","","",0,""],["菟田野稲戸","地名",34.46232,135.9707,"宇陀市","","","",0,""],["菟田野見田","地名",34.48139,135.97872,"宇陀市","","","",0,""],["菟田野駒帰","地名",34.46334,135.97879,"宇陀市","","","",0,""],["萩原","地名",34.41448,136.00275,"吉野郡東吉野村","","","",0,""],["葛","地名",34.5296,136.12778,"宇陀郡曽爾村","","","",0,""],["薬水","地名",34.39768,135.75264,"吉野郡大淀町","","","",0,""],["表野町","地名",34.32423,135.67542,"五條市","","","",0,""],["西中","地名",33.97682,135.72502,"吉野郡十津川村","","","",0,""],["西久留野町","地名",34.37813,135.69539,"五條市","","","",0,""],["西原","地名",34.19761,135.98776,"吉野郡上北山村","","","",0,""],["西吉野町八ッ川","地名",34.31054,135.76229,"五條市","","","",0,""],["西吉野町勢井","地名",34.26431,135.82368,"五條市","","","",0,""],["西吉野町北曽木","地名",34.29361,135.71318,"五條市","","","",0,""],["西吉野町十日市","地名",34.30147,135.77017,"五條市","","","",0,""],["西吉野町南山","地名",34.2952,135.76993,"五條市","","","",0,""],["西吉野町向加名生","地名",34.28953,135.72652,"五條市","","","",0,""],["西吉野町和田","地名",34.29331,135.7219,"五條市","","","",0,""],["西吉野町唐戸","地名",34.31976,135.77143,"五條市","","","",0,""],["西吉野町城戸","地名",34.28348,135.75054,"五條市","","","",0,""],["西吉野町夜中","地名",34.30848,135.74214,"五條市","","","",0,""],["西吉野町大峰","地名",34.27429,135.7827,"五條市","","","",0,""],["西吉野町大日川","地名",34.28646,135.72574,"五條市","","","",0,""],["西吉野町奥谷","地名",34.3215,135.73848,"五條市","","","",0,""],["西吉野町宗川野","地名",34.26223,135.75127,"五條市","","","",0,""],["西吉野町小古田","地名",34.29832,135.76128,"五條市","","","",0,""],["西吉野町尼ケ生","地名",34.30861,135.77117,"五條市","","","",0,""],["西吉野町屋那瀬","地名",34.29924,135.72525,"五條市","","","",0,""],["西吉野町川岸","地名",34.29074,135.76222,"五條市","","","",0,""],["西吉野町川股","地名",34.24572,135.79294,"五條市","","","",0,""],["西吉野町平沼田","地名",34.32143,135.75497,"五條市","","","",0,""],["西吉野町平雄","地名",34.26363,135.77491,"五條市","","","",0,""],["西吉野町本谷","地名",34.24166,135.75538,"五條市","","","",0,""],["西吉野町檜川迫","地名",34.27728,135.80302,"五條市","","","",0,""],["西吉野町永谷","地名",34.24406,135.72855,"五條市","","","",0,""],["西吉野町江出","地名",34.30527,135.71938,"五條市","","","",0,""],["西吉野町津越","地名",34.28202,135.7753,"五條市","","","",0,""],["西吉野町湯塩","地名",34.3104,135.72934,"五條市","","","",0,""],["西吉野町湯川","地名",34.33869,135.74347,"五條市","","","",0,""],["西吉野町滝","地名",34.31289,135.71916,"五條市","","","",0,""],["西吉野町百谷","地名",34.33705,135.75907,"五條市","","","",0,""],["西吉野町神野","地名",34.30265,135.71284,"五條市","","","",0,""],["西吉野町立川渡","地名",34.24812,135.7438,"五條市","","","",0,""],["西吉野町老野","地名",34.30943,135.71343,"五條市","","","",0,""],["西吉野町茄子原","地名",34.25061,135.76913,"五條市","","","",0,""],["西吉野町西新子","地名",34.31637,135.74796,"五條市","","","",0,""],["西吉野町西日裏","地名",34.25684,135.80305,"五條市","","","",0,""],["西吉野町西野","地名",34.26531,135.73491,"五條市","","","",0,""],["西吉野町賀名生","地名",34.29898,135.72001,"五條市","","","",0,""],["西吉野町赤松","地名",34.33345,135.74976,"五條市","","","",0,""],["西吉野町阪巻","地名",34.26976,135.75398,"五條市","","","",0,""],["西吉野町陰地","地名",34.28061,135.76196,"五條市","","","",0,""],["西吉野町鹿場","地名",34.30182,135.75341,"五條市","","","",0,""],["西吉野町黒渕","地名",34.29094,135.74004,"五條市","","","",0,""],["西増","地名",34.39267,135.83592,"吉野郡大淀町","","","",0,""],["西山","地名",34.30384,135.78399,"吉野郡下市町","","","",0,""],["西河","地名",34.35977,135.92375,"吉野郡川上村","","","",0,""],["西河内町","地名",34.37451,135.70626,"五條市","","","",0,""],["西谷","地名",34.43163,135.88325,"吉野郡吉野町","","","",0,""],["西阿田町","地名",34.37561,135.73956,"五條市","","","",0,""],["谷","地名",34.31148,135.79272,"吉野郡下市町","","","",0,""],["谷垣内","地名",33.96461,135.7658,"吉野郡十津川村","","","",0,""],["谷尻","地名",34.44855,136.03716,"吉野郡東吉野村","","","",0,""],["谷瀬","地名",34.10561,135.75746,"吉野郡十津川村","","","",0,""],["貝原","地名",34.29046,135.78489,"吉野郡下市町","","","",0,""],["赤滝","地名",34.303,135.89582,"吉野郡黒滝村","","","",0,""],["越部","地名",34.404,135.80937,"吉野郡大淀町","","","",0,""],["車谷町","地名",34.35079,135.76741,"五條市","","","",0,""],["込之上","地名",33.94607,135.79158,"吉野郡十津川村","","","",0,""],["近内町","地名",34.38042,135.70614,"五條市","","","",0,""],["迫","地名",34.33439,135.94835,"吉野郡川上村","","","",0,""],["迫西川","地名",33.97215,135.65247,"吉野郡十津川村","","","",0,""],["那知合","地名",33.97813,135.76452,"吉野郡十津川村","","","",0,""],["重里","地名",33.95604,135.73855,"吉野郡十津川村","","","",0,""],["野原中","地名",34.34361,135.70755,"五條市","1〜6丁目","","",0,""],["野原東","地名",34.34829,135.71728,"五條市","1〜7丁目","","",0,""],["野原町","地名",34.33719,135.72486,"五條市","","","",0,""],["野原西","地名",34.34368,135.69722,"五條市","1〜6丁目","","",0,""],["野尻","地名",34.03666,135.78554,"吉野郡十津川村","","","",0,""],["釜窪町","地名",34.34869,135.67741,"五條市","","","",0,""],["鉾立","地名",34.4131,135.77447,"吉野郡大淀町","","","",0,""],["長殿","地名",34.13388,135.75711,"吉野郡十津川村","","","",0,""],["長瀬","地名",34.31115,135.82244,"吉野郡黒滝村","","","",0,""],["長谷","地名",34.31733,135.80429,"吉野郡下市町","","","",0,""],["長野","地名",34.50524,136.11681,"宇陀郡曽爾村","","","",0,""],["阪合部新田町","地名",34.30493,135.68388,"五條市","","","",0,""],["阿知賀上村","地名",34.37717,135.80729,"吉野郡下市町","","","",0,""],["阿知賀中屋・新中屋","地名",34.38282,135.80026,"吉野郡下市町","","","",0,""],["阿知賀原野","地名",34.37523,135.79477,"吉野郡下市町","","","",0,""],["阿知賀小西垣内","地名",34.37894,135.79285,"吉野郡下市町","","","",0,""],["阿知賀山且","地名",34.38279,135.80395,"吉野郡下市町","","","",0,""],["阿知賀岡・岡坂","地名",34.37218,135.80206,"吉野郡下市町","","","",0,""],["阿知賀峯山","地名",34.36726,135.8005,"吉野郡下市町","","","",0,""],["阿知賀東中村","地名",34.37687,135.80196,"吉野郡下市町","","","",0,""],["阿知賀瀬ノ上","地名",34.3789,135.81283,"吉野郡下市町","","","",0,""],["阿知賀緑ヶ丘","地名",34.37881,135.79537,"吉野郡下市町","","","",0,""],["阿知賀西中村","地名",34.38172,135.79668,"吉野郡下市町","","","",0,""],["阿知賀野々熊","地名",34.37259,135.82238,"吉野郡下市町","","","",0,""],["霊安寺町","地名",34.33535,135.69745,"五條市","","","",0,""],["須恵","地名",34.3541,135.69804,"五條市","1〜3丁目","","",0,""],["風屋","地名",34.04794,135.77474,"吉野郡十津川村","","","",0,""],["飯貝","地名",34.38747,135.85953,"吉野郡吉野町","","","",0,""],["飯貝字藤田","地名",34.37561,135.8724,"吉野郡吉野町","","","",0,""],["香束","地名",34.41947,135.90272,"吉野郡吉野町","","","",0,""],["馬佐","地名",34.40446,135.81834,"吉野郡大淀町","","","",0,""],["高原","地名",34.30737,135.93259,"吉野郡川上村","","","",0,""],["高原土場","地名",34.3305,135.95953,"吉野郡川上村","","","",0,""],["高津","地名",34.07942,135.76705,"吉野郡十津川村","","","",0,""],["高滝","地名",33.9618,135.82244,"吉野郡十津川村","","","",0,""],["鳥住","地名",34.33443,135.86586,"吉野郡黒滝村","","","",0,""],["鷲家","地名",34.43338,136.00376,"吉野郡東吉野村","","","",0,""],["麦谷","地名",34.37477,136.03014,"吉野郡東吉野村","","","",0,""],["黒木","地名",34.29416,135.79768,"吉野郡下市町","","","",0,""],["黒駒町","地名",34.33589,135.68412,"五條市","","","",0,""]];
+const HASSPOT = PLACES.some(a => a[7]);   // 観光・店舗(分類cat付き)を持つ地域だけ、おすすめ・一覧・英語の案内を出す
+// 駅の路線別の並び。[事業者, 路線名, [PLACESの番号(駅)…]] 。路線順は駅の位置から作った目安(build/work/places/make_places.py)
+const LINES = [["近鉄","吉野線",[13,12,9,1,14,3,7,5,6]],["JR西日本","和歌山線",[4,2,8]],["近鉄","大阪線",[0,10,11]]];
+// 市町村の範囲表(県ページの市町村ボタンから ?at=<市町村コード> で開いた時に、地図をその範囲へ寄せる)。[コード, 名前, 緯度小, 経度小, 緯度大, 経度大]
+const MUNI = [["29449","Totsukawa Village",33.88958,135.64871,34.14013,135.88228],["29207","Gojo City",34.15064,135.66785,34.39246,135.75809],["29212","Uda City",34.44001,135.91545,34.57322,136.06569],["29441","Yoshino Town",34.34524,135.84045,34.42292,135.95294],["29453","Higashiyoshino Village",34.36824,135.94305,34.44856,136.06493],["29442","Oyodo Town",34.38093,135.73966,34.41408,135.84074],["29443","Shimoichi Town",34.30409,135.77724,34.37825,135.84749],["29452","Kawakami Village",34.23584,135.921,34.37203,136.03722],["29385","Soni Village",34.4876,136.08898,34.55344,136.15874],["29446","Tenkawa Village",34.19411,135.79966,34.2662,135.87737],["29450","Shimokitayama Village",33.99994,135.94941,34.06917,135.97997],["29451","Kamikitayama Village",34.07235,135.97162,34.2179,136.00573],["29444","Kurotaki Village",34.28233,135.82282,34.30657,135.83609],["29447","Nosegawa Village",34.15782,135.63308,34.17281,135.66354],["29386","Mitsue Village",34.51439,136.19401,34.5222,136.21517]];
+const OPNAME = i => OPS_EN[i] || D.ops[i];
+const GROUP = i => { const n = D.ops[i]; return n.startsWith("奈良交通") ? "narakotsu" : ["五條・十津川地域公共交通活性化協議会", "五條市", "十津川村", "南部地域公共交通活性化協議会", "吉野町", "名張市", "大淀町", "宇陀地域公共交通活性化協議会", "川上村", "御所市", "東吉野村", "津市", "高野町"].includes(n) ? "community" : "other"; };
+const GLABEL = { narakotsu: "Nara Kotsu", community: "Municipal community buses and shared taxis", other: "Other operators" };
+const GSHORT = { narakotsu: "Nara Kotsu", community: "Municipal", other: "Others" };
+const GTINY = { narakotsu: "Nara", community: "Muni", other: "Oth." };   // 320px級の超狭幅用
+const GORDER = ["narakotsu", "community", "other"];
+const GNUMSORT = ["narakotsu"];   // 系統番号の順に並べるグループ
+const css = n => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
+const stops = D.stops.map((s, i) => ({ i, name: s[0], lat: s[1], lon: s[2], op: s[3], rts: s[4], g: GROUP(s[3]) }));
+const routes = D.routes.map((r, i) => ({ i, op: r[0], name: r[1], total: r[2] || 0, seq: r[3] || null, stops: [], g: GROUP(r[0]) }));   // total＝この地図の範囲の外にも続く系統だけ付く、データ全体での停留所の数(make_data.py。設計 D-1)
+stops.forEach(s => s.rts.forEach(r => routes[r].stops.push(s)));
+routes.forEach(r => { r.names = [...new Set(r.stops.map(s => s.name))]; r.n = r.names.length; r.set = new Set(r.stops); });
+const routeLabel = r => r.en || r.name;
+// ---- 英語版：名前の英語(バス停＝stops_en.json・場所＝places_en.json・系統＝規則＋辞書)。日本語(標識の表記)は併記する。≈＝機械のローマ字(未確認) ----
+const P = (n, one, other) => n === 1 ? one : other;
+const SEN_ = ["Akanedai Housing","~Takasuminosato","Natsumidai 1","Natsumidai 1-kita","Natsumidai 2","Hiyoshinosato Marushe","Fureai Center","~Fureai Katsudo Center","Yahata Onsen","Yamabuki Hall","~Wasabitani","Wa Kusapo To Pono","Erube Town","Green Porisu Entrance","~Tekuno Chuo-dori Jr. High School","Tekuno Chuo-dori-higashi","~Tekuno-higashi-dori Jr. High School","Tekuno-higashi-dori-kita","~Hotel Subaru","Ribafirudo Yoshino","Ribafirudo Yoshino","~Ichi-no-tani (Higashiyoshino)","~Ichinotani","~Nanairo","~Mandai-bashi","~Mio","~Miokamidekakiuchi-guchi","~Mio-guchi","~Miodai-bashi","~Mionichiurashutsukakiuchi-guchi","Miura-guchi","~Mitatani","~Sansha-no-mori","~Sanchaya","~Uesangenya","~Kaminakakuro","~Uetanbara","~Kamiiashi","~Kamiiashi Jr. High School","~Kamiimai","~Ueuchimaki","~Kamidekakiuchi","~Kamidehashi","Kamikitayama Jr. High School","Kamikitayama Post Office","Kamiwada","~Uetako","~Uetako-guchi","~Ueogawa","~Ueogurisu","~Kami City","~Kami City Post Office","~Kami City-bashi","~Kami City Suieiba","~Kami City Sta.","~Ueanju","~Ueyanagi","~Uetochihara","~Uetochio","~Uekuwahara","~Uehigakihon","~Uenarai","~Kamisawahara","~Ueyu","~Ueyuyukihara","~Uesarushi","~Ueda Clinic","~Uedakobenten","~Uwayaosamu","~Uetateishi","~Uekasagi","~Ueironama","~Uekuzukawa","~Uekuzukawa-guchi","~Uenochi","~Uesaka","~Uekagechi","~Uewashiie","~Shitauenochi","~Shimonakakuro","~Shimoiko","~Shimoiashi","~Shimoiashi-guchi","~Shitauchimaki","~Shimode","~Shitasetsuhashi","~Shitasenbon Parking","~Geko","~Shimowada","~Shitaji","~Shitatako","~Getentsuji","~Shitakotsubose","~Shimogawa","~Shitaogurisu","Shimoichi Jr. High School","Shimoichi Imazaike","Shimoichiguchi Sta.","Shimoichi Honmachi","Shimoichi Tanaka","Shimoichi Town Office","~Shimohirano","Shimoyanagi","~Shitatochihara","~Shitatochio","~Shitakatsurahara","~Shitakuwahara","~Shitanarai","~Shitanagatani","~Shitafukase","~Shimoyu","~Shimoyukuchi","~Shimoda","~Shitayaosamu","~Shitatateishi","~Shitakasagi","~Shitaironama","~Shitakuzukawa","~Shitakuzukawa-guchi","~Shitakomiyukiue","~Gehan","~Gehanhon","~Shitakaorisoku","~Shitaryuko","~Fudo Pass-guchi","~Fudokutsu","~Sekaiisansekihi","~Nakakushi","~Nakaikuchi","~Nakaiko","~Nakasetsu","~Chuwata","Chuo-bashi","Nakaya","~Nakaanju","~Nakamurakakiuchi","~Nakahatenashi","~Nakatakekura","~Nakaironama","~Naka-nishi","~Nakatani","~Nakatani","~Nakagoshi","~Nakaguro","~Kushisaki","~Tanbara","~Tanjo","~Tanjo-guchi","~Tanjo-bashi","~Kuboya","~Kyubi","~Chichiyatsuji","~Ni-no-taki","~Nitsuno","~Gojuken","~Gomihara","Gojo Sta.","Gojo AEON","Gojo Bus Center","Gojo City Hall","~Gojo-machi","Gojo Hospital","Gojo Hospital","Gojo Hospital Entrance-guchi","Gojo-nishi Jr. High School","Gojo Sta. North Exit","Gojo High School","~Gotsu","~Gohyakuse","~Jinchi","Imai","Imai","~Imado","~Nakatani-guchi","Reading unconfirmed","~Igakendai-bashi","~Obatani-guchi","Sumiyoshi","Housing","~Sumikawa","~Ra","Sakura","Sakura Pass","~Sakuramasamitsu-ji","~Sada","~Sada Community Center","Kenko Zukuri Center","~Kenmin Ground","~Mitsuzo-ji","~Mitsunokakiuchi","~Mitsunokakiuchishita","~Nyuyukinami","~Iriya-guchi","~Iriya-guchi","~Irino","~Hachitaki","~Yatsuji-bashi","Muda Sta.","~Uchihara","~Uchihara","~Uchihara-bashi","~Uchimaki","~Uchimaki-guchi","~Uchimaki East Exit","~Uchimaki West Exit","~Uchimaki Post Office","~Naiya","~Naiyashita","~Shutsutanikohara","~Sakihisahoya","~Maeda-bashi (Iga)","~Zenki-guchi","~Katte Shrine","Kita-Muda","~Kitamata","~Kitawada","~Kitawada-guchi","~Kitashioya-guchi","Kitano-kita Community Center","~Kitanodai 1","~Kitanodai 2","~Kitanodai 3","~Kitanodai 5","~Kitanodai 6","~Kitanodai 7","~Kitanodai-guchi","~Kitanodai-nishi","~Totsukawa Kohara","Totsukawa Town Office","Totsukawa Village Office","Totsukawa Onsen","~Chiyo-bashi","~Sengokukyonantsume","~Minamiwa Hospital","~Nangokusei","~Nangokuseijichi Hall","~Nangokuseizuimichi-guchi","~Nangokuseisuido-guchi","~Minamisaka","~Nanennai","~Minamiyamato 1","~Minamiyamato 2","~Minamiyamato 3","~Minamiyamato 1","~Minamiyamato 3","~Minamiyamato 2","~Minamiono","Minami-Nara General Medical Center","Minami-Nara General Medical Center","~Nannichiura","~Nannichiura-guchi","~Haraya-guchi","~Kodai","~Furuichibajizo-no-tsuji","~Furuichibasuibun Shrine","~Furunoko","~Furunoko-guchi","~Yoshino Ohashiminamizume","~Yoshino Yamaeki","~Yoshino Hirashita (Bokasuiso)","~Yoshinotaira Chuo","~Yoshinotaira Entrance","Yoshino Ferry Terminal","~Yoshinonama Konkurito","Yoshino Town Office","Yoshino Town Office","Yoshino Hospital","Yoshino-Jingu","Yoshino High School","~Kochi","~Kazusamata-guchi","~Kazusara","~Wadako","~Karatoyama","~Zenshiro","~Zenshiro-guchi","~Kuzu","~Kuzu-higashi","~National Route Sanzai","~Tsuchida","~Tsuchida (Seibu JA)","~Chihara","~Jizo","~Jizo","~Sakamaki","~Tsubochi","~Kaki-no-se","~Kakiuchichi","~Kido","~Do-no-se","~Shiokawahara-bashi","~Shiozuru","~Zokuchi","Okubo-guchi","~Omata","~Omata-guchi","Yamato-Kamiichi Sta.","~Yamatoryu-guchi","~Oto Branch Office","~Oto Onsen Yumenoyu","~Dai Uda","~Dai Uda High School","~Omine-machi","~Okawakyonantsume","~Dainichikawa","Osugi","~Daiyariso","~Otsuko","~Otsuetsu","Oyodo Bus Center","Oyodo Town Office","Oyodo Town Office","~Owatari","~Otaki","~Otaki Dam Gaku Beru Bosai Station","~Daizunama","~Daizuseita-bashi","~Obekakiuchi","~Osako Dam","~Osako-guchi","Ono","Ono","~Onodeai","~Onozaisho","Ono-ji","~Onoshinden-higashi","~Onoshinden-nishi","~Onokatagawa","~Oada Kogen-higashi","~Ten Gase","~Ten-no-kawa Onsen","Tenkawa Wada","Tenkawa Kawai","~Tenkawa Nishitanikuchi","~Tengadaibenzaiamatsuyashiro","Tenmadai-higashi 3","Tenmadai-higashi 2","Tenmadai-nishi 2","Tenmadai-nishi 4","~Amatsuji","~Taromichi","~Taromichi Community Center","~Shitsuo","~Okusenbon-guchi","~Okuhatenashi","~Okumusashi","~Okukatagawa","~Okukyoko","~Oku Koshibe","~Okusato","~Okutaka-bashi","~Okutakataki","~Nyoiwa Teraguchi","~Gaku Beru Bosai Station","~Gakuenmae","~Magonyubu","~Ui","~Ui-guchi","~Ugakokorozashi","~Uno","Uda Municipal Hospital","Uda City General Gymnasium","Uda Hirao","Uda Fujii","Uda Police Station","~Shukawano-bashi","Muroguchi-Ono Sta.","Muro-ji","Muro Post Office","~Muro Ryuketsu Shrine","~Miya-no-taira","~Miya-no-taira","Miyamae-bashi","~Miyataki","~Terauchi","~Teragakinai","~Teragakinai","~Teragakinai Police Box","Terao","~Dosuimichi","~Koi","~Shodaishita","~Kohara","~Kohara-guchi","~Shomyo","~Shomyo-guchi","~Kotsubose","~Kokabe","~Kokabeue","~Kotaroiwa","~Koya","~Oyama","~Oyamate","~Komura","~Komuradai-bashi","~Ogurisu","~Komorideai","~Kohechi","~Kohechi","~Sho Nagao-bashi","~Shofu","~Kyoden-machi","Yamaguchi","~Yamaten-guchi","~Yamazakidai-bashi","Yamate","~Yamatetani","~Yamamotochaya","~Yamakasu","~Yamakasu","~Yamakasu Post Office","~Yamakasu East Exit","~Yamakasu-nishi","~Yamakasu West Exit","~Yamashoku","~Oka","~Okazaki-machi","~Iwasaki East Exit","~Iwasaki-bashi","~Iwamura-bashi","~Iwamori (Shimoichi Onsen)","~Iwamori (National Route)","~Iwasaka-bashi","~Minetera","~Mine Teraguchi","~Gakuken-bashi","Kawakami Village Office","Kawakami Clinic","~Kawatsu","~Kawatsudai-bashi","~Kawatsu-nishi","~Ichihara","~Ichihara-guchi","~Heigen","~Heigen-guchi","~Heichi","~Hirahata Assembly Hall","~Hiratani-guchi","Hirano-guchi","~Hirohashi Pass","~Shoyatsuji","Benten","~Benzaiten","~Ninja-bashi-higashi","~Shiga","~Sosaka","~Sosaka-guchi","~Ju Shrine","~Tokorotani","~Saitani","Oritate","Oritate-guchi","~Oritateyamazaki","~Kakari","~Kakari East Exit","~Kakarinishi","~Kakari West Exit","~Sonpo-bashi","~Shikitsu","~Atarashi","~Atarashikyoku","~Shintaku Main Store","~Shingakuken-bashi","~Nitta","Shinmachi","~Shinno","~Shinnoinari","Hiura","~Former Nakaryumon Elem. School","~Former Kichikita Elem. School","Former Oyodo Hospital","~Asahikuchi","~Asahihashi","~Hoshi Nokuni","~Subaru-no-sato","Soni","Soni School","Soni Benten-bashi","Soni Town Office","Soni Village Office","~Soni Yokowa","Soni Nagano","~Soni Kogen","~Soni Kogen Famu Garden","~Gatsutani-guchi","~Mokko-no-sato","~Kizu","~Kizuegakinai","~Kizushitakakiuchi","~Kizunakagaichi","~Kizumeiro","~Kizu Pass","~Kizugawa Community Center","~Momen-bashi","~Honkushisaki","~Honnitsuno","~Honkokabe","~Ponkotaki","~Satsu-no-tsuji","~Sugikiyoshi","~Sugitani","~Sugitanideai-bashi","~Sonei Housing","Higashinaka","~Higashi Jr. High School (above)","~Higashi Jr. High School (below)","Higashiyoshino Elem. School","Higashiyoshino Village Office","~Matsukubotaku","~Matsuiten Shrine","~Matsui-bashi","~Matsui-nishi","~Matsuhashira","~Matsuhashira-guchi","~Matsubakakiuchi","~Hatenashisuido-guchi","~Kashiwagi","~Yanagi","~Yanase","~Tsuganohon","~Tochihara","~Tochio","~Tochio","~Tochimoto-guchi","~Sakaeyama Teraguchi","~Kayamoritaku","~Katsurahara","~Momoki","~Kuwahata","~Kuwahatakoi","~Kuwahatasuido-guchi","~Sakurami Shrine","~Higakihon","~Higakihon Market","~Higakihon (Chuo Community Center)","~Hinokimaki","~Hinokimaki Market","~Ume-no-ki","~Kajiyakakiuchi","~Mori","~Morizaisho","~Shinrinshokubutsu Park","~Shiitaira","~Narai","Haibara Ohashi","Haibara Sta.","Haibara Sta. (Kita-guchi)","~Tsukinoki-bashi","~Kashio","~Kunugisunako","~Kunugisunako","~Takeshiki","~Musashionoe","~Musashioshita","~Musashitani-guchi","~Donoi","~Donoinoshita","~Donoi-guchi","~Tonobara","~Hahasato","~Hahasato-minami","~Pippu","~Hiso-guchi","~Mizushiri","Mizusawa-guchi","Nagai","Nagai-guchi","~Nagainichiura","~Nagatani","Ikegami","~Ikehara","~Ikehara Dam","~Ikeharadai-bashi","~Ikemine","~Ikemine Park","~Ikeana","~Ikeana South Exit","~Okikin","~Sawashutsu","~Sawahara","~Kawaraya","Kawai","~Kawazutani","~Dokawa Onsen","~Tsukoshigaya","~Tsukoshino-bashi","~Tsufuro Lake North Exit","~Tsufuro Lake-guchi","~Urako","Fire Station-kita","~Miyama","~Fukase","~Yuyukihara","~Yuyukino","~Yuyukino-bashi","~Yujonsensugi-no-yu","~Taki","~Taki-no-yu","~Takiguchi","~Takikawa","~Takikawa-guchi","~Torohatcho","~Seto","~Karasuhara","~Katagawa","~Katagawa-guchi","~Kataya-bashi","~Kyoko","~Kyotogamishutsu","~Kyokotobiishi","~Igaya-bashi","~Tamagakinai","~Tamaritsu-bashi","~Tamakiyamato Yamaguchi","~Tamakikawa","~Tamakikawashimo","~Ikuko","~Tanoka","Tanaka-guchi","Denen 1","Denen 3","Denen 2","Denen 5","~Denen 5 Naka","Denen 5-minami","Denen 4","~Tado","~Tado-bashi","~Hatakeya","~Hatakeya-guchi","~Shiroya","~Shirakawa","~Shirakawawatari","~Shirakawa Power Station","~Prefectural Minamiwa Danchi-guchi","~Masagose","~Yaosamuwakayama","~Yaso-guchi","~Sekishu-bashi","~Jinmukakiuchi","~Kanno","~Fukuchi","Fukugami Sta.","~Kubokakiuchi","~Kubokakiuchishita","~Kubokakiuchimiya-no-shita","~Tateri","~Taterikojin","~Tateno","~Tateno-guchi","~Ryuwaya-guchi","~Ryoan-bashi","~Chikurinin","~Taketani","~Fuefuki","Kasagi","~Kasamatsu","~Shinoraku","~Bi Yoshinodai Entrance","~Miyoshinosono","~Bi Yoshino-bashi","~Rono","~Rono South Exit","~Jimei","~Ashihara","~Hana Yoshino Garden Hills","~Hana Yoshino Habu Park","~Hana Yoshino Chuo Park","~Hanayashita","Wakamiya-bashi","~Kusadani-guchi","~Kojin-guchi","~Kikuya","~Natsumi","~Usagitano","~Hagiwara","~Ochiai (Iga)","~Kuzu","~Kagechi","~Warabio","~Warabio-guchi","~Yabuchi-bashi","~Tonai-bashi","~Yabuchi-bashi","~Hebi Gatani","~Aritori","~Eisei Center","~Koromohiki","~Nishi Jr. High School","~Nishi Jr. High School-guchi","~Nishinakaotani-bashi","~Nishihara","Nishi-Yoshino Agricultural High School","~Nishibo","Nishiyama","~Nishikawadeai","~Nishikawa","~Nishikawakuchi","~Nishitani","~Nishitanikuchi","~Nishigeiin","~Kannonmineto Yamaguchi","~Tsunogawara","~Tani-no-kuchi","~Tanigakinai","~Mameshi","~Kanaseiwata","~Kanaseiwata North Exit","~Kananama JA","~Akahani-guchi","Koshibe Sta.","~Todoroki","Tsujido","Tsujido-minami","Tsujido-guchi","~Komiyukiue","~Sakonishikawa","~Sakonishikawa-guchi","~Tsuinoya","Sports Park","~Michisu","~Nashiriai","~Shigesato","~Shigesato-guchi","~Tani-guchi","~Noyori","~Nohara South Exit","~Nohara (National Route)","~Nohara (Old Road)","Nojiri","Nojiri-guchi","~Nohirose","~Nomi","Nosegawa Village Office","~Kotohira Shrine-guchi","~Mitake-ji","~Suzu-no-otohashinishitsume","~Suzunyu","~Nagamine Community Center","Nagasaki","~Chodono","~Chodono Power Station","~Hase","~Hase-guchi","~Nagano (Iga)","~Heikun","~Sakamoto","~Atamine Park","~Reian-ji","~Otoeda","Sue","~Kazeya","~Kazeyahanazono","~Kaorisoku","~Kaorinashidai","~Umasa Entrance","~Umasa-guchi","~Takai","~Takasuke","~Takagiyama Observatory","Takatsuka","Takaoka","~Takamori-no-sato","~Takahi-bashi","~Takahashi-higashi","~Takatsu","~Takatsushita","~Takatakishita","~Takataki Jr. High School","~Takataki-guchi","~Takadawa","~Takaishi","Takami Hirano","~Takamito Yamaguchi","Takami Clinic","~Takano-bashi","~Washiie","~Washiie-guchi","~Washiietani","~Mugitani","~Mugitani-guchi","~Asota","~Kurofuchi","~Kurofuchi-guchi","~Kurotaki Annai Center","~Ryumon Post Office"];   // 先頭の ~ ＝等級C(機械のローマ字・≈を付ける)。容量を抑えるため等級A/Bは名前だけ
+stops.forEach((s, i) => { const e = SEN_[i]; s.eg = e[0] === "~" ? "C" : "AB"; s.en = s.eg === "C" ? e.slice(1) : e; });
+const REN = ["~Hotto Bus Nishiki","~44 Muroguchi-Ono Sta. Muro Ryuketsu Shrine","~20 Soni Kyochikei Line","~21 Soni Kyochikei Line","~2 Tenmadai-higashi 3 dai Uda","20 Haibara Sta. Tenmadai-higashi 3","~23 Haibara Sta. hari IC","24 Haibara Sta. Yamabe High School","~[Bun] Haibara Sta. Hayama","~52 Haibara Sta. Yokiura","~Uda Chiikirenkei Community Bus (Oku Uda Wakuwaku Bus)","~1 Haibara Sta. dai Uda","~10 Haibara Sta. Usagitano","15 Higashiyoshino Village Office Haibara Sta.","~31 Okutsu Line","~Misugi-nishi Route","~Misugi-minami Route","~Misugi Loop Route","~71 Sakurai Sta. South Exit dai Uda","~toward Sugitani","~toward Shisato","~toward Atarashi","~Yoshino-machi Community Bus (Smile Bus) Shomyo / Irino → Kami City Sta. / Yoshino Hospital","51 Yamato-Yagi Sta. (Minami) Shimoichiguchi Sta.","52 Yamato-Yagi Sta. Shimoichiguchi","Yodori Bus (Loop Route)","Gose City Community Bus “Himawari” Higashi Course","~Yodori Bus (Kan Line Route)","~[Bun] Yoshino High School (Yamato-Kamiichi Sta.)","~Yoshino-machi Community Bus (Smile Bus) Suzu-no-otohashinishitsume / Nangokusei / Kashio → Kami City Sta. / Yoshino Hospital","Yamabuki Bus","~Nanbu Chiikirenkei Community Bus (R169 Yuyu Bus)","~[Koikitsuin] Totsukawa Onsen Fukugami Sta.","~[Koikitsuin] Fukugami Sta. Totsukawa Onsen","~Minami-Nara General Medical Center Tsuin Rain","~Gojo / Totsukawa Chiikirenkei Community Bus (Koikitsuin Rain)","~60 Kintetsu Yamatotakada Sta. Gojo Bus Center","~66 Kintetsu Yamatotakada Sta. Gojo Bus Center (via Tekuno-higashi-dori Naka)","~70 Kintetsu Yamatotakada Sta. Gojo Bus Center (via Kamokiminoyu)","~76 Gojo Bus Center Kintetsu Yamatotakada Sta.","161 Gojo Bus Center Yamato-Yagi Sta.","~301 Yamato-Yagi Sta. Shingu Sta.","~302 Shingu Sta. Yamato-Yagi Sta.","~2 Oyodo Bus Center Dokawa Onsen","~Michi Line Bus [Yoshino Yamaokusenbon-guchi Rain] Inbound 1","4 Shimoichiguchi Sta. Kasagi","~7 Shimoichiguchi Sta. Nakaanju","~8 Shimoichiguchi Sta. Iwamori (Shimoichi Onsen)","~22 Shimoichiguchi Sta. Heigen","Gojo Sta. / toward Denen Rain","~366 Iwamori (Shimoichi Onsen) Saitani","~10 Kido Gojo Bus Center","~11 Kido Gojo Bus Center","~12 Kido Gojo Bus Center","~Shitatsutsuga – Gojo AEON Line","~[Bun] Nishi-Yoshino Agricultural High School","~11 Express Tateri Line (Takanoryujin Sky Rain)","Asahi Line","Tanise Line","Main Line","~Kannokawa Line","Ueyukawa Line","~Torohatcho Line","Ono Line","Takataki / Musashi Line","~Nashiriai Line","~Sakonishikawa Line","~Sakonishikawa Line (via Honkushisaki)","~Nishinakaotani-bashi Line","~Imanishi / Matsuhashira Line","Takamori Line","~Uchihara Line","~Nitsuno Line","~Nanairo / Motomiya Line","~Hatenashi Line","Kashihara Line"];   // 先頭の ~ ＝等級C(≈)
+routes.forEach((r, i) => { const e = REN[i] || ""; r.eg = e[0] === "~" ? "C" : "B"; r.en = r.eg === "C" ? e.slice(1) : e; });
+const OPS_EN = ["Nabari City","Nara Kotsu","Mie Kotsu","Uda Area Public Transport Revitalization Council","Tsu City","Higashiyoshino Village","Yoshino Town","Oyodo Town","Gose City","Kawakami Village","Southern Area Public Transport Revitalization Council","Gojo City","Gojo & Totsukawa Regional Public Transport Revitalization Council","Yoshino Omine Cable Jidosha","Koya Town","Nankai Rinkan Bus","Totsukawa Village"];
+const PEN = ["Sanbonmatsu Sta.","Shimoichiguchi Sta.","Gojo Sta.","Muda Sta.","Kita-Uchi Sta.","Yoshino-Jingu Sta.","Yoshino Sta.","Yamato-Kamiichi Sta.","Yamato-Futami Sta.","Oada Sta.","Muroguchi-Ono Sta.","Haibara Sta.","Fukugami Sta.","Kusurimizu Sta.","Koshibe Sta.","Natsumidai","~Yo Muraiwamori","~Yo Murainekai","~Yo Murakusadani","~Yo Murakanko","~Yo Murakogen","~Nanairo","Sanzai-cho","~Mio",["Mitsu","","","B"],["Miura","","","B"],"~Sanchaya","~Kami","Kamino-cho","~Uetako","~Kami City Ue-no-machi","~Kami City Rokuken-machi","~Kami City Ojinsen","~Kami City Honmachi","~Kami City Yokocho","~Uekuwahara","~Ueikehara","~Ueyukawa","~Uekuzukawa","~Uetani","~Uenochi","Kozuke-cho","Shimono-cho","~Shitatako","~Shimoichi Uesaka","~Shimoichi Gehan",["Shimoichi Imazaike","","","B"],["Shimoichi North Exit","","","B"],"~Shimoichi Horike","~Shimoichi Dokakiuchi","~Shimoichi Omine",["Shimoichi Tenjin","","","B"],"~Shimoichi Miyanoko","~Shimoichi Terauchi","~Shimoichi Yamazaki","~Shimoichi Soue",["Shimoichi Shinmachi","","","B"],"~Shimoichi Meidai",["Shimoichi Honmachi","","","B"],"~Shimoichi Sakaemachi","~Shimoichi Hiwadakura","~Shimoichi Ueki",["Shimoichi Tanaka","","","B"],["Shimoichi Akitsu","","","B"],["Shimoichi Aobadai","","","B"],"~Shitakuwahara","~Shitaikehara","~Shimobuchi","~Naka","Nakano-cho","~Nakazo","~Chuoku","~Nakato Kaminakako","~Nakato Kamitaira","~Nakato Kawato","~Nakatoshizuku","~Nakatsugawa","Nakacho","~Nakatani","~Nakagoshi","~Nakaguro","Tanbara-cho","~Tanji","~Tanjo","Kuruno-cho","~Kyubi","Futami","Gojo","~Gohyakuse","~Goshiki","~Ihikari","~Ido","~Jinchi","Imai",["Imai","","","B"],["Imai","","","B"],"Imai-cho","~Imaki",["Imanishi","","","B"],"~Izuo","~Igaken","~Obatani","Sugawa-cho","~Ra","~Sameiden","~Sada","~Nyuyukinami","~Nyuyukinamiikadaba","~Irino","Hatta-cho","Mutsukura-cho",["Muda","","","B"],"~Uchihara","~Naiya","Deyashiki-cho","~Shutsutani","~Zenki","~Kitaima-nishi","~Kitaimanishiomata",["Kita-Muda","","","B"],"~Kitawada","~Kitashioya","~Kitakohara","Kita-Yamacho","~Kitamata","~Kitamatauekakiuchi","~Kitakado",["Kitano","","","B"],"~Senmata","~Nangokusei","~Minamiono","~Nannichiura","~Minamikaku","Minami-Adacho","Haracho","~Harayasomatani","~Harayashiiba","~Yoshinoyama Kamimachi","~Yoshino Yamashita-machi","~Yoshinoyama Nakacho",["Wada","","","B"],"~Zenshiro Kamino-cho","~Zenshiro Shimono-cho","~Zenjotoyuki-machi","~Zenshiroinari-machi","~Zenjosaiyuki-machi","~Kisaya","~Kuzu","~Tsuchiyaharanaka-mura","~Tsuchiyaharado","~Tsuchiyaharaono","~Tsuchiyaharamine","~Tsuchiyaharamizu-guchi","~Tsuchiyaharahatai","~Tsuchiyaharasasakyu","~Tsuchida","~Tsubochi","~Dohara","~Shioi","~Shioya","~Shiono","~Zokuchi","Otocho Nakaihoji","Otocho Nakabara","~Otocho Nakabara Kaitaku","Otocho Dohira","~Otomachiamatsuji","Otocho Ui","Otocho Kodai","Otocho Hikitsuchi","Otocho Sotani","Otocho Tonono","Otocho Shimizu","Otocho Shinohara","Otocho Sudare","~Otomachiakaya","Otocho Tsujido","Otocho Tojikimi","Otocho Sakamoto","Otocho Hiyoso","Ouda Manroku","Ouda Kaminaka","Ouda Kamishina","Ouda Kamishin","Ouda Kamihon","Ouda Kamikataoka","Ouda Shimonaka","Ouda Shimodeguchi","Ouda Shimoshina","Ouda Shimomiyanoku","Ouda Shimohon","Ouda Shimokataoka","Ouda Shimotake","Ouda Shimocha","Ouda Nakanosho","Ouda Nakashin","Ouda Itsutsu","Ouda Uchihara","Ouda Ideshin","Ouda Hansaka","Ouda Kuchiimai","Ouda Wada","Ouda Tsukawaki","Ouda Daito","Ouda Okuma","Ouda Ureshigawara","Ouda Mochi","Ouda Miyanoku","Ouda Koideguchi","Ouda Kowada","Ouda Kotsuke","Ouda Yamaguchi","Ouda Iwamuro","Ouda Iwashimizu","Ouda Hirao","Ouda Saigatsuji","Ouda Hiro","Ouda Kasuga","Ouda Hongo","Ouda Higashihirao","Ouda Kurino","Ouda Maki","Ouda Tawara","Ouda Shiratorii","Ouda Shibo","Ouda Fujii","Ouda Nishiyama","Ouda Choshi","Ouda Hasama","Ouda Noyori","Ouda Sekido","Ouda Matorigaki","Ouda Asoda","Ouda Kurogi",["Oiwa","","","B"],"Ozu-cho","Obuka-cho","~Otaki","~Otakiotaki","~Otakishiroyaku","~Osawa-machi","~Ose","~Daizunama","~Osako",["Ono","","","B"],"Onoshinden-cho","Ono-cho","~Taromichi","~Umiyahara","Uno-cho","Muro","Muro Sanbonmatsu","Muro Shimotaguchi","Muro Mukoji","Muro Tada","Muro Ono","Muro Fukano","Muro Takidani","Muro Muyama","Muro Taguchimotokamitaguchi","Muro Taguchimototsunogawa","Muro Totori","~Muro Tatsuguchi","Muro Nishitani","Muro Kuroiwa","~Miyataki","~Teragakinai",["Terao","","","B"],"~Terato","~Sho","~Koi","~Kohara","~Shomyo","Owa-cho","~Kotsubose","~Oyamate","Koyama-cho","Kojima-cho","~Ogawa","~Ogawa","~Ogurisu",["Komori","","","B"],"~Shotochi","~Koji","~Sho Nagao","~Kyoden-machi",["Yamaguchi","","","B"],"~Yamaten","~Yamazaki",["Yamate","","","B"],"~Yamatetani","Yamada-cho","~Yamakasu","~Yamanishi","Yamakage-cho","Okaguchi","Okacho","~Iwatsubo","~Minetera","Shimano-cho",["Kawai","","","B"],"~Kawatsu","~Hidariso","~Taira","~Heigen",["Hirao","","","B"],"~Hiratani",["Hirano","","","B"],"~Hirohashinaka-mura","~Hirohashimineshutsu","~Hirohashihirosetani","~Hirohashisosaka","~Hirohashishimizu",["Hirose","","","B"],"~Anju","~O Yoshino",["Misono","","","B"],"Miyama-cho","~Shiga","~Saitaninaka","~Saitanidonoshutsu","~Saitanitani",["Oritate","","","B"],"~Mochio","~Kakari","~Shinju Saiwaicho","~Shinjushinju","~Shinjuto-machi","~Atarashi","Shinmachi","~Shinno","~Nichiura","~Asahi","Kinohara-cho","~Kizu","~Kizugawa","Honmachi","~Sugikiyoshi","~Sugitani",["Higashi-no-kawa","","","B"],["Higashinaka","","","B"],"~Higashikawa","~Higashikawanakai","~Higashikawayasuba","~Higashikawayanase","~Higashikawamiyama","~Higashikawakoromohiki","~Higashikawatakasuke","Higashi-Adacho","Sogio","~Hayashi","~Kashiwagi","~Hahasohara","~Yanagijiueyanagi","~Yanagiji Chuo","~Yanagijichu-mura","~Yanagiji Besshiyo","~Yanagiji Tajiri","~Tochiharatochihara-higashi","~Tochiharatochihara-nishi","~Tochio","~Tochimoto","~Katsurahara","~Momomatakamide","~Momomataide","~Momomatabingo","~Momomataokuyama","~Momomatamachiyaue","~Momomatamachiyashita","~Momomatashobu","~Momomatanishide","~Kuwahata","~Nashido","~Narai","Haibara Akanedai","Haibara Hinokizaka","Haibara Sanguji","Haibara Kamiidani","Haibara Shimoidani","Haibara Yataki","Haibara Uchimaki","Haibara Ogai","Haibara Tenmadaihigashi","Haibara Tenmadainishi","Haibara Yasuda","Haibara Yamaji","Haibara Yamabesan","Haibara Kaiba","Haibara Yanagi","Haibara Kuridani","Haibara Sakuragaoka","~Haibara Hinokimaki","Haibara Harumigaoka","Haibara Mori","Haibara Hifu","Haibara Ikegami","Haibara Sawa","Haibara Ishida","Haibara Fukuchi","Haibara Fukunishi","Haibara Kasama","Haibara Sasagaku","Haibara Jimyo","Haibara Nizaka","Haibara Haginosato","Haibara Hagihara","Haibara Tsunogawara","Haibara Morokino","Haibara Akabane","Haibara Akaze","Haibara Adachi","Haibara Nagamine","Haibara Ameshi","Haibara Nukai","Haibara Takai","Haibara Takatsuka","Haibara Takahagidai","~Makio","~Kashihara","~Kashio","Kashitsuji-cho","~Hashiya","~Higakihon","~Takeshiki","~Musashi","~Donokawa","~Hiso",["Nagai","","","B"],"~Ikemine","~Iketsukawa","~Ikeana","~Okikin","~Sawahara","~Sawatani","~Kawaraya",["Kawai","","","B"],"~Numatahara","~Dokawa","~Urako","~Yuyukihara","Yutaniichizuka-cho","~Takio","~Takikawa","Takicho","~Takihatake","~Takino","Seto","Hiuchi-cho","Makicho","Inukai-cho","~Kyoko","~Sarushi","~Tamagakinai","~Tamakikawa","Obusu-cho","Denen","Tadono-cho","~Hatakeya","Hatakeda-cho","~Shiroya","~Shirakawa","~Shirakawawatari","Aitani-cho","~Yaosamu","~Yaso","~Ishidotani","~Kamishita","~Kamiyukitani","~Kamiyukitanisanyukiko","~Kamimatsue-mura","~Kamimatsunaka-mura","~Kamimatsukoya","~Kamisuekawago","~Kamimatsushikitsu","~Kamimatsuhigashi-machi","~Kamimatsu Nishimachi",["Fukugami","","","B"],"~Kubokakiuchi","~Tateishiuetateishi","~Tateishishitatateishi","~Tateishikagechi","~Tateri","~Tateno","~Tatenotodoroki","~Takezutsu",["Kasagi","","","B"],"~Kagoyama","~Awameshitani","~Wakikawa","~Ironama","~Ashihara","~Kannokamisato","~Kannonaka-mura","~Kannonakano","~Kannomaetani","~Kannoshotani","~Kannotogo","~Kannoyasushihara","~Kannonishikawa","~Kanno Nagao","~Kannokiwatsuchiryo","~Natsumi","Utano Kamihono","Utano Shimohono","Utano Sakura","Utano Nyudani","Utano Bessho","Utano Furuichiba","~Usagitanosawa","Utano Ogami","Utano Ukashi","~Usagitanoiwasaki","Utano Iwahashi","Utano Hirai","Utano Togo","Utano Matsui","Utano Inado","Utano Mita","Utano Komagaeri","~Hagiwara","~Kuzu",["Kusurimizu","","","B"],"Hyono-cho",["Nishinaka","","","B"],"Nishi-Kurunocho","~Nishihara","~Nishi-Yoshino Machihachikkawa","Nishiyoshinocho Sei","Nishiyoshinocho Hokusogi","Nishiyoshinocho Tokaichi","Nishiyoshinocho Minamiyama","Nishiyoshinocho Mukaiano","Nishiyoshinocho Wada","Nishiyoshinocho Karato","Nishiyoshinocho Jodo","Nishiyoshinocho Yonaka","~Nishi-Yoshino Machiomine","Nishiyoshinocho Obikawa","Nishiyoshinocho Okudani","Nishiyoshinocho Munegawano","Nishiyoshinocho Oburuta","Nishiyoshinocho Amagasho","Nishiyoshinocho Yanase","Nishiyoshinocho Kawagishi","Nishiyoshinocho Kawamata","Nishiyoshinocho Hiranumata","Nishiyoshinocho Hirao","Nishiyoshinocho Motodani","~Nishi-Yoshino Machihinokigawasako","Nishiyoshinocho Eitani","Nishiyoshinocho Ezuru","Nishiyoshinocho Tsugoshi","Nishiyoshinocho Yushio","Nishiyoshinocho Yukawa","Nishiyoshinocho Taki","Nishiyoshinocho Momodani","Nishiyoshinocho Kono","Nishiyoshinocho Tatekawado","Nishiyoshinocho Oino","Nishiyoshinocho Nasuhara","Nishiyoshinocho Nishiatarashi","Nishiyoshinocho Nishihiura","Nishiyoshinocho Nishino","Nishiyoshinocho Ano","Nishiyoshinocho Akamatsu","Nishiyoshinocho Sakamaki","Nishiyoshinocho Onji","Nishiyoshinocho Shishiba","~Nishi-Yoshino Machikurofuchi","~Nishizo",["Nishiyama","","","B"],"~Nishikawa","Nishi-Kawachicho","~Nishitani","Nishi-Adacho","~Tani","~Tanigakinai","~Tanishiri","~Tanise","~Kaibara","~Akataki",["Koshibe","","","B"],"Kurumadani-cho","~Komiyukiue","Chikauchi-cho","~Sako","~Sakonishikawa","~Nashiriai","~Shigesato","Noharanaka","Nohara-higashi","Nohara-cho","Nohara-nishi",["Nojiri","","","B"],"Kamanokubo-cho","~Hokoritsu","~Chodono",["Nagase","","","B"],"~Hase",["Nagano","","","B"],"Sakaaibeshinden-cho","~Achigaue-mura","~Achiganakaya / Shinchuya","~Achikaharano","~Achigakonishikakiuchi","~Achigayamakatsu","~Achigaoka / Okasaka","~Achigamineyama","~Achiga Higashinaka-mura","~Achigase-no-ue","~Achiga Midorigaoka","~Achiganishinaka-mura","~Achigagagakuma","Ryoanji-cho","Sue","~Kazeya","~Iigai","~Iigai Fujita","~Kaorisoku","~Umasa","~Kogen","~Kogendoba","~Takatsu","~Takataki","~Torisumi","~Washiie","~Mugitani","~Kuroki","Kuroma-cho"].map(x => typeof x === "string" ? (x[0] === "~" ? [x.slice(1), "", "", "C"] : [x]) : x);   // 容量を抑えるため、名前だけ＝文字列・名前＋等級Cだけ＝先頭 ~ の文字列(2026-11-01)
+const LOPD = {"近鉄":"Kintetsu Railway","JR西日本":"JR West"}, LEND = {"吉野線":"Kintetsu Yoshino Line","和歌山線":"JR Wakayama Line","大阪線":"Kintetsu Osaka Line","近鉄|吉野線":"Kintetsu Yoshino Line","JR西日本|和歌山線":"JR Wakayama Line","近鉄|大阪線":"Kintetsu Osaka Line"}, AEND = {"宇陀市":"Uda City","吉野郡大淀町":"Oyodo Town","五條市":"Gojo City","吉野郡吉野町":"Yoshino Town","吉野郡下市町":"Shimoichi Town","吉野郡十津川村":"Totsukawa Village","吉野郡東吉野村":"Higashiyoshino Village","吉野郡野迫川村":"Nosegawa Village","吉野郡川上村":"Kawakami Village","吉野郡下北山村":"Shimokitayama Village","吉野郡黒滝村":"Kurotaki Village","吉野郡天川村":"Tenkawa Village","宇陀郡曽爾村":"Soni Village","宇陀郡御杖村":"Mitsue Village","吉野郡上北山村":"Kamikitayama Village"};
+const PT_EN = {"地名":"Area","駅":"Station","役所":"Public office","観光":"Sightseeing","店舗":"Shop","商業":"Shopping center","公園":"Park","病院":"Hospital","交通":"Transport","施設":"Facility","大学":"University"}, CAT_EN = {"寺社":"Temples & shrines","歴史":"History","グルメ":"Food","買い物":"Shopping","自然":"Nature","温泉":"Hot springs","夜景":"Night views","アニメ・文化":"Anime & culture","体験":"Experiences"};
+const LOP = o => LOPD[o] || o, LEN = (l, o) => LEND[o + "|" + l] || LEND[l] || l, AEN = a => AEND[a] || a;
+const SNM = new Map(); stops.forEach(s => { if (!SNM.has(s.name)) SNM.set(s.name, s); });
+const SEN = n => (SNM.get(n) || { en: n }).en;
+const enCmp = new Intl.Collator("en").compare;
+const esc_ = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));   // esc と同じ(地図の点を作る時に使うので、esc より前に置く)
+const AP = '<i class="ap" title="Romanization is automatic and not verified" aria-hidden="true">≈</i><span class="vh"> (romanization not verified)</span>';
+const nm = s => `<b class="en1">${esc_(s.en)}</b>${s.eg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(s.name)}</span>`;
+const tnm = s => `${esc_(s.en)}${s.eg === "C" ? " ≈" : ""}<br><span class="ja" lang="ja">${esc_(s.name)}</span>`;
+const snm = n => { const s = SNM.get(n); return s ? nm(s) : esc_(n); };
+const pnm = p => `<b class="en1">${esc_(p.pe)}</b>${p.pg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(p.name)}</span>`;
+const rnm = r => r.en ? `<b class="en1">${esc_(r.en)}</b>${r.eg === "C" ? AP : ""}<span class="ja" lang="ja">${esc_(r.name)}</span>` : `<span class="ja jm" lang="ja">${esc_(r.name)}</span>`;
+const PE = p => p.pe;
+const subEn = p => { if (p.sen) return p.sen; const s = p.sub || "", m = s.match(/^(\d+)〜(\d+)丁目$/); return m ? `${m[1]}-${m[2]} chome` : s ? s.split("・").map(LOP).join(" / ") : ""; };   // 補足(丁目の範囲・駅の鉄道事業者)。places_en.json の英語を優先
+const kpre = (it, v, pv) => (it.key.startsWith(v) || (pv && it.key.includes("|" + pv))) ? 0 : 1;   // 英語名の先頭一致も「前方一致」として先に
+// 系統のバス停を移動順に並べる（位置からの推定。GTFS由来の系統だけ実際の停車順）。同名バス停は1つにまとめ、端から端への最長の道を軸にする
+function orderRoute(r) {
+  if (r.seq) { const have = new Set(r.names), o = r.seq.filter(x => have.has(x)); r.names.forEach(x => { if (!o.includes(x)) o.push(x); }); return o; }   // GTFS由来の系統：データに実際の停車順(第4要素)がある
+  const by = new Map();
+  r.stops.forEach(s => { const a = by.get(s.name) || { name: s.name, la: 0, lo: 0, c: 0, st: [] }; a.la += s.lat; a.lo += s.lon; a.c++; a.st.push(s); by.set(s.name, a); });
+  const P = [...by.values()].map(a => ({ name: a.name, x: (a.lo / a.c) * 91, y: (a.la / a.c) * 111, st: a.st }));
+  const n = P.length; if (n <= 2) return P.sort((a, b) => a.x - b.x).map(p => p.name);
+  const d = (a, b) => Math.hypot(P[a].x - P[b].x, P[a].y - P[b].y);
+  // Prim法で最小全域木
+  const par = new Array(n).fill(-1), best = new Array(n).fill(Infinity), inT = new Array(n).fill(false), adj = P.map(() => []);
+  best[0] = 0;
+  for (let k = 0; k < n; k++) {
+    let u = -1; for (let i = 0; i < n; i++) if (!inT[i] && (u < 0 || best[i] < best[u])) u = i;
+    inT[u] = true; if (par[u] >= 0) { adj[u].push(par[u]); adj[par[u]].push(u); }
+    for (let v = 0; v < n; v++) if (!inT[v]) { const w = d(u, v); if (w < best[v]) { best[v] = w; par[v] = u; } }
+  }
+  const bfs = src => { const dist = new Array(n).fill(-1), prev = new Array(n).fill(-1); dist[src] = 0; const q = [src];
+    for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (dist[v] < 0) { dist[v] = dist[u] + 1; prev[v] = u; q.push(v); } }); }
+    return { dist, prev }; };
+  const far = res => res.dist.indexOf(Math.max(...res.dist));
+  const A = far(bfs(0)); const rb = bfs(A); const B = far(rb);
+  let path = []; for (let v = B; v >= 0; v = rb.prev[v]) path.push(v);   // B→A
+  path.reverse();                                                       // A→B
+  if (P[path[0]].x > P[path[path.length - 1]].x) path.reverse();        // 西の端から始める
+  // 軸に乗らないバス停は、軸に最短でつながる地点の直後に入れる
+  const onPath = new Map(path.map((v, i) => [v, i])), anchor = new Array(n).fill(-1), depth = new Array(n).fill(0), q = [];
+  path.forEach((v, i) => { anchor[v] = i; q.push(v); });
+  for (let h = 0; h < q.length; h++) { const u = q[h]; adj[u].forEach(v => { if (anchor[v] < 0) { anchor[v] = anchor[u]; depth[v] = depth[u] + 1; q.push(v); } }); }
+  const groups = path.map(() => []); for (let v = 0; v < n; v++) if (!onPath.has(v)) groups[anchor[v]].push(v);
+  const out = []; path.forEach((v, i) => { out.push(v); groups[i].sort((a, b) => depth[a] - depth[b] || d(v, a) - d(v, b)).forEach(x => out.push(x)); });
+  return out.map(i => P[i].name);
+}
+routes.forEach(r => { r.order = orderRoute(r); });
+const routeNum = r => { const m = r.name.match(/\d+/); return m ? +m[0] : 9999; };
+const routeCmp = (a, b) => GORDER.indexOf(a.g) - GORDER.indexOf(b.g) || (GNUMSORT.includes(a.g) ? routeNum(a) - routeNum(b) : 0) || a.name.localeCompare(b.name, "ja");
+
+// ---- 画面モード（スマホ=ボトムシート／それ以外=右パネル）----
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mqMobile = matchMedia("(max-width: 767px)");
+const isMobile = () => mqMobile.matches;
+const mainEl = document.getElementById("main"), panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
+const grip = document.getElementById("grip"), psum = document.getElementById("psum"), tgl = document.getElementById("tgl"), homeTop = document.getElementById("homeTop");
+
+const map = L.map("map", { zoomControl: true, renderer: L.canvas({ tolerance: 10 }), zoomAnimation: !RM, fadeAnimation: !RM, markerZoomAnimation: !RM }).setView([34.3539, 135.8154], 10);
+// 地図の種類(すべて国土地理院タイル・同じ提供元)。選んだ種類は、次に開いた時も覚えておく(この端末の中だけ)
+const GSI = "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank' rel='noopener'>GSI Japan</a>";
+const BASE = [
+  { id: "std", label: "Standard", note: "Regular map", url: "https://maps.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", att: "Map: " + GSI },
+  { id: "pale", label: "Pale", note: "Light colors, dots stand out", url: "https://maps.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png", att: "Map: " + GSI + " (Pale map)" },
+  { id: "photo", label: "Aerial", note: "Aerial photos (dates vary by area)", minZoom: 9, url: "https://maps.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+    att: "Photo: " + GSI + " (Seamless latest aerial photos)  Data source: Landsat 8 imagery (GSI, TSIC, GEO Grid/AIST), Landsat 8 imagery (courtesy of the U.S. Geological Survey)" },
+];
+let baseId = "std"; try { const sv = localStorage.getItem("busmap.base"); if (BASE.some(b => b.id === sv)) baseId = sv; } catch (e) {}
+// タイル取得失敗の案内（数枚失敗したら表示、読み込めたら消す）
+const tw = document.getElementById("tilewarn"); let tErr = 0, tOk = 0, twDismissed = false;
+const mkTiles = b => {
+  const l = L.tileLayer(b.url, { minZoom: b.minZoom || 5, maxZoom: 18, maxNativeZoom: 18, attribution: b.att });
+  l.on("tileerror", () => { tOk = 0; if (++tErr >= 3 && !twDismissed) tw.hidden = false; });
+  l.on("tileload", () => { if (tErr && ++tOk >= 4) { tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; } });
+  return l;
+};
+let tiles = mkTiles(BASE.find(b => b.id === baseId)).addTo(map);
+const applyMinZoom = () => { const mz = BASE.find(b => b.id === baseId).minZoom || 5; map.setMinZoom(mz); if (map.getZoom() < mz) map.setZoom(mz, { animate: false }); };   // 写真は、衛星画像のクレジットが要る低ズーム(9未満)を使わない
+applyMinZoom();
+function setBase(id) {
+  const b = BASE.find(x => x.id === id); if (!b || id === baseId) return;
+  map.removeLayer(tiles); tErr = 0; tOk = 0; tw.hidden = true; twDismissed = false; tiles = mkTiles(b).addTo(map); baseId = id; applyMinZoom();
+  try { localStorage.setItem("busmap.base", id); } catch (e) {}
+  syncBase();
+}
+let syncBase = () => {};
+L.Control.Base = L.Control.extend({
+  options: { position: "topright" },
+  onAdd() {
+    const c = L.DomUtil.create("div", "basectl"); L.DomEvent.disableClickPropagation(c); L.DomEvent.disableScrollPropagation(c);
+    c.innerHTML = `<button type="button" class="bc-btn" aria-controls="bcMenu" aria-expanded="false"><span class="bc-cur"></span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3 3 8l9 5 9-5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+      <div class="bc-menu" id="bcMenu" role="radiogroup" aria-label="Map type" hidden>${BASE.map(b => `<button type="button" role="radio" class="bc-opt" data-id="${b.id}" aria-checked="false"><span class="bc-ck" aria-hidden="true"></span><span><b>${b.label}</b><small>${b.note}</small></span></button>`).join("")}</div>`;
+    const btn = c.querySelector(".bc-btn"), menu = c.querySelector(".bc-menu"), opts = [...c.querySelectorAll(".bc-opt")];
+    const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); if (v) (opts.find(o => o.dataset.id === baseId) || opts[0]).focus(); };
+    syncBase = () => { opts.forEach(o => { const on = o.dataset.id === baseId; o.setAttribute("aria-checked", String(on)); o.classList.toggle("on", on); }); const cur = BASE.find(b => b.id === baseId).label; btn.querySelector(".bc-cur").textContent = cur; btn.setAttribute("aria-label", "Choose map type (current: " + cur + ")"); };   // ボタンの左に、いま表示中の地図の名前を出す
+    syncBase();
+    btn.onclick = () => open(menu.hidden);
+    opts.forEach((o, i) => { o.onclick = () => { setBase(o.dataset.id); open(false); btn.focus(); };
+      o.onkeydown = e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); opts[(i + (e.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length].focus(); } else if (e.key === "Home") { e.preventDefault(); opts[0].focus(); } else if (e.key === "End") { e.preventDefault(); opts[opts.length - 1].focus(); } }; });
+    c.addEventListener("focusout", e => { if (!menu.hidden && e.relatedTarget && !c.contains(e.relatedTarget) && !e.relatedTarget.contains(c)) open(false); });   // iPhoneのSafariは、項目の文字部分を押すと一度、親の地図へフォーカスが移る→それは「外へ出た」ではない   // Tabでメニューの外へ出たら閉じる
+    c.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { e.stopPropagation(); open(false); btn.focus(); } });
+    document.addEventListener("pointerdown", e => { if (!menu.hidden && !c.contains(e.target)) open(false); }, true);   // 地図はタップのclickを止めることがあるので、押した瞬間(pointerdown)で外側を判定する
+    return c;
+  },
+});
+new L.Control.Base().addTo(map);
+document.getElementById("tilewarnx").onclick = () => { tw.hidden = true; twDismissed = true; };
+
+// シートの高さ（3段）。地図は全面に置き、シートはその上に重ねる（開閉・ドラッグで地図の大きさは変わらない）
+const SORDER = ["min", "mid", "max"];
+// 標準段は46%。画面が低い端末(375×667など)は地図が狭くなりすぎない範囲で50%に
+const shRatio = st => { const H = mainEl.clientHeight; return st === "min" ? .13 : st === "max" ? .88 : H < 640 ? .50 : .46; };
+let sheetState = "mid";
+const sheetPx = st => { const H = mainEl.clientHeight; return st === "min" ? Math.max(72, Math.round(H * shRatio(st))) : Math.round(H * shRatio(st)); };
+const cover = () => isMobile() ? sheetPx(sheetState) : 0;      // 地図の下側がシートで隠れるpx
+function applySheet() {
+  if (!isMobile()) { panel.style.height = ""; mainEl.style.setProperty("--cover", "0px"); panel.classList.remove("min"); return; }
+  const h = sheetPx(sheetState);
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px");
+  panel.classList.toggle("min", sheetState === "min");
+  grip.setAttribute("aria-expanded", String(sheetState !== "min"));
+}
+const setSheet = st => { sheetState = st; applySheet(); };
+// 地図の見えている部分（シートの上側）の中央に、その地点が来るようにする
+function focusTo(ll, z) {
+  const zz = z == null ? map.getZoom() : z, p = map.project(ll, zz); p.y += cover() / 2;
+  map.setView(map.unproject(p, zz), zz, { animate: !RM });
+}
+function ensureVisible(ll) {
+  const c = cover(); if (!c) return;
+  const size = map.getSize(), pt = map.latLngToContainerPoint(ll);
+  if (pt.y > size.y - c - 44 || pt.y < 44 || pt.x < 30 || pt.x > size.x - 30) focusTo(ll);
+}
+// シートのドラッグ（取っ手だけがスワイプを受ける。地図とパネル内のスクロールには干渉しない）
+let drag = null;
+grip.addEventListener("pointerdown", e => {
+  if (!isMobile() || (e.pointerType === "mouse" && e.button !== 0)) return;
+  drag = { y0: e.clientY, h0: panel.getBoundingClientRect().height, moved: false, last: e.clientY, lt: e.timeStamp, v: 0 };
+  grip.setPointerCapture(e.pointerId); panel.classList.add("drag");
+});
+grip.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dy = drag.y0 - e.clientY; if (Math.abs(dy) > 6) drag.moved = true;
+  if (!drag.moved) return;
+  const h = Math.max(sheetPx("min"), Math.min(sheetPx("max"), drag.h0 + dy));
+  panel.style.height = h + "px"; mainEl.style.setProperty("--cover", h + "px"); panel.classList.remove("min");
+  const dt = e.timeStamp - drag.lt; if (dt > 0) drag.v = (drag.last - e.clientY) / dt; drag.last = e.clientY; drag.lt = e.timeStamp;
+});
+function endDrag(e) {
+  if (!drag) return; const d = drag; drag = null; panel.classList.remove("drag");
+  if (e.type === "pointercancel" && !d.moved) { applySheet(); return; }
+  if (!d.moved) { setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); return; }
+  const h = panel.getBoundingClientRect().height, px = SORDER.map(sheetPx);
+  let k = px.reduce((b, p, i) => Math.abs(p - h) < Math.abs(px[b] - h) ? i : b, 0);
+  if (d.v > .45) k = Math.max(k, px.findIndex(p => p > h + 4) < 0 ? 2 : px.findIndex(p => p > h + 4));
+  else if (d.v < -.45) { const lo = px.map((p, i) => p < h - 4 ? i : -1).filter(i => i >= 0); k = Math.min(k, lo.length ? lo[lo.length - 1] : 0); }
+  setSheet(SORDER[k]);
+}
+grip.addEventListener("pointerup", endDrag); grip.addEventListener("pointercancel", endDrag);
+grip.addEventListener("click", e => { if (e.detail === 0) setSheet(sheetState === "min" ? "mid" : sheetState === "mid" ? "max" : "mid"); });   // キーボード(Enter/Space)
+grip.addEventListener("keydown", e => {
+  const k = SORDER.indexOf(sheetState);
+  if (e.key === "ArrowUp") { e.preventDefault(); setSheet(SORDER[Math.min(2, k + 1)]); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); setSheet(SORDER[Math.max(0, k - 1)]); }
+});
+// PC・タブレットのパネル開閉（マーカーは作り直さず、地図の大きさだけ取り直す）
+function openPanel(v) {
+  mainEl.classList.toggle("pclosed", !v);
+  tgl.querySelector(".tl").textContent = v ? "Close panel" : "Open panel"; tgl.querySelector(".ta").textContent = v ? "▶" : "◀";
+  tgl.setAttribute("aria-label", v ? "Close panel" : "Open panel"); tgl.setAttribute("aria-expanded", String(v));
+  map.invalidateSize();
+}
+tgl.onclick = () => openPanel(mainEl.classList.contains("pclosed"));
+// 画面サイズが変わっても、選択・検索の状態は保ったまま配置だけ取り直す
+let rzT = 0;
+new ResizeObserver(() => {
+  map.invalidateSize(); applySheet();
+  clearTimeout(rzT); rzT = setTimeout(() => { if (curStops[0] && !hoverList.length) ensureVisible(L.latLng(curStops[0].lat, curStops[0].lon)); }, 200);
+}).observe(mainEl);
+
+const on = Object.fromEntries(GORDER.map(g => [g, true]));
+let selRoute = null, lastStop = null, lastPlace = null, curStops = [], curRings = [], placePin = null;
+const colorOf = g => css(g);
+const isSel = s => !selRoute || selRoute.set.has(s);
+const baseR = () => { const z = map.getZoom(); return z <= 12 ? 3 : z <= 14 ? 4.5 : z <= 15 ? 5.5 : 7; };
+const markers = stops.map(s => {
+  const m = L.circleMarker([s.lat, s.lon], { radius: 5, weight: 2, color: "#fff", fillColor: colorOf(s.g), fillOpacity: .95 });
+  m.on("click", () => { if (isSel(s)) { showStop(s); ensureVisible(L.latLng(s.lat, s.lon)); } });   // 薄くした点は押せない（誤タップ防止）
+  m.bindTooltip(tnm(s), { direction: "top", offset: [0, -4] });
+  m.on("tooltipopen", () => { if (!isSel(s)) m.closeTooltip(); });
+  m.on("mouseover", () => { if (isSel(s)) hoverOn([s], true); });
+  m.on("mouseout", () => { if (!touchOnly()) hoverOff(); });   // 指で押した時に出る疑似mouseoutで、選択中の輪を消さない
+  s.m = m; return m;
+});
+
+// カーソルを合わせたバス停を強調（大きな黄色の輪）。リストの名前に合わせた時も、地図の点に合わせた時も同じ見え方
+let hoverRings = [], hoverList = [];
+function hoverOn(list, fromMap) {
+  hoverOff(); hoverList = list.slice();
+  list.forEach(s => {
+    if (!s.m._map) return;
+    hoverRings.push(L.circleMarker([s.lat, s.lon], { radius: baseR() + 13, color: "#1f2b20", weight: 4, fillColor: "#ffd400", fillOpacity: .6, interactive: false }).addTo(map));
+    s.m.bringToFront();
+  });
+  if (list[0] && list[0].m._map) list[0].m.openTooltip();
+  const li = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(list[0].name)}"]`);
+  if (li && fromMap) li.classList.add("hl");
+}
+function hoverOff() {
+  hoverRings.forEach(r => r.remove()); hoverRings = [];
+  hoverList.forEach(s => s.m.closeTooltip()); hoverList = [];
+  pbody.querySelectorAll(".stoplist button.hl").forEach(b => b.classList.remove("hl"));
+}
+
+function styleOne(s, r0) {
+  const inSel = isSel(s);
+  // 系統を選んでいる間は、その系統が通るバス停を事業者フィルタに関係なく出す
+  const vis = on[s.g] || (selRoute && inSel);
+  if (!vis) { if (s.m._map) s.m.remove(); return; }
+  if (!s.m._map) s.m.addTo(map);
+  const cur = curStops.includes(s);
+  s.m.setStyle({ fillColor: colorOf(s.g), fillOpacity: inSel ? .95 : .12, opacity: inSel ? 1 : .15,
+    radius: cur ? r0 + 4 : selRoute && inSel ? r0 + 2 : r0, weight: cur ? 3 : selRoute && inSel ? 2.5 : 2 });
+  if ((selRoute && inSel) || cur) s.m.bringToFront();
+}
+// 系統を選んでいる間、地図の点に『推定順の番号』を出す（切り替え可・この端末に覚える）。低ズームでは、1・5の倍数・最後だけ
+const touchOnly = () => isMobile() || matchMedia("(hover: none)").matches;   // カーソルを合わせられない端末(スマホ・タブレット)
+let numOn = true; try { numOn = localStorage.getItem("busmap.num") !== "0"; } catch (e) {}
+const numLayer = L.layerGroup().addTo(map);
+function drawNums() {
+  numLayer.clearLayers();
+  if (!selRoute || !numOn) return;
+  const z = map.getZoom(), n = selRoute.order.length, pos = new Map(selRoute.order.map((nm, i) => [nm, i + 1]));
+  const sel = curStops[0] ? curStops[0].name : null, items = [];
+  selRoute.stops.forEach(s => { const k = pos.get(s.name); if (!k) return;
+    const pri = s.name === sel ? 0 : (k === 1 || k === n) ? 1 : k % 5 === 0 ? 2 : 3;
+    if (z < 13 && pri > 2) return;
+    items.push({ s, k, pri, p: map.latLngToContainerPoint([s.lat, s.lon]) }); });
+  items.sort((a, b) => a.pri - b.pri || a.k - b.k);
+  const kept = [];   // 画面上で重なる番号は、優先度の高い方だけ残す(選択中・最初/最後・5の倍数 → その他)
+  items.forEach(it => { if (kept.some(o => Math.abs(o.p.x - it.p.x) < 26 && Math.abs(o.p.y - it.p.y) < 18)) return; kept.push(it);
+    L.marker([it.s.lat, it.s.lon], { icon: L.divIcon({ className: "stnum", html: String(it.k), iconSize: [22, 16], iconAnchor: [-4, 21] }), interactive: false, keyboard: false, zIndexOffset: 400 }).addTo(numLayer); });
+}
+function paint() { const r0 = baseR(); stops.forEach(s => styleOne(s, r0)); drawRings(); drawNums(); }
+// 選択中のバス停の外周リング（白い縁取り＋濃い輪＋ブランドグリーンの塗り）
+function drawRings() {
+  curRings.forEach(r => r.remove()); curRings = [];
+  curStops.forEach(s => { if (!s.m._map) return;
+    const R = baseR() + 9;
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R + 2, color: "#fff", weight: 7, fill: false, interactive: false }).addTo(map));
+    curRings.push(L.circleMarker([s.lat, s.lon], { radius: R, color: "#1f2b20", weight: 3, fillColor: "#6fae2f", fillOpacity: .28, interactive: false }).addTo(map));
+    s.m.bringToFront(); });
+}
+map.on("zoomend", paint);
+// ---- この地図の範囲(設計 D-2)：ズーム12以下の時だけ、データの範囲を破線の長方形で示す(これより外の停留所・系統は載っていない) ----
+const EXT = [33.8796, 135.6231, 34.5832, 136.2252];   // [緯度小, 経度小, 緯度大, 経度大]
+const extRect = L.rectangle([[EXT[0], EXT[1]], [EXT[2], EXT[3]]], { interactive: false, dashArray: "6 6", weight: 2, opacity: .7, fill: false });
+const extTip = L.circleMarker([EXT[2], (EXT[1] + EXT[3]) / 2], { radius: 0, opacity: 0, fill: false, interactive: false }).bindTooltip("Map coverage", { permanent: true, direction: "bottom", className: "extlbl", interactive: false });
+const extLayer = L.layerGroup([extRect, extTip]);
+const syncExtent = () => { const on = map.getZoom() <= 12; if (on) extRect.setStyle({ color: css("ink") }); if (on && !map.hasLayer(extLayer)) extLayer.addTo(map); else if (!on && map.hasLayer(extLayer)) map.removeLayer(extLayer); };
+map.on("zoomend", syncExtent); syncExtent(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncExtent);
+// 選択中のバス停（地図・一覧で共通）を差し替える。点の再描画は変わった分だけ
+function setCur(list, scroll = true) {
+  const old = curStops; curStops = list || [];
+  const r0 = baseR(); old.concat(curStops).forEach(s => styleOne(s, r0)); drawRings();
+  pbody.querySelectorAll(".stoplist button.cur").forEach(b => b.classList.remove("cur"));
+  if (curStops[0]) { const b = pbody.querySelector(`.stoplist button[data-n="${CSS.escape(curStops[0].name)}"]`); if (b) { b.classList.add("cur"); if (scroll) b.scrollIntoView({ block: "nearest" }); } }
+}
+
+const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const NOTE = `<details class="note"><summary>About this page · Sources · Disclaimer</summary>
+• This is an <b>unofficial</b> page made by an individual as a hobby. It is not an official product of Totsukawa, Gojo, Yoshino, Oyodo, Higashiyoshino, Uda, Nara Kotsu or the Ministry of Land, Infrastructure, Transport and Tourism or any other organization.<br>
+• The content may contain errors, omissions or outdated information. Use it at your own risk. Always check the operator's official information (<a href="https://www.narakotsu.co.jp/" target="_blank" rel="noopener">Nara Kotsu official site (Japanese)</a>, <a href="https://www.city.gojo.lg.jp/" target="_blank" rel="noopener">Gojo City official website (Japanese)</a>, etc.) before you ride.<br>
+• Timetables and fares are not included. The source data has no stop order, so the order of stops on a route is <b>estimated</b> from their locations and may differ from reality. Some routes list only some of their stops.<br>
+<b>Sources</b><br>
+• Bus stops and routes: processed from <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html" target="_blank" rel="noopener">Ministry of Land, Infrastructure, Transport and Tourism (MLIT), National Land Numerical Information “Bus Stop Data” (FY2022, CC BY 4.0)</a><br>
+• Station locations and municipalities: processed from MLIT National Land Numerical Information (Railway Station Data N02-22 and Administrative Area Data N03-22)<br>
+• Locations of places and facilities: approximate positions made by cross-checking the <a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">GSI Japan place-name search</a> and <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors (ODbL)</a> (includes location data from OSM; not exact positions such as entrances)<br>• Town names (Totsukawa, Gojo, Yoshino, Oyodo, Higashiyoshino, Uda, Kawakami, Shimoichi, Soni, Tenkawa, Shimokitayama, Kamikitayama, Kurotaki, Mitsue, Nosegawa): processed from <a href="https://www.e-stat.go.jp/gis" target="_blank" rel="noopener">e-Stat (Portal Site of Official Statistics of Japan), 2020 Census small-area (town/chome) boundary data</a>. Each town is shown at a representative point (the centroid of its area).<br>• English and romanized names: generated from open data (<a href="https://github.com/geolonia/japanese-addresses" target="_blank" rel="noopener">Geolonia japanese-addresses</a>, CC BY 4.0; © OpenStreetMap contributors, ODbL; bus stop readings from GTFS-JP open data published by bus operators and municipalities, e.g. Sanko Bus, Kumamoto Bus, Kumamoto Toshi Bus, Kumamoto Dentetsu, Kagoshima City, via the <a href="https://gtfs-data.jp/" target="_blank" rel="noopener">GTFS Data Repository</a>, CC BY 4.0; place-name dictionaries) and automatic kana conversion. Names marked “≈” are machine-romanized and may be misread. The Japanese name is the one shown at the stop. Corrections are welcome via <a href="https://miitobow.com/">miitobow.com</a>.<br>
+• Operators listed under a municipality name are municipal community buses or shared taxis<br>• Some seasonal extra and express services are not in the source data (FY2022)<br>
+• Municipalities in this map (15): Totsukawa Village, Gojo City, Uda City, Yoshino Town, Higashiyoshino Village, Oyodo Town, Shimoichi Town, Kawakami Village, Soni Village, Tenkawa Village, Shimokitayama Village, Kamikitayama Village, Kurotaki Village, Nosegawa Village, Mitsue Village. <br>
+• Map coverage: roughly 33.88–34.58°N, 135.62–136.23°E (Totsukawa Village, Gojo City, Uda City, Yoshino Town, Higashiyoshino Village, etc.). Stops and routes outside this area are not shown. Even inside this area, stops in municipalities covered by a neighboring map are not included here.<br>
+${HASSPOT ? `• Locations of sights and shops: approximate addresses made by cross-checking GSI Japan, OSM and Wikipedia (as of ). Shops may close, move or suspend business. This page is not affiliated with any listed shop or facility and is not advertising. “Popular with visitors” is an unofficial guide based on sources such as Honichi Lab rankings and listings in English travel guides.<br>` : ""}
+• Map: <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">GSI Japan map tiles (Standard, Pale, Seamless latest aerial photos)</a>. Aerial photo dates vary by area and may not show the current situation.<br>
+• Map display: <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
+const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
+const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
+homeTop.onclick = goHome;
+function render(html, sum) {
+  const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
+  pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
+  const bk = pbody.querySelector(".back");
+  if (bk) { const hm = document.createElement("button"); hm.type = "button"; hm.className = "homebtn"; hm.setAttribute("aria-label", "Back to home (start screen)"); hm.innerHTML = HOMEICON + "Home"; hm.onclick = goHome; bk.insertAdjacentElement("afterend", hm); }   // PC用（スマホはシート上部のボタン）
+  homeTop.hidden = !bk; panel.classList.toggle("hashome", !!bk);
+  const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
+}
+
+function home() {
+  hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
+  selRoute = null; lastStop = null; paint(); map.closePopup();
+  render(`<h2 class="head">Tap a bus stop</h2>
+  <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
+  <p>Use the search box to find stations, towns, places and facilities (e.g. Yoshino Station, Shimoichiguchi Station, Sanbonmatsu Station), bus stops, and routes (e.g. Kashihara Line).</p>
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p>
+  <div class="lh">Browse</div>
+  <button class="rt" id="bArea" type="button"><span>Find by area</span><small>by municipality ›</small></button>
+  <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}<div class="lh">Municipalities in this map (15)</div><p class="tip">Totsukawa Village, Gojo City, Uda City, Yoshino Town, Higashiyoshino Village, Oyodo Town, Shimoichi Town, Kawakami Village, Soni Village, Tenkawa Village, Shimokitayama Village, Kamikitayama Village, Kurotaki Village, Nosegawa Village, Mitsue Village</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/mie/iga-higashikii/"><span>Iga and Higashi-Kii Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/mie/tsu-ise-shima/"><span>Tsu-Matsusaka-Ise-Shima Bus Map</span><small>E ›</small></a><a class="rt" href="/bus/en/nara/nara-basin/"><span>Nara Basin Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/wakayama/kinan/"><span>Kinan (Gobo-Tanabe-Shingu) Bus Map</span><small>S ›</small></a><a class="rt" href="/bus/en/wakayama/wakayama-arida/"><span>Wakayama-Kihoku-Arida Bus Map</span><small>W ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+}
+function routeBtn(r) {
+  return `<button class="rt" type="button" data-r="${r.i}"><span>${rnm(r)}</span><small>${r.n} ${P(r.n, "stop", "stops")}</small></button>`;
+}
+function groupedRoutes(rs) {
+  let out = "", cur = "";
+  rs.slice().sort(routeCmp).forEach(r => {
+    if (r.g !== cur) { cur = r.g; out += `<div class="grp"><i style="background:var(--${r.g})"></i>${GLABEL[r.g]}</div>`; }
+    out += routeBtn(r);
+  });
+  return out;
+}
+function showStop(s, opt) {
+  hoverOff(); selRoute = null; lastStop = s; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([s]);
+  if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
+  const rs = s.rts.map(i => routes[i]);
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${nm(s)}</h2>
+  <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b> ${P(rs.length, "route", "routes")}</span></div>
+  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${NOTE}`,
+  `${s.en} · ${rs.length} ${P(rs.length, "route", "routes")}`);
+  paint();   // 系統表示から戻った時の薄表示を解除
+  bind();
+  if (lastPlace) { const bk = document.getElementById("bk"), pl = lastPlace; bk.textContent = `← Back to ${PE(pl)}`; bk.onclick = () => showPlace(pl, { noMove: true }); }
+}
+
+// ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
+const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
+const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
+const places = PLACES.map((a, i) => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "", pe: (PEN[i] && PEN[i][0]) || a[9] || a[0], aen: (PEN[i] && PEN[i][1]) || AEN(a[4]), sen: (PEN[i] && PEN[i][2]) || "", pg: (PEN[i] && PEN[i][3]) || "" }));
+const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
+const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : []), p.pe, p.pe.replace(/\bSta\./g, "Station")].map(pnorm).join("|") }));
+// 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
+const pkind = p => p.type === "地名" ? "Representative point" : p.type === "駅" ? "approx. location" : p.type === "店舗" ? "Shop location" : "Address";
+const ptip = p => p.type === "地名" ? "Moved the map to this area's representative point (not necessarily its center). " : p.type === "駅" ? "Moved the map to the station (approximate location). " : p.type === "店舗" ? "Moved the map near the shop (approximate location). Shops may have closed, moved or be temporarily closed; check official information for opening hours. " : "Moved the map near the facility (not necessarily its entrance). ";
+const placeSub = p => [PT_EN[p.type] || p.type, CAT_EN[p.cat] || p.cat, subEn(p), p.aen].filter(Boolean).join(" · ");
+function setPin(p) {
+  clearPin();
+  placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
+  placePin.bindTooltip(esc(p.pe) + "<br><span class=\"ja\" lang=\"ja\">" + esc(p.name) + "</span>", { permanent: true, direction: "top", offset: [0, -30], className: "placetip" }).openTooltip();
+}
+function clearPin() { if (placePin) { placePin.remove(); placePin = null; } }
+function nearStops(p) {
+  const by = new Map();
+  stops.forEach(s => { const d = Math.hypot((s.lon - p.lon) * 91000, (s.lat - p.lat) * 111000), o = by.get(s.name);
+    if (!o || d < o.d) by.set(s.name, { s, d }); });
+  const all = [...by.values()].sort((a, b) => a.d - b.d);
+  const near = all.filter(x => x.d <= 700).slice(0, 8);
+  return near.length ? { list: near, far: false } : { list: all.slice(0, 3), far: true };
+}
+// ---- 一覧から探す：地名＝区ごと／駅＝路線ごと。選ぶと showPlace と同じ表示になり、「もどる」で一覧へ戻る ----
+let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻り先
+places.forEach((p, i) => p.i = i);
+const AREA_ORDER = ["吉野郡十津川村", "五條市", "吉野郡吉野町", "吉野郡大淀町", "吉野郡東吉野村", "宇陀市", "吉野郡川上村", "吉野郡下市町", "宇陀郡曽爾村", "吉野郡天川村", "吉野郡下北山村", "吉野郡上北山村", "吉野郡黒滝村", "宇陀郡御杖村", "吉野郡野迫川村"];
+const jaCmp = new Intl.Collator("ja").compare;
+function browseOpen(sheet) { hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
+function showAreaIndex() {
+  browseOpen(); placeBack = null;
+  const m = areaMap(), keys = [...m.keys()].sort((a, b) => (AREA_ORDER.indexOf(a) + 1 || 99) - (AREA_ORDER.indexOf(b) + 1 || 99) || jaCmp(a, b));
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Find by area</h2>
+  <p class="tip">Choose a municipality to list its place names (towns, etc.). Choose a place to move the map there and see nearby bus stops.</p>
+  ${keys.map(k => `<button class="rt" type="button" data-a="${esc(k)}"><span>${esc(AEN(k))}<span class="ja" lang="ja">${esc(k)}</span></span><small>${m.get(k).length} ›</small></button>`).join("")}${NOTE}`, "Places by municipality");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-a]").forEach(b => b.onclick = () => showAreaPlaces(b.dataset.a));
+}
+function showAreaPlaces(a) {
+  browseOpen(); const list = (areaMap().get(a) || []).slice().sort((x, y) => enCmp(x.pe, y.pe));
+  placeBack = { label: `← Back to ${AEN(a)}`, fn: () => showAreaPlaces(a) };
+  render(`<button class="back" id="bk" type="button">← All areas</button><h2 class="head">${esc(AEN(a))}<span class="ja" lang="ja">${esc(a)}</span></h2>
+  <p class="tip">${list.length} place ${P(list.length, "name", "names")} (towns, etc.). Locations are approximate representative points. Tap a name to move the map there. Sorted alphabetically by English name. If you cannot find a place, use the search box.</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${pnm(p)}</span><small>${esc(subEn(p))}</small></button>`).join("")}${NOTE}`, `${AEN(a)} · ${list.length} ${P(list.length, "place", "places")}`);
+  document.getElementById("bk").onclick = showAreaIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+// ---- 観光・グルメ（placesの cat 付き）：検索窓のおすすめパネルと、ホームの一覧 ----
+const SPOT_EN_HINT = "Yoshino Station, Shimoichiguchi Station, Sanbonmatsu Station";
+const RECO = [["外国人に人気", "Popular", p => p.foreign], ["観光名所", "Sights", p => p.type === "観光"], ["グルメ", "Food", p => p.cat === "グルメ"], ["買い物", "Shopping", p => p.cat === "買い物"], ["寺社", "Shrines", p => p.cat === "寺社"]];
+const recoSort = (a, b) => (b.foreign - a.foreign) || jaCmp(a.name, b.name);
+let recoCat = null;
+function showReco() {
+  const cats = RECO.filter(c => places.some(c[2]));
+  if (!cats.length) { showSug(false); return; }
+  if (!recoCat || !cats.some(c => c[0] === recoCat)) recoCat = cats[0][0];
+  const cur = cats.find(c => c[0] === recoCat), list = places.filter(cur[2]).sort(recoSort).slice(0, 8);
+  hit = list.map(p => ({ t: "p", p })).concat([{ t: "idx" }]); act = -1; sug.dataset.mode = "reco";
+  sug.innerHTML = `<div class="sh" role="presentation">Popular places</div>
+  <div class="scats" role="group" aria-label="Filter by type">${cats.map(c => `<button type="button" class="scat" data-cat="${esc(c[0])}" aria-pressed="${c[0] === recoCat}">${esc(c[1])}</button>`).join("")}</div>
+  ${list.map((p, k) => `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(p.pe)}<small class="en ja" lang="ja">${esc(p.name)}</small></span><small>${esc(placeSub(p))}</small></button>`).join("")}
+  <button type="button" role="option" id="sug-${list.length}" data-k="${list.length}" class="more"><span>See all sights &amp; food ›</span></button>
+  <div class="empty" style="padding:8px 14px">Search in English or Japanese, e.g. “${esc(SPOT_EN_HINT)}”</div>`;
+  sug.querySelectorAll(".scat").forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { recoCat = b.dataset.cat; showReco(); }; });
+  sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+function showSpotIndex() {
+  browseOpen(); placeBack = null;
+  const cats = ["寺社", "歴史", "自然", "温泉", "夜景", "アニメ・文化", "体験", "グルメ", "買い物"].filter(c => places.some(p => p.cat === c));
+  const fo = places.filter(p => p.foreign).length;
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Sightseeing &amp; food</h2>
+  <p class="tip">Choose a type to see the list. Tap a name to move the map there and see nearby bus stops. Locations are approximate. <b>Shops may have closed, moved or be temporarily closed</b>; check official information for opening hours.</p>
+  ${fo ? `<button class="rt" type="button" data-c="*"><span>Popular with visitors</span><small>${fo} ›</small></button>` : ""}
+  ${cats.map(c => `<button class="rt" type="button" data-c="${esc(c)}"><span>${esc(CAT_EN[c] || c)}</span><small>${places.filter(p => p.cat === c).length} ›</small></button>`).join("")}${NOTE}`, "Sights & food");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-c]").forEach(b => b.onclick = () => showSpotCat(b.dataset.c));
+}
+function showSpotCat(c) {
+  browseOpen(); const list = places.filter(c === "*" ? (p => p.foreign) : (p => p.cat === c)).sort((x, y) => enCmp(x.pe, y.pe)), ttl = c === "*" ? "Popular with visitors" : (CAT_EN[c] || c);
+  placeBack = { label: `← Back to ${ttl}`, fn: () => showSpotCat(c) };
+  render(`<button class="back" id="bk" type="button">← All types</button><h2 class="head">${esc(ttl)}</h2>
+  <p class="tip">${list.length} ${P(list.length, "place", "places")}, sorted by name. Locations are approximate; shops may have closed, moved or be temporarily closed.</p>
+  ${list.map(p => `<button class="rt" type="button" data-i="${p.i}"><span>${esc(p.pe)}<span class="enm ja" lang="ja">${esc(p.name)}</span></span><small>${esc([p.type === "店舗" ? "Shop" : "", CAT_EN[p.cat] || p.cat, subEn(p) || p.aen].filter(Boolean).join(" · "))}</small></button>`).join("")}${NOTE}`, `${ttl} · ${list.length}`);
+  document.getElementById("bk").onclick = showSpotIndex;
+  pbody.querySelectorAll(".rt[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showLineIndex() {
+  browseOpen(); placeBack = null;
+  let cur = "", html = "";
+  LINES.forEach((l, i) => { if (l[0] !== cur) { cur = l[0]; html += `<div class="grp">${esc(LOP(cur))}</div>`; } html += `<button class="rt" type="button" data-l="${i}"><span>${esc(LEN(l[1], l[0]))}<span class="ja" lang="ja">${esc(l[1])}</span></span><small>${l[2].length} ${P(l[2].length, "station", "stations")} ›</small></button>`; });
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">Find by station</h2>
+  <p class="tip">Choose a line to list its stations in order (stations within this map; the order is approximate, based on station locations). Choose a station to see nearby bus stops.</p>${html}${NOTE}`, "Stations by line");
+  document.getElementById("bk").onclick = home;
+  pbody.querySelectorAll(".rt[data-l]").forEach(b => b.onclick = () => showLine(+b.dataset.l));
+}
+function showLine(i) {
+  browseOpen(); const l = LINES[i], label = `${LOP(l[0])} ${LEN(l[1], l[0])}`;
+  placeBack = { label: LEN(l[1], l[0]).length > 22 ? "← Back to line" : `← Back to ${LEN(l[1], l[0])}`, fn: () => showLine(i) };   // 長い路線名は、スマホの『もどる』ボタンで見切れるので短くする
+  render(`<button class="back" id="bk" type="button">← All lines</button><h2 class="head">${esc(LEN(l[1], l[0]))}<span class="ja" lang="ja">${esc(l[1])}</span></h2>
+  <div class="meta"><span class="pill">${esc(LOP(l[0]))}</span><span><b>${l[2].length}</b> ${P(l[2].length, "station", "stations")} within this map</span></div>
+  <ol class="stoplist">${l[2].map(k => { const p = places[k]; return `<li><button type="button" data-i="${k}">${pnm(p)}</button></li>`; }).join("")}</ol>${NOTE}`, `${label} · ${l[2].length} ${P(l[2].length, "station", "stations")}`);
+  document.getElementById("bk").onclick = showLineIndex;
+  if (!isMobile() && l[2].length > 1) map.fitBounds(L.latLngBounds(l[2].map(k => [places[k].lat, places[k].lon])), { padding: [40, 40], maxZoom: 14, animate: !RM });
+  pbody.querySelectorAll(".stoplist button[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
+}
+function showPlace(p, opt) {
+  hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
+  if (isMobile()) setSheet("mid");
+  setCur([]); paint(); setPin(p); map.closePopup();
+  const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
+  if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
+  else ensureVisible(pll);
+  const ns = nearStops(p);
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${pnm(p)}</h2>
+  <div class="meta"><span class="pill">${esc(PT_EN[p.type] || p.type)} · ${p.cat ? esc(CAT_EN[p.cat] || p.cat) + " · " : ""}${pkind(p)}</span><span class="nw">${esc([subEn(p), p.aen].filter(Boolean).join(", "))}</span></div>
+  <p class="tip">${ptip(p)}Tap a nearby stop to see its routes.</p>
+  <div class="lh">${ns.far ? "Few bus stops nearby (nearest first)" : "Nearby bus stops (nearest first)"}</div>
+  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${nm(x.s)}</span><small>approx. ${Math.max(10, Math.round(x.d / 10) * 10)} m · ${x.s.rts.length} ${P(x.s.rts.length, "route", "routes")}</small></button>`).join("")}${NOTE}`,
+  `${p.pe} · nearby stops`);
+  const pbk = document.getElementById("bk");
+  if (placeBack) { pbk.textContent = placeBack.label; pbk.onclick = placeBack.fn; } else pbk.onclick = home;   // 一覧から開いた時は、その一覧へ戻る
+  pbody.querySelectorAll(".rt[data-s]").forEach(b => b.onclick = () => { const s = stops[+b.dataset.s]; showStop(s, { center: true, zoom: Math.max(map.getZoom(), 16) }); ensureVisible(L.latLng(s.lat, s.lon)); });
+}
+function showRoute(r) {
+  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup();
+  setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
+  paint();
+  map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const back = lastStop ? `← Back to ${esc(lastStop.en)}` : "← Back";
+  render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
+  <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
+  <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
+  <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
+  `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);
+  if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
+  document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  // ---- 停留所を順に見る（推定順）。スマホは『押しても拡大しない』：印を付けるだけ。近くを見たい時は『拡大』 ----
+  const fitAll = () => map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  const same = n => r.stops.filter(x => x.name === n);
+  const rPrev = document.getElementById("rPrev"), rNext = document.getElementById("rNext"), rZoom = document.getElementById("rZoom"), rPos = document.getElementById("rPos"), rAllBtn = document.getElementById("rAll");
+  let idx = curStops[0] ? r.order.indexOf(curStops[0].name) : -1;
+  const sync = () => {
+    rPos.innerHTML = r.seq ? `Order ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh"> ${idx < 0 ? "none selected" : esc(SEN(r.order[idx]))}</span>` : `Est. ${idx < 0 ? "–" : idx + 1}/${r.order.length}<span class="vh"> ${idx < 0 ? "none selected" : esc(SEN(r.order[idx]))}</span>`;   // 見た目は番号だけ。読み上げには停留所名も入れる
+    const ae = document.activeElement; rPrev.disabled = idx <= 0; rNext.disabled = idx >= r.order.length - 1; rZoom.disabled = idx < 0;
+    if (ae && ae.disabled) (ae === rPrev ? rNext : ae === rNext ? rPrev : rAllBtn).focus();   // 押せなくなったボタンにフォーカスが残って、キーボード操作が途切れないように
+    pbody.querySelectorAll(".stoplist button").forEach(b => { if (idx >= 0 && b.dataset.n === r.order[idx]) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+  };
+  const mark = (i, zoomIn) => {   // i番目のバス停に印(黄色の輪＋名前)を付ける。zoomIn=trueの時だけ寄せる。それ以外は、隠れている時だけ最小限に動かす
+    const list = same(r.order[i]); if (!list[0]) return; idx = i;
+    if (isMobile() && sheetState !== "mid") setSheet("mid");
+    setCur(list); hoverOn(list); sync();
+    if (zoomIn) focusTo(L.latLng(list[0].lat, list[0].lon), Math.max(map.getZoom(), 16)); else ensureVisible(L.latLng(list[0].lat, list[0].lon));
+  };
+  sync();
+  rPrev.onclick = () => mark(Math.max(0, idx - 1), false);
+  rNext.onclick = () => mark(Math.min(r.order.length - 1, idx + 1), false);
+  rZoom.onclick = () => { if (idx >= 0) mark(idx, true); };
+  document.getElementById("rAll").onclick = () => { hoverOff(); fitAll(); };
+  document.getElementById("rNum").onclick = e => { numOn = !numOn; try { localStorage.setItem("busmap.num", numOn ? "1" : "0"); } catch (x) {} e.currentTarget.setAttribute("aria-pressed", String(numOn)); drawNums(); };
+  pbody.querySelectorAll(".stoplist button").forEach(b => {
+    b.onclick = () => {
+      const i = r.order.indexOf(b.dataset.n), s = same(b.dataset.n)[0]; if (!s || i < 0) return;
+      if (touchOnly()) { mark(i, false); return; }   // スマホ・タブレット(カーソルを合わせられない端末)は、拡大しない
+      idx = i; sync();
+      if (isMobile()) setSheet("mid");           // 一覧のタップ→標準段へ。選んだ地点はシートの裏に隠れない位置へ寄せる
+      setCur(same(b.dataset.n)); focusTo(L.latLng(s.lat, s.lon), Math.max(map.getZoom(), 15)); hoverOn(same(b.dataset.n));
+    };
+    if (!touchOnly()) { b.onmouseenter = () => hoverOn(same(b.dataset.n)); b.onmouseleave = () => hoverOff(); b.onfocus = () => hoverOn(same(b.dataset.n)); b.onblur = () => hoverOff(); }   // スマホは、地図を押すとフォーカスが外れて黄色い輪が消えるので、focus連動にしない
+  });
+}
+function bind() {
+  pbody.querySelectorAll(".rt").forEach(b => b.onclick = () => showRoute(routes[+b.dataset.r]));
+  const bk = document.getElementById("bk"); if (bk) bk.onclick = home;
+}
+
+// フィルタ
+const chips = document.getElementById("chips"), chipEls = {};
+GORDER.forEach(g => {
+  const c = document.createElement("button"); c.className = "chip"; c.type = "button"; c.setAttribute("aria-pressed", "true");
+  c.innerHTML = `<i style="background:var(--${g})"></i><span class="long">${GLABEL[g]}</span><span class="short">${GSHORT[g]}</span><span class="tiny">${GTINY[g]}</span>`;
+  c.setAttribute("aria-label", "Show " + GLABEL[g] + " stops");
+  c.onclick = () => { on[g] = !on[g]; syncChips(); map.closePopup(); paint(); };
+  chips.appendChild(c); chipEls[g] = c;
+});
+function syncChips() { GORDER.forEach(g => chipEls[g].setAttribute("aria-pressed", on[g])); }
+
+// 検索（Enter／↑↓／Escに対応。判定ロジックは従来どおり）
+const q = document.getElementById("q"), sug = document.getElementById("sug"), qclear = document.getElementById("qclear");
+const kana = t => t.normalize("NFKC").toLowerCase();
+const items = [...routes.map(r => ({ t: "r", r, key: kana(r.name + " " + D.ops[r.op]) + "|" + kana(routeLabel(r) + " " + OPNAME(r.op)) + "|" + pnorm(routeLabel(r)) })),
+  ...stops.map(s => ({ t: "s", s, key: kana(s.name) + "|" + pnorm(s.en) + "|" + pnorm(s.en.replace(/\bSta\./g, "Station")) }))];
+let hit = [], act = -1;
+const showSug = v => { sug.hidden = !v; q.setAttribute("aria-expanded", String(v)); if (!v) q.removeAttribute("aria-activedescendant"); };
+function pick(it) {
+  showSug(false); q.value = ""; qclear.hidden = true; act = -1; placeBack = null;
+  if (it.t === "idx") { showSpotIndex(); return; }
+  if (it.t === "p") { showPlace(it.p); return; }
+  lastPlace = null; clearPin();     // 場所から離れて、検索で別のバス停・系統を選んだ時
+  it.t === "r" ? showRoute(it.r) : (showStop(it.s, { center: true, zoom: 16 }), ensureVisible(L.latLng(it.s.lat, it.s.lon)));
+}
+function setAct(k) {
+  act = k; if (k >= 0) q.setAttribute("aria-activedescendant", "sug-" + k);
+  sug.querySelectorAll("button[data-k]").forEach((b, i) => { b.classList.toggle("act", i === act); b.setAttribute("aria-selected", i === act); if (i === act) b.scrollIntoView({ block: "nearest" }); });
+}
+function search() {
+  const raw = q.value.trim(), v = kana(raw); act = -1; qclear.hidden = !q.value;
+  if (!v) { if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  sug.dataset.mode = "";
+  hit = (pv0 => { const h = items.filter(it => it.key.includes(v) || (pv0.length > 1 && it.key.includes(pv0))); const opOnly = it => it.t === "r" && !(kana(it.r.name + " " + routeLabel(it.r)).includes(v) || (pv0.length > 1 && pnorm(routeLabel(it.r)).includes(pv0))); return h.some(it => it.t === "s") && h.filter(it => it.t === "r").length > 20 ? h.filter(it => !opOnly(it)) : h; })(pnorm(raw));
+  hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || kpre(a, v, pnorm(raw)) - kpre(b, v, pnorm(raw)) || (a.t === "s" && b.t === "s" ? a.s.en.length - b.s.en.length : 0));
+  hit = hit.slice(0, 40);
+  // 場所（駅・地名・施設）は別の候補群として先頭に追加。既存のバス停・系統の判定と並びは変えない
+  const pv = pnorm(raw);
+  const ph = placeItems.filter(it => it.key.includes(pv)).map(it => ({ it, sc: it.name === pv ? 0 : it.name.startsWith(pv) ? 1 : 2 }))
+    .sort((a, b) => a.sc - b.sc || PTYPE_ORDER.indexOf(a.it.p.type) - PTYPE_ORDER.indexOf(b.it.p.type) || a.it.p.name.length - b.it.p.name.length || areaRank(a.it.p.area) - areaRank(b.it.p.area)).slice(0, 8).map(x => x.it);
+  hit = ph.concat(hit);
+  if (!hit.length) {
+    sug.innerHTML = `<div class="empty">No places, stops or routes match <b>“${esc(raw)}”</b>.<br>Try:<br>• a station, town, place or facility name (e.g. Yoshino Station, Shimoichiguchi Station, Sanbonmatsu Station)<br>• part of a stop name (e.g. Totsukawa Onsen)<br>• a route number (e.g. Hatenashi Line)${HASSPOT ? `<br>Search in English or Japanese, e.g. “${esc(SPOT_EN_HINT)}”` : ""}</div>`;
+  } else {
+    let html = "", cur = "";
+    hit.forEach((it, k) => {
+      if (it.t !== cur) { cur = it.t; html += `<div class="sh" role="presentation">${it.t === "p" ? "Places" : it.t === "r" ? "Routes" : "Bus stops"}</div>`; }
+      html += it.t === "p"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${esc(it.p.pe)}<small class="en ja" lang="ja">${esc(it.p.name)}</small></span><small>${esc(placeSub(it.p))}</small></button>`
+        : it.t === "r"
+        ? `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${rnm(it.r)}</span><small>${esc(OPNAME(it.r.op))} · ${it.r.n} ${P(it.r.n, "stop", "stops")}</small></button>`
+        : `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${nm(it.s)}</span><small>${esc(OPNAME(it.s.op))} · ${it.s.rts.length} ${P(it.s.rts.length, "route", "routes")}</small></button>`;
+    });
+    sug.innerHTML = html;
+    sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+  }
+  if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px";
+  showSug(true);
+}
+q.oninput = search;
+q.onfocus = () => { if (q.value.trim() || HASSPOT) search(); };
+qclear.onclick = () => { q.value = ""; qclear.hidden = true; showSug(false); act = -1; q.focus(); };
+q.onkeydown = e => {
+  if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換確定のEnterでは候補を開かない
+  if (e.key === "Escape") { e.preventDefault(); if (!sug.hidden) showSug(false); else if (q.value) { q.value = ""; qclear.hidden = true; } return; }
+  if (sug.hidden || !hit.length) return;
+  if (e.key === "ArrowDown") { e.preventDefault(); setAct((act + 1) % hit.length); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setAct((act - 1 + hit.length) % hit.length); }
+  // ↑↓で選んだ候補があればそれを開く。何も選んでいない時は従来どおり「バス停・系統の先頭候補」を開く（バス停・系統の候補が1つも無い語の時だけ、先頭の場所）
+  else if (e.key === "Enter") { e.preventDefault(); pick(act >= 0 ? hit[act] : (hit.find(h => h.t !== "p") || hit[0])); }
+};
+document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
+const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "Search places & stops" : "Search places, stops, routes") : isMobile() ? "Search places & stops" : "Search places, stops, routes"; };   // 狭い画面では短く
+setPh(); mqMobile.addEventListener("change", setPh);
+home();
+applySheet();
+map.invalidateSize();
+// ?at=<市町村コード> で開いた時は、その市町村のバス停の範囲へ地図を寄せる(県ページの市町村ボタン)。不明なコードは無視して既定の表示。
+(() => { const at = new URLSearchParams(location.search).get("at"), mu = at && MUNI.find(m => m[0] === at);
+  if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
+  map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
+  const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">Opened “${esc(mu[1])}” from the Nara page. The map shows the area of its bus stops.</p>`); })();
+// 言語の切り替えボタンは、今の ?at= などを引き継ぐ
+document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
+// 見出し(地域名＋Bus Map)が収まらない狭い画面では「Bus Map」を省く
+// それでも収まらない時は、地域名を短い名前(en.short)にする(2026-11-01・Okinawa Main Island 等)
+const fitH1 = () => { const h = document.querySelector("header h1"); if (!h) return; const n = h.querySelector(".h1n"); if (n) { n.dataset.full = n.dataset.full || n.textContent; n.textContent = n.dataset.full; } h.classList.remove("cut"); if (h.scrollWidth > h.clientWidth + 1) { h.classList.add("cut"); if (n && h.scrollWidth > h.clientWidth + 1) n.textContent = n.dataset.short; } };
+fitH1(); addEventListener("resize", fitH1);
+</script>
+</body>
+</html>
