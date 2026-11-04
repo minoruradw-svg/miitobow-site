@@ -806,5 +806,16 @@
     "url": "https://miitobow.com/articles/research-campcoffee",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-campcoffee/theme.png"
+  },
+  {
+    "id": "minifridge",
+    "title": "卓上ミニ冷蔵庫",
+    "category": "life",
+    "model": "minifridge",
+    "summary": "22候補を調査して選ぶ5商品",
+    "content": "ペルチェ式・コンプレッサー式・コードレスまで、卓上ミニ冷蔵庫22候補を調査。冷え方の仕組みと、大きさ・音・電源の注意も確認し、使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-minifridge",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-minifridge/theme.png"
   }
 ]
