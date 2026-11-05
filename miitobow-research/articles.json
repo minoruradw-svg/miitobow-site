@@ -817,5 +817,16 @@
     "url": "https://miitobow.com/articles/research-minifridge",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-minifridge/theme.png"
+  },
+  {
+    "id": "solarpanel",
+    "title": "ソーラーパネル",
+    "category": "camp",
+    "model": "solarpanel",
+    "summary": "32候補を調査して選ぶ5商品",
+    "content": "スマホ用の小型からポータブル電源用の大型まで、ポータブルソーラーパネル32候補を調査。W数と接続端子、実際の発電量の落ち方も確認し、使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-solarpanel",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-solarpanel/theme.png"
   }
 ]
