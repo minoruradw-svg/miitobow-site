@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>北見・網走周辺バスマップ | miitobow</title>
+<title>北見・網走周辺のバス路線図・バス停マップ｜1,683停・97系統｜miitobow</title>
 <meta name="description" content="北見市・網走市・紋別市・遠軽町・中標津町・斜里町などのバス停と系統を地図で眺められる非公式ページ。バス停1,683か所・97系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/hokkaido/kitami-abashiri/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/hokkaido/kitami-abashiri/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="北見・網走周辺バスマップ | miitobow">
+<meta property="og:title" content="北見・網走周辺のバス路線図・バス停マップ｜1,683停・97系統｜miitobow">
 <meta property="og:description" content="北見市・網走市・紋別市・遠軽町・中標津町・斜里町などのバス停と系統を地図で眺められる非公式ページ。バス停1,683か所・97系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/hokkaido/kitami-abashiri/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-hokkaido-kitami-abashiri.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="北見・網走周辺バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="北見・網走周辺のバス路線図・バス停マップ｜1,683停・97系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"北海道","item":"https://miitobow.com/bus/hokkaido/"},{"@type":"ListItem","position":3,"name":"北見・網走周辺","item":"https://miitobow.com/bus/hokkaido/kitami-abashiri/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">北見・網走周辺のバス路線・バス停について</h2><p>北見・網走周辺（北見市・網走市・紋別市・遠軽町・中標津町・斜里町・弟子屈町・美幌町・滝上町・湧別町・羅臼町・標津町・下川町・津別町・置戸町・愛別町・興部町・小清水町・東川町・枝幸町・雄武町・上川町・西興部村・大空町・訓子府町）のバス停1,683か所・97系統を、地図で見られる非公式ページです。主な事業者は宗谷バス、北紋バス、名士バス、北海道北見バス、斜里バス、網走バスほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>滝上線（北紋バス・81か所）：主な経由バス停は本町1丁目、本町4丁目、紋別バスターミナル</li><li>遠軽線（北紋バス・75か所）：主な経由バス停は厚生病院前、遠軽、紋別バスターミナル</li><li>釧路羅臼線（阿寒バス・75か所）：主な経由バス停は開発前、28線、中標津バスターミナル</li><li>紋別線（北海道北見バス・74か所）：主な経由バス停は遠軽、南ヶ丘3丁目、南ヶ丘4丁目</li><li>津別線（北海道北見バス・69か所）：主な経由バス停は北見、柏陽高校、北見駅</li><li>勝山温泉線（北海道北見バス・66か所）：主な経由バス停は本町1丁目、北見、中の島公園入口</li><li>温根湯線（北海道北見バス・65か所）：主な経由バス停は本町1丁目、北見、本町4丁目</li><li>興部線（名士バス・65か所）：主な経由バス停は28線、30線、25線</li><li>小清水線（網走バス・63か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>雄武線（北紋バス・59か所）：主な経由バス停は本町1丁目、本町4丁目、紋別バスターミナル</li><li>置戸線（北海道北見バス・57か所）：主な経由バス停は本町1丁目、北見、中の島公園入口</li><li>陸別線（北海道北見バス・53か所）：主な経由バス停は本町1丁目、北見、中の島公園入口</li><li>中標津市内線（阿寒バス・51か所）：主な経由バス停は中標津バスターミナル、中央十字街、中標津高校前</li><li>留辺蘂運動公園線（北海道北見バス・51か所）：主な経由バス停は本町1丁目、北見、本町4丁目</li><li>常呂線（北海道北見バス・50か所）：主な経由バス停は北見、柏陽高校、北見駅</li><li>網走東藻琴線（網走観光交通・48か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>お買い物バス（網走バス・47か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>常呂線（網走バス・46か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>知床線（斜里バス・46か所）：主な経由バス停は日の出、斜里バスターミナル、幌別</li><li>上渚滑線（北紋バス・45か所）：主な経由バス停は紋別バスターミナル、開発前、28線</li><li>美幌療育病院線（北海道北見バス・44か所）：主な経由バス停は北見、柏陽高校、北見駅</li><li>羽衣・向陽線（網走バス・44か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>つくしヶ丘団地線（網走バス・41か所）：主な経由バス停は厚生病院前、網走バスターミナル、モヨロ入口</li><li>釧路標津線（阿寒バス・40か所）：主な経由バス停は開発前、28線、中標津バスターミナル</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>本町1丁目（15系統）、北見（13系統）、厚生病院前（13系統）、網走バスターミナル（13系統）、大通（12系統）、モヨロ入口（10系統）、網走駅前（10系統）、2条通（9系統）、遠軽（9系統）、オホーツク合同庁舎前（8系統）、本町4丁目（8系統）、紋別バスターミナル（8系統）、西7丁目（8系統）、開発前（8系統）、ハローワーク前（7系統）、中央小学校（7系統）、北見郵便局（7系統）、学園通（7系統）、柏陽高校（7系統）、28線（6系統）、4条西4丁目（6系統）、4条通（6系統）、とん田仲通（6系統）、中標津バスターミナル（6系統）、南ヶ丘3丁目（6系統）、南ヶ丘4丁目（6系統）、市民会館（6系統）、東1丁目（6系統）、東3丁目（6系統）、桂町3丁目（6系統）、紋別高校（6系統）、西2丁目（6系統）、30線（5系統）、ひがしかわ道草館（5系統）、中の島公園入口（5系統）、中央十字街（5系統）、元町（5系統）、刑務所前（5系統）、北上（5系統）、北上5線（5系統）</p><h3>この地図にある主な駅</h3><p>上川駅、中愛別駅、中斜里駅、丸瀬布駅、北浜駅、北見駅、原生花園駅、呼人駅、女満別駅、安国駅、安足間駅、川湯温泉駅、愛し野駅、愛別駅、愛山駅、摩周駅、東相内駅、柏陽駅、桂台駅、止別駅、浜小清水駅、瀬戸瀬駅、生田原駅、留辺蘂駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/hokkaido/">北海道</a> ・ <a href="/bus/hokkaido/asahikawa-shibetsu/">旭川・士別周辺バスマップ</a> ・ <a href="/bus/hokkaido/hakodate-muroran/">函館・室蘭周辺バスマップ</a> ・ <a href="/bus/hokkaido/iwamizawa-otaru/">岩見沢・小樽周辺バスマップ</a> ・ <a href="/bus/hokkaido/kushiro-otofuke/">釧路・音更周辺バスマップ</a> ・ <a href="/bus/hokkaido/obihiro-shimizu/">帯広・清水周辺バスマップ</a> ・ <a href="/bus/hokkaido/rebun-rishirifuji/">礼文・利尻富士周辺バスマップ</a> ・ <a href="/bus/hokkaido/sapporo/">札幌バスマップ</a> ・ <a href="/bus/hokkaido/tomakomai-chitose/">苫小牧・千歳周辺バスマップ</a> ・ <a href="/bus/en/hokkaido/kitami-abashiri/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：道の駅、網走駅、鱒浦駅）、バス停、系統（例：網走）を探せます。</p><div class="lh">この地図に含まれる市町村（25）</div><p class="tip">北見市・網走市・紋別市・遠軽町・中標津町・斜里町・弟子屈町・美幌町・滝上町・湧別町・羅臼町・標津町・下川町・津別町・置戸町・愛別町・興部町・小清水町・東川町・枝幸町・雄武町・上川町・西興部村・大空町・訓子府町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hokkaido/asahikawa-shibetsu/"><span>旭川・士別周辺バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/hokkaido/kushiro-otofuke/"><span>釧路・音更周辺バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/hokkaido/obihiro-shimizu/"><span>帯広・清水周辺バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：道の駅、網走駅、鱒浦駅）、バス停、系統（例：網走）を探せます。</p><div class="lh">この地図に含まれる市町村（25）</div><p class="tip">北見市・網走市・紋別市・遠軽町・中標津町・斜里町・弟子屈町・美幌町・滝上町・湧別町・羅臼町・標津町・下川町・津別町・置戸町・愛別町・興部町・小清水町・東川町・枝幸町・雄武町・上川町・西興部村・大空町・訓子府町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hokkaido/asahikawa-shibetsu/"><span>旭川・士別周辺バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/hokkaido/kushiro-otofuke/"><span>釧路・音更周辺バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/hokkaido/obihiro-shimizu/"><span>帯広・清水周辺バスマップ</span><small>南西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

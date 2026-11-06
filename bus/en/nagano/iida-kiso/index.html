@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Iida-Kiso Area Bus Map | miitobow</title>
+<title>Iida-Kiso Area bus routes & bus stop map | 1,940 stops, 126 routes | miitobow</title>
 <meta name="description" content="Unofficial map of bus stops and routes in Iida, Kiso, Ina, Achi, Takagi, Minowa, etc. 1,940 bus stops and 126 routes (FY2022 data).">
 <link rel="canonical" href="https://miitobow.com/bus/en/nagano/iida-kiso/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/nagano/iida-kiso/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Iida-Kiso Area Bus Map | miitobow">
+<meta property="og:title" content="Iida-Kiso Area bus routes &amp; bus stop map | 1,940 stops, 126 routes | miitobow">
 <meta property="og:description" content="Unofficial map of bus stops and routes in Iida, Kiso, Ina, Achi, Takagi, Minowa, etc. 1,940 bus stops and 126 routes (FY2022 data).">
 <meta property="og:url" content="https://miitobow.com/bus/en/nagano/iida-kiso/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-nagano-iida-kiso.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Iida-Kiso Area Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta property="og:image:alt" content="Iida-Kiso Area bus routes &amp; bus stop map | 1,940 stops, 126 routes | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus maps of Japan","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Nagano","item":"https://miitobow.com/bus/en/nagano/"},{"@type":"ListItem","position":3,"name":"Iida-Kiso Area","item":"https://miitobow.com/bus/en/nagano/iida-kiso/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -309,7 +317,7 @@
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">About bus routes and bus stops in Iida-Kiso Area</h2><p>An unofficial map of 1,940 bus stops and 126 routes in Iida-Kiso Area (Kiso Town, Iida City, Ina City, Anan Town, Minowa Town, Matsukawa Town, Achi Village, Chino City, Takagi Village, Minamiminowa Village, Hara Village, Nagiso Town, Toyoka Village, Agematsu Town, Kiso Village, Okuwa Village, Komagane City, Neba Village, Shimojo Village, Oshika Village, Iijima Town, Hiraya Village, Fujimi Town, Tenryu Village, Otaki Village, Miyada Village, Urugi Village, Yasuoka Village, Nakagawa Village, Takamori Town). Main operators: Alpico Kotsu, Chowa Town, JR Bus Kanto, Chikuma Bus, Suwa City, Hara Villageand others. Based on FY2022 data data; timetables and fares are not included.</p><h3>Main routes (by number of stops)</h3><ul><li>Kan Line Kaidakogen Line (Kiso Town, 82 stops): main stops include Honmachi, A Co-op, Kiso Hospital</li><li>Koiki Bus Toyamasato Line (Nanshinshukoikirengo, 76 stops): main stops include Arai, Iida Sta., OIDE Chohime High School</li><li>Koiki Bus Ashima Line (Nanshinshukoikirengo, 59 stops): main stops include Arai, Iida Sta., OIDE Chohime High School</li><li>Takagi Sonmin Bus Ujinori Line Soyokaze (Kyoboku Village, 58 stops): main stops include Takagi-mura Community Center, Arai, Former Ashimashinkin</li><li>Komaba Line (Nanshinshukoikirengo, 56 stops): main stops include Iida Sta., OIDE Chohime High School, Shimono Entrance</li><li>Ina Main Line (Ina City &amp; Minowa Town &amp; Minamiminowa Village, 55 stops): main stops include Ina Chuo Hospital, Asahimachi, Orinpasu Entrance</li><li>Anan Line (Anan Town, 53 stops): main stops include Iida Sta., OIDE Chohime High School, Shimono Entrance</li><li>Kita Course (Minamiminowa Village, 52 stops): main stops include Ina Chuo Hospital, Kitahara, Nanden</li><li>Kan Line Kiso Onsen Line (Kiso Town, 51 stops): main stops include Honmachi, A Co-op, Kiso Hospital</li><li>Civic Bus Chiyo Line (City Minkaigi, 48 stops): main stops include Iida Sta., OIDE Chohime High School, Shimono Entrance</li><li>Minochan Bus-minami Course (Ina Bus, 47 stops): main stops include Town Office, Matsushima Community Center, Nakayama</li><li>Minochan Bus-higashi Course (Ina Bus, 47 stops): main stops include Town Office, Matsushima Community Center, Nagata Shizen Park Entrance</li><li>Higashi Course (Minamiminowa Village, 47 stops): main stops include Ina Chuo Hospital, Kitahara, Nanden</li><li>Seibu Community Bus (Neba Village, 47 stops): main stops include Uemachi, Shimodaira, Ono Gawa</li><li>Kuwachan Bus Kiso Hospital Line (Okuwa Village, 46 stops): main stops include A Co-op, Kiso Hospital, Kiso-Fukushima Sta.</li><li>Loop Hiyoshi Line (Kiso Town, 45 stops): main stops include Asahimachi, Shopping Center, Kamimura</li><li>Matsukawa Furutsu Bus Kami-Katagiri Loop (Matsukawa Town, 45 stops): main stops include Town Office, Arai, Ina-Oshima Sta.</li><li>Matsukawa Furutsu Bus Ojima Loop (Matsukawa Town, 45 stops): main stops include Town Office, Arai, Ina-Oshima Sta.</li><li>Civic Bus Kyuken Line (City Minkaigi, 44 stops): main stops include Iida Sta., OIDE Chohime High School, Shimono Entrance</li><li>Kan Line Mitake Otaki Line (Kiso Town, 44 stops): main stops include Honmachi, A Co-op, Kiso Hospital</li><li>Minochan Bus-nishi Course (Gatsu, Hi, Mokuyobi) (Ina Bus, 43 stops): main stops include Town Office, Matsushima Community Center, Nakayama</li><li>Minochan Bus-minami-higashi Course (Ina Bus, 42 stops): main stops include Town Office, Matsushima Community Center, Kinoshitaue-machi</li><li>Minochan Bus-nishi Course (Mizu, Kinyobi) (Ina Bus, 42 stops): main stops include Town Office, Matsushima Community Center, Nakayama</li><li>Tateshinakogen Raundo Bus (Alpico Kotsu, 41 stops): main stops include Chino Sta., Berubia West Exit, Seihakukaba Lake</li></ul><p class="tip">“Main stops” are stops on the route that many other routes also serve; their order has no meaning. Stop order on routes is estimated from positions.</p><h3>Major bus stops (by number of routes)</h3><p>Town Office (18 routes), Chino Sta. (12 routes), Takagi-mura Community Center (11 routes), Arai (10 routes), Former Ashimashinkin (10 routes), Honmachi (10 routes), Iida Sta. (10 routes), Police Box (10 routes), OIDE Chohime High School (9 routes), Shimono Entrance (9 routes), Town Office (9 routes), Iida Hospital (9 routes), Kanae Community Center (9 routes), A Co-op (8 routes), Chuodori 3 (8 routes), Ina Chuo Hospital (8 routes), Hara Village Office (8 routes), Takagi Village Office (8 routes), Municipal Hospital (8 routes), Tokiwadai (8 routes), Tokiwadai-higashi (8 routes), Kiso Hospital (8 routes), Kiso-Fukushima Sta. (8 routes), Tamura (8 routes), Ajima (8 routes), Sanshi Hall (7 routes), Uemachi (7 routes), Shimoyama-higashi (7 routes), Chuo Square (7 routes), Ina-Oshima Sta. (7 routes), Yasawa (7 routes), Takagi Post Office (7 routes), Shiobuchi (7 routes), Ojima (7 routes), Asahimachi (7 routes), Matsushima Community Center (7 routes), JA (7 routes), Pekkan (6 routes), Orinpasu Entrance (6 routes), Berubia West Exit (6 routes)</p><h3>Main stations on this map</h3><p>Suzurannosato Sta., Nanakubo Sta., Agematsu Sta., Kami-Katagiri Sta., Shimoyamamura Sta., Shimojima Sta., Shimo-Ichida Sta., Shimodaira Sta., Nakaisamurai Sta., Ina-Kamisato Sta., Ina-Yawata Sta., Inakita Sta., Ina-Oshima Sta., Inakozawa Sta., Inashi Sta., Ina-Hongo Sta., Inamatsushima Sta., Ina-Tajima Sta., Ina-Fukuoka Sta., Shinano-Sakai Sta., Kuramoto Sta., Motozenkoji Sta., Kiriishi Sta., Kitatono Sta.</p><p class="tip">This is an unofficial page made by an individual. Check the operators’ official information for timetables, fares and current service.</p><nav aria-label="Related pages"><h3>Related pages</h3><p class="seo-links"><a href="/bus/en/">Bus maps of Japan</a> ・ <a href="/bus/en/nagano/">Nagano</a> ・ <a href="/bus/en/nagano/matsumoto-shiojiri/">Matsumoto-Shiojiri Area Bus Map</a> ・ <a href="/bus/en/nagano/nagano-nakano/">Nagano-Nakano Area Bus Map</a> ・ <a href="/bus/en/nagano/ueda-omachi/">Ueda-Omachi Area Bus Map</a> ・ <a href="/bus/nagano/iida-kiso/" hreflang="ja">Japanese version</a></p></nav></section></div>
     <div class="warn">Check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
@@ -639,12 +647,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -689,6 +725,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -699,7 +736,7 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Michi-no-Eki, Inakita Sta., Iida Sta.), bus stops, and routes (e.g. Chino).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (30)</div><p class="tip">Kiso Town, Iida City, Ina City, Anan Town, Minowa Town, Matsukawa Town, Achi Village, Chino City, Takagi Village, Minamiminowa Village, Hara Village, Nagiso Town, Toyoka Village, Agematsu Town, Kiso Village, Okuwa Village, Komagane City, Neba Village, Shimojo Village, Oshika Village, Iijima Town, Hiraya Village, Fujimi Town, Tenryu Village, Otaki Village, Miyada Village, Urugi Village, Yasuoka Village, Nakagawa Village, Takamori Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/nagano/matsumoto-shiojiri/"><span>Matsumoto-Shiojiri Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/nagano/ueda-omachi/"><span>Ueda-Omachi Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/yamanashi/kofu-hokuto/"><span>Kofu-Hokuto Area Bus Map</span><small>E ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (30)</div><p class="tip">Kiso Town, Iida City, Ina City, Anan Town, Minowa Town, Matsukawa Town, Achi Village, Chino City, Takagi Village, Minamiminowa Village, Hara Village, Nagiso Town, Toyoka Village, Agematsu Town, Kiso Village, Okuwa Village, Komagane City, Neba Village, Shimojo Village, Oshika Village, Iijima Town, Hiraya Village, Fujimi Town, Tenryu Village, Otaki Village, Miyada Village, Urugi Village, Yasuoka Village, Nakagawa Village, Takamori Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/nagano/matsumoto-shiojiri/"><span>Matsumoto-Shiojiri Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/nagano/ueda-omachi/"><span>Ueda-Omachi Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/yamanashi/kofu-hokuto/"><span>Kofu-Hokuto Area Bus Map</span><small>E ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -886,7 +923,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
-  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);

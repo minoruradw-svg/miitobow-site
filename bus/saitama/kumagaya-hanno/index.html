@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>熊谷・飯能周辺バスマップ | miitobow</title>
+<title>熊谷・飯能周辺のバス路線図・バス停マップ｜2,232停・237系統｜miitobow</title>
 <meta name="description" content="熊谷市・飯能市・狭山市・入間市・秩父市・坂戸市などのバス停と系統を地図で眺められる非公式ページ。バス停2,232か所・237系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/saitama/kumagaya-hanno/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/saitama/kumagaya-hanno/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="熊谷・飯能周辺バスマップ | miitobow">
+<meta property="og:title" content="熊谷・飯能周辺のバス路線図・バス停マップ｜2,232停・237系統｜miitobow">
 <meta property="og:description" content="熊谷市・飯能市・狭山市・入間市・秩父市・坂戸市などのバス停と系統を地図で眺められる非公式ページ。バス停2,232か所・237系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/saitama/kumagaya-hanno/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-saitama-kumagaya-hanno.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="熊谷・飯能周辺バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="熊谷・飯能周辺のバス路線図・バス停マップ｜2,232停・237系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"埼玉県","item":"https://miitobow.com/bus/saitama/"},{"@type":"ListItem","position":3,"name":"熊谷・飯能周辺","item":"https://miitobow.com/bus/saitama/kumagaya-hanno/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">熊谷・飯能周辺のバス路線・バス停について</h2><p>熊谷・飯能周辺（熊谷市・飯能市・入間市・狭山市・秩父市・坂戸市・深谷市・鶴ヶ島市・東松山市・上里町・毛呂山町・ときがわ町・小川町・小鹿野町・日高市・本庄市・東秩父村・越生町・鳩山町・寄居町・吉見町・横瀬町・神川町・嵐山町・皆野町・美里町・滑川町）のバス停2,232か所・237系統を、地図で見られる非公式ページです。主な事業者は上里町、十王自動車、朝日自動車、伊勢崎市、本庄観光、武蔵観光ほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>名栗01/02/飯01/01-2/02/02-2/03/03-2/06（国際興業・69か所）：主な経由バス停は本町、飯能駅、中央通り</li><li>D1、D2　秩父吉田線（西武観光バス・62か所）：主な経由バス停は本町、西武秩父駅、上町一丁目</li><li>G1、G2　小鹿野線（西武観光バス・46か所）：主な経由バス停は本町、西武秩父駅、上町一丁目</li><li>熊谷駅～県立循環器呼吸器病センター～小川町駅（国際十王交通・45か所）：主な経由バス停は本町、駅入口、熊谷駅</li><li>グライダー号（協同バス・44か所）：主な経由バス停は熊谷駅南口、妻沼聖天前、妻沼行政センター</li><li>W01・W02　東秩父村路線（イーグルバス・40か所）：主な経由バス停は小川町駅、小川町駅入口、相生町</li><li>てぃーワゴン　金子コース（入間市・40か所）：主な経由バス停は中神、やまゆり荘、仏子駅</li><li>T3　三沢線（西武観光バス・39か所）：主な経由バス停は本町、西武秩父駅、上町一丁目</li><li>熊谷駅～小江川～小川町駅（国際十王交通・39か所）：主な経由バス停は本町、駅入口、熊谷駅</li><li>K2、N2　久那線/K1　市内線（秩父市・38か所）：主な経由バス停は本町、西武秩父駅、上町一丁目</li><li>飯04（国際興業・37か所）：主な経由バス停は本町、飯能駅、中央通り</li><li>おおや線（坂戸市・35か所）：主な経由バス停は本町、坂戸市役所、関間</li><li>【HJ31】本庄駅南口～小島南～神泉総合支所（朝日自動車・34か所）：主な経由バス停は駅入口、本庄駅南口、七軒町</li><li>医大11/12/31/32（国際興業・34か所）：主な経由バス停は飯能駅、埼玉医大、中央通り</li><li>P1　ミューズパーク線（西武観光バス・33か所）：主な経由バス停は本町、西武秩父駅、上町一丁目</li><li>【HJ32】本庄駅南口～沖電気前～神泉総合支所（朝日自動車・33か所）：主な経由バス停は駅入口、本庄駅南口、七軒町</li><li>G13　志賀坂線（西武観光バス・32か所）：主な経由バス停は原、原町、小鹿野</li><li>熊谷駅～上岡～東松山駅（国際十王交通・32か所）：主な経由バス停は本町、駅入口、熊谷駅</li><li>グライダーワゴン（妻沼循環）（協同バス・31か所）：主な経由バス停は妻沼聖天前、西野、妻沼行政センター</li><li>寄居車庫⇔本庄早稲田駅北口⇔本庄駅南口（武蔵観光・31か所）：主な経由バス停は駅入口、本庄駅南口、田中</li><li>寄居車庫⇔深谷駅（武蔵観光・31か所）：主な経由バス停は県営住宅入口、人見、原宿</li><li>狭山25（西武バス・31か所）：主な経由バス停は狭山市駅西口、中央図書館入口（狭山市）、七夕通り商店街</li><li>M5、M6、M7　中津川線（西武観光バス・30か所）：主な経由バス停は西武秩父駅、落合、三峰口駅</li><li>【KM61】熊谷駅～上根～妻沼聖天前～太田駅（朝日自動車・30か所）：主な経由バス停は本町、熊谷駅、局前</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>入間市駅（28系統）、本町（27系統）、豊岡町（23系統）、駅入口（23系統）、奈賀町（21系統）、扇町屋（21系統）、扇町屋中央（21系統）、扇町屋二丁目（21系統）、熊谷駅（16系統）、狭山市駅西口（16系統）、東金子（15系統）、武蔵団地入口（15系統）、中央図書館入口（狭山市）（13系統）、人事院研修所（11系統）、北中野（11系統）、大森（11系統）、局前（11系統）、熊谷寺前（11系統）、西武住宅前（11系統）、飯能駅（11系統）、本庄駅南口（10系統）、西武秩父駅（10系統）、七夕通り商店街（9系統）、三井アウトレットパーク（9系統）、埼玉医大（9系統）、熊谷駅南口（9系統）、社会福祉会館（9系統）、船久保工場前（9系統）、JA二本木支店（8系統）、七夕橋（8系統）、七軒町（8系統）、上町一丁目（8系統）、中央通り（8系統）、中町（8系統）、二本木（8系統）、広瀬橋北（8系統）、新富士見橋（8系統）、札所十三番（8系統）、武蔵藤沢駅（8系統）、河原宿（8系統）</p><h3>この地図にある主な駅</h3><p>つきのわ駅、ひろせ野鳥の森駅、ふかや花園駅、みなみ寄居駅、ソシオ流通センター駅、一本松駅、三峰口駅、上熊谷駅、丹荘駅、仏子駅、元加治駅、児玉駅、入曽駅、入間市駅、北坂戸駅、吾野駅、和銅黒谷駅、坂戸駅、大野原駅、大麻生駅、寄居駅、小前田駅、小川町駅、岡部駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/saitama/">埼玉県</a> ・ <a href="/bus/saitama/ageo-kawagoe/">上尾・川越周辺バスマップ</a> ・ <a href="/bus/saitama/kawaguchi-misato/">川口・三郷周辺バスマップ</a> ・ <a href="/bus/saitama/saitama-kuki/">さいたま・久喜周辺バスマップ</a> ・ <a href="/bus/en/saitama/kumagaya-hanno/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：熊谷駅、一本松駅、深谷駅）、バス停、系統（例：熊谷）を探せます。</p><div class="lh">この地図に含まれる市町村（27）</div><p class="tip">熊谷市・飯能市・入間市・狭山市・秩父市・坂戸市・深谷市・鶴ヶ島市・東松山市・上里町・毛呂山町・ときがわ町・小川町・小鹿野町・日高市・本庄市・東秩父村・越生町・鳩山町・寄居町・吉見町・横瀬町・神川町・嵐山町・皆野町・美里町・滑川町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/saitama/ageo-kawagoe/"><span>上尾・川越周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/saitama/kawaguchi-misato/"><span>川口・三郷周辺バスマップ</span><small>南東　›</small></a><a class="rt" href="/bus/saitama/saitama-kuki/"><span>さいたま・久喜周辺バスマップ</span><small>東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：熊谷駅、一本松駅、深谷駅）、バス停、系統（例：熊谷）を探せます。</p><div class="lh">この地図に含まれる市町村（27）</div><p class="tip">熊谷市・飯能市・入間市・狭山市・秩父市・坂戸市・深谷市・鶴ヶ島市・東松山市・上里町・毛呂山町・ときがわ町・小川町・小鹿野町・日高市・本庄市・東秩父村・越生町・鳩山町・寄居町・吉見町・横瀬町・神川町・嵐山町・皆野町・美里町・滑川町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/saitama/ageo-kawagoe/"><span>上尾・川越周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/saitama/kawaguchi-misato/"><span>川口・三郷周辺バスマップ</span><small>南東　›</small></a><a class="rt" href="/bus/saitama/saitama-kuki/"><span>さいたま・久喜周辺バスマップ</span><small>東　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

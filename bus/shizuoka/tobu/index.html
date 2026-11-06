@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>東部（沼津・三島・富士）バスマップ | miitobow</title>
+<title>東部（沼津・三島・富士）のバス路線図・バス停マップ｜2,338停・196系統｜miitobow</title>
 <meta name="description" content="沼津市・富士市・富士宮市・三島市・御殿場市・裾野市・小山町・清水町ほかのバス停と系統を地図で眺められる非公式ページ。バス停2,338か所・196系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/shizuoka/tobu/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/shizuoka/tobu/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="東部（沼津・三島・富士）バスマップ | miitobow">
+<meta property="og:title" content="東部（沼津・三島・富士）のバス路線図・バス停マップ｜2,338停・196系統｜miitobow">
 <meta property="og:description" content="沼津市・富士市・富士宮市・三島市・御殿場市・裾野市・小山町・清水町ほかのバス停と系統を地図で眺められる非公式ページ。バス停2,338か所・196系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/shizuoka/tobu/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-shizuoka-tobu.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="東部（沼津・三島・富士）バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="東部（沼津・三島・富士）のバス路線図・バス停マップ｜2,338停・196系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"静岡県","item":"https://miitobow.com/bus/shizuoka/"},{"@type":"ListItem","position":3,"name":"東部（沼津・三島・富士）","item":"https://miitobow.com/bus/shizuoka/tobu/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">東部（沼津・三島・富士）のバス路線・バス停について</h2><p>東部（沼津・三島・富士）（富士市・沼津市・富士宮市・三島市・御殿場市・裾野市・小山町・清水町・長泉町・函南町）のバス停2,338か所・196系統を、地図で見られる非公式ページです。主な事業者は富士急バス、富士急静岡バス、富士急モビリティ、富士急バス・富士急モビリティ、小山町、富士急湘南バスほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>西浦線（東海バス・110か所）：主な経由バス停は沼津駅、大手町、上土</li><li>沼津-江梨線（沼津市・91か所）：主な経由バス停は沼津駅、大手町、上土</li><li>沼津-戸田線（沼津市・82か所）：主な経由バス停は沼津駅、大手町、上土</li><li>北山線　東高前～白糸滝・猪の頭～根原（富士急静岡バス・66か所）：主な経由バス停は富士宮駅、大橋、神田通り</li><li>大渕線　富士駅～吉原中央駅・中野・富士脳研病院～富士宮駅（富士急静岡バス・64か所）：主な経由バス停は吉原中央駅、富士宮駅、吉原四丁目</li><li>日本ランド線　富士駅～吉原中央駅・富士サファリパーク～イエティ（富士急静岡バス・59か所）：主な経由バス停は吉原中央駅、吉原四丁目、富士駅前</li><li>根方線（富士急静岡バス・59か所）：主な経由バス停は吉原中央駅、吉原四丁目、富士駅前</li><li>三島線・特別支援学校線（富士急モビリティ・57か所）：主な経由バス停は三島駅、御殿場駅富士山口、一番町</li><li>三島駅⇔裾野駅入口～御殿場（富士急シティバス・57か所）：主な経由バス停は三島駅、一番町、幸町</li><li>沼津-木負線（沼津市・56か所）：主な経由バス停は沼津駅、大手町、上土</li><li>裾野市内循環　青葉台・千福が丘ルート（富士急シティバス・56か所）：主な経由バス停は佐野、裾野駅、裾野二本松</li><li>裾野市内循環　青葉台・岩波ルート（富士急シティバス・54か所）：主な経由バス停は佐野、裾野駅、裾野二本松</li><li>富士見校線　今宮～一色・吉高入口～富士見校（富士急静岡バス・52か所）：主な経由バス停は吉原中央駅、吉原四丁目、富士駅前</li><li>沼津駅⇔（旧東海道経由）東海道線・東田子浦駅方面（富士急シティバス・50か所）：主な経由バス停は大手町、幸町、西町</li><li>北山線　新富士駅～富士宮駅・世界遺産センター～休暇村富士（富士急静岡バス・48か所）：主な経由バス停は富士宮駅、新富士駅、十字街</li><li>北循環（富士宮市・48か所）：主な経由バス停は北高前、イオンモール富士宮、富士宮駅南口（市立病院入口）</li><li>柿田線（東海バス・48か所）：主な経由バス停は沼津駅、三島駅、大手町</li><li>清水町循環バス「ゆうすいくん号」（清水町・48か所）：主な経由バス停は戸田、サントムーン柿田川、岡村記念病院</li><li>しおかぜ（富士市）（富士市・47か所）：主な経由バス停は新富士駅、第二小学校入口、下横割</li><li>十里木線　J1・ぐりんぱ線　J2・イエティ（富士急モビリティ・47か所）：主な経由バス停は御殿場駅富士山口、新橋銀座、森之腰</li><li>河口湖線　A1・A2・C1・C2（富士急バス・富士急モビリティ・47か所）：主な経由バス停は大橋、六角堂、湯沢</li><li>富士見台線　富士駅～フィランセ・木の宮～富士見台5丁目（富士急静岡バス・45か所）：主な経由バス停は吉原中央駅、吉原四丁目、富士駅前</li><li>沼津～三島線（東海バス・45か所）：主な経由バス停は沼津駅、三島駅、大手町</li><li>がんセンター線駿河平線（富士急シティバス・44か所）：主な経由バス停は三島駅、楽寿園前、一番町</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>沼津駅（31系統）、吉原中央駅（28系統）、三島駅（25系統）、大手町（24系統）、富士宮駅（24系統）、上土（18系統）、吉原四丁目（18系統）、富士駅前（18系統）、吉原本町（17系統）、富士駅（16系統）、楽寿園前（16系統）、富士本町（15系統）、富士銀座（15系統）、御殿場駅富士山口（14系統）、新富士駅（14系統）、本町（三島市）（14系統）、富士市役所前（12系統）、県総合庁舎入口（12系統）、二瀬川（11系統）、大橋（11系統）、市役所前（11系統）、青島町（11系統）、ロゼシアター入口（10系統）、一色（10系統）、六角堂（10系統）、富士中央病院（10系統）、富安橋（10系統）、山神社（10系統）、本市場（10系統）、本市場中（10系統）、湯沢（10系統）、牛臥入口（10系統）、駿河台（10系統）、はまゆう前（9系統）、一番町（9系統）、八ッ溝（9系統）、和田町（9系統）、多比（9系統）、多比船越（9系統）、大場駅前（9系統）</p><h3>この地図にある主な駅</h3><p>ジヤトコ前駅、三島二日町駅、三島広小路駅、三島田町駅、三島駅、下土狩駅、伊豆仁田駅、入山瀬駅、函南駅、十国峠駅、十国登り口駅、南御殿場駅、原駅、吉原本町駅、吉原駅、大場駅、大岡駅、富士宮駅、富士岡駅、富士川駅、富士根駅、富士駅、岩波駅、岳南原田駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/shizuoka/">静岡県</a> ・ <a href="/bus/shizuoka/hamamatsu-enshu/">浜松・遠州バスマップ</a> ・ <a href="/bus/shizuoka/izu/">伊豆バスマップ</a> ・ <a href="/bus/shizuoka/shizuoka-shida/">静岡・志太榛原バスマップ</a> ・ <a href="/bus/en/shizuoka/tobu/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.tokaibus.jp/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：沼津駅、三島駅、新富士駅）、バス停、系統（例：西海岸線）を探せます。</p><div class="lh">この地図に含まれる市町村（10）</div><p class="tip">富士市・沼津市・富士宮市・三島市・御殿場市・裾野市・小山町・清水町・長泉町・函南町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kanagawa/fujisawa-odawara/"><span>藤沢・小田原周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/kanagawa/sagamihara-yamato/"><span>相模原・大和周辺バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/shizuoka/izu/"><span>伊豆バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/shizuoka/shizuoka-shida/"><span>静岡・志太榛原バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：沼津駅、三島駅、新富士駅）、バス停、系統（例：西海岸線）を探せます。</p><div class="lh">この地図に含まれる市町村（10）</div><p class="tip">富士市・沼津市・富士宮市・三島市・御殿場市・裾野市・小山町・清水町・長泉町・函南町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kanagawa/fujisawa-odawara/"><span>藤沢・小田原周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/kanagawa/sagamihara-yamato/"><span>相模原・大和周辺バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/shizuoka/izu/"><span>伊豆バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/shizuoka/shizuoka-shida/"><span>静岡・志太榛原バスマップ</span><small>南西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

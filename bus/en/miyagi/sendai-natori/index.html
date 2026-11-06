@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sendai-Natori Area Bus Map | miitobow</title>
+<title>Sendai-Natori Area bus routes & bus stop map | 2,558 stops, 427 routes | miitobow</title>
 <meta name="description" content="Unofficial map of bus stops and routes in Sendai, Natori, Shiroishi, Kawasaki, Iwanuma, Marumori, etc. 2,558 bus stops and 427 routes (FY2022 data).">
 <link rel="canonical" href="https://miitobow.com/bus/en/miyagi/sendai-natori/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/miyagi/sendai-natori/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sendai-Natori Area Bus Map | miitobow">
+<meta property="og:title" content="Sendai-Natori Area bus routes &amp; bus stop map | 2,558 stops, 427 routes | miitobow">
 <meta property="og:description" content="Unofficial map of bus stops and routes in Sendai, Natori, Shiroishi, Kawasaki, Iwanuma, Marumori, etc. 2,558 bus stops and 427 routes (FY2022 data).">
 <meta property="og:url" content="https://miitobow.com/bus/en/miyagi/sendai-natori/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-miyagi-sendai-natori.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Sendai-Natori Area Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta property="og:image:alt" content="Sendai-Natori Area bus routes &amp; bus stop map | 2,558 stops, 427 routes | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus maps of Japan","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Miyagi","item":"https://miitobow.com/bus/en/miyagi/"},{"@type":"ListItem","position":3,"name":"Sendai-Natori Area","item":"https://miitobow.com/bus/en/miyagi/sendai-natori/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -309,7 +317,7 @@
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">About bus routes and bus stops in Sendai-Natori Area</h2><p>An unofficial map of 2,558 bus stops and 427 routes in Sendai-Natori Area (Sendai City, Natori City, Shiroishi City, Kawasaki Town, Iwanuma City, Marumori Town, Shichigahama Town, Zao Town, Tagajo City, Shichikashuku Town, Murata Town, Ogawara Town, Kakuda City). Main operators: Sendai City, Miyagi Kotsu, Tomiya City, Shichigahama Town, Rifu Town, Shiogama Cityand others. Based on FY2022 data data; timetables and fares are not included.</p><h3>Main routes (by number of stops)</h3><ul><li>Route 10 (Sendai City, 103 stops): main stops include Izumi-Chuo Sta., Yagiyamadobutsu Park Sta., Arai 6</li><li>Route 25 (Sendai City, 101 stops): main stops include Izumi-Chuo Sta., Arai 6, Arai Sta.</li><li>Route 70 (Sendai City, 82 stops): main stops include Kita-Sendai, Yakushido Sta., Kita-Sendai Sta.</li><li>Route 30 (Sendai City, 78 stops): main stops include Izumi-Chuo Sta., Kita-Nakayama 2, Municipal Bus Sanezawa Bus Depot</li><li>Route 20 (Sendai City, 74 stops): main stops include Izumi-Chuo Sta., Arai 6, Arai Sta.</li><li>2 Akyu Line (Miyagi Kotsu, 72 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 75 (Sendai City, 72 stops): main stops include Municipal Bus Higashi-Sendai Bus Depot, Sendai Minaminenkin Office, Nagamachi Sta. West Exit</li><li>Route 15 (Sendai City, 69 stops): main stops include Izumi-Chuo Sta., Municipal Bus Sanezawa Bus Depot, Nagamachi-Minami Sta. / Taihaku Ward Office</li><li>Route 70/40/20 (Sendai City, 63 stops): main stops include Kita-Sendai, Arai 6, Arai Sta.</li><li>Route 77 (Sendai City, 60 stops): main stops include Sendai Minaminenkin Office, Nagamachi Sta. West Exit, Arai 6</li><li>Route S845 (Sendai City, 60 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>4 Akyu Line (Kawasaki) (Miyagi Kotsu, 59 stops): main stops include Sendai Sta., JR Higashinihon, Itsutsubashi 1</li><li>Route 18 (Sendai City, 58 stops): main stops include Izumi-Chuo Sta., Municipal Bus Sanezawa Bus Depot, Arai 6</li><li>Route 845 (Sendai City, 58 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route S844 (Sendai City, 58 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 844 (Sendai City, 57 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 60 (Sendai City, 56 stops): main stops include Yagiyamadobutsu Park Sta., Yakushido Sta., Dainohara Sta.</li><li>Route S120 (Sendai City, 55 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route S840 (Sendai City, 55 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 840 (Sendai City, 54 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 846 (Sendai City, 53 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>6 Nijinoka Danchi Line (Miyagi Kotsu, 52 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>7 Yamadajiyugaoka (Miyagi Kotsu, 52 stops): main stops include Sendai Sta., Chamber of Commerce, Denryoku Bldg.</li><li>Route 85 (Sendai City, 52 stops): main stops include Rikuzen-Takasago Sta., Higashi-kita Ikayakka University Hospital Entrance, Takasago 2</li></ul><p class="tip">“Main stops” are stops on the route that many other routes also serve; their order has no meaning. Stop order on routes is estimated from positions.</p><h3>Major bus stops (by number of routes)</h3><p>Sendai Sta. (223 routes), Chamber of Commerce (168 routes), Denryoku Bldg. (134 routes), Prefectural Office City Hall (128 routes), Futsuka-machi Kita-Yobancho (103 routes), Tsutsumidoriamamiya-machi (64 routes), Higashi-kita University Hospital (59 routes), Aoba-Dori Sta. (57 routes), Transportation Bureau-higashi-kita University Hospital (56 routes), Hirose-Dori Sta. (51 routes), Miyagiken Sendai Joint Government Building (49 routes), Izumi-Chuo Sta. (49 routes), JR Higashinihon (47 routes), Itsutsubashi 1 (45 routes), Jozenji-dori City Hall (44 routes), Mediateku (43 routes), Itsutsubashi Sta. (43 routes), Civic Hall (43 routes), Kosei Hospital (42 routes), Kita-Sendai (41 routes), Kimachidori 2 (39 routes), Osaki Hachimangu Shrine (36 routes), Hachiman 1 (35 routes), Ryuho-ji Entrance (35 routes), Higashi-kita Kosai Hospital Sensaifukko Memorial Hall (33 routes), Municipal Bus Higashi-Sendai Bus Depot (32 routes), Sendai Minaminenkin Office (31 routes), Kita-Nakayama 2 (30 routes), Izumizaki 1-kita (30 routes), Kakyoin / Silver Center (30 routes), Nagamachi Sta. West Exit (30 routes), Yagiyamadobutsu Park Sta. (29 routes), Municipal Bus Sanezawa Bus Depot (29 routes), Kimachidori 1 (29 routes), Arai 6 (28 routes), Arai Sta. (28 routes), Oritate (27 routes), Bansuisodo (27 routes), Sunaoshi-machi (27 routes), Yakushido Sta. (27 routes)</p><h3>Main stations on this map</h3><p>Aoba-Dori Sta., Abukuma Sta., Geba Sta., Nakanosakae Sta., Marumori Sta., Itsutsubashi Sta., Sendai Airport Sta., Sendai Sta., Sakunami Sta., Yaotome Sta., Yagiyamadobutsu Park Sta., Rokuchonome Sta., Kotodai-Koen Sta., Kita-Marumori Sta., Kita-Sendai Sta., Kita-Yobancho Sta., Kitayama Sta., Kita-Shirakawa Sta., Minami-Sendai Sta., Minami-Kakuda Sta., Oroshimachi Sta., Dainohara Sta., Natori Sta., Kokufu-Tagajo Sta.</p><p class="tip">This is an unofficial page made by an individual. Check the operators’ official information for timetables, fares and current service.</p><nav aria-label="Related pages"><h3>Related pages</h3><p class="seo-links"><a href="/bus/en/">Bus maps of Japan</a> ・ <a href="/bus/en/miyagi/">Miyagi</a> ・ <a href="/bus/en/miyagi/tome-ishinomaki/">Tome-Ishinomaki Area Bus Map</a> ・ <a href="/bus/miyagi/sendai-natori/" hreflang="ja">Japanese version</a></p></nav></section></div>
     <div class="warn">Check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
@@ -639,12 +647,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -689,6 +725,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -699,7 +736,7 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Sendai Sta., Nagamachi Sta. / Taihakkuru, Yaotome Sta.), bus stops, and routes (e.g. Gururinko).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (13)</div><p class="tip">Sendai City, Natori City, Shiroishi City, Kawasaki Town, Iwanuma City, Marumori Town, Shichigahama Town, Zao Town, Tagajo City, Shichikashuku Town, Murata Town, Ogawara Town, Kakuda City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/miyagi/tome-ishinomaki/"><span>Tome-Ishinomaki Area Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/fukushima/iwaki-fukushima/"><span>Iwaki-Fukushima Area Bus Map</span><small>S ›</small></a><a class="rt" href="/bus/en/yamagata/tsuruoka-yamagata/"><span>Tsuruoka-Yamagata Area Bus Map</span><small>NW ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (13)</div><p class="tip">Sendai City, Natori City, Shiroishi City, Kawasaki Town, Iwanuma City, Marumori Town, Shichigahama Town, Zao Town, Tagajo City, Shichikashuku Town, Murata Town, Ogawara Town, Kakuda City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/miyagi/tome-ishinomaki/"><span>Tome-Ishinomaki Area Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/fukushima/iwaki-fukushima/"><span>Iwaki-Fukushima Area Bus Map</span><small>S ›</small></a><a class="rt" href="/bus/en/yamagata/tsuruoka-yamagata/"><span>Tsuruoka-Yamagata Area Bus Map</span><small>NW ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -886,7 +923,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
-  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);

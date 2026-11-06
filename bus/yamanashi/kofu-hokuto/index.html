@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>甲府・北杜周辺バスマップ | miitobow</title>
+<title>甲府・北杜周辺のバス路線図・バス停マップ｜2,735停・251系統｜miitobow</title>
 <meta name="description" content="甲府市・北杜市・笛吹市・大月市・甲州市・山梨市などのバス停と系統を地図で眺められる非公式ページ。バス停2,735か所・251系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/yamanashi/kofu-hokuto/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/yamanashi/kofu-hokuto/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="甲府・北杜周辺バスマップ | miitobow">
+<meta property="og:title" content="甲府・北杜周辺のバス路線図・バス停マップ｜2,735停・251系統｜miitobow">
 <meta property="og:description" content="甲府市・北杜市・笛吹市・大月市・甲州市・山梨市などのバス停と系統を地図で眺められる非公式ページ。バス停2,735か所・251系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/yamanashi/kofu-hokuto/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-yamanashi-kofu-hokuto.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="甲府・北杜周辺バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="甲府・北杜周辺のバス路線図・バス停マップ｜2,735停・251系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"山梨県","item":"https://miitobow.com/bus/yamanashi/"},{"@type":"ListItem","position":3,"name":"甲府・北杜周辺","item":"https://miitobow.com/bus/yamanashi/kofu-hokuto/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">甲府・北杜周辺のバス路線・バス停について</h2><p>甲府・北杜周辺（甲府市・北杜市・大月市・笛吹市・山梨市・甲州市・甲斐市・上野原市・富士河口湖町・南アルプス市・富士吉田市・都留市・韮崎市・身延町・道志村・富士川町・中央市・山中湖村・市川三郷町・忍野村・早川町・鳴沢村・小菅村・昭和町・丹波山村）のバス停2,735か所・251系統を、地図で見られる非公式ページです。主な事業者は北杜市、山梨峡北交通、山梨交通、山梨市、甲州市、西東京バスほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>【富士五湖】富士河口湖高校・道志小学校線（富士急バス・102か所）：主な経由バス停は富士山駅、松山、駐在所前</li><li>【都留】月夜野・健康科学大学前線（富士急バス・92か所）：主な経由バス停は日本生命前、寿町、市立病院入口</li><li>【都留】健康科学大学前・月夜野線（富士急バス・90か所）：主な経由バス停は日本生命前、寿町、駐在所前</li><li>【都留】都留市立病院前・月夜野線（富士急バス・89か所）：主な経由バス停は日本生命前、寿町、市立病院入口</li><li>【富士五湖】富士山駅・甲府駅【南口】線（富士急バス・86か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、富士山駅</li><li>76：敷島営業所～長塚～甲府駅～商工会議所～伊勢町～中道橋～御所～石和八幡宮～甲府駅～長塚～敷島営業所（中道橋経由御所循環線）（山梨交通・83か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>敷島営業所発（石和経由御所循環）敷島営業所行き（90：敷島営業所～長塚～甲府駅～石和八幡宮～御所～中道橋～伊勢町営業所～商工会議所～甲府駅～長塚～敷島営業所（石和経由御所循環線））（山梨交通・83か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>【富士五湖】富士山駅・道志小学校線（富士急バス・79か所）：主な経由バス停は富士山駅、駐在所前、学校前</li><li>【都留】都留市駅・道志小学校（富士急バス・75か所）：主な経由バス停は日本生命前、駐在所前、学校前</li><li>河口湖線　A1・A2・C1・C2（富士急バス・富士急モビリティ・71か所）：主な経由バス停は富士山駅、河口湖駅、松山</li><li>47：県立中央病院～甲府駅～貢川～西野～飯野～小笠原～青柳～鰍沢営業所（山梨交通・68か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>【ふじっ湖号】山中湖畔右まわり：河口湖駅・市立病院・忍野八海・平野（富士急バス・68か所）：主な経由バス停は富士山駅、河口湖駅、松山</li><li>【都留】月夜野・長又線（富士急バス・66か所）：主な経由バス停は駐在所前、学校前、局前</li><li>【富士五湖】富士山駅・甲府駅【北口】線（富士急バス・65か所）：主な経由バス停は富士山駅、河口湖駅、松山</li><li>【都留】道志小学校前・都留市立病院前（富士急バス・63か所）：主な経由バス停は日本生命前、寿町、市立病院入口</li><li>増富温泉郷線：韮崎（営）～韮崎駅～駒井～北杜市役所～若神子～須玉中学校～塩川～増富温泉郷（山梨交通・61か所）：主な経由バス停は平和観音入口、韮崎小学校、韮崎駅</li><li>53：県立中央病院～甲府駅～千秋橋～山の神入口～花輪～南湖小学校～青柳～鰍沢営業所（山梨交通・60か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>04：敷島営業所～竜王駅～県立美術館～甲府駅～湯村温泉入口～グリーンライン昇仙峡～昇仙峡滝上（山梨交通・59か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>44：甲府駅～貢川～上今諏訪～十五所～小笠原～青柳～鰍沢営業所（山梨交通・59か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>【大月】大月中央病院前・小菅の湯線（富士急バス・59か所）：主な経由バス停は営業所前、日本生命前、猿橋駅</li><li>【富士五湖】河口湖駅・御殿場プレミアムアウトレット線（富士急バス・59か所）：主な経由バス停は富士山駅、河口湖駅、松山</li><li>34：敷島営業所～湯村温泉～県立中央病院～甲府駅～県立美術館～竜王新町～野牛島東～六科～御勅使（山梨交通・57か所）：主な経由バス停は甲府駅バスターミナル、甲府市役所、県会議事堂</li><li>【富士五湖】森の駅旭日丘・道志小学校線（富士急バス・56か所）：主な経由バス停は駐在所前、学校前、局前</li><li>【大月】大月中央病院前・竹の向線（富士急バス・55か所）：主な経由バス停は営業所前、日本生命前、猿橋駅</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>甲府駅バスターミナル（45系統）、営業所前（43系統）、甲府市役所（37系統）、県会議事堂（36系統）、日本生命前（35系統）、猿橋駅（34系統）、駅前通り（33系統）、大月駅（32系統）、幼稚園前（31系統）、殿上下宿（31系統）、猿橋（27系統）、猿橋農協前（27系統）、イオン大月店前（26系統）、大月短大前（26系統）、殿上橋（24系統）、富士山駅（23系統）、寿町（23系統）、市営住宅前（22系統）、横尾橋（22系統）、甲府地方裁判所（22系統）、駒橋（22系統）、駒橋上宿（22系統）、市営グランド入口（21系統）、常盤通り（21系統）、大島（20系統）、大月一丁目（20系統）、市役所前（大月）（20系統）、法人会館（20系統）、田無瀬（20系統）、診療所前（20系統）、都留高前（20系統）、七保橋（19系統）、下和田（19系統）、丸の内三丁目（19系統）、二葉保育園前（19系統）、吉久保（猿橋）（19系統）、宮古橋（19系統）、戸並入口（19系統）、沢向橋（19系統）、福泉寺前（19系統）</p><h3>この地図にある主な駅</h3><p>上大月駅、上野原駅、下吉田駅、下部温泉駅、久那土駅、初狩駅、勝沼ぶどう郷駅、十日市場駅、南甲府駅、善光寺駅、四方津駅、国母駅、塩之沢駅、塩山駅、塩崎駅、大月駅、富士山駅、富士急ハイランド駅、寿駅、小井川駅、小淵沢駅、山梨市駅、市ノ瀬駅、市川大門駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/yamanashi/">山梨県</a> ・ <a href="/bus/en/yamanashi/kofu-hokuto/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：道の駅、甲府駅、石和温泉駅）、バス停、系統（例：甲府）を探せます。</p><div class="lh">この地図に含まれる市町村（25）</div><p class="tip">甲府市・北杜市・大月市・笛吹市・山梨市・甲州市・甲斐市・上野原市・富士河口湖町・南アルプス市・富士吉田市・都留市・韮崎市・身延町・道志村・富士川町・中央市・山中湖村・市川三郷町・忍野村・早川町・鳴沢村・小菅村・昭和町・丹波山村</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/nagano/iida-kiso/"><span>飯田・木曽周辺バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/nagano/matsumoto-shiojiri/"><span>松本・塩尻周辺バスマップ</span><small>北西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：道の駅、甲府駅、石和温泉駅）、バス停、系統（例：甲府）を探せます。</p><div class="lh">この地図に含まれる市町村（25）</div><p class="tip">甲府市・北杜市・大月市・笛吹市・山梨市・甲州市・甲斐市・上野原市・富士河口湖町・南アルプス市・富士吉田市・都留市・韮崎市・身延町・道志村・富士川町・中央市・山中湖村・市川三郷町・忍野村・早川町・鳴沢村・小菅村・昭和町・丹波山村</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/nagano/iida-kiso/"><span>飯田・木曽周辺バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/nagano/matsumoto-shiojiri/"><span>松本・塩尻周辺バスマップ</span><small>北西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

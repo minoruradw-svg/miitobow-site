@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ichinoseki-Hanamaki Area Bus Map | miitobow</title>
+<title>Ichinoseki-Hanamaki Area bus routes & bus stop map | 2,983 stops, 191 routes | miitobow</title>
 <meta name="description" content="Unofficial map of bus stops and routes in Ichinoseki, Hanamaki, Oshu, Kitakami, Tono, Nishiwaga, etc. 2,983 bus stops and 191 routes (FY2022 data).">
 <link rel="canonical" href="https://miitobow.com/bus/en/iwate/ichinoseki-hanamaki/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/iwate/ichinoseki-hanamaki/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Ichinoseki-Hanamaki Area Bus Map | miitobow">
+<meta property="og:title" content="Ichinoseki-Hanamaki Area bus routes &amp; bus stop map | 2,983 stops, 191 routes | miitobow">
 <meta property="og:description" content="Unofficial map of bus stops and routes in Ichinoseki, Hanamaki, Oshu, Kitakami, Tono, Nishiwaga, etc. 2,983 bus stops and 191 routes (FY2022 data).">
 <meta property="og:url" content="https://miitobow.com/bus/en/iwate/ichinoseki-hanamaki/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-iwate-ichinoseki-hanamaki.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Ichinoseki-Hanamaki Area Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta property="og:image:alt" content="Ichinoseki-Hanamaki Area bus routes &amp; bus stop map | 2,983 stops, 191 routes | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus maps of Japan","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Iwate","item":"https://miitobow.com/bus/en/iwate/"},{"@type":"ListItem","position":3,"name":"Ichinoseki-Hanamaki Area","item":"https://miitobow.com/bus/en/iwate/ichinoseki-hanamaki/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -309,7 +317,7 @@
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">About bus routes and bus stops in Ichinoseki-Hanamaki Area</h2><p>An unofficial map of 2,983 bus stops and 191 routes in Ichinoseki-Hanamaki Area (Ichinoseki City, Oshu City, Hanamaki City, Kitakami City, Tono City, Nishiwaga Town, Rikuzentakata City, Ofunato City, Kanegasaki Town, Kamaishi City, Sumita Town, Hiraizumi Town, Otsuchi Town). Main operators: Nishiwaga Town, Hanamaki City, Iwatekenkotsu, Otsuchi Town, Kitakami City, Sumita Townand others. Based on FY2022 data data; timetables and fares are not included.</p><h3>Main routes (by number of stops)</h3><ul><li>Chokyorimichi Line Ofunato / Otsuchi / Kamaishi / Tono - Morioka Line (Iwatekenkotsu, 91 stops): main stops include Nakatsuma, Noda, Kamaishi Chuo</li><li>Ichinoseki City Depot Bus (Daito) Kyotasarusawasen / Daitokanjo Line (Ichinoseki City, 74 stops): main stops include Yoka-cho, Tachimachikaku, Noda</li><li>Iitoyo Kuroiwa Line (Kitakami City, 61 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Ishidoriya Line (Iwatekenkotsu, 60 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Futako Saraki Line (Kitakami City, 57 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Tachibana Iwasaki Line (Kitakami City, 56 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Kitakami Shominami High School / Narisawa Line (Iwatekenkotsu, 55 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Ohashi – Kamiheita New Town (Iwatekenkotsu, 55 stops): main stops include Joint Government Building, Nakatsuma, Noda</li><li>Osako Hanamaki Line (Osako Bus Terminal Gyo / Prefectural Chubu Hospital Gyo) (Hanamaki City, 54 stops): main stops include Odori 2, Hanamaki Sta., Odori 1</li><li>Chokyorimichi Line Ichinoseki Ofunato Line (Iwatekenkotsu, 54 stops): main stops include Ichinoseki Sta., Joint Government Building, Usuginu</li><li>Ichinoseki City Depot Bus (Daito) Ohara / Kamiuchino Line (Ichinoseki City, 53 stops): main stops include Tachimachikaku, Bus Center, Daito Hospital</li><li>Ichinoseki City Depot Bus (Fujisawa) Fujisawa Ichinoseki Line (Ichinoseki City, 53 stops): main stops include Omachi Kado, Omachi-dori, Otsuki Cho</li><li>Osako / Hanamaki Line (Iwatekenkotsu, 53 stops): main stops include Odori 2, Hanamaki Sta., Odori 1</li><li>Kanazawa Kozuchi Line (Otsuchi Town, 53 stops): main stops include Nakayama, Hachiman, Wano</li><li>Akahama Line (Koikimichi Line) (Kamiohata – Kamaishi Sta. – Akahama) (Iwatekenkotsu, 52 stops): main stops include Joint Government Building, Nakatsuma, Noda</li><li>Nanohana Bus Shoinoka / Yamatani Line (Summer / Toki) (Ichinoseki City, 51 stops): main stops include Omachi Kado, Omachi-dori, Ichinoseki Ichiko</li><li>Ichinoseki City Depot Bus (Fujisawa) Senmaya Hanaizumi Line (Ichinoseki City, 51 stops): main stops include Hanaizumi Sta., Ni-no-machi, Hanaizumi Library</li><li>Sawauchi Odekake Bus Mokuyobi (Nishiwaga Town, 51 stops): main stops include Hottoyuda Sta., Kamiyunosawa, Nidose</li><li>Ohashi – Kiishi Bypass – Kamiheita New Town (Iwatekenkotsu, 50 stops): main stops include Joint Government Building, Nakatsuma, Noda</li><li>Sawauchi Odekake Bus Kayobi (Nishiwaga Town, 50 stops): main stops include Hottoyuda Sta., Kamiyunosawa, Nidose</li><li>Narita Line / Murasakino Line / Hanamaki-kita High School Line (Iwatekenkotsu, 49 stops): main stops include Odori 2, Kitakami Post Office, Kitakami Sta.</li><li>Kasawa Pass Line (Iwatekenkotsu, 48 stops): main stops include Muika-machi, Shiroiwa, Topia</li><li>Hirota Line (Rikuzentakata City, 47 stops): main stops include Rikuzentakata Sta., Abasse, Koyashiki</li><li>Hongo Line (Iwatekenkotsu, 47 stops): main stops include Ichinoseki Sta., Honcho, Usuginu</li></ul><p class="tip">“Main stops” are stops on the route that many other routes also serve; their order has no meaning. Stop order on routes is estimated from positions.</p><h3>Major bus stops (by number of routes)</h3><p>Odori 2 (18 routes), Muika-machi (16 routes), Omachi Kado (15 routes), Hanaizumi Sta. (15 routes), Ichinoseki Sta. (14 routes), Ni-no-machi (14 routes), Hanaizumi Library (14 routes), Hanaizumi Branch Office (14 routes), JA Hanaizumi Branch (13 routes), Joint Government Building (13 routes), Omachi-dori (13 routes), Hanaizumi Post Office (13 routes), Fukuro (13 routes), Michishita (13 routes), Hottoyuda Sta. (12 routes), Ichinoseki Ichiko (12 routes), Nakatsuma (12 routes), Yoka-cho (12 routes), Kitakami Post Office (12 routes), Kitakami Sta. (12 routes), Esashi Bus Center (12 routes), Hanamaki Sta. (12 routes), Kamiyunosawa (11 routes), Nidose (11 routes), Kitakami City Hall (11 routes), Otsuki Cho (11 routes), Okutsu36-chiwari (11 routes), Odori 1 (11 routes), Ota (11 routes), Shinmachi Post Office (11 routes), Honcho (11 routes), Sakuramachi Jr. High School (11 routes), Mizusawaakatsuchida Sta.-dori (11 routes), Esashi Hospital (11 routes), Yumoto29-chiwari.yumoto30-chiwari Post Office (11 routes), Yumoto29-chiwari.yumoto30-chiwari Onsen (11 routes), Yuda19-chiwari-yuda21-chiwari (11 routes), Yuda19-chiwari-yuda21-chiwari Jr. High School-guchi (11 routes), Choei Suki Bamae (11 routes), Choritsu Nishiwaga Sawauchi Hospital (11 routes)</p><h3>Main stations on this map</h3><p>Hottoyuda Sta., Yuda Kinshu Lake Sta., Yuda-Kogen Sta., Ichinoseki Sta., Sanriku Sta., Kami-Arisu Sta., Ryoishi Sta., Nitanai Sta., Rokuhara Sta., Maesawa Sta., Kitakami Sta., Senmaya Sta., Yoshihama Sta., Kirikiri Sta., Wakasennin Sta., Toni Sta., Tsuchizawa Sta., Otsuchi Sta., Miyamori Sta., Kosano Sta., Oyamada Sta., Konashi Sta., Yamanome Sta., Iwanoshita Sta.</p><p class="tip">This is an unofficial page made by an individual. Check the operators’ official information for timetables, fares and current service.</p><nav aria-label="Related pages"><h3>Related pages</h3><p class="seo-links"><a href="/bus/en/">Bus maps of Japan</a> ・ <a href="/bus/en/iwate/">Iwate</a> ・ <a href="/bus/en/iwate/hachimantai-iwaizumi/">Hachimantai-Iwaizumi Area Bus Map</a> ・ <a href="/bus/en/iwate/morioka-miyako/">Morioka-Miyako Area Bus Map</a> ・ <a href="/bus/iwate/ichinoseki-hanamaki/" hreflang="ja">Japanese version</a></p></nav></section></div>
     <div class="warn">Check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
@@ -639,12 +647,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -689,6 +725,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -699,7 +736,7 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Michi-no-Eki, Mizusawa Sta., Ichinoseki Sta.), bus stops, and routes (e.g. Mizusawaakatsuchida).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (13)</div><p class="tip">Ichinoseki City, Oshu City, Hanamaki City, Kitakami City, Tono City, Nishiwaga Town, Rikuzentakata City, Ofunato City, Kanegasaki Town, Kamaishi City, Sumita Town, Hiraizumi Town, Otsuchi Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/iwate/morioka-miyako/"><span>Morioka-Miyako Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/akita/akita-yurihonjo/"><span>Akita-Yurihonjo Area Bus Map</span><small>W ›</small></a><a class="rt" href="/bus/en/miyagi/tome-ishinomaki/"><span>Tome-Ishinomaki Area Bus Map</span><small>S ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (13)</div><p class="tip">Ichinoseki City, Oshu City, Hanamaki City, Kitakami City, Tono City, Nishiwaga Town, Rikuzentakata City, Ofunato City, Kanegasaki Town, Kamaishi City, Sumita Town, Hiraizumi Town, Otsuchi Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/iwate/morioka-miyako/"><span>Morioka-Miyako Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/akita/akita-yurihonjo/"><span>Akita-Yurihonjo Area Bus Map</span><small>W ›</small></a><a class="rt" href="/bus/en/miyagi/tome-ishinomaki/"><span>Tome-Ishinomaki Area Bus Map</span><small>S ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -886,7 +923,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
-  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);

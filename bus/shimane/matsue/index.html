@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>松江・出雲・隠岐バスマップ | miitobow</title>
+<title>松江・出雲・隠岐のバス路線図・バス停マップ｜2,442停・228系統｜miitobow</title>
 <meta name="description" content="松江市・出雲市・安来市・雲南市・奥出雲町・飯南町と隠岐諸島（海士・西ノ島・隠岐の島）など島根県東部のバス停と系統を地図で眺められる非公式ページ。バス停2,442か所・228系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/shimane/matsue/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/shimane/matsue/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="松江・出雲・隠岐バスマップ | miitobow">
+<meta property="og:title" content="松江・出雲・隠岐のバス路線図・バス停マップ｜2,442停・228系統｜miitobow">
 <meta property="og:description" content="松江市・出雲市・安来市・雲南市・奥出雲町・飯南町と隠岐諸島（海士・西ノ島・隠岐の島）など島根県東部のバス停と系統を地図で眺められる非公式ページ。バス停2,442か所・228系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/shimane/matsue/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-shimane-matsue.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="松江・出雲・隠岐バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="松江・出雲・隠岐のバス路線図・バス停マップ｜2,442停・228系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"島根県","item":"https://miitobow.com/bus/shimane/"},{"@type":"ListItem","position":3,"name":"松江・出雲・隠岐","item":"https://miitobow.com/bus/shimane/matsue/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">松江・出雲・隠岐のバス路線・バス停について</h2><p>松江・出雲・隠岐（松江市・出雲市・雲南市・安来市・奥出雲町・飯南町・隠岐の島町・海士町・西ノ島町）のバス停2,442か所・228系統を、地図で見られる非公式ページです。主な事業者は松江市、日ノ丸自動車、一畑バス、出雲市、松江一畑交通、日ノ丸ハイヤー・松江一畑交通ほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>吉田大東線（雲南市・79か所）：主な経由バス停は上町、JR出雲大東駅、雲南市立病院</li><li>広瀬～米子線（安来市・72か所）：主な経由バス停はせんだん橋、ショッピングセンター前、市立病院前</li><li>米子～広瀬線（安来市・70か所）：主な経由バス停はせんだん橋、ショッピングセンター前、市立病院前</li><li>三成・馬木線：三成→馬木→横田（奥出雲交通・64か所）：主な経由バス停は横町角、サンクス前、三成本町上</li><li>【市営4八束①】八束町⇒江島⇒八束町⇒松江駅⇒乃木駅⇒商業高⇒市立病院（松江市・63か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【市営4八束②】平成町車庫⇒商業高⇒乃木駅⇒松江駅⇒上宇部尾⇒江島⇒八束町（松江市・63か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>横田・馬木線：横田→馬木→三成（奥出雲交通・63か所）：主な経由バス停は横町角、サンクス前、三成本町上</li><li>伯太（草野）～安来線（安来市・61か所）：主な経由バス停は上町、安来市役所前、安来駅</li><li>【市営4八束①】市立病院⇔商業高⇔乃木駅⇔松江駅⇔大海崎⇔八束町（松江市・60か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【市営4八束②】八束町⇒江島⇒上宇部尾⇒松江駅⇒乃木駅⇒商業高⇒市立病院（松江市・60か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【市営4八束①】平成町車庫⇒商業高⇒乃木駅⇒松江駅⇒大海崎⇒八束町（松江市・58か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>広瀬～西比田線（安来市・57か所）：主な経由バス停はせんだん橋、ショッピングセンター前、市立病院前</li><li>【出雲管内】日御碕線（一畑バス・56か所）：主な経由バス停はJR出雲市駅、天満宮前、出雲市役所前</li><li>観光ループ（安来市・56か所）：主な経由バス停はせんだん橋、ショッピングセンター前、市立病院前</li><li>【松江管内】大東線（一畑バス・54か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>伯太（上小竹）～広瀬線（安来市・53か所）：主な経由バス停は上町、せんだん橋、ショッピングセンター前</li><li>安来～吉田線（安来市・53か所）：主な経由バス停は安来市役所前、安来駅、本町</li><li>【市営4八束②】八束町⇒上宇部尾⇒女子高⇒松江駅⇒乃木駅⇒商業高⇒市立病院（松江市・52か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【市営4八束②】八束町⇒上宇部尾⇒女子高⇒松江駅⇒乃木駅⇒商業高⇒平成町車庫（松江市・52か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【市営8朝日ヶ丘①】平成町車庫⇔茶山⇔桧山⇔松江駅⇔朝日ヶ丘⇔授産センター（松江市・52か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>飯南町生活路線バス　谷・赤名・頓原線（飯南町・52か所）：主な経由バス停は上町、大内谷、ふれあい大橋</li><li>【市営4八束①】平成町車庫⇒商業高⇒乃木駅⇒松江駅⇒大海崎（松江市・50か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【松江管内】御津線（一畑バス・49か所）：主な経由バス停は松江駅、朝日町、寺町</li><li>【松江管内】八雲線（一畑バス・48か所）：主な経由バス停は松江駅、朝日町、寺町</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>松江駅（89系統）、朝日町（71系統）、寺町（69系統）、県民会館前（65系統）、大橋南詰（64系統）、大橋北詰（63系統）、国宝松江城県庁前（56系統）、京橋（55系統）、天神町（50系統）、南殿町（43系統）、松江しんじ湖温泉駅（32系統）、裁判所前（31系統）、県庁南入口（30系統）、菅田庵入口（30系統）、桧山（29系統）、美月（29系統）、松江駅南口（26系統）、生協病院入口（26系統）、界橋（26系統）、湖南中学校前（24系統）、くにびきメッセ前（23系統）、市立病院（23系統）、やそり橋（22系統）、上乃木（22系統）、天神町中央（22系統）、北公園（21系統）、菅田町（21系統）、乃木駅（20系統）、平成町車庫（20系統）、灘町（20系統）、八重垣団地入口（19系統）、八雲台入口（19系統）、南高校前（19系統）、矢の原（19系統）、矢の原入口（19系統）、北殿町（18系統）、北田町（18系統）、南田町（18系統）、石橋町（18系統）、総合体育館前（18系統）</p><h3>この地図にある主な駅</h3><p>一畑口駅、三井野原駅、下久野駅、乃木駅、亀嵩駅、伊野灘駅、八川駅、出雲三成駅、出雲八代駅、出雲坂根駅、出雲大東駅、出雲大社前駅、出雲市駅、出雲横田駅、出雲神西駅、出雲科学館パークタウン前駅、加茂中駅、南大東駅、南宍道駅、園駅、大寺駅、大津町駅、安来駅、宍道駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/shimane/">島根県</a> ・ <a href="/bus/shimane/iwami/">石見バスマップ</a> ・ <a href="/bus/en/shimane/matsue/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.ichibata.co.jp/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：松江駅、出雲市駅、安来駅）、バス停、系統（例：出雲）を探せます。</p><div class="lh">この地図に含まれる市町村（9）</div><p class="tip">松江市・出雲市・雲南市・安来市・奥出雲町・飯南町・隠岐の島町・海士町・西ノ島町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hiroshima/hiroshima-north/"><span>広島県北部バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/shimane/iwami/"><span>石見バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/tottori/tottori-yonago/"><span>鳥取・米子周辺バスマップ</span><small>東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：松江駅、出雲市駅、安来駅）、バス停、系統（例：出雲）を探せます。</p><div class="lh">この地図に含まれる市町村（9）</div><p class="tip">松江市・出雲市・雲南市・安来市・奥出雲町・飯南町・隠岐の島町・海士町・西ノ島町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hiroshima/hiroshima-north/"><span>広島県北部バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/shimane/iwami/"><span>石見バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/tottori/tottori-yonago/"><span>鳥取・米子周辺バスマップ</span><small>東　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

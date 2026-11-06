@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>富山・新川バスマップ | miitobow</title>
+<title>富山・新川のバス路線図・バス停マップ｜1,318停・100系統｜miitobow</title>
 <meta name="description" content="富山市・魚津市・黒部市・上市町・立山町・入善町・滑川市のバス停と系統を地図で眺められる非公式ページ。バス停1,318か所・100系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/toyama/toyama-niikawa/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/toyama/toyama-niikawa/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="富山・新川バスマップ | miitobow">
+<meta property="og:title" content="富山・新川のバス路線図・バス停マップ｜1,318停・100系統｜miitobow">
 <meta property="og:description" content="富山市・魚津市・黒部市・上市町・立山町・入善町・滑川市のバス停と系統を地図で眺められる非公式ページ。バス停1,318か所・100系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/toyama/toyama-niikawa/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-toyama-toyama-niikawa.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="富山・新川バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="富山・新川のバス路線図・バス停マップ｜1,318停・100系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"富山県","item":"https://miitobow.com/bus/toyama/"},{"@type":"ListItem","position":3,"name":"富山・新川","item":"https://miitobow.com/bus/toyama/toyama-niikawa/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -295,7 +303,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">富山・新川のバス路線・バス停について</h2><p>富山・新川（富山市・魚津市・黒部市・上市町・立山町・入善町・滑川市）のバス停1,318か所・100系統を、地図で見られる非公式ページです。主な事業者は入善町、富山地方鉄道、黒部モビリティサービス、（有）宇奈月交通、桜井交通、魚津市ほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>堤防・熊野経由八尾・萩の島循環線（富山地方鉄道・68か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>41号線（笹津・猪谷）線（富山地方鉄道・62か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>富山空港・総合運動公園・成子経由八尾線（富山地方鉄道・53か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>山田・国病・簡保線（富山地方鉄道・50か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>運転教育・済生会病院線（富山地方鉄道・48か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>水橋・滑川線（富山地方鉄道・47か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>西の番・大場・流杉線（富山地方鉄道・45か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>上野方ルート（魚津市・44か所）：主な経由バス停はサンプラザ前、魚津駅前、電鉄魚津駅前</li><li>（若竹町）辰尾・笹津線（富山地方鉄道・44か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>大長谷線（富山市・42か所）：主な経由バス停は八尾駅、八尾行政サービスセンター前、聞名寺下</li><li>興人・国立高専線（富山地方鉄道・42か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>五百石（石金、大泉、蔵本）線（富山地方鉄道・41か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>布目経由・新湊線（富山地方鉄道・41か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>愛本本線（（有）宇奈月交通・40か所）：主な経由バス停は西町、東町、宇奈月市民サービスセンター</li><li>福沢・国際大学・月岡西緑町線（富山地方鉄道・40か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>経田-道下ルート（魚津市・40か所）：主な経由バス停はサンプラザ前、魚津駅前、労災病院前（玄関口）</li><li>下赤江（米田、リハビリ）線（富山地方鉄道・38か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>天神ルート（魚津市・38か所）：主な経由バス停はサンプラザ前、魚津駅前、労災病院前（玄関口）</li><li>富山国際大付属高校（大久保・本郷）線（学休日運休）（富山地方鉄道・38か所）：主な経由バス停は総曲輪、太郎丸口、星井町</li><li>杉原線（富山市・38か所）：主な経由バス停は八尾行政サービスセンター前、聞名寺下、東町</li><li>福沢・国際大学・月岡西緑町線（学休日運休）（富山地方鉄道・37か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li><li>野積線（富山市・35か所）：主な経由バス停は八尾駅、八尾行政サービスセンター前、聞名寺下</li><li>中島ルート（魚津市・33か所）：主な経由バス停はサンプラザ前、魚津駅前、電鉄魚津駅前</li><li>八幡四方線（富山地方鉄道・33か所）：主な経由バス停は富山駅前、城址公園前、富山市役所前</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>富山駅前（37系統）、城址公園前（33系統）、富山市役所前（33系統）、総曲輪（27系統）、西町（13系統）、中教院前（11系統）、八尾駅（10系統）、サンプラザ前（9系統）、八尾行政サービスセンター前（9系統）、聞名寺下（9系統）、魚津駅前（9系統）、丸の内（8系統）、五福末広町（8系統）、太郎丸口（8系統）、安野屋町（8系統）、星井町（8系統）、星井町1丁目（8系統）、東町（8系統）、眼鏡橋（8系統）、福島第二（8系統）、花園町（8系統）、西中野口（8系統）、鏡町（8系統）、今町（7系統）、富山大学前（7系統）、富山球場前（7系統）、新富町（7系統）、清水町（7系統）、畑中（7系統）、石坂（7系統）、神通町（7系統）、西新町（7系統）、電鉄魚津駅前（7系統）、黒部駅前（7系統）、元町（6系統）、八尾ふらっと館前（6系統）、公民館前（6系統）、労災病院前（玄関口）（6系統）、南富山駅前（6系統）、太郎丸一区（6系統）</p><h3>この地図にある主な駅</h3><p>インテック本社前駅、オークスカナルパークホテル富山前駅、グランドプラザ前駅、トヨタモビリティ富山Gスクエア五福前（五福末広町）駅、上堀駅、上市駅、上本町駅、上滝駅、下奥井駅、下段駅、下立口駅、下立駅、不二越駅、中加積駅、中滑川駅、中町（西町北）駅、丸の内駅、五百石駅、入善駅、内山駅、千垣駅、千里駅、南富山駅、南富山駅前駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/toyama/">富山県</a> ・ <a href="/bus/toyama/takaoka-tonami/">高岡・砺波バスマップ</a> ・ <a href="/bus/en/toyama/toyama-niikawa/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.chitetsu.co.jp/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -601,12 +609,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -651,6 +687,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -660,7 +697,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：富山駅、魚津駅、宇奈月温泉駅）、バス停、系統（例：布目経由・新湊線）を探せます。</p><div class="lh">この地図に含まれる市町村（7）</div><p class="tip">富山市・魚津市・黒部市・上市町・立山町・入善町・滑川市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/gifu/hida-gujo/"><span>飛騨・郡上バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/toyama/takaoka-tonami/"><span>高岡・砺波バスマップ</span><small>西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：富山駅、魚津駅、宇奈月温泉駅）、バス停、系統（例：布目経由・新湊線）を探せます。</p><div class="lh">この地図に含まれる市町村（7）</div><p class="tip">富山市・魚津市・黒部市・上市町・立山町・入善町・滑川市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/gifu/hida-gujo/"><span>飛騨・郡上バスマップ</span><small>南　›</small></a><a class="rt" href="/bus/toyama/takaoka-tonami/"><span>高岡・砺波バスマップ</span><small>西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -847,7 +884,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

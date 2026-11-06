@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nagoya Area Bus Map | miitobow</title>
+<title>Nagoya Area bus routes & bus stop map | 2,583 stops, 305 routes | miitobow</title>
 <meta name="description" content="Unofficial map of bus stops and routes in Nisshin, Nagoya, Tokai, Nagakute, Obu, Owariasahi, Togo, Miyoshi and more. 2,583 bus stops and 305 routes (FY2022 data).">
 <link rel="canonical" href="https://miitobow.com/bus/en/aichi/nagoya/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/aichi/nagoya/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Nagoya Area Bus Map | miitobow">
+<meta property="og:title" content="Nagoya Area bus routes &amp; bus stop map | 2,583 stops, 305 routes | miitobow">
 <meta property="og:description" content="Unofficial map of bus stops and routes in Nisshin, Nagoya, Tokai, Nagakute, Obu, Owariasahi, Togo, Miyoshi and more. 2,583 bus stops and 305 routes (FY2022 data).">
 <meta property="og:url" content="https://miitobow.com/bus/en/aichi/nagoya/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-aichi-nagoya.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Nagoya Area Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta property="og:image:alt" content="Nagoya Area bus routes &amp; bus stop map | 2,583 stops, 305 routes | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus maps of Japan","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Aichi","item":"https://miitobow.com/bus/en/aichi/"},{"@type":"ListItem","position":3,"name":"Nagoya Area","item":"https://miitobow.com/bus/en/aichi/nagoya/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -309,7 +317,7 @@
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">About bus routes and bus stops in Nagoya Area</h2><p>An unofficial map of 2,583 bus stops and 305 routes in Nagoya Area (Nagoya City, Nisshin City, Tokai City, Obu City, Nagakute City, Owariasahi City, Togo Town, Miyoshi City, Chita City, Toyoake City). Main operators: Nagoya City, Owariasahi City, Seto City, Meitetsu Bus, Toyoyama Town, Nagakute Cityand others. Based on FY2022 data data; timetables and fares are not included.</p><h3>Main routes (by number of stops)</h3><ul><li>Naka Route Route 4 (Tokai City, 56 stops): main stops include Otagawa Sta., Fujitsuka, Uenodai</li><li>Naka Route Route 3 (Tokai City, 54 stops): main stops include Otagawa Sta., Fujitsuka, Uenodai</li><li>Kita Route Route 1 (Tokai City, 53 stops): main stops include Otagawa Sta., Ota Elem. School Entrance-kita, Tokai City Hall</li><li>Kita Route Route 2 (Tokai City, 53 stops): main stops include Otagawa Sta., Ota Elem. School Entrance-kita, Tokai City Hall</li><li>Mizuho Loop (Nagoya City, 53 stops): main stops include Takatsuji, Hiromi-cho, Aratama-Bashi</li><li>Minami Route Route 5 / 6 (Tokai City, 49 stops): main stops include Oshimizu, Otagawa Sta., Ota Elem. School Entrance-kita</li><li>Asapi Nishi Route (Owariasahi City, 47 stops): main stops include City Hall, Haruoka, Aichi Medical University</li><li>Nakamura Loop (Nagoya City, 46 stops): main stops include Daimon-dori, Chikatetsu Iwatsuka, Daimon-dori-higashi</li><li>Asapi Higashi Route (Owariasahi City, 43 stops): main stops include City Hall, Haruoka, Aichi Medical University</li><li>Midori Loop (Nagoya City, 43 stops): main stops include Oshimizu, Fujitaika University Hospital, Hirate</li><li>Kita Loop (Nagoya City, 41 stops): main stops include Ozone, Kami-Iida, Heiantori</li><li>Meito Loop (Nagoya City, 41 stops): main stops include Hikiyama, Inokoishihara, Inokoishi Nishihara</li><li>Tokushige Loop (Nagoya City, 41 stops): main stops include Midori Bunka Elem. School Theater, Chikatetsu Tokushige, Oshimizu</li><li>Sakae 11 (Nagoya City, 41 stops): main stops include Sakae, City Hall, Ogama-cho</li><li>33 Owariasahi Mukougaokahatsu Meitetsu Bus Center (Shikenya via Sakae) (Meitetsu Bus, 40 stops): main stops include Sakae, City Hall, Shikenya</li><li>Kanayama 22 (Nagoya City, 40 stops): main stops include Kanayama, Chikatetsu Takabata, Sawakami-machi</li><li>Sansan Bus Satsuki Rain (Miyoshi Kurozasa Line) (Miyoshi City, 39 stops): main stops include Shiomino Oka, Miyoshi City Hall, Miyoshi Municipal Hospital</li><li>Kan Jingu Shrine 1 (Nagoya City, 39 stops): main stops include Nakagawa Bus Depot, Atsuta Denma-cho, Nakajimashin-cho</li><li>Mori. Shin (Nagoya City, 39 stops): main stops include Ozone, Omori Housing, Obata</li><li>West Line (Clockwise) (Counterclockwise) (Nagakute City, 39 stops): main stops include City Hall, Nagakute-Kosenjo Sta., Aichi Medical University</li><li>Aiai Bus Hokubu Loop Course (Chita City, 38 stops): main stops include City Hall, Asakura Sta., Itoyokado</li><li>Yutori To Rain (Nagoya City, 38 stops): main stops include Ozone, Fujitsuka, Sunadabashi</li><li>32 Meitetsu Bus Center Hatsu Toyota Museum (Sakae via Shikenya) (Meitetsu Bus, 37 stops): main stops include Sakae, City Hall, Shikenya</li><li>Kururinbasu 6 Iwazaki Line (Nisshin City, 37 stops): main stops include City Hall, Hongo, Chuo Welfare Center</li></ul><p class="tip">“Main stops” are stops on the route that many other routes also serve; their order has no meaning. Stop order on routes is estimated from positions.</p><h3>Major bus stops (by number of routes)</h3><p>Sakae (36 routes), City Hall (29 routes), Nagoya Sta. (22 routes), Fujigaoka (20 routes), Kanayama (18 routes), Shikenya (15 routes), Yabacho (15 routes), Chikatetsu Takabata (14 routes), Hikiyama (13 routes), Sawakami-machi (13 routes), Sasashima-cho (13 routes), Shikenya West Exit (12 routes), Ozone (12 routes), Daimon-dori (12 routes), Hirokojisakae (12 routes), Kyuse-dori (12 routes), Midori Bunka Elem. School Theater (12 routes), Taniguchi (12 routes), Nagakute-Kosenjo Sta. (12 routes), Nakagawa Bus Depot (11 routes), Kodeki-machi (11 routes), Meitetsu Bus Center (11 routes), Chikatetsu Tokushige (11 routes), Chikatetsu Naruko-Kita (11 routes), Yamaguchi-cho (11 routes), Hirokoji Honmachi (11 routes), Hikiyama-higashi (11 routes), Haruoka (11 routes), Minato-Kuyakusho (11 routes), Takatsuji (11 routes), Naruo Bus Depot (11 routes), Sangenya (10 routes), Hirokoji Fushimi (10 routes), Shimizu-guchi (10 routes), Inokoishihara (10 routes), Inokoishi Nishihara (10 routes), Kami-Iida (9 routes), Nakamura-Koen (9 routes), Zengo Sta. (9 routes), Chikatetsu Iwatsuka (9 routes)</p><h3>Main stations on this map</h3><p>Irinaka Sta., Sashima-Raibu Sta., Hanamizuki-Dori Sta., Nagoya-Dome-Mae-Yada Sta., Issha Sta., Miyoshigaoka Sta., Sango Sta., Kamimaezu Sta., Kami-Otai Sta., Kamiyashiro Sta., Kami-Iida Sta., Chukyo-Keibajo-Mae Sta., Naka-Otai Sta., Nakajima Sta., Nakamura-Koen Sta., Nakamura Ward Office Sta., Nakamura-Nisseki Sta., Marunouchi Sta., Hisaya-Odori Sta., Kamejima Sta., Imaike Sta., Fushiya Sta., Fushimi Sta., Denma-cho Sta.</p><p class="tip">This is an unofficial page made by an individual. Check the operators’ official information for timetables, fares and current service.</p><nav aria-label="Related pages"><h3>Related pages</h3><p class="seo-links"><a href="/bus/en/">Bus maps of Japan</a> ・ <a href="/bus/en/aichi/">Aichi</a> ・ <a href="/bus/en/aichi/chita-nishi-mikawa/">Chita and West Mikawa Bus Map</a> ・ <a href="/bus/en/aichi/higashi-mikawa/">East Mikawa Bus Map</a> ・ <a href="/bus/en/aichi/owari/">Owari (Ichinomiya-Kasugai-Komaki) Bus Map</a> ・ <a href="/bus/aichi/nagoya/" hreflang="ja">Japanese version</a></p></nav></section></div>
     <div class="warn">Check <a href="https://www.kotsu.city.nagoya.jp/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
@@ -639,12 +647,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -689,6 +725,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -699,7 +736,7 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Nagoya Station, Sakae, Kanayama Station), bus stops, and routes (e.g. Yutori To Rain).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (10)</div><p class="tip">Nagoya City, Nisshin City, Tokai City, Obu City, Nagakute City, Owariasahi City, Togo Town, Miyoshi City, Chita City, Toyoake City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/aichi/chita-nishi-mikawa/"><span>Chita and West Mikawa Bus Map</span><small>SE ›</small></a><a class="rt" href="/bus/en/aichi/owari/"><span>Owari (Ichinomiya-Kasugai-Komaki) Bus Map</span><small>N ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (10)</div><p class="tip">Nagoya City, Nisshin City, Tokai City, Obu City, Nagakute City, Owariasahi City, Togo Town, Miyoshi City, Chita City, Toyoake City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/aichi/chita-nishi-mikawa/"><span>Chita and West Mikawa Bus Map</span><small>SE ›</small></a><a class="rt" href="/bus/en/aichi/owari/"><span>Owari (Ichinomiya-Kasugai-Komaki) Bus Map</span><small>N ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -886,7 +923,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
-  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);

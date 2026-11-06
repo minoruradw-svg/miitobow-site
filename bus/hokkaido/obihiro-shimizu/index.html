@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>帯広・清水周辺バスマップ | miitobow</title>
+<title>帯広・清水周辺のバス路線図・バス停マップ｜1,624停・106系統｜miitobow</title>
 <meta name="description" content="帯広市・清水町・新得町・むかわ町・芽室町・富良野市などのバス停と系統を地図で眺められる非公式ページ。バス停1,624か所・106系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/hokkaido/obihiro-shimizu/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/hokkaido/obihiro-shimizu/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="帯広・清水周辺バスマップ | miitobow">
+<meta property="og:title" content="帯広・清水周辺のバス路線図・バス停マップ｜1,624停・106系統｜miitobow">
 <meta property="og:description" content="帯広市・清水町・新得町・むかわ町・芽室町・富良野市などのバス停と系統を地図で眺められる非公式ページ。バス停1,624か所・106系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/hokkaido/obihiro-shimizu/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-hokkaido-obihiro-shimizu.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="帯広・清水周辺バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="帯広・清水周辺のバス路線図・バス停マップ｜1,624停・106系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"北海道","item":"https://miitobow.com/bus/hokkaido/"},{"@type":"ListItem","position":3,"name":"帯広・清水周辺","item":"https://miitobow.com/bus/hokkaido/obihiro-shimizu/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -296,7 +304,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">帯広・清水周辺のバス路線・バス停について</h2><p>帯広・清水周辺（帯広市・清水町・むかわ町・新得町・芽室町・富良野市・新ひだか町・平取町・芦別市・中札内村・夕張市・日高町・鹿追町・厚真町・更別村・砂川市・浦河町・奈井江町・歌志内市・新冠町・上砂川町）のバス停1,624か所・106系統を、地図で見られる非公式ページです。主な事業者は芦別市、北海道中央バス、美唄自動車学校、美唄市、ふらのバス、北海道拓殖バスほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>環状線北廻り（十勝バス・100か所）：主な経由バス停は帯広駅BT、帯広駅西口、西2条1丁目</li><li>環状線南廻り（十勝バス・100か所）：主な経由バス停は帯広駅BT、帯広駅西口、西2条1丁目</li><li>広尾線（十勝バス・98か所）：主な経由バス停は帯広駅BT、帯広駅西口、西3条9丁目</li><li>循環線［東西南北］（十勝バス・92か所）：主な経由バス停はかじのビル前、駅北11丁目、西2条9丁目</li><li>コミュニティバス「そばくる」（新得町・90か所）：主な経由バス停は佐幌6号、小松整骨院前、屈足22号</li><li>日高ターミナル→振内案内所→平取→富川高校（道南バス・81か所）：主な経由バス停は団地入口、富川市街、共栄</li><li>富川高校→平取→振内案内所→日高ターミナル（道南バス・72か所）：主な経由バス停は団地入口、富川市街、共栄</li><li>じゃがバス（芽室町・71か所）：主な経由バス停は西2条7丁目、本通3丁目、東7条6丁目</li><li>大正小学校線（十勝バス・69か所）：主な経由バス停はかじのビル前、帯広駅BT、帯広駅西口</li><li>苫小牧駅前→静内（道南バス・69か所）：主な経由バス停は鵡川農協前、団地入口、富川市街</li><li>静内→苫小牧駅前（道南バス・67か所）：主な経由バス停は鵡川農協前、団地入口、富川市街</li><li>平取～静内（道南バス・65か所）：主な経由バス停は団地入口、富川市街、静内</li><li>静内～浦河老人ホーム前（道南バス・63か所）：主な経由バス停は静内、静内本町、共栄</li><li>大空団地線：白樺経由（十勝バス・62か所）：主な経由バス停は帯広駅BT、帯広駅西口、西3条9丁目</li><li>大空団地線（十勝バス・61か所）：主な経由バス停はかじのビル前、駅北11丁目、西2条9丁目</li><li>新得帯広線（新帯線）（北海道拓殖バス・59か所）：主な経由バス停はかじのビル前、駅北11丁目、西2条9丁目</li><li>南商・柏葉高線（十勝バス・57か所）：主な経由バス停はかじのビル前、帯広駅BT、帯広駅西口</li><li>芽室線（十勝バス・57か所）：主な経由バス停は帯広駅BT、帯広駅西口、西3条9丁目</li><li>南商・あかしや線（十勝バス・56か所）：主な経由バス停はかじのビル前、駅北11丁目、帯広駅BT</li><li>夕張市内線（夕張鉄道・53か所）：主な経由バス停は富野、ゆうばり小学校、りすた</li><li>然別湖線（北海道拓殖バス・53か所）：主な経由バス停はかじのビル前、駅北11丁目、西2条9丁目</li><li>歌志内線（北海道中央バス・52か所）：主な経由バス停は砂川市立病院、あかね団地、すずらん団地入口</li><li>帯広・陸別線（十勝バス・51か所）：主な経由バス停はかじのビル前、駅北11丁目、帯広駅BT</li><li>一中・療養所線（北海道拓殖バス・50か所）：主な経由バス停はかじのビル前、駅北11丁目、西2条9丁目</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>かじのビル前（28系統）、駅北11丁目（28系統）、西2条9丁目（25系統）、帯広駅BT（24系統）、帯広駅西口（23系統）、西2条1丁目（23系統）、西3条9丁目（23系統）、西2条4丁目（21系統）、西2条6丁目（21系統）、西2条8丁目（21系統）、帯広駅バスターミナル（20系統）、西2条7丁目（19系統）、帯広第2合同庁舎前（18系統）、西2条2丁目（18系統）、西5条13丁目（18系統）、長崎屋前（18系統）、第一病院前（15系統）、三条高校・開西病院前（14系統）、十勝バス本社（14系統）、国道西22条（14系統）、NHK前（13系統）、西23条2丁目（13系統）、イオン帯広店前（12系統）、帯広市役所南口（11系統）、西5条17丁目（11系統）、西帯広（10系統）、四中前（9系統）、帯広郵便局前（9系統）、西20条5丁目（9系統）、西21条2丁目（9系統）、鵡川農協前（9系統）、柳橋（8系統）、清水小学校（8系統）、白樺通21条（8系統）、西20条4丁目（8系統）、西5条24丁目（8系統）、西5条28丁目（8系統）、西帯広郵便局前（8系統）、西福祉センター前（8系統）、公園東町1丁目（7系統）</p><h3>この地図にある主な駅</h3><p>上芦別駅、十勝清水駅、大成駅、奈井江駅、学田駅、富良野駅、山部駅、布部駅、帯広駅、御影駅、新夕張駅、新得駅、柏林台駅、浜厚真駅、浜田浦駅、滝ノ上駅、砂川駅、芦別駅、芽室駅、西帯広駅、豊沼駅、野花南駅、鵡川駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/hokkaido/">北海道</a> ・ <a href="/bus/hokkaido/asahikawa-shibetsu/">旭川・士別周辺バスマップ</a> ・ <a href="/bus/hokkaido/hakodate-muroran/">函館・室蘭周辺バスマップ</a> ・ <a href="/bus/hokkaido/iwamizawa-otaru/">岩見沢・小樽周辺バスマップ</a> ・ <a href="/bus/hokkaido/kitami-abashiri/">北見・網走周辺バスマップ</a> ・ <a href="/bus/hokkaido/kushiro-otofuke/">釧路・音更周辺バスマップ</a> ・ <a href="/bus/hokkaido/rebun-rishirifuji/">礼文・利尻富士周辺バスマップ</a> ・ <a href="/bus/hokkaido/sapporo/">札幌バスマップ</a> ・ <a href="/bus/hokkaido/tomakomai-chitose/">苫小牧・千歳周辺バスマップ</a> ・ <a href="/bus/en/hokkaido/obihiro-shimizu/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -602,12 +610,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -652,6 +688,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -661,7 +698,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：帯広駅、芽室駅、鵡川駅）、バス停、系統（例：帯広）を探せます。</p><div class="lh">この地図に含まれる市町村（21）</div><p class="tip">帯広市・清水町・むかわ町・新得町・芽室町・富良野市・新ひだか町・平取町・芦別市・中札内村・夕張市・日高町・鹿追町・厚真町・更別村・砂川市・浦河町・奈井江町・歌志内市・新冠町・上砂川町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hokkaido/asahikawa-shibetsu/"><span>旭川・士別周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/hokkaido/iwamizawa-otaru/"><span>岩見沢・小樽周辺バスマップ</span><small>北西　›</small></a><a class="rt" href="/bus/hokkaido/kitami-abashiri/"><span>北見・網走周辺バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/hokkaido/kushiro-otofuke/"><span>釧路・音更周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/hokkaido/tomakomai-chitose/"><span>苫小牧・千歳周辺バスマップ</span><small>西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：帯広駅、芽室駅、鵡川駅）、バス停、系統（例：帯広）を探せます。</p><div class="lh">この地図に含まれる市町村（21）</div><p class="tip">帯広市・清水町・むかわ町・新得町・芽室町・富良野市・新ひだか町・平取町・芦別市・中札内村・夕張市・日高町・鹿追町・厚真町・更別村・砂川市・浦河町・奈井江町・歌志内市・新冠町・上砂川町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/hokkaido/asahikawa-shibetsu/"><span>旭川・士別周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/hokkaido/iwamizawa-otaru/"><span>岩見沢・小樽周辺バスマップ</span><small>北西　›</small></a><a class="rt" href="/bus/hokkaido/kitami-abashiri/"><span>北見・網走周辺バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/hokkaido/kushiro-otofuke/"><span>釧路・音更周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/hokkaido/tomakomai-chitose/"><span>苫小牧・千歳周辺バスマップ</span><small>西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -848,7 +885,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>伊賀・東紀州バスマップ | miitobow</title>
+<title>伊賀・東紀州のバス路線図・バス停マップ｜1,306停・76系統｜miitobow</title>
 <meta name="description" content="伊賀市・名張市・熊野市・紀宝町・尾鷲市・紀北町・御浜町のバス停と系統を地図で眺められる非公式ページ。バス停1,306か所・76系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/mie/iga-higashikii/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/mie/iga-higashikii/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="伊賀・東紀州バスマップ | miitobow">
+<meta property="og:title" content="伊賀・東紀州のバス路線図・バス停マップ｜1,306停・76系統｜miitobow">
 <meta property="og:description" content="伊賀市・名張市・熊野市・紀宝町・尾鷲市・紀北町・御浜町のバス停と系統を地図で眺められる非公式ページ。バス停1,306か所・76系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/mie/iga-higashikii/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-mie-iga-higashikii.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="伊賀・東紀州バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="伊賀・東紀州のバス路線図・バス停マップ｜1,306停・76系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"三重県","item":"https://miitobow.com/bus/mie/"},{"@type":"ListItem","position":3,"name":"伊賀・東紀州","item":"https://miitobow.com/bus/mie/iga-higashikii/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -295,7 +303,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">伊賀・東紀州のバス路線・バス停について</h2><p>伊賀・東紀州（伊賀市・名張市・熊野市・紀宝町・尾鷲市・紀北町・御浜町）のバス停1,306か所・76系統を、地図で見られる非公式ページです。主な事業者は伊賀市、三重交通、名張市、紀北町、尾鷲市、熊野市ほか。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>56松阪熊野線（三重交通・69か所）：主な経由バス停はイオン前、熊野市駅前、きれい橋</li><li>56松阪熊野線阿波曽経由（三重交通・68か所）：主な経由バス停はイオン前、熊野市駅前、きれい橋</li><li>浅里鵜殿線（紀宝町・68か所）：主な経由バス停は発電所前、阿田和端地、下地</li><li>13熊野新宮線（三重交通・66か所）：主な経由バス停は熊野市駅前、きれい橋、紀北信用前</li><li>紀南病院線（紀宝町・59か所）：主な経由バス停は阿田和端地、堤谷、町民サービスセンター</li><li>E瀞流荘紀南病院線（熊野市・御浜町・55か所）：主な経由バス停は阿田和端地、町民サービスセンター、紀南病院</li><li>にんまる外回り循環（伊賀市・48か所）：主な経由バス停は上野市駅、赤坂、公園東口</li><li>12阿波線（三重交通・44か所）：主な経由バス停は上野市駅、恵美須町、銀座二丁目</li><li>10阿波線（三重交通・42か所）：主な経由バス停は上野市駅、恵美須町、銀座二丁目</li><li>73上野名張線（三重交通・42か所）：主な経由バス停は上野市駅、名張駅前（西口）、松崎町</li><li>廃止代替バス路線　諏訪・予野線（伊賀市・42か所）：主な経由バス停は上野市駅、恵美須町、銀座二丁目</li><li>71上野名張線（三重交通・41か所）：主な経由バス停は上野市駅、名張駅前（西口）、松崎町</li><li>B飛鳥・五郷線（熊野市・40か所）：主な経由バス停は松原、熊野市駅前、きれい橋</li><li>にんまる内回り循環（伊賀市・40か所）：主な経由バス停は上野市駅、恵美須町、銀座二丁目</li><li>阿山行政サービス巡回車　玉滝鞆田線（伊賀市・40か所）：主な経由バス停はおおすみ整形外科、JR新堂駅南口、ともだ保育所前</li><li>A熊野古道瀞流荘線（熊野市・御浜町・39か所）：主な経由バス停は松原、熊野市駅前、きれい橋</li><li>C清流・那智黒石の里線（熊野市・39か所）：主な経由バス停は松原、熊野市駅前、きれい橋</li><li>相野谷線（紀宝町・39か所）：主な経由バス停は発電所前、センター弁慶、井内</li><li>51尾鷲長島線（三重交通・38か所）：主な経由バス停はイオン前、尾鷲港、尾鷲市病院前</li><li>青山行政バス　高尾線（伊賀市・38か所）：主な経由バス停は青山町駅前、青山複合施設アオーネ、青山小学校前</li><li>D潮風かほる熊野古道線（熊野市・37か所）：主な経由バス停は松原、熊野市駅前、きれい橋</li><li>八鬼山線（尾鷲市・37か所）：主な経由バス停はイオン前、松原、尾鷲港</li><li>ナッキー号（名張市・36か所）：主な経由バス停は桔梗が丘駅前、イオン前、松崎町</li><li>いがまち行政サービス巡回車　柘植・西柘植線（伊賀市・35か所）：主な経由バス停はおおすみ整形外科、新堂駅南口、上市場交差点</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>上野市駅（13系統）、名張駅前（西口）（12系統）、桔梗が丘駅前（11系統）、イオン前（9系統）、名張駅東口（9系統）、松崎町（9系統）、上八町（8系統）、夏見（8系統）、恵美須町（8系統）、松原（8系統）、熊野市駅前（8系統）、銀座二丁目（8系統）、銀座四丁目（8系統）、きれい橋（7系統）、名張口（7系統）、名張市役所（7系統）、尾鷲港（7系統）、東町（伊賀）（7系統）、沖津藻大橋（7系統）、紀北信用前（7系統）、記念通り（7系統）、中二番町（6系統）、二番町（6系統）、国道百合が丘（6系統）、尾鷲市病院前（6系統）、尾鷲駅（6系統）、希央台（6系統）、河上横町（6系統）、西一番町（6系統）、青山町駅前（6系統）、青山複合施設アオーネ（6系統）、三番町（5系統）、大屋戸（5系統）、大屋戸天神前（5系統）、大泊（5系統）、尾鷲駅口（5系統）、桑町（5系統）、桔梗が丘局前（5系統）、梅が丘（5系統）、梅が丘一番町（5系統）</p><h3>この地図にある主な駅</h3><p>三木里駅、三野瀬駅、上林駅、上野市駅、丸山駅、九鬼駅、二木島駅、伊賀上津駅、伊賀上野駅、伊賀神戸駅、佐那具駅、依那古駅、名張駅、四十九駅、大曽根浦駅、大泊駅、尾鷲駅、島ヶ原駅、市部駅、広小路駅、新堂駅、新居駅、新鹿駅、有井駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/mie/">三重県</a> ・ <a href="/bus/mie/hokusei/">北勢（桑名・四日市・鈴鹿）バスマップ</a> ・ <a href="/bus/mie/tsu-ise-shima/">津・松阪・伊勢志摩バスマップ</a> ・ <a href="/bus/en/mie/iga-higashikii/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.sanco.co.jp/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -601,12 +609,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -651,6 +687,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -660,7 +697,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：伊賀上野駅、名張駅、熊野市駅）、バス停、系統（例：56松阪熊野線）を探せます。</p><div class="lh">この地図に含まれる市町村（7）</div><p class="tip">伊賀市・名張市・熊野市・紀宝町・尾鷲市・紀北町・御浜町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/mie/hokusei/"><span>北勢（桑名・四日市・鈴鹿）バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/mie/tsu-ise-shima/"><span>津・松阪・伊勢志摩バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/nara/nara-basin/"><span>奈良盆地バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/nara/nara-south/"><span>奈良県南部（吉野・五條・宇陀）バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/shiga/otsu-koka/"><span>大津・草津・甲賀バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/wakayama/kinan/"><span>紀南（御坊・田辺・新宮）バスマップ</span><small>南西　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：伊賀上野駅、名張駅、熊野市駅）、バス停、系統（例：56松阪熊野線）を探せます。</p><div class="lh">この地図に含まれる市町村（7）</div><p class="tip">伊賀市・名張市・熊野市・紀宝町・尾鷲市・紀北町・御浜町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/mie/hokusei/"><span>北勢（桑名・四日市・鈴鹿）バスマップ</span><small>北東　›</small></a><a class="rt" href="/bus/mie/tsu-ise-shima/"><span>津・松阪・伊勢志摩バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/nara/nara-basin/"><span>奈良盆地バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/nara/nara-south/"><span>奈良県南部（吉野・五條・宇陀）バスマップ</span><small>南西　›</small></a><a class="rt" href="/bus/shiga/otsu-koka/"><span>大津・草津・甲賀バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/wakayama/kinan/"><span>紀南（御坊・田辺・新宮）バスマップ</span><small>南西　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -847,7 +884,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

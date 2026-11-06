@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>指宿・南薩バスマップ | miitobow</title>
+<title>指宿・南薩のバス路線図・バス停マップ｜966停・80系統｜miitobow</title>
 <meta name="description" content="指宿市・南九州市（知覧）・南さつま市・枕崎市のバス停と系統を地図で眺められる非公式ページ。バス停966か所・80系統（2022年度版）。">
 <link rel="canonical" href="https://miitobow.com/bus/kagoshima/nansatsu/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/kagoshima/nansatsu/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="指宿・南薩バスマップ | miitobow">
+<meta property="og:title" content="指宿・南薩のバス路線図・バス停マップ｜966停・80系統｜miitobow">
 <meta property="og:description" content="指宿市・南九州市（知覧）・南さつま市・枕崎市のバス停と系統を地図で眺められる非公式ページ。バス停966か所・80系統（2022年度版）。">
 <meta property="og:url" content="https://miitobow.com/bus/kagoshima/nansatsu/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-kagoshima-nansatsu.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="指宿・南薩バスマップ | miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
+<meta property="og:image:alt" content="指宿・南薩のバス路線図・バス停マップ｜966停・80系統｜miitobow（『ミートボーのバスマップ』の文字と、バス停の横で手を振るミートボー、丘の道を走るバスのイラスト）">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"全国のバスマップ","item":"https://miitobow.com/bus/"},{"@type":"ListItem","position":2,"name":"鹿児島県","item":"https://miitobow.com/bus/kagoshima/"},{"@type":"ListItem","position":3,"name":"指宿・南薩","item":"https://miitobow.com/bus/kagoshima/nansatsu/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -295,7 +303,7 @@
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">指宿・南薩のバス路線・バス停について</h2><p>指宿・南薩（南九州市・南さつま市・指宿市・枕崎市）のバス停966か所・80系統を、地図で見られる非公式ページです。主な事業者は南さつま市、鹿児島交通、南九州市、指宿市。2022年度版のデータで、時刻表と運賃は載せていません。</p><h3>主な系統（バス停の多い順）</h3><ul><li>中山線（加世田・坊津地域）（南さつま市・66か所）：主な経由バス停は加世田、上加世田、上津貫</li><li>なのはな館～東大川（鹿児島交通・65か所）：主な経由バス停は指宿駅前、山川駅前、丈六入口</li><li>加世田～野間池（鹿児島交通・56か所）：主な経由バス停は加世田、合庁前［南さつま市］、加世田大橋</li><li>エコキャンプ場～池田湖（鹿児島交通・52か所）：主な経由バス停は指宿駅前、山川駅前、丈六入口</li><li>枕崎～田之野下～伊集院高校（鹿児島交通・51か所）：主な経由バス停は加世田、枕崎、合庁前［南さつま市］</li><li>枕崎～石堂～伊集院高校（鹿児島交通・49か所）：主な経由バス停は加世田、枕崎、合庁前［南さつま市］</li><li>のまんたけ号（笠沙地域）（南さつま市・48か所）：主な経由バス停は小崎、新田、仁王崎</li><li>大木場線（加世田・大浦地域）（南さつま市・48か所）：主な経由バス停は加世田、加世田大橋、南さつま市役所</li><li>小牧～ニシムタ指宿店線（指宿市・47か所）：主な経由バス停は指宿駅前、丈六入口、指宿医療センター前</li><li>金生町～枕崎（鹿児島交通・43か所）：主な経由バス停は枕崎、測候所下、中央通り［枕崎市］</li><li>拠点間バス（番所鼻公園・知覧線）（南九州市・42か所）：主な経由バス停は下郡、特攻観音入口、知覧</li><li>拠点間バス（頴娃・川辺線）（南九州市・41か所）：主な経由バス停は文化会館、頴娃図書館、頴娃支所</li><li>枕崎～知覧（鹿児島交通・38か所）：主な経由バス停は枕崎、下郡、特攻観音入口</li><li>川尻～なのはな館線（指宿市・36か所）：主な経由バス停は指宿駅前、山川駅前、丈六入口</li><li>枕崎～加世田（鹿児島交通・36か所）：主な経由バス停は加世田、枕崎、合庁前［南さつま市］</li><li>金生町～山川桟橋（鹿児島交通・35か所）：主な経由バス停は指宿駅前、山川駅前、丈六入口</li><li>武家屋敷入口～指宿いわさきH（鹿児島交通・32か所）：主な経由バス停は下郡、特攻観音入口、知覧</li><li>活お海道～開聞駅前（鹿児島交通・32か所）：主な経由バス停は山川駅前、山川桟橋、成川</li><li>知覧～頴娃郵便局前（鹿児島交通・32か所）：主な経由バス停は知覧、中郡［南九州］、法務局前［南九州市］</li><li>枕崎～中坊～今岳（鹿児島交通・30か所）：主な経由バス停は枕崎、中央通り［枕崎市］、西本町［枕崎市］</li><li>加世田～加世田高校～知覧（鹿児島交通・28か所）：主な経由バス停は加世田、合庁前［南さつま市］、知覧</li><li>高橋線（加世田・金峰地域）（南さつま市・28か所）：主な経由バス停は加世田、加世田大橋、尾下</li><li>加世田循環線（鹿児島交通・27か所）：主な経由バス停は加世田、合庁前［南さつま市］、阿多</li><li>池辺線（金峰地域）（南さつま市・27か所）：主な経由バス停は尾下、池辺、上馬場</li></ul><p class="tip">「主な経由バス停」は、その系統が通るバス停のうち、ほかの系統も多く通るものです。並びに順番の意味はありません。系統の停車順は位置からの推定です。</p><h3>主なバス停（通る系統の多い順）</h3><p>加世田（18系統）、文化会館（14系統）、枕崎（13系統）、頴娃図書館（12系統）、頴娃支所（12系統）、三俣東（11系統）、下郡（11系統）、中央温泉（11系統）、合庁前［南さつま市］（11系統）、特攻観音入口（11系統）、知覧（11系統）、西頴娃駅（11系統）、下大久保（9系統）、加世田大橋（9系統）、中松（8系統）、中郡（8系統）、中郡まち（8系統）、保健センター（8系統）、指宿駅前（8系統）、楠元（8系統）、温泉センター（8系統）、高校前［薩南工業高］（8系統）、中郡［南九州］（7系統）、尾下（7系統）、山川駅前（7系統）、市役所（7系統）、池辺（7系統）、測候所下（7系統）、中央通り［枕崎市］（6系統）、広瀬橋（6系統）、枕崎中前（6系統）、法務局前（6系統）、阿多（6系統）、鹿篭（6系統）、万ノ瀬橋（5系統）、丈六入口（5系統）、上加世田（5系統）、上津貫（5系統）、上馬場（5系統）、中山入口（5系統）</p><h3>この地図にある主な駅</h3><p>二月田駅、入野駅、大山駅、宮ヶ浜駅、山川駅、御領駅、指宿駅、東開聞駅、松ヶ浦駅、枕崎駅、水成川駅、白沢駅、石垣駅、薩摩今和泉駅、薩摩塩屋駅、薩摩川尻駅、薩摩板敷駅、西大山駅、西頴娃駅、開聞駅、頴娃大川駅、頴娃駅</p><p class="tip">このページは個人が作った非公式のものです。時刻・運賃・最新の運行は、事業者の公式情報で確認してください。</p><nav aria-label="関連ページ"><h3>関連ページ</h3><p class="seo-links"><a href="/bus/">全国のバスマップ</a> ・ <a href="/bus/kagoshima/">鹿児島県</a> ・ <a href="/bus/kagoshima/amami/">奄美群島バスマップ</a> ・ <a href="/bus/kagoshima/kagoshima-city/">鹿児島周辺バスマップ</a> ・ <a href="/bus/kagoshima/kirishima/">霧島周辺バスマップ</a> ・ <a href="/bus/kagoshima/osumi/">大隅バスマップ</a> ・ <a href="/bus/kagoshima/satsumasendai/">薩摩川内・出水バスマップ</a> ・ <a href="/bus/kagoshima/tanegashima/">種子島・屋久島バスマップ</a> ・ <a href="/bus/en/kagoshima/nansatsu/" hreflang="en">English</a></p></nav></section></div>
     <div class="warn">乗車前は<a href="https://www.iwasaki-corp.com/business/bus/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
@@ -601,12 +609,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("この系統名は新しいデータで変わりました。候補から選んでください"); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -651,6 +687,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -660,7 +697,7 @@ function home() {
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
   <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
   <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：指宿駅、枕崎駅、知覧）、バス停、系統（例：指宿）を探せます。</p><div class="lh">この地図に含まれる市町村（4）</div><p class="tip">南九州市・南さつま市・指宿市・枕崎市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kagoshima/kagoshima-city/"><span>鹿児島周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/kagoshima/osumi/"><span>大隅バスマップ</span><small>東　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  <p>上の検索で、駅・町名・地名・施設（例：指宿駅、枕崎駅、知覧）、バス停、系統（例：指宿）を探せます。</p><div class="lh">この地図に含まれる市町村（4）</div><p class="tip">南九州市・南さつま市・指宿市・枕崎市</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kagoshima/kagoshima-city/"><span>鹿児島周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/kagoshima/osumi/"><span>大隅バスマップ</span><small>東　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -847,7 +884,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${esc(routeLabel(r))}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>データ上の停留所：この地図の範囲内に<b>${r.n}</b>か所。範囲外にさらに約<b>${r.total - r.n}</b>か所</span>` : `<span>データ上の停留所 <b>${r.n}</b>か所</span>`}</div>
   <div class="lh">${r.seq ? "停留所一覧（運行順）" : "停留所一覧（位置からの推定順）"}</div>
-  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環で通る順を1本にまとめているため、実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
+  <p class="tip">${r.seq ? "※事業者・自治体が公開しているGTFSデータの停車順です。往復・循環・曜日や季節で異なる便を1本にまとめているため、便によっては通らないバス停も含みます。実際の運行（向き・回り方）と細かくは異なることがあります。" : "※元データに停車順が無いため、位置から推定した順です。実際の運行順・向きとずれることがあります（枝分かれする系統は特に）。"}${r.total ? (r.seq ? "この系統は地図の範囲の外にも続きます。一覧は範囲内のバス停だけです。" : "この系統は地図の範囲の外にも続きます。並び順の推定は範囲内だけで行っています。") : ""}${touchOnly() ? "名前を押すと、地図は動かさず、そのバス停に印を付けます。" : "名前を押すと地図でその場所に寄ります。"}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "停留所を順に見る（運行順）" : "停留所を順に見る（推定順）"}"><button type="button" id="rPrev" aria-label="前のバス停">◀ 前</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="次のバス停">次 ▶</button><button type="button" id="rZoom" aria-label="選んだバス停の近くを拡大" disabled>拡大</button><button type="button" id="rAll" aria-label="系統の全体が見えるように戻す">全体</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "地図の点に運行順の番号を出す" : "地図の点に推定順の番号を出す"}">番号</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${esc(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)}・${r.n}か所`);

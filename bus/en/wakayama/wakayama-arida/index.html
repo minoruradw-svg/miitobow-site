@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wakayama-Kihoku-Arida Bus Map | miitobow</title>
+<title>Wakayama-Kihoku-Arida bus routes & bus stop map | 1,537 stops, 155 routes | miitobow</title>
 <meta name="description" content="Unofficial map of bus stops and routes in Kinokawa, Aridagawa, Wakayama, Kainan, Kimino, Iwade, Hashimoto, Arida and more. 1,537 bus stops and 155 routes (FY2022 data).">
 <link rel="canonical" href="https://miitobow.com/bus/en/wakayama/wakayama-arida/">
 <link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/wakayama/wakayama-arida/">
@@ -12,15 +12,16 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Wakayama-Kihoku-Arida Bus Map | miitobow">
+<meta property="og:title" content="Wakayama-Kihoku-Arida bus routes &amp; bus stop map | 1,537 stops, 155 routes | miitobow">
 <meta property="og:description" content="Unofficial map of bus stops and routes in Kinokawa, Aridagawa, Wakayama, Kainan, Kimino, Iwade, Hashimoto, Arida and more. 1,537 bus stops and 155 routes (FY2022 data).">
 <meta property="og:url" content="https://miitobow.com/bus/en/wakayama/wakayama-arida/">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://miitobow.com/bus/assets/og-wakayama-wakayama-arida.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Wakayama-Kihoku-Arida Bus Map | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
+<meta property="og:image:alt" content="Wakayama-Kihoku-Arida bus routes &amp; bus stop map | 1,537 stops, 155 routes | miitobow (The title “Miitobow's Bus Map” in Japanese, Miitobow waving beside a bus stop, and a bus driving along a hillside road (illustration))">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus maps of Japan","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Wakayama","item":"https://miitobow.com/bus/en/wakayama/"},{"@type":"ListItem","position":3,"name":"Wakayama-Kihoku-Arida","item":"https://miitobow.com/bus/en/wakayama/wakayama-arida/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
@@ -204,6 +205,13 @@
   .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
   .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
   body.sj-open { overflow: hidden; }
+  .seo { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.7; color: var(--ink); }
+  .seo h2 { font-size: 15px; margin: 8px 0; }
+  .seo h3 { font-size: 13px; margin: 14px 0 4px; }
+  .seo ul { margin: 0; padding-left: 1.3em; }
+  .seo li { margin: 2px 0; }
+  .seo p { margin: 6px 0; }
+  .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
 
@@ -309,7 +317,7 @@
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <div id="pbody" class="pbody"></div>
+    <div id="pbody" class="pbody"><section id="seo" class="seo" aria-labelledby="seoH"><h2 id="seoH">About bus routes and bus stops in Wakayama-Kihoku-Arida</h2><p>An unofficial map of 1,537 bus stops and 155 routes in Wakayama-Kihoku-Arida (Kinokawa City, Aridagawa Town, Wakayama City, Kainan City, Kimino Town, Hashimoto City, Iwade City, Arida City, Koya Town, Katsuragi Town, Hirogawa Town, Yuasa Town). Main operators: Nankai Rinkan Bus, Hashimoto City, Koya Town, Wakayama Bus Naga, Kinokawa City, Katsuragi Townand others. Based on FY2022 data data; timetables and fares are not included.</p><h3>Main routes (by number of stops)</h3><ul><li>Hanazono Line (Arida Railway, 87 stops): main stops include Kanaya-guchi, Benten, Kanaya</li><li>Takano Line (Kimino Town, 66 stops): main stops include Kyokutani, Tozan-guchi, Kii Nogami</li><li>Kinokawa Community Bus (Kinokawa City &amp; Iwade City, 51 stops): main stops include Nakamitani, Kinokawa City Kishi Gawa Branch Office, Iwade Sta.</li><li>Kii Kokawa Line 24 (Wakayama Bus Naga, 51 stops): main stops include Negoro, Kii Sta., Anjo</li><li>Shinai Saikazaki Loop Line [30] (Wakayama Bus, 49 stops): main stops include JR Wakayama Sta., Mikimachi Shintori, Nankai Wakayamashi Sta.</li><li>Kii Kokawa Line 23 (Wakayama Bus Naga, 46 stops): main stops include Negoro, Kii Sta., Anjo</li><li>Higashibata Line (Kainan City, 45 stops): main stops include Shiyakusho-Mae, Kainan Sta., Hikata-minami</li><li>Kii Kokawa Line 31 (Wakayama Bus Naga, 44 stops): main stops include Negoro, Kii Sta., Anjo</li><li>Nishi Loop [Kisendai / Yoshida] Course (Iwade City, 42 stops): main stops include Yamamura, Yamamura-nishi, Aidani</li><li>Central Loop [Minami-Oike / Nakakuro] Course (Iwade City, 40 stops): main stops include Negoro, Anjo, Negoro-nishi</li><li>Kogawa Line (Kimino Town, 40 stops): main stops include Kyokutani, Tozan-guchi, Kii Nogami</li><li>Nanayama Line (Kainan City, 39 stops): main stops include Shiyakusho-Mae, Kainan Sta., Hikata-minami</li><li>Chiiki Loop Bus 20 Higashi-Kishi Marusei Course (Kinokawa City, 39 stops): main stops include Kinokawa City Kishi Gawa Branch Office, Kishi Gawaohashihigashizume, Kishi Gawa High School</li><li>Makotokuni / Shigano Line (Kimino Town, 39 stops): main stops include Kyokutani, Tozan-guchi, Kii Nogami</li><li>Miyama Line (Arida Railway, 39 stops): main stops include Prefectural Office, Red Cross Medical Center, Mizuken-guchi</li><li>Shinai Saikazaki Loop Line [33] (Wakayama Bus, 38 stops): main stops include JR Wakayama Sta., Mikimachi Shintori, Arochi</li><li>Wakayamashinai Line [121] (Wakayama Bus, 37 stops): main stops include JR Wakayama Sta., Mikimachi Shintori, Arochi</li><li>Kimiidera Line [40] (Wakayama Bus, 36 stops): main stops include JR Wakayama Sta., Mikimachi Shintori, Nankai Wakayamashi Sta.</li><li>Chiiki Loop Bus 11 Kawara Nishiwaki Course (Kinokawa City, 35 stops): main stops include Akiba, JA Kokawa Branch Office, Komeri Naga Store</li><li>Higashi Loop [Funato / Negoro] Course (Iwade City, 35 stops): main stops include Negoro, Anjo, Negoro-nishi</li><li>Kimiidera Line [42] (Wakayama Bus, 35 stops): main stops include JR Wakayama Sta., Mikimachi Shintori, Nankai Wakayamashi Sta.</li><li>Kii Kokawa Line 26 (Wakayama Bus Naga, 34 stops): main stops include Negoro, Kii Sta., Anjo</li><li>Orange Bus (Daijuu Bus, 33 stops): main stops include Kainan Sta., Kyokutani, Tozan-guchi</li><li>Musota Line [83] (Wakayama Bus, 33 stops): main stops include Nankai Wakayamashi Sta., Kii Sta., Hironishi</li></ul><p class="tip">“Main stops” are stops on the route that many other routes also serve; their order has no meaning. Stop order on routes is estimated from positions.</p><h3>Major bus stops (by number of routes)</h3><p>JR Wakayama Sta. (30 routes), Mikimachi Shintori (28 routes), Nankai Wakayamashi Sta. (28 routes), Arochi (28 routes), Kita-no-shinchi (27 routes), Wakayama Shiromae (24 routes), Shiyakusho-Mae (23 routes), Prefectural Office (19 routes), Park-mae-nishi (18 routes), Red Cross Medical Center (17 routes), Manago-machi (16 routes), Wakaura-guchi (15 routes), Mizuken-guchi (15 routes), Kainan Sta. (15 routes), Takamatsu (15 routes), Horishi (14 routes), Komatsubara 5 (14 routes), Negoro (14 routes), Takamatsu-kita (14 routes), Uji (13 routes), Honmachi 4 (13 routes), Akibayama (13 routes), Kii Sta. (13 routes), Wakaura (11 routes), Johoku-bashi (11 routes), Anjo (11 routes), Yamamura (11 routes), Yamamura-nishi (11 routes), Rinkanden-Entoshi Sta. (11 routes), Negoro-nishi (11 routes), Sakuradai (11 routes), Tsuya (11 routes), Aidani (11 routes), Aidani Rankan-bashi (11 routes), Aidani-nishi (11 routes), Kamikurodani (10 routes), Kita-Oike (10 routes), Yama (10 routes), Negoro-higashi (10 routes), Ike-no-kawa (10 routes)</p><h3>Main stations on this map</h3><p>Shimoisaka Sta., Shimo-Hyogo Sta., Shimotsu Sta., Nakamatsue Sta., Nakaiburi Sta., Nirigahama Sta., Kotsu-Center-Mae Sta., Idakiso Sta., Hachimanmae Sta., Musota Sta., Shimizuura Sta., Hatsushima Sta., Kada Sta., Kamogo Sta., Senda Sta., Kire Sta., Nate Sta., Wakayamadaigakumae Sta., Wakayamashi Sta., Wakayamako Sta., Wakayama Sta., Oike-Yuen Sta., Otani Sta., Myoji Sta.</p><p class="tip">This is an unofficial page made by an individual. Check the operators’ official information for timetables, fares and current service.</p><nav aria-label="Related pages"><h3>Related pages</h3><p class="seo-links"><a href="/bus/en/">Bus maps of Japan</a> ・ <a href="/bus/en/wakayama/">Wakayama</a> ・ <a href="/bus/en/wakayama/kinan/">Kinan (Gobo-Tanabe-Shingu) Bus Map</a> ・ <a href="/bus/wakayama/wakayama-arida/" hreflang="ja">Japanese version</a></p></nav></section></div>
     <div class="warn">Check <a href="https://www.city.wakayama.wakayama.jp/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
@@ -639,12 +647,40 @@ homeTop.onclick = goHome;
 let hashLock = false;
 function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
 function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+// 系統名の正規化キー(GTFS置換で『～』が『→』に変わる・往復の向きが違う等を吸収。gtfs_lib.canon と同じ考え方)
+let RKEYS = null;
+function rkey(n) {
+  let t = String(n).normalize("NFKC").replace(/[\s　]+/g, "").replace(/[：:]/, "：");
+  const c = t.match(/^[A-Za-z0-9\-\/]+：/), code = c ? c[0] : ""; t = t.slice(code.length);
+  const a = t.split(/[→←～〜⇔↔~]/).filter(Boolean).join("~"), b = t.split(/[→←～〜⇔↔~]/).filter(Boolean).reverse().join("~");
+  return code + (a < b ? a : b);
+}
+function routeAlias(op, nm_) {
+  const al = (typeof RALIAS !== "undefined" ? RALIAS : {})[op + "|" + nm_];
+  if (al) { const r = routes.find(x => x.name === al && (!op || D.ops[x.op] === op)); if (r) return r; }
+  if (!RKEYS) { RKEYS = new Map(); routes.forEach(x => { const kk = rkey(x.name); if (!RKEYS.has(kk)) RKEYS.set(kk, []); RKEYS.get(kk).push(x); }); }
+  const l = RKEYS.get(rkey(nm_)); return l ? (l.find(x => !op || D.ops[x.op] === op) || null) : null;
+}
+// 見つからない時は黙って無視せず、コード(『：』の前)か先頭の地名で検索して候補を開く。候補が1つも無ければ従来どおり何もしない
+function routeHint(nm_) {
+  const c = String(nm_).match(/^[^：:]{1,12}[：:]/), term = c ? c[0].slice(0, -1) : String(nm_).split(/[→←～〜⇔↔~\s　]/)[0];
+  if (!term) return false;
+  q.value = term; search();
+  if (!hit.length) { q.value = ""; qclear.hidden = true; showSug(false); return false; }
+  openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
+}
 function readHash() {
   let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
-    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "route") {
+      const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1);
+      let r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op));
+      if (!r) r = routeAlias(op, nm_);   // 系統名が新しいデータで変わった時(GTFS置換)：別名表→正規化一致
+      if (r) { lastStop = null; showRoute(r); return true; }
+      if (routeHint(nm_)) return true;
+    }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
   } finally { hashLock = false; }
   return false;
@@ -689,6 +725,7 @@ function render(html, sum) {
   const h = pbody.querySelector("h2"); if (h && fromPanel) { h.tabIndex = -1; h.focus({ preventScroll: true }); }   // 画面が替わったことを、キーボード・読み上げの利用者にも伝える
 }
 
+const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
@@ -699,7 +736,7 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Wakayama Station, Wakayamashi Station, Hashimoto Station), bus stops, and routes (e.g. Miyama Line).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (12)</div><p class="tip">Kinokawa City, Aridagawa Town, Wakayama City, Kainan City, Kimino Town, Hashimoto City, Iwade City, Arida City, Koya Town, Katsuragi Town, Hirogawa Town, Yuasa Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/nara/nara-south/"><span>Southern Nara (Yoshino-Gojo-Uda) Bus Map</span><small>E ›</small></a><a class="rt" href="/bus/en/osaka/minami-kawachi/"><span>Minami-Kawachi Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/osaka/senshu/"><span>Senshu-Southern Sakai Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/wakayama/kinan/"><span>Kinan (Gobo-Tanabe-Shingu) Bus Map</span><small>S ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (12)</div><p class="tip">Kinokawa City, Aridagawa Town, Wakayama City, Kainan City, Kimino Town, Hashimoto City, Iwade City, Arida City, Koya Town, Katsuragi Town, Hirogawa Town, Yuasa Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/nara/nara-south/"><span>Southern Nara (Yoshino-Gojo-Uda) Bus Map</span><small>E ›</small></a><a class="rt" href="/bus/en/osaka/minami-kawachi/"><span>Minami-Kawachi Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/osaka/senshu/"><span>Senshu-Southern Sakai Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/wakayama/kinan/"><span>Kinan (Gobo-Tanabe-Shingu) Bus Map</span><small>S ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -886,7 +923,7 @@ function showRoute(r) {
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
-  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions and loops are merged into one list, so it may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
+  <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
   <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);
