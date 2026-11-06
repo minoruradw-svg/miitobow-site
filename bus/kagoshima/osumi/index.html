@@ -180,6 +180,33 @@
   details.note summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--accent-dark); }
   details.note a { color: var(--accent-dark); }
 
+  /* ---- 持ち出し(日本語で見せる・コピー・外部地図・系統の行き先) ---- */
+  .acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+  .act { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .act:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .act.ext { color: var(--accent-dark); }
+  details.extmaps { margin: 0 0 10px; }
+  details.extmaps summary::before { content: "▸ "; white-space: pre; }
+  details.extmaps[open] summary::before { content: "▾ "; }
+  details.extmaps summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: var(--accent-dark); }
+  .rt .ends { display: block; font-size: 11.5px; line-height: 1.25; font-weight: 400; color: var(--ink-soft); margin-top: 1px; }
+  .rt:has(.ends) { padding-top: 4px; padding-bottom: 4px; }   /* 行き先の1行を足しても、ボタンの高さが増えないように */
+  #showja { position: fixed; inset: 0; z-index: 2000; background: #fff; color: #111; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: auto; }
+  #showja[hidden] { display: none; }
+  #showja .sj-in { width: 100%; max-width: 900px; text-align: center; }
+  .sj-hint { margin: 0 0 20px; font-size: 14px; color: #444; }
+  .sj-name { font-size: clamp(44px, 12vw, 96px); font-weight: 900; line-height: 1.15; overflow-wrap: anywhere; }
+  .sj-sub { margin-top: 8px; font-size: clamp(16px, 4vw, 26px); color: #333; overflow-wrap: anywhere; }
+  .sj-phrase { margin-top: 24px; font-size: clamp(22px, 6vw, 40px); font-weight: 700; }
+  .sj-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .sj-btns button, .sj-close { min-height: 48px; padding: 0 18px; border-radius: 12px; border: 2px solid #999; background: #fff; color: #111; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sj-btns button[aria-pressed="true"] { background: #e6f2ea; border-color: #2a7a4b; }
+  .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
+  .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
+  body.sj-open { overflow: hidden; }
+  #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  #toast[hidden] { display: none; }
+
   /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
   @media (max-width: 767px) {
     header { flex-wrap: nowrap; gap: 6px; padding: 6px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
@@ -217,7 +244,7 @@
     .lh { margin-top: 8px; }
     .grp { margin: 6px 0 4px; }
     .rt { margin-bottom: 4px; }
-    .warn { white-space: nowrap; overflow: hidden; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
+    .warn { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.35; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
   }
   @media (max-width: 767px) and (max-height: 500px) { header h1 { display: none; } .searchwrap { order: 0; flex: 1 1 200px; } }
   @media (min-width: 768px) { .chip .short { display: none; } }
@@ -263,12 +290,13 @@
 </header>
 <main id="main">
   <div id="map" role="application" aria-label="大隅半島（鹿屋・志布志・垂水）のバス停の地図"></div>
+  <div id="showja" role="dialog" aria-modal="true" aria-labelledby="sjName" hidden><div class="sj-in"><p class="sj-hint">この画面を運転手や係員に見せてください</p><div id="sjName" class="sj-name" lang="ja"></div><div id="sjSub" class="sj-sub"></div><div id="sjPhrase" class="sj-phrase" lang="ja"></div><div id="sjTr" class="sj-sub"></div><div class="sj-btns" id="sjBtns"><button type="button" id="sjGo" aria-pressed="true">このバス停に行きたいです</button><button type="button" id="sjOff" aria-pressed="false">ここで降ります</button></div><button type="button" id="sjClose" class="sj-close">閉じる</button></div></div>
   <div id="tilewarn" role="status" aria-live="polite" hidden><span>地図の画像を読み込めませんでした。通信状況をご確認ください。バス停の点と系統の一覧はそのまま使えます。</span><button type="button" id="tilewarnx" aria-label="閉じる">×</button></div>
   <aside id="panel" aria-label="バス停・系統の情報">
     <button id="grip" class="sheet-top" type="button" aria-label="パネルの高さを変える（上下にスワイプ、または上下キー）" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="ホーム（最初の画面）へ戻る" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>ホーム</span></button>
     <div id="pbody" class="pbody"></div>
-    <div class="warn">非公式・2022年度版・時刻運賃なし｜乗車前は<a href="https://www.iwasaki-corp.com/business/bus/" target="_blank" rel="noopener">公式情報</a>で確認</div>
+    <div class="warn">乗車前は<a href="https://www.iwasaki-corp.com/business/bus/" target="_blank" rel="noopener">公式情報</a>で確認｜非公式・2022年度版・時刻運賃なし</div>
   </aside>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
@@ -561,12 +589,59 @@ const NOTE = `<details class="note"><summary>このページについて・出�
 ・この地図に含まれる市町村（8）：鹿屋市・錦江町・志布志市・肝付町・南大隅町・垂水市・大崎町・東串良町。<br>
 ・この地図の範囲：おおよそ北緯30.99〜31.64・東経130.65〜131.14（鹿屋市・錦江町・志布志市・肝付町・南大隅町など）。範囲の外の停留所・系統は載せていません。範囲の中でも、となりの地図に載せている市町村のバス停は、この地図には入れていません。<br>
 ${HASSPOT ? `・観光地・店舗の位置：国土地理院・OSM・Wikipediaの情報を突き合わせた所在地の目安です（掲載時点：）。店舗は閉店・移転・休業することがあります。本ページは掲載の店舗・施設とは無関係で、宣伝ではありません。「外国人に人気」は、訪日ラボのランキングや英語のガイドへの掲載などを根拠にした非公式の目安です<br>` : ""}
+・「Googleマップで開く」などは外部サイトへのリンクです。押した時だけ座標を渡します。<br>
+・「現在地の近くのバス停」は、端末の位置情報をこの端末の中だけで使います。サーバーには送らず、保存もしません。<br>
 ・地図：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院 地理院タイル（標準地図・淡色地図・全国最新写真（シームレス））</a>。写真は、撮影時期が場所によって異なり、現在の様子と違うことがあります<br>
 ・地図表示：<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
 const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
 homeTop.onclick = goHome;
+// ---- 深いリンク(#stop= / #route= / #place=)。名前で引く(同名は先頭)。見つからなければ無視 ----
+let hashLock = false;
+function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
+function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+function readHash() {
+  let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
+  if (!m) return false; hashLock = true;
+  try {
+    if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
+    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
+  } finally { hashLock = false; }
+  return false;
+}
+// ---- 持ち出し：日本語で大きく見せる／名前をコピー／外部地図へ(押した時だけ座標を渡す) ----
+const EXT_LINKS = (lat, lon, name) => { const q = lat.toFixed(5) + "," + lon.toFixed(5);
+  return `<a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Googleマップで開く</a><a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=transit">ここへの経路（Google）</a><a class="act ext" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${q}&q=${encodeURIComponent(name)}">Appleマップで開く</a>`; };
+const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">大きく表示</button><button type="button" class="act" data-act="copy">名前をコピー</button></div>`;
+const EXTS = (lat, lon, name) => `<details class="extmaps"><summary>地図アプリで開く・経路を調べる</summary><div class="acts">${EXT_LINKS(lat, lon, name)}</div><p class="tip">外部サイトが開きます。押した時だけ、この場所の座標を渡します。</p></details>`;
+const sjEl = document.getElementById("showja"), sjName = document.getElementById("sjName"), sjSub = document.getElementById("sjSub"), sjPhrase = document.getElementById("sjPhrase"), sjTr = document.getElementById("sjTr"), sjGo = document.getElementById("sjGo"), sjOff = document.getElementById("sjOff");
+let sjFrom = null, sjKind = "stop";
+const SJ_JA = { go: "このバス停に行きたいです", place: "ここに行きたいです", off: "ここで降ります" };   // 相手に見せる日本語(ui.json の showja.* の ja と同じ文言。英語版でもこの日本語を見せる)   // 相手に見せる文は、どの言語のページでも日本語。ページの言語での意味は小さく添える
+function sjPhr(off) { sjGo.setAttribute("aria-pressed", String(!off)); sjOff.setAttribute("aria-pressed", String(off)); const k = off ? "off" : sjKind === "stop" ? "go" : "place", own = off ? "ここで降ります" : (sjKind === "stop" ? "このバス停に行きたいです" : "ここに行きたいです"); sjPhrase.textContent = SJ_JA[k]; sjTr.textContent = own === SJ_JA[k] ? "" : own; }
+function openShowJa(ja, en, kind, from) { sjFrom = from || null; sjKind = kind; sjName.textContent = ja; sjSub.textContent = en || ""; sjOff.hidden = kind !== "stop"; sjGo.textContent = kind === "stop" ? "このバス停に行きたいです" : "ここに行きたいです"; sjPhr(false); sjEl.hidden = false; document.body.classList.add("sj-open"); document.getElementById("sjClose").focus(); }
+function closeShowJa() { if (sjEl.hidden) return; sjEl.hidden = true; document.body.classList.remove("sj-open"); if (sjFrom && sjFrom.isConnected) sjFrom.focus(); }
+sjGo.onclick = () => sjPhr(false); sjOff.onclick = () => sjPhr(true); document.getElementById("sjClose").onclick = closeShowJa;
+document.addEventListener("keydown", e => {
+  if (sjEl.hidden) return;
+  if (e.key === "Escape") { e.preventDefault(); closeShowJa(); return; }
+  if (e.key === "Tab") { const f = [...sjEl.querySelectorAll("button")].filter(b => !b.hidden && b.offsetParent !== null); if (!f.length) return; const a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } else if (!sjEl.contains(document.activeElement)) { e.preventDefault(); a.focus(); } }
+});
+function copyText(t, btn) {
+  const done = () => { const o = btn.dataset.o || btn.textContent; btn.dataset.o = o; btn.textContent = "コピーしました"; setTimeout(() => { btn.textContent = o; }, 1500); };
+  const fb = () => { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy") && done(); } catch (e) {} ta.remove(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fb); else fb();
+}
+function bindActs() {
+  pbody.querySelectorAll(".acts[data-ja]").forEach(g => {
+    const ja = g.dataset.ja, en = g.dataset.en, kind = g.dataset.kind;
+    g.querySelector('[data-act="showja"]').onclick = e => openShowJa(ja, en, kind, e.currentTarget);
+    g.querySelector('[data-act="copy"]').onclick = e => copyText(ja, e.currentTarget);
+  });
+}
+const EN_NAME = n => typeof SEN === "function" ? esc(SEN(n)) : esc(n);
+const ENDS = r => r.order.length < 3 ? "" : `<span class="ends">${EN_NAME(r.order[0])} → ${EN_NAME(r.order[r.order.length - 1])}${r.seq ? "" : "（推定）"}</span>`;
 function render(html, sum) {
   const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
   pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
@@ -580,15 +655,17 @@ function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
   render(`<h2 class="head">バス停を押してみてください</h2>
-  <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
-  <p>上の検索で、駅・町名・地名・施設（例：鹿屋バスセンター、志布志、佐多岬）、バス停、系統（例：鹿屋）を探せます。</p>
   <div class="lh">一覧から探す</div>
+  <button class="rt" id="bLoc" type="button"><span>現在地の近くのバス停</span></button>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市町村ごと　›</small></button>
-  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}<div class="lh">この地図に含まれる市町村（8）</div><p class="tip">鹿屋市・錦江町・志布志市・肝付町・南大隅町・垂水市・大崎町・東串良町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kagoshima/kagoshima-city/"><span>鹿児島周辺バスマップ</span><small>北西　›</small></a><a class="rt" href="/bus/kagoshima/kirishima/"><span>霧島周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/kagoshima/nansatsu/"><span>指宿・南薩バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/kagoshima/tanegashima/"><span>種子島・屋久島バスマップ</span><small>南　›</small></a>${NOTE}`, "バス停・系統を選んでください");
-  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+  <button class="rt" id="bStn" type="button"><span>駅から探す</span><small>路線ごと　›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>観光・グルメから探す</span><small>Sightseeing &amp; food　›</small></button>` : ""}
+  <p>地図の点がバス停です（${stops.length.toLocaleString()}か所・${routes.length}系統）。押すと、そこを通る系統が出ます。系統を選ぶと、その系統のバス停だけが光ります。</p>
+  <p>上の検索で、駅・町名・地名・施設（例：鹿屋バスセンター、志布志、佐多岬）、バス停、系統（例：鹿屋）を探せます。</p><div class="lh">この地図に含まれる市町村（8）</div><p class="tip">鹿屋市・錦江町・志布志市・肝付町・南大隅町・垂水市・大崎町・東串良町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/kagoshima/kagoshima-city/"><span>鹿児島周辺バスマップ</span><small>北西　›</small></a><a class="rt" href="/bus/kagoshima/kirishima/"><span>霧島周辺バスマップ</span><small>北　›</small></a><a class="rt" href="/bus/kagoshima/nansatsu/"><span>指宿・南薩バスマップ</span><small>西　›</small></a><a class="rt" href="/bus/kagoshima/tanegashima/"><span>種子島・屋久島バスマップ</span><small>南　›</small></a>${NOTE}`, "バス停・系統を選んでください");
+  setHash("");
+  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {
-  return `<button class="rt" type="button" data-r="${r.i}"><span>${esc(routeLabel(r))}</span><small>${r.n}か所</small></button>`;
+  return `<button class="rt" type="button" data-r="${r.i}"><span>${esc(routeLabel(r))}${ENDS(r)}</span><small>${r.n}か所</small></button>`;
 }
 function groupedRoutes(rs) {
   let out = "", cur = "";
@@ -601,35 +678,37 @@ function groupedRoutes(rs) {
 function showStop(s, opt) {
   hoverOff(); selRoute = null; lastStop = s; openPanel(true);
   if (isMobile()) setSheet("mid");
-  setCur([s]);
+  setCur([s]); setHash("stop=" + s.name);
   if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
   const rs = s.rts.map(i => routes[i]);
   render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(s.name)}</h2>
   <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b>系統</span></div>
-  ${rs.length ? `<div class="lh">このバス停を通る系統</div>` + groupedRoutes(rs) : `<p>系統の情報がありません</p>`}${NOTE}`,
+  ${ACTS(s.name, typeof s.en === "string" ? s.en : "", s.lat, s.lon, "stop")}
+  ${rs.length ? `<div class="lh">このバス停を通る系統</div>` + groupedRoutes(rs) : `<p>系統の情報がありません</p>`}${EXTS(s.lat, s.lon, s.name)}${NOTE}`,
   `${s.name}・${rs.length}系統`);
   paint();   // 系統表示から戻った時の薄表示を解除
-  bind();
+  bind(); bindActs();
   if (lastPlace) { const bk = document.getElementById("bk"), pl = lastPlace; bk.textContent = `← ${pl.name}にもどる`; bk.onclick = () => showPlace(pl, { noMove: true }); }
 }
 
 // ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
-const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const PTYPE_ZOOM = { 現在地: 16, 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
 const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
 const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
 const places = PLACES.map(a => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "" }));
 const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
 const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : [])].map(pnorm).join("|") }));
 // 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
-const pkind = p => p.type === "地名" ? "代表地点" : p.type === "駅" ? "駅の位置" : p.type === "店舗" ? "店の場所" : "所在地";
-const ptip = p => p.type === "地名" ? "地図をこの地域の代表地点へ動かしました。範囲の中心とは限りません。" : p.type === "駅" ? "地図を駅の付近へ動かしました（位置は目安です）。" : p.type === "店舗" ? "地図を店の所在地付近へ動かしました（位置は目安です）。店は閉店・移転・休業していることがあります。営業は公式情報でご確認ください。" : "地図を施設の所在地付近へ動かしました。出入口の位置とは限りません。";
+const pkind = p => p.type === "現在地" ? "おおよその位置" : p.type === "地名" ? "代表地点" : p.type === "駅" ? "駅の位置" : p.type === "店舗" ? "店の場所" : "所在地";
+const ptip = p => p.type === "現在地" ? "位置はこの端末の中だけで使います。サーバーには送りません。精度は端末しだいです。" : p.type === "地名" ? "地図をこの地域の代表地点へ動かしました。範囲の中心とは限りません。" : p.type === "駅" ? "地図を駅の付近へ動かしました（位置は目安です）。" : p.type === "店舗" ? "地図を店の所在地付近へ動かしました（位置は目安です）。店は閉店・移転・休業していることがあります。営業は公式情報でご確認ください。" : "地図を施設の所在地付近へ動かしました。出入口の位置とは限りません。";
 const placeSub = p => [p.type === "店舗" ? "お店" : p.type, p.cat, p.sub, p.area].filter(Boolean).join("・");
 function setPin(p) {
   clearPin();
   placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
   placePin.bindTooltip(p.name, { permanent: true, direction: "top", offset: [0, -30], className: "placetip" }).openTooltip();
 }
-function clearPin() { if (placePin) { placePin.remove(); placePin = null; } }
+let locCircle = null;
+function clearPin() { if (placePin) { placePin.remove(); placePin = null; } if (locCircle) { locCircle.remove(); locCircle = null; } }
 function nearStops(p) {
   const by = new Map();
   stops.forEach(s => { const d = Math.hypot((s.lon - p.lon) * 91000, (s.lat - p.lat) * 111000), o = by.get(s.name);
@@ -643,7 +722,7 @@ let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻�
 places.forEach((p, i) => p.i = i);
 const AREA_ORDER = ["鹿屋市", "志布志市", "垂水市", "曽於郡大崎町", "肝属郡東串良町", "肝属郡肝付町", "肝属郡錦江町", "肝属郡南大隅町"];
 const jaCmp = new Intl.Collator("ja").compare;
-function browseOpen(sheet) { hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function browseOpen(sheet) { setHash(""); hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
 function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
 function showAreaIndex() {
   browseOpen(); placeBack = null;
@@ -726,23 +805,41 @@ function showLine(i) {
 function showPlace(p, opt) {
   hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
   if (isMobile()) setSheet("mid");
-  setCur([]); paint(); setPin(p); map.closePopup();
+  setCur([]); paint(); setPin(p); map.closePopup(); if (p.i >= 0) setHash("place=" + p.name);
   const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
   if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
   else ensureVisible(pll);
   const ns = nearStops(p);
   render(`<button class="back" id="bk" type="button">← もどる</button><h2 class="head">${esc(p.name)}</h2>${p.en ? `<p class="enname">${esc(p.en)}</p>` : ""}
   <div class="meta"><span class="pill">${esc(p.type === "店舗" ? "お店" : p.type)}・${p.cat ? esc(p.cat) + "・" : ""}${pkind(p)}</span><span class="nw">${esc([p.sub, p.area].filter(Boolean).join("・"))}</span></div>
+  ${p.i >= 0 ? ACTS(p.name, p.pe || p.en || "", p.lat, p.lon, "place") : ""}
   <p class="tip">${ptip(p)}近くのバス停を押すと、通る系統が出ます。</p>
   <div class="lh">${ns.far ? "近くにバス停は多くありません（最も近い順）" : "周辺のバス停（近い順）"}</div>
-  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${esc(x.s.name)}</span><small>約${Math.max(10, Math.round(x.d / 10) * 10)}m・${x.s.rts.length}系統</small></button>`).join("")}${NOTE}`,
+  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${esc(x.s.name)}</span><small>約${Math.max(10, Math.round(x.d / 10) * 10)}m・${x.s.rts.length}系統</small></button>`).join("")}${p.i >= 0 ? EXTS(p.lat, p.lon, p.name) : ""}${NOTE}`,
   `${p.name}・周辺のバス停`);
+  bindActs();
   const pbk = document.getElementById("bk");
   if (placeBack) { pbk.textContent = placeBack.label; pbk.onclick = placeBack.fn; } else pbk.onclick = home;   // 一覧から開いた時は、その一覧へ戻る
   pbody.querySelectorAll(".rt[data-s]").forEach(b => b.onclick = () => { const s = stops[+b.dataset.s]; showStop(s, { center: true, zoom: Math.max(map.getZoom(), 16) }); ensureVisible(L.latLng(s.lat, s.lon)); });
 }
+// ---- 現在地の近くのバス停：押した時だけ位置を1回取得。端末の中だけで使い、送らず・保存しない ----
+const toastEl = document.createElement("div"); toastEl.id = "toast"; toastEl.setAttribute("role", "status"); toastEl.setAttribute("aria-live", "polite"); toastEl.hidden = true; document.getElementById("main").appendChild(toastEl);
+let toastT = 0;
+function toast(t) { toastEl.textContent = t; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toastEl.hidden = true; }, 6000); }
+function locateMe() {
+  if (!navigator.geolocation) { toast("位置情報を使えませんでした。地名や駅名で探してください。"); return; }
+  toast("現在地を調べています…");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude, acc = pos.coords.accuracy || 0;
+    const p = { i: -1, name: "現在地", pe: "現在地", en: "", type: "現在地", lat, lon, area: "", aen: "", sub: "", sen: "", cat: "", alias: "" };
+    const ns = nearStops(p);
+    if (!ns.list.length || ns.list[0].d > 8000) { toast("現在地はこの地図の範囲の外のようです。地域一覧から近い地図を選んでください。"); return; }   // この地図の範囲の外(近くにバス停が1つも無い)
+    toastEl.hidden = true; placeBack = null; showPlace(p);
+    if (acc > 0) locCircle = L.circle([lat, lon], { radius: Math.min(acc, 2000), color: "#1a73e8", weight: 1, fillOpacity: .1, interactive: false }).addTo(map);
+  }, () => toast("位置情報を使えませんでした。地名や駅名で探してください。"), { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+}
 function showRoute(r) {
-  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup();
+  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup(); setHash("route=" + D.ops[r.op] + "|" + r.name);
   setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
   paint();
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
@@ -869,7 +966,7 @@ q.onkeydown = e => {
 document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
 const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "場所・バス停・系統 / Search" : "場所・バス停・系統を検索 / Search places") : isMobile() ? "場所・バス停・系統" : "場所・バス停・系統を検索"; };   // 狭い画面では短く
 setPh(); mqMobile.addEventListener("change", setPh);
-home();
+hashLock = true; try { home(); } finally { hashLock = false; }   // 起動時のホームは、URLのhashを消さない(共有リンクで開いた時に readHash で復元するため)
 applySheet();
 map.invalidateSize();
 // ?at=<市町村コード> で開いた時は、その市町村のバス停の範囲へ地図を寄せる(県ページの市町村ボタン)。不明なコードは無視して既定の表示。
@@ -877,6 +974,8 @@ map.invalidateSize();
   if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
   map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
   const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">鹿児島県ページから「${esc(mu[1])}」を開きました。地図はその市町村のバス停の範囲です。</p>`); })();
+if (location.hash) readHash(); addEventListener("popstate", () => { closeShowJa(); if (!readHash()) { hashLock = true; try { home(); } finally { hashLock = false; } } });
+syncLangHash();
 // 言語の切り替えボタンは、今の ?at= などを引き継ぐ
 document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
 // ブラウザの言語が英語の人に、英語版があることを1回だけ案内する(閉じたらこの端末では出さない・自動では移動しない)
@@ -886,6 +985,7 @@ document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; })
   d.querySelector("a").href += location.search;
   d.querySelector("button").onclick = () => { d.remove(); try { localStorage.setItem("busmap.langHint", "1"); } catch (e) {} };
   mainEl.appendChild(d); })();
+syncLangHash();
 </script>
 </body>
 </html>

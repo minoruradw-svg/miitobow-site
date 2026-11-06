@@ -180,6 +180,33 @@
   details.note summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--accent-dark); }
   details.note a { color: var(--accent-dark); }
 
+  /* ---- 持ち出し(日本語で見せる・コピー・外部地図・系統の行き先) ---- */
+  .acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+  .act { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .act:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .act.ext { color: var(--accent-dark); }
+  details.extmaps { margin: 0 0 10px; }
+  details.extmaps summary::before { content: "▸ "; white-space: pre; }
+  details.extmaps[open] summary::before { content: "▾ "; }
+  details.extmaps summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: var(--accent-dark); }
+  .rt .ends { display: block; font-size: 11.5px; line-height: 1.25; font-weight: 400; color: var(--ink-soft); margin-top: 1px; }
+  .rt:has(.ends) { padding-top: 4px; padding-bottom: 4px; }   /* 行き先の1行を足しても、ボタンの高さが増えないように */
+  #showja { position: fixed; inset: 0; z-index: 2000; background: #fff; color: #111; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: auto; }
+  #showja[hidden] { display: none; }
+  #showja .sj-in { width: 100%; max-width: 900px; text-align: center; }
+  .sj-hint { margin: 0 0 20px; font-size: 14px; color: #444; }
+  .sj-name { font-size: clamp(44px, 12vw, 96px); font-weight: 900; line-height: 1.15; overflow-wrap: anywhere; }
+  .sj-sub { margin-top: 8px; font-size: clamp(16px, 4vw, 26px); color: #333; overflow-wrap: anywhere; }
+  .sj-phrase { margin-top: 24px; font-size: clamp(22px, 6vw, 40px); font-weight: 700; }
+  .sj-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .sj-btns button, .sj-close { min-height: 48px; padding: 0 18px; border-radius: 12px; border: 2px solid #999; background: #fff; color: #111; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sj-btns button[aria-pressed="true"] { background: #e6f2ea; border-color: #2a7a4b; }
+  .sj-btns button[aria-pressed="true"]::before { content: "✓ "; }
+  .sj-close { margin-top: 24px; background: #111; color: #fff; border-color: #111; }
+  body.sj-open { overflow: hidden; }
+  #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  #toast[hidden] { display: none; }
+
   /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
   @media (max-width: 767px) {
     header { flex-wrap: nowrap; gap: 6px; padding: 6px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
@@ -217,7 +244,7 @@
     .lh { margin-top: 8px; }
     .grp { margin: 6px 0 4px; }
     .rt { margin-bottom: 4px; }
-    .warn { white-space: nowrap; overflow: hidden; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
+    .warn { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.35; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); font-size: clamp(10.5px, 3.1vw, 12px); }
   }
   @media (max-width: 767px) and (max-height: 500px) { header h1 { display: none; } .searchwrap { order: 0; flex: 1 1 200px; } }
   @media (min-width: 768px) { .chip .short { display: none; } }
@@ -277,12 +304,13 @@
 </header>
 <main id="main">
   <div id="map" role="application" aria-label="Map of bus stops in Kushiro-Otofuke Area"></div>
+  <div id="showja" role="dialog" aria-modal="true" aria-labelledby="sjName" hidden><div class="sj-in"><p class="sj-hint">Show this screen to the driver or staff.</p><div id="sjName" class="sj-name" lang="ja"></div><div id="sjSub" class="sj-sub"></div><div id="sjPhrase" class="sj-phrase" lang="ja"></div><div id="sjTr" class="sj-sub"></div><div class="sj-btns" id="sjBtns"><button type="button" id="sjGo" aria-pressed="true">I want to go to this bus stop.</button><button type="button" id="sjOff" aria-pressed="false">I get off here.</button></div><button type="button" id="sjClose" class="sj-close">Close</button></div></div>
   <div id="tilewarn" role="status" aria-live="polite" hidden><span>Map images could not be loaded. Please check your connection. The bus stop dots and route lists still work.</span><button type="button" id="tilewarnx" aria-label="Close">×</button></div>
   <aside id="panel" aria-label="Bus stop and route details">
     <button id="grip" class="sheet-top" type="button" aria-label="Resize the panel (swipe up or down, or use the arrow keys)" aria-controls="pbody" aria-describedby="psum" aria-expanded="true"><span class="bar"></span><span id="psum"></span></button>
     <button id="homeTop" class="hometop" type="button" aria-label="Back to home (start screen)" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
     <div id="pbody" class="pbody"></div>
-    <div class="warn">Unofficial · FY2022 data · no timetables/fares · check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first</div>
+    <div class="warn">Check <a href="https://www.mlit.go.jp/jidosha/" target="_blank" rel="noopener">official info</a> first · unofficial · FY2022 data · no timetables/fares</div>
   </aside>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
@@ -317,7 +345,7 @@ routes.forEach((r, i) => { const e = REN[i] || ""; r.eg = e[0] === "~" ? "C" : "
 const OPS_EN = ["Hokkaido Kitami Bus ≈","Nemuro Kotsu ≈","Akan Bus ≈","Tokachi Bus ≈","Hokkaido Takushoku Bus ≈","Honbetsu Town","Ikeda Town","Kushiro Bus ≈","Rausu Town","Otofuke Town","Urahoro Town"];   // 末尾の ≈ ＝英語名を公式確認できていない事業者(i18n/operators_src.json の等級C)
 const PEN = ["Kami-Oboro Sta.","Beppo Sta.","Bettoga Sta.","Toshibetsu Sta.","Atsunai Sta.","Akkeshi Sta.","Attoko Sta.","Toro Sta.","Otanoshike Sta.","Oboro Sta.","Makubetsu Sta.","Shoro Sta.","Shin-Yoshino Sta.","Shin-Otanoshike Sta.","Shin-Fuji Sta.","Konbumori Sta.","Satsunai Sta.",["Higashi-Nemuro Sta.","","","B"],"Higashi-Kushiro Sta.","Nemuro Sta.","Shibecha Sta.","Musa Sta.","Ikeda Sta.","Urahoro Sta.","Shiranuka Sta.","Isobunnai Sta.","Hosooka Sta.","Kayanuma Sta.","Ochiishi Sta.","Nishi-Wada Sta.","Nishi-Shoro Sta.","Toya Sta.","Kushiro-Shitsugen Sta.","Kushiro Sta.","Monshizu Sta.","Onbetsu Sta.","Suzurandainaka-machi","Suzurandaikita-machi","Suzurandaiminami-machi","~Nukabiragen Izumisato","Hibikino Nakamachi","Hibikino Higashimachi","Hibikino Nishimachi","Yoshino","Warabi","~Iwabokke",["Uenbetsu","","","B"],["Urimaku","","","B"],["Kashunnai","","","B"],["Kunnebetsu","","","B"],"Sattebetsu","Sannushi",["Shirarutoro","","","B"],"Setaniushi","Chiraikaribetsu","~Tomamu",["Toyoi","","","B"],["Toyoibetsu","","","B"],"Toraibetsu",["Toritoshi","","","B"],"~Toritoshi Genya","~Toritoshi Genyaminamiichishichisen","~Toritoshi Genyaminamiichishisen","~Toritoshi Genyaminamishisen",["Funbe","","","B"],"Horonitai",["Poroburepetsu","","","B"],["Moseushinai","","","B"],"~Yururishima, Moyururishima",["Rakko","","","B"],["Rakkobetsu","","","B"],["Rururan","","","B"],"Rukushuporu",["Ososhi","","","B"],"1-jodori","~Mannen","~Mannen","3-jodori","Mitsura","~Mimata","~Kami Toyoi Kisen","~Kami Torari","~Kamibeppo Genya","~Kamibeppo Genyahigashishichisen","~Kamibeppo Genya Higashi-5-sen","~Kamibeppo Genya Higashi-4-sen","Kamitoshibetsu","Kamitoshibetsu Motomachi","~Kamiatsunai","~Kamishihoro Kisen","~Kamishihoro Higashi-1-sen","~Kamishihoro Higashi-3-sen","~Kamishihoro Higashi-2-sen","~Kamishihoro Higashi-5-sen","~Kamishihoro Higashirokusen","~Kamishihoro Higashi-4-sen","~Kamishihoro Shimizutani","~Uetawa","Kamioboro","~Uehororo","~Uetomanichi","~Uetomanni","Kamishunbetsu","Kamishunbetsuminami-cho","Kamishunbetsuasahi-cho","Kamishunbetsusakae-cho","Kamishunbetsumidori-cho","Kamihonbetsu","~Kamishikaribetsu","Kamirawan","~Kamitoyoji","Kamiashoro","Kamiashoro Motomachi","~Kamirikubetsu","~Kamiotofuke","~Kamiotofuke","Kamifuren","~Shimo Torari","~Shitakyuchoro","~Shimoshihoro","~Shimotaiki","~Shitakyohen","~Shitahororo","Shimoaikappu","~Shitatoman","~Shimorikubetsu","~Shitasetsuri","~Shimootofuke","Namikidori-higashi","Namikidori-nishi","~Nakakyuchoro","Nakazono-cho","~Naka Shihoro","Chuo","~Nakajima","Nakajima-cho","~Nakahororo","~Nakatoman No. 1","~Nakatoman No. 2","Nakashunbetsu","Nakashunbetsuminami-cho","Nakashunbetsuhigashi-cho","Nakashunbetsunishi-cho","Nakaya","Nakanishibetsu","Nakanishibetsuhikari-cho","Nakanishibetsuasahi-cho","Nakanishibetsuhon-cho","Nakanishibetsumidori-cho","Nakaashoro","~Nakazato","Nakasuzuran Motomachi","Nakasuzuran-kita","Nakasuzuran-minami","~Naka Rikubetsu","~Nakasetsuri","~Naka Otofuke","~Naka Otofuke","Nakatsuruno","Maruyamadori-kita","Maruyamadori-minami","~Kyuchoro","Opporo","2-jodori","~Goi","~Gojuishi","Senbiri","Senbirimoto-machi","~Senpoji-mura","~Senpoji Muraji Otakupaushi","~Senpoji Muraji Beta","~Senpoji Muraji Ponrukushuporu","~Senpoji-mura Senpoji","~Senpoji-mura Binnai","~Senpoji-mura Nyukyogaku","~Senpoji-mura Funise","~Senpoji-mura Kyoraiushi","~Senpoji-mura Kobanya","~Senpoji-mura Chihogaku","~Senpoji-mura Romonomai","~Senpoji-mura Senottoko","~Senpoji-mura Jurankyu","Nakahama-cho","Nakadori","Kaishomae","Kaishodori","Suminoe","Suminoe-cho","Sumiyoshi","Sumiyoshidai","~Sumiyoshi-cho Block 1","~Sumiyoshi-cho Block 2","~Sakushu","~Yoda","~Shinshu","Motomachi","~Motomachi-kita","~Motomachi-minami","~Hikariminami","Kowa","Kowa-cho","~Hikarichisono","Koei","Koyo-cho","Koyo-cho","Irie-cho","Irifune","Koendori-kita","Koendori-minami",["Kyowa","","","B"],"Kyoei",["Kyoei","","","B"],"Kyoeidai-higashi","Kyoeidai-nishi","Kyoeiodori","Kyoei-machi",["Kyoei No. 1","","","B"],["Kyoei No. 1 Chuo","","","B"],["Kyoei No. 1-kita","","","B"],["Kyoei No. 1-minami","","","B"],["Kyoei No. 1-nishi","","","B"],["Kyoei No. 2 Chuo","","","B"],["Kyoei No. 2-kita","","","B"],["Kyoei No. 2-minami","","","B"],"~Maruyamanishimachi","~Bunsen","Hattaushi","Beppo","Beppo-minami","~Beppo Genya","~Beppo Genyaminamiikkusen","~Beppo Genyaminaminiichisen","~Beppo Genyaminaminisansen","~Beppo Genyaminamininisen","~Beppo Genyaminaminishisen-higashi","Beppo-higashi","Bekanbeushi","Betsutoga","Betsukai","Betsukaimiyamai-cho","Betsukaikotobuki-cho","Betsukaikawakami-cho","Betsukaitokiwa-cho","Betsukaishinei-cho","Betsukaiasahi-cho","Betsukaimidori-cho","Betsukainishihon-cho","Betsukaitsurumai-cho","~Riue",["Toshibetsu Minamimachi","","","B"],["Toshibetsu Motomachi","","","B"],"~Toshibetsu Higashimachi","~Toshibetsu Nishimachi","Sashiushi","Yutari","Yutarimoto-machi","Kita","Kita-1-jo","Kita-3-jo","Kita-2-jo","Kita-5-jo","Kita-6-jo","Kita-4-jo",["Kitazono","","1 chome"],"Kita-Odori","Hokuto","~Hokutoman","Hokuto-cho","Hokumeidai","~Hokuei Block 1","~Hokuei Block 2",["Kita-Shibecha","","","B"],"Kita-Hamacho","~Kitamachi Block 1","~Kitamachi Block 3","~Kitamachi Block 2","Kita-Midanchi","Kitadori","Hokuto","Kitasuzuran-kita","Kitasuzuran-minami","Hokuyodai","~Tokachita Block 1","~Tokachita Block 2","Tokachigawaonsen","Tokachigawaonsen-kita","Tokachigawaonsen-minami","Chiyonora",["Chiyoda","","","B"],"~Senju","Chishima-cho","Chitose-cho","Minami","Minami-1-jo","Minami-7-jo","Minami-3-jo",["Minaminaka Otofuke","","","B"],"Minami-2-jo","Minami-5-jo","Minami-Sumiyoshidai","Minami-6-jo","~Nansei","Minami-4-jo","Minami-Odori","~Nantoman",["Minami-Shibecha","","","B"],"Minami-Hamacho","Minamimachi","~Minamimachi Block 1","~Minamimachi Block 2","Minamidori","Minamisuzuran-kita","Minamisuzuran-minami","Nanyodai",["Atsunai Block 1","","","B"],["Atsunai Block 3","","","B"],["Atsunai Block 2","","","B"],["Atsunai Block 5","","","B"],["Atsunai Block 4","","","B"],["Akkeshi Lake","","","B"],"~Akkeshiwan","Attoko","~Kosei","Tomoshiri","Futaoki","Futaba-cho","Futaba-cho","Furukawa-cho","~Komai","~Goryu",["Yoshino Block 1","","","B"],["Yoshino Block 3","","","B"],["Yoshino Block 2","","","B"],"Koyo-cho","Watenbetsu","Kita-cho","Kitoshi","Kokuyo","Shiroyama","Horikawa-cho",["Toro","","","B"],["Shihoro","","","B"],"~Tawa","~Taizen","Obetsu","Okawa-cho","Taisei",["Omori","","","B"],"Otanoshike","Otanoshike-kita","Otanoshike-minami","Otanoshike-nishi",["Taiki","","","B"],"Taisho-cho","Omachi","Oyochi","Oyochimoto-machi","~Taiho",["Odori","","","B"],"Odori",["Odori-kita","","","B"],"Odori-kita",["Odori-minami","","","B"],["Odori-minami","","","B"],"Daikokujima","~Ota","Ota-kita","Ota-minami","Ota Koyo","Ota-higashi","Ota-nishi","Ponto","Okuyuki",["Yasuhara","","","B"],"Sadamoto-cho","~Horai","Horainakamachi-kita","Horainakamachi-minami","Horaikita 1-jo","Horaiminami 1-jo","Horaihondori","Horaihigashimachi-kita","Horaihigashimachi-minami","Horainishimachi-kita","Horainishimachi-minami","Horin-cho","~Hosho","Takaramachi","Takaracho","~Takaramachi","Takaramachi","~Takaramachi Block 1","Miyazono","Miyamoto","Tomihara","Fuji","Fujimi",["Tomioka","","","B"],"~Tomigawa","Kotobuki","Kotobukimachi","~Kotobukimachi","Kotobukidori","~Sho Toshibetsu","Kojima","Odaito","Odaitomisaki-cho","Odaitominato-cho","Odaitoshiomi-cho","Oboro","~Oda","~Kyohen","Yamanote","Yamate-machi","Yamahana","Misaki","Misakicho","Kawakami",["Kawakami","","","B"],["Kawakami","","","B"],"Kawakami-cho","Kawakita-cho","Kawaguchi",["Kawai","","","B"],"~Kawamukai","~Senryununo","Kawabata-cho","Kibogaoka","~Obitomi","~Tsuneshitsu","Tokiwa",["Tokiwa","","","B"],"Tokiwa","Tokiwa-cho","~Tsunetoyo","~Horoka","Hororo-higashi","Hororo-nishi","Horomoshiri","Nusamai-cho","Heinai-cho","Heiwa",["Heiwa","","","B"],"Heiwa","~Kotoku","Saiwaicho","Saiwaimachi","Saiwaicho","~Saiwaimachi","Saiwaicho","~Ikusenyo",["Hiro","","","B"],"Hirosato","Tokotan","~Tokotan","Tokotan","Shoro","Bentengahama","~Bentenshima","Benten-cho","~Kowa","Yasakae-cho","Yayoi",["Yayoi","","","B"],"Yayoi-machi","Yayoi-cho","Osonae","~Osotsubetsu","Churui Nakato","Churui Motochurui","Churui Koshin","Churui Kyoei","Churui Kyotoku","Churui Furusato","Churui Horonai","Churui Saiwaimachi","Churui Shinsei","Churui Hiyori","Churui Meiwa","Churui Bansei","Churui Asahi","Churui Motomachi","Churui Toho","Churui Sakaemachi","Churui Shiroganemachi","Churui Nishito","Churui Nishikimachi","~Onnenai","Onnenai","Aikappu","Aikappu","Aikoku","Aikoku-higashi","Aikoku-nishi","~Aiushi","Oshotsupu","~Shinbetsu","~Shihororo","~Shisetsuri","Shikishima-cho","Fumizono","~Shinwa","Shinfuji-cho","Shintomi-cho","~Niikawa","Shinkawa-cho","~Shinhororo","Shinei-cho","Shinbashiodori","Shinmachi","Shinmachi","~Shinmachi","Shinmachi","~Shinmachi Ikku Chuo","~Shinmachi Ikku-kita","~Shinmachi Ikku-minami","~Shinmachi Nikuchuoichi","~Shinmachi Nikuchuoni","~Shinmachi Niku-kita","~Shinmachi Niku-minami","~Shinmachi Niku-higashi","~Shinmachi Niku-nishi","Shindori","Shindori","Shindori-kita","Niino","Shinkushiro-cho","Shinkai","~Nichishu","~Nisshin","~Nichiho","~Former Kamitoyoji District","Asahi","~Asahihama","Asahimachi",["Asahimachi","","","B"],"Asahimachi","Asahimachi","~Asahimachi","Konbumori","~Konbumori-mura","~Konbumori Muraji Achorobetsu","~Konbumori Muraji Chorobetsu","~Konbumori-mura Fukuko","~Konbumori-mura Matameshidoki","~Konbumori-mura Shukutokunai","~Konbumori-mura Horonainishi","~Konbumori-mura Konbumori","~Konbumori-mura Raishiga","~Konbumori-mura Miyama","Konbumori","~Meirin","Meiji-cho","Akesato","~Akeno","Hoshigaura-kita","Hoshigaura-minami","Hoshigaura Odori","~Harukunitai","Harutori",["Harutori Lake","","","B"],"Kasuga-cho","Shunkodai","Showa","Showachuo","Showa-kita","Showa-minami","Showa-cho","Showa-cho","~Shoei","~Bansei","Akatsukicho","Akatsukicho","Akebono","Akebonocho","Tsukioka-cho","Tsukimi-cho","Ariake","Ariiso-cho",["Asahi","","","B"],"Asahi-machi","Asahi-cho","Kiba","Kinokoenshita-machi","Kinoodori-higashi","Kinoodori-nishi","Kinoshin-machi","Kinohigashidori","Kinonishidori","Mabiro","~Suehiro-cho","Suehiro-cho","Honbetsu","Honbekkai","Motomachi","Honcho","~Motomachi","~Hontomatsutomu","Hondori","Satsunaiakashiya-machi","Satsunaimizuho-machi","Satsunaichuo-machi","Satsunaikyoei-machi","Satsunaihokuei-machi","Satsunaikita-machi","Satsunaitsutsumi-machi","Satsunaibunkyo-machi","Satsunaishinkita-machi","Satsunaikasuga-machi","Satsunaiakatsuki-machi","Satsunaihigashi-machi","Satsunaikatsura-machi","Satsunaisakura-machi","Satsunaiizumi-machi","Satsunaiminori-machi","Satsunaiwakakusa-machi","Satsunainishi-machi","Satsunaiyutaka-machi","Satsunaiaoba-machi","~Zaimoku-cho","Zaimoku-cho","Raibetsu","Higashi-1-jo","~2","~1 Ikku-higashi","~1 Ikku-nishi","~1 Niku Chuo","~1 Niku-higashi","~1 Niku-nishi","Higashi-3-jo","Higashi-2-jo","~2","Higashi-Attoko",["Higashidai","","","B"],"~Towa","Higashi-Wada","~Higashisamuraikari","~Higashi-Yamacho","Higashi-Kawacho","~Higashitoman","Higashi-Honbetsu","Higashi-Hondori","Tobai","Tobai","Higashimachi","Higashidori","Toyoodori-nishi","Toyo-nishi",["Higashi-Otofuke","","","B"],"Matsugae-cho","Matsuyama-cho","Matsumoto-cho","Matsura-cho","Matsuba","~Rinnaiichi","~Rinnaini","Hakujudai","Kashiwagi-cho","Kashiwagi-cho","Kashiwagi-cho","Kashiwahigashi","Kashiwanishi","Yanagimachi","Yanagimachi","Yanagimachinakaku","Yanagimachikitaku","Yanagimachiminamiku","~Sakae","~Sakae","Sakaemachi","Sakaecho","~Sakaemachi","Sakaemachi","Sakaemachi","~Sakaemachi Chuo Ichi","~Sakaemachi Chuo Ni","~Sakaemachi-kita","~Sakaemachi-minami","~Sakaemachi-nishi","~Sakaeho","Sakaedori","Katsura","Katsurakoi","Katsuragi","Katsuragi","Sakura","Sakuragaoka","Sakuragaoka-nishi","Sakuragaoka","Sakurada","~Sakuramachi","Umegae-cho","Baika","Yarimukashi","~Samamai","~Shijaku","Musa","Habomai","~Shokusan","Shiomi-cho","Okimanbetsu","Kahan","Jisui-cho","~Numanoe","~Numahoro","Izumikawa","~Katsutaira","~Hama Taiki","Hamamatsu","Hamacho","Urami","Naniwa-cho","Kaigan-cho","Kaiun","~Kiyomi","~Kiyomigaoka","Kiyotaka-cho","Onnemoto","Onneto","Minatomachi","Minatomachi","Konan","Wangetsu","~Setarai","~Shikaribetsu","Katamusari","Makinochi","~Sarubetsu","Goyomai","Kotohira-cho","~Namatsuyoshi","~Seika","~Ryumakoto","Tokitai","Shirakabadai","Shirakabadori-kita","Shirakabadori-minami","Shirahama",["Shiranuka Higashi1-jo-kita","","","B"],["Shiranuka Higashi1-jo-minami","","","B"],["Shiranuka Higashi3-jo-kita","","","B"],["Shiranuka Higashi3-jo-minami","","","B"],["Shiranuka Higashi2-jo-kita","","","B"],["Shiranuka Higashi2-jo-minami","","","B"],["Shiranuka Nishi1-jo-kita","","","B"],["Shiranuka Nishi1-jo-minami","","","B"],["Shiranuka Nishi3-jo-kita","","","B"],["Shiranuka Nishi2-jo-kita","","","B"],["Shiranuka Nishi2-jo-minami","","","B"],["Shiranuka Nishi5-jo-kita","","","B"],["Shiranuka Nishi4-jo-kita","","","B"],"Shiraito","Shirogane-cho","Masura","~Chokubetsu",["Aikawa","","","B"],["Aikawa","","","B"],"Shinei","Mutsumi","Yausubetsu","Shirito-cho","~Ishizaka",["Isobunnai","","","B"],"Kamuiwa","Inaushi",["Inaho","","","B"],"Honioi","Tsukushikoi","Yonemachi","~Nukanai","Itoizawa","Momijidori-kita","Momijidori-minami",["Monbetsu","","","B"],"Nosappu","Shiundai","~Tota","Midori","Midorigaoka","Midorigaoka","Midoricho","Midorimachi","Midorimachi","Midoricho","~Midorimachi","~Midorimachi-higashi","~Midorimachi-nishi","Ryokuyodainakaku","Ryokuyodaikitaku","Ryokuyodaiminamiku","~Mikato","Mihara","Mihara",["Misono","","","B"],"~Mikawa","~Bisei","Mino","Bisei","Biranbetsu","Biribetsu","Okotsu","Ashino","Hanasakiminato","Hanasaki-cho","Hanazono-cho","Hanazono-cho","~Megumu","Meto","Metomoto-machi","Wakamatsu","Wakamatsu-cho","Wakatake","Wakatake-cho","Wakakusa-cho","Wakaba","~Wakaba-machi Chuo","~Wakaba-machi-kita","~Wakaba-machi-minami","~Wakaba-machi-higashi","Tomata","Mokitoshi","~Shigeruyori","~Shigeruyori-minami","~Shigeruyorikansen","~Shigeruhororo","Moashoro","~Shigerusetsuri",["Kayanuma","","","B"],"~Chaanbetsu","Charo","~Howa","Ochiishi-higashi","Ochiishi-nishi","~Kaorubetsu","~Nijibetsu","Rawan","Rawanmoto-machi","Nishi-1-jo","~Nishi-1-jo","Nishi-3-jo","~Nishi-3-jo",["Nishinaka Otofuke","","","B"],"Nishi-2-jo","~Nishi-2-jo","Nishi-Senbiri",["Nishi-Yutari","","","B"],"Nishi-Attoko","Nishi-Wada","Nishi-4-jo","Nishishoro Higashi1-jokita","Nishishoro Higashi1-jominami","Nishishoro Higashi3-jokita","Nishishoro Higashi3-jominami","Nishishoro Higashi2-jokita","Nishishoro Higashi2-jominami","Nishishoro Nishi1-jokita","Nishishoro Nishi1-jominami","Nishishoro Nishi3-jokita","Nishishoro Nishi3-jominami","Nishishoro Nishi2-jokita","Nishishoro Nishi2-jominami","Nishishoro Nishi5-jominami","Nishishoro Nishi4-jominami","~Nishitoman","Nishi-Shunbetsu","Nishi-Shunbetsumiyazonocho","Nishi-Shunbetsusaiwaicho","Nishi-Shunbetsushoeicho","Nishi-Shunbetsuhonkyucho","Nishi-Shunbetsukiyokawacho","Nishi-Shunbetsuekimaekotobukicho","Nishi-Shunbetsuekimaeakebonocho","Nishi-Shunbetsuekimaekashiwacho","Nishi-Shunbetsuekimaesakaecho","Nishi-Shunbetsuekimaenishicho","Nishi-Shunbetsuekimaenishikicho","Nishi-Hondori","Nishi-Hamacho","Nishiko","Nishimachi","Nishi-Biribetsu","~Toyoni Hondori","~Toyoni Higashidori","~Toyoninishi-dori","~Hohoku","Toyohara",["Toyoka","","","B"],"Toyokawa-cho","~Toyota","~Toyota","Toyomi","Toyosato","Kaizuka","~Kiromichi","Hashirikotan","~Atoeiga-mura Fuyumadotoko","~Atoeiga-mura Hatsumuteki","~Atoeiga-mura Jitchose","~Atoeiga-mura Urakumohaku","~Atoeiga-mura Atoeiga","~Gunoka","~Kinushi","~Tobetsu","~Torukotake","Toya","Toya-minami","~Tono","~Tonogenya","Konan","Rakuyo","Satomigaoka","Nokke","~Nozuka","~Nozuka Hondori","~Nozuka Higashidori","~Nozukanishi-dori","Senbodai","Suzurankoen","~Tetsudo","Nishikimachi","Nishikimachi","Nishikicho","Nishikidori-kita","Nishikidori-minami","Kagamicho","~Choryueda","Chobushi","Monshizu","~Kaishin","Kaiun","~Kan","~Akan Lake (Komen)","Akancho Okurushube","Akancho Kamininishibetsu","Akancho Kamiteshibetsu","Akancho Kamishitakara","Akancho Kamiakan","Akancho Shimoninishibetsu","~Akan Machishitatorubetsu","Akancho Shimoshitakara","Akancho Nakaninishibetsu","Akancho Chuo","Akancho Nakateshibetsu","~Akan Machiju Akan","Akancho Ninishibetsu","Akancho Nakamachi","Akancho Kyowa","Akancho Kitashinmachi","Akancho Kitamachi","Akancho Taisho","Akancho Fujimi","Akancho Fubushinai","~Akan Machitorubetsu Chuo","Akancho Shinmachi","Akancho Asahimachi","Akancho Toei","Akancho Higashishitakara","Akancho Chichappu","Akancho Kinoka","Akancho Shitakara","Akancho Soshi","Akancho Nishiteshibetsu","Akancho Nishiakan","Akancho Akankonsen","Akancho Yubetsuyokoyama","Akancho Akubetsu","~Arekinai","Jinya","Kariki","Yuhigaoka","Yuhigaokanakaku","Yuhigaokakitaku","Yuhigaokaminamiku","~Setsuri",["Aoyama","","","B"],"Aoyama","~Shizunai","Onbetsucho Akebono","Onbetsucho Muri","Onbetsucho Nakazono","Onbetsucho Nakaonbetsu","Onbetsucho Kyoei","Onbetsucho Shakubetsu","Onbetsucho Kawahigashi","~Onbetsumachi Kawanishi","Onbetsucho Asahi","Onbetsucho Motomachi","Onbetsucho Kaiko","Onbetsucho Chokubetsu","Onbetsucho Midorimachi","Onbetsucho Wakakusa","~Onbetsucho Onbetsugenyakisen Genya","Onbetsucho Furen","Onbetsucho Pashikuru",["Otofuke","","","B"],["Otowa","","","B"],"~Furen Lake",["Yoro","","","B"],"~Komaba","Komaba Namiki","3","3","Komaba Kitamachi","Komaba Minami1-jodori","3","~Komaba Minami1-jodori 3-jodori","~Komaba Minami1-jodori 2-jodori","~Komaba Minami1-jodori 25","Komaba Heiwadai","Komaba Hondori","Komaba-higashi","Komaba-cho","Komaba-cho","Komaba-nishi","Komamaki","~Komahatake",["Takakura","","","B"],"Takayama","~Takashima","Kokodori","Tottori-kita","Tottori-minami","Tottori Odori","~Toritorigenya","Toritoshi-higashi","Toritoshi-nishi","Torisato","Narumi-cho","Tsurugadai","Tsuruoka","Tsurui-kita","Tsurui-minami","Tsurui-higashi","Tsurui-nishi","Tsuruno","Tsuruno-higashi","Washippu","Azabu","~Kuroishitaira","Kurogane-cho","~(Jushomu Shi)","Kamishihoro Town Office","Betsukai Town Office","Akkeshi Town Office","Shihoro Town Office","Taiki Town Office","Makubetsu Town Office","Hiroo Town Office","Hombetsu Town Office","Nemuro City Hall","Shibecha Town Office","Ikeda Town Office","Urahoro Town Office","Shiranuka Town Office","Ashoro Town Office","Kushiro City Hall","Kushiro Town Office","Rikubetsu Town Office","Otofuke Town Office","Tsurui Village Office","Washo Market","Nusamai Bridge","Cape Nosappu","Ashoro Museum of Paleontology","Kushiro Fisherman's Wharf MOO","Kushiro Zoo"].map(x => typeof x === "string" ? (x[0] === "~" ? [x.slice(1), "", "", "C"] : [x]) : x);   // 容量を抑えるため、名前だけ＝文字列・名前＋等級Cだけ＝先頭 ~ の文字列(2026-11-01)
 const LOPD = {"北海道旅客鉄道":"Hokkaido Railway Company"}, LEND = {"根室線":"JR Nemuro Line","釧網線":"JR Senmo Line","北海道旅客鉄道|根室線":"JR Nemuro Line","北海道旅客鉄道|釧網線":"JR Senmo Line"}, AEND = {"厚岸郡厚岸町":"Akkeshi Town","釧路郡釧路町":"Kushiro Town","根室市":"Nemuro City","中川郡池田町":"Ikeda Town","十勝郡浦幌町":"Urahoro Town","川上郡標茶町":"Shibecha Town","釧路市":"Kushiro City","中川郡幕別町":"Makubetsu Town","白糠郡白糠町":"Shiranuka Town","河東郡音更町":"Otofuke Town","河東郡上士幌町":"Kamishihoro Town","足寄郡陸別町":"Rikubetsu Town","河東郡士幌町":"Shihoro Town","広尾郡広尾町":"Hiro Town","広尾郡大樹町":"Taiki Town","足寄郡足寄町":"Ashoro Town","阿寒郡鶴居村":"Tsurui Village","野付郡別海町":"Betsukai Town","中川郡本別町":"Honbetsu Town"};
-const PT_EN = {"地名":"Area","駅":"Station","役所":"Public office","観光":"Sightseeing","店舗":"Shop","商業":"Shopping center","公園":"Park","病院":"Hospital","交通":"Transport","施設":"Facility","大学":"University"}, CAT_EN = {"寺社":"Temples & shrines","歴史":"History","グルメ":"Food","買い物":"Shopping","自然":"Nature","温泉":"Hot springs","夜景":"Night views","アニメ・文化":"Anime & culture","体験":"Experiences"};
+const PT_EN = {"地名":"Area","駅":"Station","役所":"Public office","観光":"Sightseeing","店舗":"Shop","商業":"Shopping center","公園":"Park","病院":"Hospital","交通":"Transport","施設":"Facility","大学":"University","現在地":"Location"}, CAT_EN = {"寺社":"Temples & shrines","歴史":"History","グルメ":"Food","買い物":"Shopping","自然":"Nature","温泉":"Hot springs","夜景":"Night views","アニメ・文化":"Anime & culture","体験":"Experiences"};
 const LOP = o => LOPD[o] || o, LEN = (l, o) => LEND[o + "|" + l] || LEND[l] || l, AEN = a => AEND[a] || a;
 const SNM = new Map(); stops.forEach(s => { if (!SNM.has(s.name)) SNM.set(s.name, s); });
 const SEN = n => (SNM.get(n) || { en: n }).en;
@@ -599,12 +627,59 @@ const NOTE = `<details class="note"><summary>About this page · Sources · Discl
 • Municipalities in this map (19): Kushiro City, Otofuke Town, Makubetsu Town, Honbetsu Town, Ikeda Town, Nemuro City, Kushiro Town, Urahoro Town, Akkeshi Town, Hiro Town, Betsukai Town, Kamishihoro Town, Shihoro Town, Shiranuka Town, Ashoro Town, Tsurui Village, Taiki Town, Shibecha Town, Rikubetsu Town. <br>
 • Map coverage: roughly 42.27–43.60°N, 143.07–145.82°E (Kushiro City, Otofuke Town, Makubetsu Town, Honbetsu Town, Ikeda Town, etc.). Stops and routes outside this area are not shown. Even inside this area, stops in municipalities covered by a neighboring map are not included here.<br>
 ${HASSPOT ? `• Locations of sights and shops: approximate addresses made by cross-checking GSI Japan, OSM and Wikipedia (as of 2026-11-04). Shops may close, move or suspend business. This page is not affiliated with any listed shop or facility and is not advertising. “Popular with visitors” is an unofficial guide based on sources such as Honichi Lab rankings and listings in English travel guides.<br>` : ""}
+• “Open in Google Maps” etc. are links to external sites. Coordinates are passed only when you tap them.<br>
+• “Bus stops near me” uses your device location only on this device. It is never sent to a server or stored.<br>
 • Map: <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">GSI Japan map tiles (Standard, Pale, Seamless latest aerial photos)</a>. Aerial photo dates vary by area and may not show the current situation.<br>
 • Map display: <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
 const HOMEICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function goHome() { home(); if (isMobile()) setSheet("mid"); }   // どの画面からでも、一発でホームへ(スマホは地図が見える高さに戻す)
 homeTop.onclick = goHome;
+// ---- 深いリンク(#stop= / #route= / #place=)。名前で引く(同名は先頭)。見つからなければ無視 ----
+let hashLock = false;
+function setHash(h) { if (hashLock) return; const want = h ? "#" + h : ""; let cur = ""; try { cur = decodeURIComponent(location.hash); } catch (e) { cur = location.hash; } if (cur === want) return; try { history.pushState(null, "", location.pathname + location.search + want); } catch (e) {} syncLangHash(); }
+function syncLangHash() { document.querySelectorAll("a.lang").forEach(a => { a.href = a.href.split("#")[0] + location.hash; }); }
+function readHash() {
+  let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
+  if (!m) return false; hashLock = true;
+  try {
+    if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
+    if (m[1] === "route") { const k = m[2].indexOf("|"), op = k < 0 ? "" : m[2].slice(0, k), nm_ = k < 0 ? m[2] : m[2].slice(k + 1); const r = routes.find(x => x.name === nm_ && (!op || D.ops[x.op] === op)); if (r) { lastStop = null; showRoute(r); return true; } }
+    if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
+  } finally { hashLock = false; }
+  return false;
+}
+// ---- 持ち出し：日本語で大きく見せる／名前をコピー／外部地図へ(押した時だけ座標を渡す) ----
+const EXT_LINKS = (lat, lon, name) => { const q = lat.toFixed(5) + "," + lon.toFixed(5);
+  return `<a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Open in Google Maps</a><a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=transit">Directions here (Google Maps)</a><a class="act ext" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${q}&q=${encodeURIComponent(name)}">Open in Apple Maps</a>`; };
+const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">Show in Japanese</button><button type="button" class="act" data-act="copy">Copy name</button></div>`;
+const EXTS = (lat, lon, name) => `<details class="extmaps"><summary>Open in a map app / get directions</summary><div class="acts">${EXT_LINKS(lat, lon, name)}</div><p class="tip">Opens an external site. This place’s coordinates are sent only when you tap.</p></details>`;
+const sjEl = document.getElementById("showja"), sjName = document.getElementById("sjName"), sjSub = document.getElementById("sjSub"), sjPhrase = document.getElementById("sjPhrase"), sjTr = document.getElementById("sjTr"), sjGo = document.getElementById("sjGo"), sjOff = document.getElementById("sjOff");
+let sjFrom = null, sjKind = "stop";
+const SJ_JA = { go: "このバス停に行きたいです", place: "ここに行きたいです", off: "ここで降ります" };   // 相手に見せる日本語(ui.json の showja.* の ja と同じ文言。英語版でもこの日本語を見せる)   // 相手に見せる文は、どの言語のページでも日本語。ページの言語での意味は小さく添える
+function sjPhr(off) { sjGo.setAttribute("aria-pressed", String(!off)); sjOff.setAttribute("aria-pressed", String(off)); const k = off ? "off" : sjKind === "stop" ? "go" : "place", own = off ? "I get off here." : (sjKind === "stop" ? "I want to go to this bus stop." : "I want to go here."); sjPhrase.textContent = SJ_JA[k]; sjTr.textContent = own === SJ_JA[k] ? "" : own; }
+function openShowJa(ja, en, kind, from) { sjFrom = from || null; sjKind = kind; sjName.textContent = ja; sjSub.textContent = en || ""; sjOff.hidden = kind !== "stop"; sjGo.textContent = kind === "stop" ? "I want to go to this bus stop." : "I want to go here."; sjPhr(false); sjEl.hidden = false; document.body.classList.add("sj-open"); document.getElementById("sjClose").focus(); }
+function closeShowJa() { if (sjEl.hidden) return; sjEl.hidden = true; document.body.classList.remove("sj-open"); if (sjFrom && sjFrom.isConnected) sjFrom.focus(); }
+sjGo.onclick = () => sjPhr(false); sjOff.onclick = () => sjPhr(true); document.getElementById("sjClose").onclick = closeShowJa;
+document.addEventListener("keydown", e => {
+  if (sjEl.hidden) return;
+  if (e.key === "Escape") { e.preventDefault(); closeShowJa(); return; }
+  if (e.key === "Tab") { const f = [...sjEl.querySelectorAll("button")].filter(b => !b.hidden && b.offsetParent !== null); if (!f.length) return; const a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } else if (!sjEl.contains(document.activeElement)) { e.preventDefault(); a.focus(); } }
+});
+function copyText(t, btn) {
+  const done = () => { const o = btn.dataset.o || btn.textContent; btn.dataset.o = o; btn.textContent = "Copied"; setTimeout(() => { btn.textContent = o; }, 1500); };
+  const fb = () => { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy") && done(); } catch (e) {} ta.remove(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fb); else fb();
+}
+function bindActs() {
+  pbody.querySelectorAll(".acts[data-ja]").forEach(g => {
+    const ja = g.dataset.ja, en = g.dataset.en, kind = g.dataset.kind;
+    g.querySelector('[data-act="showja"]').onclick = e => openShowJa(ja, en, kind, e.currentTarget);
+    g.querySelector('[data-act="copy"]').onclick = e => copyText(ja, e.currentTarget);
+  });
+}
+const EN_NAME = n => typeof SEN === "function" ? esc(SEN(n)) : esc(n);
+const ENDS = r => r.order.length < 3 ? "" : `<span class="ends">${EN_NAME(r.order[0])} → ${EN_NAME(r.order[r.order.length - 1])}${r.seq ? "" : " (est.)"}</span>`;
 function render(html, sum) {
   const ae = document.activeElement, fromPanel = !ae || ae === document.body || pbody.contains(ae);
   pbody.innerHTML = html; psum.textContent = sum; pbody.scrollTop = 0;
@@ -618,16 +693,18 @@ function home() {
   hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
   render(`<h2 class="head">Tap a bus stop</h2>
+  <div class="lh">Browse</div>
+  <button class="rt" id="bLoc" type="button"><span>Bus stops near me</span></button>
+  <button class="rt" id="bArea" type="button"><span>Find by area</span><small>by ward or municipality ›</small></button>
+  <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Michi-no-Eki Urahoro, Kushiro Sta., Akkeshi Sta.), bus stops, and routes (e.g. Kushiro).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p>
-  <div class="lh">Browse</div>
-  <button class="rt" id="bArea" type="button"><span>Find by area</span><small>by ward or municipality ›</small></button>
-  <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}<div class="lh">Municipalities in this map (19)</div><p class="tip">Kushiro City, Otofuke Town, Makubetsu Town, Honbetsu Town, Ikeda Town, Nemuro City, Kushiro Town, Urahoro Town, Akkeshi Town, Hiro Town, Betsukai Town, Kamishihoro Town, Shihoro Town, Shiranuka Town, Ashoro Town, Tsurui Village, Taiki Town, Shibecha Town, Rikubetsu Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/hokkaido/kitami-abashiri/"><span>Kitami-Abashiri Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/hokkaido/obihiro-shimizu/"><span>Obihiro-Shimizu Area Bus Map</span><small>W ›</small></a>${NOTE}`, "Choose a bus stop or route");
-  document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (19)</div><p class="tip">Kushiro City, Otofuke Town, Makubetsu Town, Honbetsu Town, Ikeda Town, Nemuro City, Kushiro Town, Urahoro Town, Akkeshi Town, Hiro Town, Betsukai Town, Kamishihoro Town, Shihoro Town, Shiranuka Town, Ashoro Town, Tsurui Village, Taiki Town, Shibecha Town, Rikubetsu Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/hokkaido/kitami-abashiri/"><span>Kitami-Abashiri Area Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/hokkaido/obihiro-shimizu/"><span>Obihiro-Shimizu Area Bus Map</span><small>W ›</small></a>${NOTE}`, "Choose a bus stop or route");
+  setHash("");
+  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
 function routeBtn(r) {
-  return `<button class="rt" type="button" data-r="${r.i}"><span>${rnm(r)}</span><small>${r.n} ${P(r.n, "stop", "stops")}</small></button>`;
+  return `<button class="rt" type="button" data-r="${r.i}"><span>${rnm(r)}${ENDS(r)}</span><small>${r.n} ${P(r.n, "stop", "stops")}</small></button>`;
 }
 function groupedRoutes(rs) {
   let out = "", cur = "";
@@ -640,35 +717,37 @@ function groupedRoutes(rs) {
 function showStop(s, opt) {
   hoverOff(); selRoute = null; lastStop = s; openPanel(true);
   if (isMobile()) setSheet("mid");
-  setCur([s]);
+  setCur([s]); setHash("stop=" + s.name);
   if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
   const rs = s.rts.map(i => routes[i]);
   render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${nm(s)}</h2>
   <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b> ${P(rs.length, "route", "routes")}</span></div>
-  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${NOTE}`,
+  ${ACTS(s.name, typeof s.en === "string" ? s.en : "", s.lat, s.lon, "stop")}
+  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${EXTS(s.lat, s.lon, s.name)}${NOTE}`,
   `${s.en} · ${rs.length} ${P(rs.length, "route", "routes")}`);
   paint();   // 系統表示から戻った時の薄表示を解除
-  bind();
+  bind(); bindActs();
   if (lastPlace) { const bk = document.getElementById("bk"), pl = lastPlace; bk.textContent = `← Back to ${PE(pl)}`; bk.onclick = () => showPlace(pl, { noMove: true }); }
 }
 
 // ---- 場所（駅・地名・施設）：地図をその周辺へ動かし、近くのバス停を一覧する。系統一覧は自動では開かない ----
-const PTYPE_ZOOM = { 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
+const PTYPE_ZOOM = { 現在地: 16, 店舗: 17, 駅: 16, 役所: 16, 商業: 16, 病院: 16, 施設: 16, 地名: 15, 公園: 15, 観光: 15, 交通: 15 };
 const areaRank = a => { const i = AREA_ORDER.indexOf(a); return i < 0 ? 999 : i; };   // 同名の地名は、設定の区の並びの早いほうを先に
 const PTYPE_ORDER =["地名", "駅", "役所", "観光", "店舗", "商業", "公園", "病院", "交通", "施設"];
 const places = PLACES.map((a, i) => ({ name: a[0], type: a[1], lat: a[2], lon: a[3], area: a[4], sub: a[5], alias: a[6], cat: a[7] || "", foreign: +a[8] || 0, en: a[9] || "", pe: (PEN[i] && PEN[i][0]) || a[9] || a[0], aen: (PEN[i] && PEN[i][1]) || AEN(a[4]), sen: (PEN[i] && PEN[i][2]) || "", pg: (PEN[i] && PEN[i][3]) || "" }));
 const pnorm = s => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/[\s\-‐‑–—・･'’.,()（）]/g, "");   // 英語(ō→o・空白・ハイフン無視)でも引けるように。濁点(U+3099)は残す;   // ケ/ヶ/ヵの表記ゆれもそろえる   // カタカナ→ひらがなにそろえる(場所の検索だけ)
 const placeItems = places.map(p => ({ t: "p", p, name: pnorm(p.name), key: [p.name, p.name.replace(/駅$/, ""), ...(p.alias ? p.alias.split("|") : []), p.pe, p.pe.replace(/\bSta\./g, "Station")].map(pnorm).join("|") }));
 // 地名は「代表地点」、施設は「所在地」、駅は「駅の位置」として区別して案内する
-const pkind = p => p.type === "地名" ? "Representative point" : p.type === "駅" ? "approx. location" : p.type === "店舗" ? "Shop location" : "Address";
-const ptip = p => p.type === "地名" ? "Moved the map to this area's representative point (not necessarily its center). " : p.type === "駅" ? "Moved the map to the station (approximate location). " : p.type === "店舗" ? "Moved the map near the shop (approximate location). Shops may have closed, moved or be temporarily closed; check official information for opening hours. " : "Moved the map near the facility (not necessarily its entrance). ";
+const pkind = p => p.type === "現在地" ? "approx. position" : p.type === "地名" ? "Representative point" : p.type === "駅" ? "approx. location" : p.type === "店舗" ? "Shop location" : "Address";
+const ptip = p => p.type === "現在地" ? "Your location is used only on this device and never sent to a server. Accuracy depends on your device. " : p.type === "地名" ? "Moved the map to this area's representative point (not necessarily its center). " : p.type === "駅" ? "Moved the map to the station (approximate location). " : p.type === "店舗" ? "Moved the map near the shop (approximate location). Shops may have closed, moved or be temporarily closed; check official information for opening hours. " : "Moved the map near the facility (not necessarily its entrance). ";
 const placeSub = p => [PT_EN[p.type] || p.type, CAT_EN[p.cat] || p.cat, subEn(p), p.aen].filter(Boolean).join(" · ");
 function setPin(p) {
   clearPin();
   placePin = L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "placepin", html: "<span></span>", iconSize: [32, 32], iconAnchor: [16, 30] }), interactive: false, keyboard: false, zIndexOffset: 500 }).addTo(map);
   placePin.bindTooltip(esc(p.pe) + "<br><span class=\"ja\" lang=\"ja\">" + esc(p.name) + "</span>", { permanent: true, direction: "top", offset: [0, -30], className: "placetip" }).openTooltip();
 }
-function clearPin() { if (placePin) { placePin.remove(); placePin = null; } }
+let locCircle = null;
+function clearPin() { if (placePin) { placePin.remove(); placePin = null; } if (locCircle) { locCircle.remove(); locCircle = null; } }
 function nearStops(p) {
   const by = new Map();
   stops.forEach(s => { const d = Math.hypot((s.lon - p.lon) * 91000, (s.lat - p.lat) * 111000), o = by.get(s.name);
@@ -682,7 +761,7 @@ let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻�
 places.forEach((p, i) => p.i = i);
 const AREA_ORDER = ["釧路市", "河東郡音更町", "中川郡幕別町", "中川郡本別町", "中川郡池田町", "根室市", "釧路郡釧路町", "十勝郡浦幌町", "河東郡士幌町", "河東郡上士幌町", "厚岸郡厚岸町", "広尾郡広尾町", "野付郡別海町", "白糠郡白糠町", "足寄郡足寄町", "阿寒郡鶴居村", "広尾郡大樹町", "川上郡標茶町", "足寄郡陸別町"];
 const jaCmp = new Intl.Collator("ja").compare;
-function browseOpen(sheet) { hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function browseOpen(sheet) { setHash(""); hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
 function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
 function showAreaIndex() {
   browseOpen(); placeBack = null;
@@ -765,23 +844,41 @@ function showLine(i) {
 function showPlace(p, opt) {
   hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
   if (isMobile()) setSheet("mid");
-  setCur([]); paint(); setPin(p); map.closePopup();
+  setCur([]); paint(); setPin(p); map.closePopup(); if (p.i >= 0) setHash("place=" + p.name);
   const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
   if (!(opt && opt.noMove) || map.getZoom() < pz) focusTo(pll, pz);   // 系統の広域表示から戻った時も、周辺へ寄せ直す
   else ensureVisible(pll);
   const ns = nearStops(p);
   render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${pnm(p)}</h2>
   <div class="meta"><span class="pill">${esc(PT_EN[p.type] || p.type)} · ${p.cat ? esc(CAT_EN[p.cat] || p.cat) + " · " : ""}${pkind(p)}</span><span class="nw">${esc([subEn(p), p.aen].filter(Boolean).join(", "))}</span></div>
+  ${p.i >= 0 ? ACTS(p.name, p.pe || p.en || "", p.lat, p.lon, "place") : ""}
   <p class="tip">${ptip(p)}Tap a nearby stop to see its routes.</p>
   <div class="lh">${ns.far ? "Few bus stops nearby (nearest first)" : "Nearby bus stops (nearest first)"}</div>
-  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${nm(x.s)}</span><small>approx. ${Math.max(10, Math.round(x.d / 10) * 10)} m · ${x.s.rts.length} ${P(x.s.rts.length, "route", "routes")}</small></button>`).join("")}${NOTE}`,
+  ${ns.list.map(x => `<button class="rt" type="button" data-s="${x.s.i}"><span>${nm(x.s)}</span><small>approx. ${Math.max(10, Math.round(x.d / 10) * 10)} m · ${x.s.rts.length} ${P(x.s.rts.length, "route", "routes")}</small></button>`).join("")}${p.i >= 0 ? EXTS(p.lat, p.lon, p.name) : ""}${NOTE}`,
   `${p.pe} · nearby stops`);
+  bindActs();
   const pbk = document.getElementById("bk");
   if (placeBack) { pbk.textContent = placeBack.label; pbk.onclick = placeBack.fn; } else pbk.onclick = home;   // 一覧から開いた時は、その一覧へ戻る
   pbody.querySelectorAll(".rt[data-s]").forEach(b => b.onclick = () => { const s = stops[+b.dataset.s]; showStop(s, { center: true, zoom: Math.max(map.getZoom(), 16) }); ensureVisible(L.latLng(s.lat, s.lon)); });
 }
+// ---- 現在地の近くのバス停：押した時だけ位置を1回取得。端末の中だけで使い、送らず・保存しない ----
+const toastEl = document.createElement("div"); toastEl.id = "toast"; toastEl.setAttribute("role", "status"); toastEl.setAttribute("aria-live", "polite"); toastEl.hidden = true; document.getElementById("main").appendChild(toastEl);
+let toastT = 0;
+function toast(t) { toastEl.textContent = t; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toastEl.hidden = true; }, 6000); }
+function locateMe() {
+  if (!navigator.geolocation) { toast("Location is not available. Try searching by a place or station name."); return; }
+  toast("Finding your location…");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude, acc = pos.coords.accuracy || 0;
+    const p = { i: -1, name: "現在地", pe: "Your location", en: "", type: "現在地", lat, lon, area: "", aen: "", sub: "", sen: "", cat: "", alias: "" };
+    const ns = nearStops(p);
+    if (!ns.list.length || ns.list[0].d > 8000) { toast("You seem to be outside this map. Choose a nearby map from the region list."); return; }   // この地図の範囲の外(近くにバス停が1つも無い)
+    toastEl.hidden = true; placeBack = null; showPlace(p);
+    if (acc > 0) locCircle = L.circle([lat, lon], { radius: Math.min(acc, 2000), color: "#1a73e8", weight: 1, fillOpacity: .1, interactive: false }).addTo(map);
+  }, () => toast("Location is not available. Try searching by a place or station name."), { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+}
 function showRoute(r) {
-  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup();
+  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup(); setHash("route=" + D.ops[r.op] + "|" + r.name);
   setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
   paint();
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
@@ -908,7 +1005,7 @@ q.onkeydown = e => {
 document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
 const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "Search places & stops" : "Search places, stops, routes") : isMobile() ? "Search places & stops" : "Search places, stops, routes"; };   // 狭い画面では短く
 setPh(); mqMobile.addEventListener("change", setPh);
-home();
+hashLock = true; try { home(); } finally { hashLock = false; }   // 起動時のホームは、URLのhashを消さない(共有リンクで開いた時に readHash で復元するため)
 applySheet();
 map.invalidateSize();
 // ?at=<市町村コード> で開いた時は、その市町村のバス停の範囲へ地図を寄せる(県ページの市町村ボタン)。不明なコードは無視して既定の表示。
@@ -916,12 +1013,15 @@ map.invalidateSize();
   if (!mu) { if (isMobile()) { const z = map.getZoom(), pt = map.project(map.getCenter(), z).add([0, sheetPx("mid") / 2]); map.setView(map.unproject(pt, z), z, { animate: false }); } return; }   // スマホの既定の表示は、中心が標準のシートに隠れないよう、見える部分の中央へ
   map.fitBounds([[mu[2], mu[3]], [mu[4], mu[5]]], { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + (isMobile() ? sheetPx("mid") : 0)], maxZoom: 14, animate: false });
   const h = pbody.querySelector("h2"); if (h) h.insertAdjacentHTML("afterend", `<p class="tip">Opened “${esc(mu[1])}” from the Hokkaido page. The map shows the area of its bus stops.</p>`); })();
+if (location.hash) readHash(); addEventListener("popstate", () => { closeShowJa(); if (!readHash()) { hashLock = true; try { home(); } finally { hashLock = false; } } });
+syncLangHash();
 // 言語の切り替えボタンは、今の ?at= などを引き継ぐ
 document.querySelectorAll("a.lang").forEach(a => { a.href += location.search; });
 // 見出し(地域名＋Bus Map)が収まらない狭い画面では「Bus Map」を省く
 // それでも収まらない時は、地域名を短い名前(en.short)にする(2026-11-01・Okinawa Main Island 等)
 const fitH1 = () => { const h = document.querySelector("header h1"); if (!h) return; const n = h.querySelector(".h1n"); if (n) { n.dataset.full = n.dataset.full || n.textContent; n.textContent = n.dataset.full; } h.classList.remove("cut"); if (h.scrollWidth > h.clientWidth + 1) { h.classList.add("cut"); if (n && h.scrollWidth > h.clientWidth + 1) n.textContent = n.dataset.short; } };
 fitH1(); addEventListener("resize", fitH1);
+syncLangHash();
 </script>
 </body>
 </html>
