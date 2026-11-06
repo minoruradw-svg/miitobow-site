@@ -247,7 +247,8 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </header>
 
 <!-- ===== 固定レイヤー：ワールド＋カメラ ===== -->
-<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bub" id="lfBub"></div></div></div>
+<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div>
+<div class="zvfull" data-zm="thx" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true">
   <canvas id="gridc"></canvas>
   <div id="world">
@@ -319,7 +320,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
   <div class="qc hand" id="hand"><div class="in"><small>基本クエスト</small></div></div>
 </div>
 <div class="tapdone" id="tapDone"><span>クエストができた！</span><button class="again" id="tapAgain" type="button">もう一度</button></div>
-<button class="taphint" id="tapHint" type="button" aria-label="クエスト追加を押してみる"><i class="r1"></i><i class="r2"></i><span class="lb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 013 0V10l5.2 1.1A2 2 0 0118.8 13l-.7 6a2 2 0 01-2 1.8H11a2 2 0 01-1.6-.8L5 14.5a1.4 1.4 0 012.1-1.8L9 14.4z" fill="#fff" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg>ここ押してみてね</span></button>
+<button class="taphint" id="tapHint" type="button" aria-label="クエスト追加を押してみる"><i class="r1"></i><i class="r2"></i><span class="lb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 013 0V10l5.2 1.1A2 2 0 0118.8 13l-.7 6a2 2 0 01-2 1.8H11a2 2 0 01-1.6-.8L5 14.5a1.4 1.4 0 012.1-1.8L9 14.4z" fill="#fff" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg><span class="lbt">ここ押してみてね</span></span></button>
 
 <main>
 <!-- ===== ファーストビュー ===== -->
@@ -341,21 +342,20 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== S2 毎日のやることがクエストに ===== -->
-<section class="chapter" data-ch="s2" id="features" style="height:340vh">
-  <div class="pin"><div class="card">
-    <p class="no">01 — QUEST</p>
-    <h2 class="sr">毎日のやることが、クエストになる。</h2>
-    <div class="zv" data-zm="quest" aria-hidden="true"></div>
-    <p class="txt"><span class="nb">買い物も、</span><span class="nb">筋トレも、</span><span class="nb">洗濯も。</span><span class="nb">名前をつけるだけで、</span><span class="nb">巻物のクエストに。</span><span class="nb">達成すると、</span><span class="nb">ハンコが残ります。</span></p>
-    <p class="sm">カードはアプリの画面を再現したイメージです。</p>
+<section class="chapter" data-ch="s2" id="features" style="height:300vh">
+  <div class="pin"><div class="card qwrap">
+    <h2 class="sr">毎日のやることが、クエストになる。買い物も、筋トレも、洗濯も。名前をつけるだけで、巻物のクエストに。達成すると、ハンコが残ります。</h2>
+    <div class="qa" aria-hidden="true"><span class="qh">毎日のやることが、<br>クエストになる。</span><span class="qs1">名前をつけるだけ。</span><span class="qs2">達成すると、ハンコが残る。</span></div>
+    <p class="qnote">カードはアプリの画面を再現したイメージです。</p>
   </div></div>
 </section>
 
 <!-- ===== 体験デモ ===== -->
-<section class="demo" data-ch="demo" aria-labelledby="demoH">
+<section class="demo" aria-labelledby="demoH">
   <div>
     <p class="no">TRY IT</p>
-    <h2 id="demoH">さわって、クエストにしてみる。</h2>
+    <h2 class="sr" id="demoH">さわって、クエストにしてみる。</h2>
+    <div class="zv" data-zm="try" aria-hidden="true"></div>
     <p class="txt" id="dtxt" aria-live="polite">「クエストにする」を押す</p>
     <div class="dbox">
       <div class="dstage" id="dstage">
@@ -382,26 +382,30 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== S4 お願い ===== -->
-<section class="chapter" data-ch="s4" style="height:420vh">
+<section class="chapter" data-ch="s4" style="height:520vh">
   <div class="pin"><div class="card">
     <p class="no">03 — REQUEST</p>
-    <h2>家族やパートナーに、<br>お願いする。</h2>
-    <p class="txt">やってほしいことを、クエストにして送れます。届いたら、相手は返事をするだけ。</p>
-    <ol class="s4steps" id="s4steps" aria-hidden="true"><li class="on"><b>1</b>あなたが送る</li><li><b>2</b>相手に届く</li><li><b>3</b>相手が受ける</li></ol>
-    <p class="step" aria-hidden="true"><i></i><span id="s4step">あなたが「ゴミ出し」をお願いする</span></p>
+    <h2 class="sr">家族やパートナーに、お願いする。</h2>
+    <div class="zv" data-zm="req" aria-hidden="true"></div>
+    <p class="txt"><span class="nb">やってほしいことを、</span><span class="nb">クエストにして送れます。</span><span class="nb">届いたら、</span><span class="nb">相手は返事をするだけ。</span></p>
+    <div class="v9only"><ol class="s4steps" id="s4steps" aria-hidden="true"><li class="on"><b>1</b>あなたが送る</li><li><b>2</b>相手に届く</li><li><b>3</b>相手が受ける</li></ol>
+    <p class="step" aria-hidden="true"><i></i><span id="s4step">あなたが「ゴミ出し」をお願いする</span></p></div>
   </div></div>
 </section>
 
 <!-- ===== S5 達成とありがとう ===== -->
-<section class="chapter" data-ch="s5" style="height:480vh">
+<section class="chapter" data-ch="s5" style="height:520vh">
   <div class="pin"><div class="card">
-    <p class="no">04 — THANKS</p>
-    <div id="s5a"><h2>達成したら、<br>ハンコがポン。</h2>
-    <p class="txt">お願いが達成されると、クエストにCLEARのハンコが押されます。</p></div>
-    <div id="s5b" style="display:none"><h2><span class="rv" id="rv">ありがとう</span>を、<br>届ける。</h2>
-    <p class="txt">お礼のスタンプとひとことを返して、気持ちも一緒に届けます。</p></div>
-    <p class="step" aria-hidden="true"><i></i><span id="s5step">お願いが達成された</span></p>
+    <h2 class="sr">ありがとうを、届ける。達成したら、ハンコがポン。</h2>
+    <div class="v9only"><div id="s5a"><h2>達成したら、<br>ハンコがポン。</h2><p class="txt">お願いが達成されると、クエストにCLEARのハンコが押されます。</p></div>
+    <div id="s5b" style="display:none"><h2><span class="rv" id="rv">ありがとう</span>を、<br>届ける。</h2><p class="txt">お礼のスタンプとひとことを返して、気持ちも一緒に届けます。</p></div>
+    <p class="step" aria-hidden="true"><i></i><span id="s5step">お願いが達成された</span></p></div>
   </div></div>
+</section>
+
+<!-- ===== 夜（ミートボーの生活の場面）→ 紹介動画へ ===== -->
+<section class="chapter" data-ch="bed" style="height:220vh">
+  <div class="pin"><div class="card"><h2 class="sr">寝る前に、あれ、やったっけ。</h2></div></div>
 </section>
 
 <div class="after" id="after">
@@ -419,7 +423,8 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
   <!-- ===== S7 ダウンロード ===== -->
   <section class="closing" data-ch="s7">
     <img class="app" src="assets/icon_192.webp" alt="パパクエ" width="96" height="96" loading="lazy">
-    <h2>人生が、<span class="gt">パパッと</span><br>クエストになる。</h2>
+    <h2 class="sr">人生が、パパッとクエストになる。</h2>
+    <div class="zv zvdl" data-zm="dl" aria-hidden="true"></div>
     <p>今日のやることを、冒険の一歩に。</p>
     <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a>
     <span class="sub">iPhone専用・iOS 15.5以降</span>
@@ -613,6 +618,56 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
   .lf-bub { left: auto; right: -2%; top: -20%; font-size: clamp(26px, 7vw, 40px); }
   .taphint .lb { font-size: 15px; padding: 10px 14px 10px 11px; }
 }
+</style>
+<style>
+/* v10 第2段：03 REQUEST以降＋TRY＋夜＋DLも「場面の交代」。押して進める */
+.v9only { display: none !important; }
+[data-ch="s4"] .pin, [data-ch="s5"] .pin, [data-ch="bed"] .pin { justify-content: center; align-items: center; padding: 56px var(--gx) 0; text-align: center; }
+[data-ch="s4"] .card, [data-ch="s5"] .card, [data-ch="bed"] .card { width: min(1280px, 100%); opacity: var(--vis, 0); transform: translateY(calc((1 - var(--vis, 0)) * 22px)) scale(calc(1 - var(--hv, 0) * .75)); }
+[data-ch="s4"] .card .txt { font-size: clamp(18px, 1.55vw, 26px); color: #343a36; font-weight: 500; max-width: 34em; margin: clamp(10px, 2vh, 22px) auto 0; line-height: 1.75; text-wrap: balance; }
+[data-ch="s4"] .no { color: #3d433f; font-size: 15px; margin-bottom: 6px; }
+.zvfull { position: fixed; inset: 0; z-index: 4; opacity: 0; visibility: hidden; pointer-events: none; }
+.zvfull video, .zvfull img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(1.02); }
+.demo .zv { margin: 0 auto 6px; width: min(100%, calc(46vh * 2.625)); }
+.demo .no { font-size: 15px; color: #3d433f; margin-bottom: 4px; }
+.demo .txt { font-size: clamp(18px, 1.55vw, 26px); font-weight: 700; color: #17323a; margin-top: 6px; }
+.closing .zv { margin: 0 auto 20px; width: min(100%, calc(46vh * 2.625)); }
+@media (min-width: 1000px) { .dbox { zoom: 1.3; } .s4bar { display: none !important; } }
+@media (max-width: 999px) {
+  [data-ch="s4"] .pin, [data-ch="s5"] .pin, [data-ch="bed"] .pin { padding: 56px 20px 0; }
+  [data-ch="s4"] .card .txt { font-size: 16px; line-height: 1.7; margin-top: 6px; }
+  [data-ch="s4"] { height: 520vh !important; height: 520svh !important; } [data-ch="s5"] { height: 520vh !important; height: 520svh !important; } [data-ch="bed"] { height: 220vh !important; height: 220svh !important; }
+  
+  .demo .zv, .closing .zv { aspect-ratio: 5 / 4; width: 100%; }
+}
+
+</style>
+<style>
+/* v10 第3段：FVの文字の動画 → すぐ スマホ＋巻物3枚。空いているスペースに必要な一言だけ。TRYは削除（ADDとTHANKSで触れるため重複） */
+.demo { display: none !important; }
+.hero { height: 170vh; height: 170svh; }
+.qwrap { position: absolute; inset: 0; width: auto !important; opacity: 1 !important; transform: none !important; text-align: left; pointer-events: none; }
+.qwrap span { display: block; }
+.qa { position: absolute; left: max(24px, calc(var(--gx) * .55)); top: calc(64px + 5.5vh); margin: 0; line-height: 1.3; }
+.qh { font-size: clamp(24px, 2.15vw, 40px); font-weight: 900; color: #17323a; opacity: var(--q1, 0); transform: translateY(calc((1 - var(--q1, 0)) * 16px)); }
+.qs1 { margin-top: 12px; font-size: clamp(15px, 1.2vw, 21px); font-weight: 700; color: #343a36; opacity: var(--q2, 0); transform: translateY(calc((1 - var(--q2, 0)) * 12px)); }
+.qs2 { margin-top: 4px; font-size: clamp(15px, 1.2vw, 21px); font-weight: 900; color: #1e9a70; opacity: var(--q3, 0); transform: translateY(calc((1 - var(--q3, 0)) * 12px)); }
+.qnote { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; text-align: center; font-size: 12px; color: #4a504b; opacity: var(--q3, 0); }
+@media (max-width: 999px) {
+  .hero { height: 170vh; height: 170svh; }
+  [data-ch="s2"] { height: 300vh !important; height: 300svh !important; }
+  .qa { left: 0; right: 0; top: 62px; text-align: center; line-height: 1.25; }
+  .qh { font-size: clamp(18px, 5vw, 24px); } .qh br { display: none; }
+  .qs1, .qs2 { display: inline; margin: 0; font-size: clamp(12px, 3.5vw, 15px); } .qs1 { display: block; margin-top: 6px; } .qs2 { display: inline; }
+  .qnote { bottom: 6px; font-size: 11px; }
+}
+</style>
+<style>
+.lf-bubw { position: absolute; left: -50vw; right: -50vw; top: auto; bottom: calc(100% - 4px); padding-bottom: 18px; display: flex; justify-content: center; pointer-events: none; }
+.lf-bub { position: relative !important; left: auto !important; right: auto !important; top: auto !important; transform-origin: 50% 100%; }
+.lf-bub::after { left: 50% !important; margin-left: -11px; }
+#life { padding-top: clamp(80px, 13vh, 130px); } #lfImg { height: min(48vh, 540px); }
+@media (max-width: 999px) { #life { padding-top: 80px; } #lfImg { height: min(37vh, 330px); } }
 </style>
 <script src="app.js?v=10"></script>
 </body>

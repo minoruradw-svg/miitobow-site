@@ -23,9 +23,18 @@
   const L = { B: $("s1Board"), L: $("s1Lock"), A: $("s1Add"), P: $("s1Party") };
   let W = innerWidth, H = innerHeight, M = W < 1000, PW = 330, PH = 680, MW = 155, MH = 150, MB = {};
   /* ミートボーの生活の場面：画像・セリフは、ここ1か所で差し替える（秘書が新しい生活シーン画像を作ったら src だけ変える） */
-  const LIFE = { s3: { src: "assets/mascot_still.webp", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" } };
+  const LIFE = {   // ミートボーの生活の場面。src を差し替えれば絵が変わる（キー＝章：s2=01 QUEST／s3=02 ADD／s5=03 REQUEST／s6=04 THANKS／s7=夜）
+    s2: { src: "assets/mascot_still.webp", alt: "", label: "洗濯物を干しながら", bubble: "やること、いっぱい" },
+    s3: { src: "assets/life/life_s3.png", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" },
+    s5: { src: "assets/life/life_s5.png", alt: "", label: "夜、家でひと息", bubble: "ゴミ出し、お願い！" },
+    s6: { src: "assets/life/life_s6.png", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
+    s7: { src: "assets/life/life_s7.png", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
+  const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
+  const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.12, .22, .70, .82] };   // [出始め, 出きる, 消え始め, 消えきる]
+  /* 触れる場面の窓（スクロール進行度）。文字の場面が縮んで消える窓 hv／スマホが入る窓 ph／スマホが出ていく開始 out */
+  const WIN = { s2: { hv: [.18, .26] }, s3: { hv: [.20, .30] }, s4: { hv: [.10, .18], ph: [.50, .62], out: .95 }, s5: { hv: [.10, .18], ph: [.50, .62], out: .95 }, bed: { hv: [0, 0] } };
   /* 文字の場面＝よそおいモーションで書き出した動画（PC=16:9 / スマホ=9:16）。構成表は v10/zukai/ */
-  const ZV = { fv: { pc: "assets/zm/fv_pc.mp4", sp: "assets/zm/fv_sp.mp4", end: "assets/zm/fv_pc_end.jpg", endSp: "assets/zm/fv_sp_end.jpg" }, quest: { pc: "assets/zm/quest_pc.mp4", sp: "assets/zm/quest_sp.mp4", end: "assets/zm/quest_pc_end.jpg", endSp: "assets/zm/quest_sp_end.jpg" }, add: { pc: "assets/zm/add_pc.mp4", sp: "assets/zm/add_sp.mp4", end: "assets/zm/add_pc_end.jpg", endSp: "assets/zm/add_sp_end.jpg" } };
+  const ZV = { req: { pc: "assets/zm/req_pc.mp4", sp: "assets/zm/req_sp.mp4", end: "assets/zm/req_pc_end.jpg", endSp: "assets/zm/req_sp_end.jpg" }, thx: { pc: "assets/zm/thx_pc.mp4", sp: "assets/zm/thx_sp.mp4", end: "assets/zm/thx_pc_end.jpg", endSp: "assets/zm/thx_sp_end.jpg" }, dl: { pc: "assets/zm/dl_pc.mp4", sp: "assets/zm/dl_sp.mp4", end: "assets/zm/dl_pc_end.jpg", endSp: "assets/zm/dl_sp_end.jpg" }, fv: { pc: "assets/zm/fv_pc.mp4", sp: "assets/zm/fv_sp.mp4", end: "assets/zm/fv_pc_end.jpg", endSp: "assets/zm/fv_sp_end.jpg" }, add: { pc: "assets/zm/add_pc.mp4", sp: "assets/zm/add_sp.mp4", end: "assets/zm/add_pc_end.jpg", endSp: "assets/zm/add_sp_end.jpg" } };
   /* 触れる体験（02 ADD＝ロック画面の「クエスト追加」を押す）の時間管理 */
   const TAP = { st: 0, t0: 0, add: 0, last: 0, ring: 0, ringT: 0, goRip: 0, goT: 0, go: 0, chars: 0, u3: 0, out3: 0, nq: 0, pop: 0 };
   const G = { XL: 0, car: { x: 0, y: 60 }, rq: { x: 0, y: 0 }, P2x: 1500, P2y: 0, s4: 1.12, sx0: 0, scrW: 0, scrH: 0, sq: { x: 0, y: -60, w: 200, h: 80 }, wg: { x: 80, y: -130 }, ig: { x: -20, y: 30 }, nq: { x: 0, y: 120 }, sc: 1, yc: 450 };
@@ -59,6 +68,7 @@
     const dc0 = $("dcard"); hand.style.width = dc0.offsetWidth + "px"; hand.style.height = dc0.offsetHeight + "px"; hand.style.margin = `${-dc0.offsetHeight / 2}px 0 0 ${-dc0.offsetWidth / 2}px`;
     W = innerWidth; H = innerHeight; M = W < 1000; PW = ph1.offsetWidth; PH = ph1.offsetHeight; MW = mas.offsetWidth; MH = mas.offsetHeight;
     { const px = parseFloat(getComputedStyle(document.querySelector('[data-ch="s4"] .pin')).paddingLeft) || 0, cw = Math.min(520, .42 * W); G.XL = (px + (W - px - cw - 28)) / 2; }   // S4・S5（v9のまま）用
+    if (!M) G.XL = W / 2;   // v10：どの章でもスマホは真ん中
     G.tl5 = M ? W * .6 : G.XL + 520;
     const sy = scrollY = window.scrollY;
     tops = chEls.map(e => e.getBoundingClientRect().top + sy); hs = chEls.map(e => e.offsetHeight);
@@ -66,6 +76,7 @@
     MB = {};
     { const hdr = M ? 56 : 64; G.sc = M ? Math.min((H - hdr - 84) / PH, .92 * W / PW) : Math.min(.82 * H / PH, 1.5); G.yc = M ? hdr + 8 + PH * G.sc / 2 : .5 * H + 24; }   // スマホの場面：主役が真ん中（PCは画面高の約84％）
     if (M) ["s2", "s3", "s4", "s5"].forEach(id => { const c = cards[IDX[id]]; MB[id] = 76 + (c ? c.offsetHeight : 180); });
+    if (M) { MB.s4 = 156; MB.s5 = 150; }   // 文字の場面は動画になったので、スマホ幅のS4/S5は v9 と同じ位置に固定
     G.s4 = M ? 1.0 : 1.02; G.P2x = M ? 0 : 1500; G.P2y = M ? 900 : 0;
     G.sx0 = .042 * PW; G.scrW = PW - 2 * G.sx0; G.scrH = PH - 2 * G.sx0;
     const so = screenEl.offsetTop, sl = screenEl.offsetLeft;                      // 画面(.screen)のスマホ内位置
@@ -87,22 +98,20 @@
   const yPhone = (id, s, gap) => MB[id] + gap + PH * s / 2;
   const MFV = 442;   // スマホ版：スマホの上端（文字→App Storeボタン→スマホ）
   function heroCam() { return M ? camFor(.5 * W, MFV + PH / 2, 1, 0, 0) : camFor(.715 * W, .56 * H, 1, 0, 0); }
-  function heroState(y) {   // FV：文字の場面（動画）→スマホの場面（画面の真ん中）
-    const o = base(), a = o4(seg(y, .42, .86));
-    setCam(o, camFor(.5 * W, G.yc, 1, 0, 0)); o.cy += (1 - a) * .32 * H;
-    o.p1s = lerp(.55, 1, a) * G.sc; o.p1ry = -34 * (1 - a); o.p1rx = 6 * (1 - a); o.p1op = sm(seg(y, .42, .66)); o.glow = a; o.lB = 1; o.mop = 0; o.ms = 1; return o;
+  function heroState(y) {   // FV：文字の場面（動画）だけ。スマホは次の章で巻物と一緒に出る
+    const o = base(), c = camFor(.5 * W, G.yc, 1, 0, 0); setCam(o, c); o.p1s = G.sc; o.p1op = 0; o.lB = 1; o.mop = 0; o.ms = 1; return o;
   }
-  const S2P = [{ side: -1, y: -30, r: -5, sc: 1.45 }, { side: 1, y: -215, r: 6, sc: 1.1 }, { side: 1, y: 205, r: -4, sc: 1.1 }];
-  const S2M = [{ x: -62, y: -150, r: -6, sc: .8 }, { x: 70, y: 0, r: 5, sc: .8 }, { x: -50, y: 150, r: -3, sc: .8 }];
+  const S2P = [{ side: -1, y: 20, r: -5, sc: 1.45 }, { side: 1, y: -215, r: 6, sc: 1.1 }, { side: 1, y: 205, r: -4, sc: 1.1 }];
+  const S2M = [{ x: -62, y: -92, r: -6, sc: .72 }, { x: 72, y: 22, r: 5, sc: .72 }, { x: -52, y: 124, r: -3, sc: .72 }];
   const S2S = () => M ? { x: 0, y: 150 } : { x: -300, y: 40 };
-  function S2(p) {   // 01 QUEST：文字の場面（0〜.3）→ スマホが真ん中に出る → 巻物が飛び出す
-    const o = base(), a = o4(seg(p, .30, .48)); setCam(o, camFor(.5 * W, G.yc, 1, 0, 0)); o.cy += (1 - a) * .30 * H;
-    o.p1s = lerp(.6, 1, a) * G.sc; o.p1ry = -30 * (1 - a) - 9 * a * (1 - sm(seg(p, .5, .85))); o.p1rx = 6 * (1 - a);
-    o.p1op = sm(seg(p, .32, .5)) * (1 - sm(seg(p, .93, 1))); o.p1dim = .55 * sm(seg(p, .5, .7)); o.lB = 1;
-    o.lpar = .5 * sm(seg(p, .5, .8)) * (1 - sm(seg(p, .9, 1))); o.ca = 1 - sm(seg(p, .90, .97)); return o; }
+  function S2(p) {   // FV直後：スマホ＋巻物3枚が飛び出す（空きスペースに必要な一言）
+    const o = base(), a = sm(seg(p, 0, .12)); setCam(o, camFor(.5 * W, G.yc + (M ? 12 : 0), 1, 0, 0)); o.cy += (1 - a) * .2 * H;
+    o.p1s = G.sc * (M ? .78 : 1) * lerp(.85, 1, a); o.p1ry = -9 * (1 - sm(seg(p, .1, .5))) - 14 * (1 - a); o.p1rx = 0;
+    o.p1op = 1 - sm(seg(p, .96, 1)); o.p1dim = .4 * sm(seg(p, .1, .3)); o.lB = 1; o.glow = .6 * (1 - sm(seg(p, .1, .3)));
+    o.lpar = .5 * sm(seg(p, .1, .4)) * (1 - sm(seg(p, .9, 1))); o.ca = 1 - sm(seg(p, .93, .985)); return o; }
   function DEMO() { const o = S2(1); o.p1op = 0; o.ca = 0; o.lpar = 0; return o; }
   function base3() { return M ? camFor(.5 * W, yPhone("s3", .92, 26), 1, 0, 0) : camFor(G.XL, .5 * H, 1, 0, 0); }
-  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, 0, 0) : camFor(.64 * W, .5 * H + 32, 1, 0, 0); }
+  function base4() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, 0, 0) : camFor(.5 * W, .5 * H + 32, 1, 0, 0); }
   function S3(p) {   // 02 ADD：文字の場面 → ミートボーの生活の場面 → スマホの場面（押してみる）
     const o = base(), a = o4(seg(p, .52, .66)); setCam(o, camFor(.5 * W, G.yc, 1, 0, 0)); o.cy += (1 - a) * .30 * H;
     o.p1s = lerp(.6, 1, a) * G.sc; o.p1ry = -34 * (1 - a); o.p1rx = 6 * (1 - a); o.p1op = sm(seg(p, .54, .68)) * (1 - sm(seg(p, .92, 1)));
@@ -112,15 +121,15 @@
     const c = M ? { x: a.x + 110, y: (a.y + b.y) / 2 } : { x: (a.x + b.x) / 2, y: a.y - 390 }; return [a, c, b]; }
   const bez = (P, e) => { const k = 1 - e; return { x: k * k * P[0].x + 2 * k * e * P[1].x + e * e * P[2].x, y: k * k * P[0].y + 2 * k * e * P[1].y + e * e * P[2].y }; };
   const bezT = (P, e) => { const k = 1 - e; return Math.atan2(2 * k * (P[1].y - P[0].y) + 2 * e * (P[2].y - P[1].y), 2 * k * (P[1].x - P[0].x) + 2 * e * (P[2].x - P[1].x)); };
-  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, G.P2x, G.P2y) : camFor(.64 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
+  function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, G.P2x, G.P2y) : camFor(.5 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
   function S4(p) { const o = base(), A = base4(), D = camD(), P = flightPts(), e = io5(seg(p, .32, .64)), ec = io5(seg(p, .35, .66));
     let cx = lerp(A.cx, D.cx, ec), cy = lerp(A.cy, D.cy, ec), cs = 1, cr = 0; const B = bez(P, e);
     if (!M) cy = lerp(A.cy, D.cy, 0) + (B.y - P[0].y) * .35 * (e > 0 && e < 1 ? 1 : (e >= 1 ? 1 : 0)); else cx = (B.x - P[0].x) * .4 * bell(e);
     cs = p < .32 ? lerp(1, M ? .96 : .94, io3(seg(p, .22, .32))) : (M ? 1 - .12 * bell(e) : .94 - .16 * bell(e));
     if (p >= .64) { cs = lerp(M ? .96 : .94, 1, io3(seg(p, .64, .74))); }
-    if (!RM && !M) cr = p < .64 ? -1.2 + 2.4 * e : lerp(1.2, 0, io3(seg(p, .64, .74)));
+    if (!RM && !M) cr = p < .64 ? (-1.2 + 2.4 * e) * sm(seg(p, .12, .3)) : lerp(1.2, 0, io3(seg(p, .64, .74)));
     if (!M && p >= .64) cy = lerp(cy, 0, io3(seg(p, .64, .74)));
-    const z = io3(seg(p, .74, .84)); cs = lerp(cs, M ? 1 : 1.15, z); if (!M) cy = lerp(cy, -60, z);
+    const z = io3(seg(p, .74, .84)); cs = lerp(cs, M ? 1 : 1.05, z); if (!M) cy = lerp(cy, -20, z);
     setCam(o, { cx, cy, cs, cr }); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = sm(seg(p, .22, .32)) * .9; o.lB = 0; o.lP = 1; o.p2op = 1; o.p2y = G.P2y + 4 * bell(seg(p, .74, .78));
     o.lgrn = .5 * bell(seg(p, .32, .64)); o.lpar = p >= .64 ? .4 * bell(seg(p, .64, .82)) : 0; o.lparx = G.P2x; o.lpary = G.P2y; return o; }
   // S5：ハンコ→ありがとうスタンプ
@@ -140,9 +149,16 @@
     if (!RM) { const u = seg(p, .185, .23); if (u > 0 && u < 1) c.cy += Math.sin(u * 3 * Math.PI) * (1 - u) * 4; }
     setCam(o, c); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = 0; o.lB = 0; o.lP = 1; o.p2op = 1;
     o.lgld = (.5 * sm(seg(p, .185, .22)) * lerp(1, .4, sm(seg(p, .22, .40)))) * (1 - sm(seg(p, .94, 1))); o.lgrn = Math.min(.5, .4 * bell(seg(p, .36, .50)) + .5 * bell(seg(p, .58, .80)));
-    o.mx = G.P2x - PW * G.s4 / 2 - MW * .66; o.my = G.P2y + PH * G.s4 / 2 - MH * .85 + 4; o.mop = sm(seg(p, .95, .985)); o.ms = .85; return o; }
+    o.mx = G.P2x - PW * G.s4 / 2 - MW * .66; o.my = G.P2y + PH * G.s4 / 2 - MH * .85 + 4; o.mop = 0; o.ms = .85; return o; }
   function OUT() { const o = S5(1); o.p1op = 0; o.p2op = 0; o.mop = 0; o.ca = 0; o.lgld = 0; o.lgrn = 0; return o; }
-  const FN = { s2: S2, demo: DEMO, s3: S3, s4: S4, s5: p => S5(w5(p)), s6: OUT, s7: OUT };
+  /* 押して進める：v9の時間軸(0〜1)を、スクロールでなく「押した」あとの時間で進める。stops＝止まる位置、dur＝各区間の秒数、auto＝自動で進む区間 */
+  const STG = {
+    s4: { v: 0, i: 0, anim: null, stops: [0, .78, 1], dur: [5.2, 3.2], auto: [false, false], lab: ["ここ押してみてね", "「了解」を押してみてね"], done: "お願いが届いた！", tgt: () => [sendStatus, okBtn] },
+    s5: { v: 0, i: 0, anim: null, stops: [0, .10, .47, .73, 1], dur: [1.3, 4.6, 4.4, 4.6], auto: [true, false, false, false], lab: ["", "「達成」を押してみてね", "ここ押してみてね", "ここ押してみてね"], done: "ありがとうが届いた！", tgt: () => [null, pop5ok, thxBtnEl, sbtn] } };
+  const vReq = () => (scrollY > tops[IDX.s5] - H) ? 1 : STG.s4.v;
+  const phWin = (u, id) => { const w = WIN[id]; return o4(seg(u, w.ph[0], w.ph[1])) * (1 - sm(seg(u, w.out, 1))); };
+  function scene45(o, u, id) { const w = WIN[id], a = o4(seg(u, w.ph[0], w.ph[1])), k = a * (1 - sm(seg(u, w.out, 1))); o.p1op *= k; o.p2op *= k; o.cy += (1 - a) * .28 * H; o.ca = 0; return o; }
+  const FN = { s2: S2, demo: DEMO, s3: S3, s4: u => scene45(S4(vReq()), u, "s4"), s5: u => scene45(S5(STG.s5.v), u, "s5"), bed: OUT, s6: OUT, s7: OUT };
   function mix(a, b, t) { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k], t); return o; }
   function globalState() {
     const first = tops[0] - H;
@@ -151,7 +167,7 @@
     const id = ids[i], p = pin(id), enter = sm(1 - (tops[i] - scrollY) / H), cur = FN[id](p);
     if (enter >= 1 || scrollY >= tops[i]) return cur;
     const prev = i === 0 ? heroState(9) : FN[ids[i - 1]](1), tgt = FN[id](0);
-    const fast = tgt.p1op < .01 && tgt.p2op < .01 ? sm(clamp(enter * 3)) : ((prev.p1op < .01 && prev.p2op < .01) ? sm(seg(enter, .6, 1)) : enter);   // スマホのない場面からは、スマホの登場を後ろ40%へ（デモに残像を出さない）
+    const fast = id === "s2" ? sm(seg(enter, .3, 1)) : tgt.p1op < .01 && tgt.p2op < .01 ? sm(clamp(enter * 3)) : ((prev.p1op < .01 && prev.p2op < .01) ? sm(seg(enter, .6, 1)) : enter);   // スマホのない場面からは、スマホの登場を後ろ40%へ（デモに残像を出さない）
     return mix(prev, tgt, fast);
   }
 
@@ -204,11 +220,11 @@
   }
   let sqSwap = false;
   function details(S, now) {
-    const p2 = pin("s2"), p3 = pin("s3"), p4 = pin("s4"), p5 = w5(pin("s5"));
+    const p2 = pin("s2"), p3 = pin("s3"), p4 = vReq(), p5 = STG.s5.v, u4 = pin("s4"), u5 = pin("s5"), ub = pin("bed");
     // ---- S2：スマホ画面から巻物が浮かび、ほどけ、奥行きをもって広がり、1本に巻き戻る ----
     const cam = { cx: S.cx, cy: S.cy };
-    qcs.forEach((c, i) => { const g = (M ? S2M : S2P)[i], k = o4(seg(p2, .52 + .10 * i, .68 + .10 * i)), ku = sm(seg(k, 0, .3)), Hs = M ? 1 : clamp(H / 900, .8, 1.3), PWs = PW * G.sc;
-      const fxp = M ? g.x : g.side * (PWs / 2 + 115 * g.sc * Hs - 45), fyp = M ? g.y : g.y * Hs, x = lerp(0, fxp, k), y = lerp(0, fyp, k), sc = lerp(.8, g.sc * (M ? 1 : Hs), k);
+    qcs.forEach((c, i) => { const g = (M ? S2M : S2P)[i], k = o4(seg(p2, .04 + .20 * i, .18 + .20 * i)), ku = sm(seg(k, 0, .3)), Hs = M ? 1 : clamp(H / 900, .8, 1.3), PWs = PW * G.sc;
+      const fxp = M ? g.x : g.side * (PWs / 2 + 115 * g.sc * Hs - 95), fyp = M ? g.y : g.y * Hs, x = lerp(0, fxp, k), y = lerp(0, fyp, k), sc = lerp(.8, g.sc * (M ? 1 : Hs), k);
       const roll = 62 * clamp(1 - ku), rx = 28 * (1 - ku) - 6 * bell(seg(k, .2, 1));
       c.style.zIndex = String(3 - i); c.style.display = S.ca * clamp(k * 6) > .01 ? "" : "none"; c.style.opacity = String(S.ca * clamp(k * 6)); c.style.clipPath = `inset(-70px -70px calc(${roll}% - 70px) -70px)`;
       c.style.transform = `translate3d(${x}px,${y}px,0) perspective(900px) rotateX(${rx}deg) rotate(${g.r * k}deg) scale(${sc})`; });
@@ -231,8 +247,6 @@
       const sx = G.ig.x * sc3, sy = G.ig.y * sc3, nx = G.nq.x * sc3, ny = G.nq.y * sc3, px3 = lerp(lerp(sx, 0, u3), nx, out3), py3 = lerp(lerp(sy, -.03 * PH * sc3, u3), ny, out3);
       pop3.style.display = TAP.st === 1 && u3 > 0 && out3 < 1 ? "" : "none"; pop3.style.opacity = String(clamp(u3 * 3) * (1 - sm(seg(out3, .5, 1))));
       pop3.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u3)}% - 70px) -70px)`; pop3.style.transform = `translate3d(${px3}px,${py3}px,0) perspective(900px) rotateX(${24 * (1 - u3)}deg) scale(${k3})`; }
-    tapUi(p3, S);
-    lifeUi(p3);
     // ---- S4：1枚のカードが私→相手へ。カメラが追う ----
     const P = flightPts(), s = G.s4, takeoff = o4(seg(p4, .22, .32)), e = io5(seg(p4, .32, .64)), land = o5(seg(p4, .64, .74));
     const sw = G.sq.w * s, sh_ = G.sq.h * s, fs = PW * .042 * s;
@@ -268,7 +282,7 @@
     flash.style.opacity = String(p5 > .185 && p5 < .23 ? (1 - seg(p5, .185, .23)) * .28 : 0);
     { const pre5 = clamp((scrollY - (tops[IDX.s5] - H * .8)) / (H * .8)), u5 = Math.max(o4(seg(p5, 0, .10)), o4(seg(pre5, .35, 1))), out5 = io3(seg(p5, .30, .36)), k = kP(), C5 = popC5(), rqx = G.P2x + G.rq.x * G.s4, rqy = G.P2y + G.rq.y * G.s4;
       const pk = lerp(.35, k, u5) * lerp(1, .35, out5), qx = lerp(lerp(rqx, C5.x, u5), rqx, out5), qy = lerp(lerp(rqy, C5.y, u5), rqy, out5);
-      pop5.style.display = (p5 > 0 || pre5 > .35) && p5 < .365 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))));
+      const kPh = phWin(pin("s5"), "s5"); pop5.style.display = (p5 > 0 || pre5 > .35) && p5 < .365 && kPh > .01 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))) * kPh);
       pop5.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u5)}% - 70px) -70px)`; pop5.style.transform = `translate3d(${qx}px,${qy + 3 * bell(seg(p5, .185, .21)) * k}px,0) perspective(900px) rotateX(${24 * (1 - u5)}deg) scale(${pk})`;
       pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); recvQ.style.opacity = String(1 - sm(clamp(u5 * 1.6)) * (1 - sm(seg(p5, .35, .37)))); }
     ltGld.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0)`; ltGrn.style.transform = `translate3d(${M ? 0 : G.P2x / 2}px,${M ? 450 : -200}px,0)`;
@@ -296,14 +310,19 @@
     if (S.mop > .5 && p5 > .955 && !s5Greeted) { s5Greeted = true; playGreeting(); }
     if (p5 < .5) s5Greeted = false;
     // ---- 章テキストの出入り ----
-    chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
-      let a = (ids[i] === 's2' || ids[i] === 's3') ? sm(clamp((scrollY - tops[i] + .8 * H) / (.4 * H))) : sm(clamp((scrollY - tops[i] + H * .14) / (H * .14))), out = ids[i] === 's5' ? 1 - sm(seg(p, .97, 1)) : ids[i] === 's3' ? 1 - sm(seg(p, .86, .91)) : 1 - sm(seg(p, .93, 1));
-      if (ids[i] === 's4') { s4Vis = a * out; a *= 1 - .98 * sm(seg(p, .24, .30)) * (M ? 1 : 1 - sm(seg(p, .68, .74))); }
-      if (ids[i] === 's5') { const q = w5(p); a *= q < .43 ? sm(seg(q, .21, .26)) * (1 - sm(seg(q, .33, .38))) : Math.min(sm(seg(q, .47, .52)), 1 - .98 * sm(seg(q, .76, .80)) * (1 - sm(seg(q, .915, .94)))); const sa = $('s5a'), sb = $('s5b'); sa.style.display = q < .43 ? '' : 'none'; sb.style.display = q < .43 ? 'none' : ''; }
-      if (ids[i] === 's2' || ids[i] === 's3') { const hv = ids[i] === 's2' ? sm(seg(p, .28, .40)) : sm(seg(p, .20, .30)); out = 1 - hv; c.style.setProperty("--hv", hv.toFixed(3)); }
-      const vv = a * out; if (vv > .5 && !c.classList.contains("on")) { c.classList.add("on"); zvPlay(ids[i], true); } else if (vv < .05 && c.classList.contains("on")) { c.classList.remove("on"); zvPlay(ids[i], false); }
+    chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const id = ids[i], p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
+      const scn = id === "s2" || id === "s3" || id === "s4" || id === "s5" || id === "bed";
+      const a = scn ? sm(clamp((scrollY - tops[i] + .8 * H) / (.4 * H))) : sm(clamp((scrollY - tops[i] + H * .14) / (H * .14)));
+      let out = 1 - sm(seg(p, .93, 1));
+      if (scn) { const hv = sm(seg(p, WIN[id].hv[0], WIN[id].hv[1])); out = id === "bed" ? 0 : 1 - hv; c.style.setProperty("--hv", hv.toFixed(3)); }
+      if (id === "s4") s4Vis = phWin(p, "s4");
+      const vv = a * out; if (id === "s5") thxVis = vv;
+      if (vv > .5 && !c.classList.contains("on")) { c.classList.add("on"); zvPlay(id, true); } else if (vv < .05 && c.classList.contains("on")) { c.classList.remove("on"); zvPlay(id, false); }
+      if (id === "s2") { const ex = 1 - sm(seg(p, .93, .985)), q = (a0, a1) => (sm(seg(p, a0, a1)) * ex).toFixed(3); c.style.setProperty("--q1", q(.06, .14)); c.style.setProperty("--q2", q(.26, .34)); c.style.setProperty("--q3", q(.46, .54)); }
       c.style.setProperty("--vis", vv.toFixed(3)); });
+    lifeFrame({ s3: p3, s4: u4, s5: u5, bed: ub }); hintFrame(S, p3, u4, u5); zvScroll(); { const tb = zvBox.thx && zvBox.thx.box; if (tb) { tb.style.opacity = String(thxVis); tb.style.visibility = thxVis > .01 ? "visible" : "hidden"; } }
   }
+  let thxVis = 0;
   let s5Greeted = false;
   if (!RM) $$(".card h2").forEach(h2 => { let n = 0; h2.setAttribute("aria-label", h2.textContent); [...h2.childNodes].forEach(nd => { if (nd.nodeType !== 3) return; const f = document.createDocumentFragment(); [...nd.textContent].forEach(ch => { const s = document.createElement("span"); s.className = "ch" + (ch === " " ? " sp" : ""); s.setAttribute("aria-hidden", "true"); s.style.setProperty("--i", n++); s.textContent = ch === " " ? "\u00a0" : ch; f.appendChild(s); }); nd.replaceWith(f); }); });
 
@@ -336,8 +355,8 @@
   }
 
   /* ---------- 文字の場面＝動画（必要になった時にJSで作る。muted / playsinline / preload=metadata） ---------- */
-  const zvBox = {}; $$(".zv[data-zm]").forEach(b => { zvBox[b.dataset.zm] = { box: b, v: null }; });
-  const zvKey = { fv: "fv", s2: "quest", s3: "add" };
+  const zvBox = {}; $$("[data-zm]").forEach(b => { zvBox[b.dataset.zm] = { box: b, v: null }; });
+  const zvKey = { fv: "fv", s3: "add", s4: "req", s5: "thx" }; const zvOn = {};
   function zvEnsure(k) {
     const z = zvBox[k]; if (!z || z.v || !ZV[k]) return z;
     if (RM) { const im = new Image(); im.alt = ""; im.src = M ? ZV[k].endSp : ZV[k].end; z.box.appendChild(im); z.v = im; return z; }
@@ -347,16 +366,20 @@
     const k = zvKey[id]; if (!k) return; const z = zvEnsure(k); if (!z || !z.v || RM) return;
     if (on) { try { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { z.v.pause(); z.v.currentTime = 0; } catch (e) {} }
   }
-  function zvPrepare() { ["quest", "add"].forEach(k => { const el = zvBox[k] && zvBox[k].box.closest(".chapter"); if (el && !zvBox[k].v && el.getBoundingClientRect().top < H * 2.2) zvEnsure(k); }); }
+  function zvPrepare() { ["add", "req", "thx"].forEach(k => { const el = zvBox[k] && (zvBox[k].box.closest(".chapter") || document.querySelector('[data-ch="s5"]')); if (el && !zvBox[k].v && el.getBoundingClientRect().top < H * 2.2) zvEnsure(k); }); }
+  function zvScroll() { [["dl", document.querySelector(".closing")]].forEach(([k, el]) => { if (!zvBox[k] || !el) return; const r = el.getBoundingClientRect(), near = r.top < H * 1.6 && r.bottom > -H * .5; if (near) zvEnsure(k); const on = r.top < H * .6 && r.bottom > H * .35; if (on !== !!zvOn[k]) { zvOn[k] = on; const z = zvEnsure(k); if (z && z.v && !RM) { try { if (on) { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } else { z.v.pause(); z.v.currentTime = 0; } } catch (e) {} } } }); }
 
-  /* ---------- ミートボーの生活の場面 ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"); let lifeSet = false;
-  function lifeUi(p3) {
-    const c = LIFE.s3; if (!lifeSet) { lifeSet = true; lfImg.src = c.src; lfImg.alt = c.alt; lfBub.textContent = c.bubble; lfLab.textContent = c.label; }
-    const a = o4(seg(p3, .27, .38)), out = sm(seg(p3, .50, .60)), op = sm(seg(p3, .27, .34)) * (1 - out), pop = o4(seg(p3, .35, .41));
-    life.style.visibility = op > .01 ? "visible" : "hidden"; life.style.opacity = String(op);
-    life.style.transform = `translateX(${-out * W * .35}px) scale(${1 - .25 * out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, a)}) translateY(${(1 - a) * 30}px)`;
-    lfLab.style.opacity = String(a); lfBub.style.opacity = String(clamp(pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, pop) * (1 + .08 * bell(seg(p3, .40, .50)))}) rotate(${(1 - pop) * -10}deg)`;
+  /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"); let lifeKey = "";
+  function lifeFrame(ps) {
+    let best = { op: 0 };
+    Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
+      if (op > best.op) best = { op, a, out, pop: o4(seg(p, w[0] + .08, w[0] + .14)), key: LIFE_CH[ch], p, t: w[0] + .13 }; });
+    if (best.op <= .01) { life.style.visibility = "hidden"; life.style.opacity = "0"; return; }
+    if (lifeKey !== best.key) { lifeKey = best.key; const c = LIFE[best.key]; lfImg.src = c.src; lfImg.alt = c.alt; lfBub.textContent = c.bubble; lfLab.textContent = c.label; }
+    life.style.visibility = "visible"; life.style.opacity = String(best.op);
+    life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
+    lfLab.style.opacity = String(best.a); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)))}) rotate(${(1 - best.pop) * -10}deg)`;
   }
 
   /* ---------- 触れる体験（02 ADD） ---------- */
@@ -374,16 +397,30 @@
     TAP.u3 = run ? o4(seg(T, 2.5, 3.3)) : 0; TAP.out3 = run ? io3(seg(T, 4.4, 5.0)) : (TAP.st === 2 ? 1 : 0);
     TAP.nq = TAP.st === 2 ? 1 : run ? sm(seg(T, 4.7, 5.2)) : 0; TAP.pop = run ? bell(seg(T, 2.5, 5.0)) : 0;
   }
-  function tapUi(p3, S) {
-    const idle = TAP.st === 0, win = o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95)));
-    const ho = idle ? win * S.p1op : 0; tapHint.style.opacity = String(ho); tapHint.style.visibility = ho > .02 ? "visible" : "hidden";
-    if (ho > .02) { const r = ripple.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; tapHint.style.transform = `translate3d(${x}px,${y}px,0)`;
-      const lb = tapHint.querySelector(".lb"); if (!hintW) hintW = lb.offsetWidth; const l = x - hintW / 2, rt = x + hintW / 2, sh = l < 8 ? 8 - l : rt > W - 8 ? W - 8 - rt : 0; tapHint.style.setProperty("--sh", sh.toFixed(1) + "px"); }
-    const dn = TAP.st === 2 && p3 > .66 && p3 < .92; tapDone.classList.toggle("on", dn);
+  const stgActive = k => { const g = STG[k]; return !g.anim && !g.auto[g.i] && g.i < g.stops.length - 1; };
+  function stgStart(k) { const g = STG[k]; if (g.anim || g.i >= g.stops.length - 1) return; g.anim = { from: g.v, to: g.stops[g.i + 1], t0: performance.now(), dur: g.dur[g.i] * 1000 }; if (RM) { g.v = g.anim.to; g.i++; g.anim = null; } }
+  function stgTick(k, now, active) { const g = STG[k];
+    if (g.anim) { const f = clamp((now - g.anim.t0) / g.anim.dur); g.v = lerp(g.anim.from, g.anim.to, f); if (f >= 1) { g.v = g.anim.to; g.i++; g.anim = null; } }
+    else if (active && g.auto[g.i] && g.i < g.stops.length - 1) stgStart(k); }
+  let hintOwner = "", doneOwner = "";
+  function hintFrame(S, p3, u4, u5) {
+    stgTick("s4", performance.now(), phWin(u4, "s4") > .5); stgTick("s5", performance.now(), phWin(u5, "s5") > .5);
+    let best = { op: 0 };
+    { const idle = TAP.st === 0, win = o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))), op = idle ? win * S.p1op : 0;
+      if (op > best.op) { const r = ripple.getBoundingClientRect(); best = { key: "s3", op, x: r.left + r.width / 2, y: r.top + r.height / 2, lab: "ここ押してみてね" }; } }
+    [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k], el = stgActive(k) ? g.tgt()[g.i] : null; if (!el) return; const wv = phWin(u, k) * o4(seg(u, WIN[k].ph[1], WIN[k].ph[1] + .05)); if (wv > best.op) { const r = el.getBoundingClientRect(); best = { key: k, op: wv, x: r.left + r.width / 2, y: r.top + r.height / 2, lab: g.lab[g.i] }; } });
+    hintOwner = best.op > .02 ? best.key : "";
+    tapHint.style.opacity = String(best.op); tapHint.style.visibility = best.op > .02 ? "visible" : "hidden";
+    if (best.op > .02) { const lt = tapHint.querySelector(".lbt"); if (lt.textContent !== best.lab) { lt.textContent = best.lab; hintW = 0; }
+      tapHint.style.transform = `translate3d(${best.x}px,${best.y}px,0)`; const lb = tapHint.querySelector(".lb"); if (!hintW) hintW = lb.offsetWidth; const l = best.x - hintW / 2, rt = best.x + hintW / 2, sh = l < 8 ? 8 - l : rt > W - 8 ? W - 8 - rt : 0; tapHint.style.setProperty("--sh", sh.toFixed(1) + "px"); }
+    let dk = "", dt = "";
+    if (TAP.st === 2 && p3 > .66 && p3 < .92) { dk = "s3"; dt = "クエストができた！"; }
+    else [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k]; if (g.i >= g.stops.length - 1 && phWin(u, k) > .5) { dk = k; dt = g.done; } });
+    doneOwner = dk; tapDone.classList.toggle("on", !!dk); if (dk && tapDone.firstElementChild.textContent !== dt) tapDone.firstElementChild.textContent = dt;
   }
-  tapHint.onclick = () => { const kb = document.activeElement === tapHint; tapStart(); if (kb) setTimeout(() => { if (tapDone.classList.contains("on")) tapAgain.focus(); }, 60); };
-  tapAgain.onclick = () => { TAP.st = RM ? 2 : 1; TAP.t0 = performance.now(); };
-  window.__tap = TAP;
+  tapHint.onclick = () => { const kb = document.activeElement === tapHint, o = hintOwner; if (o === "s3") tapStart(); else if (o) stgStart(o); if (kb) setTimeout(() => { if (tapDone.classList.contains("on")) tapAgain.focus(); }, 60); };
+  tapAgain.onclick = () => { if (doneOwner === "s3") { TAP.st = RM ? 2 : 1; TAP.t0 = performance.now(); } else if (doneOwner) { const g = STG[doneOwner]; g.v = 0; g.i = 0; g.anim = null; } };
+  window.__tap = TAP; window.__stg = STG;
 
   /* ---------- 体験デモ ---------- */
   const CAPS = [["あなた", "が、", "お願い", "を送る"], ["相手の画面", "に、", "届く", ""], ["相手が", "「", "了解", "」。受けてもらえた"]];
@@ -420,7 +457,7 @@
     lastT = now; scrollY = smY;
     if (t0) introP = RM ? 1 : clamp(((now - t0) / 1000 - 1.55) / 1.1);
     px += (tx - px) * .08; py += (ty - py) * .08;
-    const hy = scrollY / H, hs_ = sm(seg(hy, .26, .62));
+    const hy = scrollY / H, hs_ = sm(seg(hy, .55, 1.0));
     copy.style.transform = `scale(${1 - .55 * hs_})`; copy.style.opacity = String(1 - hs_); copy.style.visibility = hs_ > .98 ? "hidden" : ""; cue.style.setProperty("--co", String(Math.max(0, 1 - hy * 4)));
     if (scrollY > afterTop - H * .2) { fx.classList.add("off"); return; }
     tapTick(now); zvPrepare(); S = globalState(); const ease = apply(S); details(S, now);
