@@ -7,7 +7,7 @@
   const seg = (p, a, b) => clamp((p - a) / (b - a));
   const io5 = t => { t = clamp(t); return t < .5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2; };
   const io3 = t => { t = clamp(t); return t < .5 ? 4 * t ** 3 : 1 - Math.pow(-2 * t + 2, 3) / 2; };
-  const o4 = t => 1 - Math.pow(1 - clamp(t), 4), o5 = t => 1 - Math.pow(1 - clamp(t), 5);
+  const o3 = t => 1 - Math.pow(1 - clamp(t), 3), o4 = t => 1 - Math.pow(1 - clamp(t), 4), o5 = t => 1 - Math.pow(1 - clamp(t), 5);
   const bell = t => Math.sin(Math.PI * clamp(t));
   const settle = t => { t = clamp(t); return 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2); };
   const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -25,10 +25,10 @@
   /* ミートボーの生活の場面：画像・セリフは、ここ1か所で差し替える（秘書が新しい生活シーン画像を作ったら src だけ変える） */
   const LIFE = {   // ミートボーの生活の場面。src を差し替えれば絵が変わる（キー＝章：s2=01 QUEST／s3=02 ADD／s5=03 REQUEST／s6=04 THANKS／s7=夜）
     s2: { src: "assets/mascot_still.webp", alt: "", label: "洗濯物を干しながら", bubble: "やること、いっぱい" },
-    s3: { src: "assets/life/life_s3.png", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" },
-    s5: { src: "assets/life/life_s5.png", alt: "", label: "夜、家でひと息", bubble: "ゴミ出し、お願い！" },
-    s6: { src: "assets/life/life_s6.png", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
-    s7: { src: "assets/life/life_s7.png", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
+    s3: { src: "assets/life/life_s3.webp", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" },
+    s5: { src: "assets/life/life_s5.webp", alt: "", label: "夜、家でひと息", bubble: "ゴミ出し、お願い！" },
+    s6: { src: "assets/life/life_s6.webp", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
+    s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
   const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
   const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.12, .22, .70, .82] };   // [出始め, 出きる, 消え始め, 消えきる]
   /* 触れる場面の窓（スクロール進行度）。文字の場面が縮んで消える窓 hv／スマホが入る窓 ph／スマホが出ていく開始 out */
@@ -36,7 +36,7 @@
   /* 文字の場面＝よそおいモーションで書き出した動画（PC=16:9 / スマホ=9:16）。構成表は v10/zukai/ */
   const ZV = { req: { pc: "assets/zm/req_pc.mp4", sp: "assets/zm/req_sp.mp4", end: "assets/zm/req_pc_end.jpg", endSp: "assets/zm/req_sp_end.jpg" }, thx: { pc: "assets/zm/thx_pc.mp4", sp: "assets/zm/thx_sp.mp4", end: "assets/zm/thx_pc_end.jpg", endSp: "assets/zm/thx_sp_end.jpg" }, dl: { pc: "assets/zm/dl_pc.mp4", sp: "assets/zm/dl_sp.mp4", end: "assets/zm/dl_pc_end.jpg", endSp: "assets/zm/dl_sp_end.jpg" }, fv: { pc: "assets/zm/fv_pc.mp4", sp: "assets/zm/fv_sp.mp4", end: "assets/zm/fv_pc_end.jpg", endSp: "assets/zm/fv_sp_end.jpg" }, add: { pc: "assets/zm/add_pc.mp4", sp: "assets/zm/add_sp.mp4", end: "assets/zm/add_pc_end.jpg", endSp: "assets/zm/add_sp_end.jpg" } };
   /* 触れる体験（02 ADD＝ロック画面の「クエスト追加」を押す）の時間管理 */
-  const TAP = { st: 0, t0: 0, add: 0, last: 0, ring: 0, ringT: 0, goRip: 0, goT: 0, go: 0, chars: 0, u3: 0, out3: 0, nq: 0, pop: 0 };
+  const TAP = { sheet: 0, st: 0, t0: 0, add: 0, last: 0, ring: 0, ringT: 0, goRip: 0, goT: 0, go: 0, chars: 0, u3: 0, out3: 0, nq: 0, pop: 0 };
   const G = { XL: 0, car: { x: 0, y: 60 }, rq: { x: 0, y: 0 }, P2x: 1500, P2y: 0, s4: 1.12, sx0: 0, scrW: 0, scrH: 0, sq: { x: 0, y: -60, w: 200, h: 80 }, wg: { x: 80, y: -130 }, ig: { x: -20, y: 30 }, nq: { x: 0, y: 120 }, sc: 1, yc: 450 };
 
   /* ---------- 文字ごとのグラデ ---------- */
@@ -85,7 +85,7 @@
     { sheet.style.display = ''; sheet.style.transform = 'none'; const c = $("car"); G.car = { x: sl + sheet.offsetLeft + c.offsetLeft + c.offsetWidth / 2 - PW / 2, y: so + sheet.offsetTop + c.offsetTop + c.offsetHeight / 2 - PH / 2 }; sheet.style.transform = ''; }
     G.nq = { x: sl + newq.offsetLeft + newq.offsetWidth / 2 - PW / 2, y: so + newq.offsetTop + newq.offsetHeight / 2 - PH / 2 };
     G.wg = { x: G.sx0 + .74 * G.scrW - PW / 2, y: G.sx0 + .31 * G.scrH - PH / 2 };
-    G.ig = { x: G.sx0 + .40 * G.scrW - PW / 2, y: G.sx0 + .562 * G.scrH - PH / 2 };
+    G.ig = { x: G.sx0 + .5 * G.scrW - PW / 2, y: G.sx0 + .84 * G.scrH - PH / 2 };
     const sz = M ? 480 : 720; if (cf.width !== sz) { cf.width = cf.height = sz; cfLast = -1; }
     cf.style.width = cf.style.height = sz + "px";
   }
@@ -148,13 +148,13 @@
     if (p > .985) c.cs = lerp(c.cs, 1, sm(seg(p, .985, 1)));
     if (!RM) { const u = seg(p, .185, .23); if (u > 0 && u < 1) c.cy += Math.sin(u * 3 * Math.PI) * (1 - u) * 4; }
     setCam(o, c); o.p1s = G.s4; o.p1ry = 0; o.p1rx = 0; o.p1dim = 0; o.lB = 0; o.lP = 1; o.p2op = 1;
-    o.lgld = (.5 * sm(seg(p, .185, .22)) * lerp(1, .4, sm(seg(p, .22, .40)))) * (1 - sm(seg(p, .94, 1))); o.lgrn = Math.min(.5, .4 * bell(seg(p, .36, .50)) + .5 * bell(seg(p, .58, .80)));
+    o.lgld = 0; o.lgrn = Math.min(.5, .4 * bell(seg(p, .36, .50)) + .5 * bell(seg(p, .58, .80)));
     o.mx = G.P2x - PW * G.s4 / 2 - MW * .66; o.my = G.P2y + PH * G.s4 / 2 - MH * .85 + 4; o.mop = 0; o.ms = .85; return o; }
   function OUT() { const o = S5(1); o.p1op = 0; o.p2op = 0; o.mop = 0; o.ca = 0; o.lgld = 0; o.lgrn = 0; return o; }
   /* 押して進める：v9の時間軸(0〜1)を、スクロールでなく「押した」あとの時間で進める。stops＝止まる位置、dur＝各区間の秒数、auto＝自動で進む区間 */
   const STG = {
-    s4: { v: 0, i: 0, anim: null, stops: [0, .78, 1], dur: [5.2, 3.2], auto: [false, false], lab: ["ここ押してみてね", "「了解」を押してみてね"], done: "お願いが届いた！", tgt: () => [sendStatus, okBtn] },
-    s5: { v: 0, i: 0, anim: null, stops: [0, .10, .47, .73, 1], dur: [1.3, 4.6, 4.4, 4.6], auto: [true, false, false, false], lab: ["", "「達成」を押してみてね", "ここ押してみてね", "ここ押してみてね"], done: "ありがとうが届いた！", tgt: () => [null, pop5ok, thxBtnEl, sbtn] } };
+    s4: { v: 0, i: 0, anim: null, stops: [0, .78, 1], dur: [5.2, 3.2], auto: [false, false], lab: ["ここ押してみてね", "「受ける」を押してみてね"], done: "お願いが届いた！", tgt: () => [sendStatus, okBtn] },
+    s5: { v: 0, i: 0, anim: null, stops: [0, .10, .47, .73, 1], dur: [1.3, 4.6, 4.4, 4.6], auto: [true, false, false, false], lab: ["", "「完了にする」を押してみてね", "ここ押してみてね", "ここ押してみてね"], done: "ありがとうが届いた！", tgt: () => [null, pop5ok, thxBtnEl, sbtn] } };
   const vReq = () => (scrollY > tops[IDX.s5] - H) ? 1 : STG.s4.v;
   const phWin = (u, id) => { const w = WIN[id]; return o4(seg(u, w.ph[0], w.ph[1])) * (1 - sm(seg(u, w.out, 1))); };
   function scene45(o, u, id) { const w = WIN[id], a = o4(seg(u, w.ph[0], w.ph[1])), k = a * (1 - sm(seg(u, w.out, 1))); o.p1op *= k; o.p2op *= k; o.cy += (1 - a) * .28 * H; o.ca = 0; return o; }
@@ -240,8 +240,8 @@
     // ---- S3 ----
     ripple.style.opacity = String(TAP.ring); ripple.style.transform = `scale(${.4 + 1.2 * TAP.ringT})`;
     goRip.style.opacity = String(TAP.goRip); goRip.style.transform = `scale(${.4 + 1.2 * TAP.goT})`;
-    typed.textContent = "牛乳".slice(0, TAP.chars); typed.style.visibility = TAP.chars > 0 ? "visible" : "hidden";
-    gobtn.style.opacity = String(TAP.go ? .9 : 0);
+    typed.textContent = "牛乳".slice(0, TAP.chars); $("qph").style.display = TAP.chars > 0 ? "none" : "";
+    gobtn.classList.toggle("on", !!TAP.go); { const q = $("qsheet"), sh = TAP.sheet; q.style.opacity = sh > .01 ? "1" : "0"; q.style.transform = `translateY(${(1 - sh) * 100}%)`; $("scrimq").style.opacity = String(sh); }
     newq.style.opacity = String(TAP.nq); newq.style.transform = `translateY(${(1 - TAP.nq) * 18}px)`;
     { const u3 = TAP.u3, out3 = TAP.out3, sc3 = S.p1s, kmax = M ? Math.min(1.3, (W - 36) / 230) : Math.min(2.1, Math.max(1, .3 * W / 230)), k3 = lerp(.35, kmax, u3) * lerp(1, .35, out3);
       const sx = G.ig.x * sc3, sy = G.ig.y * sc3, nx = G.nq.x * sc3, ny = G.nq.y * sc3, px3 = lerp(lerp(sx, 0, u3), nx, out3), py3 = lerp(lerp(sy, -.03 * PH * sc3, u3), ny, out3);
@@ -258,10 +258,10 @@
     fly.style.boxShadow = `0 ${14 + 76 * hh}px ${22 + 88 * hh}px rgba(0,0,0,${.25 - .12 * hh})`;
     sendQ.style.opacity = p4 >= .22 && p4 < 1 && p5 < 1 ? "0" : "1"; sendQ.style.transform = `scale(${1 + .04 * sm(seg(p4, .08, .16)) * (1 - sm(seg(p4, .16, .22)))})`;
     const press = (p4 > .16 && p4 < .22) ? 1 : 0; sendStatus.style.transform = `scale(${press ? .96 : 1})`;
-    setText(sendStatus, p4 < .22 ? "お願いを送る" : (p4 < .82 && p5 === 0 ? "返事を待っています" : "受けてもらいました"));
+    setText(sendStatus, p4 < .22 ? "おねがいを送る" : (p4 < .82 && p5 === 0 ? "返事を待っています" : "受けてもらいました"));
     s2Idle.style.opacity = String(1 - sm(seg(p4, .64, .68))); const swapped = p4 >= .72;
     s2Recv.style.opacity = String(sm(seg(p4, .68, .74)) * (1 - sm(seg(p5, .78, .84)))); recvQ.style.opacity = swapped ? "1" : "0";
-    okBtn.classList.toggle("on", p4 > .82 && p4 < .88); okRipple.style.opacity = String(Math.sin(seg(p4, .79, .88) * Math.PI)); okRipple.style.transform = `scale(${.4 + 1.2 * seg(p4, .79, .88)})`; recvStatus.style.opacity = String(p4 > .86 || p5 > 0 ? 1 : 0); setText(recvStatus, p5 > .1 ? "達成しました" : "受けました");
+    okBtn.classList.toggle("on", p4 > .82 && p4 < .88); okRipple.style.opacity = String(Math.sin(seg(p4, .79, .88) * Math.PI)); okRipple.style.transform = `scale(${.4 + 1.2 * seg(p4, .79, .88)})`; recvStatus.style.opacity = String(p4 > .86 || p5 > 0 ? 1 : 0); setText(recvStatus, p5 > .1 ? "完了しました。おつかれさま！" : "受けています");
     const tg = true;
     tag1.style.opacity = String(tg ? sm(seg(p4, 0, .08)) * (1 - sm(seg(p4, .26, .32))) * (p5 === 0 ? 1 : 0) * (scrollY > tops[IDX.s4] - H * .5 ? 1 : 0) : 0);
     tag2.style.opacity = String(tg ? sm(seg(p4, .60, .68)) * (1 - sm(seg(p5, .04, .10))) : 0);
@@ -270,23 +270,23 @@
     if (st4 !== lastSt4) { lastSt4 = st4; [s4steps, s4barSteps].forEach(ol => [...ol.children].forEach((li, i) => { li.className = i === st4 ? "on" : (i < st4 ? "done" : ""); })); }
     if (M) { updateCaps(p4, s4Vis); s4bar.style.opacity = String(s4Vis * (p5 === 0 ? 1 : 0)); s4bar.style.top = (MB.s4 - 8) + "px"; }
     else s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
-    setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「了解」して、受けてもらえた");
+    setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「受ける」。受けてもらえた");
     // ---- S5：CLEARハンコ→紙吹雪→ありがとうスタンプ ----
     const Sp = stampPos(), sz = M ? 150 : 190, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
     stampBig.style.width = stampBig.style.height = sz + "px"; stampBig.style.margin = `${-sz / 2}px 0 0 ${-sz / 2}px`;
-    const gone = 1 - sm(seg(p5, .30, .35)); stampBig.style.opacity = String(clamp(seg(p5, .12, .135)) * gone); stampBig.style.display = (p5 > .1 && gone > .01) ? "" : "none"; ink.style.display = (p5 > .18 && gone > .01) ? "" : "none"; cf.style.display = (p5 >= .19 && p5 <= .44) ? "" : "none";
+    const gone = 1 - sm(seg(p5, .30, .35)); const tp5 = o3(k5), dr5 = Math.pow(clamp(tp5 / .55), 2), bn5 = tp5 < .55 ? 0 : Math.sin((tp5 - .55) / .45 * Math.PI) * .08; stampBig.style.opacity = String(clamp(p5 > .12 ? tp5 / .3 : 0) * gone); stampBig.style.display = (p5 > .1 && gone > .01) ? "" : "none"; ink.style.display = "none"; cf.style.display = "none";
     const kk = 0;
-    stampBig.style.transform = `translate3d(${Sp.x + sz * .14 * kk}px,${Sp.y + sz * .09 * kk}px,0) scale(${lerp(3, 1, fall) * (1 + .04 * bell(land5)) * lerp(1, .6, kk)}) rotate(${lerp(-24, -12, fall)}deg)`;
+    stampBig.style.transform = `translate3d(${Sp.x + sz * .14 * kk}px,${Sp.y + sz * .09 * kk}px,0) scale(${2.4 - 1.4 * dr5 + bn5}) rotate(-12deg)`;
     stampBig.firstElementChild.style.filter = `drop-shadow(0 ${lerp(40, 2, fall)}px ${lerp(50, 4, fall)}px rgba(120,20,15,${lerp(.25, .35, fall)}))`;
     const u185 = seg(p5, .185, .26); ink.style.opacity = String(p5 > .185 ? lerp(.25, 0, u185) * gone : 0); ink.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0) scale(${lerp(.6, 1.3, u185)})`;
-    flash.style.opacity = String(p5 > .185 && p5 < .23 ? (1 - seg(p5, .185, .23)) * .28 : 0);
+    flash.style.opacity = "0";
     { const pre5 = clamp((scrollY - (tops[IDX.s5] - H * .8)) / (H * .8)), u5 = Math.max(o4(seg(p5, 0, .10)), o4(seg(pre5, .35, 1))), out5 = io3(seg(p5, .30, .36)), k = kP(), C5 = popC5(), rqx = G.P2x + G.rq.x * G.s4, rqy = G.P2y + G.rq.y * G.s4;
       const pk = lerp(.35, k, u5) * lerp(1, .35, out5), qx = lerp(lerp(rqx, C5.x, u5), rqx, out5), qy = lerp(lerp(rqy, C5.y, u5), rqy, out5);
       const kPh = phWin(pin("s5"), "s5"); pop5.style.display = (p5 > 0 || pre5 > .35) && p5 < .365 && kPh > .01 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))) * kPh);
       pop5.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u5)}% - 70px) -70px)`; pop5.style.transform = `translate3d(${qx}px,${qy + 3 * bell(seg(p5, .185, .21)) * k}px,0) perspective(900px) rotateX(${24 * (1 - u5)}deg) scale(${pk})`;
       pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); recvQ.style.opacity = String(1 - sm(clamp(u5 * 1.6)) * (1 - sm(seg(p5, .35, .37)))); }
     ltGld.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0)`; ltGrn.style.transform = `translate3d(${M ? 0 : G.P2x / 2}px,${M ? 450 : -200}px,0)`;
-    cf.style.transform = `translate3d(${Sp.x - cf.width / 2}px,${Sp.y - cf.height * .45}px,0)`; drawConfetti(p5 >= .19 && p5 <= .44 ? seg(p5, .19, .44) : 0);
+    cf.style.transform = `translate3d(${Sp.x - cf.width / 2}px,${Sp.y - cf.height * .45}px,0)`; 
     // ---- 後半：いいね・ありがとうを伝える → スタンプを選ぶ → 押す → 相手に届く ----
     const askIn = sm(seg(p5, .42, .47)), up = io5(seg(p5, .50, .57)), down = io5(seg(p5, .76, .80)), shW = up * (1 - down);
     thxBtnEl.style.opacity = String(askIn * (1 - sm(seg(p5, .50, .52)))); thxBtnEl.classList.toggle("on", p5 > .485 && p5 < .505);
@@ -297,15 +297,14 @@
     nchips.children[1].classList.toggle("on", p5 > .69); sbtn.classList.toggle("on", p5 > .735 && p5 < .765);
     sendRip.style.opacity = String(Math.sin(seg(p5, .725, .765) * Math.PI)); sendRip.style.transform = `scale(${.4 + 1.2 * seg(p5, .725, .765)})`;
     sendStatus.style.opacity = String(p5 > 0 ? 1 - sm(seg(p5, .44, .46)) : 1);
-    if (p5 > .44) setText(sendStatus, "お願いが達成されました");
+    if (p5 > .44) setText(sendStatus, "完了しました。おつかれさま！");
     rv.style.backgroundPosition = `${100 * (1 - o4(seg(p5, .44, .56)))}% 0`;
     const P5 = flightPts(), e5 = io5(seg(p5, .79, .90)), tk = o4(seg(p5, .765, .80)), sizeT = .62 * G.scrW * G.s4, start = { x: G.car.x * G.s4, y: G.car.y * G.s4 };
     thxFly.style.width = thxFly.style.height = sizeT + "px"; thxFly.style.margin = `${-sizeT / 2}px 0 0 ${-sizeT / 2}px`;
     const tp = p5 < .79 ? start : bez([start, P5[1], { x: G.P2x, y: G.P2y }], e5);
     const ts = p5 < .79 ? lerp(.6, 1, tk) : 1 + .15 * bell(e5), vis = p5 >= .765 && p5 < .93;
     thxFly.style.display = vis ? "" : "none"; thxFly.style.opacity = vis ? String(clamp(seg(p5, .765, .78))) : "0"; thxFly.style.transform = `translate3d(${tp.x}px,${tp.y}px,0) scale(${ts}) rotate(${p5 >= .79 && p5 < .90 ? Math.sin(e5 * 2 * Math.PI) * 4 : 0}deg)`;
-    s2Arrive.style.opacity = String(sm(seg(p5, .90, .94))); thxCap.style.opacity = String(sm(seg(p5, .95, .985)));
-    thxImg.style.opacity = String(sm(seg(p5, .93, .95))); thxImg.style.transform = "none";
+    s2Arrive.style.opacity = String(sm(seg(p5, .90, .93))); celeFrame(p5, now);
     setText(s5step, p5 < .30 ? "お願いが達成された" : p5 < .56 ? "ありがとうを伝える" : "スタンプが届く");
     if (S.mop > .5 && p5 > .955 && !s5Greeted) { s5Greeted = true; playGreeting(); }
     if (p5 < .5) s5Greeted = false;
@@ -323,6 +322,39 @@
     lifeFrame({ s3: p3, s4: u4, s5: u5, bed: ub }); hintFrame(S, p3, u4, u5); zvScroll(); { const tb = zvBox.thx && zvBox.thx.box; if (tb) { tb.style.opacity = String(thxVis); tb.style.visibility = thxVis > .01 ? "visible" : "hidden"; } }
   }
   let thxVis = 0;
+  /* ---------- スタンプ受信の演出（実アプリ stamp_celebration.dart の式どおり：光の筋・衝撃の輪・閃光・ハート／星／丸・またたく星。音と振動は無し） ---------- */
+  const cele = $("cele"), celeG = cele.getContext("2d"); let celeT0 = 0, celeW = 0;
+  const CC = ["#FF6F91", "#FFC75F", "#FFFFFF", "#9BE7FF", "#FF9671", "#D65DB1"], lcg = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const PART = (() => { const r = lcg(7); return Array.from({ length: LOW ? 56 : 96 }, (_, i) => ({ a: r() * 6.2832, sp: 340 + r() * 420, sz: 12 + r() * 18, sh: i % 3, c: CC[Math.floor(r() * 6)], d: .38 + r() * .18, life: 1.8 + r() * 1.3, spin: (r() - .5) * 8 })); })();
+  const TWK = (() => { const r = lcg(11); return Array.from({ length: 18 }, () => ({ a: r() * 6.2832, d: 1.05 + r(), ph: r() * 6.2832, sp: 2.2 + r() * 2.2, b: 8 + r() * 10 })); })();
+  const heartP = (g, q) => { g.beginPath(); g.moveTo(0, q * .35); g.bezierCurveTo(-q * .9, -q * .2, -q * .45, -q * .85, 0, -q * .35); g.bezierCurveTo(q * .45, -q * .85, q * .9, -q * .2, 0, q * .35); g.closePath(); };
+  const starP = (g, q, n, inner) => { g.beginPath(); for (let i = 0; i < n * 2; i++) { const rad = i % 2 === 0 ? q : q * inner, a = -Math.PI / 2 + i * Math.PI / n, x = Math.cos(a) * rad, y = Math.sin(a) * rad; if (i) g.lineTo(x, y); else g.moveTo(x, y); } g.closePath(); };
+  function drawCele(t) {
+    const w = cele.clientWidth || 1, dpr = Math.min(2, window.devicePixelRatio || 1), cw = Math.round(w * dpr), ch = Math.round((cele.clientHeight || 1) * dpr);
+    if (cele.width !== cw || cele.height !== ch) { cele.width = cw; cele.height = ch; }
+    const K = cw / 390, g = celeG, ox = cw / 2, oy = ch / 2, r = 120 * K; g.clearRect(0, 0, cw, ch);
+    const fade = clamp(t / .5); g.save(); g.translate(ox, oy); g.rotate(t * .35);
+    for (let i = 0; i < 14; i++) { const a = i * 6.2832 / 14, len = r * (2.7 + .25 * Math.sin(t * 2 + i)), gr = g.createRadialGradient(0, 0, 0, 0, 0, len); gr.addColorStop(0, `rgba(255,243,196,${.55 * fade})`); gr.addColorStop(1, "rgba(255,182,200,0)");
+      g.fillStyle = gr; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a - .09) * len, Math.sin(a - .09) * len); g.lineTo(Math.cos(a + .09) * len, Math.sin(a + .09) * len); g.closePath(); g.fill(); }
+    g.restore();
+    for (let k = 0; k < 3; k++) { const lt = t - .4 - k * .14; if (lt < 0 || lt > 1.1) continue; const u = lt / 1.1, rad = r * (.9 + 2.2 * o3(u)), m = k / 2;
+      g.strokeStyle = `rgba(${Math.round(255 + (185 - 255) * m)},${Math.round(224 + (68 - 224) * m)},${Math.round(138 + (64 - 138) * m)},${.85 * (1 - u)})`; g.lineWidth = (7 * (1 - u) + 1) * K; g.beginPath(); g.arc(ox, oy, rad, 0, 6.2832); g.stroke(); }
+    const fl = t - .38; if (fl >= 0 && fl < .35) { const u = fl / .35, gr = g.createRadialGradient(ox, oy, 0, ox, oy, r * 1.8); gr.addColorStop(0, `rgba(255,255,255,${.85 * (1 - u)})`); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.beginPath(); g.arc(ox, oy, r * (.8 + .9 * u), 0, 6.2832); g.fill(); }
+    for (const p of PART) { const tau = t - p.d; if (tau < 0 || tau > p.life) continue; const u = tau / p.life, drag = 1 - Math.exp(-2.4 * tau), dist = p.sp * drag / 2.4, x = ox + Math.cos(p.a) * dist * K, y = oy + (Math.sin(p.a) * dist + 200 * tau * tau) * K, al = u < .65 ? 1 : 1 - (u - .65) / .35, sc = u < .12 ? u / .12 : 1;
+      g.save(); g.translate(x, y); g.rotate(p.spin * tau); g.globalAlpha = clamp(al); g.fillStyle = p.c; const q = p.sz * sc * K;
+      if (p.sh === 1) { heartP(g, q); g.fill(); } else if (p.sh === 0) { starP(g, q, 5, .45); g.fill(); } else { g.beginPath(); g.arc(0, 0, q * .35, 0, 6.2832); g.fill(); } g.restore(); }
+    for (let i = 0; i < 18; i++) { const q = TWK[i], appear = clamp((t - .5 - i * .04) / .3), tw = (.5 + .5 * Math.sin(t * q.sp + q.ph)) * appear; if (tw < .05) continue;
+      g.save(); g.translate(ox + Math.cos(q.a) * r * q.d, oy + Math.sin(q.a) * r * q.d); g.fillStyle = `rgba(255,255,255,${.5 + .5 * tw})`; starP(g, q.b * tw * K, 4, .22); g.fill(); g.restore(); }
+  }
+  function celeFrame(p5, now) {
+    const on = p5 >= .93;
+    if (on && !celeT0) celeT0 = now; else if (!on && celeT0) { celeT0 = 0; celeG.clearRect(0, 0, cele.width, cele.height); thxImg.style.opacity = "0"; }
+    if (!celeT0) { thxImg.style.opacity = "0"; return; }
+    const t = (now - celeT0) / 1000;
+    if (RM) { thxImg.style.opacity = "1"; thxImg.style.transform = "none"; return; }
+    const tt = o3(clamp(t / .7)), drop = Math.pow(clamp(tt / .55), 2), bounce = tt < .55 ? 0 : Math.sin((tt - .55) / .45 * Math.PI) * .08;   // StampPop：2.4倍→1倍・少しはずむ・0.7秒
+    thxImg.style.opacity = String(clamp(tt / .3)); thxImg.style.transform = `scale(${2.4 - 1.4 * drop + bounce})`; drawCele(t);
+  }
   let s5Greeted = false;
   if (!RM) $$(".card h2").forEach(h2 => { let n = 0; h2.setAttribute("aria-label", h2.textContent); [...h2.childNodes].forEach(nd => { if (nd.nodeType !== 3) return; const f = document.createDocumentFragment(); [...nd.textContent].forEach(ch => { const s = document.createElement("span"); s.className = "ch" + (ch === " " ? " sp" : ""); s.setAttribute("aria-hidden", "true"); s.style.setProperty("--i", n++); s.textContent = ch === " " ? "\u00a0" : ch; f.appendChild(s); }); nd.replaceWith(f); }); });
 
@@ -361,7 +393,7 @@
     const z = zvBox[k]; if (!z || z.v || !ZV[k]) return z;
     if (RM) { const im = new Image(); im.alt = ""; im.src = M ? ZV[k].endSp : ZV[k].end; z.box.appendChild(im); z.v = im; return z; }
     const v = document.createElement("video"); v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "metadata"; v.setAttribute("aria-hidden", "true");
-    v.src = M ? ZV[k].sp : ZV[k].pc; z.box.appendChild(v); z.v = v; return z; }
+    v.src = M ? ZV[k].sp : ZV[k].pc; z.box.appendChild(v); z.v = v; v.addEventListener("error", () => { LS.vid = true; }); return z; }
   function zvPlay(id, on) {
     const k = zvKey[id]; if (!k) return; const z = zvEnsure(k); if (!z || !z.v || RM) return;
     if (on) { try { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { z.v.pause(); z.v.currentTime = 0; } catch (e) {} }
@@ -392,7 +424,8 @@
     const run = TAP.st === 1;
     TAP.ringT = run ? seg(T, 0, .6) : 0; TAP.ring = run && T < .6 ? Math.sin(TAP.ringT * Math.PI) : 0;
     const target = (run && T > .35) || TAP.st === 2 ? 1 : 0; TAP.add = RM ? target : TAP.add + (target - TAP.add) * (1 - Math.exp(-dt * 9)); if (Math.abs(target - TAP.add) < .003) TAP.add = target;
-    TAP.chars = run && T > .9 && T < 2.45 ? Math.min(3, Math.floor((T - .9) / .28) + 1) : 0;
+    TAP.chars = run && T > .9 && T < 2.45 ? Math.min(2, Math.floor((T - .9) / .28) + 1) : 0;
+    TAP.sheet = run ? (T < 2.55 ? sm(seg(T, .4, .8)) : 1 - sm(seg(T, 2.55, 2.85))) : 0;
     TAP.go = run && T > 2.0 && T < 2.5; TAP.goT = run ? seg(T, 2.0, 2.5) : 0; TAP.goRip = TAP.go ? Math.sin(TAP.goT * Math.PI) : 0;
     TAP.u3 = run ? o4(seg(T, 2.5, 3.3)) : 0; TAP.out3 = run ? io3(seg(T, 4.4, 5.0)) : (TAP.st === 2 ? 1 : 0);
     TAP.nq = TAP.st === 2 ? 1 : run ? sm(seg(T, 4.7, 5.2)) : 0; TAP.pop = run ? bell(seg(T, 2.5, 5.0)) : 0;
@@ -416,14 +449,46 @@
     let dk = "", dt = "";
     if (TAP.st === 2 && p3 > .66 && p3 < .92) { dk = "s3"; dt = "クエストができた！"; }
     else [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k]; if (g.i >= g.stops.length - 1 && phWin(u, k) > .5) { dk = k; dt = g.done; } });
-    doneOwner = dk; tapDone.classList.toggle("on", !!dk); if (dk && tapDone.firstElementChild.textContent !== dt) tapDone.firstElementChild.textContent = dt;
+    doneOwner = dk; tapDone.classList.toggle("on", !!dk); downCue.classList.toggle("on", !!dk && !LS.cur); if (dk && tapDone.firstElementChild.textContent !== dt) tapDone.firstElementChild.textContent = dt;
   }
   tapHint.onclick = () => { const kb = document.activeElement === tapHint, o = hintOwner; if (o === "s3") tapStart(); else if (o) stgStart(o); if (kb) setTimeout(() => { if (tapDone.classList.contains("on")) tapAgain.focus(); }, 60); };
   tapAgain.onclick = () => { if (doneOwner === "s3") { TAP.st = RM ? 2 : 1; TAP.t0 = performance.now(); } else if (doneOwner) { const g = STG[doneOwner]; g.v = 0; g.i = 0; g.anim = null; } };
   window.__tap = TAP; window.__stg = STG;
 
+  /* ---------- 押す場面のスクロール制御：押す番の間は、下へ進めない（上は動く） ----------
+     ・押す場面が画面の正位置（LK[k].p）に来たらロック。wheel／touchmove／キーで下向きだけ止め、scrollイベントでも位置に戻す（慣性・つまみ操作の保険）。
+     ・解除：押し終わった／「スキップして先へ」／Escape／上へ戻った／ヘッダーのナビ／reduced-motion／極端に小さい画面／動画の読み込み失敗。
+     ・一度「完了・スキップ・上へ戻った」場面は、二度とロックしない（「もう一度」もロック無し）。 */
+  const LK = { s3: { p: .76, done: () => TAP.st === 2 }, s4: { p: .70, done: () => STG.s4.i >= 2 }, s5: { p: .70, done: () => STG.s5.i >= 4 } };
+  const LS = { cur: null, off: {}, vid: false }, skipBtn = $("lockSkip"), lockMsg = $("lockMsg"), downCue = $("downCue"); let lockPrev = window.scrollY, userUntil = 0, navUntil = 0;
+  const NOLOCK = /[?&]nolock/.test(location.search), lockOk = () => !NOLOCK && !RM && W >= 300 && !LS.vid, lockYof = k => tops[IDX[k]] + (hs[IDX[k]] - H) * LK[k].p;
+  function lockSet(k) { LS.cur = k; document.documentElement.classList.add("locked"); skipBtn.hidden = false; lockMsg.textContent = "ボタンを押すと次へ進めます"; }
+  function lockRelease(why) { const k = LS.cur; if (!k) return; LS.cur = null; if (why) LS.off[k] = why; document.documentElement.classList.remove("locked"); skipBtn.hidden = true; lockMsg.textContent = why === "done" ? "先へ進めます" : ""; }
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY, prev = lockPrev, now = performance.now(); lockPrev = y; if (!lockOk()) { if (LS.cur) lockRelease(null); return; }
+    if (LS.cur) { const ly = lockYof(LS.cur); if (y > ly + 1) { window.scrollTo(0, ly); return; } if (y < ly - H * .25) lockRelease("escaped"); return; }
+    if (y <= prev || navUntil > now) return; const user = userUntil > now;
+    if (!user && y - prev > .6 * H) return;   // コードやつまみによる大きなジャンプは対象外（ホイール・タッチ・キーは、どれだけ速くても止める）
+    Object.keys(LK).sort((a, b) => lockYof(a) - lockYof(b)).some(k => { if (LS.off[k]) return false; const ly = lockYof(k); if (prev <= ly && y >= ly) { window.scrollTo(0, ly); lockSet(k); return true; } return false; });
+  }, { passive: true });
+  window.addEventListener("wheel", e => { userUntil = performance.now() + 250; if (LS.cur && e.deltaY > 0 && e.cancelable) e.preventDefault(); }, { passive: false });
+  let tLast = 0; window.addEventListener("touchstart", e => { tLast = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener("touchmove", e => { userUntil = performance.now() + 250; const y = e.touches[0].clientY; if (LS.cur && e.touches.length === 1 && y < tLast && e.cancelable) e.preventDefault(); tLast = y; }, { passive: false });
+  window.addEventListener("keydown", e => {
+    const t = e.target && e.target.tagName, inter = t === "BUTTON" || t === "A" || t === "INPUT" || t === "TEXTAREA" || t === "SELECT";
+    if (e.key === "End" || e.key === "Home") navUntil = performance.now() + 1200; else if ([" ", "PageDown", "ArrowDown", "PageUp", "ArrowUp"].includes(e.key)) userUntil = performance.now() + 250;
+    if (!LS.cur) return;
+    if (e.key === "Escape") { lockRelease("escaped"); return; }
+    const down = (e.key === " " && !e.shiftKey) || e.key === "PageDown" || e.key === "ArrowDown" || e.key === "End";
+    if (down && !(e.key === " " && inter)) e.preventDefault();
+  });
+  document.addEventListener("click", e => { const a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) { navUntil = performance.now() + 1500; lockRelease(null); } });
+  skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); window.scrollTo({ top: tops[IDX[k]] + (hs[IDX[k]] - H) * .97, behavior: RM ? "auto" : "smooth" }); };
+  function lockFrame() { if (LS.cur && LK[LS.cur].done()) lockRelease("done"); }
+
+
   /* ---------- 体験デモ ---------- */
-  const CAPS = [["あなた", "が、", "お願い", "を送る"], ["相手の画面", "に、", "届く", ""], ["相手が", "「", "了解", "」。受けてもらえた"]];
+  const CAPS = [["あなた", "が、", "お願い", "を送る"], ["相手の画面", "に、", "届く", ""], ["相手が", "「", "受ける", "」。受けてもらえた"]];
   let capEls = null, s4Vis = 0;
   function buildCaps() { const box = $("capstack"); if (!box || capEls) return; capEls = CAPS.map(([a1, a2, k, a3]) => { const d = document.createElement("div"); d.className = "cl"; d.innerHTML = `${a1}${a2}<span class="mk">${k}</span>${a3}`; box.appendChild(d); return d; }); }
   const expo = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * clamp(x));
@@ -460,7 +525,7 @@
     const hy = scrollY / H, hs_ = sm(seg(hy, .55, 1.0));
     copy.style.transform = `scale(${1 - .55 * hs_})`; copy.style.opacity = String(1 - hs_); copy.style.visibility = hs_ > .98 ? "hidden" : ""; cue.style.setProperty("--co", String(Math.max(0, 1 - hy * 4)));
     if (scrollY > afterTop - H * .2) { fx.classList.add("off"); return; }
-    tapTick(now); zvPrepare(); S = globalState(); const ease = apply(S); details(S, now);
+    tapTick(now); zvPrepare(); lockFrame(); S = globalState(); const ease = apply(S); details(S, now);
     fx.classList.toggle("off", S.p1op * ease < .01 && S.p2op < .01 && S.ca < .01 && S.mop < .01 && handOp < .01);
   }
   window.addEventListener("resize", () => { measure();  });

@@ -260,14 +260,14 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
       <div class="scr" id="s1Board"><img class="fill" src="assets/screen_board.webp" alt="" width="585" height="1266" decoding="async"></div>
       <div class="scr" id="s1Lock"><img class="fill" src="assets/lock.webp" alt="" width="585" height="1266" decoding="async" loading="lazy"><i class="ripple" id="ripple"></i></div>
       <div class="scr" id="s1Add"><img class="fill" src="assets/screen_home.webp" alt="" width="585" height="1266" decoding="async">
-        <div class="typed" id="typed"></div><i class="ripple" id="goRip" style="left:81.8%;top:56.1%;width:16%;margin:-8% 0 0 -8%"></i><div class="gobtn" id="gobtn"></div>
+        <div class="scrimq" id="scrimq"></div><div class="qsheet" id="qsheet"><h5>クエストを受注</h5><div class="qfield"><b class="bolt">&#9889;</b><span class="qt" id="typed"></span><span class="qph" id="qph">クエスト名を入力</span></div><div class="qsubmit" id="gobtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20l18-8L3 4v6l12 2-12 2z" fill="currentColor"/></svg>受注</div></div><i class="ripple" id="goRip" style="left:50%;top:90%;width:16%;margin:-8% 0 0 -8%"></i>
         <div class="newq rq" id="newq"><small>基本クエスト</small><b id="newqName">牛乳</b></div>
       </div>
       <div class="scr" id="s1Party">
         <div class="hd"><span>パーティ</span></div>
         <img class="banner" src="assets/ask.webp" alt="" style="top:14%" width="520" height="173" loading="lazy">
-        <div class="rq" style="top:34%" id="sendQ"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b></div>
-        <div class="status" id="sendStatus" style="top:68%">お願いを送る</div>
+        <div class="rq rq2" style="top:34%" id="sendQ"><small>おねがいクエスト</small><span class="pchip">相手にお願いした</span><b>ゴミ出し</b></div>
+        <div class="status" id="sendStatus" style="top:68%">おねがいを送る</div>
         <div class="askbtn" id="thxBtn">♡ いいね・ありがとうを伝える</div><i class="ripple" id="askRip" style="left:50%;top:54.5%;width:16%;margin:-8% 0 0 -8%;border-color:rgba(214,189,123,.95)"></i>
       </div>
       <div class="sheet" id="sheet">
@@ -291,14 +291,13 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
       <div class="hd"><span>パーティ</span></div>
       <div class="scr" id="s2Idle" style="opacity:1"><div class="status" style="top:46%;background:transparent;border:0;color:#9db5ad;font-weight:500">おねがいはまだありません</div></div>
       <div class="scr" id="s2Recv">
-        <div class="arrive" style="top:11%;background:rgba(214,189,123,.25)">お願いが届きました</div>
-        <div class="rq" id="recvQ" style="top:42%"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b></div><i class="ripple" id="okRipple" style="left:50%;top:63%;width:20%;margin:-10% 0 0 -10%;border-color:rgba(214,189,123,.95)"></i><div class="status okb" id="okBtn" style="top:60%;background:var(--gold);color:#3a3217;border-color:var(--gold);font-weight:800">了解</div>
+        <div class="arrive" style="top:11%;background:rgba(214,189,123,.25)">返事をしてね</div>
+        <div class="rq rq2" id="recvQ" style="top:42%"><small>おねがいクエスト</small><span class="pchip">相手からのお願い</span><b>ゴミ出し</b></div><i class="ripple" id="okRipple" style="left:50%;top:63%;width:20%;margin:-10% 0 0 -10%;border-color:rgba(214,189,123,.95)"></i><div class="status okb" id="okBtn" style="top:60%;background:var(--gold);color:#3a3217;border-color:var(--gold);font-weight:800">受ける</div>
         <div id="flash" style="position:absolute;inset:0;background:#fff;opacity:0;z-index:19"></div>
         <img class="stampov" id="clearSt" src="assets/st-clear.webp" alt="" style="left:30%;top:34%" width="320" height="320">
-        <div class="status" id="recvStatus" style="top:70%;opacity:0">受けました</div>
+        <div class="status" id="recvStatus" style="top:70%;opacity:0">受けています</div>
       </div>
-      <div class="scr" id="s2Arrive"><div class="burst"></div><div class="arrive">相手からスタンプが届きました！</div>
-        <img class="thx" id="thxImg" src="assets/st-thanks.webp" alt="" width="320" height="320"><div class="cap" id="thxCap">いつもありがとう</div></div>
+      <div class="scr" id="s2Arrive"><div class="dim"></div><canvas id="cele"></canvas><img class="thx" id="thxImg" src="assets/st-thanks.webp" alt="" width="320" height="320"><div class="aband"><span>相手からスタンプが届きました！</span></div><div class="anote" id="thxCap">いつもありがとう</div><div class="atap">タップでとじる</div></div>
     </div></div></div>
     <div class="pshadow"></div>
   </div></div>
@@ -308,9 +307,9 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
     <div class="qc" id="qc0"><div class="in"><small>基本クエスト</small><b>買い物</b><span class="tg">買い物</span><ul><li>にんじん</li><li>ジャガイモ</li><li>肉</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
     <div class="qc" id="qc1"><div class="in"><small>基本クエスト</small><b>筋トレ</b><span class="tg t">健康</span><ul><li>腕立て伏せ</li><li>スクワット</li><li>プランク</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
     <div class="qc" id="qc2"><div class="in"><small>基本クエスト</small><b>洗濯</b><span class="tg h">家事</span><ul><li>洗う</li><li>干す</li><li>たたむ</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
-    <div class="qc pop" id="pop3"><div class="in"><small>基本クエスト</small><b>牛乳</b><span class="tg">買い物</span><ul><li>牛乳を買う</li></ul><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
-    <div class="qc pop" id="pop5"><div class="in"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b><span class="tg">お願い</span><ul></ul><div class="bt"><i id="pop5ok">達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
-    <div class="rq flyc" id="fly"><small>おねがいクエスト　私 → 相手</small><b>ゴミ出し</b></div>
+    <div class="qc pop" id="pop3"><div class="in"><small>基本クエスト</small><b>牛乳</b><div class="bt"><i>達成</i><i class="o">失敗</i><i class="o">延期</i></div></div></div>
+    <div class="qc pop" id="pop5"><div class="in"><small>おねがいクエスト</small><span class="pchip">相手からのお願い</span><b>ゴミ出し</b><div class="bt"><i id="pop5ok">完了にする</i></div></div></div>
+    <div class="rq flyc rq2" id="fly"><small>おねがいクエスト</small><span class="pchip">相手にお願いした</span><b>ゴミ出し</b></div>
     <img id="thxFly" src="assets/st-thanks.webp" alt="" width="320" height="320">
     <div id="ink"></div>
     <div id="stampBig"><img src="assets/st-clear.webp" alt="" width="320" height="320"></div>
@@ -668,6 +667,41 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 .lf-bub::after { left: 50% !important; margin-left: -11px; }
 #life { padding-top: clamp(80px, 13vh, 130px); } #lfImg { height: min(48vh, 540px); }
 @media (max-width: 999px) { #life { padding-top: 80px; } #lfImg { height: min(37vh, 330px); } }
+</style>
+<style>
+/* v10 第4段：実アプリの表示・文言に合わせる（v10_事実照合.md） */
+.scrimq { position: absolute; inset: 0; background: rgba(0,0,0,.4); opacity: 0; }
+.qsheet { position: absolute; left: 0; right: 0; bottom: 0; background: #f5f1e7; color: #17323a; border-radius: 1.4em 1.4em 0 0; padding: 1.1em 1.2em 1.4em; font-size: calc(var(--pw) * .0345); opacity: 0; transform: translateY(100%); z-index: 6; box-shadow: 0 -10px 30px rgba(0,0,0,.35); }
+.qsheet h5 { margin: 0 0 .6em; font-size: 1.35em; font-weight: 800; }
+.qfield { display: flex; align-items: center; gap: .5em; border: 1.5px solid #a9a58f; border-radius: .7em; padding: .65em .8em; background: #faf8f1; min-height: 2.9em; font-size: 1.05em; }
+.qfield .bolt { color: #c9a64a; font-size: 1em; } .qt { font-weight: 800; } .qph { color: #8c8f86; }
+.qsubmit { margin-top: .7em; display: flex; align-items: center; justify-content: center; gap: .4em; background: #d6bd7b; color: #3a3217; font-weight: 800; border-radius: .7em; padding: .8em 0; font-size: 1.05em; }
+.qsubmit svg { width: 1em; height: 1em; } .qsubmit.on { transform: scale(.96); background: #c7a94a; }
+.pchip { display: inline-block; margin: 2px 0 2px 6px; font-size: .74em; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: rgba(52,81,143,.12); border: 1px solid rgba(52,81,143,.45); color: #34518f; white-space: nowrap; vertical-align: 1px; }
+.qc .pchip { font-size: 10.5px; margin: 3px 0 2px 0; display: block; width: fit-content; }
+.rq2 small { display: inline-block; margin: 0; } .rq2 b { display: block; }
+.qc .bt { margin-top: auto; } .qc .bt i:only-child { flex: 1 1 100%; }
+#s2Arrive .dim { position: absolute; inset: 0; background: rgba(0,0,0,.62); }
+#cele { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.aband { position: absolute; left: 0; right: 0; top: 19%; display: flex; justify-content: center; }
+.aband span { background: rgba(0,0,0,.6); border-radius: .9em; padding: .4em .9em; font-size: 1.05em; font-weight: 800; color: #f1e8cf; white-space: nowrap; }
+.anote { position: absolute; left: 50%; top: 70%; transform: translate(-50%, -50%); background: #f5f1e7; color: #17323a; border-radius: 1em; padding: .4em .9em; font-size: 1em; font-weight: 800; white-space: nowrap; }
+.atap { position: absolute; left: 0; right: 0; top: 81%; text-align: center; font-size: .73em; color: #9db5ad; }
+</style>
+<button class="lockskip" id="lockSkip" type="button" hidden>スキップして先へ</button>
+<div class="downcue" id="downCue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>下へ</span></div>
+<div class="sr" id="lockMsg" aria-live="polite"></div>
+<style>
+/* 押す場面：押し終わるまで下へのスクロールを止める（上は動く・スキップ・Escapeで解除） */
+html.locked, html.locked body { overscroll-behavior-y: none; }
+.lockskip { position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 9; min-height: 32px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #5e635f; background: rgba(255,255,255,.82); border: 1px solid #d5d9d5; border-radius: 99px; cursor: pointer; }
+.lockskip:hover { color: #1f2223; border-color: #9aa19c; }
+.lockskip[hidden] { display: none; }
+.downcue { position: fixed; right: 16px; bottom: max(14px, env(safe-area-inset-bottom, 0px)); z-index: 9; display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 700; color: #1e9a70; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s; }
+.downcue.on { opacity: 1; visibility: visible; }
+.downcue svg { width: 26px; height: 26px; animation: dcue 1.2s ease-in-out infinite; }
+@keyframes dcue { 0%, 100% { transform: translateY(-3px); opacity: .5; } 50% { transform: translateY(5px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .downcue svg { animation: none; } }
 </style>
 <script src="app.js?v=10"></script>
 </body>
