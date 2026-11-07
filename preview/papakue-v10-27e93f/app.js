@@ -26,7 +26,7 @@
   const LIFE = {   // ミートボーの生活の場面。src を差し替えれば絵が変わる（キー＝章：s2=01 QUEST／s3=02 ADD／s5=03 REQUEST／s6=04 THANKS／s7=夜）
     s2: { src: "assets/mascot_still.webp", alt: "", label: "洗濯物を干しながら", bubble: "やること、いっぱい" },
     s3: { src: "assets/life/life_s3.webp", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" },
-    s5: { src: "assets/life/life_s5.webp", alt: "", label: "夜、家でひと息", bubble: "ゴミ出し、お願い！" },
+    s5: { src: "assets/life/life_s5.webp", alt: "", label: "朝、外から", bubble: "ゴミ出し、お願い！" },
     s6: { src: "assets/life/life_s6.webp", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
     s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
   const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
