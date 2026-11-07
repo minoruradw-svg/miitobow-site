@@ -186,6 +186,7 @@
   .act { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
   .act:hover { border-color: var(--brand); background: var(--brand-soft); }
   .act.ext { color: var(--accent-dark); }
+  .act.fav[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
   details.extmaps { margin: 0 0 10px; }
   details.extmaps summary::before { content: "▸ "; white-space: pre; }
   details.extmaps[open] summary::before { content: "▾ "; }
@@ -662,7 +663,7 @@ function readHash() {
 // ---- 持ち出し：日本語で大きく見せる／名前をコピー／外部地図へ(押した時だけ座標を渡す) ----
 const EXT_LINKS = (lat, lon, name) => { const q = lat.toFixed(5) + "," + lon.toFixed(5);
   return `<a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Googleマップで開く</a><a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=transit">ここへの経路（Google）</a><a class="act ext" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${q}&q=${encodeURIComponent(name)}">Appleマップで開く</a>`; };
-const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">大きく表示</button><button type="button" class="act" data-act="copy">名前をコピー</button>${kind === "stop" ? `<button type="button" class="act" data-act="pair">ここから別のバス停へ（直通の系統）</button>` : ""}</div>`;
+const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">大きく表示</button><button type="button" class="act" data-act="copy">名前をコピー</button>${kind === "stop" ? `<button type="button" class="act" data-act="pair">ここから別のバス停へ（直通の系統）</button>` : ""}${kind === "stop" ? `<button type="button" class="act fav" data-act="fav" aria-pressed="false"></button>` : ""}</div>`;
 const GOFF = {};   // 事業者グループ → official[] の添字(任意・無ければ全件)
 const OFFICIAL = (g, open) => { const el = document.createElement("div"); el.innerHTML = `<a class="act ext" target="_blank" rel="noopener" data-oi="0" href="https://www.mlit.go.jp/jidosha/">国土交通省 自動車局（バス）</a><a class="act ext" target="_blank" rel="noopener" data-oi="1" href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11.html">国土数値情報（バス停留所データ）</a>`; const keep = g && GOFF[g]; if (keep) [...el.children].forEach(a => { if (!keep.includes(+a.dataset.oi)) a.remove(); }); if (!el.children.length) return "";
   return `<details class="extmaps official"${open ? " open" : ""}><summary>公式サイト（時刻表・運賃はこちらで）</summary><div class="acts">${el.innerHTML}</div><p class="tip">外部サイトが開きます。このページとは無関係の、各事業者の公式情報です。時刻・運賃・運休はそちらで確認してください。</p></details>`; };
@@ -684,12 +685,30 @@ function copyText(t, btn) {
   const fb = () => { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy") && done(); } catch (e) {} ta.remove(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fb); else fb();
 }
+// ---- お気に入りのバス停：この端末のブラウザ(localStorage)だけに保存。名前で持つ(日英共通・地域ごと) ----
+const FAVKEY = "busmap.fav:" + location.pathname.replace(/^\/(bus\/)?(en\/)?/, "").replace(/(index\.html)?$/, "").replace(/\/$/, "");
+function favList() { try { const a = JSON.parse(localStorage.getItem(FAVKEY) || "[]"); return Array.isArray(a) ? a.filter(n => typeof n === "string" && stops.some(s => s.name === n)) : []; } catch (e) { return []; } }
+function favSave(a) { try { localStorage.setItem(FAVKEY, JSON.stringify(a.slice(0, 50))); return true; } catch (e) { return false; } }
+function favPaint(btn, on) { btn.setAttribute("aria-pressed", String(on)); btn.textContent = on ? "★ お気に入り（もう一度押すと外す）" : "☆ お気に入りに入れる"; }
+function favHome() {
+  const a = favList(); if (!a.length) return "";
+  return `<div class="lh">お気に入りのバス停</div>` + a.map(n => { const s = stops.find(x => x.name === n); return `<button class="rt" type="button" data-fav="${esc(n)}"><span>★ ${esc(n)}</span><small>${esc(s.en || "")}</small></button>`; }).join("") + `<p class="tip">お気に入りは、この端末のこのブラウザにだけ保存されます（外へは送りません）。</p>`;
+}
+function bindFavHome() { pbody.querySelectorAll("button[data-fav]").forEach(b => { b.onclick = () => { const s = stops.find(x => x.name === b.dataset.fav); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); } }; }); }
 function bindActs() {
   pbody.querySelectorAll(".acts[data-ja]").forEach(g => {
     const ja = g.dataset.ja, en = g.dataset.en, kind = g.dataset.kind;
     g.querySelector('[data-act="showja"]').onclick = e => openShowJa(ja, en, kind, e.currentTarget);
     g.querySelector('[data-act="copy"]').onclick = e => copyText(ja, e.currentTarget);
     const pb = g.querySelector('[data-act="pair"]'); if (pb) pb.onclick = () => startPair(lastStop);
+    const fb = g.querySelector('[data-act="fav"]');
+    if (fb) {
+      favPaint(fb, favList().includes(ja));
+      fb.onclick = () => {
+        const a = favList(), on = a.includes(ja), nx = on ? a.filter(n => n !== ja) : [ja, ...a];
+        if (favSave(nx)) { favPaint(fb, !on); if (!on) toast("お気に入りに入れました。ホームに出ます"); } else toast("この環境では保存できませんでした");
+      };
+    }
   });
 }
 // ---- 2つのバス停の直通系統：A と B の両方を通る系統(系統の交差)。向き・時刻・曜日は出さない ----
@@ -742,6 +761,7 @@ function home() {
   cancelPair(false); pairBack = null; hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
   render(`<h2 class="head">バス停を押してみてください</h2>
+  ${favHome()}
   <div class="lh">一覧から探す</div>
   <button class="rt" id="bLoc" type="button"><span>現在地の近くのバス停</span></button>
   <button class="rt" id="bArea" type="button"><span>地名から探す</span><small>市区町村ごと　›</small></button>
@@ -750,7 +770,7 @@ function home() {
   <p>上の検索で、駅・町名・地名・施設（例：熊谷駅、一本松駅、深谷駅）、バス停、系統（例：熊谷）を探せます。</p>
   <details class="note ride" id="ride"><summary>日本のバスの乗り方（一般的な流れ）</summary><p>乗り方・支払い方は<b>事業者や路線で異なります</b>。車内・バス停の案内表示と、運転手の指示に従ってください。ここでは一般的な流れだけをまとめています。運賃の金額・時刻は書いていません。</p><ul><li><b>乗る</b>：前のドアから乗る車と、後ろ（中）のドアから乗る車があります。乗る側のドアは、車体やバス停の表示で分かります。</li><li><b>整理券・ICカード</b>：後ろから乗る車では、乗る時に整理券（番号の紙）を取るか、ICカードを読み取り機にタッチします。整理券の番号で運賃が決まります。ICカードは、降りる時にも読み取り機にタッチする路線が多いです（案内表示に従ってください）。</li><li><b>運賃</b>：均一運賃の路線と、距離で変わる路線があります。運転席の上の運賃表示器に、整理券の番号ごとの金額が出ます。</li><li><b>支払い</b>：現金は降りる時（前払いの路線は乗る時）に運賃箱へ入れます。おつりが出ない車が多いので、両替機で先に両替します。交通系ICカード（Suica・ICOCA・nimoca など）が使える事業者が多いですが、使えない路線・地域もあります。</li><li><b>降りる</b>：次のバス停の案内（アナウンス・表示）を聞いて、降車ボタンを押します。バスが止まってから席を立ちます。</li><li><b>同じ名前のバス停</b>：行き先によって道路の反対側や離れた場所にあることがあります。この地図では同じ名前のバス停をまとめて表示しています。</li></ul><p class="tip">詳しくは、各事業者の公式サイトの「乗り方」案内をご覧ください（バス停・系統の画面の「公式サイト」から開けます）。</p></details><div class="lh">この地図に含まれる市町村（27）</div><p class="tip">熊谷市・飯能市・入間市・狭山市・秩父市・坂戸市・深谷市・鶴ヶ島市・東松山市・上里町・毛呂山町・ときがわ町・小川町・小鹿野町・日高市・本庄市・東秩父村・越生町・鳩山町・寄居町・吉見町・横瀬町・神川町・嵐山町・皆野町・美里町・滑川町</p><div class="lh">ほかの地域</div><a class="rt" href="/bus/"><span>地域一覧（バスマップのホーム）</span><small>›</small></a><a class="rt" href="/bus/saitama/ageo-kawagoe/"><span>上尾・川越周辺バスマップ</span><small>東　›</small></a><a class="rt" href="/bus/saitama/kawaguchi-misato/"><span>川口・三郷周辺バスマップ</span><small>南東　›</small></a><a class="rt" href="/bus/saitama/saitama-kuki/"><span>さいたま・久喜周辺バスマップ</span><small>東　›</small></a>${SEO}${NOTE}`, "バス停・系統を選んでください");
   setHash("");
-  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex; bindFavHome();
 }
 function routeBtn(r) {
   return `<button class="rt" type="button" data-r="${r.i}"><span>${esc(routeLabel(r))}${ENDS(r)}</span><small>${r.n}か所</small></button>`;

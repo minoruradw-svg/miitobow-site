@@ -186,6 +186,7 @@
   .act { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
   .act:hover { border-color: var(--brand); background: var(--brand-soft); }
   .act.ext { color: var(--accent-dark); }
+  .act.fav[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
   details.extmaps { margin: 0 0 10px; }
   details.extmaps summary::before { content: "▸ "; white-space: pre; }
   details.extmaps[open] summary::before { content: "▾ "; }
@@ -699,7 +700,7 @@ function readHash() {
 // ---- 持ち出し：日本語で大きく見せる／名前をコピー／外部地図へ(押した時だけ座標を渡す) ----
 const EXT_LINKS = (lat, lon, name) => { const q = lat.toFixed(5) + "," + lon.toFixed(5);
   return `<a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Open in Google Maps</a><a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=transit">Directions here (Google Maps)</a><a class="act ext" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${q}&q=${encodeURIComponent(name)}">Open in Apple Maps</a>`; };
-const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">Show in Japanese</button><button type="button" class="act" data-act="copy">Copy name</button>${kind === "stop" ? `<button type="button" class="act" data-act="pair">Direct routes to another stop</button>` : ""}</div>`;
+const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">Show in Japanese</button><button type="button" class="act" data-act="copy">Copy name</button>${kind === "stop" ? `<button type="button" class="act" data-act="pair">Direct routes to another stop</button>` : ""}${kind === "stop" ? `<button type="button" class="act fav" data-act="fav" aria-pressed="false"></button>` : ""}</div>`;
 const GOFF = {};   // 事業者グループ → official[] の添字(任意・無ければ全件)
 const OFFICIAL = (g, open) => { const el = document.createElement("div"); el.innerHTML = `<a class="act ext" target="_blank" rel="noopener" data-oi="0" href="https://citybus-osaka.co.jp/">Osaka City Bus official route maps and timetables (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="1" href="https://subway.osakametro.co.jp/">Osaka Metro (subway) official site</a><a class="act ext" target="_blank" rel="noopener" data-oi="2" href="https://www.hankyubus.co.jp/">Hankyu Bus official site (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="3" href="https://www.keihanbus.jp/">Keihan Bus official site (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="4" href="https://www.kintetsu-bus.co.jp/">Kintetsu Bus official site (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="5" href="https://www.nankaibus.jp/">Nankai Bus official site (Japanese)</a>`; const keep = g && GOFF[g]; if (keep) [...el.children].forEach(a => { if (!keep.includes(+a.dataset.oi)) a.remove(); }); if (!el.children.length) return "";
   return `<details class="extmaps official"${open ? " open" : ""}><summary>Official sites (timetables & fares)</summary><div class="acts">${el.innerHTML}</div><p class="tip">Opens an external site. These are the operators’ own official pages, not related to this page. Check timetables, fares and service changes there.</p></details>`; };
@@ -721,12 +722,30 @@ function copyText(t, btn) {
   const fb = () => { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy") && done(); } catch (e) {} ta.remove(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fb); else fb();
 }
+// ---- お気に入りのバス停：この端末のブラウザ(localStorage)だけに保存。名前で持つ(日英共通・地域ごと) ----
+const FAVKEY = "busmap.fav:" + location.pathname.replace(/^\/(bus\/)?(en\/)?/, "").replace(/(index\.html)?$/, "").replace(/\/$/, "");
+function favList() { try { const a = JSON.parse(localStorage.getItem(FAVKEY) || "[]"); return Array.isArray(a) ? a.filter(n => typeof n === "string" && stops.some(s => s.name === n)) : []; } catch (e) { return []; } }
+function favSave(a) { try { localStorage.setItem(FAVKEY, JSON.stringify(a.slice(0, 50))); return true; } catch (e) { return false; } }
+function favPaint(btn, on) { btn.setAttribute("aria-pressed", String(on)); btn.textContent = on ? "★ Saved (tap again to remove)" : "☆ Save this stop"; }
+function favHome() {
+  const a = favList(); if (!a.length) return "";
+  return `<div class="lh">Saved stops</div>` + a.map(n => { const s = stops.find(x => x.name === n); return `<button class="rt" type="button" data-fav="${esc(n)}"><span>★ ${esc(n)}</span><small>${esc(s.en || "")}</small></button>`; }).join("") + `<p class="tip">Saved stops stay only in this browser on this device. Nothing is sent anywhere.</p>`;
+}
+function bindFavHome() { pbody.querySelectorAll("button[data-fav]").forEach(b => { b.onclick = () => { const s = stops.find(x => x.name === b.dataset.fav); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); } }; }); }
 function bindActs() {
   pbody.querySelectorAll(".acts[data-ja]").forEach(g => {
     const ja = g.dataset.ja, en = g.dataset.en, kind = g.dataset.kind;
     g.querySelector('[data-act="showja"]').onclick = e => openShowJa(ja, en, kind, e.currentTarget);
     g.querySelector('[data-act="copy"]').onclick = e => copyText(ja, e.currentTarget);
     const pb = g.querySelector('[data-act="pair"]'); if (pb) pb.onclick = () => startPair(lastStop);
+    const fb = g.querySelector('[data-act="fav"]');
+    if (fb) {
+      favPaint(fb, favList().includes(ja));
+      fb.onclick = () => {
+        const a = favList(), on = a.includes(ja), nx = on ? a.filter(n => n !== ja) : [ja, ...a];
+        if (favSave(nx)) { favPaint(fb, !on); if (!on) toast("Saved. It will show on the home screen."); } else toast("Could not save in this browser.");
+      };
+    }
   });
 }
 // ---- 2つのバス停の直通系統：A と B の両方を通る系統(系統の交差)。向き・時刻・曜日は出さない ----
@@ -779,6 +798,7 @@ function home() {
   cancelPair(false); pairBack = null; hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
   render(`<h2 class="head">Tap a bus stop</h2>
+  ${favHome()}
   <div class="lh">Browse</div>
   <button class="rt" id="bLoc" type="button"><span>Bus stops near me</span></button>
   <button class="rt" id="bArea" type="button"><span>Find by area</span><small>by ward or municipality ›</small></button>
@@ -788,7 +808,7 @@ function home() {
   <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p>
   <details class="note ride" id="ride"><summary>How to ride a bus in Japan (general guide)</summary><p>Boarding and payment <b>differ by operator and route</b>. Follow the signs on the bus and at the stop, and the driver’s instructions. This is only a general outline; fares and times are not included.</p><ul><li><b>Boarding</b>: Some buses are boarded at the front door, others at the rear (middle) door. Signs on the bus or at the stop show which.</li><li><b>Numbered ticket / IC card</b>: On rear-boarding buses, take a numbered ticket (seiriken) or tap your IC card on the reader when you get on. The ticket number sets your fare. On many routes you also tap your IC card when you get off (follow the on-board instructions).</li><li><b>Fares</b>: Some routes have a flat fare; others charge by distance. A display above the driver shows the fare for each ticket number.</li><li><b>Paying</b>: Cash goes into the fare box when you get off (or when you get on, on pre-pay routes). Many buses do not give change, so use the change machine first. Transit IC cards (Suica, ICOCA, nimoca, etc.) are accepted by many operators, but not on every route or in every area.</li><li><b>Getting off</b>: Listen for the next-stop announcement or display, then press a stop button. Stay seated until the bus stops.</li><li><b>Same stop name</b>: Stops with the same name may be across the road or some distance apart depending on direction. This map groups same-name stops together.</li></ul><p class="tip">For details, see “How to ride” on each operator’s official site (open it from “Official sites” on a stop or route screen).</p></details><div class="lh">Municipalities in this map (10)</div><p class="tip">Osaka City, Sakai City, Suita City, Toyonaka City, Higashiosaka City, Settsu City, Yao City, Moriguchi City, Kadoma City, Matsubara City</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/osaka/kita-osaka/"><span>Hokusetsu-Kita-Kawachi Bus Map</span><small>N ›</small></a><a class="rt" href="/bus/en/osaka/minami-kawachi/"><span>Minami-Kawachi Bus Map</span><small>S ›</small></a><a class="rt" href="/bus/en/osaka/senshu/"><span>Senshu-Southern Sakai Bus Map</span><small>S ›</small></a><a class="rt" href="/bus/en/hyogo/hanshin-sanda/"><span>Amagasaki-Takarazuka-Sanda Bus Map</span><small>NW ›</small></a><a class="rt" href="/bus/en/hyogo/kobe/"><span>Kobe-Nishinomiya-Akashi Bus Map</span><small>W ›</small></a><a class="rt" href="/bus/en/nara/nara-basin/"><span>Nara Basin Bus Map</span><small>E ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
-  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
+  document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex; bindFavHome();
 }
 function routeBtn(r) {
   return `<button class="rt" type="button" data-r="${r.i}"><span>${rnm(r)}${ENDS(r)}</span><small>${r.n} ${P(r.n, "stop", "stops")}</small></button>`;
