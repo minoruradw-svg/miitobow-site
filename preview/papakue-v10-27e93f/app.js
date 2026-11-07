@@ -37,6 +37,7 @@
   const ZV = { req: { pc: "assets/zm/req_pc.mp4", sp: "assets/zm/req_sp.mp4", end: "assets/zm/req_pc_end.jpg", endSp: "assets/zm/req_sp_end.jpg" }, thx: { pc: "assets/zm/thx_pc.mp4", sp: "assets/zm/thx_sp.mp4", end: "assets/zm/thx_pc_end.jpg", endSp: "assets/zm/thx_sp_end.jpg" }, dl: { pc: "assets/zm/dl_pc.mp4", sp: "assets/zm/dl_sp.mp4", end: "assets/zm/dl_pc_end.jpg", endSp: "assets/zm/dl_sp_end.jpg" }, fv: { pc: "assets/zm/fv_pc.mp4", sp: "assets/zm/fv_sp.mp4", end: "assets/zm/fv_pc_end.jpg", endSp: "assets/zm/fv_sp_end.jpg" }, add: { pc: "assets/zm/add_pc.mp4", sp: "assets/zm/add_sp.mp4", end: "assets/zm/add_pc_end.jpg", endSp: "assets/zm/add_sp_end.jpg" } };
   /* 触れる体験（02 ADD＝ロック画面の「クエスト追加」を押す）の時間管理 */
   const TAP = { sheet: 0, st: 0, t0: 0, add: 0, last: 0, ring: 0, ringT: 0, goRip: 0, goT: 0, go: 0, chars: 0, u3: 0, out3: 0, nq: 0, pop: 0 };
+  let fixY = null; const rawY = () => fixY !== null ? fixY : window.scrollY;   // ロック中（iOSは body 固定）は、固定した位置を返す
   const G = { XL: 0, car: { x: 0, y: 60 }, rq: { x: 0, y: 0 }, P2x: 1500, P2y: 0, s4: 1.12, sx0: 0, scrW: 0, scrH: 0, sq: { x: 0, y: -60, w: 200, h: 80 }, wg: { x: 80, y: -130 }, ig: { x: -20, y: 30 }, nq: { x: 0, y: 120 }, sc: 1, yc: 450 };
 
   /* ---------- 文字ごとのグラデ ---------- */
@@ -70,7 +71,7 @@
     { const px = parseFloat(getComputedStyle(document.querySelector('[data-ch="s4"] .pin')).paddingLeft) || 0, cw = Math.min(520, .42 * W); G.XL = (px + (W - px - cw - 28)) / 2; }   // S4・S5（v9のまま）用
     if (!M) G.XL = W / 2;   // v10：どの章でもスマホは真ん中
     G.tl5 = M ? W * .6 : G.XL + 520;
-    const sy = scrollY = window.scrollY;
+    const sy = scrollY = rawY();
     tops = chEls.map(e => e.getBoundingClientRect().top + sy); hs = chEls.map(e => e.offsetHeight);
     afterTop = $("after").getBoundingClientRect().top + sy;
     MB = {};
@@ -393,7 +394,7 @@
     const z = zvBox[k]; if (!z || z.v || !ZV[k]) return z;
     if (RM) { const im = new Image(); im.alt = ""; im.src = M ? ZV[k].endSp : ZV[k].end; z.box.appendChild(im); z.v = im; return z; }
     const v = document.createElement("video"); v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "metadata"; v.setAttribute("aria-hidden", "true");
-    v.src = M ? ZV[k].sp : ZV[k].pc; z.box.appendChild(v); z.v = v; v.addEventListener("error", () => { LS.vid = true; }); return z; }
+    v.src = M ? ZV[k].sp : ZV[k].pc; z.box.appendChild(v); z.v = v; return z; }
   function zvPlay(id, on) {
     const k = zvKey[id]; if (!k) return; const z = zvEnsure(k); if (!z || !z.v || RM) return;
     if (on) { try { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { z.v.pause(); z.v.currentTime = 0; } catch (e) {} }
@@ -449,7 +450,10 @@
     let dk = "", dt = "";
     if (TAP.st === 2 && p3 > .66 && p3 < .92) { dk = "s3"; dt = "クエストができた！"; }
     else [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k]; if (g.i >= g.stops.length - 1 && phWin(u, k) > .5) { dk = k; dt = g.done; } });
-    doneOwner = dk; tapDone.classList.toggle("on", !!dk); downCue.classList.toggle("on", !!dk && !LS.cur); if (dk && tapDone.firstElementChild.textContent !== dt) tapDone.firstElementChild.textContent = dt;
+    doneOwner = dk; tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
+    const wOn = { s3: o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))) > .5, s4: phWin(u4, "s4") > .5, s5: phWin(u5, "s5") > .5 };
+    const playing = (TAP.st === 1 && wOn.s3) || (!!STG.s4.anim && wOn.s4) || (!!STG.s5.anim && wOn.s5);
+    const ph = dk ? 0 : (hintOwner ? 1 : (playing ? 2 : 0)), sb = $("stateBar"); sb.className = "statebar" + (ph ? " on sb" + ph : ""); if (ph) { const tx = ph === 1 ? "ここを押してね" : "見ていてね…"; if ($("sbT").textContent !== tx) $("sbT").textContent = tx; sb.querySelector(".fing").style.display = ph === 1 ? "" : "none"; }
   }
   tapHint.onclick = () => { const kb = document.activeElement === tapHint, o = hintOwner; if (o === "s3") tapStart(); else if (o) stgStart(o); if (kb) setTimeout(() => { if (tapDone.classList.contains("on")) tapAgain.focus(); }, 60); };
   tapAgain.onclick = () => { if (doneOwner === "s3") { TAP.st = RM ? 2 : 1; TAP.t0 = performance.now(); } else if (doneOwner) { const g = STG[doneOwner]; g.v = 0; g.i = 0; g.anim = null; } };
@@ -460,30 +464,34 @@
      ・解除：押し終わった／「スキップして先へ」／Escape／上へ戻った／ヘッダーのナビ／reduced-motion／極端に小さい画面／動画の読み込み失敗。
      ・一度「完了・スキップ・上へ戻った」場面は、二度とロックしない（「もう一度」もロック無し）。 */
   const LK = { s3: { p: .76, done: () => TAP.st === 2 }, s4: { p: .70, done: () => STG.s4.i >= 2 }, s5: { p: .70, done: () => STG.s5.i >= 4 } };
-  const LS = { cur: null, off: {}, vid: false }, skipBtn = $("lockSkip"), lockMsg = $("lockMsg"), downCue = $("downCue"); let lockPrev = window.scrollY, userUntil = 0, navUntil = 0;
+  const LS = { cur: null, y: 0, off: {}, vid: false }, skipBtn = $("lockSkip"), lockMsg = $("lockMsg"), mainEl = document.querySelector("main"); let lockPrev = rawY(), navUntil = performance.now() + 2500;   // 読み込み直後（#ハッシュ・戻るの復元）は対象外
+  window.__LS = LS; window.__lockOff = list => list.forEach(k => { LS.off[k] = "test"; }); window.__rawY = rawY;
+  const LOCKFIX = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const NOLOCK = /[?&]nolock/.test(location.search), lockOk = () => !NOLOCK && !RM && W >= 300 && !LS.vid, lockYof = k => tops[IDX[k]] + (hs[IDX[k]] - H) * LK[k].p;
-  function lockSet(k) { LS.cur = k; document.documentElement.classList.add("locked"); skipBtn.hidden = false; lockMsg.textContent = "ボタンを押すと次へ進めます"; }
-  function lockRelease(why) { const k = LS.cur; if (!k) return; LS.cur = null; if (why) LS.off[k] = why; document.documentElement.classList.remove("locked"); skipBtn.hidden = true; lockMsg.textContent = why === "done" ? "先へ進めます" : ""; }
-  window.addEventListener("scroll", () => {
-    const y = window.scrollY, prev = lockPrev, now = performance.now(); lockPrev = y; if (!lockOk()) { if (LS.cur) lockRelease(null); return; }
-    if (LS.cur) { const ly = lockYof(LS.cur); if (y > ly + 1) { window.scrollTo(0, ly); return; } if (y < ly - H * .25) lockRelease("escaped"); return; }
-    if (y <= prev || navUntil > now) return; const user = userUntil > now;
-    if (!user && y - prev > .6 * H) return;   // コードやつまみによる大きなジャンプは対象外（ホイール・タッチ・キーは、どれだけ速くても止める）
-    Object.keys(LK).sort((a, b) => lockYof(a) - lockYof(b)).some(k => { if (LS.off[k]) return false; const ly = lockYof(k); if (prev <= ly && y >= ly) { window.scrollTo(0, ly); lockSet(k); return true; } return false; });
+  /* ロック＝ページのスクロールそのものを無効にする：html/body に overflow:hidden＋touch-action:none＋overscroll-behavior:none（スクロールバーは消え、幅は scrollbar-gutter で確保）。
+     iOS Safari は body を position:fixed にして位置を保持する。ロック中は main を inert にして、Tab のフォーカス移動によるスクロールも防ぐ。 */
+  function lockSet(k) { const ly = lockYof(k); window.scrollTo(0, ly); LS.cur = k; LS.y = ly; const de = document.documentElement; if (LOCKFIX) { fixY = ly; document.body.style.top = -ly + "px"; de.classList.add("lockfix"); } de.classList.add("locked"); mainEl.inert = true; skipBtn.hidden = false; lockMsg.textContent = "ボタンを押すと次へ進めます"; if (document.activeElement && mainEl.contains(document.activeElement)) document.activeElement.blur(); }
+  function lockRelease(why) { const k = LS.cur; if (!k) return; LS.cur = null; if (why) LS.off[k] = why; document.documentElement.classList.remove("locked", "lockfix"); mainEl.inert = false; const y = LS.y; if (fixY !== null) { fixY = null; document.body.style.top = ""; window.scrollTo(0, y); } lockPrev = y; skipBtn.hidden = true; lockMsg.textContent = why === "done" ? "先へ進めます" : ""; }
+  window.addEventListener("scroll", () => {   // 保険：ロック中に位置が動いたら戻す／ロック前は、押す場面の位置を下へ越えた瞬間にロック（つまみドラッグ・ホイール・キー・タッチ・慣性のどれでも）
+    const y = rawY(), prev = lockPrev, now = performance.now(); lockPrev = y; if (!lockOk()) { if (LS.cur) lockRelease(null); return; }
+    if (LS.cur) { if (fixY === null && Math.abs(y - LS.y) > 1) window.scrollTo(0, LS.y); return; }
+    if (y <= prev || navUntil > now) return;
+    Object.keys(LK).sort((a, b) => lockYof(a) - lockYof(b)).some(k => { if (LS.off[k]) return false; const ly = lockYof(k); if (prev <= ly && y >= ly) { lockSet(k); return true; } return false; });
   }, { passive: true });
-  window.addEventListener("wheel", e => { userUntil = performance.now() + 250; if (LS.cur && e.deltaY > 0 && e.cancelable) e.preventDefault(); }, { passive: false });
-  let tLast = 0; window.addEventListener("touchstart", e => { tLast = e.touches[0].clientY; }, { passive: true });
-  window.addEventListener("touchmove", e => { userUntil = performance.now() + 250; const y = e.touches[0].clientY; if (LS.cur && e.touches.length === 1 && y < tLast && e.cancelable) e.preventDefault(); tLast = y; }, { passive: false });
+  window.addEventListener("wheel", e => { if (LS.cur && !e.ctrlKey && e.cancelable) e.preventDefault(); }, { passive: false });
+  window.addEventListener("mousedown", e => { if (LS.cur && e.button === 1) e.preventDefault(); });   // ホイールクリックのオートスクロール
+  window.addEventListener("touchmove", e => { if (LS.cur && e.touches.length === 1 && e.cancelable) e.preventDefault(); }, { passive: false });
   window.addEventListener("keydown", e => {
-    const t = e.target && e.target.tagName, inter = t === "BUTTON" || t === "A" || t === "INPUT" || t === "TEXTAREA" || t === "SELECT";
-    if (e.key === "End" || e.key === "Home") navUntil = performance.now() + 1200; else if ([" ", "PageDown", "ArrowDown", "PageUp", "ArrowUp"].includes(e.key)) userUntil = performance.now() + 250;
     if (!LS.cur) return;
     if (e.key === "Escape") { lockRelease("escaped"); return; }
-    const down = (e.key === " " && !e.shiftKey) || e.key === "PageDown" || e.key === "ArrowDown" || e.key === "End";
-    if (down && !(e.key === " " && inter)) e.preventDefault();
+    const t = e.target && e.target.tagName, inter = t === "BUTTON" || t === "A" || t === "INPUT" || t === "TEXTAREA" || t === "SELECT";
+    if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "End", "Home"].includes(e.key) && !(e.key === " " && inter)) e.preventDefault();
   });
-  document.addEventListener("click", e => { const a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) { navUntil = performance.now() + 1500; lockRelease(null); } });
-  skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); window.scrollTo({ top: tops[IDX[k]] + (hs[IDX[k]] - H) * .97, behavior: RM ? "auto" : "smooth" }); };
+  document.addEventListener("click", e => { const a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) { navUntil = performance.now() + 2500; lockRelease(null); } });
+  const goNext = k => { navUntil = performance.now() + 2500; window.scrollTo({ top: tops[IDX[k]] + (hs[IDX[k]] - H) * .97, behavior: RM ? "auto" : "smooth" }); };
+  skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); goNext(k); };
+  $("nextGo").onclick = () => { const k = doneOwner; if (k) { if (LS.cur) lockRelease("done"); goNext(k); } };
+  window.addEventListener("resize", () => { if (LS.cur) requestAnimationFrame(() => { LS.y = lockYof(LS.cur); if (fixY !== null) { fixY = LS.y; document.body.style.top = -LS.y + "px"; } else window.scrollTo(0, LS.y); }); });
   function lockFrame() { if (LS.cur && LK[LS.cur].done()) lockRelease("done"); }
 
 
@@ -514,10 +522,10 @@
     v.innerHTML = '<source src="assets/pr_720.mp4" type="video/mp4">'; const vin = $("vin"); vin.innerHTML = ""; vin.appendChild(v); v.play().catch(() => {}); v.focus(); };
 
   /* ---------- ループ ---------- */
-  let smY = window.scrollY, lastT = 0;   // 描画に使うスクロール位置：実際の位置へなめらかに追従（止めると余韻でぴたっと止まる。逆スクロールも同じ道をたどる）
+  let smY = rawY(), lastT = 0;   // 描画に使うスクロール位置：実際の位置へなめらかに追従（止めると余韻でぴたっと止まる。逆スクロールも同じ道をたどる）
   function frame(now) {
     requestAnimationFrame(frame);
-    const real = window.scrollY;
+    const real = rawY();
     if (RM || !lastT) smY = real; else { smY += (real - smY) * (1 - Math.exp(-Math.min(.3, (now - lastT) / 1000) * 22)); if (Math.abs(real - smY) < .5) smY = real; }
     lastT = now; scrollY = smY;
     if (t0) introP = RM ? 1 : clamp(((now - t0) / 1000 - 1.55) / 1.1);
