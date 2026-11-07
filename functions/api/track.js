@@ -10,6 +10,31 @@ const ALLOWED_EVENTS = new Set(["store_click"]);
 const ALLOWED_TARGETS = new Set(["ios", "android", "windows"]);
 const MAX_FIELD_LEN = 200;
 
+// /start/（SNS専用LP）のクリック計測。既存のストアクリック記録(track:log)には触れず、
+// 別キー(track:start)に記録する（件数の上限で、ストアの記録が押し出されないようにするため）。
+// 個人情報は記録しない（イベント名・ページ・UTMのみ）。
+const START_LOG_KEY = "track:start";
+const ALLOWED_START_TARGETS = new Set([
+  "start_translate_pc",
+  "start_translate_mobile",
+  "start_papakue",
+  "start_note",
+  "start_contact",
+  "start_home",
+  "start_threads",
+  "start_brain_lp",
+  "start_brain_sns",
+  "start_brain_video",
+  "start_services",
+  // /services/（制作サービスLP）のクリック
+  "services_form",
+  "services_work_home",
+  "services_work_android",
+  "services_work_made",
+  "services_nav_plan",
+  "services_nav_works",
+]);
+
 function clip(s) {
   return typeof s === "string" ? s.slice(0, MAX_FIELD_LEN) : "";
 }
@@ -32,6 +57,46 @@ export async function onRequestPost({ request, env }) {
 
   const event = clip(body.event);
   const target = clip(body.target);
+
+  // /start/ のクリック（別キーに記録。既存のストアクリックの処理は、この下のまま変更なし）
+  if (event === "start_click") {
+    if (!ALLOWED_START_TARGETS.has(target)) {
+      return new Response(JSON.stringify({ error: "invalid_event_or_target" }), {
+        status: 400,
+        headers: { "content-type": "application/json" },
+      });
+    }
+    const startEntry = {
+      ts: Date.now(),
+      event,
+      target,
+      page: clip(body.page),
+      utm_source: clip(body.utm_source),
+      utm_medium: clip(body.utm_medium),
+      utm_campaign: clip(body.utm_campaign),
+      utm_content: clip(body.utm_content),
+    };
+    const startRaw = await env.MIITOBOW_BOARD.get(START_LOG_KEY);
+    let startLog = [];
+    if (startRaw) {
+      try {
+        startLog = JSON.parse(startRaw);
+        if (!Array.isArray(startLog)) startLog = [];
+      } catch (e) {
+        startLog = [];
+      }
+    }
+    startLog.push(startEntry);
+    if (startLog.length > MAX_ENTRIES) {
+      startLog = startLog.slice(startLog.length - MAX_ENTRIES);
+    }
+    await env.MIITOBOW_BOARD.put(START_LOG_KEY, JSON.stringify(startLog));
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 201,
+      headers: { "content-type": "application/json" },
+    });
+  }
+
   if (!ALLOWED_EVENTS.has(event) || !ALLOWED_TARGETS.has(target)) {
     return new Response(JSON.stringify({ error: "invalid_event_or_target" }), {
       status: 400,
@@ -79,7 +144,9 @@ export async function onRequestGet({ request, env }) {
       headers: { "content-type": "application/json" },
     });
   }
-  const raw = await env.MIITOBOW_BOARD.get(LOG_KEY);
+  // ?log=start で /start/ のクリック記録、指定なしは従来どおりストアのクリック記録
+  const wantStart = new URL(request.url).searchParams.get("log") === "start";
+  const raw = await env.MIITOBOW_BOARD.get(wantStart ? START_LOG_KEY : LOG_KEY);
   let log = [];
   if (raw) {
     try {

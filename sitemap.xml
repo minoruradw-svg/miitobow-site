@@ -2595,4 +2595,12 @@
     <lastmod>2026-11-06</lastmod>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://miitobow.com/start/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://miitobow.com/services/</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

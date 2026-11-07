@@ -57,6 +57,8 @@ STATIC_PAGES = [
     ("/privacy/ja-en/", "privacy/ja-en/index.html", "0.2"),
     ("/game/", "game/index.html", "0.4"),
     ("/bus/", "bus/index.html", "0.5"),
+    ("/start/", "start/index.html", "0.7"),
+    ("/services/", "services/index.html", "0.7"),
 ]
 
 # サイトマップに載せないページ（公開はされている）。載せない理由を必ず書く。
