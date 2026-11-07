@@ -404,7 +404,7 @@
   function zvScroll() { [["dl", document.querySelector(".closing")]].forEach(([k, el]) => { if (!zvBox[k] || !el) return; const r = el.getBoundingClientRect(), near = r.top < H * 1.6 && r.bottom > -H * .5; if (near) zvEnsure(k); const on = r.top < H * .6 && r.bottom > H * .35; if (on !== !!zvOn[k]) { zvOn[k] = on; const z = zvEnsure(k); if (z && z.v && !RM) { try { if (on) { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } else { z.v.pause(); z.v.currentTime = 0; } } catch (e) {} } } }); }
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"); let lifeKey = "";
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"); let lifeKey = "";
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
@@ -413,10 +413,18 @@
     if (lifeKey !== best.key) { lifeKey = best.key; const c = LIFE[best.key]; lfImg.src = c.src; lfImg.alt = c.alt; lfBub.textContent = c.bubble; lfLab.textContent = c.label; }
     life.style.visibility = "visible"; life.style.opacity = String(best.op);
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
-    /* 夜の場面だけ：あと1件のロック画面が出て（.38〜.46）、吹き出しが「残ってた！」に変わる（.54〜） */
-    if (lfLock) { const night = best.key === "s7", lk = night ? o4(seg(best.p, .38, .47)) : 0; lfLock.style.opacity = String(lk); lfLock.style.transform = `scale(${lerp(.6, 1, lk)}) translateY(${(1 - lk) * 24}px)`;
-      if (night) { const sw = best.p > .54; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
-    lfLab.style.opacity = String(best.a); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .54, .62)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
+    /* 夜の場面：ミートボーが左へスライド → 大きなスマホ（実機のロック画面）が「ドン」と出て、吹き出しが「残ってた！」に。キャプション「ロック画面で、確認できます」 */
+    const night = best.key === "s7", lk = night ? o4(seg(best.p, .38, .46)) : 0, don = night ? o4(seg(best.p, .38, .45)) : 0;
+    const sh = lk * W * (M ? .23 : .20), sN = 1 - lk * (M ? .30 : .08);
+    lfImg.parentElement.style.transform = `translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
+    if (lfLock) {
+      const ph = M ? Math.min(.43 * H, 350) : Math.min(.74 * H, 620), pw = ph * 481 / 960, area = life.clientHeight || (H - 64), cx = W * (M ? .74 : .64);
+      lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = Math.max(6, (area - ph) / 2 - (M ? 6 : 30)).toFixed(1) + "px";
+      lfLock.style.opacity = String(night ? clamp(seg(best.p, .38, .405)) : 0);
+      lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .44, .54)) : 0)).toFixed(3)})`;
+      if (lfCap) lfCap.style.opacity = String(night ? clamp(seg(best.p, .47, .53)) : 0);
+      if (night) { const sw = best.p > .40; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
+    lfLab.style.opacity = String(best.a * (1 - lk)); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .40, .48)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
   }
 
   /* ---------- ビビちゃん（相手のスマホの右の空きに）：受け取った → ゴミ出し中 → スタンプで喜ぶ ---------- */
