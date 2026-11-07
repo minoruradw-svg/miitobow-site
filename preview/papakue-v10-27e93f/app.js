@@ -30,7 +30,7 @@
     s6: { src: "assets/life/life_s6.webp", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
     s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
   const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
-  const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.12, .22, .70, .82] };   // [出始め, 出きる, 消え始め, 消えきる]
+  const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.10, .18, .84, .94] };   // [出始め, 出きる, 消え始め, 消えきる]
   /* 触れる場面の窓（スクロール進行度）。文字の場面が縮んで消える窓 hv／スマホが入る窓 ph／スマホが出ていく開始 out */
   const WIN = { s2: { hv: [.18, .26] }, s3: { hv: [.20, .30] }, s4: { hv: [.10, .18], ph: [.50, .62], out: .95 }, s5: { hv: [.10, .18], ph: [.50, .62], out: .95 }, bed: { hv: [0, 0] } };
   /* 文字の場面＝よそおいモーションで書き出した動画（PC=16:9 / スマホ=9:16）。構成表は v10/zukai/ */
@@ -105,8 +105,8 @@
   const S2P = [{ side: -1, y: 20, r: -5, sc: 1.45 }, { side: 1, y: -215, r: 6, sc: 1.1 }, { side: 1, y: 205, r: -4, sc: 1.1 }];
   const S2M = [{ x: -62, y: -92, r: -6, sc: .72 }, { x: 72, y: 22, r: 5, sc: .72 }, { x: -52, y: 124, r: -3, sc: .72 }];
   const S2S = () => M ? { x: 0, y: 150 } : { x: -300, y: 40 };
-  function S2(p) {   // FV直後：スマホ＋巻物3枚が飛び出す（空きスペースに必要な一言）
-    const o = base(), a = sm(seg(p, 0, .12)); setCam(o, camFor(.5 * W, G.yc + (M ? 12 : 0), 1, 0, 0)); o.cy += (1 - a) * .2 * H;
+  function S2(p) {   // FV直後：スマホ＋巻物3枚が飛び出す（空きスペースに必要な一言）。2026-11-07：入場の上下の往復をやめた＝スマホは入場で下から1回だけ上がり、章が始まる位置(p=0)で最終位置に着いている（a=1固定）
+    const o = base(), a = 1; setCam(o, camFor(.5 * W, G.yc + (M ? 12 : 0), 1, 0, 0)); o.cy += (1 - a) * .2 * H;
     o.p1s = G.sc * (M ? .78 : 1) * lerp(.85, 1, a); o.p1ry = -9 * (1 - sm(seg(p, .1, .5))) - 14 * (1 - a); o.p1rx = 0;
     o.p1op = 1 - sm(seg(p, .96, 1)); o.p1dim = .4 * sm(seg(p, .1, .3)); o.lB = 1; o.glow = .6 * (1 - sm(seg(p, .1, .3)));
     o.lpar = .5 * sm(seg(p, .1, .4)) * (1 - sm(seg(p, .9, 1))); o.ca = 1 - sm(seg(p, .93, .985)); return o; }
@@ -169,7 +169,8 @@
     if (enter >= 1 || scrollY >= tops[i]) return cur;
     const prev = i === 0 ? heroState(9) : FN[ids[i - 1]](1), tgt = FN[id](0);
     const fast = id === "s2" ? sm(seg(enter, .3, 1)) : tgt.p1op < .01 && tgt.p2op < .01 ? sm(clamp(enter * 3)) : ((prev.p1op < .01 && prev.p2op < .01) ? sm(seg(enter, .6, 1)) : enter);   // スマホのない場面からは、スマホの登場を後ろ40%へ（デモに残像を出さない）
-    return mix(prev, tgt, fast);
+    const r = mix(prev, tgt, fast); if (id === "s2") r.cy -= (1 - fast) * .2 * H;   // スマホが下から1回だけ上がって、最終位置で止まる
+    return r;
   }
 
   /* ---------- 描画 ---------- */
@@ -320,7 +321,7 @@
       if (vv > .5 && !c.classList.contains("on")) { c.classList.add("on"); zvPlay(id, true); } else if (vv < .05 && c.classList.contains("on")) { c.classList.remove("on"); zvPlay(id, false); }
       if (id === "s2") { const ex = 1 - sm(seg(p, .93, .985)), q = (a0, a1) => (sm(seg(p, a0, a1)) * ex).toFixed(3); c.style.setProperty("--q1", q(.06, .14)); c.style.setProperty("--q2", q(.26, .34)); c.style.setProperty("--q3", q(.46, .54)); }
       c.style.setProperty("--vis", vv.toFixed(3)); });
-    lifeFrame({ s3: p3, s4: u4, s5: u5, bed: ub }); hintFrame(S, p3, u4, u5); zvScroll(); { const tb = zvBox.thx && zvBox.thx.box; if (tb) { tb.style.opacity = String(thxVis); tb.style.visibility = thxVis > .01 ? "visible" : "hidden"; } }
+    lifeFrame({ s3: p3, s4: u4, s5: u5, bed: ub }); biviFrame(S, p4, p5, u5, now); hintFrame(S, p3, u4, u5); zvScroll(); { const tb = zvBox.thx && zvBox.thx.box; if (tb) { tb.style.opacity = String(thxVis); tb.style.visibility = thxVis > .01 ? "visible" : "hidden"; } }
   }
   let thxVis = 0;
   /* ---------- スタンプ受信の演出（実アプリ stamp_celebration.dart の式どおり：光の筋・衝撃の輪・閃光・ハート／星／丸・またたく星。音と振動は無し） ---------- */
@@ -403,7 +404,7 @@
   function zvScroll() { [["dl", document.querySelector(".closing")]].forEach(([k, el]) => { if (!zvBox[k] || !el) return; const r = el.getBoundingClientRect(), near = r.top < H * 1.6 && r.bottom > -H * .5; if (near) zvEnsure(k); const on = r.top < H * .6 && r.bottom > H * .35; if (on !== !!zvOn[k]) { zvOn[k] = on; const z = zvEnsure(k); if (z && z.v && !RM) { try { if (on) { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } else { z.v.pause(); z.v.currentTime = 0; } } catch (e) {} } } }); }
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"); let lifeKey = "";
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"); let lifeKey = "";
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
@@ -412,7 +413,31 @@
     if (lifeKey !== best.key) { lifeKey = best.key; const c = LIFE[best.key]; lfImg.src = c.src; lfImg.alt = c.alt; lfBub.textContent = c.bubble; lfLab.textContent = c.label; }
     life.style.visibility = "visible"; life.style.opacity = String(best.op);
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
-    lfLab.style.opacity = String(best.a); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)))}) rotate(${(1 - best.pop) * -10}deg)`;
+    /* 夜の場面だけ：あと1件のロック画面が出て（.38〜.46）、吹き出しが「残ってた！」に変わる（.54〜） */
+    if (lfLock) { const night = best.key === "s7", lk = night ? o4(seg(best.p, .38, .47)) : 0; lfLock.style.opacity = String(lk); lfLock.style.transform = `scale(${lerp(.6, 1, lk)}) translateY(${(1 - lk) * 24}px)`;
+      if (night) { const sw = best.p > .54; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
+    lfLab.style.opacity = String(best.a); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .54, .62)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
+  }
+
+  /* ---------- ビビちゃん（相手のスマホの右の空きに）：受け取った → ゴミ出し中 → スタンプで喜ぶ ---------- */
+  const bivi = $("bivi"), BV = { look: $("bvLook"), trash: $("bvTrash"), happy: $("bvHappy") }; let bvKey = "", bvT0 = 0;
+  function biviFrame(S, p4, p5, u5, now) {
+    if (!bivi) return;
+    const key = p5 >= .93 ? "happy" : (u5 > .02 ? "trash" : (p4 >= .72 ? "look" : "")), vis = (M || !key) ? 0 : clamp(S.p2op * 1.5);
+    if (vis <= .01) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; bvKey = ""; return; }
+    const img = BV[key], ratio = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1.02, r = ph2.getBoundingClientRect();
+    const left = r.right + 18 + (key === "trash" ? 76 : 0), availW = W - left - 14; /* ゴミ出しの場面は、広がる巻物の右端をよける */ let hh = Math.min(.46 * H, 420); if (hh * ratio > availW) hh = availW / ratio;
+    if (hh < 150) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; return; }
+    if (bvKey !== key) { bvKey = key; bvT0 = now; Object.keys(BV).forEach(k => { BV[k].style.opacity = k === key ? "1" : "0"; }); }
+    const t = RM ? 9 : (now - bvT0) / 1000;
+    let sc = 1, tx = 0, ty = 0;
+    if (key === "look") { const e = o4(clamp(t / .5)); sc = lerp(.82, 1, e) + .06 * bell(clamp((t - .35) / .35)); ty = (1 - e) * 24; }
+    else if (key === "trash") { const e = o4(clamp(t / .7)); tx = (1 - e) * 90; sc = 1; }
+    else { sc = 1 + .17 * Math.abs(Math.sin(t * Math.PI / .42)) * Math.exp(-2.3 * t); }   // 喜ぶ：パンパン（2回はずんで落ち着く）
+    bivi.style.width = (hh * ratio).toFixed(1) + "px"; bivi.style.height = hh.toFixed(1) + "px";
+    bivi.style.left = left.toFixed(1) + "px"; bivi.style.top = Math.max(74, r.bottom - hh - 26).toFixed(1) + "px";
+    bivi.style.visibility = "visible"; bivi.style.opacity = String(vis);
+    bivi.style.transform = `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${sc.toFixed(3)})`;
   }
 
   /* ---------- 触れる体験（02 ADD） ---------- */
