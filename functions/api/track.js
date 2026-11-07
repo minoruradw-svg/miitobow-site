@@ -31,6 +31,7 @@ const ALLOWED_START_TARGETS = new Set([
   "services_work_home",
   "services_work_android",
   "services_work_made",
+  "services_work_windows",
   "services_nav_plan",
   "services_nav_works",
 ]);
