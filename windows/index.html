@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>スクショで翻訳 for Windows｜英語の画面を、まるごと日本語に。</title>
+<meta name="description" content="スクショを貼るだけで、英語の画面が元のレイアウトのまま日本語に。翻訳も文字の読み取りもPCの中で完結。無料・広告なしのWindowsアプリ。">
+<link rel="canonical" href="https://miitobow.com/windows/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="miitobow">
+<meta property="og:title" content="スクショで翻訳 for Windows｜英語の画面を、まるごと日本語に。">
+<meta property="og:description" content="スクショを貼るだけで、英語の画面が元のレイアウトのまま日本語に。翻訳も文字の読み取りもPCの中で完結。無料・広告なし。">
+<meta property="og:url" content="https://miitobow.com/windows/">
+<meta property="og:image" content="https://miitobow.com/windows/images/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+:root{
+  --ink:#10303a; --ink2:#1d4650; --teal:#17606b; --teal-d:#0f4a54; --aqua:#4cc9d6; --aqua-s:#e5f6f8; --aqua-m:#c9edf1;
+  --paper:#fbfdfd; --white:#fff; --line:#d5e5e8; --muted:#55707a; --warn:#8a5a00; --warn-bg:#fff6e0;
+  --shadow:0 18px 50px -18px rgba(16,48,58,.35), 0 3px 10px rgba(16,48,58,.08);
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:light; } }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.8 "Yu Gothic UI","Yu Gothic","Hiragino Sans","Meiryo",system-ui,sans-serif;-webkit-text-size-adjust:100%;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:800;line-height:1.35;letter-spacing:.01em;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.in{width:min(1160px,100% - 40px);margin-inline:auto}
+.nb{display:inline-block}
+.skip{position:absolute;left:-999px;top:0;background:#fff;padding:8px 14px;z-index:99}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:3px solid var(--aqua);outline-offset:3px;border-radius:6px}
+
+/* header */
+.hd{position:sticky;top:0;z-index:30;background:rgba(251,253,253,.92);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.hd .in{display:flex;align-items:center;gap:22px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:1.02rem;white-space:nowrap}
+.brand img{width:34px;height:34px;border-radius:9px}
+.brand small{font-weight:700;color:var(--teal);font-size:.72rem;border:1px solid var(--aqua);border-radius:99px;padding:1px 9px;margin-left:2px}
+.hd nav{display:flex;gap:4px;margin-left:auto}
+.hd nav a{text-decoration:none;font-size:.9rem;font-weight:700;color:var(--ink2);padding:8px 12px;border-radius:99px}
+.hd nav a:hover,.hd nav a.on{background:var(--aqua-s)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;text-decoration:none;font-weight:800;border-radius:99px;padding:.78em 1.5em;background:var(--teal);color:#fff;border:2px solid var(--teal);box-shadow:0 8px 22px -10px rgba(23,96,107,.7);transition:transform .15s,background .15s}
+.btn:hover{background:var(--teal-d);transform:translateY(-1px)}
+.btn.alt{background:transparent;color:var(--teal);box-shadow:none}
+.btn.alt:hover{background:var(--aqua-s)}
+.btn.big{font-size:1.05rem;padding:.95em 1.9em}
+.btn svg{width:1.1em;height:1.1em;flex:none}
+.hd .btn{padding:.55em 1.2em;font-size:.9rem;margin-left:6px}
+
+/* sections */
+.sec{padding:clamp(64px,9vw,120px) 0}
+.sec.tint{background:var(--aqua-s)}
+.sec.dark{background:var(--ink);color:#eaf7f9}
+.eyebrow{display:inline-block;font-weight:800;font-size:.78rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:14px}
+.dark .eyebrow{color:var(--aqua)}
+.sh{margin-bottom:clamp(28px,4vw,52px);max-width:760px}
+.sh h2{font-size:clamp(1.7rem,3.3vw,2.6rem)}
+.sh p{margin-top:16px;color:var(--muted)}
+.dark .sh p{color:#b8d6db}
+em{font-style:normal;background:linear-gradient(transparent 62%,rgba(76,201,214,.45) 62%)}
+.dark em{background:linear-gradient(transparent 62%,rgba(76,201,214,.3) 62%)}
+.note{font-size:.82rem;color:var(--muted);line-height:1.7}
+.dark .note{color:#9cc0c6}
+
+/* hero */
+.hero{padding:clamp(36px,6vw,80px) 0 clamp(56px,8vw,100px);background:radial-gradient(1100px 520px at 85% 8%,var(--aqua-m),transparent 70%),radial-gradient(700px 420px at 0% 100%,var(--aqua-s),transparent 70%),var(--paper)}
+.hero .in{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(20px,3vw,48px);align-items:center}
+.hero h1{font-size:clamp(2.1rem,4.4vw,3.7rem);line-height:1.22}
+.hero .lead{margin-top:22px;font-size:clamp(1rem,1.5vw,1.15rem);color:var(--ink2);max-width:34em}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.checks{display:flex;flex-wrap:wrap;gap:8px 20px;margin:24px 0 0;padding:0;list-style:none;font-weight:700;font-size:.92rem;color:var(--ink2)}
+.checks li::before{content:"✓";color:var(--teal);margin-right:.4em;font-weight:900}
+.hero-art{position:relative}
+.hero-art img{width:100%;border-radius:22px;box-shadow:var(--shadow)}
+.hero-note{margin-top:14px}
+.price-tag{margin-top:10px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;list-style:none;padding:0;margin:0}
+.step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px 30px;position:relative;box-shadow:0 10px 28px -20px rgba(16,48,58,.4)}
+.step .no{font-weight:900;font-size:.8rem;letter-spacing:.14em;color:var(--teal)}
+.step h3{font-size:1.28rem;margin:8px 0 12px}
+.step p{color:var(--muted);font-size:.95rem}
+.keys{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0 14px}
+kbd{font:800 .92rem/1 "Segoe UI","Yu Gothic UI",system-ui,sans-serif;background:linear-gradient(#fff,#eef4f5);border:1px solid #b9ccd0;border-bottom-width:3px;border-radius:8px;padding:.5em .75em;color:var(--ink);box-shadow:0 1px 0 #fff inset}
+.plus{font-weight:800;color:var(--muted)}
+
+/* pains */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pain{padding:26px 26px 28px;border-radius:var(--r);background:var(--white);border:1px solid var(--line)}
+.pain .n{font:900 .8rem/1 system-ui;letter-spacing:.14em;color:var(--teal)}
+.pain h3{font-size:1.15rem;margin:10px 0 10px}
+.pain p{color:var(--muted);font-size:.95rem}
+
+.pains-next{margin-top:34px;text-align:center;font-weight:800;font-size:clamp(1.15rem,2.2vw,1.5rem);color:var(--teal)}
+.pains-next span{display:inline-block;padding:10px 26px;border-radius:99px;background:var(--white);border:2px solid var(--aqua);box-shadow:0 10px 24px -14px rgba(23,96,107,.6)}
+.pain .n{font-size:.82rem;letter-spacing:.08em}
+/* pains scenes */
+.pain{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.pain .tx{padding:22px 24px 26px}
+.pv{position:relative;aspect-ratio:16/10;background:linear-gradient(160deg,#dff3f6,#c9e6ea);overflow:hidden}
+.pv img{display:block}
+.pv-1 img{position:absolute;left:5%;top:9%;width:90%;height:auto;border-radius:8px;box-shadow:0 14px 30px -12px rgba(16,48,58,.5)}
+.q{position:absolute;width:30px;height:30px;border-radius:50%;background:#ffb020;color:#10303a;font:900 18px/30px system-ui,sans-serif;text-align:center;box-shadow:0 0 0 4px rgba(255,176,32,.35);animation:qp 1.6s ease-in-out infinite}
+@keyframes qp{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.cur{position:absolute;width:30px;height:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.think{position:absolute;left:6%;bottom:7%;background:#fff;color:#10303a;font-weight:800;font-size:.86rem;line-height:1.4;padding:9px 14px;border-radius:14px 14px 14px 3px;box-shadow:0 10px 22px -8px rgba(16,48,58,.5);max-width:78%}
+.pv-2 .half{position:absolute;left:3%;top:12%;width:50%;aspect-ratio:1200/508;overflow:hidden;border-radius:8px;box-shadow:0 12px 26px -12px rgba(16,48,58,.5);background:#fff}
+.pv-2 .half img{width:100%;height:auto}
+.pv-2 .mid{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#ffb020;color:#10303a;font:900 16px/28px system-ui,sans-serif;text-align:center;z-index:2;box-shadow:0 0 0 4px rgba(255,176,32,.35);animation:qp 1.6s ease-in-out infinite}
+.plain{position:absolute;right:3%;top:12%;width:41%;background:#fff;border-radius:8px;padding:10px 12px 12px;box-shadow:0 12px 26px -12px rgba(16,48,58,.5);font-size:.72rem;line-height:1.55;color:#10303a}
+.plain b{display:block;font-size:.7rem;color:#55707a;margin-bottom:4px}
+.plain ul{margin:0;padding:0 0 0 1.1em}
+.t2{left:auto;right:6%;bottom:7%}
+.pv-3 .blurimg{position:absolute;left:5%;bottom:7%;width:62%;border-radius:8px;overflow:hidden;box-shadow:0 14px 30px -12px rgba(16,48,58,.5)}
+.pv-3 .blurimg img{width:100%;height:auto;filter:blur(1.2px) saturate(.85)}
+.cloud{position:absolute;right:9%;top:9%;width:30%;height:auto}
+.up{position:absolute;right:21%;top:36%;font:900 2.6rem/1 system-ui,sans-serif;color:#17606b}
+.lab3{position:absolute;right:5%;top:42%;font-weight:800;font-size:.7rem;color:#10303a;background:#fff;border-radius:6px;padding:3px 8px;transform:translateY(-2px)}
+.t3{left:6%;bottom:auto;top:9%;max-width:56%;border-radius:14px 14px 3px 14px}
+.no-motion .q,.no-motion .pv-2 .mid{animation:none}
+@media (prefers-reduced-motion: reduce){.q,.pv-2 .mid{animation:none}}
+/* pain 2 */
+.pv{aspect-ratio:16/11}
+.pv-2b .half{left:3%;top:9%;width:50%}
+.pv-2b .hl{position:absolute;left:25.5%;top:57%;width:70%;height:19%;border:2.5px solid #ffb020;border-radius:6px;box-shadow:0 0 0 3px rgba(255,176,32,.3)}
+.pv-2b .hl-lab{position:absolute;left:26%;top:80%;background:#ffb020;color:#10303a;font:800 .62rem/1 system-ui,sans-serif;padding:3px 7px;border-radius:5px;white-space:nowrap}
+.pv-2b .plain{left:auto;right:3%;top:9%;width:43%;padding:9px 11px 11px;font-size:.6rem;line-height:1.65;max-height:70%;overflow:hidden}
+.pv-2b .plain p{margin:0;color:#10303a;font-size:inherit;line-height:inherit}
+.pv-2b .plain mark{background:#ffe08a;padding:0 2px;border-radius:3px}
+.pv-2b .link2{position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.pv-2b .mid{left:52%;top:30%}
+.pv-2b .t2{left:6%;right:auto;bottom:7%;max-width:88%}
+/* pain 3 */
+.pv-3b .src3{position:absolute;left:3%;top:10%;width:46%;border-radius:8px;overflow:hidden;box-shadow:0 12px 26px -12px rgba(16,48,58,.5);background:#fff}
+.pv-3b .src3 img{width:100%;height:auto;display:block}
+.pv-3b .stamp{position:absolute;right:6px;top:6px;background:#c8372d;color:#fff;font:900 .66rem/1 system-ui,sans-serif;letter-spacing:.08em;padding:4px 7px;border-radius:4px;transform:rotate(6deg);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.pv-3b .arr3{position:absolute;left:50%;top:27%;transform:translateX(-50%);font:900 1.5rem/1 system-ui,sans-serif;color:#17606b}
+.pv-3b .web3{position:absolute;right:3%;top:10%;width:42%;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 12px 26px -12px rgba(16,48,58,.5)}
+.pv-3b .wb{height:22px;background:#e9eef0;display:flex;gap:5px;align-items:center;padding:0 8px}
+.pv-3b .wb i{width:7px;height:7px;border-radius:50%;background:#b8c6ca}
+.pv-3b .wb em{font:700 .56rem/1 system-ui,sans-serif;color:#55707a;font-style:normal;margin-left:6px;white-space:nowrap}
+.pv-3b .drop{margin:10px;border:2px dashed #8fc9d0;border-radius:8px;height:calc(100% - 42px);min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#17606b;font:800 .62rem/1.2 system-ui,sans-serif;padding:8px 4px}
+.pv-3b .cl3{width:38px;height:auto}
+.pv-3b .t3{left:6%;top:auto;bottom:7%;max-width:88%;border-radius:14px 14px 14px 3px}
+/* before/after */
+.ba-wrap{max-width:1040px;margin:0 auto}
+.ba{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);background:#fff;user-select:none;touch-action:pan-y;aspect-ratio:1500 / 919}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba .top{clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+.ba .bar{position:absolute;top:0;bottom:0;left:var(--p,50%);width:3px;margin-left:-1.5px;background:var(--aqua);box-shadow:0 0 0 1px rgba(255,255,255,.8),0 0 14px rgba(76,201,214,.8);pointer-events:none}
+.ba .bar::after{content:"◀ ▶";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;font-size:.7rem;letter-spacing:.2em;font-weight:900;color:#fff;background:var(--teal);border:2px solid #fff;padding:9px 13px;border-radius:99px;box-shadow:0 6px 18px rgba(16,48,58,.4)}
+.ba .lab{position:absolute;top:14px;padding:5px 14px;border-radius:99px;font-weight:800;font-size:.8rem;background:rgba(16,48,58,.82);color:#fff;pointer-events:none}
+.ba .l1{right:14px}
+.ba .l2{left:14px;background:var(--teal)}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.ba-tools{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.pill{font:inherit;font-weight:800;font-size:.9rem;border:2px solid var(--teal);background:#fff;color:var(--teal);border-radius:99px;padding:.45em 1.2em;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--teal);color:#fff}
+.caption{margin-top:14px;text-align:center}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.feat div{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 24px}
+.feat h3{font-size:1.02rem;margin-bottom:8px}
+.feat p{font-size:.92rem;color:var(--muted)}
+
+/* modes */
+.modes{display:grid;gap:34px}
+.mode{background:var(--white);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 14px 36px -24px rgba(16,48,58,.5)}
+.mimg{overflow-x:auto;border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.mode img{width:100%;display:block}
+.mhint{display:none}
+.mode .tx{padding:28px clamp(22px,3vw,40px) 32px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px clamp(20px,4vw,56px);align-items:start}
+.mode h3{font-size:1.5rem}
+.mode .sub{color:var(--muted);margin-top:6px}
+.mode ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.mode li{padding-left:1.5em;position:relative;font-size:.97rem}
+.mode li::before{content:"";position:absolute;left:0;top:.62em;width:.8em;height:.8em;border-radius:50%;background:var(--aqua)}
+.levels{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.levels span{font-size:.78rem;font-weight:800;border:1px solid var(--aqua);background:var(--aqua-s);border-radius:99px;padding:2px 11px}
+
+/* scrolly how-to */
+.sc{display:none;position:relative;height:420vh;margin-top:6px}
+html.sc-ok:not(.no-motion) .sc{display:block}
+html.sc-ok:not(.no-motion) .how-static{display:none}
+.sc-pin{position:sticky;top:64px;height:calc(100vh - 64px);height:calc(100svh - 64px);display:flex;align-items:center}
+.sc-grid{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);gap:clamp(22px,3.4vw,56px);align-items:center;width:min(1160px,100% - 40px);margin-inline:auto}
+.sc-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.sc-step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px 22px 20px;opacity:.38;transform:scale(.97);transform-origin:left center;transition:opacity .25s,transform .25s,box-shadow .25s,border-color .25s}
+.sc-step.on{opacity:1;transform:none;border-color:var(--aqua);box-shadow:0 14px 34px -18px rgba(23,96,107,.55)}
+.sc-step .no{font-weight:900;font-size:.78rem;letter-spacing:.14em;color:var(--teal)}
+.sc-step h3{font-size:1.25rem;margin:4px 0 10px}
+.sc-step p{color:var(--muted);font-size:.93rem;margin-top:10px}
+.sc-step .keys{margin:0}
+.sc-step kbd{transition:transform .12s,background .12s,box-shadow .12s}
+.sc-step kbd.pr{transform:translateY(3px);border-bottom-width:1px;background:linear-gradient(#c9edf1,#aee3ea);box-shadow:0 0 0 3px rgba(76,201,214,.45)}
+.kmsg{font-weight:800;color:var(--teal);font-size:.95rem}
+.sc-prog{height:5px;border-radius:99px;background:var(--aqua-m);margin-top:18px;overflow:hidden}
+.sc-prog i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px}
+.sc-hint{margin-top:10px}
+.sc-stage{position:relative}
+.scr{position:relative;aspect-ratio:1500 / 919;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);background:#0f2f36}
+.scr>div{position:absolute;inset:0}
+.scr img{display:block;width:100%;height:100%;object-fit:cover}
+.lyA .wall{position:absolute;inset:0;background:radial-gradient(900px 500px at 20% 10%,#4cc9d6,transparent 60%),radial-gradient(700px 420px at 90% 90%,#2a8f9c,transparent 60%),#17606b}
+.lyA .win{position:absolute;left:7%;top:16%;width:86%;inset:auto;border-radius:10px;box-shadow:0 22px 50px -12px rgba(0,0,0,.55);background:#fff}
+.lyA .win{left:7%;top:16%}
+.lyA .win img{height:auto;border-radius:0 0 10px 10px}
+.wbar{height:20px;background:#e9eef0;border-radius:10px 10px 0 0;display:flex;gap:6px;align-items:center;padding-left:10px}
+.wbar i{width:8px;height:8px;border-radius:50%;background:#b8c6ca}
+.lyA .tbar{position:absolute;left:0;right:0;bottom:0;top:auto;height:6%;background:rgba(10,30,36,.72);backdrop-filter:blur(6px)}
+.lyA .sel{position:absolute;left:-8px;top:-8px;width:0;height:0;border:2px dashed #fff;box-shadow:0 0 0 200vmax rgba(5,20,26,.5);opacity:0;pointer-events:none}
+.sel-lab{position:absolute;left:-2px;bottom:calc(100% + 6px);background:#10303a;color:#fff;font:700 11px/1 system-ui,sans-serif;padding:4px 8px;border-radius:5px;white-space:nowrap}
+.flash{background:#fff;opacity:0;pointer-events:none}
+.lyA .toast{position:absolute;inset:auto 4% 9% auto;width:auto;height:auto;background:#10303a;color:#fff;font:800 .85rem/1 system-ui,sans-serif;padding:12px 16px;border-radius:10px;opacity:0;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.lyB,.lyC{opacity:0}
+.lyB .ring{position:absolute;inset:auto;left:2%;top:25%;width:76%;height:60%;border:3px solid var(--aqua);border-radius:12px;opacity:0;box-shadow:0 0 0 6px rgba(76,201,214,.3)}
+.scr .badge{position:absolute;inset:auto auto 7% 50%;transform:translateX(-50%);background:var(--teal);color:#fff;font-weight:800;font-size:.95rem;padding:9px 20px;border-radius:99px;opacity:0;box-shadow:0 8px 22px rgba(0,0,0,.3);white-space:nowrap;width:auto;height:auto}
+.lyC .scan{position:absolute;inset:0 auto 0 0;width:4px;background:var(--aqua);box-shadow:0 0 18px 4px rgba(76,201,214,.9);opacity:0}
+.scr .stp{position:absolute;inset:auto auto 12px 14px;width:auto;height:auto;background:rgba(16,48,58,.85);color:#fff;font:800 .78rem/1 system-ui,sans-serif;letter-spacing:.08em;padding:7px 12px;border-radius:99px}
+@media (max-width:1000px){
+  .sc{height:360vh}
+  .sc-pin{align-items:flex-start;padding-top:8px}
+  .sc-grid{grid-template-columns:1fr;gap:14px;width:calc(100% - 32px)}
+  .sc-stage{order:-1}
+  .sc-step{display:none;transform:none;opacity:1}
+  .sc-step.on{display:block}
+  .sc-prog{margin-top:12px}
+}
+/* more */
+.more{margin-top:34px}
+.more h3{font-size:1.05rem;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.chips li{background:var(--white);border:1px solid var(--line);border-radius:99px;padding:6px 16px;font-size:.9rem;font-weight:700;color:var(--ink2)}
+/* anywhere */
+.any{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.acard{background:var(--white);border-radius:22px;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column}
+.acard .shot{background:#edf1f4;display:flex;align-items:center;justify-content:center}
+.acard .shot img{width:100%}
+.acard .tx{padding:24px 26px 28px}
+.acard h3{font-size:1.3rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:800;color:var(--warn);background:var(--warn-bg);border:1px solid #f0d9a1;border-radius:99px;padding:2px 10px}
+.acard p{margin-top:10px;color:var(--muted);font-size:.95rem}
+
+/* private */
+.priv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(26px,4vw,64px);align-items:center}
+.flow{display:grid;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:22px}
+.flow .pc{font-weight:800;font-size:.8rem;letter-spacing:.12em;color:var(--aqua);margin-bottom:2px}
+.flow .st{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;font-weight:800}
+.flow .st b{width:34px;height:34px;border-radius:50%;background:var(--aqua);color:var(--ink);display:grid;place-items:center;flex:none}
+.flow .ar{text-align:center;color:var(--aqua);line-height:1;font-size:1.1rem}
+.priv ul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+.priv li{padding-left:1.7em;position:relative}
+.priv li::before{content:"✓";position:absolute;left:0;color:var(--aqua);font-weight:900}
+
+/* scenes */
+.scenes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.scene{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.scene h3{font-size:1.15rem;margin-bottom:8px}
+.scene p{font-size:.93rem;color:var(--muted)}
+.scene .ex{display:block;margin-top:12px;font-size:.8rem;font-weight:700;color:var(--teal)}
+.desk{margin-top:44px;position:relative}
+.desk img{width:100%;border-radius:24px;box-shadow:var(--shadow)}
+
+/* honest */
+.honest{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.hbox{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:28px}
+.hbox h3{font-size:1.2rem;margin-bottom:14px}
+.hbox ul{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+.hbox li{padding-left:1.4em;position:relative;font-size:.95rem}
+.hbox li::before{content:"";position:absolute;left:.1em;top:.7em;width:.55em;height:.55em;border-radius:2px;background:var(--aqua);transform:rotate(45deg)}
+.spec{width:100%;border-collapse:collapse;font-size:.93rem}
+.spec th,.spec td{text-align:left;padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.spec th{width:8.5em;color:var(--muted);font-weight:700;padding-right:10px}
+.spec tr:last-child th,.spec tr:last-child td{border-bottom:0}
+
+/* price */
+.price{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(22px,4vw,56px);align-items:center;background:var(--white);border:1px solid var(--line);border-radius:28px;padding:clamp(26px,4vw,52px);box-shadow:var(--shadow)}
+.price .zero{font-size:clamp(3.6rem,8vw,6rem);font-weight:900;line-height:1;color:var(--teal);letter-spacing:-.02em}
+.price .zero small{font-size:1.3rem;margin-left:.2em;letter-spacing:0;color:var(--ink)}
+.price ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.price li{padding-left:1.7em;position:relative}
+.price li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:900}
+
+/* faq */
+.faq{max-width:860px;margin-inline:auto;display:grid;gap:10px}
+details{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+summary{cursor:pointer;list-style:none;padding:18px 54px 18px 22px;font-weight:800;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-52%);font-size:1.5rem;color:var(--teal);font-weight:700}
+details[open] summary::after{content:"–"}
+details p{padding:0 22px 20px;color:var(--muted);font-size:.95rem}
+details p a{color:var(--teal);font-weight:700}
+
+/* closing */
+.closing{text-align:center;background:radial-gradient(900px 420px at 50% 0,#1f7b88,transparent 70%),var(--teal-d);color:#fff}
+.closing h2{font-size:clamp(1.9rem,4vw,3rem)}
+.closing p{margin:16px auto 0;max-width:34em;color:#d6f0f3}
+.closing .cta-row{justify-content:center}
+.closing .btn{background:#fff;color:var(--teal-d);border-color:#fff;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+.closing .btn:hover{background:var(--aqua-s)}
+.closing .note{color:#b4dde2}
+.ft{background:var(--ink);color:#b8d6db;padding:34px 0;font-size:.88rem}
+.ft .in{display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;justify-content:space-between}
+.ft nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.ft a{color:#e8f6f8}
+.motion{position:static;margin-top:18px;z-index:40;font:inherit;font-weight:800;font-size:.8rem;border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:99px;padding:.5em 1em;cursor:pointer;box-shadow:0 6px 20px rgba(16,48,58,.2)}
+@media (min-width:1001px){.motion{position:fixed;right:14px;bottom:14px;margin:0}}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.js .rv.in-view{opacity:1;transform:none}
+.no-motion .rv{opacity:1!important;transform:none!important;transition:none!important}
+html.no-motion{scroll-behavior:auto}
+@media (prefers-reduced-motion: reduce){ .js .rv{opacity:1;transform:none;transition:none} html{scroll-behavior:auto} }
+
+/* responsive */
+@media (max-width:1000px){
+  .hero .in,.priv,.price{grid-template-columns:1fr}
+  .hero-art{order:-1}
+  .any,.honest{grid-template-columns:1fr}
+  .mode .tx{grid-template-columns:1fr}
+  .mhint{display:block;padding:8px 16px 0;text-align:right}
+  .mimg img{min-width:760px}
+  .steps,.pains,.feat,.scenes{grid-template-columns:1fr}
+  .hd nav{display:none}
+  .hd .btn{margin-left:auto}
+}
+@media (max-width:560px){
+  .in{width:calc(100% - 32px)}
+  .brand small{display:none}
+  .ba .bar::after{padding:7px 10px;font-size:.62rem}
+  .mode .tx,.hbox{padding:22px}
+  .cta-row .btn{width:100%}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="hd"><div class="in">
+ <a class="brand" href="#top" aria-label="ページの先頭へ"><img src="images/icon.webp" width="34" height="34" alt=""><span>スクショで翻訳</span><small>Windows</small></a>
+ <nav aria-label="このページの目次"><a href="#how" data-sec="how">使い方</a><a href="#modes" data-sec="modes">2つのモード</a><a href="#private" data-sec="private">安心のしくみ</a><a href="#honest" data-sec="honest">動作環境</a><a href="#faq" data-sec="faq">FAQ</a></nav>
+ <a class="btn" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener" data-store="windows" data-target="windows">Storeで入手 ↗</a>
+</div></header>
+
+<main id="main">
+<section id="top" class="hero"><div class="in">
+ <div class="hero-text">
+  <span class="eyebrow">Windows向け ・ 英語 → 日本語</span>
+  <h1><span class="nb">英語の画面を、</span><span class="nb"><em>まるごと日本語に。</em></span></h1>
+  <p class="lead">スクショを貼るだけ。元のレイアウトのまま、日本語の訳が同じ場所に重なります。翻訳も、文字の読み取りも、すべてPCの中で行います。</p>
+  <div class="cta-row">
+   <a class="btn big" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener" data-store="windows" data-target="windows"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5.2 10.5 4v7H3zM11.6 3.85 21 2.5V11h-9.4zM3 12h7.5v7L3 17.8zM11.6 12H21v8.5l-9.4-1.3z"/></svg>Microsoft Store で入手</a>
+   <a class="btn alt big" href="#how">使い方を見る</a>
+  </div>
+  <ul class="checks"><li>無料・広告なし</li><li>画像を外部に送らない</li><li>GPU不要</li></ul>
+  <p class="note hero-note">Windows 10（1809以降）／ 日本語→英語は、別アプリの英語版です。</p>
+ </div>
+ <div class="hero-art"><img src="images/hero.webp" width="1286" height="860" alt="モニターに表示された、英語と日本語の対訳画面" class="" decoding="async"></div>
+</div></section>
+
+<section id="how" class="sec"><div class="in">
+ <div class="sh rv"><span class="eyebrow">HOW TO USE</span><h2><span class="nb">撮る。貼る。</span><span class="nb">日本語で、読む。</span></h2><p>いつものスクショの延長で使えます。文字を一つずつ打ち直す必要はありません。</p></div>
+ 
+<div class="how-static"><ol class="steps">
+  <li class="step rv"><span class="no">STEP 01</span><h3>スクショを撮る</h3><div class="keys"><kbd>Win</kbd><span class="plus">+</span><kbd>Shift</kbd><span class="plus">+</span><kbd>S</kbd></div><p>読みたい画面の範囲を、Windows標準のスクショで撮ります。アプリで画像ファイルを開くこともできます。</p></li>
+  <li class="step rv"><span class="no">STEP 02</span><h3>アプリに貼り付ける</h3><div class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>V</kbd></div><p>「貼付で自動翻訳」は初期設定でON。貼った瞬間に翻訳が始まります。OFFにしたときは <kbd style="font-size:.78rem">Ctrl</kbd>＋<kbd style="font-size:.78rem">Enter</kbd> です。</p></li>
+  <li class="step rv"><span class="no">STEP 03</span><h3>日本語で読む</h3><div class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><span class="plus">ホイール</span></div><p>元の位置に、日本語が重なって表示されます。結果は拡大・縮小して確認でき、画像として保存もできます。</p></li>
+ </ol></div>
+ <div class="sc" id="sc" aria-label="使い方：スクロールすると、STEP 1から3が順に進みます">
+  <div class="sc-pin"><div class="sc-grid">
+   <div class="sc-text">
+    <ol class="sc-list">
+     <li class="sc-step" data-i="0"><span class="no">STEP 01</span><h3>スクショを撮る</h3><div class="keys"><kbd data-k="0">Win</kbd><span class="plus">+</span><kbd data-k="1">Shift</kbd><span class="plus">+</span><kbd data-k="2">S</kbd></div><p>読みたい画面の範囲を、Windows標準のスクショで撮ります。</p></li>
+     <li class="sc-step" data-i="1"><span class="no">STEP 02</span><h3>アプリに貼り付ける</h3><div class="keys"><kbd data-k="3">Ctrl</kbd><span class="plus">+</span><kbd data-k="4">V</kbd></div><p>貼った瞬間に、翻訳が始まります（初期設定でON）。</p></li>
+     <li class="sc-step" data-i="2"><span class="no">STEP 03</span><h3>日本語で読む</h3><div class="keys"><span class="kmsg">元の位置に、日本語が重なる</span></div><p>結果は拡大・縮小して確認でき、画像として保存もできます。</p></li>
+    </ol>
+    <div class="sc-prog" aria-hidden="true"><i id="sc-bar"></i></div>
+    <p class="note sc-hint">↓ スクロールすると、続きが進みます</p>
+   </div>
+   <div class="sc-stage"><div class="scr" id="scr">
+    <div class="lyA" id="lyA"><div class="wall"></div>
+     <div class="win" id="win"><div class="wbar"><i></i><i></i><i></i></div><img src="images/snap_src.webp" width="1180" height="500" alt="英語の設定画面" class="" decoding="async"><div class="sel" id="sel"><span class="sel-lab">1180 × 500</span></div></div>
+     <div class="tbar"></div>
+     <div class="flash" id="flash"></div>
+     <div class="toast" id="toast">画面を撮りました</div>
+    </div>
+    <div class="lyB" id="lyB"><img src="images/ba_before.webp" width="1500" height="919" alt="アプリに貼り付けた英語の画面" class="" decoding="async"><div class="ring" id="ring"></div><div class="badge" id="bdg2">貼り付け完了</div></div>
+    <div class="lyC" id="lyC"><img src="images/ba_after.webp" width="1500" height="919" alt="日本語に翻訳された画面" class="" decoding="async"><div class="scan" id="scan"></div></div>
+    <div class="badge b3" id="bdg3">日本語に！</div>
+    <div class="stp" id="stp">STEP 1 / 3</div>
+   </div></div>
+  </div></div>
+ </div>
+</div></section>
+
+<section class="sec tint"><div class="in">
+ <div class="sh rv"><span class="eyebrow">あるある</span><h2><span class="nb">こんな経験、</span><span class="nb"><em>ありませんか？</em></span></h2><p>英語の画面を前に、こんなふうに困ったことは。</p></div>
+ <div class="pains">
+  <article class="pain rv"><div class="pv pv-1"><img src="images/snap_src.webp" width="1200" height="508" alt="" loading="lazy" decoding="async">
+   <span class="q" style="right:8%;top:30%">？</span><span class="q" style="right:8%;top:56%;animation-delay:.5s">？</span>
+   <svg class="cur" viewBox="0 0 24 24" aria-hidden="true" style="right:5%;top:62%"><path d="M5 3l14 8-6 1.8L10.5 19z" fill="#10303a" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+   <span class="think">これ、オンのままで…いいのかな？</span></div>
+   <div class="tx"><span class="n">あるある 01</span><h3>英語の設定画面で、手が止まった。</h3><p>ボタンや項目の意味が読めず、押していいのか分からない。先へ進むのが、少し怖かった。</p></div></article>
+
+  <article class="pain rv"><div class="pv pv-2 pv-2b">
+   <div class="half"><img src="images/snap_src.webp" width="1200" height="508" alt="" loading="lazy" decoding="async"><span class="hl"></span><span class="hl-lab">この項目は…？</span></div>
+   <div class="plain"><b>文字だけの翻訳アプリ</b>
+    <p>設定 一般 通知 プライバシー ストレージ 言語 更新情報 一般 アプリの外観と動作を管理します。 ヒントを表示する アプリを開くと役立つヒントが表示されます。 <mark>自動更新</mark> アップデートを自動でダウンロードしてインストールします。 通知を表示する 何かが注意が必要なときに通知を受ける</p></div>
+   <span class="mid">？</span>
+   <span class="think t2">元の画面と見比べて、探さないと…</span></div>
+   <div class="tx"><span class="n">あるある 02</span><h3>訳したのに、どこの話か分からなくなった。</h3><p>文字だけの翻訳は、画面の形が消えてしまう。どのボタン、どの項目の話なのか、元の画面と見比べて探すことになった。</p></div></article>
+
+  <article class="pain rv"><div class="pv pv-3 pv-3b">
+   <div class="src3"><img src="images/snap_src.webp" width="1200" height="508" alt="" loading="lazy" decoding="async"><span class="stamp">社外秘</span></div>
+   <span class="arr3">→</span>
+   <div class="web3"><div class="wb"><i></i><i></i><i></i><em>ネット上の翻訳サイト</em></div>
+    <div class="drop"><svg class="cl3" viewBox="0 0 64 44" aria-hidden="true"><path d="M16 38h32a12 12 0 0 0 1.5-23.9A16 16 0 0 0 18.7 12 13 13 0 0 0 16 38z" fill="#e5f6f8" stroke="#17606b" stroke-width="2.6" stroke-linejoin="round"/><path d="M32 33V20m0 0-5 5m5-5 5 5" fill="none" stroke="#17606b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>画像をアップロード</span></div></div>
+   <span class="think t3">社外秘の画面を<br>ネットに上げて大丈夫…？</span></div>
+   <div class="tx"><span class="n">あるある 03</span><h3>外に出せない画面は、翻訳をあきらめた。</h3><p>画像をネット上の翻訳サービスに送る形だと、社内の画面や、人に見せたくない画面は、ためらってしまった。</p></div></article>
+ </div>
+ <p class="pains-next rv"><span>その「困った」を、スクショ1枚で。</span></p>
+</div></section>
+
+<section id="overlay" class="sec"><div class="in">
+ <div class="sh rv"><span class="eyebrow">SAME PLACE, IN JAPANESE</span><h2><span class="nb">訳が、同じ場所に。</span><span class="nb"><em>だから、迷わない。</em></span></h2><p>元の画像に訳が重なるから、見比べる手間が少なく、どのボタンの話かすぐ分かります。下の線を左右に動かしてみてください。</p></div>
+ <div class="ba-wrap rv">
+  <div class="ba" id="ba" style="--p:50%"><img src="images/ba_before.webp" width="1500" height="919" alt="元の英語の画面" class="" loading=lazy decoding="async"><img src="images/ba_after.webp" width="1500" height="919" alt="日本語に翻訳された画面" class="top" loading=lazy decoding="async"><span class="bar"></span><span class="lab l2">日本語</span><span class="lab l1">英語（元の画面）</span><input type="range" min="0" max="100" value="50" aria-label="英語と日本語の境目を動かす"></div>
+  <div class="ba-tools"><button class="pill" type="button" data-p="0" aria-pressed="false">英語だけ</button><button class="pill" type="button" data-p="50" aria-pressed="true">半分ずつ</button><button class="pill" type="button" data-p="100" aria-pressed="false">日本語だけ</button></div>
+  <p class="note caption">デモ用の英語画面（設定画面）を、実際にアプリで翻訳した例です。文字の大きさや位置は、元の画像から推定して重ねるため、揃わない箇所があります。結果は、画面によって異なります。</p>
+ </div>
+ <div class="feat">
+  <div class="rv"><h3>画面でよく使う言葉は、辞書で</h3><p>ボタンやメニューの言葉は、内蔵の「UI辞書」で訳します（約2,000語以上）。辞書に当たった箇所は、青で強調できます。</p></div>
+  <div class="rv"><h3>長い訳は、「…」で全文</h3><p>訳が長くて枠に収まらないときは、見切れマークを押すと全文を表示。訳候補を見比べることもできます。</p></div>
+  <div class="rv"><h3>訳し漏れは、その場で</h3><p>訳されなかった英単語の箇所をドラッグで選んで、その場所だけ翻訳し直す「カーソル翻訳」があります。</p></div>
+ </div>
+</div></section>
+
+<section id="modes" class="sec tint"><div class="in">
+ <div class="sh rv"><span class="eyebrow">TWO MODES</span><h2><span class="nb">画面は「項目」で。</span><span class="nb">文章は「長文」で。</span></h2><p>読むものに合わせて、2つのモードを使い分けます。</p></div>
+ <div class="modes">
+  <article class="mode rv"><div class="mimg"><img src="images/mode_item.webp" width="1500" height="598" alt="項目翻訳モード：英語と日本語を並べて表示" class="" loading=lazy decoding="async"></div><p class="note mhint">← 横にスクロールして、大きく見られます</p><div class="tx"><div><h3>項目翻訳モード</h3><p class="sub">画面の中のボタン・メニュー・項目を、元のレイアウトのまま日本語に。</p></div>
+   <ul><li>英語の設定画面・管理画面・操作画面に</li><li>英語を左、日本語を右に並べて見比べられる</li><li>訳候補の表示・原寸表示・履歴からの復元</li></ul></div></article>
+  <article class="mode rv"><div class="mimg"><img src="images/mode_long.webp" width="1500" height="418" alt="長文解析モード：英文メールを日本語に翻訳" class="" loading=lazy decoding="async"></div><p class="note mhint">← 横にスクロールして、大きく見られます</p><div class="tx"><div><h3>長文解析モード</h3><p class="sub">メール・記事・説明文などの長い英文を、読みやすい日本語に。</p></div>
+   <ul><li>文章も画像も、Ctrl+V で貼り付けて翻訳</li><li>翻訳レベルを選べます<div class="levels"><span>LV1 直訳</span><span>LV2 自然化（標準）</span><span>LV3 究極仕上げ</span></div></li><li>「訳を修正」で直した訳は、自分専用の「育てる辞書」に保存。次回から自動で反映されます</li></ul></div></article>
+ </div>
+ <p class="note rv" style="margin-top:18px">※LV3は、文章量に応じて処理時間が増えます。翻訳レベルは、長文解析モードのみです。</p>
+ <div class="more rv"><h3>ほかにも</h3><ul class="chips"><li>ライト／ダークテーマ</li><li>翻訳履歴（画像つきで復元）</li><li>自動コピー</li><li>文字の読み取りを3段階で選べる</li><li>日本語の対訳リスト表示</li><li>対訳画像の共有（任意）</li><li>動画チュートリアル2本</li></ul></div>
+</div></section>
+
+<section id="anywhere" class="sec"><div class="in">
+ <div class="sh rv"><span class="eyebrow">WORK ANYWHERE</span><h2><span class="nb">作業中の画面から、</span><span class="nb">そのまま訳す。</span></h2><p>どちらも、設定でONにしたときだけ働く、任意の機能です。</p></div>
+ <div class="any">
+  <article class="acard rv"><div class="shot"><img src="images/quick.webp" width="1100" height="580" alt="英文を選んでCtrl+Cを2回押すと、訳がポップアップで表示される" class="" loading=lazy decoding="async"></div><div class="tx"><h3>クイック翻訳 <span class="tag">任意</span></h3><p>どのアプリでも、英文を選んで <kbd style="font-size:.74rem">Ctrl</kbd>＋<kbd style="font-size:.74rem">C</kbd> を2回。カーソルのそばに、日本語の訳がポップアップします。</p></div></article>
+  <article class="acard rv"><div class="shot"><img src="images/auto.webp" width="1100" height="442" alt="スクショを撮ると、翻訳するかどうかの確認が表示される" class="" loading=lazy decoding="async"></div><div class="tx"><h3>スクショで自動翻訳 <span class="tag">任意・初期OFF</span></h3><p>スクショを撮ると、「翻訳しますか？」と確認が出ます。押すだけで翻訳が始まります。クリップボードの画像は、PCの中だけで確認します。</p></div></article>
+ </div>
+</div></section>
+
+<section id="private" class="sec dark"><div class="in priv">
+ <div class="rv">
+  <span class="eyebrow">PRIVATE BY DESIGN</span>
+  <h2 style="font-size:clamp(1.7rem,3.3vw,2.6rem)"><span class="nb">あなたの画面は、</span><span class="nb"><em>あなたのPCの中に。</em></span></h2>
+  <ul>
+   <li>画像も、訳文も、外部に送信しません</li>
+   <li>翻訳エンジンはアプリに同梱。使うときに、追加のダウンロードは要りません</li>
+   <li>利用状況を送るしくみ（テレメトリ）はありません</li>
+   <li>外部につながるのは、あなたがボタンを押したときだけ（SNS共有・開発支援・評価・スマホ版の案内で、ブラウザやMicrosoft Storeを開きます）</li>
+  </ul>
+  <p class="note" style="margin-top:20px">※Microsoft Storeからの入手・更新には、通信が必要です。社外に出したくない画面を扱うときは、お使いの組織のルールに従ってください。</p>
+ </div>
+ <div class="flow rv" aria-label="翻訳の流れ：すべてPCの中で完結">
+  <div class="pc">この中で、すべて完結</div>
+  <div class="st"><b>1</b>画像の文字を読み取る</div><div class="ar">↓</div>
+  <div class="st"><b>2</b>日本語に翻訳する</div><div class="ar">↓</div>
+  <div class="st"><b>3</b>画像に訳を重ねる</div>
+ </div>
+</div></section>
+
+<section class="sec"><div class="in">
+ <div class="sh rv"><span class="eyebrow">EVERYDAY WORK</span><h2><span class="nb">毎日の仕事の、</span><span class="nb">「読めない」を減らす。</span></h2><p>スクショが撮れる画面なら、どれでも対象です。</p></div>
+ <div class="scenes">
+  <div class="scene rv"><h3>英語の設定・管理画面</h3><p>ボタンや項目の意味を確かめながら、落ち着いて操作できます。</p><span class="ex">設定画面 ／ 管理ツール ／ ダッシュボード</span></div>
+  <div class="scene rv"><h3>海外のWebサービス</h3><p>日本語に対応していないサイトやアプリの画面も、スクショから読めます。</p><span class="ex">Webサイト ／ アプリ ／ オンラインツール</span></div>
+  <div class="scene rv"><h3>英文のメール・資料</h3><p>長めの英文は、長文解析モードで。直した訳は、辞書に育っていきます。</p><span class="ex">メール ／ 説明書 ／ 記事</span></div>
+ </div>
+ <div class="desk rv"><img src="images/desk.webp" width="1586" height="992" alt="ノートPCで、英文のメールを日本語に翻訳している画面" class="" loading=lazy decoding="async"></div>
+ <p class="note caption rv">背景はAI生成の利用イメージ。アプリ画面は実際の翻訳例です。</p>
+</div></section>
+
+<section id="honest" class="sec tint"><div class="in">
+ <div class="sh rv"><span class="eyebrow">BEFORE YOU INSTALL</span><h2><span class="nb">先に、正直なことも。</span></h2><p>完全オフラインで動くための、割り切りもあります。入れる前に、ご確認ください。</p></div>
+ <div class="honest">
+  <div class="hbox rv"><h3>得意なこと・苦手なこと</h3><ul>
+   <li>英語から日本語への翻訳のみです（日本語→英語は、別アプリの英語版）</li>
+   <li>クラウド型の翻訳サービスほど、自然でないことがあります。固有名詞・スラング・広告のコピーは、崩れやすい傾向です</li>
+   <li>文字の読み取りは、色地や白抜きの文字が苦手な場合があります</li>
+   <li>誤訳は、「訳を修正」で直して、育てる辞書に覚えさせる使い方を想定しています</li>
+  </ul></div>
+  <div class="hbox rv"><h3>動作環境の目安</h3><table class="spec">
+   <tr><th>対応OS</th><td>Windows 10 バージョン1809 以降</td></tr>
+   <tr><th>GPU</th><td>不要（CPUで動作）</td></tr>
+   <tr><th>アプリの大きさ</th><td>ダウンロード約1.4GB（インストール後は約1.8GB）。翻訳エンジンを同梱</td></tr>
+   <tr><th>初回の翻訳</th><td>エンジンの読み込みに、20秒前後かかることがあります</td></tr>
+   <tr><th>翻訳の速さ</th><td>画面1枚で十数秒（開発機での実測）。PCの性能で変わります</td></tr>
+  </table></div>
+ </div>
+</div></section>
+
+<section id="price" class="sec"><div class="in">
+ <div class="sh rv"><span class="eyebrow">PRICE</span><h2><span class="nb">まずは、無料で。</span></h2></div>
+ <div class="price rv">
+  <div><div class="zero">0<small>円</small></div><p class="note" style="margin-top:10px">現在の公開版の料金です。</p></div>
+  <div><ul><li>広告は表示されません</li><li>翻訳の回数制限はありません</li><li>気に入ったら、任意の「開発支援」から応援できます（支援しても、機能は変わりません）</li></ul>
+   <div class="cta-row"><a class="btn big" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener" data-store="windows" data-target="windows">Microsoft Store で入手 ↗</a></div></div>
+ </div>
+</div></section>
+
+<section id="faq" class="sec tint"><div class="in">
+ <div class="sh rv"><span class="eyebrow">FAQ</span><h2><span class="nb">気になること、</span><span class="nb">ここで解決。</span></h2></div>
+ <div class="faq"><details><summary>画像は外部に送られますか？</summary><p>いいえ。文字の読み取りも翻訳も、PCの中で行い、画像や訳文は外部に送信しません。外部につながるのは、あなたが「Xでシェア」「Threadsでシェア」「開発支援」「スマホ版」を押したときにブラウザを開く場合と、「評価する」を押したときにMicrosoft Storeのレビュー画面を開く場合だけです。</p></details><details><summary>ネットがなくても使えますか？</summary><p>はい。翻訳エンジンはアプリに同梱されているので、翻訳そのものは通信なしで動きます。Microsoft Storeからの入手・更新には、通信が必要です。</p></details><details><summary>無料ですか？ 広告は出ますか？</summary><p>現在の公開版は無料で、広告は表示されません。気に入ったときに応援できる、任意の「開発支援」ボタンがあります。支援しても、機能は変わりません。</p></details><details><summary>日本語から英語にも訳せますか？</summary><p>このアプリは、英語から日本語のみです。日本語から英語は、別アプリの「スクショで翻訳（英語版）」をご利用ください。</p></details><details><summary>アプリでスクショを撮れますか？</summary><p>撮影機能はアプリにはありません。Windows標準のスクショ（Win＋Shift＋S など）で撮って、Ctrl＋V で貼り付けます。任意の「スクショで自動翻訳」をONにすると、スクショを撮った直後に、翻訳するかどうかの確認が出ます。</p></details><details><summary>訳が不自然なときは？</summary><p>完全オフラインで動かすため、クラウド型の翻訳サービスほど自然でないことがあります。長文解析モードでは「訳を修正」「別の言い方」が使え、直した訳は「育てる辞書」に保存されて、次回から反映されます。項目翻訳モードでは、訳されなかった箇所を「カーソル翻訳」で翻訳し直せます。</p></details><details><summary>動作が重い・遅いときは？</summary><p>GPUを使わず、CPUで翻訳します。初回の翻訳は、エンジンの読み込みに20秒前後かかることがあります。長文解析モードのLV3（究極仕上げ）は、文章量に応じて、さらに時間がかかります。</p></details><details><summary>ゲームや動画の字幕にも使えますか？</summary><p>スクショが撮れる画面であれば、翻訳できます。ただし、ゲームの字幕や動画の字幕に特化した機能はありません。</p></details><details><summary>Android版・iOS版もありますか？</summary><p>はい。スマホ向けの「スクショで翻訳」は、<a href="/android">こちらのページ</a>でご紹介しています（アプリの機能は、PC版と異なります）。</p></details></div>
+</div></section>
+
+<section class="sec closing"><div class="in">
+ <h2 class="rv"><span class="nb">英語の画面で、</span><span class="nb">立ち止まらない。</span></h2>
+ <p class="rv">まずは1枚、スクショを貼って試してみませんか。</p>
+ <div class="cta-row rv"><a class="btn big" href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" target="_blank" rel="noopener" data-store="windows" data-target="windows">Microsoft Store で入手 ↗</a></div>
+ <p class="note rv" style="margin-top:14px">無料・広告なし ／ Windows 10（1809以降）</p>
+</div></section>
+</main>
+
+<footer class="ft"><div class="in">
+ <span>© 2026 miitobow ・ スクショで翻訳</span>
+ <nav aria-label="関連リンク"><a href="/android">Android版・iOS版</a><a href="https://apps.microsoft.com/detail/9nb1cj34rc22" target="_blank" rel="noopener">英語版（日→英）</a><a href="/privacy/">プライバシーポリシー</a><a href="/">miitobow.com</a></nav>
+</div><div class="in"><button class="motion" id="motion" type="button" aria-pressed="false">Ⅱ 動きを止める</button></div></footer>
+
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stopped=reduce; if(reduce) d.classList.add('no-motion');
+  var mb=document.getElementById('motion');
+  function setMotion(s){stopped=s;d.classList.toggle('no-motion',s);mb.setAttribute('aria-pressed',s?'true':'false');mb.textContent=s?'▶ 動きを再開':'Ⅱ 動きを止める';}
+  mb.addEventListener('click',function(){setMotion(!stopped);}); setMotion(stopped);
+
+  // ---- スクロール連動「使い方」 ----
+  (function(){
+    var sc=document.getElementById('sc'); if(!sc) return;
+    var $=function(id){return document.getElementById(id);};
+    var sel=$('sel'), flash=$('flash'), toast=$('toast'), lyA=$('lyA'), lyB=$('lyB'), lyC=$('lyC'), ring=$('ring'), b2=$('bdg2'), b3=$('bdg3'), scan=$('scan'), stp=$('stp'), bar=$('sc-bar');
+    var steps=[].slice.call(sc.querySelectorAll('.sc-step')), keys=[].slice.call(sc.querySelectorAll('kbd'));
+    var raf=0, pin=sc.querySelector('.sc-pin');
+    function cl(x){return x<0?0:x>1?1:x;}
+    function rp(p,a,b){return cl((p-a)/(b-a));}
+    function eo(x){return 1-Math.pow(1-x,3);}
+    function render(){
+      raf=0;
+      var r=sc.getBoundingClientRect(), pinTop=64;
+      var total=sc.offsetHeight-pin.clientHeight;
+      var p=cl((pinTop-r.top)/Math.max(1,total));
+      var idx=p<.333?0:p<.667?1:2;
+      steps.forEach(function(s,i){s.classList.toggle('on',i===idx);});
+      stp.textContent='STEP '+(idx+1)+' / 3'; bar.style.width=(p*100)+'%';
+      var th=[.03,.06,.09,.40,.45];
+      keys.forEach(function(k,i){k.classList.toggle('pr',p>th[i]&&(i<3?p<.33:p<.66));});
+      var dim=eo(rp(p,.085,.12)), g=eo(rp(p,.11,.23));
+      sel.style.opacity=dim*(1-rp(p,.25,.27));
+      sel.style.width='calc('+(18+82*g)+'% + 16px)'; sel.style.height='calc('+(30+70*g)+'% + 16px)';
+      flash.style.opacity=Math.max(0,1-Math.abs(p-.255)/.018)*.85;
+      toast.style.opacity=eo(rp(p,.265,.29))*(1-rp(p,.33,.36));
+      var ab=eo(rp(p,.34,.40));
+      lyA.style.opacity=1-ab; lyA.style.transform='scale('+(1-.06*ab)+')';
+      lyB.style.opacity=ab; lyB.style.transform='translateY('+((1-ab)*26)+'px) scale('+(.97+.03*ab)+')';
+      ring.style.opacity=Math.max(0,1-Math.abs(p-.5)/.05)*.95;
+      b2.style.opacity=eo(rp(p,.52,.55))*(1-rp(p,.66,.69));
+      var cx=eo(rp(p,.71,.87));
+      lyC.style.opacity=cx>0?1:0; lyC.style.clipPath='inset(0 '+((1-cx)*100)+'% 0 0)';
+      scan.style.left=(cx*100)+'%'; scan.style.opacity=(cx>0&&cx<1)?1:0;
+      b3.style.opacity=eo(rp(p,.88,.92));
+    }
+    function onScroll(){ if(!raf) raf=requestAnimationFrame(render); }
+    window.addEventListener('scroll',onScroll,{passive:true}); window.addEventListener('resize',onScroll);
+    render();
+    document.documentElement.classList.add('sc-ok');
+  })();
+  // 出現
+  var rv=[].slice.call(document.querySelectorAll('.rv'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    rv.forEach(function(el){io.observe(el);});
+  } else rv.forEach(function(el){el.classList.add('in-view');});
+  // 目次の現在位置
+  var links=[].slice.call(document.querySelectorAll('.hd nav a'));
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.dataset.sec===e.target.id);});}});},{rootMargin:'-40% 0px -55% 0px'});
+    links.forEach(function(l){var s=document.getElementById(l.dataset.sec);if(s)so.observe(s);});
+  }
+  // 比較スライダー
+  var ba=document.getElementById('ba'), rg=ba.querySelector('input'), pills=[].slice.call(document.querySelectorAll('.pill'));
+  function setP(v){v=Math.max(0,Math.min(100,v));ba.style.setProperty('--p',v+'%');rg.value=v;pills.forEach(function(p){p.setAttribute('aria-pressed',String(+p.dataset.p===Math.round(v)));});}
+  rg.addEventListener('input',function(){setP(+rg.value);});
+  pills.forEach(function(p){p.addEventListener('click',function(){setP(+p.dataset.p);});});
+  // 初回だけ、見えたときに1往復
+  if(!stopped && 'IntersectionObserver' in window){
+    var played=false, bo=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting&&!played){played=true;bo.disconnect();var t0=null;
+        (function step(t){ if(t0===null)t0=t; var k=(t-t0)/2400; if(k>=1){setP(50);return;} var v=50+Math.sin(k*Math.PI*2)*38*(1-k*.3); setP(v); requestAnimationFrame(step);} )(performance.now());
+      }});},{threshold:.55});
+    bo.observe(ba);
+  }
+  // ストアボタンのクリック計測（既存の store_click・target=windows）
+  function utm(){try{var r=sessionStorage.getItem('miitobow_utm');return r?JSON.parse(r):{};}catch(e){return {};}}
+  try{var q=new URLSearchParams(location.search),u={};['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){if(q.get(k))u[k]=q.get(k);});if(Object.keys(u).length)sessionStorage.setItem('miitobow_utm',JSON.stringify(u));}catch(e){}
+  [].slice.call(document.querySelectorAll('a[data-target]')).forEach(function(a){a.addEventListener('click',function(){
+    var u=utm(),body=JSON.stringify({event:'store_click',target:a.dataset.target,page:location.pathname,utm_source:u.utm_source||'',utm_medium:u.utm_medium||'',utm_campaign:u.utm_campaign||'',utm_content:u.utm_content||''});
+    try{ if(navigator.sendBeacon){navigator.sendBeacon('/api/track',new Blob([body],{type:'application/json'}));} else {fetch('/api/track',{method:'POST',headers:{'content-type':'application/json'},body:body,keepalive:true});} }catch(e){}
+  });});
+})();
+</script>
+</body>
+</html>
