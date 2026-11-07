@@ -214,6 +214,14 @@
   .seo a { color: var(--accent-dark); }
   #toast { position: absolute; z-index: 1060; left: 8px; right: 8px; top: 62px; margin: 0 auto; width: max-content; max-width: min(100% - 16px, 520px); padding: 10px 14px; border-radius: 10px; background: #fff7e0; color: #222; border: 1px solid #ecd9a0; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
   #toast[hidden] { display: none; }
+  /* ---- 第2弾(直通・乗り方・公式) ---- */
+  .pairbar { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 10px; border-radius: 10px; background: var(--brand-soft); border: 1px solid var(--brand); font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .pairbar span { flex: 1 1 auto; min-width: 0; } .pairbar .act { flex: none; }
+  #sug[data-mode="pair"] .sh { background: var(--brand-soft); }
+  .ride summary::before { content: "▸ "; white-space: pre; } .ride[open] summary::before { content: "▾ "; }
+  .ride { font-size: 13px; color: var(--ink); } .ride li { margin: 4px 0; } .ride summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; }
+  .head .and { margin: 0 .4em; font-weight: 400; color: var(--ink-soft); }
+  .official .act.ext { max-width: 100%; white-space: normal; line-height: 1.3; padding: 6px 14px; }
 
   /* ---- スマホ：ボトムシート（ヘッダー1行化・シート内を詰める）---- */
   @media (max-width: 767px) {
@@ -534,7 +542,7 @@ new ResizeObserver(() => {
 }).observe(mainEl);
 
 const on = Object.fromEntries(GORDER.map(g => [g, true]));
-let selRoute = null, lastStop = null, lastPlace = null, curStops = [], curRings = [], placePin = null;
+let selRoute = null, lastStop = null, lastPlace = null, curStops = [], curRings = [], placePin = null, pairFrom = null, pairBack = null;
 const colorOf = g => css(g);
 const isSel = s => !selRoute || selRoute.set.has(s);
 const baseR = () => { const z = map.getZoom(); return z <= 12 ? 3 : z <= 14 ? 4.5 : z <= 15 ? 5.5 : 7; };
@@ -637,6 +645,8 @@ const NOTE = `<details class="note"><summary>About this page · Sources · Discl
 ${HASSPOT ? `• Locations of sights and shops: approximate addresses made by cross-checking GSI Japan, OSM and Wikipedia (as of 2026-11-02). Shops may close, move or suspend business. This page is not affiliated with any listed shop or facility and is not advertising. “Popular with visitors” is an unofficial guide based on sources such as Honichi Lab rankings and listings in English travel guides.<br>` : ""}
 • “Open in Google Maps” etc. are links to external sites. Coordinates are passed only when you tap them.<br>
 • “Bus stops near me” uses your device location only on this device. It is never sent to a server or stored.<br>
+• “Direct routes to another stop” only lists routes that serve both stops. Direction, times, days and transfers are not known.<br>
+• “How to ride” is a general outline, not guidance for a specific operator or route.<br>
 • Map: <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">GSI Japan map tiles (Standard, Pale, Seamless latest aerial photos)</a>. Aerial photo dates vary by area and may not show the current situation.<br>
 • Map display: <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a></details>`;
 const opPill = g => `<span class="pill"><i style="background:var(--${g})"></i>`;
@@ -670,7 +680,7 @@ function routeHint(nm_) {
   openPanel(true); toast("This route name has changed in newer data. Please pick from the suggestions."); return true;
 }
 function readHash() {
-  let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place)=(.+)$/); } catch (e) { return false; }
+  let m; try { m = decodeURIComponent(location.hash.slice(1)).match(/^(stop|route|place|pair)=(.+)$/); } catch (e) { return false; }
   if (!m) return false; hashLock = true;
   try {
     if (m[1] === "stop") { const s = stops.find(x => x.name === m[2]); if (s) { lastPlace = null; clearPin(); showStop(s, { center: true, zoom: 16 }); return true; } }
@@ -682,13 +692,17 @@ function readHash() {
       if (routeHint(nm_)) return true;
     }
     if (m[1] === "place") { const p = places.find(x => x.name === m[2]); if (p) { placeBack = null; showPlace(p); return true; } }
+    if (m[1] === "pair") { const k = m[2].indexOf("|"); if (k > 0) { const A = stops.find(x => x.name === m[2].slice(0, k)), Bs = stops.find(x => x.name === m[2].slice(k + 1)); if (A && Bs && A.name !== Bs.name) { showPair(A, Bs); return true; } } }
   } finally { hashLock = false; }
   return false;
 }
 // ---- 持ち出し：日本語で大きく見せる／名前をコピー／外部地図へ(押した時だけ座標を渡す) ----
 const EXT_LINKS = (lat, lon, name) => { const q = lat.toFixed(5) + "," + lon.toFixed(5);
   return `<a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Open in Google Maps</a><a class="act ext" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=transit">Directions here (Google Maps)</a><a class="act ext" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${q}&q=${encodeURIComponent(name)}">Open in Apple Maps</a>`; };
-const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">Show in Japanese</button><button type="button" class="act" data-act="copy">Copy name</button></div>`;
+const ACTS = (nameJa, nameEn, lat, lon, kind) => `<div class="acts" role="group" data-ja="${esc(nameJa)}" data-en="${esc(nameEn)}" data-kind="${kind}"><button type="button" class="act" data-act="showja">Show in Japanese</button><button type="button" class="act" data-act="copy">Copy name</button>${kind === "stop" ? `<button type="button" class="act" data-act="pair">Direct routes to another stop</button>` : ""}</div>`;
+const GOFF = {};   // 事業者グループ → official[] の添字(任意・無ければ全件)
+const OFFICIAL = (g, open) => { const el = document.createElement("div"); el.innerHTML = `<a class="act ext" target="_blank" rel="noopener" data-oi="0" href="https://www.showa-bus.jp/">Showa Bus official site (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="1" href="https://www.bus.saihigroup.co.jp/">Saihi Bus official site (Japanese)</a><a class="act ext" target="_blank" rel="noopener" data-oi="2" href="https://www.city.karatsu.lg.jp/">Karatsu City official website (Japanese)</a>`; const keep = g && GOFF[g]; if (keep) [...el.children].forEach(a => { if (!keep.includes(+a.dataset.oi)) a.remove(); }); if (!el.children.length) return "";
+  return `<details class="extmaps official"${open ? " open" : ""}><summary>Official sites (timetables & fares)</summary><div class="acts">${el.innerHTML}</div><p class="tip">Opens an external site. These are the operators’ own official pages, not related to this page. Check timetables, fares and service changes there.</p></details>`; };
 const EXTS = (lat, lon, name) => `<details class="extmaps"><summary>Open in a map app / get directions</summary><div class="acts">${EXT_LINKS(lat, lon, name)}</div><p class="tip">Opens an external site. This place’s coordinates are sent only when you tap.</p></details>`;
 const sjEl = document.getElementById("showja"), sjName = document.getElementById("sjName"), sjSub = document.getElementById("sjSub"), sjPhrase = document.getElementById("sjPhrase"), sjTr = document.getElementById("sjTr"), sjGo = document.getElementById("sjGo"), sjOff = document.getElementById("sjOff");
 let sjFrom = null, sjKind = "stop";
@@ -712,7 +726,42 @@ function bindActs() {
     const ja = g.dataset.ja, en = g.dataset.en, kind = g.dataset.kind;
     g.querySelector('[data-act="showja"]').onclick = e => openShowJa(ja, en, kind, e.currentTarget);
     g.querySelector('[data-act="copy"]').onclick = e => copyText(ja, e.currentTarget);
+    const pb = g.querySelector('[data-act="pair"]'); if (pb) pb.onclick = () => startPair(lastStop);
   });
+}
+// ---- 2つのバス停の直通系統：A と B の両方を通る系統(系統の交差)。向き・時刻・曜日は出さない ----
+const sameName = n => stops.filter(x => x.name === n);
+function startPair(A) {
+  if (!A) return; pairFrom = A; q.value = ""; qclear.hidden = true; showSug(false); setPh();
+  const old = document.getElementById("pairbar"); if (old) old.remove();
+  const acts = pbody.querySelector(".acts[data-kind='stop']");
+  if (acts) acts.insertAdjacentHTML("afterend", `<div class="pairbar" id="pairbar" role="status"><span>From <b>${esc(A.en)}</b>. Type the destination stop in the search box above.</span><button type="button" class="act" id="pairX">Cancel</button></div>`);
+  const x = document.getElementById("pairX"); if (x) x.onclick = () => cancelPair(true);
+  psum.textContent = "Choose the destination stop"; q.focus();
+}
+function cancelPair(refocus) {
+  if (!pairFrom) return; const A = pairFrom; pairFrom = null; setPh(); const b = document.getElementById("pairbar"); if (b) b.remove();
+  if (lastStop === A) psum.textContent = `${A.en} · ${A.rts.length} ${P(A.rts.length, "route", "routes")}`;
+  if (refocus) { const pb = pbody.querySelector('[data-act="pair"]'); if (pb) pb.focus(); }
+}
+function showPair(A, B, opt) {
+  cancelPair(false); hoverOff(); selRoute = null; lastStop = null; lastPlace = null; placeBack = null; clearPin(); openPanel(true); map.closePopup();
+  if (isMobile()) setSheet("mid");
+  const As = sameName(A.name), Bs = sameName(B.name), ra = new Set(As.flatMap(x => x.rts));
+  const rs = [...new Set(Bs.flatMap(x => x.rts))].filter(i => ra.has(i)).map(i => routes[i]);
+  pairBack = { A, B }; setCur([...As, ...Bs]); setHash("pair=" + A.name + "|" + B.name); paint();
+  map.fitBounds(L.latLngBounds([...As, ...Bs].map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
+  render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${nm(A)}<span class="and">and</span>${nm(B)}</h2>
+  <div class="meta"><span><b>${rs.length}</b> ${P(rs.length, "route", "routes")}</span></div>
+  <p class="tip">Routes below serve both stops in this data. <b>Direction, times and days are not known.</b> Some runs may skip stops. Check official information before boarding.</p>
+  ${rs.length ? `<div class="lh">Routes serving both stops</div>` + groupedRoutes(rs) : `<p>No route in this data serves both stops. A transfer may be needed.</p>`}
+  <div class="lh">Change</div>
+  <button class="rt" type="button" id="pDest"><span>Change destination stop</span><small>›</small></button>
+  <button class="rt" type="button" id="pFrom"><span>From ${esc(B.en)} to another stop</span><small>›</small></button>${OFFICIAL("", false)}${NOTE}`, `${A.en} · ${B.en} · ${rs.length} ${P(rs.length, "route", "routes")}`);
+  bind();   // .rt[data-r] → showRoute（pairBack が立っているので「もどる」は直通へ）
+  document.getElementById("bk").onclick = () => { pairBack = null; showStop(A, { center: true, zoom: 16 }); };
+  document.getElementById("pDest").onclick = () => { pairBack = null; showStop(A, { center: true, zoom: 16 }); startPair(A); };
+  document.getElementById("pFrom").onclick = () => { pairBack = null; showStop(B, { center: true, zoom: 16 }); startPair(B); };
 }
 const EN_NAME = n => typeof SEN === "function" ? esc(SEN(n)) : esc(n);
 const ENDS = r => r.order.length < 3 ? "" : `<span class="ends">${EN_NAME(r.order[0])} → ${EN_NAME(r.order[r.order.length - 1])}${r.seq ? "" : " (est.)"}</span>`;
@@ -727,7 +776,7 @@ function render(html, sum) {
 
 const SEO = (document.getElementById("seo") || {}).outerHTML || "";   // 検索エンジン向けの静的本文(ビルドで同梱)。ホームの画面にも同じものを出す
 function home() {
-  hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
+  cancelPair(false); pairBack = null; hoverOff(); setCur([]); clearPin(); lastPlace = null; placeBack = null;
   selRoute = null; lastStop = null; paint(); map.closePopup();
   render(`<h2 class="head">Tap a bus stop</h2>
   <div class="lh">Browse</div>
@@ -736,7 +785,8 @@ function home() {
   <button class="rt" id="bStn" type="button"><span>Find by station</span><small>by line ›</small></button>${HASSPOT ? `<button class="rt" id="bSpot" type="button"><span>Sightseeing &amp; food</span><small>›</small></button>` : ""}
   <p>The dots on the map are bus stops (${stops.length.toLocaleString("en-US")} stops · ${routes.length} routes). Tap one to see the routes that serve it. Choose a route to highlight only its stops.</p>
   <p>Use the search box to find stations, towns, places and facilities (e.g. Karatsu Station, Imari Station, Yobuko), bus stops, and routes (e.g. Yobuko).</p>
-  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p><div class="lh">Municipalities in this map (3)</div><p class="tip">Karatsu City, Imari City, Genkai Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/saga/saga-city/"><span>Saga Area Bus Map</span><small>E ›</small></a><a class="rt" href="/bus/en/fukuoka/fukuoka-city/"><span>Fukuoka Area Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/nagasaki/sasebo/"><span>Sasebo Area Bus Map</span><small>SW ›</small></a><a class="rt" href="/bus/en/nagasaki/tsushima-iki/"><span>Tsushima and Iki Bus Map</span><small>NW ›</small></a><a class="rt" href="/bus/en/saga/takeo-kashima/"><span>Takeo-Kashima Area Bus Map</span><small>S ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
+  <p class="tip">Bus stop names are shown in English with the Japanese name (as on the stop sign) below. “≈” = automatic romanization, not verified. <i>Danchi</i> = housing complex.</p>
+  <details class="note ride" id="ride"><summary>How to ride a bus in Japan (general guide)</summary><p>Boarding and payment <b>differ by operator and route</b>. Follow the signs on the bus and at the stop, and the driver’s instructions. This is only a general outline; fares and times are not included.</p><ul><li><b>Boarding</b>: Some buses are boarded at the front door, others at the rear (middle) door. Signs on the bus or at the stop show which.</li><li><b>Numbered ticket / IC card</b>: On rear-boarding buses, take a numbered ticket (seiriken) or tap your IC card on the reader when you get on. The ticket number sets your fare. On many routes you also tap your IC card when you get off (follow the on-board instructions).</li><li><b>Fares</b>: Some routes have a flat fare; others charge by distance. A display above the driver shows the fare for each ticket number.</li><li><b>Paying</b>: Cash goes into the fare box when you get off (or when you get on, on pre-pay routes). Many buses do not give change, so use the change machine first. Transit IC cards (Suica, ICOCA, nimoca, etc.) are accepted by many operators, but not on every route or in every area.</li><li><b>Getting off</b>: Listen for the next-stop announcement or display, then press a stop button. Stay seated until the bus stops.</li><li><b>Same stop name</b>: Stops with the same name may be across the road or some distance apart depending on direction. This map groups same-name stops together.</li></ul><p class="tip">For details, see “How to ride” on each operator’s official site (open it from “Official sites” on a stop or route screen).</p></details><div class="lh">Municipalities in this map (3)</div><p class="tip">Karatsu City, Imari City, Genkai Town</p><div class="lh">Other areas</div><a class="rt" href="/bus/en/"><span>All maps (Bus Maps home)</span><small>›</small></a><a class="rt" href="/bus/en/saga/saga-city/"><span>Saga Area Bus Map</span><small>E ›</small></a><a class="rt" href="/bus/en/fukuoka/fukuoka-city/"><span>Fukuoka Area Bus Map</span><small>NE ›</small></a><a class="rt" href="/bus/en/nagasaki/sasebo/"><span>Sasebo Area Bus Map</span><small>SW ›</small></a><a class="rt" href="/bus/en/nagasaki/tsushima-iki/"><span>Tsushima and Iki Bus Map</span><small>NW ›</small></a><a class="rt" href="/bus/en/saga/takeo-kashima/"><span>Takeo-Kashima Area Bus Map</span><small>S ›</small></a>${SEO}${NOTE}`, "Choose a bus stop or route");
   setHash("");
   document.getElementById("bLoc").onclick = locateMe; document.getElementById("bArea").onclick = showAreaIndex; document.getElementById("bStn").onclick = showLineIndex; const bs = document.getElementById("bSpot"); if (bs) bs.onclick = showSpotIndex;
 }
@@ -752,7 +802,7 @@ function groupedRoutes(rs) {
   return out;
 }
 function showStop(s, opt) {
-  hoverOff(); selRoute = null; lastStop = s; openPanel(true);
+  cancelPair(false); pairBack = null; hoverOff(); selRoute = null; lastStop = s; openPanel(true);
   if (isMobile()) setSheet("mid");
   setCur([s]); setHash("stop=" + s.name);
   if (opt && opt.center) focusTo(L.latLng(s.lat, s.lon), opt.zoom);
@@ -760,7 +810,7 @@ function showStop(s, opt) {
   render(`<button class="back" id="bk" type="button">← Back</button><h2 class="head">${nm(s)}</h2>
   <div class="meta">${opPill(s.g)}${esc(OPNAME(s.op))}</span><span><b>${rs.length}</b> ${P(rs.length, "route", "routes")}</span></div>
   ${ACTS(s.name, typeof s.en === "string" ? s.en : "", s.lat, s.lon, "stop")}
-  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${EXTS(s.lat, s.lon, s.name)}${NOTE}`,
+  ${rs.length ? `<div class="lh">Routes serving this stop</div>` + groupedRoutes(rs) : `<p>No route information</p>`}${EXTS(s.lat, s.lon, s.name)}${OFFICIAL(s.g, false)}${NOTE}`,
   `${s.en} · ${rs.length} ${P(rs.length, "route", "routes")}`);
   paint();   // 系統表示から戻った時の薄表示を解除
   bind(); bindActs();
@@ -798,7 +848,7 @@ let placeBack = null;   // {label, fn}: 一覧から場所を開いた時の戻�
 places.forEach((p, i) => p.i = i);
 const AREA_ORDER = ["唐津市", "伊万里市", "東松浦郡玄海町"];
 const jaCmp = new Intl.Collator("ja").compare;
-function browseOpen(sheet) { setHash(""); hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
+function browseOpen(sheet) { cancelPair(false); pairBack = null; setHash(""); hoverOff(); setCur([]); clearPin(); lastPlace = null; selRoute = null; lastStop = null; paint(); map.closePopup(); openPanel(true); if (isMobile()) setSheet(sheet || "max"); }   // 一覧は長いので、スマホでは大きめに開く
 function areaMap() { const m = new Map(); places.forEach(p => { if (p.type === "地名") { if (!m.has(p.area)) m.set(p.area, []); m.get(p.area).push(p); } }); return m; }
 function showAreaIndex() {
   browseOpen(); placeBack = null;
@@ -879,7 +929,7 @@ function showLine(i) {
   pbody.querySelectorAll(".stoplist button[data-i]").forEach(b => b.onclick = () => showPlace(places[+b.dataset.i]));
 }
 function showPlace(p, opt) {
-  hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
+  cancelPair(false); pairBack = null; hoverOff(); selRoute = null; lastStop = null; lastPlace = p; openPanel(true);
   if (isMobile()) setSheet("mid");
   setCur([]); paint(); setPin(p); map.closePopup(); if (p.i >= 0) setHash("place=" + p.name);
   const pz = PTYPE_ZOOM[p.type] || 15, pll = L.latLng(p.lat, p.lon);
@@ -915,20 +965,20 @@ function locateMe() {
   }, () => toast("Location is not available. Try searching by a place or station name."), { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
 }
 function showRoute(r) {
-  hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup(); setHash("route=" + D.ops[r.op] + "|" + r.name);
-  setCur(lastStop && r.set.has(lastStop) ? [lastStop] : []);
+  cancelPair(false); hoverOff(); selRoute = r; on[r.g] = true; syncChips(); openPanel(true); map.closePopup(); setHash("route=" + D.ops[r.op] + "|" + r.name);
+  setCur(pairBack ? [...sameName(pairBack.A.name), ...sameName(pairBack.B.name)].filter(s => r.set.has(s)) : lastStop && r.set.has(lastStop) ? [lastStop] : []);
   paint();
   map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
-  const back = lastStop ? `← Back to ${esc(lastStop.en)}` : "← Back";
+  const back = pairBack ? "← Back to direct routes" : lastStop ? `← Back to ${esc(lastStop.en)}` : "← Back";
   render(`<button class="back" id="bk" type="button">${back}</button><h2 class="head">${rnm(r)}</h2>
   <div class="meta">${opPill(r.g)}${esc(OPNAME(r.op))}</span>${r.total ? `<span>Stops in the data: <b>${r.n}</b> inside this map's area, and about <b>${r.total - r.n}</b> more outside it</span>` : `<span><b>${r.n}</b> ${P(r.n, "stop", "stops")} in the data</span>`}</div>
   <div class="lh">${r.seq ? "Stops (in running order)" : "Stops (order estimated from locations)"}</div>
   <p class="tip">${r.seq ? "* This is the stopping order in the GTFS data published by the operator or municipality. Both directions, loops and trips that run only on some days or seasons are merged into one list, so some stops may not be served by every trip. It may differ in detail from the actual service (direction, loop order). " : "* The source data has no stop order, so this order is estimated from locations. It may differ from the actual order or direction (especially on branching routes). "}${r.total ? (r.seq ? "This route also continues beyond this map's area. The list shows only the stops inside the area. " : "This route also continues beyond this map's area. The order estimate uses only the stops inside the area. ") : ""}${touchOnly() ? "Tap a name to mark that stop without moving the map." : "Click a name to zoom the map to it."}</p>
   <div class="rbar" role="group" aria-label="${r.seq ? "Step through the stops (running order)" : "Step through the stops (estimated order)"}"><button type="button" id="rPrev" aria-label="Previous stop">◀ Prev</button><span id="rPos" role="status" aria-live="polite"></span><button type="button" id="rNext" aria-label="Next stop">Next ▶</button><button type="button" id="rZoom" aria-label="Zoom in on the selected stop" disabled>Zoom</button><button type="button" id="rAll" aria-label="Show the whole route">Whole route</button><button type="button" id="rNum" aria-pressed="${numOn}" aria-label="${r.seq ? "Show running-order numbers on the map" : "Show estimated order numbers on the map"}">Nos.</button></div>
-  <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${NOTE}`,
+  <ol class="stoplist">${r.order.map(n => `<li><button type="button" data-n="${esc(n)}">${snm(n)}</button></li>`).join("")}</ol>${OFFICIAL(r.g, true)}${NOTE}`,
   `${routeLabel(r)} · ${r.n} ${P(r.n, "stop", "stops")}`);
   if (curStops[0]) setCur(curStops, false);   // 開いた直後は先頭（戻る・系統名・注記）を見せる
-  document.getElementById("bk").onclick = () => lastStop ? showStop(lastStop) : home();
+  document.getElementById("bk").onclick = () => pairBack ? showPair(pairBack.A, pairBack.B) : lastStop ? showStop(lastStop) : home();
   // ---- 停留所を順に見る（推定順）。スマホは『押しても拡大しない』：印を付けるだけ。近くを見たい時は『拡大』 ----
   const fitAll = () => map.fitBounds(L.latLngBounds(r.stops.map(s => [s.lat, s.lon])), { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24 + Math.min(cover(), sheetPx("mid"))], maxZoom: 16, animate: !RM });
   const same = n => r.stops.filter(x => x.name === n);
@@ -981,13 +1031,16 @@ function syncChips() { GORDER.forEach(g => chipEls[g].setAttribute("aria-pressed
 
 // 検索（Enter／↑↓／Escに対応。判定ロジックは従来どおり）
 const q = document.getElementById("q"), sug = document.getElementById("sug"), qclear = document.getElementById("qclear");
-const kana = t => t.normalize("NFKC").toLowerCase();
+const KNUM = { 一: "1", 二: "2", 三: "3", 四: "4", 五: "5", 六: "6", 七: "7", 八: "8", 九: "9", 十: "10" };
+const kana = t => t.normalize("NFKC").toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/ゖ/g, "け").replace(/ゕ/g, "か").replace(/[一二三四五六七八九十](?=丁目)/g, c => KNUM[c]).replace(/[\s\u3000・･\-‐]/g, "");   // カナ→かな・ヶ/ケ・漢数字の丁目・空白と区切りを無視(場所検索の pnorm と同じ寛容さ)
+const syn = t => t.replace(/\b(station|stn|st)\b\.?\s*$/i, "Sta.");   // 英語：St / Stn / Station を Sta. にそろえる(日本語には効かない)
 const items = [...routes.map(r => ({ t: "r", r, key: kana(r.name + " " + D.ops[r.op]) + "|" + kana(routeLabel(r) + " " + OPNAME(r.op)) + "|" + pnorm(routeLabel(r)) })),
   ...stops.map(s => ({ t: "s", s, key: kana(s.name) + "|" + pnorm(s.en) + "|" + pnorm(s.en.replace(/\bSta\./g, "Station")) }))];
 let hit = [], act = -1;
 const showSug = v => { sug.hidden = !v; q.setAttribute("aria-expanded", String(v)); if (!v) q.removeAttribute("aria-activedescendant"); };
 function pick(it) {
   showSug(false); q.value = ""; qclear.hidden = true; act = -1; placeBack = null;
+  if (pairFrom) { const A = pairFrom; if (it.t === "s") { showPair(A, it.s); return; } cancelPair(false); }   // 直通モード：バス停を選ぶと直通結果。ほかを選んだら直通を解いて通常どおり
   if (it.t === "idx") { showSpotIndex(); return; }
   if (it.t === "p") { showPlace(it.p); return; }
   lastPlace = null; clearPin();     // 場所から離れて、検索で別のバス停・系統を選んだ時
@@ -999,13 +1052,21 @@ function setAct(k) {
 }
 function search() {
   const raw = q.value.trim(), v = kana(raw); act = -1; qclear.hidden = !q.value;
-  if (!v) { if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  if (!v) { if (pairFrom) { showSug(false); return; } if (HASSPOT && document.activeElement === q) showReco(); else showSug(false); return; }
+  if (pairFrom) {   // 直通モード：候補はバス停だけ・同名は1件・出発と同名は除く
+    const seen = new Set(), pv0 = pnorm(syn(raw));
+    hit = items.filter(it => it.t === "s" && it.s.name !== pairFrom.name && (it.key.includes(v) || (pv0.length > 1 && it.key.includes(pv0))) && !seen.has(it.s.name) && seen.add(it.s.name));
+    hit.sort((a, b) => kpre(a, v, pnorm(syn(raw))) - kpre(b, v, pnorm(syn(raw))) || (a.t === "s" && b.t === "s" ? a.s.en.length - b.s.en.length : 0)); hit = hit.slice(0, 40); sug.dataset.mode = "pair";
+    sug.innerHTML = hit.length ? `<div class="sh" role="presentation">Destination stop</div>` + hit.map((it, k) => `<button type="button" role="option" id="sug-${k}" data-k="${k}"><span>${nm(it.s)}</span><small>${esc(OPNAME(it.s.op))} · ${it.s.rts.length} ${P(it.s.rts.length, "route", "routes")}</small></button>`).join("") : `<div class="empty">No bus stop matches <b>“${esc(raw)}”</b>. Try part of the stop name.</div>`;
+    sug.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => pick(hit[+b.dataset.k]));
+    if (isMobile()) sug.style.top = Math.round(document.querySelector("header").getBoundingClientRect().bottom + 4) + "px"; showSug(true); return;
+  }
   sug.dataset.mode = "";
-  hit = (pv0 => { const h = items.filter(it => it.key.includes(v) || (pv0.length > 1 && it.key.includes(pv0))); const opOnly = it => it.t === "r" && !(kana(it.r.name + " " + routeLabel(it.r)).includes(v) || (pv0.length > 1 && pnorm(routeLabel(it.r)).includes(pv0))); return h.some(it => it.t === "s") && h.filter(it => it.t === "r").length > 20 ? h.filter(it => !opOnly(it)) : h; })(pnorm(raw));
-  hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || kpre(a, v, pnorm(raw)) - kpre(b, v, pnorm(raw)) || (a.t === "s" && b.t === "s" ? a.s.en.length - b.s.en.length : 0));
+  hit = (pv0 => { const h = items.filter(it => it.key.includes(v) || (pv0.length > 1 && it.key.includes(pv0))); const opOnly = it => it.t === "r" && !(kana(it.r.name + " " + routeLabel(it.r)).includes(v) || (pv0.length > 1 && pnorm(routeLabel(it.r)).includes(pv0))); return h.some(it => it.t === "s") && h.filter(it => it.t === "r").length > 20 ? h.filter(it => !opOnly(it)) : h; })(pnorm(syn(raw)));
+  hit.sort((a, b) => (a.t === b.t ? 0 : a.t === "r" ? -1 : 1) || kpre(a, v, pnorm(syn(raw))) - kpre(b, v, pnorm(syn(raw))) || (a.t === "s" && b.t === "s" ? a.s.en.length - b.s.en.length : 0));
   hit = hit.slice(0, 40);
   // 場所（駅・地名・施設）は別の候補群として先頭に追加。既存のバス停・系統の判定と並びは変えない
-  const pv = pnorm(raw);
+  const pv = pnorm(syn(raw));
   const ph = placeItems.filter(it => it.key.includes(pv)).map(it => ({ it, sc: it.name === pv ? 0 : it.name.startsWith(pv) ? 1 : 2 }))
     .sort((a, b) => a.sc - b.sc || PTYPE_ORDER.indexOf(a.it.p.type) - PTYPE_ORDER.indexOf(b.it.p.type) || a.it.p.name.length - b.it.p.name.length || areaRank(a.it.p.area) - areaRank(b.it.p.area)).slice(0, 8).map(x => x.it);
   hit = ph.concat(hit);
@@ -1028,11 +1089,11 @@ function search() {
   showSug(true);
 }
 q.oninput = search;
-q.onfocus = () => { if (q.value.trim() || HASSPOT) search(); };
+q.onfocus = () => { if (pairFrom) { if (q.value.trim()) search(); return; } if (q.value.trim() || HASSPOT) search(); };
 qclear.onclick = () => { q.value = ""; qclear.hidden = true; showSug(false); act = -1; q.focus(); };
 q.onkeydown = e => {
   if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換確定のEnterでは候補を開かない
-  if (e.key === "Escape") { e.preventDefault(); if (!sug.hidden) showSug(false); else if (q.value) { q.value = ""; qclear.hidden = true; } return; }
+  if (e.key === "Escape") { e.preventDefault(); if (pairFrom && sug.hidden && !q.value) { cancelPair(true); return; } if (!sug.hidden) showSug(false); else if (q.value) { q.value = ""; qclear.hidden = true; } return; }
   if (sug.hidden || !hit.length) return;
   if (e.key === "ArrowDown") { e.preventDefault(); setAct((act + 1) % hit.length); }
   else if (e.key === "ArrowUp") { e.preventDefault(); setAct((act - 1 + hit.length) % hit.length); }
@@ -1040,7 +1101,7 @@ q.onkeydown = e => {
   else if (e.key === "Enter") { e.preventDefault(); pick(act >= 0 ? hit[act] : (hit.find(h => h.t !== "p") || hit[0])); }
 };
 document.addEventListener("click", e => { if (e.target.isConnected && !e.target.closest(".searchwrap")) showSug(false); });
-const setPh = () => { q.placeholder = HASSPOT ? (isMobile() ? "Search places & stops" : "Search places, stops, routes") : isMobile() ? "Search places & stops" : "Search places, stops, routes"; };   // 狭い画面では短く
+const setPh = () => { q.placeholder = pairFrom ? "Type the destination stop" : HASSPOT ? (isMobile() ? "Search places & stops" : "Search places, stops, routes") : isMobile() ? "Search places & stops" : "Search places, stops, routes"; };   // 狭い画面では短く
 setPh(); mqMobile.addEventListener("change", setPh);
 hashLock = true; try { home(); } finally { hashLock = false; }   // 起動時のホームは、URLのhashを消さない(共有リンクで開いた時に readHash で復元するため)
 applySheet();
