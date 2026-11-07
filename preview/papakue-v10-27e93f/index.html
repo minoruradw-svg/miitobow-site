@@ -248,7 +248,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 
 <!-- ===== 固定レイヤー：ワールド＋カメラ ===== -->
 <div id="bivi" aria-hidden="true"><img id="bvLook" src="assets/bivi/bivi_look.webp" alt="" width="732" height="720" decoding="async"><img id="bvTrash" src="assets/bivi/bivi_trash.webp" alt="" width="927" height="720" decoding="async"><img id="bvHappy" src="assets/bivi/bivi_happy.webp" alt="" width="732" height="720" decoding="async"></div>
-<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div><div class="lf-lock" id="lfLock" aria-hidden="true"><div class="lk-st">ロック画面</div><div class="lk-time">22:40</div><div class="lk-w"><div class="lk-t">今日のクエスト</div><div class="lk-n">あと1件</div><div class="lk-i">・牛乳</div></div></div></div></div>
+<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div><div class="lf-lock" id="lfLock" aria-hidden="true"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"></div></div></div></div></div>
 <div class="zvfull" data-zm="thx" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true">
   <canvas id="gridc"></canvas>
@@ -729,20 +729,14 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 @media (prefers-reduced-motion: reduce) { .nextgo, .statebar.sb1 { animation: none; } }
 
 /* 夜の場面：ロック画面ウィジェット「今日のクエスト」の模型（実アプリ＝LockScreenQuestView の accessoryRectangular と同じ文言） */
-.lf-lock { position: absolute; left: 83%; bottom: 3%; width: clamp(130px, 13vw, 200px); aspect-ratio: 9 / 13; border-radius: 24px; background: linear-gradient(165deg, #1d3b3a, #12202b 70%); border: 3px solid #17323a; box-shadow: 0 18px 36px rgba(31,34,35,.28); color: #fff; font-size: clamp(12px, 1.3vw, 19px); display: flex; flex-direction: column; align-items: center; padding: 9% 7% 0; opacity: 0; transform-origin: 0 100%; will-change: transform, opacity; overflow: hidden; }
-.lf-lock .lk-st { font-size: .62em; letter-spacing: .12em; opacity: .65; }
-.lf-lock .lk-time { font-size: 2.3em; font-weight: 300; line-height: 1.1; margin: .25em 0 .7em; font-variant-numeric: tabular-nums; }
-.lf-lock .lk-w { width: 100%; background: rgba(255,255,255,.18); border-radius: 12px; padding: .55em .7em .6em; text-align: left; border: 1px solid rgba(255,255,255,.22); }
-.lf-lock .lk-t { font-size: .66em; opacity: .85; }
-.lf-lock .lk-n { font-size: 1.35em; font-weight: 800; line-height: 1.25; }
-.lf-lock .lk-i { font-size: .72em; opacity: .9; }
-.lf-lock .lk-t, .lf-lock .lk-n, .lf-lock .lk-i { white-space: nowrap; }
-@media (max-width: 999px) { .lf-lock { left: 80%; bottom: 2%; width: clamp(92px, 25vw, 118px); font-size: clamp(9.5px, 2.6vw, 12px); border-radius: 18px; padding-top: 7%; } .lf-lock .lk-st { display: none; } .lf-lock .lk-time { font-size: 1.9em; margin: .1em 0 .5em; } .lf-lock .lk-w { padding: .45em .5em .5em; } .lf-lock .lk-n { font-size: 1.2em; } }
+.lf-lock { position: absolute; left: 97%; bottom: 1%; width: clamp(120px, 15vw, 190px); opacity: 0; transform-origin: 0 100%; will-change: transform, opacity; }
+.lf-lock img { display: block; width: 100%; height: auto; filter: drop-shadow(0 16px 24px rgba(31,34,35,.28)); }
+@media (max-width: 999px) { .lf-lock { left: 84%; bottom: 1%; width: clamp(80px, 22vw, 100px); } }
 
 /* ビビちゃん（相手のスマホの右）：受け取った→ゴミ出し中→スタンプで喜ぶ（パンパン） */
 #bivi { position: fixed; z-index: 4; pointer-events: none; visibility: hidden; opacity: 0; will-change: transform, opacity; }
 #bivi img { position: absolute; left: 0; bottom: 0; height: 100%; width: auto; opacity: 0; transform-origin: 50% 100%; filter: drop-shadow(0 18px 22px rgba(31,34,35,.16)); }
 </style>
-<script src="app.js?v=10-20261107b"></script>
+<script src="app.js?v=10-20261107c"></script>
 </body>
 </html>
