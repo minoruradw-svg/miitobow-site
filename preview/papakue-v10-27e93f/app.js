@@ -403,6 +403,34 @@
   function zvPrepare() { ["add", "req", "thx"].forEach(k => { const el = zvBox[k] && (zvBox[k].box.closest(".chapter") || document.querySelector('[data-ch="s5"]')); if (el && !zvBox[k].v && el.getBoundingClientRect().top < H * 2.2) zvEnsure(k); }); }
   function zvScroll() { [["dl", document.querySelector(".closing")]].forEach(([k, el]) => { if (!zvBox[k] || !el) return; const r = el.getBoundingClientRect(), near = r.top < H * 1.6 && r.bottom > -H * .5; if (near) zvEnsure(k); const on = r.top < H * .6 && r.bottom > H * .35; if (on !== !!zvOn[k]) { zvOn[k] = on; const z = zvEnsure(k); if (z && z.v && !RM) { try { if (on) { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } else { z.v.pause(); z.v.currentTime = 0; } } catch (e) {} } } }); }
 
+  /* ---------- 最後の場面：ミートボー＋ビビちゃんが跳ね込み、アイコンがポン、ハートと星が弾ける（入るたびに1回） ---------- */
+  (function closingFx() {
+    const sec = document.getElementById("closing"), cv = document.getElementById("clFx"), mit = document.getElementById("clMit");
+    if (!sec || !cv || !("IntersectionObserver" in window)) return;
+    sec.classList.add("cl-js");
+    let raf = 0, t0 = 0, parts = [];
+    const rnd = lcg(23), ico = () => { const r = sec.querySelector(".app").getBoundingClientRect(), s = sec.getBoundingClientRect(); return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 }; };
+    function emit(x, y, n, spread, up) { for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + (rnd() - .5) * spread, sp = 340 + rnd() * 520; parts.push({ x, y, vx: Math.cos(a) * sp * (up ? 1 : 1.2), vy: Math.sin(a) * sp, sz: 9 + rnd() * 13, sh: i % 3, c: CC[Math.floor(rnd() * 6)], spin: (rnd() - .5) * 9, life: 1.7 + rnd() * 1.1, age: 0 }); } }
+    function tick(now) {
+      const dt = Math.min(.05, (now - t0) / 1000); t0 = now;
+      const w = sec.clientWidth, h = sec.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+      parts = parts.filter(p => p.age < p.life);
+      for (const p of parts) { p.age += dt; p.vy += 900 * dt; p.vx *= (1 - 1.1 * dt); p.x += p.vx * dt; p.y += p.vy * dt; const u = p.age / p.life, al = u < .7 ? 1 : 1 - (u - .7) / .3;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.spin * p.age); g.globalAlpha = clamp(al); g.fillStyle = p.c; const q = p.sz;
+        if (p.sh === 1) { heartP(g, q); g.fill(); } else if (p.sh === 0) { starP(g, q, 5, .45); g.fill(); } else { g.beginPath(); g.arc(0, 0, q * .32, 0, 6.2832); g.fill(); } g.restore(); }
+      if (parts.length) raf = requestAnimationFrame(tick); else { raf = 0; g.clearRect(0, 0, w, h); }
+    }
+    function burst() { if (RM || LOW && false) return; const c = ico(); emit(c.x, c.y, LOW ? 46 : 84, 2.9, true); setTimeout(() => { const w = sec.clientWidth, y = sec.clientHeight - 130; emit(w * .16, y, 26, 1.6, true); emit(w * .84, y, 26, 1.6, true); }, 650); t0 = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
+    let shown = false;
+    const near = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && mit && !mit.src) mit.src = "assets/mascot_wave_360_12fps.webp"; }), { rootMargin: "700px 0px" }); near.observe(sec);
+    new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio >= .3) { if (!shown) { shown = true; sec.classList.add("in"); burst(); } }
+      else if (!e.isIntersecting && shown) { shown = false; sec.classList.remove("in"); }
+    }), { threshold: [0, .3] }).observe(sec);
+  })();
+
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
   const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"); let lifeKey = "";
   function lifeFrame(ps) {

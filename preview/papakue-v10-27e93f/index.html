@@ -421,7 +421,8 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
   </section>
 
   <!-- ===== S7 ダウンロード ===== -->
-  <section class="closing" data-ch="s7">
+  <section class="closing" data-ch="s7" id="closing">
+    <div class="cl-stage" aria-hidden="true"><img class="cl-mit cl-char" id="clMit" alt="" width="360" height="380" decoding="async"><img class="cl-bivi cl-char" src="assets/bivi/bivi_happy.webp?v=20261108c" alt="" width="787" height="720" loading="lazy" decoding="async"><img class="cl-f cl-f1 cl-pop" src="assets/st-thanks.webp" alt="" width="320" height="320" loading="lazy" style="--r:-12deg;--d:.5s"><img class="cl-f cl-f2 cl-pop" src="assets/st-like.webp" alt="" width="360" height="360" loading="lazy" style="--r:10deg;--d:.65s"><img class="cl-f cl-f3 cl-pop" src="assets/st-clear.webp" alt="" width="320" height="320" loading="lazy" style="--r:8deg;--d:.8s"><img class="cl-f cl-f4 cl-pop" src="assets/scroll.webp" alt="" width="520" height="520" loading="lazy" style="--r:-8deg;--d:.95s"><canvas class="cl-fx" id="clFx"></canvas></div>
     <img class="app" src="assets/icon_192.webp" alt="パパクエ" width="96" height="96" loading="lazy">
     <h2 class="sr">人生が、パパッとクエストになる。</h2>
     <div class="zv zvdl" data-zm="dl" aria-hidden="true"></div>
@@ -736,7 +737,39 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 /* ビビちゃん（相手のスマホの右）：受け取った→ゴミ出し中→スタンプで喜ぶ（パンパン） */
 #bivi { position: fixed; z-index: 4; pointer-events: none; visibility: hidden; opacity: 0; will-change: transform, opacity; }
 #bivi img { position: absolute; left: 0; bottom: 0; height: 100%; width: auto; opacity: 0; transform-origin: 50% 100%; filter: drop-shadow(0 18px 22px rgba(31,34,35,.16)); }
+
+/* 最後の場面：にぎやかに（ミートボー＋ビビちゃん・スタンプ・紙ふぶき）。JSが動いた時だけ隠して、入場で動かす */
+.closing { position: relative; overflow: hidden; }
+.closing > *:not(.cl-stage) { position: relative; z-index: 2; }
+.cl-stage { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.cl-char { position: absolute; bottom: 54px; width: auto; filter: drop-shadow(0 18px 24px rgba(31,34,35,.18)); }
+.cl-mit { left: clamp(6px, 6vw, 110px); height: clamp(210px, 36vh, 380px); }
+.cl-bivi { right: clamp(6px, 6vw, 110px); height: clamp(190px, 32vh, 340px); }
+.cl-f { position: absolute; width: clamp(54px, 6vw, 96px); height: auto; filter: drop-shadow(0 10px 14px rgba(31,34,35,.16)); transform: rotate(var(--r, 0deg)); }
+.cl-f1 { left: 25%; top: 17%; } .cl-f2 { right: 24%; top: 20%; } .cl-f3 { left: 9%; top: 36%; } .cl-f4 { right: 8%; top: 33%; width: clamp(64px, 7vw, 110px); }
+.cl-fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+.closing.cl-js .cl-pop, .closing.cl-js .cl-char { opacity: 0; }
+.closing.cl-js .cl-mit { transform: translateX(-160px); } .closing.cl-js .cl-bivi { transform: translateX(160px); }
+.closing.in .cl-pop { animation: clPop .7s cubic-bezier(.2,1.6,.4,1) var(--d, 0s) forwards, clFloat 3.6s ease-in-out calc(var(--d, 0s) + .9s) infinite; }
+.closing.in .cl-mit { animation: clInL .95s cubic-bezier(.2,1.35,.4,1) .15s forwards, clBob 2.6s ease-in-out 1.2s infinite; }
+.closing.in .cl-bivi { animation: clInR .95s cubic-bezier(.2,1.35,.4,1) .35s forwards, clBob 2.2s ease-in-out 1.4s infinite; }
+.closing.in .app { animation: clIcon 1s cubic-bezier(.2,1.5,.4,1) forwards, clWig 4.2s ease-in-out 1.6s infinite; }
+@keyframes clPop { 0% { opacity: 0; transform: scale(.2) rotate(var(--r, 0deg)); } 70% { opacity: 1; transform: scale(1.2) rotate(var(--r, 0deg)); } 100% { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); } }
+@keyframes clFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+@keyframes clBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -9px; } }
+@keyframes clInL { 0% { opacity: 0; transform: translateX(-160px); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes clInR { 0% { opacity: 0; transform: translateX(160px); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes clIcon { 0% { transform: scale(.3) rotate(-14deg); } 60% { transform: scale(1.22) rotate(6deg); } 100% { transform: scale(1) rotate(0deg); } }
+@keyframes clWig { 0%, 86%, 100% { transform: rotate(0deg); } 90% { transform: rotate(-8deg) scale(1.06); } 94% { transform: rotate(7deg) scale(1.06); } 97% { transform: rotate(-3deg); } }
+@media (prefers-reduced-motion: reduce) { .closing.in .cl-pop, .closing.in .cl-char, .closing.in .app { animation: none !important; opacity: 1 !important; transform: none !important; } .closing.in .cl-pop { transform: rotate(var(--r, 0deg)) !important; } }
+@media (max-width: 999px) {
+  .closing { padding-bottom: 210px; }
+  .cl-char { bottom: 22px; }
+  .cl-mit { left: 3%; height: 150px; } .cl-bivi { right: 3%; height: 138px; }
+  .cl-f1 { left: 6%; top: 58px; width: 54px; } .cl-f2 { right: 6%; top: 84px; width: 50px; }
+  .cl-f3, .cl-f4 { display: none; }
+}
 </style>
-<script src="app.js?v=10-20261108b"></script>
+<script src="app.js?v=10-20261108c"></script>
 </body>
 </html>
