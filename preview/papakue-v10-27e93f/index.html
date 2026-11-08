@@ -743,6 +743,7 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 /* 最後の場面：にぎやかに（ミートボー＋ビビちゃん・スタンプ・紙ふぶき）。JSが動いた時だけ隠して、入場で動かす */
 .closing { position: relative; overflow: hidden; }
 .closing > *:not(.cl-stage) { position: relative; z-index: 2; }
+.closing > .zv { z-index: 0; } /* 見出し動画（白地）がキャラやスタンプを隠さないよう、演出より下に */
 .cl-stage { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .cl-char { position: absolute; bottom: 54px; width: auto; filter: drop-shadow(0 18px 24px rgba(31,34,35,.18)); }
 .cl-mit { left: clamp(6px, 6vw, 110px); height: clamp(210px, 36vh, 380px); }
@@ -781,6 +782,6 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 @media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
 .closing .cl-mit { bottom: -14px; }   /* 上半身の絵なので、下の切れ目をセクションの縁に隠す（ふわふわ動いても浮かない） */
 </style>
-<script src="app.js?v=10-20261108h"></script>
+<script src="app.js?v=10-20261108i"></script>
 </body>
 </html>
