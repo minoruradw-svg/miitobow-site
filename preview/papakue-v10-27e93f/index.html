@@ -392,7 +392,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
     <p class="no">03 — REQUEST</p>
     <h2 class="sr">家族やパートナーに、お願いする。</h2>
     <div class="zv" data-zm="req" aria-hidden="true"></div>
-    <p class="txt"><span class="nb">パーティを組むと</span><br><span class="nb">相手にやってほしいことを、</span><span class="nb">クエストにして送れます。</span><br><span class="nb">届いたら、</span><span class="nb">相手は返事をするだけ。</span></p>
+    <p class="txt"><span class="nb">パーティを組むと、</span><span class="nb">相手にやってほしいことを</span><br><span class="nb"><b class="rq">「お願い」</b>クエストにして送れます。</span><br><span class="nb">届いたら、</span><span class="nb">相手は返事をするだけ。</span></p>
     <div class="v9only"><ol class="s4steps" id="s4steps" aria-hidden="true"><li class="on"><b>1</b>あなたが送る</li><li><b>2</b>相手に届く</li><li><b>3</b>相手が受ける</li></ol>
     <p class="step" aria-hidden="true"><i></i><span id="s4step">あなたが「ゴミ出し」をお願いする</span></p></div>
   </div></div>
@@ -654,9 +654,10 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 .qwrap { position: absolute; inset: 0; width: auto !important; opacity: 1 !important; transform: none !important; text-align: left; pointer-events: none; }
 .qwrap span { display: block; }
 .qa { position: absolute; left: max(24px, calc(var(--gx) * .55)); top: calc(64px + 5.5vh); margin: 0; line-height: 1.3; }
-.qh { font-size: clamp(24px, 2.15vw, 40px); font-weight: 900; color: #17323a; opacity: var(--q1, 0); transform: translateY(calc((1 - var(--q1, 0)) * 16px)); }
-.qs1 { margin-top: 12px; font-size: clamp(15px, 1.2vw, 21px); font-weight: 700; color: #343a36; opacity: var(--q2, 0); transform: translateY(calc((1 - var(--q2, 0)) * 12px)); }
-.qs2 { margin-top: 4px; font-size: clamp(15px, 1.2vw, 21px); font-weight: 900; color: #1e9a70; opacity: var(--q3, 0); transform: translateY(calc((1 - var(--q3, 0)) * 12px)); }
+.qh { font-size: clamp(26px, 2.9vw, 60px); font-weight: 900; color: #17323a; opacity: var(--q1, 0); transform: translateY(calc((1 - var(--q1, 0)) * 16px)); }
+.qs1 { margin-top: 14px; font-size: clamp(16px, 1.8vw, 34px); font-weight: 700; color: #343a36; opacity: var(--q2, 0); transform: translateY(calc((1 - var(--q2, 0)) * 12px)); }
+.qs2 { margin-top: 6px; font-size: clamp(16px, 1.8vw, 34px); font-weight: 900; color: #1e9a70; opacity: var(--q3, 0); transform: translateY(calc((1 - var(--q3, 0)) * 12px)); }
+.rq { color: #1e9a70; font-weight: 900; }
 .qnote { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; text-align: center; font-size: 12px; color: #4a504b; opacity: var(--q3, 0); }
 @media (max-width: 999px) {
   .hero { height: 170vh; height: 170svh; }
@@ -786,6 +787,6 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 @media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
 .closing .cl-mit { bottom: -14px; }   /* 上半身の絵なので、下の切れ目をセクションの縁に隠す（ふわふわ動いても浮かない） */
 </style>
-<script src="app.js?v=10-20261108k"></script>
+<script src="app.js?v=10-20261108l"></script>
 </body>
 </html>
