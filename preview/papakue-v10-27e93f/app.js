@@ -310,7 +310,7 @@
     setText(s5step, p5 < .30 ? "お願いが達成された" : p5 < .56 ? "ありがとうを伝える" : "スタンプが届く");
     if (S.mop > .5 && p5 > .955 && !s5Greeted) { s5Greeted = true; playGreeting(); }
     if (p5 < .5) s5Greeted = false;
-    { const ry = rawY(); if (Math.abs(ry - hLast) > .5) hDown = ry > hLast; hLast = ry; }
+    { const ry = rawY(), dy = ry - hLast; if (Math.abs(dy) > .5) hDown = dy > 0; if (Math.abs(dy) > H * .6) hJump = now + 2500; hLast = ry; }
     // ---- 章テキストの出入り ----
     chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const id = ids[i], p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
       const scn = id === "s2" || id === "s3" || id === "s4" || id === "s5" || id === "bed";
@@ -579,8 +579,8 @@
   $("nextGo").onclick = () => { const k = doneOwner; if (k) { if (LS.cur) lockRelease("done"); goNext(k); } };
   window.addEventListener("resize", () => { if (LS.cur && LS.cur !== "hold") requestAnimationFrame(() => { LS.y = lockYof(LS.cur); if (fixY !== null) { fixY = LS.y; document.body.style.top = -LS.y + "px"; } else window.scrollTo(0, LS.y); }); });
   /* 見出し動画の「短い言葉が次々出る間」は、スクロールを止める（全文が出そろうまで）。全文が出たら自由。下へ入った時だけ・最大7秒・動画が動かなければ解除。 */
-  const HOLD = { thx: 5.1 }; let hold = null, hLast = rawY(), hDown = false;
-  function holdStart(k) { if (hold || LS.cur || !hDown || !lockOk() || LS.off.hold || !HOLD[k]) return; const z = zvBox[k]; if (!z || !z.v || z.v.tagName !== "VIDEO") return; hold = { k, t0: performance.now() }; lockSet("hold"); }
+  const HOLD = { thx: 5.1 }; let hold = null, hLast = rawY(), hDown = false, hJump = 0;
+  function holdStart(k) { if (hold || LS.cur || !hDown || hJump > performance.now() || navUntil > performance.now() || !lockOk() || LS.off.hold || !HOLD[k]) return; const z = zvBox[k]; if (!z || !z.v || z.v.tagName !== "VIDEO") return; hold = { k, t0: performance.now() }; lockSet("hold"); }
   function holdDone() { const z = zvBox[hold.k], v = z && z.v, t = performance.now() - hold.t0; return !v || v.tagName !== "VIDEO" || v.ended || v.currentTime >= HOLD[hold.k] || t > 7000 || (t > 3000 && v.currentTime < .2); }
   function lockFrame() { if (hold && LS.cur !== "hold") hold = null; if (hold && holdDone()) { hold = null; lockRelease("done"); return; } if (LS.cur && LS.cur !== "hold" && LK[LS.cur].done()) lockRelease("done"); }
 
