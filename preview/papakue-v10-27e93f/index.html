@@ -392,7 +392,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
     <p class="no">03 — REQUEST</p>
     <h2 class="sr">家族やパートナーに、お願いする。</h2>
     <div class="zv" data-zm="req" aria-hidden="true"></div>
-    <p class="txt"><span class="nb">パーティを組むと、</span><span class="nb">相手にやってほしいことを</span><br><span class="nb"><b class="rq">「お願い」</b>クエストにして送れます。</span><br><span class="nb">届いたら、</span><span class="nb">相手は返事をするだけ。</span></p>
+    <p class="txt"><span class="nb">パーティを組むと、</span><span class="nb">相手にやってほしいことを</span><br><span class="nb"><b class="reqword">「お願い」</b>クエストにして送れます。</span><br><span class="nb">届いたら、</span><span class="nb">相手は返事をするだけ。</span></p>
     <div class="v9only"><ol class="s4steps" id="s4steps" aria-hidden="true"><li class="on"><b>1</b>あなたが送る</li><li><b>2</b>相手に届く</li><li><b>3</b>相手が受ける</li></ol>
     <p class="step" aria-hidden="true"><i></i><span id="s4step">あなたが「ゴミ出し」をお願いする</span></p></div>
   </div></div>
@@ -657,7 +657,7 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 .qh { font-size: clamp(26px, 2.9vw, 60px); font-weight: 900; color: #17323a; opacity: var(--q1, 0); transform: translateY(calc((1 - var(--q1, 0)) * 16px)); }
 .qs1 { margin-top: 14px; font-size: clamp(16px, 1.8vw, 34px); font-weight: 700; color: #343a36; opacity: var(--q2, 0); transform: translateY(calc((1 - var(--q2, 0)) * 12px)); }
 .qs2 { margin-top: 6px; font-size: clamp(16px, 1.8vw, 34px); font-weight: 900; color: #1e9a70; opacity: var(--q3, 0); transform: translateY(calc((1 - var(--q3, 0)) * 12px)); }
-.rq { color: #1e9a70; font-weight: 900; }
+.reqword { color: #1e9a70; font-weight: 900; }
 .qnote { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; text-align: center; font-size: 12px; color: #4a504b; opacity: var(--q3, 0); }
 @media (max-width: 999px) {
   .hero { height: 170vh; height: 170svh; }
@@ -812,7 +812,10 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 /* 最後の「パパクエ」はドンと大きく（動画の文字は枠の約6割なので、枠の中で拡大して見せる） */
 .closing .zv video, .closing .zv img { transform: scale(1.5); transform-origin: 50% 50%; }
 @media (max-width: 999px) { .closing .zv video, .closing .zv img { transform: scale(1.2); } }
+
+/* 幅が狭くて高さが低い窓（横長のスマホ・小さなウィンドウ）でも、最初の見出し＋3行（説明・App Storeボタン・注記）が画面に収まるように、見出し動画の大きさを高さで制限する */
+@media (max-width: 999px) { .copy .zv { width: min(100%, max(200px, calc((100vh - 340px) * 1.25))); width: min(100%, max(200px, calc((100svh - 340px) * 1.25))); } }
 </style>
-<script src="app.js?v=10-20261108r"></script>
+<script src="app.js?v=10-20261108t"></script>
 </body>
 </html>
