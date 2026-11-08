@@ -26,6 +26,8 @@ const ALLOWED_START_TARGETS = new Set([
   "start_brain_sns",
   "start_brain_video",
   "start_services",
+  "start_pr_translate",
+  "start_pr_papakue",
   // /services/（制作サービスLP）のクリック
   "services_form",
   "services_work_home",
