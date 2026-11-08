@@ -248,7 +248,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 
 <!-- ===== 固定レイヤー：ワールド＋カメラ ===== -->
 <div id="bivi" aria-hidden="true"><img id="bvLook" src="assets/bivi/bivi_look.webp?v=20261108b" alt="" width="787" height="720" decoding="async"><img id="bvTrash" src="assets/bivi/bivi_trash.webp" alt="" width="927" height="720" decoding="async"><img id="bvHappy" src="assets/bivi/bivi_happy.webp?v=20261108b" alt="" width="787" height="720" decoding="async"></div>
-<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"></div><div class="lf-cap" id="lfCap">ロック画面で、確認できます</div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
+<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"><i class="lk-card" id="lkCard"></i></div><div class="lf-tx" id="lfTx"><video id="lfTxV" src="assets/zm/lock_tx.mp4?v=20261108g" muted playsinline preload="auto" width="870" height="490"></video><img id="lfTxI" src="assets/zm/lock_tx_end.jpg?v=20261108g" alt="" width="870" height="490" style="display:none"></div><div class="lf-cap" id="lfCap">ロック画面で、確認できます</div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
 <div class="zvfull" data-zm="thx" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true">
   <canvas id="gridc"></canvas>
@@ -769,7 +769,15 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
   .cl-f1 { left: 6%; top: 58px; width: 54px; } .cl-f2 { right: 6%; top: 84px; width: 50px; }
   .cl-f3, .cl-f4 { display: none; }
 }
+
+/* 夜の場面（2枚目）：スマホが主役。ロック画面のカードにリング、右にモーション文字 */
+.lk-card { position: absolute; left: 4.5%; top: 74%; width: 91%; height: 12.5%; border-radius: 22px; border: 3px solid #F2B33D; opacity: 0; pointer-events: none; box-shadow: 0 0 18px rgba(242,179,61,.55); }
+.lk-card.on { animation: lkPulse 1.7s ease-out infinite; }
+@keyframes lkPulse { 0% { box-shadow: 0 0 0 0 rgba(242,179,61,.75), 0 0 18px rgba(242,179,61,.55); } 70%, 100% { box-shadow: 0 0 0 18px rgba(242,179,61,0), 0 0 18px rgba(242,179,61,.35); } }
+.lf-tx { position: absolute; z-index: 2; left: 0; top: 0; opacity: 0; pointer-events: none; will-change: opacity; }
+.lf-tx video, .lf-tx img { display: block; width: 100%; height: auto;  }
+@media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
 </style>
-<script src="app.js?v=10-20261108e"></script>
+<script src="app.js?v=10-20261108g"></script>
 </body>
 </html>

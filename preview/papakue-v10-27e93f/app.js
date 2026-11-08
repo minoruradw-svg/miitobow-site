@@ -432,7 +432,7 @@
   })();
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"); let lifeKey = "";
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
@@ -443,14 +443,27 @@
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
     /* 夜の場面：ミートボーが左へスライド → 大きなスマホ（実機のロック画面）が「ドン」と出て、吹き出しが「残ってた！」に。キャプション「ロック画面で、確認できます」 */
     const night = best.key === "s7", lk = night ? o4(seg(best.p, .38, .46)) : 0, don = night ? o4(seg(best.p, .38, .45)) : 0;
-    const sh = lk * W * (M ? .23 : .20), sN = 1 - lk * (M ? .30 : .08);
+    /* ①ミートボーが真ん中（主役）→ ②左の端へ。スマホが真ん中にドン */
+    const sh = lk * W * (M ? .23 : .33), sN = 1 - lk * (M ? .30 : .16);
     lfImg.parentElement.style.transform = `translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
     if (lfLock) {
-      const ph = M ? Math.min(.43 * H, 350) : Math.min(.74 * H, 620), pw = ph * 481 / 960, area = life.clientHeight || (H - 64), cx = W * (M ? .74 : .64);
-      lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = Math.max(6, (area - ph) / 2 - (M ? 6 : 30)).toFixed(1) + "px";
+      const area = life.clientHeight || (H - 64), ph = M ? Math.min(.43 * H, 350) : Math.min(.8 * H, 720), pw = ph * 481 / 960, cx = W * (M ? .74 : .5);
+      lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = Math.max(6, (area - ph) / 2 - (M ? 6 : 8)).toFixed(1) + "px";
       lfLock.style.opacity = String(night ? clamp(seg(best.p, .38, .405)) : 0);
       lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .44, .54)) : 0)).toFixed(3)})`;
-      if (lfCap) lfCap.style.opacity = String(night ? clamp(seg(best.p, .47, .53)) : 0);
+      if (lkCard) { lkCard.style.opacity = String(night ? clamp(seg(best.p, .47, .5)) : 0); lkCard.classList.toggle("on", night && best.p > .5 && !RM); }
+      /* 右に大きく「ロック画面で【確認】できます。」（スマホは下に） */
+      if (lfTx) {
+        let tw, tx, ty;
+        if (M) { tw = Math.min(.8 * W, 320); tx = (W - tw) / 2; ty = area - tw * 490 / 870 - 10; }
+        else { const x0 = cx + pw / 2 + W * .02; tw = Math.min(W * .98 - x0, 820); tx = x0 + (W * .98 - x0 - tw) / 2; ty = (area - tw * 490 / 870) / 2 + 6; }
+        lfTx.style.width = tw.toFixed(1) + "px"; lfTx.style.left = tx.toFixed(1) + "px"; lfTx.style.top = ty.toFixed(1) + "px";
+        const want = night && best.p > .46;
+        if (want !== txOn) { txOn = want;
+          if (RM) { lfTxV.style.display = "none"; lfTxI.style.display = "block"; }
+          else if (want) { try { lfTxV.currentTime = 0; const pr = lfTxV.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { lfTxV.pause(); } catch (e) {} } }
+        lfTx.style.opacity = txOn ? "1" : "0"; }
+      if (lfCap) lfCap.style.opacity = "0";
       if (night) { const sw = best.p > .40; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
     lfLab.style.opacity = String(best.a * (1 - lk)); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .40, .48)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
   }
