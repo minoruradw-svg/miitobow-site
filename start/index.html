@@ -120,7 +120,8 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  .sub{margin:0.625rem 0 0;font-size:1.0625rem;text-wrap:balance}
  .apps{background:var(--cream)}
  .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
- .acard{background:#fff;border:2px solid var(--g2);border-radius:1.75rem;padding:2.125rem 2.125rem 1.875rem;display:flex;flex-direction:column}
+ .st600{position:absolute;top:-2.6rem;right:-1rem;width:clamp(8.5rem,11vw,11rem);height:auto;transform:rotate(4deg);z-index:3;pointer-events:none;filter:drop-shadow(0 0.5rem 0.75rem rgba(0,0,0,.2))}
+ .acard{position:relative;background:#fff;border:2px solid var(--g2);border-radius:1.75rem;padding:2.125rem 2.125rem 1.875rem;display:flex;flex-direction:column}
  .acard.pq{background:#FBF6EA;background-image:linear-gradient(#E4EDDB 1px,transparent 1px),linear-gradient(90deg,#E4EDDB 1px,transparent 1px);background-size:1.5rem 1.5rem}
  .app-top{display:flex;align-items:center;gap:1rem}
  .appicon{width:4.25rem;height:4.25rem;border-radius:1rem}
@@ -283,6 +284,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  .w-foot{padding:18px 16px 28px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.entr{transition:none}}
+ @media (max-width:640px){.st600{top:-3rem;right:-0.25rem;width:6.25rem}}
 </style>
 </head>
 <body>
@@ -308,7 +310,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
 <section id="w-translate" class="w-sec apps"><div class="w-in">
  <div class="sec-head"><span class="chip">公開中のアプリ</span><h2><span class="nb">毎日が少し便利になる、</span><span class="nb">2つのアプリ。</span></h2></div>
  <div class="app-grid">
-  <article class="acard">
+  <article class="acard"><img class="st600" src="images/w/sticker600.webp" alt="スクショで翻訳 総ダウンロード600突破" width="640" height="633">
    <div class="app-top"><img src="images/w/icon_translate.webp" width="256" height="256" alt="スクショで翻訳のアイコン" class="appicon" loading=lazy decoding="async"><div><p class="mini">Windows・Android・iPhone</p><h3>スクショで翻訳</h3></div></div>
    <p class="hl"><span class="nb">読めない画面を、</span><span class="nb"><em>スクショで</em>翻訳。</span></p>
    <p class="sub">海外のアプリや外国語の画面を、スクショから手軽に日本語で。</p>
