@@ -114,8 +114,11 @@ h1 .pp, .pp3 { font-weight: 900; }
 .cta .pill { min-height: 56px; padding: 0 32px; font-size: 17px; }
 .cta .sub { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 500; color: var(--ink2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 6px; text-decoration-thickness: 1px; }
 .note { font-size: 13px; color: var(--ink2); margin-top: 18px; }
-.cue { opacity: var(--co, 1); position: absolute; left: var(--gx); bottom: 26px; font-size: 11px; letter-spacing: .24em; color: var(--ink2); }
-.cue i { display: block; width: 1px; height: 28px; margin: 8px 0 0 4px; background: var(--ink2); transform-origin: top; animation: cue 2s ease-in-out infinite; }
+.cue { opacity: var(--co, 1); position: fixed; left: 0; right: 0; bottom: max(18px, env(safe-area-inset-bottom, 0px)); z-index: 8; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; pointer-events: none; color: #1e7a5c; animation: cueIn .8s ease 3s both; }
+.cue .cq { font-size: 15px; font-weight: 700; letter-spacing: .06em; color: #17323a; }
+.cue .cs { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+.cue svg { width: 26px; height: 26px; animation: dcue 1.2s ease-in-out infinite; }
+@keyframes cueIn { from { opacity: 0; } to { opacity: var(--co, 1); } }
 @keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 .js [data-in] { opacity: 0; }
 @media (min-width: 1000px) { [data-ch="s5"] .pin { justify-content: flex-end; } }
@@ -184,14 +187,16 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 @media (max-width: 999px) {
   :root { --gx: 24px; --pw: 232px; --mw: 130px; --h2: 28px; }
   .top { height: 56px; }
-  .nav a:not(.pill) { display: none; }
+  .nav a:not(.pill):not(.home) { display: none; }
+  .nav a.home { min-width: 0; padding: 0 6px; font-weight: 700; }
   .copy { top: 98px; width: calc(100vw - 48px); }
   .eyebrow { font-size: 12px; letter-spacing: .16em; margin-bottom: 12px; }
   .lead { font-size: 15px; line-height: 1.8; margin-top: 22px; }
   .cta { margin-top: 24px; gap: 16px; }
   .cta .pill { min-height: 52px; padding: 0 28px; font-size: 16px; }
   .note { font-size: 12px; margin-top: 14px; }
-  .cue { display: none; }
+  .cue { flex-direction: row; justify-content: center; align-items: center; gap: 8px; bottom: max(10px, env(safe-area-inset-bottom, 0px)); }
+  .cue .cq { font-size: 13px; letter-spacing: .02em; } .cue .cs { font-size: 12px; letter-spacing: .06em; } .cue svg { width: 22px; height: 22px; }
   .pin { align-items: flex-start; padding-top: 76px; }
   .card { width: 100%; }
   .card h2 { font-size: 27px; }
@@ -206,7 +211,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
   .video { padding-top: 80px; }
   .closing { padding: 100px 24px 90px; }
 }
-@media (prefers-reduced-motion: reduce) { .cue i { animation: none; transform: scaleY(1); opacity: .5; } .pill { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .cue svg { animation: none; } .pill { transition: none; } }
 </style>
 <style>
 #world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
@@ -238,9 +243,9 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 
 <header class="top" id="top">
   <div class="in">
-    <a class="brand" href="./"><img src="assets/icon_96.webp" alt="" width="30" height="30">パパクエ</a>
+    <a class="brand" href="#top" aria-label="パパクエ ホームへ戻る"><img src="assets/icon_96.webp" alt="" width="30" height="30">パパクエ</a>
     <nav class="nav" aria-label="メイン">
-      <a href="#features">特徴</a><a href="#howto">使い方</a><a href="#video">紹介動画</a>
+      <a class="home" href="#top">ホーム</a><a href="#features">特徴</a><a href="#howto">使い方</a><a href="#video">紹介動画</a>
       <a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Store</a>
     </nav>
   </div>
@@ -337,7 +342,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
       <p class="note" data-in="glide" data-t="2.11">iPhone専用・iOS 15.5以降</p>
     </div>
     <div class="cta-m" id="ctam"><div class="cta-m-in" data-in="glide" data-t="2.03"><a class="pill" href="https://apps.apple.com/jp/app/id6818682738" target="_blank" rel="noopener">App Storeで見る</a><span class="note-m">iPhone専用・iOS 15.5以降</span></div></div>
-    <div class="cue" id="cue" hidden aria-hidden="true"><span data-in="fade" data-t="2.8" style="display:block">SCROLL<i></i></span></div>
+    <div class="cue" id="cue" aria-hidden="true"><span class="cq">パパクエを体験してみる？</span><span class="cs">スクロール<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
 </section>
 
@@ -573,7 +578,6 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 .copy .lead { font-size: clamp(18px, 1.55vw, 26px); color: #343a36; font-weight: 500; margin: clamp(10px, 2vh, 22px) auto 0; max-width: 34em; line-height: 1.75; }
 .copy .cta { justify-content: center; margin-top: clamp(16px, 3vh, 30px); }
 .copy .note { margin-top: 12px; font-size: 14px; color: #3d433f; }
-.cue { left: 0; right: 0; text-align: center; } .cue i { margin: 8px auto 0; }
 /* 文字の場面（章）：中央・巨大な動画＋短い説明 */
 [data-ch="s2"] .pin, [data-ch="s3"] .pin { justify-content: center; align-items: center; padding: 56px var(--gx) 0; text-align: center; }
 [data-ch="s2"] .card, [data-ch="s3"] .card { width: min(1280px, 100%); opacity: var(--vis, 0); transform: translateY(calc((1 - var(--vis, 0)) * 22px)) scale(calc(1 - var(--hv, 0) * .75)); }
@@ -782,6 +786,6 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 @media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
 .closing .cl-mit { bottom: -14px; }   /* 上半身の絵なので、下の切れ目をセクションの縁に隠す（ふわふわ動いても浮かない） */
 </style>
-<script src="app.js?v=10-20261108i"></script>
+<script src="app.js?v=10-20261108k"></script>
 </body>
 </html>
