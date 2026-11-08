@@ -517,6 +517,12 @@
   function stgTick(k, now, active) { const g = STG[k];
     if (g.anim) { const f = clamp((now - g.anim.t0) / g.anim.dur); g.v = lerp(g.anim.from, g.anim.to, f); if (f >= 1) { g.v = g.anim.to; g.i++; g.anim = null; } }
     else if (active && g.auto[g.i] && g.i < g.stops.length - 1) stgStart(k); }
+  const qDone = $("qDone"); let qdOn = false;
+  function qDoneFrame(want) {   // PCだけ：スマホ（ph1）の右の空きに出す。入らない幅では出さない
+    if (!qDone) return; let ok = want && !M;
+    if (ok) { const r = ph1.getBoundingClientRect(), w = qDone.offsetWidth || 360, x = r.right + Math.max(18, W * .02), y = r.top + r.height * .30;
+      if (x + w > W - 12 || r.height < 200) ok = false; else { qDone.style.setProperty("--qx", x.toFixed(0) + "px"); qDone.style.setProperty("--qy", y.toFixed(0) + "px"); qDone.style.transform = `translate3d(${x.toFixed(0)}px,${y.toFixed(0)}px,0)`; } }
+    if (ok !== qdOn) { qdOn = ok; qDone.classList.toggle("on", ok); if (!ok) qDone.style.opacity = "0"; } }
   let hintOwner = "", doneOwner = "";
   function hintFrame(S, p3, u4, u5) {
     stgTick("s4", performance.now(), phWin(u4, "s4") > .5); stgTick("s5", performance.now(), phWin(u5, "s5") > .5);
@@ -531,7 +537,7 @@
     let dk = "", dt = "";
     if (TAP.st === 2 && p3 > .66 && p3 < .92) { dk = "s3"; dt = "クエストができた！"; }
     else [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k]; if (g.i >= g.stops.length - 1 && phWin(u, k) > .5) { dk = k; dt = g.done; } });
-    doneOwner = dk; tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
+    doneOwner = dk; qDoneFrame(dk === "s3"); tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
     const wOn = { s3: o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))) > .5, s4: phWin(u4, "s4") > .5, s5: phWin(u5, "s5") > .5 };
     const playing = (TAP.st === 1 && wOn.s3) || (!!STG.s4.anim && wOn.s4) || (!!STG.s5.anim && wOn.s5);
     const ph = dk ? 0 : (hintOwner ? 1 : (playing ? 2 : 0)), sb = $("stateBar"); sb.className = "statebar" + (ph ? " on sb" + ph : ""); if (ph) { const tx = ph === 1 ? "光っている所を押してね" : "見ていてね…"; if ($("sbT").textContent !== tx) $("sbT").textContent = tx; sb.querySelector(".fing").style.display = ph === 1 ? "" : "none"; }
