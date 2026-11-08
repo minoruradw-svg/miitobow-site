@@ -28,7 +28,7 @@
     s3: { src: "assets/life/life_s3.webp", alt: "", label: "買い物の途中で", bubble: "あ！牛乳！" },
     s5: { src: "assets/life/life_s5.webp", alt: "", label: "朝、外から", bubble: "ゴミ出し、お願い！" },
     s6: { src: "assets/life/life_s6.webp", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
-    s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "あれ？やったっけ" } };
+    s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "なんか忘れてないっけ？" } };
   const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
   const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.10, .18, .84, .94] };   // [出始め, 出きる, 消え始め, 消えきる]
   /* 触れる場面の窓（スクロール進行度）。文字の場面が縮んで消える窓 hv／スマホが入る窓 ph／スマホが出ていく開始 out */
@@ -310,6 +310,7 @@
     setText(s5step, p5 < .30 ? "お願いが達成された" : p5 < .56 ? "ありがとうを伝える" : "スタンプが届く");
     if (S.mop > .5 && p5 > .955 && !s5Greeted) { s5Greeted = true; playGreeting(); }
     if (p5 < .5) s5Greeted = false;
+    { const ry = rawY(); if (Math.abs(ry - hLast) > .5) hDown = ry > hLast; hLast = ry; }
     // ---- 章テキストの出入り ----
     chEls.forEach((el, i) => { const c = cards[i]; if (!c || !el.classList.contains("chapter")) return; const id = ids[i], p = clamp((scrollY - tops[i]) / Math.max(1, hs[i] - H));
       const scn = id === "s2" || id === "s3" || id === "s4" || id === "s5" || id === "bed";
@@ -318,7 +319,7 @@
       if (scn) { const hv = sm(seg(p, WIN[id].hv[0], WIN[id].hv[1])); out = id === "bed" ? 0 : 1 - hv; c.style.setProperty("--hv", hv.toFixed(3)); }
       if (id === "s4") s4Vis = phWin(p, "s4");
       const vv = a * out; if (id === "s5") thxVis = vv;
-      if (vv > .5 && !c.classList.contains("on")) { c.classList.add("on"); zvPlay(id, true); } else if (vv < .05 && c.classList.contains("on")) { c.classList.remove("on"); zvPlay(id, false); }
+      if (vv > .5 && !c.classList.contains("on")) { c.classList.add("on"); zvPlay(id, true); if (id === "s5") holdStart("thx"); } else if (vv < .05 && c.classList.contains("on")) { c.classList.remove("on"); zvPlay(id, false); }
       if (id === "s2") { const ex = 1 - sm(seg(p, .93, .985)), q = (a0, a1) => (sm(seg(p, a0, a1)) * ex).toFixed(3); c.style.setProperty("--q1", q(.06, .14)); c.style.setProperty("--q2", q(.26, .34)); c.style.setProperty("--q3", q(.46, .54)); }
       c.style.setProperty("--vis", vv.toFixed(3)); });
     lifeFrame({ s3: p3, s4: u4, s5: u5, bed: ub }); biviFrame(S, p4, p5, u5, now); hintFrame(S, p3, u4, u5); zvScroll(); { const tb = zvBox.thx && zvBox.thx.box; if (tb) { tb.style.opacity = String(thxVis); tb.style.visibility = thxVis > .01 ? "visible" : "hidden"; } }
@@ -432,7 +433,7 @@
   })();
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfQ = $("lfQ"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
@@ -442,41 +443,46 @@
     life.style.visibility = "visible"; life.style.opacity = String(best.op);
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
     /* 夜の場面：ミートボーが左へスライド → 大きなスマホ（実機のロック画面）が「ドン」と出て、吹き出しが「残ってた！」に。キャプション「ロック画面で、確認できます」 */
-    const night = best.key === "s7", lk = night ? o4(seg(best.p, .38, .46)) : 0, don = night ? o4(seg(best.p, .38, .45)) : 0;
-    /* ①ミートボーが真ん中（主役）→ ②左の端へ。スマホが真ん中にドン */
+    /* 夜の場面（物語）：①ミートボー「なんか忘れてないっけ？」→②真ん中にドン「こんな経験ありませんか？」→③ミートボーが左へ・スマホがドン・「パパクエなら／ロック画面で確認できます」 */
+    const night = best.key === "s7", qa = night ? sm(seg(best.p, .30, .36)) : 0, qIn = night ? o4(seg(best.p, .35, .42)) : 0, qOut = night ? sm(seg(best.p, .50, .55)) : 0, back = night ? sm(seg(best.p, .53, .58)) : 0;
+    const lk = night ? o4(seg(best.p, .58, .64)) : 0, don = night ? o4(seg(best.p, .58, .65)) : 0, mv = night ? clamp(1 - qa * (1 - back)) : 1;
+    /* ①ミートボーが真ん中（主役）→ ③左の端へ。スマホが真ん中にドン */
     const sh = lk * W * (M ? .23 : .33), sN = 1 - lk * (M ? .30 : .16);
+    lfImg.parentElement.style.opacity = String(mv.toFixed(3));
     lfImg.parentElement.style.transform = `translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
+    if (lfQ) { lfQ.style.opacity = String(night ? (qIn * (1 - qOut)).toFixed(3) : 0); lfQ.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, qIn) * (1 + .05 * bell(seg(best.p, .38, .5)))).toFixed(3)})`; }
     if (lfLock) {
-      const area = life.clientHeight || (H - 64), ph = M ? Math.min(.43 * H, 350) : Math.min(.8 * H, 720), pw = ph * 481 / 960, cx = W * (M ? .74 : .5);
-      lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = Math.max(6, (area - ph) / 2 - (M ? 6 : 8)).toFixed(1) + "px";
-      lfLock.style.opacity = String(night ? clamp(seg(best.p, .38, .405)) : 0);
-      lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .44, .54)) : 0)).toFixed(3)})`;
-      if (lkCard) { lkCard.style.opacity = String(night ? clamp(seg(best.p, .47, .5)) : 0); lkCard.classList.toggle("on", night && best.p > .5 && !RM); }
+      const area = life.clientHeight || (H - 64), ph = M ? Math.min(.38 * H, 300) : Math.min(.8 * H, 720), pw = ph * 481 / 960, cx = W * (M ? .74 : .5);
+      lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = (M ? 6 : Math.max(6, (area - ph) / 2 - 8)).toFixed(1) + "px";
+      lfLock.style.opacity = String(night ? clamp(seg(best.p, .58, .605)) : 0);
+      lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .64, .74)) : 0)).toFixed(3)})`;
+      if (lkCard) { lkCard.style.opacity = String(night ? clamp(seg(best.p, .67, .70)) : 0); lkCard.classList.toggle("on", night && best.p > .70 && !RM); }
       /* 右に大きく「ロック画面で【確認】できます。」（スマホは下に） */
       if (lfTx) {
         let tw, tx, ty;
         if (M) { tw = Math.min(.8 * W, 320); tx = (W - tw) / 2; ty = area - tw * 490 / 870 - 10; }
         else { const x0 = cx + pw / 2 + W * .02; tw = Math.min(W * .98 - x0, 820); tx = x0 + (W * .98 - x0 - tw) / 2; ty = (area - tw * 490 / 870) / 2 + 6; }
+        const cs = M ? Math.min(15 * W / 100, 60) : Math.min(tw * .17, 150); if (!M) ty += cs * .55;
         lfTx.style.width = tw.toFixed(1) + "px"; lfTx.style.left = tx.toFixed(1) + "px"; lfTx.style.top = ty.toFixed(1) + "px";
-        const want = night && best.p > .46;
+        const want = night && best.p > .64;
         if (want !== txOn) { txOn = want;
           if (RM) { lfTxV.style.display = "none"; lfTxI.style.display = "block"; }
           else if (want) { try { lfTxV.currentTime = 0; const pr = lfTxV.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { lfTxV.pause(); } catch (e) {} } }
-        lfTx.style.opacity = txOn ? "1" : "0"; }
-      if (lfCap) lfCap.style.opacity = "0";
-      if (night) { const sw = best.p > .40; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
-    lfLab.style.opacity = String(best.a * (1 - lk)); lfBub.style.opacity = String(clamp(best.pop * 2)); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .40, .48)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
+        lfTx.style.opacity = txOn ? "1" : "0";
+        if (lfCap) { const cp = night ? o4(seg(best.p, .63, .68)) : 0; lfCap.style.cssText = `left:${tx.toFixed(1)}px;width:${tw.toFixed(1)}px;top:${(ty - cs * 1.15).toFixed(1)}px;bottom:auto;right:auto;font-size:${cs.toFixed(1)}px;opacity:${(night ? clamp(seg(best.p, .63, .655)) : 0).toFixed(3)};transform:scale(${lerp(1.7, 1, cp).toFixed(3)});transform-origin:50% 100%`; } }
+      if (night) { const sw = best.p > .60; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
+    lfLab.style.opacity = String(best.a * (1 - lk) * mv); lfBub.style.opacity = String(clamp(best.pop * 2) * mv); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .60, .68)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
   }
 
   /* ---------- ビビちゃん（相手のスマホの右の空きに）：受け取った → ゴミ出し中 → スタンプで喜ぶ ---------- */
-  const bivi = $("bivi"), BV = { look: $("bvLook"), trash: $("bvTrash"), happy: $("bvHappy") }; let bvKey = "", bvT0 = 0;
+  const bivi = $("bivi"), bvThx = $("bvThx"), BV = { look: $("bvLook"), trash: $("bvTrash"), happy: $("bvHappy") }; let bvKey = "", bvT0 = 0;
   function biviFrame(S, p4, p5, u5, now) {
     if (!bivi) return;
     const key = p5 >= .93 ? "happy" : (u5 > .02 ? "trash" : (p4 >= .72 ? "look" : "")), vis = (M || !key) ? 0 : clamp(S.p2op * 1.5);
-    if (vis <= .01) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; bvKey = ""; return; }
+    if (vis <= .01) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; bvKey = ""; if (bvThx) bvThx.classList.remove("on"); return; }
     const img = BV[key], ratio = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1.02, r = ph2.getBoundingClientRect();
     const left = r.right + 18 + (key === "trash" ? 76 : 0), availW = W - left - 14; /* ゴミ出しの場面は、広がる巻物の右端をよける */ let hh = Math.min(.46 * H, 420); if (hh * ratio > availW) hh = availW / ratio;
-    if (hh < 150) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; return; }
+    if (hh < 150) { bivi.style.visibility = "hidden"; bivi.style.opacity = "0"; if (bvThx) bvThx.classList.remove("on"); return; }
     if (bvKey !== key) { bvKey = key; bvT0 = now; Object.keys(BV).forEach(k => { BV[k].style.opacity = k === key ? "1" : "0"; }); }
     const t = RM ? 9 : (now - bvT0) / 1000;
     let sc = 1, tx = 0, ty = 0;
@@ -486,6 +492,7 @@
     bivi.style.width = (hh * ratio).toFixed(1) + "px"; bivi.style.height = hh.toFixed(1) + "px";
     bivi.style.left = left.toFixed(1) + "px"; bivi.style.top = Math.max(74, r.bottom - hh - 26).toFixed(1) + "px";
     bivi.style.visibility = "visible"; bivi.style.opacity = String(vis);
+    if (bvThx) { const topY = Math.max(74, r.bottom - hh - 26), need = 62 + 96 - topY; bvThx.style.marginBottom = need > 0 ? (-need).toFixed(0) + "px" : "0"; bvThx.classList.toggle("on", key === "happy" && t > .12); }
     bivi.style.transform = `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${sc.toFixed(3)})`;
   }
 
@@ -544,7 +551,7 @@
   const NOLOCK = /[?&]nolock/.test(location.search), lockOk = () => !NOLOCK && !RM && W >= 300 && H >= 560 && !LS.vid, lockYof = k => tops[IDX[k]] + (hs[IDX[k]] - H) * LK[k].p;
   /* ロック＝ページのスクロールそのものを無効にする：html/body に overflow:hidden＋touch-action:none＋overscroll-behavior:none（スクロールバーは消え、幅は scrollbar-gutter で確保）。
      iOS Safari は body を position:fixed にして位置を保持する。ロック中は main を inert にして、Tab のフォーカス移動によるスクロールも防ぐ。 */
-  function lockSet(k) { const ly = lockYof(k); window.scrollTo(0, ly); LS.cur = k; LS.y = ly; const de = document.documentElement; if (LOCKFIX) { fixY = ly; document.body.style.top = -ly + "px"; de.classList.add("lockfix"); } de.classList.add("locked"); mainEl.inert = true; skipBtn.hidden = false; lockMsg.textContent = "ボタンを押すと次へ進めます"; if (document.activeElement && mainEl.contains(document.activeElement)) document.activeElement.blur(); }
+  function lockSet(k) { const ly = k === "hold" ? rawY() : lockYof(k); if (k !== "hold") window.scrollTo(0, ly); LS.cur = k; LS.y = ly; const de = document.documentElement; if (LOCKFIX) { fixY = ly; document.body.style.top = -ly + "px"; de.classList.add("lockfix"); } de.classList.add("locked"); mainEl.inert = true; skipBtn.hidden = false; skipBtn.textContent = k === "hold" ? "このまま先へ" : "スキップして先へ"; lockMsg.textContent = k === "hold" ? "文字が出そろうまで、少しお待ちください" : "ボタンを押すと次へ進めます"; if (document.activeElement && mainEl.contains(document.activeElement)) document.activeElement.blur(); }
   function lockRelease(why) { const k = LS.cur; if (!k) return; LS.cur = null; if (why) LS.off[k] = why; document.documentElement.classList.remove("locked", "lockfix"); mainEl.inert = false; const y = LS.y; if (fixY !== null) { fixY = null; document.body.style.top = ""; window.scrollTo(0, y); } lockPrev = y; skipBtn.hidden = true; lockMsg.textContent = why === "done" ? "先へ進めます" : ""; }
   window.addEventListener("scroll", () => {   // 保険：ロック中に位置が動いたら戻す／ロック前は、押す場面の位置を下へ越えた瞬間にロック（つまみドラッグ・ホイール・キー・タッチ・慣性のどれでも）
     const y = rawY(), prev = lockPrev, now = performance.now(); lockPrev = y; if (!lockOk()) { if (LS.cur) lockRelease(null); return; }
@@ -568,10 +575,14 @@
   window.addEventListener("popstate", () => { navUntil = performance.now() + 2500; lockRelease(null); });
   document.addEventListener("focusin", () => { navUntil = performance.now() + 800; });   // Tab でのフォーカス移動によるスクロールでは、ロックしない
   const goNext = k => { navUntil = performance.now() + 2500; window.scrollTo({ top: tops[IDX[k]] + (hs[IDX[k]] - H) * .97, behavior: RM ? "auto" : "smooth" }); };
-  skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); goNext(k); };
+  skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); if (k !== "hold") goNext(k); };
   $("nextGo").onclick = () => { const k = doneOwner; if (k) { if (LS.cur) lockRelease("done"); goNext(k); } };
-  window.addEventListener("resize", () => { if (LS.cur) requestAnimationFrame(() => { LS.y = lockYof(LS.cur); if (fixY !== null) { fixY = LS.y; document.body.style.top = -LS.y + "px"; } else window.scrollTo(0, LS.y); }); });
-  function lockFrame() { if (LS.cur && LK[LS.cur].done()) lockRelease("done"); }
+  window.addEventListener("resize", () => { if (LS.cur && LS.cur !== "hold") requestAnimationFrame(() => { LS.y = lockYof(LS.cur); if (fixY !== null) { fixY = LS.y; document.body.style.top = -LS.y + "px"; } else window.scrollTo(0, LS.y); }); });
+  /* 見出し動画の「短い言葉が次々出る間」は、スクロールを止める（全文が出そろうまで）。全文が出たら自由。下へ入った時だけ・最大7秒・動画が動かなければ解除。 */
+  const HOLD = { thx: 5.1 }; let hold = null, hLast = rawY(), hDown = false;
+  function holdStart(k) { if (hold || LS.cur || !hDown || !lockOk() || LS.off.hold || !HOLD[k]) return; const z = zvBox[k]; if (!z || !z.v || z.v.tagName !== "VIDEO") return; hold = { k, t0: performance.now() }; lockSet("hold"); }
+  function holdDone() { const z = zvBox[hold.k], v = z && z.v, t = performance.now() - hold.t0; return !v || v.tagName !== "VIDEO" || v.ended || v.currentTime >= HOLD[hold.k] || t > 7000 || (t > 3000 && v.currentTime < .2); }
+  function lockFrame() { if (hold && LS.cur !== "hold") hold = null; if (hold && holdDone()) { hold = null; lockRelease("done"); return; } if (LS.cur && LS.cur !== "hold" && LK[LS.cur].done()) lockRelease("done"); }
 
 
   /* ---------- 体験デモ ---------- */

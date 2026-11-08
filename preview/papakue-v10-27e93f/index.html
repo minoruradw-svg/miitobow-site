@@ -252,8 +252,8 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </header>
 
 <!-- ===== 固定レイヤー：ワールド＋カメラ ===== -->
-<div id="bivi" aria-hidden="true"><img id="bvLook" src="assets/bivi/bivi_look.webp?v=20261108b" alt="" width="787" height="720" decoding="async"><img id="bvTrash" src="assets/bivi/bivi_trash.webp" alt="" width="927" height="720" decoding="async"><img id="bvHappy" src="assets/bivi/bivi_happy.webp?v=20261108b" alt="" width="787" height="720" decoding="async"></div>
-<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"><i class="lk-card" id="lkCard"></i></div><div class="lf-tx" id="lfTx"><video id="lfTxV" src="assets/zm/lock_tx.mp4?v=20261108g" muted playsinline preload="metadata" width="870" height="490"></video><img id="lfTxI" src="assets/zm/lock_tx_end.jpg?v=20261108g" alt="" width="870" height="490" style="display:none"></div><div class="lf-cap" id="lfCap">ロック画面で、確認できます</div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
+<div id="bivi" aria-hidden="true"><img id="bvLook" src="assets/bivi/bivi_look.webp?v=20261108b" alt="" width="787" height="720" decoding="async"><img id="bvTrash" src="assets/bivi/bivi_trash.webp" alt="" width="927" height="720" decoding="async"><img id="bvHappy" src="assets/bivi/bivi_happy.webp?v=20261108b" alt="" width="787" height="720" decoding="async"><div class="bv-thx" id="bvThx"><b class="bt-txt">ありがとうが<br>届いた！</b><i class="bt-sp s1"></i><i class="bt-sp s2"></i><i class="bt-sp s3"></i><i class="bt-sp s4"></i><i class="bt-sp s5"></i></div></div>
+<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"><i class="lk-card" id="lkCard"></i></div><div class="lf-tx" id="lfTx"><video id="lfTxV" src="assets/zm/lock_tx.mp4?v=20261108g" muted playsinline preload="metadata" width="870" height="490"></video><img id="lfTxI" src="assets/zm/lock_tx_end.jpg?v=20261108g" alt="" width="870" height="490" style="display:none"></div><div class="lf-cap" id="lfCap"><span class="cp">パパクエ</span><span class="cn">なら</span></div><div class="lf-q" id="lfQ"><span class="nb">こんな経験</span><span class="nb">ありませんか？</span></div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
 <div class="zvfull" data-zm="thx" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true">
   <canvas id="gridc"></canvas>
@@ -409,7 +409,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== 夜（ミートボーの生活の場面）→ 紹介動画へ ===== -->
-<section class="chapter" data-ch="bed" style="height:300vh">
+<section class="chapter" data-ch="bed" style="height:380vh">
   <div class="pin"><div class="card"><h2 class="sr">寝る前に、あれ、やったっけ。ロック画面を見ると、あと1件。残ってた。</h2></div></div>
 </section>
 
@@ -641,7 +641,7 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 @media (max-width: 999px) {
   [data-ch="s4"] .pin, [data-ch="s5"] .pin, [data-ch="bed"] .pin { padding: 56px 20px 0; }
   [data-ch="s4"] .card .txt { font-size: 16px; line-height: 1.7; margin-top: 6px; }
-  [data-ch="s4"] { height: 440vh !important; height: 440svh !important; } [data-ch="s5"] { height: 440vh !important; height: 440svh !important; } [data-ch="bed"] { height: 220vh !important; height: 220svh !important; }
+  [data-ch="s4"] { height: 440vh !important; height: 440svh !important; } [data-ch="s5"] { height: 440vh !important; height: 440svh !important; } [data-ch="bed"] { height: 300vh !important; height: 300svh !important; }
   
   .demo .zv, .closing .zv { aspect-ratio: 5 / 4; width: 100%; }
 }
@@ -786,7 +786,33 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 .lf-tx video, .lf-tx img { display: block; width: 100%; height: auto;  }
 @media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
 .closing .cl-mit { bottom: -14px; }   /* 上半身の絵なので、下の切れ目をセクションの縁に隠す（ふわふわ動いても浮かない） */
+
+/* ビビちゃんの上に出る「ありがとうが届いた！」（キラキラ・ぽんと出てゆれる）。下のチップは見落とされやすいので、目に入る位置に */
+#bivi .bv-thx { position: absolute; left: 50%; bottom: calc(100% - 14px); z-index: 2; padding: 12px 26px 14px; text-align: center; background: #fff; border: 3px solid #1e9a70; border-radius: 28px; box-shadow: 0 0 0 5px rgba(246,201,69,.38), 0 14px 30px rgba(31,34,35,.2); opacity: 0; transform: translate(-50%, 18px) scale(.5); transform-origin: 50% 100%; white-space: nowrap; }
+#bivi .bv-thx::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 22px; height: 22px; background: #fff; border-right: 3px solid #1e9a70; border-bottom: 3px solid #1e9a70; transform: translateX(-50%) rotate(45deg); border-radius: 0 0 6px 0; }
+#bivi .bv-thx.on { animation: btPop .7s cubic-bezier(.2,1.6,.4,1) forwards, btFloat 2.6s ease-in-out .8s infinite; }
+.bt-txt { display: block; font-size: clamp(20px, 1.9vw, 34px); line-height: 1.3; font-weight: 900; letter-spacing: .02em; color: #17806a; background: linear-gradient(100deg, #17806a 0 38%, #f0a800 50%, #17806a 62% 100%); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: btShine 2.4s linear infinite; }
+.bt-sp { position: absolute; width: 26px; height: 26px; background: #f6c945; clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); opacity: 0; }
+.bv-thx.on .bt-sp { animation: btTw 1.5s ease-in-out infinite; }
+.bt-sp.s1 { left: -20px; top: -14px; width: 30px; height: 30px; } .bt-sp.s2 { right: -18px; top: -20px; width: 34px; height: 34px; animation-delay: .35s !important; } .bt-sp.s3 { right: -20px; bottom: 6px; width: 16px; height: 16px; animation-delay: .7s !important; } .bt-sp.s4 { left: -22px; bottom: 10px; width: 14px; height: 14px; animation-delay: 1s !important; } .bt-sp.s5 { left: 46%; top: -22px; width: 16px; height: 16px; animation-delay: .15s !important; }
+@keyframes btPop { 0% { opacity: 0; transform: translate(-50%, 18px) scale(.5); } 70% { opacity: 1; transform: translate(-50%, -4px) scale(1.08); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); } }
+@keyframes btFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes btShine { 0% { background-position: 130% 0; } 100% { background-position: -130% 0; } }
+@keyframes btTw { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+@media (prefers-reduced-motion: reduce) { #bivi .bv-thx.on { animation: none; opacity: 1; transform: translate(-50%, 0); } .bt-txt { animation: none; -webkit-text-fill-color: #17806a; } .bv-thx.on .bt-sp { animation: none; opacity: 1; } }
+
+/* 夜の場面：真ん中にドンと出る問いかけ／ロック画面の前の「パパクエなら」 */
+.lf-q { position: absolute; left: 0; right: 0; top: 50%; z-index: 3; text-align: center; font-size: clamp(34px, 5.8vw, 112px); line-height: 1.25; font-weight: 900; letter-spacing: .02em; color: #17323a; text-wrap: balance; opacity: 0; pointer-events: none; will-change: transform, opacity; transform: translateY(-50%) scale(1.7); }
+.lf-q .nb { display: inline-block; }
+.lf-cap { font-weight: 900 !important; color: #17323a !important; text-align: center; z-index: 3; line-height: 1.1; letter-spacing: .02em; white-space: nowrap; }
+.lf-cap .cn { font-size: .5em; margin-left: .12em; }
+@media (max-width: 999px) { .lf-q { font-size: clamp(34px, 10vw, 52px); padding: 0 16px; } }
+@media (prefers-reduced-motion: reduce) { .lf-q { transform: translateY(-50%) !important; } }
+
+/* 最後の「パパクエ」はドンと大きく（動画の文字は枠の約6割なので、枠の中で拡大して見せる） */
+.closing .zv video, .closing .zv img { transform: scale(1.5); transform-origin: 50% 50%; }
+@media (max-width: 999px) { .closing .zv video, .closing .zv img { transform: scale(1.2); } }
 </style>
-<script src="app.js?v=10-20261108l"></script>
+<script src="app.js?v=10-20261108q"></script>
 </body>
 </html>
