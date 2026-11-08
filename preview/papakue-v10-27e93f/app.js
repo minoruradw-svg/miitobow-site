@@ -30,7 +30,7 @@
     s6: { src: "assets/life/life_s6.webp", alt: "", label: "ゴミ出しが終わった", bubble: "ゴミ出し、助かった！" },
     s7: { src: "assets/life/life_s7.webp", alt: "", label: "寝る前に", bubble: "なんか忘れてないっけ？" } };
   const LIFE_CH = { s3: "s3", s4: "s5", s5: "s6", bed: "s7" };   // 章ID→LIFEのキー
-  const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.10, .18, .84, .94] };   // [出始め, 出きる, 消え始め, 消えきる]
+  const LIFE_WIN = { s2: [.24, .32, .44, .52], s3: [.27, .34, .50, .60], s4: [.20, .28, .42, .50], s5: [.20, .28, .42, .50], bed: [.05, .11, .90, .96] };   // [出始め, 出きる, 消え始め, 消えきる]
   /* 触れる場面の窓（スクロール進行度）。文字の場面が縮んで消える窓 hv／スマホが入る窓 ph／スマホが出ていく開始 out */
   const WIN = { s2: { hv: [.18, .26] }, s3: { hv: [.20, .30] }, s4: { hv: [.10, .18], ph: [.50, .62], out: .95 }, s5: { hv: [.10, .18], ph: [.50, .62], out: .95 }, bed: { hv: [0, 0] } };
   /* 文字の場面＝よそおいモーションで書き出した動画（PC=16:9 / スマホ=9:16）。構成表は v10/zukai/ */
@@ -123,6 +123,12 @@
   const bez = (P, e) => { const k = 1 - e; return { x: k * k * P[0].x + 2 * k * e * P[1].x + e * e * P[2].x, y: k * k * P[0].y + 2 * k * e * P[1].y + e * e * P[2].y }; };
   const bezT = (P, e) => { const k = 1 - e; return Math.atan2(2 * k * (P[1].y - P[0].y) + 2 * e * (P[2].y - P[1].y), 2 * k * (P[1].x - P[0].x) + 2 * e * (P[2].x - P[1].x)); };
   function camD() { return M ? camFor(.5 * W, yPhone("s4", G.s4, 84), 1, G.P2x, G.P2y) : camFor(.5 * W, .5 * H + 32, 1, G.P2x, G.P2y); }
+  /* 受けたお願い：通知バナー（届いた時）→「受ける」後はカードが巻物のクエストに（ぽんと変わる） */
+  function setRecv(op, p4, p5) {
+    const mo = sm(seg(p4, .90, .955)), mg = o4(seg(p4, .90, .96)), pn = o4(seg(p4, .695, .745)) * (1 - sm(seg(p4, .80, .86))) * (p5 === 0 ? 1 : 0);
+    recvQ.style.opacity = String(op * (1 - mo)); recvScroll.style.opacity = String(op * mo);
+    recvScroll.style.transform = `scale(${(lerp(.55, 1, mg) + .09 * bell(seg(p4, .92, .975))).toFixed(3)}) rotate(${(lerp(-9, 0, mg)).toFixed(2)}deg)`; recvScroll.classList.toggle("sp", mo > .5 && !RM);
+    pushN.style.opacity = String(pn); pushN.style.transform = `translateY(${((1 - pn) * -120).toFixed(1)}%)`; }
   function S4(p) { const o = base(), A = base4(), D = camD(), P = flightPts(), e = io5(seg(p, .32, .64)), ec = io5(seg(p, .35, .66));
     let cx = lerp(A.cx, D.cx, ec), cy = lerp(A.cy, D.cy, ec), cs = 1, cr = 0; const B = bez(P, e);
     if (!M) cy = lerp(A.cy, D.cy, 0) + (B.y - P[0].y) * .35 * (e > 0 && e < 1 ? 1 : (e >= 1 ? 1 : 0)); else cx = (B.x - P[0].x) * .4 * bell(e);
@@ -154,7 +160,7 @@
   function OUT() { const o = S5(1); o.p1op = 0; o.p2op = 0; o.mop = 0; o.ca = 0; o.lgld = 0; o.lgrn = 0; return o; }
   /* 押して進める：v9の時間軸(0〜1)を、スクロールでなく「押した」あとの時間で進める。stops＝止まる位置、dur＝各区間の秒数、auto＝自動で進む区間 */
   const STG = {
-    s4: { v: 0, i: 0, anim: null, stops: [0, .78, 1], dur: [5.2, 3.2], auto: [false, false], lab: ["ここ押してみてね", "「受ける」を押してみてね"], done: "お願いが届いた！", tgt: () => [sendStatus, okBtn] },
+    s4: { v: 0, i: 0, anim: null, stops: [0, .78, 1], dur: [5.2, 3.2], auto: [false, false], lab: ["ここ押してみてね", "「受ける」を押してみてね"], done: "お願いがクエストになった！", tgt: () => [sendStatus, okBtn] },
     s5: { v: 0, i: 0, anim: null, stops: [0, .10, .47, .73, 1], dur: [1.3, 4.6, 4.4, 4.6], auto: [true, false, false, false], lab: ["", "「完了にする」を押してみてね", "ここ押してみてね", "ここ押してみてね"], done: "ありがとうが届いた！", tgt: () => [null, pop5ok, thxBtnEl, sbtn] } };
   const vReq = () => (scrollY > tops[IDX.s5] - H) ? 1 : STG.s4.v;
   const phWin = (u, id) => { const w = WIN[id]; return o4(seg(u, w.ph[0], w.ph[1])) * (1 - sm(seg(u, w.out, 1))); };
@@ -205,7 +211,7 @@
   /* ---------- 章の中身 ---------- */
   const pp3 = document.createElement("i"), pp3L = [], qlL = [], rv = $("rv");
   const gobtn = $("gobtn"), newq = $("newq"), ripple = $("ripple"), goRip = $("goRip"), s4step = $("s4step"), s4steps = $("s4steps"), s4bar = $("s4bar"), okRipple = $("okRipple"), s4barSteps = $("s4barSteps"), tag1e = $("tag1"), s5step = $("s5step");
-  const sendStatus = $("sendStatus"), thxBtn = $("thxBtn"), s2Recv = $("s2Recv"), s2Arrive = $("s2Arrive"), s2Idle = $("s2Idle"), recvStatus = $("recvStatus"), okBtn = $("okBtn"), thxImg = $("thxImg"), thxCap = $("thxCap"), recvQ = $("recvQ"), clearSt = $("clearSt");
+  const sendStatus = $("sendStatus"), thxBtn = $("thxBtn"), s2Recv = $("s2Recv"), s2Arrive = $("s2Arrive"), s2Idle = $("s2Idle"), recvStatus = $("recvStatus"), okBtn = $("okBtn"), thxImg = $("thxImg"), thxCap = $("thxCap"), recvQ = $("recvQ"), clearSt = $("clearSt"), recvScroll = $("recvScroll"), pushN = $("pushN");
   const flash = (() => { const d = document.createElement("div"); d.style.cssText = "position:absolute;inset:0;background:#fff;opacity:0;z-index:19"; $("s2Recv").parentElement.appendChild(d); return d; })();
   clearSt.style.display = "none";
   const setText = (el, t) => { if (el.textContent !== t) { el.textContent = t; if (canAnimate && !RM) el.animate([{ opacity: 0, transform: "translateX(16px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EASE.expo }); } };
@@ -262,8 +268,8 @@
     const press = (p4 > .16 && p4 < .22) ? 1 : 0; sendStatus.style.transform = `scale(${press ? .96 : 1})`;
     setText(sendStatus, p4 < .22 ? "おねがいを送る" : (p4 < .82 && p5 === 0 ? "返事を待っています" : "受けてもらいました"));
     s2Idle.style.opacity = String(1 - sm(seg(p4, .64, .68))); const swapped = p4 >= .72;
-    s2Recv.style.opacity = String(sm(seg(p4, .68, .74)) * (1 - sm(seg(p5, .78, .84)))); recvQ.style.opacity = swapped ? "1" : "0";
-    okBtn.classList.toggle("on", p4 > .82 && p4 < .88); okRipple.style.opacity = String(Math.sin(seg(p4, .79, .88) * Math.PI)); okRipple.style.transform = `scale(${.4 + 1.2 * seg(p4, .79, .88)})`; recvStatus.style.opacity = String(p4 > .86 || p5 > 0 ? 1 : 0); setText(recvStatus, p5 > .1 ? "完了しました。おつかれさま！" : "受けています");
+    s2Recv.style.opacity = String(sm(seg(p4, .68, .74)) * (1 - sm(seg(p5, .78, .84)))); setRecv(swapped ? 1 : 0, p4, p5);
+    okBtn.classList.toggle("on", p4 > .82 && p4 < .88); okRipple.style.opacity = String(Math.sin(seg(p4, .79, .88) * Math.PI)); okRipple.style.transform = `scale(${.4 + 1.2 * seg(p4, .79, .88)})`; recvStatus.style.opacity = String(p4 > .86 || p5 > 0 ? 1 : 0); setText(recvStatus, p5 > .1 ? "完了しました。おつかれさま！" : p4 > .94 ? "クエストになりました！" : "受けています");
     const tg = true;
     tag1.style.opacity = String(tg ? sm(seg(p4, 0, .08)) * (1 - sm(seg(p4, .26, .32))) * (p5 === 0 ? 1 : 0) * (scrollY > tops[IDX.s4] - H * .5 ? 1 : 0) : 0);
     tag2.style.opacity = String(tg ? sm(seg(p4, .60, .68)) * (1 - sm(seg(p5, .04, .10))) : 0);
@@ -272,7 +278,7 @@
     if (st4 !== lastSt4) { lastSt4 = st4; [s4steps, s4barSteps].forEach(ol => [...ol.children].forEach((li, i) => { li.className = i === st4 ? "on" : (i < st4 ? "done" : ""); })); }
     if (M) { updateCaps(p4, s4Vis); s4bar.style.opacity = String(s4Vis * (p5 === 0 ? 1 : 0)); s4bar.style.top = (MB.s4 - 8) + "px"; }
     else s4bar.style.opacity = String(sm(seg(p4, .30, .35)) * (1 - sm(seg(p4, .63, .68))) * (p5 === 0 ? 1 : 0));
-    setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : "相手が「受ける」。受けてもらえた");
+    setText(s4step, p4 < .32 ? "あなたが「ゴミ出し」をお願いする" : p4 < .72 ? "お願いが、相手の画面へ届く" : p4 < .88 ? "通知が届く。相手が「受ける」を押す" : "お願いが、巻物のクエストになる");
     // ---- S5：CLEARハンコ→紙吹雪→ありがとうスタンプ ----
     const Sp = stampPos(), sz = M ? 150 : 190, k5 = seg(p5, .12, .20), fall = o5(k5), land5 = seg(p5, .185, .21);
     stampBig.style.width = stampBig.style.height = sz + "px"; stampBig.style.margin = `${-sz / 2}px 0 0 ${-sz / 2}px`;
@@ -286,13 +292,18 @@
       const pk = lerp(.35, k, u5) * lerp(1, .35, out5), qx = lerp(lerp(rqx, C5.x, u5), rqx, out5), qy = lerp(lerp(rqy, C5.y, u5), rqy, out5);
       const kPh = phWin(pin("s5"), "s5"); pop5.style.display = (p5 > 0 || pre5 > .35) && p5 < .365 && kPh > .01 ? "" : "none"; pop5.style.opacity = String(clamp(u5 * 3) * (1 - sm(seg(p5, .33, .36))) * kPh);
       pop5.style.clipPath = `inset(-70px -70px calc(${62 * (1 - u5)}% - 70px) -70px)`; pop5.style.transform = `translate3d(${qx}px,${qy + 3 * bell(seg(p5, .185, .21)) * k}px,0) perspective(900px) rotateX(${24 * (1 - u5)}deg) scale(${pk})`;
-      pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); recvQ.style.opacity = String(1 - sm(clamp(u5 * 1.6)) * (1 - sm(seg(p5, .35, .37)))); }
+      pop5ok.classList.toggle("on", p5 > .105 && p5 < .15); setRecv(1 - sm(clamp(u5 * 1.6)) * (1 - sm(seg(p5, .35, .37))), p4, p5); }
     ltGld.style.transform = `translate3d(${Sp.x}px,${Sp.y}px,0)`; ltGrn.style.transform = `translate3d(${M ? 0 : G.P2x / 2}px,${M ? 450 : -200}px,0)`;
     cf.style.transform = `translate3d(${Sp.x - cf.width / 2}px,${Sp.y - cf.height * .45}px,0)`; 
     // ---- 後半：いいね・ありがとうを伝える → スタンプを選ぶ → 押す → 相手に届く ----
     const askIn = sm(seg(p5, .42, .47)), up = io5(seg(p5, .50, .57)), down = io5(seg(p5, .76, .80)), shW = up * (1 - down);
     thxBtnEl.style.opacity = String(askIn * (1 - sm(seg(p5, .50, .52)))); thxBtnEl.classList.toggle("on", p5 > .485 && p5 < .505);
     askRip.style.opacity = String(Math.sin(seg(p5, .475, .51) * Math.PI)); askRip.style.transform = `scale(${.4 + 1.2 * seg(p5, .475, .51)})`;
+    { const vis = M ? 0 : o4(seg(p5, .50, .57)) * (1 - sm(seg(p5, .76, .80)));
+      if (vis > .01) { const r = ph1.getBoundingClientRect(), hh = Math.min(r.height * .62, 560), ww = hh * 397 / 900, x = r.left - ww * .96 - Math.max(8, W * .01), lean = bell(seg(p5, .66, .73)); if (x + ww < 0 || x < -ww * .3) { mitoPress.style.visibility = "hidden"; } else {
+        mitoPress.style.height = hh.toFixed(0) + "px"; mitoPress.style.visibility = "visible"; mitoPress.style.opacity = String(vis.toFixed(3));
+        mitoPress.style.transform = `translate3d(${(x + 12 * lean + (1 - vis) * -40).toFixed(1)}px,${(r.bottom - hh - r.height * .045).toFixed(1)}px,0) rotate(${(3 * lean).toFixed(2)}deg) scale(${(1 + .03 * lean).toFixed(3)})`; } }
+      else { mitoPress.style.visibility = "hidden"; mitoPress.style.opacity = "0"; } }
     sheet.style.display = shW > .002 ? "" : "none"; sheet.style.transform = `translateY(${(1 - shW) * 103}%)`;   // 出番以外は描かない
     const pg = io3(seg(p5, .60, .68)); car0.style.transform = `translateX(${-pg * 11}em) scale(${lerp(1, .66, pg)})`; car0.style.opacity = String(lerp(1, .5, pg));
     car1.style.transform = `translateX(${(1 - pg) * 11}em) scale(${lerp(.66, 1, pg)})`; car1.style.opacity = String(lerp(.5, 1, pg)); setText(curl, pg > .5 ? "ありがとう" : "いいね");
@@ -433,7 +444,7 @@
   })();
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
-  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfQ = $("lfQ"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
+  const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfQ = $("lfQ"), lfN = $("lfN"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
@@ -444,19 +455,21 @@
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
     /* 夜の場面：ミートボーが左へスライド → 大きなスマホ（実機のロック画面）が「ドン」と出て、吹き出しが「残ってた！」に。キャプション「ロック画面で、確認できます」 */
     /* 夜の場面（物語）：①ミートボー「なんか忘れてないっけ？」→②真ん中にドン「こんな経験ありませんか？」→③ミートボーが左へ・スマホがドン・「パパクエなら／ロック画面で確認できます」 */
-    const night = best.key === "s7", qa = night ? sm(seg(best.p, .30, .36)) : 0, qIn = night ? o4(seg(best.p, .35, .42)) : 0, qOut = night ? sm(seg(best.p, .50, .55)) : 0, back = night ? sm(seg(best.p, .53, .58)) : 0;
-    const lk = night ? o4(seg(best.p, .58, .64)) : 0, don = night ? o4(seg(best.p, .58, .65)) : 0, mv = night ? clamp(1 - qa * (1 - back)) : 1;
+    const night0 = best.key === "s7"; if (night0) { best.a = o4(seg(best.p, .26, .32)); best.pop = o4(seg(best.p, .34, .40)); best.t = .39; }   // ミートボーは「ある日の夜…」のあとに出る
+    const night = best.key === "s7", qa = night ? sm(seg(best.p, .40, .46)) : 0, qIn = night ? o4(seg(best.p, .45, .52)) : 0, qOut = night ? sm(seg(best.p, .60, .65)) : 0, back = night ? sm(seg(best.p, .63, .68)) : 0;
+    const lk = night ? o4(seg(best.p, .68, .74)) : 0, don = night ? o4(seg(best.p, .68, .75)) : 0, mv = night ? clamp(1 - qa * (1 - back)) * sm(seg(best.p, .25, .29)) : 1;
     /* ①ミートボーが真ん中（主役）→ ③左の端へ。スマホが真ん中にドン */
     const sh = lk * W * (M ? .23 : .33), sN = 1 - lk * (M ? .30 : .16);
     lfImg.parentElement.style.opacity = String(mv.toFixed(3));
     lfImg.parentElement.style.transform = `translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
-    if (lfQ) { lfQ.style.opacity = String(night ? (qIn * (1 - qOut)).toFixed(3) : 0); lfQ.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, qIn) * (1 + .05 * bell(seg(best.p, .38, .5)))).toFixed(3)})`; }
+    if (lfN) { const ni = night ? o4(seg(best.p, .07, .14)) : 0, no = night ? sm(seg(best.p, .20, .25)) : 0; lfN.style.opacity = String((ni * (1 - no)).toFixed(3)); lfN.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, ni) * (1 + .04 * bell(seg(best.p, .10, .2)))).toFixed(3)})`; }
+    if (lfQ) { lfQ.style.opacity = String(night ? (qIn * (1 - qOut)).toFixed(3) : 0); lfQ.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, qIn) * (1 + .05 * bell(seg(best.p, .48, .6)))).toFixed(3)})`; }
     if (lfLock) {
       const area = life.clientHeight || (H - 64), ph = M ? Math.min(.38 * H, 300) : Math.min(.8 * H, 720), pw = ph * 481 / 960, cx = W * (M ? .74 : .5);
       lfLock.style.height = ph.toFixed(1) + "px"; lfLock.style.width = pw.toFixed(1) + "px"; lfLock.style.left = (cx - pw / 2).toFixed(1) + "px"; lfLock.style.top = (M ? 6 : Math.max(6, (area - ph) / 2 - 8)).toFixed(1) + "px";
-      lfLock.style.opacity = String(night ? clamp(seg(best.p, .58, .605)) : 0);
-      lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .64, .74)) : 0)).toFixed(3)})`;
-      if (lkCard) { lkCard.style.opacity = String(night ? clamp(seg(best.p, .67, .70)) : 0); lkCard.classList.toggle("on", night && best.p > .70 && !RM); }
+      lfLock.style.opacity = String(night ? clamp(seg(best.p, .68, .705)) : 0);
+      lfLock.style.transform = `translateY(${(-(1 - don) * 70).toFixed(1)}px) scale(${(lerp(1.4, 1, don) + (night ? .035 * bell(seg(best.p, .74, .84)) : 0)).toFixed(3)})`;
+      if (lkCard) { lkCard.style.opacity = String(night ? clamp(seg(best.p, .77, .80)) : 0); lkCard.classList.toggle("on", night && best.p > .80 && !RM); }
       /* 右に大きく「ロック画面で【確認】できます。」（スマホは下に） */
       if (lfTx) {
         let tw, tx, ty;
@@ -464,14 +477,14 @@
         else { const x0 = cx + pw / 2 + W * .02; tw = Math.min(W * .98 - x0, 820); tx = x0 + (W * .98 - x0 - tw) / 2; ty = (area - tw * 490 / 870) / 2 + 6; }
         const cs = M ? Math.min(15 * W / 100, 60) : Math.min(tw * .17, 150); if (!M) ty += cs * .55;
         lfTx.style.width = tw.toFixed(1) + "px"; lfTx.style.left = tx.toFixed(1) + "px"; lfTx.style.top = ty.toFixed(1) + "px";
-        const want = night && best.p > .64;
+        const want = night && best.p > .74;
         if (want !== txOn) { txOn = want;
           if (RM) { lfTxV.style.display = "none"; lfTxI.style.display = "block"; }
           else if (want) { try { lfTxV.currentTime = 0; const pr = lfTxV.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { lfTxV.pause(); } catch (e) {} } }
         lfTx.style.opacity = txOn ? "1" : "0";
-        if (lfCap) { const cp = night ? o4(seg(best.p, .63, .68)) : 0; lfCap.style.cssText = `left:${tx.toFixed(1)}px;width:${tw.toFixed(1)}px;top:${(ty - cs * 1.15).toFixed(1)}px;bottom:auto;right:auto;font-size:${cs.toFixed(1)}px;opacity:${(night ? clamp(seg(best.p, .63, .655)) : 0).toFixed(3)};transform:scale(${lerp(1.7, 1, cp).toFixed(3)});transform-origin:50% 100%`; } }
-      if (night) { const sw = best.p > .60; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
-    lfLab.style.opacity = String(best.a * (1 - lk) * mv); lfBub.style.opacity = String(clamp(best.pop * 2) * mv); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .60, .68)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
+        if (lfCap) { const cp = night ? o4(seg(best.p, .73, .78)) : 0; lfCap.style.cssText = `left:${tx.toFixed(1)}px;width:${tw.toFixed(1)}px;top:${(ty - cs * 1.15).toFixed(1)}px;bottom:auto;right:auto;font-size:${cs.toFixed(1)}px;opacity:${(night ? clamp(seg(best.p, .73, .755)) : 0).toFixed(3)};transform:scale(${lerp(1.7, 1, cp).toFixed(3)});transform-origin:50% 100%`; } }
+      if (night) { const sw = best.p > .62; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
+    lfLab.style.opacity = String(best.a * (1 - lk) * mv); lfBub.style.opacity = String(clamp(best.pop * 2) * mv); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .70, .78)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
   }
 
   /* ---------- ビビちゃん（相手のスマホの右の空きに）：受け取った → ゴミ出し中 → スタンプで喜ぶ ---------- */
@@ -517,11 +530,12 @@
   function stgTick(k, now, active) { const g = STG[k];
     if (g.anim) { const f = clamp((now - g.anim.t0) / g.anim.dur); g.v = lerp(g.anim.from, g.anim.to, f); if (f >= 1) { g.v = g.anim.to; g.i++; g.anim = null; } }
     else if (active && g.auto[g.i] && g.i < g.stops.length - 1) stgStart(k); }
-  const qDone = $("qDone"); let qdOn = false;
-  function qDoneFrame(want) {   // PCだけ：スマホ（ph1）の右の空きに出す。入らない幅では出さない
-    if (!qDone) return; let ok = want && !M;
-    if (ok) { const r = ph1.getBoundingClientRect(), w = qDone.offsetWidth || 360, x = r.right + Math.max(18, W * .02), y = r.top + r.height * .30;
-      if (x + w > W - 12 || r.height < 200) ok = false; else { qDone.style.setProperty("--qx", x.toFixed(0) + "px"); qDone.style.setProperty("--qy", y.toFixed(0) + "px"); qDone.style.transform = `translate3d(${x.toFixed(0)}px,${y.toFixed(0)}px,0)`; } }
+  const mitoPress = $("mitoPress"), qDone = $("qDone"); let qdOn = false;
+  function qDoneFrame(which) {   // PCだけ：s3＝スマホ（ph1）の右、s4＝受け取り側スマホ（ph2）の左の空きに出す。入らない幅では出さない
+    if (!qDone) return; let ok = !!which && !M; const key = ok ? which : "";
+    if (ok) { const txt = which === "s3" ? "クエストが<br>できた！" : "お願いが<br>クエストに！"; if (qDone.dataset.k !== which) { qDone.dataset.k = which; qDone.firstElementChild.innerHTML = txt; }
+      const ref = which === "s3" ? ph1 : ph2, r = ref.getBoundingClientRect(), w = qDone.offsetWidth || 360, g = Math.max(18, W * .02), x = which === "s3" ? r.right + g : r.left - g - w, y = r.top + r.height * .30;
+      if (x < 12 || x + w > W - 12 || r.height < 200) ok = false; else { qDone.style.setProperty("--qx", x.toFixed(0) + "px"); qDone.style.setProperty("--qy", y.toFixed(0) + "px"); qDone.style.transform = `translate3d(${x.toFixed(0)}px,${y.toFixed(0)}px,0)`; } }
     if (ok !== qdOn) { qdOn = ok; qDone.classList.toggle("on", ok); if (!ok) qDone.style.opacity = "0"; } }
   let hintOwner = "", doneOwner = "";
   function hintFrame(S, p3, u4, u5) {
@@ -537,7 +551,7 @@
     let dk = "", dt = "";
     if (TAP.st === 2 && p3 > .66 && p3 < .92) { dk = "s3"; dt = "クエストができた！"; }
     else [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k]; if (g.i >= g.stops.length - 1 && phWin(u, k) > .5) { dk = k; dt = g.done; } });
-    doneOwner = dk; qDoneFrame(dk === "s3"); tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
+    doneOwner = dk; qDoneFrame(dk === "s3" ? "s3" : dk === "s4" ? "s4" : ""); tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
     const wOn = { s3: o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))) > .5, s4: phWin(u4, "s4") > .5, s5: phWin(u5, "s5") > .5 };
     const playing = (TAP.st === 1 && wOn.s3) || (!!STG.s4.anim && wOn.s4) || (!!STG.s5.anim && wOn.s5);
     const ph = dk ? 0 : (hintOwner ? 1 : (playing ? 2 : 0)), sb = $("stateBar"); sb.className = "statebar" + (ph ? " on sb" + ph : ""); if (ph) { const tx = ph === 1 ? "光っている所を押してね" : "見ていてね…"; if ($("sbT").textContent !== tx) $("sbT").textContent = tx; sb.querySelector(".fing").style.display = ph === 1 ? "" : "none"; }
