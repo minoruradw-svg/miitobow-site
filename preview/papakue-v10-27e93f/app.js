@@ -370,7 +370,6 @@
       el.animate(glide ? [{ opacity: 0, transform: "translateY(46px)" }, { opacity: 1, transform: "none" }] : [{ opacity: 0 }, { opacity: 1 }], { duration: glide ? 550 : 600, delay: d, easing: EASE.expo, fill: "both" }); });
     letters.forEach((l, i) => { const p = PAP[i], tot = p.d1 + p.d2, o1 = p.d1 / tot;
       l.animate([{ opacity: 0, transform: `translate(${p.x}px,${p.y}px) scale(${p.s0}) rotate(${p.r}deg)`, offset: 0, easing: EASE.p4out }, { opacity: 1, transform: `translate(0,0) scale(${p.s1}) rotate(0deg)`, offset: o1, easing: EASE.p2io }, { opacity: 1, transform: "none", offset: 1 }], { duration: tot * 1000, delay: (0.90 + p.t) * 1000, fill: "both" }); });
-    setTimeout(prepareGreeting, 800);
   }
   const mStill = $("mStill"), mAnim = $("mAnim"), conn = navigator.connection || {};
   const LITE = /[?&]mascot=lite/.test(location.search) || conn.saveData === true || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
@@ -395,10 +394,11 @@
     const z = zvBox[k]; if (!z || z.v || !ZV[k]) return z;
     if (RM) { const im = new Image(); im.alt = ""; im.src = M ? ZV[k].endSp : ZV[k].end; z.box.appendChild(im); z.v = im; return z; }
     const v = document.createElement("video"); v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "metadata"; v.setAttribute("aria-hidden", "true");
-    v.src = M ? ZV[k].sp : ZV[k].pc; z.box.appendChild(v); z.v = v; return z; }
+    v.src = M ? ZV[k].sp : ZV[k].pc; v.addEventListener("error", () => zvFallback(k)); z.box.appendChild(v); z.v = v; return z; }
+  function zvFallback(k) { const z = zvBox[k]; if (!z || !z.v || z.v.tagName !== "VIDEO" || !ZV[k]) return; const im = new Image(); im.alt = ""; im.src = M ? ZV[k].endSp : ZV[k].end; try { z.box.replaceChild(im, z.v); } catch (e) { return; } z.v = im; }   // 動画が読めない・自動再生できない時でも、見出しの最後の絵が出る
   function zvPlay(id, on) {
     const k = zvKey[id]; if (!k) return; const z = zvEnsure(k); if (!z || !z.v || RM) return;
-    if (on) { try { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} } else { try { z.v.pause(); z.v.currentTime = 0; } catch (e) {} }
+    if (on) { try { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(err => { if (err && err.name === "NotAllowedError") zvFallback(k); }); } catch (e) {} } else { try { z.v.pause(); z.v.currentTime = 0; } catch (e) {} }
   }
   function zvPrepare() { ["add", "req", "thx"].forEach(k => { const el = zvBox[k] && (zvBox[k].box.closest(".chapter") || document.querySelector('[data-ch="s5"]')); if (el && !zvBox[k].v && el.getBoundingClientRect().top < H * 2.2) zvEnsure(k); }); }
   function zvScroll() { [["dl", document.querySelector(".closing")]].forEach(([k, el]) => { if (!zvBox[k] || !el) return; const r = el.getBoundingClientRect(), near = r.top < H * 1.6 && r.bottom > -H * .5; if (near) zvEnsure(k); const on = r.top < H * .6 && r.bottom > H * .35; if (on !== !!zvOn[k]) { zvOn[k] = on; const z = zvEnsure(k); if (z && z.v && !RM) { try { if (on) { z.v.currentTime = 0; const pr = z.v.play(); if (pr && pr.catch) pr.catch(() => {}); } else { z.v.pause(); z.v.currentTime = 0; } } catch (e) {} } } }); }
@@ -517,7 +517,7 @@
     { const idle = TAP.st === 0, win = o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))), op = idle ? win * S.p1op : 0;
       if (op > best.op) { const r = ripple.getBoundingClientRect(); best = { key: "s3", op, x: r.left + r.width / 2, y: r.top + r.height / 2, lab: "ここ押してみてね" }; } }
     [["s4", u4], ["s5", u5]].forEach(([k, u]) => { const g = STG[k], el = stgActive(k) ? g.tgt()[g.i] : null; if (!el) return; const wv = phWin(u, k) * o4(seg(u, WIN[k].ph[1], WIN[k].ph[1] + .05)); if (wv > best.op) { const r = el.getBoundingClientRect(); best = { key: k, op: wv, x: r.left + r.width / 2, y: r.top + r.height / 2, lab: g.lab[g.i] }; } });
-    hintOwner = best.op > .02 ? best.key : "";
+    hintOwner = best.op > .02 ? best.key : ""; { const al = best.lab || "クエスト追加を押してみる"; if (tapHint.getAttribute("aria-label") !== al) tapHint.setAttribute("aria-label", al); }
     tapHint.style.opacity = String(best.op); tapHint.style.visibility = best.op > .02 ? "visible" : "hidden";
     if (best.op > .02) { const lt = tapHint.querySelector(".lbt"); if (lt.textContent !== best.lab) { lt.textContent = best.lab; hintW = 0; }
       tapHint.style.transform = `translate3d(${best.x}px,${best.y}px,0)`; const lb = tapHint.querySelector(".lb"); if (!hintW) hintW = lb.offsetWidth; const l = best.x - hintW / 2, rt = best.x + hintW / 2, sh = l < 8 ? 8 - l : rt > W - 8 ? W - 8 - rt : 0; tapHint.style.setProperty("--sh", sh.toFixed(1) + "px"); }
@@ -527,7 +527,7 @@
     doneOwner = dk; tapDone.classList.toggle("on", !!dk); { const tdt = $("tdText"); if (dk && tdt.textContent !== dt) tdt.textContent = dt; }
     const wOn = { s3: o4(seg(p3, .64, .72)) * (1 - sm(seg(p3, .90, .95))) > .5, s4: phWin(u4, "s4") > .5, s5: phWin(u5, "s5") > .5 };
     const playing = (TAP.st === 1 && wOn.s3) || (!!STG.s4.anim && wOn.s4) || (!!STG.s5.anim && wOn.s5);
-    const ph = dk ? 0 : (hintOwner ? 1 : (playing ? 2 : 0)), sb = $("stateBar"); sb.className = "statebar" + (ph ? " on sb" + ph : ""); if (ph) { const tx = ph === 1 ? "ここを押してね" : "見ていてね…"; if ($("sbT").textContent !== tx) $("sbT").textContent = tx; sb.querySelector(".fing").style.display = ph === 1 ? "" : "none"; }
+    const ph = dk ? 0 : (hintOwner ? 1 : (playing ? 2 : 0)), sb = $("stateBar"); sb.className = "statebar" + (ph ? " on sb" + ph : ""); if (ph) { const tx = ph === 1 ? "光っている所を押してね" : "見ていてね…"; if ($("sbT").textContent !== tx) $("sbT").textContent = tx; sb.querySelector(".fing").style.display = ph === 1 ? "" : "none"; }
   }
   tapHint.onclick = () => { const kb = document.activeElement === tapHint, o = hintOwner; if (o === "s3") tapStart(); else if (o) stgStart(o); if (kb) setTimeout(() => { if (tapDone.classList.contains("on")) tapAgain.focus(); }, 60); };
   tapAgain.onclick = () => { if (doneOwner === "s3") { TAP.st = RM ? 2 : 1; TAP.t0 = performance.now(); } else if (doneOwner) { const g = STG[doneOwner]; g.v = 0; g.i = 0; g.anim = null; } };
@@ -541,27 +541,32 @@
   const LS = { cur: null, y: 0, off: {}, vid: false }, skipBtn = $("lockSkip"), lockMsg = $("lockMsg"), mainEl = document.querySelector("main"); let lockPrev = rawY(), navUntil = performance.now() + 2500;   // 読み込み直後（#ハッシュ・戻るの復元）は対象外
   window.__LS = LS; window.__lockOff = list => list.forEach(k => { LS.off[k] = "test"; }); window.__rawY = rawY;
   const LOCKFIX = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const NOLOCK = /[?&]nolock/.test(location.search), lockOk = () => !NOLOCK && !RM && W >= 300 && !LS.vid, lockYof = k => tops[IDX[k]] + (hs[IDX[k]] - H) * LK[k].p;
+  const NOLOCK = /[?&]nolock/.test(location.search), lockOk = () => !NOLOCK && !RM && W >= 300 && H >= 560 && !LS.vid, lockYof = k => tops[IDX[k]] + (hs[IDX[k]] - H) * LK[k].p;
   /* ロック＝ページのスクロールそのものを無効にする：html/body に overflow:hidden＋touch-action:none＋overscroll-behavior:none（スクロールバーは消え、幅は scrollbar-gutter で確保）。
      iOS Safari は body を position:fixed にして位置を保持する。ロック中は main を inert にして、Tab のフォーカス移動によるスクロールも防ぐ。 */
   function lockSet(k) { const ly = lockYof(k); window.scrollTo(0, ly); LS.cur = k; LS.y = ly; const de = document.documentElement; if (LOCKFIX) { fixY = ly; document.body.style.top = -ly + "px"; de.classList.add("lockfix"); } de.classList.add("locked"); mainEl.inert = true; skipBtn.hidden = false; lockMsg.textContent = "ボタンを押すと次へ進めます"; if (document.activeElement && mainEl.contains(document.activeElement)) document.activeElement.blur(); }
   function lockRelease(why) { const k = LS.cur; if (!k) return; LS.cur = null; if (why) LS.off[k] = why; document.documentElement.classList.remove("locked", "lockfix"); mainEl.inert = false; const y = LS.y; if (fixY !== null) { fixY = null; document.body.style.top = ""; window.scrollTo(0, y); } lockPrev = y; skipBtn.hidden = true; lockMsg.textContent = why === "done" ? "先へ進めます" : ""; }
   window.addEventListener("scroll", () => {   // 保険：ロック中に位置が動いたら戻す／ロック前は、押す場面の位置を下へ越えた瞬間にロック（つまみドラッグ・ホイール・キー・タッチ・慣性のどれでも）
     const y = rawY(), prev = lockPrev, now = performance.now(); lockPrev = y; if (!lockOk()) { if (LS.cur) lockRelease(null); return; }
-    if (LS.cur) { if (fixY === null && Math.abs(y - LS.y) > 1) window.scrollTo(0, LS.y); return; }
+    if (LS.cur) { if (fixY === null) { if (y < LS.y - 2) { lockRelease("up"); return; } if (Math.abs(y - LS.y) > 1) window.scrollTo(0, LS.y); } return; }
     if (y <= prev || navUntil > now) return;
     Object.keys(LK).sort((a, b) => lockYof(a) - lockYof(b)).some(k => { if (LS.off[k]) return false; const ly = lockYof(k); if (prev <= ly && y >= ly) { lockSet(k); return true; } return false; });
   }, { passive: true });
-  window.addEventListener("wheel", e => { if (LS.cur && !e.ctrlKey && e.cancelable) e.preventDefault(); }, { passive: false });
+  window.addEventListener("wheel", e => { if (!LS.cur || e.ctrlKey) return; if (e.deltaY < 0) { lockRelease("up"); if (e.cancelable) e.preventDefault(); window.scrollBy(0, e.deltaMode === 1 ? e.deltaY * 40 : e.deltaY); return; } if (e.cancelable) e.preventDefault(); }, { passive: false });   // 下向きだけ止める。上へ戻す操作はロックを解く（コメントどおり「上は動く」）
   window.addEventListener("mousedown", e => { if (LS.cur && e.button === 1) e.preventDefault(); });   // ホイールクリックのオートスクロール
-  window.addEventListener("touchmove", e => { if (LS.cur && e.touches.length === 1 && e.cancelable) e.preventDefault(); }, { passive: false });
+  let tsY = 0; window.addEventListener("touchstart", e => { if (e.touches.length === 1) tsY = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener("touchmove", e => { if (!LS.cur || e.touches.length !== 1) return; if (fixY === null && e.touches[0].clientY - tsY > 8) { lockRelease("up"); return; } if (e.cancelable) e.preventDefault(); }, { passive: false });   // 指を下へ動かす＝上へ戻る操作は、ロックを解いて通す（iOSの固定方式は除く）
   window.addEventListener("keydown", e => {
     if (!LS.cur) return;
     if (e.key === "Escape") { lockRelease("escaped"); return; }
+    if (["PageUp", "ArrowUp", "Home"].includes(e.key) && fixY === null) { lockRelease("up"); return; }
     const t = e.target && e.target.tagName, inter = t === "BUTTON" || t === "A" || t === "INPUT" || t === "TEXTAREA" || t === "SELECT";
-    if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "End", "Home"].includes(e.key) && !(e.key === " " && inter)) e.preventDefault();
+    if ([" ", "PageDown", "ArrowDown", "End"].includes(e.key) && !(e.key === " " && inter)) e.preventDefault();
   });
   document.addEventListener("click", e => { const a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) { navUntil = performance.now() + 2500; lockRelease(null); } });
+  window.addEventListener("hashchange", () => { navUntil = performance.now() + 2500; lockRelease(null); });
+  window.addEventListener("popstate", () => { navUntil = performance.now() + 2500; lockRelease(null); });
+  document.addEventListener("focusin", () => { navUntil = performance.now() + 800; });   // Tab でのフォーカス移動によるスクロールでは、ロックしない
   const goNext = k => { navUntil = performance.now() + 2500; window.scrollTo({ top: tops[IDX[k]] + (hs[IDX[k]] - H) * .97, behavior: RM ? "auto" : "smooth" }); };
   skipBtn.onclick = () => { const k = LS.cur; if (!k) return; lockRelease("skip"); goNext(k); };
   $("nextGo").onclick = () => { const k = doneOwner; if (k) { if (LS.cur) lockRelease("done"); goNext(k); } };
@@ -614,7 +619,7 @@
   if (CAN_HOVER && !LOW && !RM) window.addEventListener("pointermove", e => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
   const imgs = $$("#ph1 img, #mStill").slice(0, 3);
   const ready = Promise.all([document.fonts ? document.fonts.ready : 0, ...imgs.map(i => i.decode ? i.decode().catch(() => 0) : 0)]);
-  Promise.race([ready, new Promise(r => setTimeout(r, 2000))]).then(() => { measure();  t0 = performance.now(); window.__pkT0 = t0; document.documentElement.classList.add("ready"); intro(); setTimeout(() => { zvEnsure("fv"); zvPlay("fv", true); }, 500); });
+  Promise.race([ready, new Promise(r => setTimeout(r, 1000))]).then(() => { measure();  t0 = performance.now(); window.__pkT0 = t0; document.documentElement.classList.add("ready"); intro(); setTimeout(() => { zvEnsure("fv"); zvPlay("fv", true); }, 500); });
   window.addEventListener("load", () => { measure();  });
   requestAnimationFrame(frame);
   window.__pk = { get S() { return S; }, get smY() { return smY; }, get cfLast() { return cfLast; }, pin5: () => pin('s5'), tops: () => tops, pin };

@@ -248,7 +248,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 
 <!-- ===== 固定レイヤー：ワールド＋カメラ ===== -->
 <div id="bivi" aria-hidden="true"><img id="bvLook" src="assets/bivi/bivi_look.webp?v=20261108b" alt="" width="787" height="720" decoding="async"><img id="bvTrash" src="assets/bivi/bivi_trash.webp" alt="" width="927" height="720" decoding="async"><img id="bvHappy" src="assets/bivi/bivi_happy.webp?v=20261108b" alt="" width="787" height="720" decoding="async"></div>
-<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"><i class="lk-card" id="lkCard"></i></div><div class="lf-tx" id="lfTx"><video id="lfTxV" src="assets/zm/lock_tx.mp4?v=20261108g" muted playsinline preload="auto" width="870" height="490"></video><img id="lfTxI" src="assets/zm/lock_tx_end.jpg?v=20261108g" alt="" width="870" height="490" style="display:none"></div><div class="lf-cap" id="lfCap">ロック画面で、確認できます</div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
+<div id="life" aria-hidden="true"><div class="lf-lab" id="lfLab"></div><div class="lf-lock" id="lfLock"><img src="assets/life/phone_lock.webp" alt="" width="481" height="960" decoding="async"><i class="lk-card" id="lkCard"></i></div><div class="lf-tx" id="lfTx"><video id="lfTxV" src="assets/zm/lock_tx.mp4?v=20261108g" muted playsinline preload="metadata" width="870" height="490"></video><img id="lfTxI" src="assets/zm/lock_tx_end.jpg?v=20261108g" alt="" width="870" height="490" style="display:none"></div><div class="lf-cap" id="lfCap">ロック画面で、確認できます</div><div class="lf-wrap"><img id="lfImg" alt="" width="480" height="506"><div class="lf-bubw"><div class="lf-bub" id="lfBub"></div></div></div></div></div></div>
 <div class="zvfull" data-zm="thx" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true">
   <canvas id="gridc"></canvas>
@@ -372,7 +372,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== S3 パパッと追加（押してもらう体験） ===== -->
-<section class="chapter" data-ch="s3" id="howto" style="height:320vh">
+<section class="chapter" data-ch="s3" id="howto" style="height:260vh">
   <div class="pin"><div class="card">
     <p class="no">02 — ADD</p>
     <h2 class="sr">思いついたら、パパッと追加。</h2>
@@ -382,7 +382,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== S4 お願い ===== -->
-<section class="chapter" data-ch="s4" style="height:520vh">
+<section class="chapter" data-ch="s4" style="height:440vh">
   <div class="pin"><div class="card">
     <p class="no">03 — REQUEST</p>
     <h2 class="sr">家族やパートナーに、お願いする。</h2>
@@ -394,7 +394,7 @@ footer a:hover { color: var(--ink); text-decoration: underline; }
 </section>
 
 <!-- ===== S5 達成とありがとう ===== -->
-<section class="chapter" data-ch="s5" style="height:520vh">
+<section class="chapter" data-ch="s5" style="height:440vh">
   <div class="pin"><div class="card">
     <h2 class="sr">ありがとうを、届ける。達成したら、ハンコがポン。</h2>
     <div class="v9only"><div id="s5a"><h2>達成したら、<br>ハンコがポン。</h2><p class="txt">お願いが達成されると、クエストにCLEARのハンコが押されます。</p></div>
@@ -518,7 +518,7 @@ img { height: auto; }   /* 幅だけ指定した画像が、属性の高さで�
 @media (max-width: 999px) { .s4bar { display: flex; position: fixed; left: 0; right: 0; top: 56px; justify-content: center; padding: 8px 0 12px; z-index: 5; background: linear-gradient(#fff 70%, rgba(255,255,255,0)); opacity: 0; pointer-events: none; } .s4bar .s4steps { margin: 0; } }
 @media (max-width: 999px) { .s4steps { gap: 4px; margin-top: 10px; } .s4steps li { font-size: 12px; padding: 5px 9px 5px 5px; } .s4steps li b { width: 18px; height: 18px; font-size: 11px; } }
 /* スマホ：何も変わらない区間を詰める（文字が読める長さは残す） */
-@media (max-width: 999px) { [data-ch="s2"] { height: 240vh !important; height: 240svh !important; } [data-ch="s3"] { height: 300vh !important; height: 300svh !important; } [data-ch="s5"] { height: 420vh !important; height: 420svh !important; } }
+@media (max-width: 999px) { [data-ch="s2"] { height: 240vh !important; height: 240svh !important; } [data-ch="s3"] { height: 250vh !important; height: 250svh !important; } [data-ch="s5"] { height: 360vh !important; height: 360svh !important; } }
 </style>
 <style>
 /* v9：実アプリの「スタンプを選ぶ」画面（thank_stamps.dart）に合わせた下からのシート */
@@ -614,7 +614,7 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
   [data-ch="s2"] .pin, [data-ch="s3"] .pin { padding: 56px 20px 0; }
   [data-ch="s2"] .card .txt, [data-ch="s3"] .card .txt { font-size: 16px; line-height: 1.7; margin-top: 6px; }
   [data-ch="s2"] .card .sm { font-size: 12.5px; margin-top: 6px; }
-  [data-ch="s2"] { height: 340vh !important; height: 340svh !important; } [data-ch="s3"] { height: 320vh !important; height: 320svh !important; }
+  [data-ch="s2"] { height: 340vh !important; height: 340svh !important; } [data-ch="s3"] { height: 260vh !important; height: 260svh !important; }
   #life { inset: 56px 0 0 0; } #lfImg { height: min(44vh, 400px); }
   .lf-bub { left: auto; right: -2%; top: -20%; font-size: clamp(26px, 7vw, 40px); }
   .taphint .lb { font-size: 15px; padding: 10px 14px 10px 11px; }
@@ -637,7 +637,7 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 @media (max-width: 999px) {
   [data-ch="s4"] .pin, [data-ch="s5"] .pin, [data-ch="bed"] .pin { padding: 56px 20px 0; }
   [data-ch="s4"] .card .txt { font-size: 16px; line-height: 1.7; margin-top: 6px; }
-  [data-ch="s4"] { height: 520vh !important; height: 520svh !important; } [data-ch="s5"] { height: 520vh !important; height: 520svh !important; } [data-ch="bed"] { height: 220vh !important; height: 220svh !important; }
+  [data-ch="s4"] { height: 440vh !important; height: 440svh !important; } [data-ch="s5"] { height: 440vh !important; height: 440svh !important; } [data-ch="bed"] { height: 220vh !important; height: 220svh !important; }
   
   .demo .zv, .closing .zv { aspect-ratio: 5 / 4; width: 100%; }
 }
@@ -697,9 +697,10 @@ html:not(.ready) #fx, html:not(.ready) .chapter .pin, html:not(.ready) #pp, html
 <style>
 /* 押す場面：押し終わるまで下へのスクロールを止める（上は動く・スキップ・Escapeで解除） */
 html.locked, html.locked body { overscroll-behavior-y: none; }
-.lockskip { position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 9; min-height: 32px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #5e635f; background: rgba(255,255,255,.82); border: 1px solid #d5d9d5; border-radius: 99px; cursor: pointer; }
-@media (max-width: 999px) { .lockskip { bottom: max(88px, calc(env(safe-area-inset-bottom, 0px) + 76px)); } }
-.lockskip:hover { color: #1f2223; border-color: #9aa19c; }
+.lockskip { position: fixed; left: calc(50% + 250px); bottom: max(33px, env(safe-area-inset-bottom, 0px)); z-index: 9; min-height: 44px; padding: 8px 22px; font-size: 15px; font-weight: 700; color: #17323a; background: #fff; border: 2px solid #17323a; border-radius: 99px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.18); white-space: nowrap; }
+.lockskip:hover { background: #e4f3ec; }
+@media (max-width: 999px) { .lockskip { left: 50%; transform: translateX(-50%); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 66px); } }
+.lockskip:focus-visible { outline: 3px solid #1e9a70; outline-offset: 3px; }
 .lockskip[hidden] { display: none; }
 .downcue { position: fixed; right: 16px; bottom: max(14px, env(safe-area-inset-bottom, 0px)); z-index: 9; display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 700; color: #1e9a70; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s; }
 .downcue.on { opacity: 1; visibility: visible; }
@@ -714,6 +715,7 @@ html.locked, html.locked body { overflow: hidden !important; overscroll-behavior
 html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 .statebar { position: fixed; left: 50%; bottom: max(22px, env(safe-area-inset-bottom, 0px)); z-index: 9; transform: translateX(-50%); display: none; align-items: center; gap: 12px; padding: 14px 30px; border-radius: 99px; font-size: clamp(20px, 2vw, 28px); font-weight: 900; line-height: 1.2; color: #fff; background: #17323a; box-shadow: 0 10px 30px rgba(0,0,0,.35); white-space: nowrap; pointer-events: none; }
 .statebar.on { display: flex; }
+@media (max-height: 720px) { .statebar.sb1 { display: none; } }   /* 低い画面は、押す対象や吹き出しを隠すので出さない */
 .statebar svg.fing { width: 1.3em; height: 1.3em; flex: none; }
 .statebar.sb1 { animation: sbpulse 1.3s ease-in-out infinite; }
 .statebar.sb2 { background: #5e635f; }
@@ -741,7 +743,7 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 /* 最後の場面：にぎやかに（ミートボー＋ビビちゃん・スタンプ・紙ふぶき）。JSが動いた時だけ隠して、入場で動かす */
 .closing { position: relative; overflow: hidden; }
 .closing > *:not(.cl-stage) { position: relative; z-index: 2; }
-.cl-stage { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.cl-stage { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .cl-char { position: absolute; bottom: 54px; width: auto; filter: drop-shadow(0 18px 24px rgba(31,34,35,.18)); }
 .cl-mit { left: clamp(6px, 6vw, 110px); height: clamp(210px, 36vh, 380px); }
 .cl-bivi { right: clamp(6px, 6vw, 110px); height: clamp(190px, 32vh, 340px); }
@@ -777,6 +779,7 @@ html.lockfix body { position: fixed; left: 0; right: 0; width: 100%; }
 .lf-tx { position: absolute; z-index: 2; left: 0; top: 0; opacity: 0; pointer-events: none; will-change: opacity; }
 .lf-tx video, .lf-tx img { display: block; width: 100%; height: auto;  }
 @media (prefers-reduced-motion: reduce) { .lk-card.on { animation: none; } }
+.closing .cl-mit { bottom: -14px; }   /* 上半身の絵なので、下の切れ目をセクションの縁に隠す（ふわふわ動いても浮かない） */
 </style>
 <script src="app.js?v=10-20261108g"></script>
 </body>
