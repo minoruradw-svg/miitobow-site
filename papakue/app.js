@@ -470,9 +470,15 @@
     const night = best.key === "s7", qa = night ? sm(seg(best.p, .40, .46)) : 0, qIn = night ? o4(seg(best.p, .45, .52)) : 0, qOut = night ? sm(seg(best.p, .60, .65)) : 0, back = night ? sm(seg(best.p, .63, .68)) : 0;
     const lk = night ? o4(seg(best.p, .68, .74)) : 0, don = night ? o4(seg(best.p, .68, .75)) : 0, mv = night ? clamp(1 - qa * (1 - back)) * sm(seg(best.p, .25, .29)) : 1;
     /* ①ミートボーが真ん中（主役）→ ③左の端へ。スマホが真ん中にドン */
-    const sh = lk * W * (M ? .23 : .33), sN = 1 - lk * (M ? .30 : .16);
+    const sh = lk * W * (M ? .23 : .33); let sN = 1 - lk * (M ? .30 : .16);
+    let liftY = 0;
+    if (M && night && lk > 0) {   // 画面が低い(Threadsのアプリ内ブラウザなど)と、ミートボーが下の大きな見出し(パパクエなら…)に重なる→上へ持ち上げ、足りなければ縮める
+      const a0 = life.clientHeight || (H - 64), tw0 = Math.min(.8 * W, 320), cs0 = Math.min(15 * W / 100, 60), capTop = a0 - tw0 * 490 / 870 - 10 - cs0 * 1.15;   // 見出し(lfCap)の上端(life内)
+      const par = lfImg.parentElement, hh = par.offsetHeight || 209, cT = (par.offsetTop || 0) + hh / 2, need = cT + hh * lerp(.78, 1, best.a) * sN / 2 - (capTop - 8);
+      if (need > 0) { const room = Math.max(0, cT - hh * lerp(.78, 1, best.a) * sN / 2 - 6); liftY = Math.min(need, room); const rest = need - liftY; if (rest > 0) sN = Math.max(.45, sN - rest * 2 / (hh * lerp(.78, 1, best.a))); }
+    }
     lfImg.parentElement.style.opacity = String(mv.toFixed(3));
-    lfImg.parentElement.style.transform = `translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
+    lfImg.parentElement.style.transform = `translateY(${(-liftY).toFixed(1)}px) translateX(${-sh.toFixed(1)}px) scale(${(lerp(.78, 1, best.a) * sN).toFixed(3)}) translateY(${(1 - best.a) * 30}px)`;
     if (lfN) { const ni = night ? o4(seg(best.p, .07, .14)) : 0, no = night ? sm(seg(best.p, .20, .25)) : 0; lfN.style.opacity = String((ni * (1 - no)).toFixed(3)); lfN.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, ni) * (1 + .04 * bell(seg(best.p, .10, .2)))).toFixed(3)})`; }
     if (lfQ) { lfQ.style.opacity = String(night ? (qIn * (1 - qOut)).toFixed(3) : 0); lfQ.style.transform = `translateY(-50%) scale(${(lerp(1.7, 1, qIn) * (1 + .05 * bell(seg(best.p, .48, .6)))).toFixed(3)})`; }
     if (lfLock) {
