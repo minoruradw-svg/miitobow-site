@@ -561,6 +561,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://miitobow.com/bus/en/how-to-ride/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://miitobow.com/bus/en/fukuoka/chikugo/</loc>
     <lastmod>2026-11-01</lastmod>
     <priority>0.5</priority>
