@@ -38,6 +38,7 @@ const ALLOWED_START_TARGETS = new Set([
   "services_work_android",
   "services_work_made",
   "services_work_windows",
+  "services_work_papakue",   // 2026-11-09追加・ユーザー承認（制作事例のパパクエ紹介ページ）
   "services_nav_plan",
   "services_nav_works",
 ]);
