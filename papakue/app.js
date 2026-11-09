@@ -446,11 +446,21 @@
 
   /* ---------- ミートボーの生活の場面（全章共通の1枚。いちばん出ている章の絵を出す） ---------- */
   const life = $("life"), lfImg = $("lfImg"), lfBub = $("lfBub"), lfLab = $("lfLab"), lfLock = $("lfLock"), lfCap = $("lfCap"), lfQ = $("lfQ"), lfN = $("lfN"), lfTx = $("lfTx"), lfTxV = $("lfTxV"), lfTxI = $("lfTxI"), lkCard = $("lkCard"); let txOn = false; let lifeKey = "";
+  /* 生活の場面で、止まって見ていると「スクロールしてね」を出す（スクロールで進む場面なので、待つのかスクロールするのか分からない、というユーザー指摘への対応）。
+     スクロール中は出さない／押す場面の案内（見ていてね・光っている所・できた！）が出ている間は出さない */
+  const downCue = $("downCue"); let lastScrollT = 0, cueOn = false;
+  addEventListener("scroll", () => { lastScrollT = performance.now(); }, { passive: true });
+  function lifeCue(want) {
+    if (!downCue) return;
+    const busy = document.getElementById("stateBar").classList.contains("on") || tapDone.classList.contains("on") || hintOwner !== "";
+    const on = !!want && !busy && (performance.now() - lastScrollT > 1100);
+    if (on !== cueOn) { cueOn = on; downCue.classList.toggle("on", on); }
+  }
   function lifeFrame(ps) {
     let best = { op: 0 };
     Object.keys(LIFE_CH).forEach(ch => { const w = LIFE_WIN[ch], p = ps[ch], a = o4(seg(p, w[0], w[1])), out = sm(seg(p, w[2], w[3])), op = sm(seg(p, w[0], w[0] + .07)) * (1 - out);
       if (op > best.op) best = { op, a, out, pop: o4(seg(p, w[0] + .08, w[0] + .14)), key: LIFE_CH[ch], p, t: w[0] + .13 }; });
-    if (best.op <= .01) { life.style.visibility = "hidden"; life.style.opacity = "0"; return; }
+    if (best.op <= .01) { life.style.visibility = "hidden"; life.style.opacity = "0"; lifeCue(false); return; }
     if (lifeKey !== best.key) { lifeKey = best.key; const c = LIFE[best.key]; lfImg.src = c.src; lfImg.alt = c.alt; lfBub.textContent = c.bubble; lfLab.textContent = c.label; }
     life.style.visibility = "visible"; life.style.opacity = String(best.op);
     life.style.transform = `translateX(${-best.out * W * .35}px) scale(${1 - .25 * best.out})`; lfImg.parentElement.style.transform = `scale(${lerp(.78, 1, best.a)}) translateY(${(1 - best.a) * 30}px)`;
@@ -486,6 +496,7 @@
         if (lfCap) { const cp = night ? o4(seg(best.p, .73, .78)) : 0; lfCap.style.cssText = `left:${tx.toFixed(1)}px;width:${tw.toFixed(1)}px;top:${(ty - cs * 1.15).toFixed(1)}px;bottom:auto;right:auto;font-size:${cs.toFixed(1)}px;opacity:${(night ? clamp(seg(best.p, .73, .755)) : 0).toFixed(3)};transform:scale(${lerp(1.7, 1, cp).toFixed(3)});transform-origin:50% 100%`; } }
       if (night) { const sw = best.p > .62; const txt = sw ? "残ってた！" : LIFE.s7.bubble; if (lfBub.textContent !== txt) lfBub.textContent = txt; } }
     lfLab.style.opacity = String(best.a * (1 - lk) * mv); lfBub.style.opacity = String(clamp(best.pop * 2) * mv); lfBub.style.transform = `scale(${lerp(.2, 1, best.pop) * (1 + .08 * bell(seg(best.p, best.t, best.t + .1)) + (best.key === "s7" ? .1 * bell(seg(best.p, .70, .78)) : 0))}) rotate(${(1 - best.pop) * -10}deg)`;
+    lifeCue(best.a > .95 && best.pop > .95 && best.out < .05 && best.op > .95 && !(M && night && best.p > .74));   // スマホの夜の場面の最後は、下の大きな文字（確認できます）に重なるので出さない
   }
 
   /* ---------- ビビちゃん（相手のスマホの右の空きに）：受け取った → ゴミ出し中 → スタンプで喜ぶ ---------- */
