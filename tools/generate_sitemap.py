@@ -60,6 +60,7 @@ STATIC_PAGES = [
     ("/start/", "start/index.html", "0.7"),
     ("/services/", "services/index.html", "0.7"),
     ("/windows/", "windows/index.html", "0.7"),
+    ("/papakue/", "papakue/index.html", "0.7"),
 ]
 
 # サイトマップに載せないページ（公開はされている）。載せない理由を必ず書く。
