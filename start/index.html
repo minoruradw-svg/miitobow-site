@@ -283,6 +283,34 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  .dl small{font-size:12px}
  .w-foot{padding:18px 16px 28px}
 }
+/* v3：導線を役割で分ける（見る＝動画：薄地／取る＝ダウンロード：緑／知る＝紹介ページ：文字リンク）。左右のカードは行ごとに高さをそろえる */
+.prv{background:#F2F8F2;border:1.5px solid #DCEBD6;color:var(--ink);padding:.6rem 1.1rem;margin-bottom:0;min-height:3.5rem}
+.prv .pi{background:transparent;border:2px solid var(--g);color:var(--g);width:2.1rem;height:2.1rem;font-size:.8rem}
+.prv:hover{background:#E9F3E6}
+.cta{display:flex;flex-direction:column;gap:.75rem;margin-top:.75rem}
+.cta .btns{margin-top:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.dl.half{padding:.75rem .875rem;gap:.5rem;min-width:0}
+.dl.half b{font-size:.9375rem}.dl.half small{font-size:.71875rem}
+.dl.half .t{flex:1;min-width:0}
+.more{margin:0;font-size:.875rem;font-weight:700;line-height:1.8;color:var(--ink)}
+.more a{display:inline-block;padding:.65rem 0;line-height:1.2;color:var(--g);text-decoration:underline;text-underline-offset:3px;margin:0 .15em;white-space:nowrap}
+@media (max-width:999px){.pair{order:-1}}   /* スマホ閲覧者（Threads来訪はほぼスマホ）には、スマホ版を先に見せる。DOM順は変えない */
+@media (max-width:480px){.dl.half .go{display:none}}
+@media (prefers-reduced-motion:reduce){.dl,.prv{transition:none}.dl:hover{transform:none}}
+@media (min-width:1000px){
+ .app-grid{column-gap:2rem;row-gap:0}
+ .acard{display:grid;grid-template-rows:subgrid;grid-row:span 7;row-gap:0;align-content:start}
+ .cta{align-self:start}
+}
+@supports not (grid-template-rows:subgrid){
+ @media (min-width:1000px){
+  .acard{display:flex;flex-direction:column;grid-row:auto}
+  .sub{min-height:3.5em}.facts{min-height:calc(3*1.75em + 2*.5rem)}
+  .ba,.pqs{min-height:25rem}
+  .cta{margin-top:auto;padding-top:.75rem}
+ }
+}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.entr{transition:none}}
  @media (max-width:640px){.st600{top:-3rem;right:-0.25rem;width:6.25rem}}
 
@@ -344,7 +372,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
    <div class="ba"><figure><div class="phone tall"><img src="images/w/tr_before.webp" alt="翻訳前：韓国語のメニュー" class="" loading=lazy decoding="async"></div><figcaption>翻訳前</figcaption></figure><div class="arrow" aria-hidden="true">→</div><figure><div class="phone tall"><img src="images/w/tr_after.webp" alt="翻訳後：日本語に翻訳された画面" class="" loading=lazy decoding="async"></div><figcaption>翻訳後</figcaption></figure></div>
    <ul class="facts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Windows版は完全無料</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>スマホ版は基本無料（1日5回まで、広告視聴で追加5回）</li></ul>
    <button type="button" class="prv" data-prv="translate" data-pev="start_pr_translate"><span class="pi" aria-hidden="true">▶</span><span class="t"><b>紹介動画を見る</b><small>約40秒・音声あり</small></span></button>
-   <div class="btns stack"><a href="https://miitobow.com/windows/" class="dl" data-ev="start_translate_pc"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z" fill="currentColor"/></svg></span><span class="t"><b>Windows版の紹介ページへ</b><small><span class="nb">ダウンロードは、</span><span class="nb">そこから</span></small></span><span class="go">→</span></a><a href="https://miitobow.com/android" class="dl alt" data-ev="start_translate_mobile"><span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="5" width="20" height="38" rx="4"/><path d="M21 38h6"/></svg></span><span class="t"><b>スマホ版の紹介ページへ</b><small><span class="nb">Android・iPhoneの</span><span class="nb">ダウンロードは、</span><span class="nb">そこから</span></small></span><span class="go">→</span></a></div>
+   <div class="cta"><div class="btns stack"><a href="https://apps.microsoft.com/detail/9p1pzb8bkzlg" class="dl" target="_blank" rel="noopener" data-ev="start_translate_pc" data-target="windows" aria-label="スクショで翻訳 Windows版を Microsoft Store でダウンロード（新しいタブ）"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z" fill="currentColor"/></svg></span><span class="t"><b>Windows版をダウンロード</b><small>Microsoft Storeが開きます</small></span><span class="go"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 10H10v28h28V28M28 8h12v12M40 8L22 26"/></svg></span></a><div class="pair"><a href="https://play.google.com/store/apps/details?id=com.miitobow.screenshot_translator" class="dl half" target="_blank" rel="noopener" data-ev="start_translate_mobile" data-target="android" aria-label="スクショで翻訳 Android版を Google Play でダウンロード（新しいタブ）"><span class="t"><b>Android版</b><small>Google Playで入手</small></span><span class="go"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 10H10v28h28V28M28 8h12v12M40 8L22 26"/></svg></span></a><a href="https://apps.apple.com/jp/app/id6796209645" class="dl half" target="_blank" rel="noopener" data-ev="start_translate_mobile" data-target="ios" aria-label="スクショで翻訳 iPhone版を App Store でダウンロード（新しいタブ）"><span class="t"><b>iPhone版</b><small>App Storeで入手</small></span><span class="go"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 10H10v28h28V28M28 8h12v12M40 8L22 26"/></svg></span></a></div></div><p class="more">使い方・画面をくわしく見る：<a href="https://miitobow.com/windows/" data-ev="start_translate_page_pc">Windows版</a>／<a href="https://miitobow.com/android" data-ev="start_translate_page_mobile">スマホ版</a></p></div>
   </article>
   <article id="w-papakue" class="acard pq">
    <div class="app-top"><img src="images/w/icon_papakue.webp" width="192" height="192" alt="パパクエのアイコン" class="appicon" loading=lazy decoding="async"><div><p class="mini">iPhoneアプリ</p><h3>パパクエ</h3></div></div>
@@ -353,7 +381,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
    <div class="pqs"><figure><div class="phone "><img src="images/w/pq_home.webp" alt="パパクエのホーム画面「今日の冒険」" class="" loading=lazy decoding="async"></div><figcaption>今日の冒険</figcaption></figure><figure><div class="phone "><img src="images/w/pq_board.webp" alt="パパクエのクエストボード（巻物）" class="" loading=lazy decoding="async"></div><figcaption>巻物のクエスト</figcaption></figure><figure><div class="phone "><img src="images/w/pq_lock.webp" alt="ロック画面のクエスト追加ウィジェット" class="" loading=lazy decoding="async"></div><figcaption>ロック画面から追加</figcaption></figure></div>
    <ul class="facts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>ロック画面から、すぐ追加</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>達成・失敗・延期を巻物で管理</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>ありがとうのスタンプも送れる</li></ul>
    <button type="button" class="prv" data-prv="papakue" data-pev="start_pr_papakue"><span class="pi" aria-hidden="true">▶</span><span class="t"><b>紹介動画を見る</b><small>約40秒・音声あり</small></span></button>
-   <div class="btns stack"><a href="https://miitobow.com/papakue/" class="dl alt"><span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24v36H12zM18 16h12M18 24h12M18 32h8"/></svg></span><span class="t"><b>パパクエの紹介ページへ</b><small><span class="nb">くわしい使い方は、</span><span class="nb">そこから</span></small></span><span class="go">→</span></a><a href="https://apps.apple.com/jp/app/id6818682738" class="dl" target="_blank" rel="noopener" data-ev="start_papakue" data-target="ios"><span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6v24M14 21l10 10 10-10M8 40h32"/></svg></span><span class="t"><b>パパクエをダウンロード</b><small>App Storeが開きます（iPhone向け）</small></span><span class="go"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 10H10v28h28V28M28 8h12v12M40 8L22 26"/></svg></span></a></div>
+   <div class="cta"><div class="btns stack"><a href="https://apps.apple.com/jp/app/id6818682738" class="dl" target="_blank" rel="noopener" data-ev="start_papakue" data-target="ios"><span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6v24M14 21l10 10 10-10M8 40h32"/></svg></span><span class="t"><b>パパクエをダウンロード</b><small>App Storeが開きます（iPhone向け）</small></span><span class="go"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 10H10v28h28V28M28 8h12v12M40 8L22 26"/></svg></span></a></div><p class="more">使い方・画面をくわしく見る：<a href="https://miitobow.com/papakue/" data-ev="start_papakue_page">パパクエの紹介ページ</a></p></div>
   </article>
  </div>
 </div></section>

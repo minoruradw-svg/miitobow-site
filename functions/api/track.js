@@ -28,6 +28,10 @@ const ALLOWED_START_TARGETS = new Set([
   "start_services",
   "start_pr_translate",
   "start_pr_papakue",
+  // /start/ のアプリカード：紹介ページへの文字リンク（2026-11-09追加・ユーザー承認）
+  "start_translate_page_pc",
+  "start_translate_page_mobile",
+  "start_papakue_page",
   // /services/（制作サービスLP）のクリック
   "services_form",
   "services_work_home",
