@@ -72,7 +72,7 @@ footer { max-width: 960px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px
 @media (prefers-reduced-motion: no-preference) { .btn, .pref, .muni { transition: background .15s; } }
 /* ---- 2026-11-09 LP化：ホームは「画像のLPだけ」。ボタンを押すと都道府県の一覧が現れる。PCは横長の画像、スマホは縦長の画像 ---- */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.lp { max-width: 1600px; margin: 0 auto; padding: 0; }
+.lp { max-width: none; margin: 0; padding: 0; }   /* 横長の画像は、画面の幅いっぱいに（左右に余白を作らない） */
 .lp > * { min-width: 0; }
 .lp-fig { margin: 0; position: relative; }
 .lp-fig img { display: block; width: 100%; height: auto; }
