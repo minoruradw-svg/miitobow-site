@@ -10,6 +10,8 @@
 // 個人情報（メール等）はログに出さない。
 
 // 相談の分野（/services/ の実際のメニュー3本＋まだ決まっていない）。ミニフォームと整理ページで共通。
+import { denyIfBadPin } from "./board/_lib.js";   // 合言葉の失敗回数でロックする、掲示板と共通の仕組み
+
 const KINDS = {
   lp: "紹介ページ・LPを作りたい",
   tool: "小さなWebツール（試作品）を作りたい",
@@ -20,15 +22,13 @@ const SOURCES = { form: "ミニフォーム", organize: "整理シート" };   /
 const MAX_BODY = 4000, MAX_URL = 300, MAX_NAME = 50, MAX_EMAIL = 254;
 const RATE_MAX = 5;            // 同じ接続元から1時間に5件まで
 const RATE_TTL = 3600;
+const NL = String.fromCharCode(10);
+const NOTIFY_DAILY_CAP = 30;   // 1日にLINEへ送る通知の上限（超えても受付は保存。LINEの月間の送信枠を守る）
 const RETENTION_TTL = 60 * 60 * 24 * 183;   // 受付データの保管期間＝約6か月で自動的に消える（個人情報ページの記載と一致させること）
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/;
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
-}
-function checkPin(request, env) {
-  const pin = request.headers.get("X-Board-Pin") || "";
-  return env.BOARD_PIN && pin === env.BOARD_PIN;
 }
 async function sha(text) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
@@ -49,12 +49,23 @@ function validUrl(s) {
 
 async function notifyLine(env, rec) {
   if (!env.LINE_TOKEN) return "unconfigured";
-  const text = `【新しいWeb制作の相談】\n受付ID：${rec.id}\n相談の種類：${KINDS[rec.kind]}\n経路：${SOURCES[rec.source] || SOURCES.form}\n（内容は秘書セッションで確認できます）`;
+  // 1日の通知回数の上限（日付ごとのカウンタ。2日で消える）
+  const day = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10).replace(/-/g, "");
+  const ckey = "consult:nc:" + day;
+  let n = 0;
+  try { n = parseInt((await env.MIITOBOW_BOARD.get(ckey)) || "0", 10) || 0; } catch (e) { n = 0; }
+  if (n >= NOTIFY_DAILY_CAP) return "capped";
+  try { await env.MIITOBOW_BOARD.put(ckey, String(n + 1), { expirationTtl: 172800 }); } catch (e) { /* 数えられなくても続行 */ }
+  const text = `【新しいWeb制作の相談】${NL}受付ID：${rec.id}${NL}相談の種類：${KINDS[rec.kind]}${NL}経路：${SOURCES[rec.source] || SOURCES.form}${NL}（内容は秘書セッションで確認できます）`;
+  // 宛先：LINE_ADMIN_TO（運営者のユーザーID等）があれば、その宛先だけに送る。無ければ、既存のGoogleフォーム通知と同じ「友だち全員」への配信。
+  const push = !!env.LINE_ADMIN_TO;
+  const url = push ? "https://api.line.me/v2/bot/message/push" : "https://api.line.me/v2/bot/message/broadcast";
+  const payload = push ? { to: env.LINE_ADMIN_TO, messages: [{ type: "text", text }] } : { messages: [{ type: "text", text }] };
   try {
-    const res = await fetch("https://api.line.me/v2/bot/message/broadcast", {
+    const res = await fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json", Authorization: "Bearer " + env.LINE_TOKEN },
-      body: JSON.stringify({ messages: [{ type: "text", text }] }),
+      body: JSON.stringify(payload),
     });
     return res.ok ? "sent" : "failed";
   } catch (e) {
@@ -117,7 +128,8 @@ export async function onRequestPost({ request, env }) {
 }
 
 export async function onRequestGet({ request, env }) {
-  if (!checkPin(request, env)) return json({ error: "unauthorized" }, 401);
+  const denied = await denyIfBadPin(request, env);   // 失敗が続くと一定時間ロック
+  if (denied) return denied;
   const url = new URL(request.url);
   const list = await env.MIITOBOW_BOARD.list({ prefix: "consult:r:" });
   const out = [];
@@ -125,7 +137,7 @@ export async function onRequestGet({ request, env }) {
     const raw = await env.MIITOBOW_BOARD.get(k.name);
     if (!raw) continue;
     let rec = JSON.parse(raw);
-    if (url.searchParams.get("retry") === "1" && (rec.notify === "pending" || rec.notify === "failed" || rec.notify === "unconfigured")) {
+    if (url.searchParams.get("retry") === "1" && (rec.notify === "pending" || rec.notify === "failed" || rec.notify === "unconfigured" || rec.notify === "capped")) {
       const st = await notifyLine(env, rec);
       if (st !== rec.notify) { rec.notify = st; await env.MIITOBOW_BOARD.put(k.name, JSON.stringify(rec), { expirationTtl: RETENTION_TTL }); }
     }
