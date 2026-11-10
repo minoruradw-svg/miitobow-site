@@ -24,6 +24,9 @@ const SCHEMAS = {
     price_info: { max: 600 }, schedule: { max: 600 }, cta_url: { max: 300, url: true }, must_words: { max: 600 },
     ng_words: { max: 600 }, assets_urls: { max: 1200, urls: true }, ref_urls: { max: 1200, urls: true },
     publish_pref: { max: 600 }, extra: { max: 2000 },
+    // 2026-11-10追加（LPの質問シートの観点を、自分の言葉で組み直した7欄）
+    buyer: { max: 300 }, hesitation: { max: 800 }, guarantee: { max: 600 }, cta_after: { max: 600 },
+    payment_flow: { max: 600 }, brand: { max: 400 }, feel: { max: 300 },
   },
   // コスプレ小道具・フィギュア。住所・電話番号の欄は作らない（受け渡しが決まってからメールで聞く）
   prop: {

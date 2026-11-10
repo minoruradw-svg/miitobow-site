@@ -64,7 +64,7 @@ textarea{min-height:5.5rem;resize:vertical}
 <section id="v-form" hidden>
 <h1 tabindex="-1">制作の材料を、<br>教えてください。</h1>
 <p><span id="who"></span>分かる範囲で大丈夫です。空欄は飛ばしてください。</p>
-<div class="notice" id="n-lp"><b>ここに書いていただいたことだけを、使います。</b>実績・数字・お客様の声など、事実でないものは、こちらで作りません。無い場合は、空欄で大丈夫です。</div>
+<div class="notice" id="n-lp"><b>ここに書いていただいたことだけを、使います。</b>実績・数字・お客様の声など、事実でないものは、こちらで作りません。無い場合は、空欄で大丈夫です。<b>空欄の項目は「確認中」として残します。</b></div>
 <div class="notice" id="n-tool" hidden><b>ここに書いていただいたことだけを、使います。</b>個人情報の取り扱い・ログイン・決済が必要なものは、お受けできない場合があります（判断はこちらで行います）。決まっていないところは、空欄で大丈夫です。<b>「計算の決まりごと」と「入力と結果の例」</b>があると、正確に作れます。</div>
 <div class="notice" id="n-prop" hidden><b>ここに書いていただいたことだけを、使います。</b>権利を確認できないものは、お受けできない場合があります（判断はこちらで行います）。<b>住所・電話番号は、ここでは入力しないでください。</b>受け渡しが決まってから、メールでお聞きします。</div>
 
@@ -77,17 +77,27 @@ textarea{min-height:5.5rem;resize:vertical}
 <div class="card">
 <div class="field"><label class="l" for="service_name">商品・サービスの名前</label><input type="text" id="service_name" maxlength="100"></div>
 <div class="field"><label class="l" for="offer_detail">提供する内容を、くわしく</label><p class="hint">何ができるか・どんな人向けか・どんな流れか</p><textarea id="offer_detail" maxlength="3000"></textarea></div>
-<div class="field"><label class="l" for="features">特徴・選ばれる理由</label><textarea id="features" maxlength="2000"></textarea></div>
+<div class="field"><label class="l" for="buyer">申し込む人と、使う人は同じですか？</label><p class="hint">違う場合は、両方を。（例：使うのは子ども・申し込むのは親）</p><input type="text" id="buyer" maxlength="300"></div>
+<div class="field"><label class="l" for="features">特徴・選ばれる理由</label><p class="hint">ほかではなくこれを選ぶ、いちばん伝えたい理由を、1行目に書いてください。</p><textarea id="features" maxlength="2000"></textarea></div>
 <div class="field"><label class="l" for="evidence">実績・数字・お客様の声</label><p class="hint">事実のものだけ。無ければ、空欄でOKです。</p><textarea id="evidence" maxlength="2000"></textarea></div>
+<div class="field"><label class="l" for="guarantee">保証・返金・キャンセルの条件</label><p class="hint">決まっているものだけ。無ければ空欄でOKです。</p><textarea id="guarantee" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="price_info">価格・プラン</label><input type="text" id="price_info" maxlength="600"></div>
 <div class="field"><label class="l" for="schedule">日程・提供の時期</label><input type="text" id="schedule" maxlength="600"></div>
 <div class="field"><label class="l" for="cta_url">申込先・誘導したい先のURL</label><p class="hint">ボタンを押した人が行く先（ストア・フォームなど）</p><input type="url" id="cta_url" maxlength="300" placeholder="https://" inputmode="url"><p class="err" id="e-cta_url" role="alert"></p></div>
+<div class="field"><label class="l" for="cta_after">ボタンを押した人に、そのあと何が起きますか？</label><p class="hint">例：LINE登録で動画が届く／申込フォームに進む</p><textarea id="cta_after" maxlength="600"></textarea></div>
+<div class="field"><label class="l" for="payment_flow">支払い方法と、申し込み後に届くもの・連絡</label><p class="hint">決まっている範囲で。</p><textarea id="payment_flow" maxlength="600"></textarea></div>
 </div>
 <div class="card">
+<div class="field"><label class="l" for="hesitation">申し込みをためらう理由・よく聞かれる不安</label><p class="hint">よくある質問と、ボタンの直前の一言に使います。</p><textarea id="hesitation" maxlength="800"></textarea></div>
 <div class="field"><label class="l" for="must_words">必ず入れたい言葉・内容</label><textarea id="must_words" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="ng_words">入れてほしくない表現</label><textarea id="ng_words" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="assets_urls">写真・ロゴの置き場所（共有URL）</label><p class="hint">1行に1つ。Googleドライブなどの共有リンクを入れてください。メールへの添付でも大丈夫です。</p><textarea id="assets_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-assets_urls" role="alert"></p></div>
+<div class="field"><span class="l" id="br-l">ロゴ・ブランドの色</span><div class="opts" role="radiogroup" aria-labelledby="br-l">
+<label><input type="radio" name="br" value="ロゴがある（上の共有URLに入れる）">ロゴがある（上の共有URLに入れる）</label>
+<label><input type="radio" name="br" value="ロゴは無い・文字で置いてほしい">ロゴは無い・文字で置いてほしい</label>
+<label><input type="radio" name="br" value="ロゴは無い・仮のロゴを1案つくってほしい">ロゴは無い・仮のロゴを1案つくってほしい</label></div><p class="hint">ブランドの色が決まっていれば、一番下の「ほかに伝えたいこと」に書いてください。</p></div>
 <div class="field"><label class="l" for="ref_urls">参考にしたいページ</label><p class="hint">1行に1つ。まだ無い方は下のギャラリーから探せます（外部サイトが新しいタブで開きます）。気に入ったデザインがあればページのURLを下の欄に貼ってください。</p><p class="hint" style="font-weight:700">参考は雰囲気や構成の方向性を知るためのものです。同じ作りをお約束するものではありません。内容と範囲を見てできることをお伝えします。</p><div class="refcards"><a class="refcard" href="https://sankoudesign.com/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>SANKOU!｜Webデザインのギャラリー</b><small>Webサイト・LPのデザインの参考を、まとめて見られるギャラリー。</small><div class="rc-u">https://sankoudesign.com/</div></div><div class="rc-i" style="background:#2f2827;color:#fff">SANKOU!</div></a><a class="refcard" href="https://webdesignclip.com/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>Web Design Clip｜日本のWebデザインのギャラリー</b><small>日本のおしゃれなWebサイトを、たくさん見られるギャラリー。</small><div class="rc-u">https://webdesignclip.com/</div></div><div class="rc-i" style="background:#333;color:#fff">Web Design Clip</div></a><a class="refcard" href="https://muuuuu.org/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>MUUUUU.ORG｜Webデザインのギャラリー</b><small>すぐれたデザインのWebサイトを、毎日ひとつ紹介するギャラリー。</small><div class="rc-u">https://muuuuu.org/</div></div><div class="rc-i" style="background:#1f6a80;color:#fff">MUUUUU.ORG</div></a></div><textarea id="ref_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-ref_urls" role="alert"></p></div>
+<div class="field"><label class="l" for="feel">最初の画面で、感じてほしい気持ち</label><p class="hint">主に見るのは、スマホですか、パソコンですか。</p><input type="text" id="feel" maxlength="300"></div>
 <div class="field"><span class="l" id="pp-l">公開先の希望</span><div class="opts" role="radiogroup" aria-labelledby="pp-l">
 <label><input type="radio" name="pp" value="おまかせしたい">おまかせしたい</label>
 <label><input type="radio" name="pp" value="すでに公開先（サーバー等）がある">すでに公開先（サーバー等）がある</label>
@@ -200,7 +210,7 @@ var tm=(location.hash||"").match(/^#t=([0-9a-f]{64})$/);
 var token=tm?tm[1]:"";
 // 分野ごとの欄：APIの項目名 → 画面の部品のid（radio は別扱い）
 var SPEC={
-  lp:{text:["service_name","offer_detail","features","evidence","price_info","schedule","cta_url","must_words","ng_words","assets_urls","ref_urls","extra"],radios:{publish_pref:"pp"},pre:"",errs:["cta_url","assets_urls","ref_urls"]},
+  lp:{text:["service_name","offer_detail","features","evidence","price_info","schedule","cta_url","must_words","ng_words","assets_urls","ref_urls","extra","buyer","hesitation","guarantee","cta_after","payment_flow","feel"],radios:{publish_pref:"pp",brand:"br"},pre:"",errs:["cta_url","assets_urls","ref_urls"]},
   tool:{text:["tool_name","purpose","users","inputs","outputs","rules","examples","screen_idea","data_notes","deadline","ref_urls","assets_urls","must_words","ng_words","extra"],radios:{devices:"t_dev",data_handling:"t_data",publish_pref:"t_pub"},pre:"t_",errs:["ref_urls","assets_urls"]},
   prop:{text:["item_name","usage","size_detail","colors","parts_pref","extras","deadline","rights_source","ref_images_urls","ref_notes","must_words","ng_words","extra"],radios:{finish_pref:"p_finish",rights_status:"p_rights"},pre:"p_",errs:["ref_images_urls"]}
 };
