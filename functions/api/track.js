@@ -40,6 +40,10 @@ const ALLOWED_START_TARGETS = new Set([
   "services_work_windows",
   "services_work_papakue",   // 2026-11-09追加・ユーザー承認（制作事例のパパクエ紹介ページ）
   "services_work_bus",       // 2026-11-09追加・ユーザー承認（制作事例のバスマップ紹介ページ）
+  // /services/organize/（相談内容の整理ページ）の3つの節目（2026-11-10追加・ユーザー承認。会話・入力内容は記録しない）
+  "organize_start",
+  "organize_sheet_ready",
+  "organize_send",
   "services_nav_plan",
   "services_nav_works",
 ]);

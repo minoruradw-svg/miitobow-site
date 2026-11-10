@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>相談内容を整理する｜制作サービス｜ミートボー | miitobow</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="質問に答えるだけで、作りたいものを「制作相談シート」にまとめます。決まっていなくても大丈夫です。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2E7D5;--cream:#FBF6EA;--ink:#345F68;--g:#4CA468;--g2:#DCEBD6;--red:#C4414D;--line:#E4D6BD;--y:#FFF3C4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 "Zen Kaku Gothic New","Hiragino Sans","Meiryo",system-ui,sans-serif}
+a{color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.top{padding:.8rem 1rem;border-bottom:1px solid var(--line);background:rgba(242,231,213,.95)}
+.top a{font-weight:700;text-decoration:none}
+main{max-width:40rem;margin:0 auto;padding:1.4rem 1rem 4rem}
+h1{font-family:"Shippori Mincho B1",serif;font-size:clamp(1.5rem,6.6vw,2.2rem);line-height:1.35;margin:.2rem 0 .8rem}
+h1 .nb{display:inline-block}
+h2{font-size:1.15rem;margin:1.4rem 0 .4rem}
+.card{background:#fff;border:2px solid var(--g2);border-radius:1.4rem;padding:1.2rem 1.1rem;margin:1rem 0}
+.oks{list-style:none;margin:.8rem 0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.oks li{background:var(--g2);border-radius:999px;padding:.1rem .9rem;font-size:.88rem;font-weight:700}
+.oks li:before{content:"✓ ";color:var(--g)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:3.2rem;border:2px solid var(--g);border-radius:999px;background:var(--g);color:#fff;font:inherit;font-weight:700;font-size:1.02rem;cursor:pointer;margin:.6rem 0;text-align:center;text-decoration:none;padding:.5rem 1rem}
+.btn.alt{background:#fff;color:var(--ink)}
+.btn[disabled]{opacity:.55;cursor:wait}
+.notice{background:var(--y);border-radius:.9rem;padding:.7rem .9rem;font-size:.88rem;margin:.8rem 0}
+.mito{display:flex;gap:.7rem;align-items:center;margin-bottom:.6rem}
+.mito img{flex:none;width:2.8rem;height:2.8rem;border-radius:50%;object-fit:cover;object-position:50% 4%;background:#F7D9B8;border:2px solid #fff}
+.prog{font-size:.85rem;color:#5a7a82;display:flex;justify-content:space-between;align-items:center;gap:.6rem}
+.bar{height:.5rem;background:var(--g2);border-radius:999px;margin:.3rem 0 .8rem;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--g);width:0;transition:width .25s}
+.q{font-size:1.1rem;font-weight:700;margin:.4rem 0}
+.hint{font-size:.85rem;color:#5a7a82;margin:.1rem 0 .6rem}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opts label{display:flex;align-items:center;gap:.7rem;min-height:3.1rem;padding:.5rem .9rem;border:2px solid var(--line);border-radius:.9rem;background:var(--cream);cursor:pointer;font-weight:700}
+.opts input{width:1.2rem;height:1.2rem;accent-color:var(--g);flex:none}
+.opts label:has(input:checked){background:var(--g2);border-color:var(--g)}
+.opts label:has(input:checked):after{content:"選択中";margin-left:auto;font-size:.72rem;background:var(--g);color:#fff;border-radius:999px;padding:0 .6rem;white-space:nowrap}
+input[type=text],input[type=url],input[type=email],textarea{width:100%;font:inherit;color:var(--ink);padding:.7rem .8rem;border:2px solid var(--line);border-radius:.8rem;background:#fff}
+textarea{min-height:6rem;resize:vertical}
+.count{text-align:right;font-size:.78rem;color:#6b8288}
+.err{color:var(--red);font-weight:700;font-size:.88rem;margin:.3rem 0 0}
+.row{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:space-between;margin-top:.6rem}
+.link{background:none;border:0;color:var(--ink);text-decoration:underline;font:inherit;font-size:.92rem;cursor:pointer;padding:.5rem .4rem;min-height:2.75rem;min-width:2.75rem}
+.sec{border-radius:.9rem;padding:.7rem .9rem;margin:.8rem 0}
+.s1{background:var(--g2)}.s2{background:var(--y)}.s3{background:#fff;border:1px dashed #7a949a}
+.sec h3{margin:.2rem 0 .4rem;font-size:1.05rem}
+.sec h3 small{font-weight:400;font-size:.8rem}
+dl.facts{margin:0}
+dl.facts dt{font-weight:700;font-size:.85rem;margin-top:.7rem}
+dl.facts dd{margin:.1rem 0 0;display:flex;gap:.5rem;align-items:flex-start;justify-content:space-between}
+dl.facts .val{flex:1;white-space:pre-wrap;word-break:break-word}
+dl.facts .ed{flex:none;background:#fff;border:1px solid var(--g);color:var(--ink);border-radius:999px;font:inherit;font-size:.8rem;padding:.2rem .8rem;min-height:2.4rem;cursor:pointer}
+dl.facts textarea{min-height:4rem}
+.editbox{flex:1}
+.warn{background:#fde3e5;border:2px solid var(--red);border-radius:.9rem;padding:.7rem .9rem;font-weight:700;margin:.8rem 0}
+.done{background:var(--g2);border:2px solid var(--g);border-radius:1.2rem;padding:1.2rem;font-weight:700}
+.done p{margin:.2rem 0}
+.copybox{width:100%;min-height:9rem;font-size:.82rem}
+.ok-msg{color:var(--g);font-weight:700;min-height:1.4rem}
+.field{margin:.8rem 0}
+.field label.l{display:block;font-weight:700;margin-bottom:.3rem}
+.req{background:var(--red);color:#fff;font-size:.72rem;border-radius:.3rem;padding:0 .4rem;margin-left:.4rem;vertical-align:middle}
+.opt{font-size:.78rem;color:#6b8288;margin-left:.4rem;font-weight:400}
+.agree{display:flex;gap:.7rem;align-items:flex-start;font-size:.92rem}
+.agree input{width:1.3rem;height:1.3rem;margin-top:.25rem;accent-color:var(--g);flex:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.resume{background:#fff;border:2px solid var(--g);border-radius:1rem;padding:.8rem 1rem;margin:1rem 0}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><a href="/services/" id="back-link">← 制作サービスへ戻る</a></div>
+<div class="sr" id="sr" role="status"></div>
+<main id="app">
+
+<!-- 開始 -->
+<section id="v-start">
+<h1 tabindex="-1"><span class="nb">まだ、</span><span class="nb">ふわっとした話でも。</span></h1>
+<div class="resume" id="resume" hidden>
+  <b>前回の続きがあります。</b>
+  <div class="row" style="justify-content:flex-start"><button class="btn" id="do-resume" type="button" style="width:auto;margin:.3rem .4rem .3rem 0">続きから</button><button class="btn alt" id="do-fresh" type="button" style="width:auto;margin:.3rem 0">最初から</button></div>
+</div>
+<p>いくつかの質問に答えるだけで、作りたいものを<b>「制作相談シート」</b>にまとめます。決まっていないことは「分からない・あとで」でOKです。</p>
+<ul class="oks"><li>相談だけでもOK</li><li>途中でやめてもOK</li><li>分からないは飛ばせます</li></ul>
+<div class="notice">入力した内容は、<b>送信するまで、あなたの端末の中だけ</b>で処理されます。名前・メールは、最後の送信画面で入力します。</div>
+<button class="btn" id="go-start" type="button">はじめる</button>
+<p class="hint" style="text-align:center">そのまま相談したい方は <a href="/services/consult/">こちら</a> へ。</p>
+</section>
+
+<!-- 分野 -->
+<section id="v-field" hidden>
+<div class="mito"><img src="/services/images/mitobo.webp" alt="" width="45" height="45"><h1 class="q" style="margin:0;font-family:inherit" tabindex="-1">どんなことで相談したいですか？</h1></div>
+<div class="card"><div class="opts" id="field-opts" role="radiogroup" aria-label="相談の分野">
+<label><input type="radio" name="field" value="lp">紹介ページ・LPを作りたい</label>
+<label><input type="radio" name="field" value="tool">小さなWebツール（試作品）を作りたい</label>
+<label><input type="radio" name="field" value="prop">コスプレ小道具・フィギュアを作りたい</label>
+<label><input type="radio" name="field" value="undecided">まだ決まっていない</label>
+</div><p class="err" id="e-field" role="alert"></p>
+<button class="btn" id="go-field" type="button">次へ</button></div>
+</section>
+
+<!-- 質問 -->
+<section id="v-q" hidden>
+<div class="prog"><span id="prog-t">質問 1 / 8</span><button class="link" id="go-sum" type="button">ここまででまとめる</button></div>
+<div class="bar" aria-hidden="true"><b id="prog-b"></b></div>
+<div class="mito"><img src="/services/images/mitobo.webp" alt="" width="45" height="45"><h1 class="q" id="q-text" style="margin:0;font-family:inherit" tabindex="-1"></h1></div>
+<p class="hint" id="q-hint"></p>
+<div class="card" id="q-card"></div>
+<div class="row"><button class="link" id="go-back" type="button">← ひとつ前へ</button><button class="link" id="go-unknown" type="button">分からない・あとで</button></div>
+</section>
+
+<!-- シート -->
+<section id="v-sheet" hidden>
+<h1 tabindex="-1" style="font-size:1.6rem">制作相談シート（下書き）</h1>
+<div class="warn">まだ、miitobowには送られていません。内容を確認して、下のボタンから送ってください。</div>
+<div class="sec s1"><h3>あなたが話したこと <small>（「直す」で変えられます）</small></h3><dl class="facts" id="facts"></dl></div>
+<div class="sec s2"><h3>まだ決まっていないこと <small>（そのままで大丈夫）</small></h3><ul id="unknown"></ul></div>
+<div class="sec s3" id="hints-sec"><h3>ミートボーからのひとこと <small>（参考です）</small></h3><ul id="hints"></ul></div>
+
+<h2>miitobowに送る</h2>
+<form id="send" novalidate>
+  <p class="hint">メールアドレスだけ入れれば、送れます。内容を確認して、順番にお返事します。</p>
+  <div class="field"><label class="l" for="email">お返事用のメールアドレス<span class="req">必須</span></label>
+  <input type="email" id="email" maxlength="254" autocomplete="email"><p class="err" id="e-email" role="alert"></p></div>
+  <div class="field"><label class="l" for="name">お名前・呼び名<span class="opt">任意</span></label>
+  <input type="text" id="name" maxlength="50" placeholder="ニックネームでもOK" autocomplete="nickname"></div>
+  <p class="hint">いただいた内容は、ご相談への返信のためだけに使います。詳しくは <a href="/services/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a> をご覧ください。</p>
+  <div class="field"><label class="agree"><input type="checkbox" id="agree"><span>個人情報の取り扱いに同意して送信します。<span class="req">必須</span></span></label><p class="err" id="e-agree" role="alert"></p></div>
+  <div class="hp" aria-hidden="true"><label>この欄は空のままにしてください<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
+  <button class="btn" id="do-send" type="submit">この内容で相談する</button>
+  <div id="send-status" role="status"></div>
+</form>
+
+<details style="margin-top:1.2rem"><summary>ほかの送り方（依頼フォーム／コピー）</summary>
+  <p class="hint">制作内容が決まっている方は、Googleの依頼フォームも使えます。名前とメールを入れて送信すると、正式な相談になります。</p>
+  <a class="btn alt" id="open-form" href="#" target="_blank" rel="noopener">依頼フォームを開く（内容入り）</a>
+  <p class="err" id="e-long" hidden>内容が長いため、一部だけが入っています。全文は「内容をコピー」して、フォームの「ご依頼内容の詳細」に貼り替えてください。</p>
+  <button class="btn alt" id="do-copy" type="button">内容をコピー</button>
+  <p class="ok-msg" id="copied" role="status"></p>
+  <textarea class="copybox" id="copybox" readonly aria-label="コピー用の文章"></textarea>
+</details>
+<div class="row" style="justify-content:flex-start"><button class="link" id="go-edit" type="button">← 質問に戻って直す</button></div>
+<div class="notice">料金や納期は、ここでは決まりません。<a href="/services/#plan" target="_blank" rel="noopener">料金・範囲のページ</a>に目安があり、内容を確認したうえで正式な見積もりをお伝えします。</div>
+</section>
+
+<!-- 完了 -->
+<section id="v-done" hidden>
+<h1 tabindex="-1" style="font-size:1.5rem">ありがとうございました</h1>
+<div class="done"><p>ご相談ありがとうございます！</p><p>内容を受け付けました。</p><p>確認後、順番にお返事します。</p><p class="hint" id="rid" style="font-weight:400"></p></div>
+<p class="hint">お手元に控えを残したい方は、下のボタンでコピーできます。</p>
+<button class="btn alt" id="do-copy2" type="button">相談シートの控えをコピー</button>
+<p class="ok-msg" id="copied2" role="status"></p>
+<a class="btn alt" href="/services/">制作サービスへ戻る</a>
+</section>
+</main>
+
+<script>
+(function(){
+"use strict";
+var API="/api/consult";
+var FORM="https://docs.google.com/forms/d/e/1FAIpQLSfNvO-i_Z42rshMFWYFez8Ya7sqdJ3A-jj4ZCVVsSFkIOdLpA/viewform";
+var ENTRY={kind:"2123906518",detail:"351067075",ref:"479622179",assets:"417879863",budget:"1107942505"};
+var ASSETS=["写真","ロゴ","文章の素案","まだ何もない"];
+var STORE="miitobow_organize_v1";
+var FIELDS={lp:"紹介ページ・LP",tool:"小さなWebツール（試作品）",prop:"コスプレ小道具・フィギュア",undecided:"まだ決まっていない"};
+var KIND_FORM={lp:"LP・紹介ページ制作",tool:"小規模Webツール・試作品制作",prop:"コスプレ小道具・フィギュア制作"};   // propはGoogleフォームに同名の選択肢を足した後に有効（無い間は入らないだけ）
+function O(t,u){return {t:t,u:!!u}}
+var TIMING=[O("1か月以内"),O("2〜3か月以内"),O("急がない"),O("まだ決まっていない",1)];
+var BUDGET={k:"budget",l:"予算（希望・目安）",t:"ご予算の目安はありますか？",h:"未定でOKです。ここでは金額は決まりません。",type:"text"};
+var TIMEQ={k:"timing",l:"希望時期",t:"いつ頃までに欲しいですか？",type:"choice",opts:TIMING};
+var Q={
+ lp:[
+  {k:"summary",l:"依頼内容の概要",t:"どんなページを作りたいですか？",h:"例：スマホアプリの紹介ページ",type:"text"},
+  {k:"audience",l:"想定ユーザー",t:"誰に見てもらいたいですか？",h:"一言でOKです",type:"text"},
+  {k:"goal",l:"見た人にしてほしいこと",t:"見た人に、どうしてほしいですか？",h:"例：ダウンロードしてほしい／問い合わせてほしい",type:"text"},
+  {k:"copy",l:"文章の用意",t:"ページの文章は、どうしたいですか？",type:"choice",opts:[O("自分で用意できる"),O("素案はある"),O("おまかせしたい"),O("分からない",1)]},
+  {k:"tone",l:"デザインの方向性",t:"雰囲気は、近いのはどれですか？",type:"choice",opts:[O("明るい・やさしい"),O("落ち着いた・信頼感"),O("かっこいい・シャープ"),O("まだ決まっていない",1)]},
+  {k:"assets",l:"お持ちのもの",t:"お持ちのものを教えてください。",h:"当てはまるものを、いくつでも",type:"multi",opts:ASSETS.map(function(x){return O(x)}).concat([O("ドメイン・公開先がある")])},
+  {k:"ref",l:"参考URL",t:"参考にしているサイトはありますか？",h:"URLがあれば。あとで拝見します",type:"url"},
+  BUDGET,TIMEQ],
+ tool:[
+  {k:"problem",l:"解決したいこと",t:"何を解決したいですか？",h:"例：計算が面倒／チェックを忘れる",type:"text"},
+  {k:"who",l:"使う人",t:"誰が使いますか？",type:"text"},
+  {k:"io",l:"入力と結果のイメージ",t:"何を入れると、何が出てほしいですか？",h:"例：数字を入れると、合計が出る",type:"text"},
+  {k:"features",l:"必要な機能",t:"ほかに必要な機能はありますか？",type:"text"},
+  {k:"data",l:"保存・ログイン・決済など",t:"次の中で、必要になりそうなものはありますか？",h:"当てはまるものを、いくつでも",type:"multi",opts:[O("保存する情報がある"),O("ログインが必要"),O("決済が必要"),O("個人情報を扱う"),O("どれもいらない"),O("分からない",1)],note:"内容によっては、お受けできない場合があります。内容を確認してから、お伝えします。"},
+  BUDGET,TIMEQ],
+ prop:[
+  {k:"what",l:"作りたいもの",t:"何を作りたいですか？",h:"例：ゲームキャラの武器／フィギュア",type:"text"},
+  {k:"scene",l:"使う場面",t:"どんな場面で使いますか？",h:"例：撮影／イベント／飾る",type:"text"},
+  {k:"size",l:"大きさ（最長辺）",t:"大きさは、どのくらいですか？",h:"いちばん長い辺の目安",type:"choice",opts:[O("10cm以下"),O("10〜20cm"),O("20〜30cm"),O("30cmより大きい"),O("分からない",1)]},
+  {k:"finish",l:"仕上がり",t:"仕上がりは、どれが近いですか？",type:"choice",opts:[O("未塗装（キット）"),O("基本塗装・組立済み"),O("まだ決まっていない",1)]},
+  {k:"refimg",l:"参考画像",t:"参考にする画像や資料はありますか？",type:"choice",opts:[O("ある"),O("ない")]},
+  {k:"rights",l:"原作・キャラクターの権利",t:"原作やキャラクターがあるものですか？",type:"choice",opts:[O("原作・既存のキャラクターがある"),O("オリジナル"),O("分からない",1)],note:"原作があるものは、権利の確認が必要です。内容によっては、お受けできない場合があります。"},
+  BUDGET,TIMEQ],
+ undecided:[
+  {k:"trouble",l:"困っていること",t:"困っていることを、そのまま教えてください。",h:"うまく言えなくて大丈夫です",type:"text"},
+  {k:"image",l:"作ってみたいイメージ",t:"作ってみたいイメージはありますか？",h:"例：こんな人に見てほしい",type:"text"},
+  {k:"near",l:"近いもの",t:"近いのは、どれですか？",h:"選ぶと、そのまま詳しい質問に進みます",type:"choice",opts:[O("紹介ページ・LP"),O("小さなWebツール"),O("コスプレ小道具・フィギュア"),O("まだ分からない",1)]},
+  TIMEQ]
+};
+var LAST={k:"other",l:"ほかに伝えたいこと",t:"ほかに伝えておきたいことはありますか？",h:"空欄でも大丈夫です",type:"text"};
+var NEAR_MAP={"紹介ページ・LP":"lp","小さなWebツール":"tool","コスプレ小道具・フィギュア":"prop"};
+function tx(a,k){return (a[k]&&a[k].v)?String(a[k].v):""}
+var HINTS=[
+ {f:["lp"],when:function(a){return !a.goal},text:"見た人にしてほしいことが1つ決まると、ページの作りが決めやすくなります。"},
+ {f:["lp"],when:function(a){return tx(a,"copy")==="おまかせしたい"},text:"文章をゼロから作る場合は、追加のお見積もりになることがあります。"},
+ {f:["tool"],when:function(a){return /ログイン|決済|個人情報/.test(tx(a,"data"))},text:"ログイン・決済・個人情報が必要な内容は、お受けできない場合があります。内容を確認してお伝えします。"},
+ {f:["prop"],when:function(a){return /原作/.test(tx(a,"rights"))},text:"原作やキャラクターがあるものは、権利の確認が必要です。"},
+ {f:["prop"],when:function(a){return tx(a,"size")==="30cmより大きい"},text:"30cmを超える大きさは、個別にご相談になります。"},
+ {f:["undecided"],when:function(a){return /ページ|サイト|紹介|ホームページ/.test(tx(a,"trouble")+tx(a,"image"))},text:"お話から、「紹介ページ・LP」が近そうです。質問に戻って選ぶと、詳しく整理できます。"},
+ {f:["undecided"],when:function(a){return /計算|入力|ツール|アプリ|チェック/.test(tx(a,"trouble")+tx(a,"image"))},text:"お話から、「小さなWebツール」が近そうです。質問に戻って選ぶと、詳しく整理できます。"},
+ {f:["undecided"],when:function(a){return /フィギュア|コスプレ|造形|3D|小道具/.test(tx(a,"trouble")+tx(a,"image"))},text:"お話から、「コスプレ小道具・フィギュア」が近そうです。質問に戻って選ぶと、詳しく整理できます。"}
+];
+
+function fresh(){return {v:"start",field:null,fromU:false,qs:[],idx:0,ans:{},sent:false}}
+var st=fresh();
+var qp=new URLSearchParams(location.search);
+var seen={};   // 計測：開始・シート完成・送信を、それぞれ1回だけ（内容は送らない）
+function track(ev){if(seen[ev])return;seen[ev]=1;try{fetch("/api/track",{method:"POST",headers:{"content-type":"application/json"},keepalive:true,body:JSON.stringify({event:"start_click",target:ev,page:location.pathname,utm_source:qp.get("utm_source")||"",utm_medium:qp.get("utm_medium")||"",utm_campaign:qp.get("utm_campaign")||"",utm_content:qp.get("utm_content")||""})})}catch(e){}}
+var $=function(i){return document.getElementById(i)};
+var pending=(new URLSearchParams(location.search)).get("field");if(!FIELDS[pending])pending=null;
+function save(){if(st.sent)return;try{sessionStorage.setItem(STORE,JSON.stringify(st))}catch(e){}}
+function clearSave(){try{sessionStorage.removeItem(STORE)}catch(e){}}
+function load(){try{var r=sessionStorage.getItem(STORE);if(!r)return null;var o=JSON.parse(r);if(o&&o.v&&o.ans&&Object.keys(o.ans).length&&!o.sent&&o.field)return o}catch(e){}return null}
+function nAns(){return Object.keys(st.ans).length}
+function show(id){
+  st.v=id.replace("v-","");
+  ["v-start","v-field","v-q","v-sheet","v-done"].forEach(function(v){$(v).hidden=(v!==id)});
+  window.scrollTo(0,0);if(id!=="v-q"){var h=$(id).querySelector("h1");if(h)h.focus({preventScroll:true})}
+  save();
+}
+window.addEventListener("beforeunload",function(e){if(nAns()>0&&!st.sent&&(st.v==="q"||st.v==="sheet")){e.preventDefault();e.returnValue=""}});
+
+function fieldKeys(){
+  var qs=Q[st.field].filter(function(x){return x.k!=="near"});
+  var keys=(st.fromU?["trouble","image"]:[]).concat(qs.map(function(x){return x.k}));
+  return keys.filter(function(k,i){return keys.indexOf(k)===i}).concat(["other"]);
+}
+function qdef(k){var all=[LAST];Object.keys(Q).forEach(function(f){all=all.concat(Q[f])});for(var i=0;i<all.length;i++)if(all[i].k===k)return all[i];return {k:k,l:k}}
+function begin(f){st.field=f;st.fromU=false;st.qs=Q[f].concat([LAST]);st.idx=0}
+
+// ---- 開始・分野 ----
+function init(){
+  var s=load();
+  if(s){$("resume").hidden=false;
+    $("do-resume").onclick=function(){st=s;$("resume").hidden=true;if(st.v==="sheet")sheet();else{show("v-q");render()}};
+    $("do-fresh").onclick=function(){clearSave();st=fresh();$("resume").hidden=true}}
+}
+$("go-start").onclick=function(){
+  track("organize_start");
+  if(pending){st=fresh();begin(pending);show("v-q");render();return}
+  show("v-field");
+};
+$("go-field").onclick=function(){
+  var c=document.querySelector("input[name=field]:checked");
+  if(!c){$("e-field").textContent="分野を選んでください。";$("field-opts").querySelector("input").focus();return}
+  $("e-field").textContent="";begin(c.value);show("v-q");render();
+};
+
+// ---- 質問 ----
+function cur(){return st.qs[st.idx]}
+function valText(v){return Array.isArray(v)?v.join("、"):(v||"")}
+function render(){
+  var q=cur(),n=st.qs.length,a=st.ans[q.k];
+  $("prog-t").textContent="質問 "+(st.idx+1)+" / "+n;$("prog-b").style.width=((st.idx+1)/n*100)+"%";
+  $("sr").textContent="質問 "+(st.idx+1)+"／"+n+"："+q.t;
+  $("q-text").textContent=q.t;$("q-hint").textContent=q.h||"";
+  var card=$("q-card");card.innerHTML="";
+  var err=document.createElement("p");err.className="err";err.id="e-q";err.setAttribute("role","alert");
+  var first=null;
+  if(q.type==="text"||q.type==="url"){
+    var el=document.createElement(q.type==="url"?"input":"textarea");
+    if(q.type==="url"){el.type="url";el.placeholder="https://";el.maxLength=300;el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();next()}})}
+    else{el.rows=4;el.maxLength=600}
+    el.id="in";el.setAttribute("aria-label",q.t);if(a)el.value=valText(a.v);card.appendChild(el);first=el;
+    if(q.type==="text"){var ct=document.createElement("div");ct.className="count";ct.textContent=el.value.length+" / 600";el.addEventListener("input",function(){ct.textContent=el.value.length+" / 600"});card.appendChild(ct)}
+  }else{
+    var box=document.createElement("div");box.className="opts";box.setAttribute("role",q.type==="multi"?"group":"radiogroup");box.setAttribute("aria-label",q.t);
+    var vals=a?(Array.isArray(a.v)?a.v:[a.v]):[];
+    var names=q.opts.map(function(o){return o.t});
+    var firstChecked=null,firstAny=null;
+    q.opts.forEach(function(o){var l=document.createElement("label");var i=document.createElement("input");i.type=q.type==="multi"?"checkbox":"radio";i.name="opt";i.value=o.t;if(vals.indexOf(o.t)>=0){i.checked=true;if(!firstChecked)firstChecked=i}if(!firstAny)firstAny=i;l.appendChild(i);l.appendChild(document.createTextNode(o.t));box.appendChild(l)});
+    first=firstChecked||firstAny;
+    card.appendChild(box);
+    var extra=vals.filter(function(x){return x&&names.indexOf(x)<0});
+    if(extra.length){var pv=document.createElement("div");pv.className="notice";pv.textContent="いまの答え：「"+extra.join("、")+"」（このまま「次へ」で残ります。選び直すと置き換わります）";card.appendChild(pv)}
+  }
+  if(q.note){var nt=document.createElement("div");nt.className="notice";nt.textContent=q.note;card.appendChild(nt)}
+  card.appendChild(err);
+  var nx=document.createElement("button");nx.className="btn";nx.type="button";nx.id="go-next";nx.textContent=st.idx===n-1?"まとめる":"次へ";nx.onclick=next;card.appendChild(nx);
+  $("go-back").textContent=st.idx===0?"← 分野を選び直す":"← ひとつ前へ";
+  if(first)first.focus({preventScroll:true});
+  save();
+}
+function readQ(){
+  var q=cur();
+  if(q.type==="text"||q.type==="url"){
+    var v=$("in").value.trim();
+    if(q.type==="url"&&v&&!/^https?:\/\/\S+$/i.test(v)){$("e-q").textContent="URLは http:// または https:// で始まる形式で入力してください。";$("in").focus();return null}
+    return {has:!!v,v:v,u:false};
+  }
+  var c=[].slice.call(document.querySelectorAll("#q-card input:checked")).map(function(i){return i.value});
+  if(!c.length)return {has:false};
+  var unk=q.opts.filter(function(o){return o.u}).map(function(o){return o.t});
+  var real=c.filter(function(x){return unk.indexOf(x)<0});
+  if(q.type==="multi"){return real.length?{has:true,v:real,u:false}:{has:true,v:c,u:true}}
+  return {has:true,v:c[0],u:unk.indexOf(c[0])>=0};
+}
+function store(r){var q=cur();if(r.has){st.ans[q.k]={v:r.v,u:!!r.u,edited:false}}}   // 何も選んでいない・空欄のときは、前の答えを消さない
+function next(){
+  var r=readQ();if(r===null)return;store(r);var q=cur();
+  if(q.k==="near"&&st.ans.near){
+    var f=NEAR_MAP[st.ans.near.v];var base=Q.undecided.slice(0,3);
+    if(f){st.fromU=true;st.field=f;st.qs=base.concat(Q[f]).concat([LAST])}
+    else{st.fromU=false;st.field="undecided";st.qs=Q.undecided.concat([LAST])}
+    st.idx=2;
+  }
+  go(st.idx+1);
+}
+function go(i){if(i>=st.qs.length){sheet();return}st.idx=i;show("v-q");render()}
+$("go-unknown").onclick=function(){var q=cur();delete st.ans[q.k];if(q.k==="near"){st.fromU=false;st.field="undecided";st.qs=Q.undecided.concat([LAST]);st.idx=2}go(st.idx+1)};
+$("go-back").onclick=function(){if(st.idx===0){show("v-field");return}st.idx--;render()};
+$("go-sum").onclick=function(){var r=readQ();if(r===null)return;store(r);sheet()};
+$("go-edit").onclick=function(){st.idx=Math.min(st.idx,st.qs.length-1);show("v-q");render()};
+$("back-link").addEventListener("click",function(e){if(nAns()>0&&!st.sent&&!confirm("ここまでの回答は、この端末の中に残ります。戻りますか？"))e.preventDefault()});
+
+// ---- シート ----
+function rows(){
+  var facts=[],unk=[];
+  fieldKeys().forEach(function(k){
+    if(k==="near")return;var a=st.ans[k],d=qdef(k);
+    if(a&&!a.u&&valText(a.v).trim()!=="")facts.push({k:k,l:d.l,text:valText(a.v)});
+    else if(k!=="other")unk.push({l:d.l,text:(a&&a.u)?valText(a.v):""});
+  });
+  return {facts:facts,unk:unk};
+}
+function sheet(){
+  var r=rows(),fa=$("facts");fa.innerHTML="";
+  var add=function(l,t,k){var dt=document.createElement("dt");dt.textContent=l;var dd=document.createElement("dd");var sp=document.createElement("span");sp.className="val";sp.textContent=t;dd.appendChild(sp);
+    if(k){var b=document.createElement("button");b.type="button";b.className="ed";b.textContent="直す";b.setAttribute("aria-label",l+"を直す");b.onclick=function(){editRow(dd,k,l,t)};dd.appendChild(b)}
+    fa.appendChild(dt);fa.appendChild(dd)};
+  add("制作の種類",FIELDS[st.field],null);
+  r.facts.forEach(function(f){add(f.l,f.text,f.k)});
+  if(!r.facts.length){var p=document.createElement("p");p.className="hint";p.textContent="まだ、お話しいただいた内容がありません。「質問に戻って直す」から、答えを足せます。";fa.appendChild(p)}
+  var u=$("unknown");u.innerHTML="";
+  (r.unk.length?r.unk:[{l:"（ありません）",text:null}]).forEach(function(x){var li=document.createElement("li");li.textContent=x.text===null?x.l:(x.l+" … 未定"+(x.text?"（"+x.text+"）":""));u.appendChild(li)});
+  var h=$("hints");h.innerHTML="";
+  var hs=HINTS.filter(function(x){return x.f.indexOf(st.field)>=0&&x.when(st.ans)});
+  hs.forEach(function(x){var li=document.createElement("li");li.textContent=x.text;h.appendChild(li)});$("hints-sec").hidden=!hs.length;
+  refreshOut();show("v-sheet");track("organize_sheet_ready");
+}
+function editRow(dd,k,label,text){
+  dd.innerHTML="";var box=document.createElement("div");box.className="editbox";
+  var t=document.createElement("textarea");t.maxLength=700;t.value=text;t.setAttribute("aria-label",label);
+  var ok=document.createElement("button");ok.type="button";ok.className="btn";ok.style.width="auto";ok.style.minHeight="2.6rem";ok.textContent="これで決定";
+  var cancel=document.createElement("button");cancel.type="button";cancel.className="link";cancel.textContent="やめる";
+  ok.onclick=function(){var v=t.value.trim();if(v)st.ans[k]={v:v,u:false,edited:true};else delete st.ans[k];sheet()};
+  cancel.onclick=function(){sheet()};
+  box.appendChild(t);box.appendChild(ok);box.appendChild(cancel);dd.appendChild(box);t.focus();
+}
+function sheetText(){
+  var r=rows();var L=["【制作相談シート】","制作の種類："+FIELDS[st.field],"","■お客様が話したこと"];
+  r.facts.forEach(function(f){L.push("・"+f.l+"："+f.text)});if(!r.facts.length)L.push("・（なし）");
+  L.push("","■まだ決まっていないこと");L.push(r.unk.length?r.unk.map(function(x){return "・"+x.l+(x.text?"（"+x.text+"）":"")}).join("\n"):"・なし");
+  L.push("","※質問に答える形式で整理した内容です。");return L.join("\n");
+}
+function refOf(){return st.ans.ref&&!st.ans.ref.u?valText(st.ans.ref.v):""}
+function buildFormUrl(){
+  var p=["usp=pp_url"],a=st.ans;
+  if(KIND_FORM[st.field])p.push("entry."+ENTRY.kind+"="+encodeURIComponent(KIND_FORM[st.field]));
+  if(refOf())p.push("entry."+ENTRY.ref+"="+encodeURIComponent(refOf()));
+  if(a.budget&&!a.budget.u)p.push("entry."+ENTRY.budget+"="+encodeURIComponent(valText(a.budget.v)));
+  var as=a.assets&&!a.assets.u?(Array.isArray(a.assets.v)?a.assets.v:String(a.assets.v).split("、")):[];
+  as.forEach(function(x){if(ASSETS.indexOf(x)>=0)p.push("entry."+ENTRY.assets+"="+encodeURIComponent(x))});
+  var text=sheetText(),base=FORM+"?"+p.join("&"),LIMIT=800,long=false;
+  if(text.length>LIMIT){long=true;text=text.slice(0,LIMIT)+"\n…（続きは、コピーして貼り付けます）"}
+  return {url:base+"&entry."+ENTRY.detail+"="+encodeURIComponent(text),long:long};
+}
+function refreshOut(){var r=buildFormUrl();$("open-form").href=r.url;$("e-long").hidden=!r.long;$("copybox").value=sheetText();$("copied").textContent=""}
+function copyText(msgEl){
+  var t=sheetText();var ok=function(){msgEl.textContent="コピーしました。"};
+  var fb=function(){var b=$("copybox");b.value=t;var d=b.closest("details");if(d)d.open=true;b.focus();b.select();try{if(document.execCommand("copy"))ok();else msgEl.textContent="コピーできませんでした。文章を選んでコピーしてください。"}catch(e){msgEl.textContent="コピーできませんでした。文章を選んでコピーしてください。"}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb)}else fb();
+}
+$("do-copy").onclick=function(){copyText($("copied"))};
+$("do-copy2").onclick=function(){copyText($("copied2"))};
+
+// ---- 送信（自社の受付 /api/consult） ----
+var sendKey=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)+"0000";
+var busy=false;
+function setErr(id,m){var e=$("e-"+id);if(e)e.textContent=m||""}
+$("email").addEventListener("input",function(){setErr("email","")});
+$("agree").addEventListener("change",function(){setErr("agree","")});
+$("send").addEventListener("submit",function(e){
+  e.preventDefault();if(busy)return;
+  setErr("email","");setErr("agree","");var bad=null;
+  if(!/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/.test($("email").value.trim())){setErr("email","メールアドレスの形式を確認してください。");bad=bad||$("email")}
+  if(!$("agree").checked){setErr("agree","個人情報の取り扱いへの同意が必要です。");bad=bad||$("agree")}
+  if(bad){bad.focus();return}
+  busy=true;var btn=$("do-send");btn.disabled=true;btn.textContent="送信しています…";$("send-status").innerHTML="";
+  var payload={kind:st.field,source:"organize",body:sheetText(),url:refOf(),name:$("name").value,email:$("email").value.trim(),agree:true,hp:$("hp").value,key:sendKey};
+  fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)})
+  .then(function(r){return r.json().then(function(j){return {s:r.status,j:j}})})
+  .then(function(x){
+    if(x.j&&x.j.ok){track("organize_send");st.sent=true;clearSave();$("rid").textContent=(x.j.id&&x.j.id!=="C-ignored")?"受付ID："+x.j.id:"";show("v-done");return}
+    if(x.s===400&&x.j&&x.j.fields){if(x.j.fields.email)setErr("email",x.j.fields.email);if(x.j.fields.agree)setErr("agree",x.j.fields.agree);fail("入力内容を確認してください。");return}
+    if(x.s===429){fail("送信が続いたため、いったん受け付けを止めています。時間をおいて、もう一度お試しください。");return}
+    fail();
+  }).catch(function(){fail("通信が途中で切れました。受付済みの可能性があります。同じ内容を重ねて送っても、二重には受け付けません。")});
+});
+function fail(extra){busy=false;var b=$("do-send");b.disabled=false;b.textContent="この内容で相談する";
+  var d=document.createElement("div");d.className="warn";d.setAttribute("role","alert");
+  d.appendChild(document.createTextNode("送信を確認できませんでした。入力内容はそのまま残しています。時間をおいて再度お試しください。（下の「ほかの送り方」も使えます）"));
+  if(extra){var s=document.createElement("div");s.style.fontWeight="400";s.textContent=extra;d.appendChild(s)}
+  $("send-status").innerHTML="";$("send-status").appendChild(d)}
+
+init();
+})();
+</script>
+</body>
+</html>

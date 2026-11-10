@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>気軽に相談する｜制作サービス｜ミートボー | miitobow</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="まだ、ふわっとした話でも大丈夫。こんなサイト作れる？何から始めたらいい？そんな段階からのご相談を受け付けます。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2E7D5;--cream:#FBF6EA;--ink:#345F68;--g:#4CA468;--g2:#DCEBD6;--red:#C4414D;--line:#E4D6BD}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 "Zen Kaku Gothic New","Hiragino Sans","Meiryo",system-ui,sans-serif}
+a{color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.top{padding:.8rem 1rem;border-bottom:1px solid var(--line);background:rgba(242,231,213,.95)}
+.top a{font-weight:700;text-decoration:none}
+main{max-width:40rem;margin:0 auto;padding:1.6rem 1rem 4rem}
+h1 .nb{display:inline-block}
+h1{font-family:"Shippori Mincho B1",serif;font-size:clamp(1.5rem,6.6vw,2.3rem);line-height:1.35;margin:.2rem 0 .8rem}
+.lead{margin:0 0 .8rem}
+.lead span{display:block}
+.oks{list-style:none;margin:.8rem 0 1.6rem;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.oks li{background:var(--g2);border-radius:999px;padding:.1rem .9rem;font-size:.88rem;font-weight:700}
+.oks li:before{content:"✓ ";color:var(--g)}
+form{background:#fff;border:2px solid var(--g2);border-radius:1.4rem;padding:1.3rem 1.1rem}
+fieldset{border:0;margin:0 0 1.4rem;padding:0}
+legend,label.l{display:block;font-weight:700;margin:0 0 .5rem;padding:0}
+.req{background:var(--red);color:#fff;font-size:.72rem;border-radius:.3rem;padding:0 .4rem;margin-left:.4rem;vertical-align:middle}
+.opt{font-size:.78rem;color:#6b8288;margin-left:.4rem;font-weight:400}
+.hint{font-size:.85rem;color:#5a7a82;margin:.1rem 0 .5rem}
+.kinds{display:flex;flex-direction:column;gap:.5rem}
+.kinds label{display:flex;align-items:center;gap:.7rem;min-height:3.2rem;padding:.5rem .9rem;border:2px solid var(--line);border-radius:.9rem;background:var(--cream);cursor:pointer;font-weight:700;transition:background .15s,border-color .15s}
+.kinds input{width:1.2rem;height:1.2rem;accent-color:var(--g);flex:none}
+.kinds label:has(input:checked){background:var(--g2);border-color:var(--g)}
+.kinds label:has(input:checked):after{content:"選択中";margin-left:auto;white-space:nowrap;flex:none;font-size:.72rem;background:var(--g);color:#fff;border-radius:999px;padding:0 .6rem}
+input[type=text],input[type=email],input[type=url],textarea{width:100%;font:inherit;color:var(--ink);padding:.7rem .8rem;border:2px solid var(--line);border-radius:.8rem;background:#fff}
+textarea{min-height:8rem;resize:vertical}
+input:focus,textarea:focus{border-color:var(--g)}
+.err{color:var(--red);font-size:.88rem;font-weight:700;margin:.3rem 0 0;min-height:0}
+.count{text-align:right;font-size:.8rem;color:#6b8288}
+.agree{display:flex;gap:.7rem;align-items:flex-start;font-size:.92rem}
+.agree input{width:1.3rem;height:1.3rem;margin-top:.25rem;accent-color:var(--g);flex:none}
+.purpose{font-size:.85rem;background:var(--cream);border-radius:.8rem;padding:.7rem .9rem;margin:0 0 .8rem}
+button.go{display:block;width:100%;min-height:3.4rem;border:0;border-radius:999px;background:var(--g);color:#fff;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;transition:background .15s}
+button.go:hover{background:#3f8f58}
+button.go[disabled]{background:#8aa89a;cursor:wait}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.status{margin-top:1rem;font-weight:700}
+.done{background:var(--g2);border:2px solid var(--g);border-radius:1.2rem;padding:1.2rem}
+.done p{margin:.2rem 0}
+.alert{background:#fff;border:2px solid var(--red);border-radius:1rem;padding:.8rem 1rem;color:var(--red)}
+.formal{margin-top:1.6rem;font-size:.92rem}
+.formal a{font-weight:700}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><a href="/services/">← 制作サービスへ戻る</a></div>
+<main>
+<h1><span class="nb">まだ、</span><span class="nb">ふわっとした話でも。</span></h1>
+<p class="lead"><span>「こんなサイト作れる？」</span><span>「何から始めたらいい？」</span>そんな段階からでも大丈夫です。まずは、今考えていることを気軽に聞かせてください。</p>
+<ul class="oks"><li>相談だけでもOK</li><li>イメージが決まっていなくてもOK</li><li>依頼前提でなくてもOK</li></ul>
+
+<form id="f" novalidate>
+ <fieldset>
+  <legend>相談の種類<span class="req">必須</span></legend>
+  <div class="kinds" id="kinds" role="radiogroup" aria-describedby="e-kind">
+   <label><input type="radio" name="kind" value="lp">紹介ページ・LPを作りたい</label>
+   <label><input type="radio" name="kind" value="tool">小さなWebツール（試作品）を作りたい</label>
+   <label><input type="radio" name="kind" value="prop">コスプレ小道具・フィギュアを作りたい</label>
+   <label><input type="radio" name="kind" value="undecided">まだ決まっていない</label>
+  </div>
+  <p class="err" id="e-kind" role="alert"></p>
+ </fieldset>
+
+ <fieldset>
+  <label class="l" for="body">よければ、もう少し教えてください。<span class="opt">任意</span></label>
+  <p class="hint">一言だけでも、空欄でも大丈夫です。</p>
+  <textarea id="body" name="body" maxlength="1000" placeholder="何を用意したらいいか分からないので相談したいです。"></textarea>
+  <div class="count"><span id="cnt">0</span> / 1000</div>
+ </fieldset>
+
+ <fieldset>
+  <label class="l" for="url">参考にしているサイトがあれば教えてください。<span class="opt">任意</span></label>
+  <input type="url" id="url" name="url" maxlength="300" inputmode="url" placeholder="https://" autocomplete="off">
+  <p class="err" id="e-url" role="alert"></p>
+ </fieldset>
+
+ <fieldset>
+  <label class="l" for="name">お名前・呼び名<span class="opt">任意</span></label>
+  <input type="text" id="name" name="name" maxlength="50" placeholder="ニックネームでもOK" autocomplete="nickname">
+ </fieldset>
+
+ <fieldset>
+  <label class="l" for="email">お返事用のメールアドレス<span class="req">必須</span></label>
+  <p class="hint">こちらにお返事をお送りします。</p>
+  <input type="email" id="email" name="email" maxlength="254" autocomplete="email" required>
+  <p class="err" id="e-email" role="alert"></p>
+ </fieldset>
+
+ <p class="purpose">いただいた内容は、ご相談への返信のためだけに使います。詳しくは <a href="/services/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a> をご覧ください。</p>
+ <fieldset>
+  <label class="agree"><input type="checkbox" id="agree" name="agree"><span>個人情報の取り扱いに同意して送信します。<span class="req">必須</span></span></label>
+  <p class="err" id="e-agree" role="alert"></p>
+ </fieldset>
+
+ <div class="hp" aria-hidden="true"><label>この欄は空のままにしてください<input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off"></label></div>
+
+ <button type="submit" class="go" id="go">この内容で相談する</button>
+</form>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<p class="formal">質問に答えて整理しながら相談したい方は <a href="/services/organize/">相談内容を整理する</a> へ。制作内容が決まっている方は、<a href="https://docs.google.com/forms/d/e/1FAIpQLSfNvO-i_Z42rshMFWYFez8Ya7sqdJ3A-jj4ZCVVsSFkIOdLpA/viewform" target="_blank" rel="noopener">こちらの依頼フォーム</a>から。料金・プランは <a href="/services/#plan">料金・範囲</a> をご覧ください。</p>
+</main>
+
+<script>
+(function(){
+  var PH={"lp":"新しくお店を始めるのでサイトが欲しいです。","tool":"入力すると結果が出る、小さなツールを試したいです。","prop":"ゲームのキャラの武器を、撮影用に作ってほしいです。","undecided":"何を用意したらいいか分からないので相談したいです。"};
+  var f=document.getElementById("f"),go=document.getElementById("go"),st=document.getElementById("status"),body=document.getElementById("body");
+  var key=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)+"0000";
+  var busy=false;
+  f.addEventListener("change",function(e){if(e.target.name==="kind"){body.placeholder=PH[e.target.value]||"";setErr("kind","");}if(e.target.id==="agree")setErr("agree","");});
+  f.email.addEventListener("input",function(){setErr("email","");});f.url.addEventListener("input",function(){setErr("url","");});
+  body.addEventListener("input",function(){document.getElementById("cnt").textContent=body.value.length;});
+  function setErr(id,msg){document.getElementById("e-"+id).textContent=msg||"";}
+  function validate(){
+    var ok=true,first=null;
+    ["kind","url","email","agree"].forEach(function(k){setErr(k,"");});
+    var kind=f.querySelector("input[name=kind]:checked");
+    if(!kind){setErr("kind","相談の種類を選んでください。");ok=false;first=first||document.querySelector("#kinds input");}
+    var u=f.url.value.trim();
+    if(u&&!/^https?:\/\/\S+$/i.test(u)){setErr("url","URLは http:// または https:// で始まる形式で入力してください。");ok=false;first=first||f.url;}
+    if(!/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/.test(f.email.value.trim())){setErr("email","メールアドレスの形式を確認してください。");ok=false;first=first||f.email;}
+    if(!f.agree.checked){setErr("agree","個人情報の取り扱いへの同意が必要です。");ok=false;first=first||f.agree;}
+    if(first)first.focus();
+    return ok;
+  }
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(busy||!validate())return;
+    busy=true;go.disabled=true;go.textContent="送信しています…";st.innerHTML="";
+    var kind=f.querySelector("input[name=kind]:checked").value;
+    var payload={kind:kind,body:body.value,url:f.url.value.trim(),name:f.name.value,email:f.email.value.trim(),agree:true,hp:f.hp.value,key:key};
+    fetch("/api/consult",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+    .then(function(x){
+      if(x.j&&x.j.ok){
+        f.style.display="none";
+        st.innerHTML='<div class="done"><p>ご相談ありがとうございます！</p><p>内容を受け付けました。</p><p>確認後、順番にお返事します。</p></div>';
+        st.scrollIntoView({block:"center"});
+        return;
+      }
+      if(x.s===400&&x.j&&x.j.fields){Object.keys(x.j.fields).forEach(function(k){setErr(k,x.j.fields[k]);});fail("入力内容を確認してください。");return;}
+      if(x.s===429){fail("送信が続いたため、いったん受け付けを止めています。時間をおいて、もう一度お試しください。");return;}
+      fail();
+    })
+    .catch(function(){fail("通信が途中で切れました。受付済みの可能性があります。同じ内容を重ねて送っても、二重には受け付けません。");});
+  });
+  function fail(extra){
+    busy=false;go.disabled=false;go.textContent="この内容で相談する";
+    st.innerHTML='<div class="alert">送信を確認できませんでした。<br>入力内容はそのまま残しています。<br>時間をおいて再度お試しください。'+(extra?'<br><small>'+extra+'</small>':'')+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
