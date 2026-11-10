@@ -15,7 +15,7 @@
 <meta property="og:title" content="Saga bus routes &amp; bus stop maps by region | miitobow">
 <meta property="og:description" content="Regional bus maps of Saga Prefecture (Takeo-Kashima Area Bus Map, Karatsu Area Bus Map, Saga Area Bus Map). Bus stops and routes on a map.">
 <meta property="og:url" content="https://miitobow.com/bus/en/saga/">
-<meta property="og:image" content="https://miitobow.com/bus/assets/og-busmap.jpg">
+<meta property="og:image" content="https://miitobow.com/bus/assets/og-pref-saga.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bus Maps","item":"https://miitobow.com/bus/en/"},{"@type":"ListItem","position":2,"name":"Saga","item":"https://miitobow.com/bus/en/saga/"}]}</script>
@@ -71,18 +71,21 @@ details[open] > summary::before { transform: rotate(90deg); }
 .note { margin-top: 28px; padding: 14px 16px; border-radius: 12px; background: var(--surface-soft); color: var(--ink-soft); font-size: 13px; }
 footer { max-width: 960px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px; color: var(--ink-soft); }
 @media (prefers-reduced-motion: no-preference) { .btn, .pref, .muni { transition: background .15s; } }
-/* ---- 2026-11-09 LP化：ホームは「画像の縦長LP＋実際に押せる一覧」。PCは左に画像、右に導線 ---- */
-.lp { display: grid; gap: 0; max-width: 1040px; margin: 0 auto; padding: 0 0 8px; }
+/* ---- 2026-11-09 LP化：ホームは「画像のLPだけ」。ボタンを押すと都道府県の一覧が現れる。PCは横長の画像、スマホは縦長の画像 ---- */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.lp { max-width: none; margin: 0; padding: 0; }   /* 横長の画像は、画面の幅いっぱいに（左右に余白を作らない） */
 .lp > * { min-width: 0; }
 .lp-fig { margin: 0; position: relative; }
 .lp-fig img { display: block; width: 100%; height: auto; }
 .lp-hit { position: absolute; display: block; border-radius: 999px; }
+.lp-hit-pc { display: none; }
 .lp-hit:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
-.g-intro { padding: 18px 16px 8px; }
-.g-intro h1 { margin: 0 0 6px; }
+@media (min-width: 900px) { .lp-hit-sp { display: none; } .lp-hit-pc { display: block; } }
+.g-pref[hidden] { display: none; }
+.g-pref { padding: 28px 16px 0; scroll-margin-top: 12px; }
+.g-panel { max-width: 960px; margin: 0 auto; }
+.g-intro { padding: 0 0 8px; }
 .tagline { margin: 0 0 8px; font-size: 20px; font-weight: 700; }
-.cta-main { display: flex; align-items: center; justify-content: center; min-height: 52px; margin: 14px 0 12px; padding: 0 20px; border-radius: 14px; background: var(--accent-dark); color: #fff; font-weight: 700; text-decoration: none; font-size: 17px; }
-.cta-main:hover { background: #2d4a1a; }
 .quick-h { margin: 12px 0 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); }
 .facts { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); font-weight: 700; font-size: 15px; }
 .facts .nb { display: inline-block; margin-right: 10px; }
@@ -92,19 +95,8 @@ footer { max-width: 960px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px
 .visitors ul { margin: 0; padding-left: 20px; }
 .visitors li { margin: 4px 0; font-size: 14px; }
 .visitors a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
-.g-pref { padding: 8px 16px 0; }
-.g-note { padding: 0 16px; }
-/* スマホ：.g-right は枠を消して、画像と一緒に1列に並べる（順序はCSSで：FV → 導線 → できること → 使い方 → CTA → 県の一覧 → 注記） */
-.g-right { display: contents; }
-.g-fv { order: 1; } .g-intro { order: 2; } .g-offer { order: 3; } .g-detail { order: 4; } .g-cta { order: 5; } .g-pref { order: 6; } .g-note { order: 7; }
-@media (min-width: 900px) {
-  .lp { grid-template-columns: 480px minmax(0, 1fr); column-gap: 36px; padding: 24px 16px 8px; align-items: start; }
-  .g-fv { grid-column: 1; grid-row: 1; } .g-offer { grid-column: 1; grid-row: 2; } .g-detail { grid-column: 1; grid-row: 3; } .g-cta { grid-column: 1; grid-row: 4; }
-  .g-right { display: block; grid-column: 2; grid-row: 1 / span 4; align-self: start; }
-  .g-intro { padding: 8px 0 0; } .g-pref { padding: 8px 0 0; } .g-note { grid-column: 1 / -1; grid-row: 5; padding: 0; order: 0; }
-  .g-fv, .g-offer, .g-detail, .g-cta { order: 0; }
-  .lp-fig img { border-radius: 18px; }
-}
+.g-pref .head { margin-top: 22px; }
+.g-note { max-width: 960px; margin: 0 auto; padding: 8px 16px 0; }
 /* 県ページ：スマホでもミニ地図を右上に小さく置いて、カードを短くする */
 .pref-sum { margin: 0 0 14px; font-weight: 700; color: var(--ink-soft); }
 @media (max-width: 639px) { .card h3 { font-size: 17px; text-wrap: balance; word-break: auto-phrase; } .card-in { grid-template-columns: minmax(0, 1fr) 112px; gap: 12px; align-items: start; } .card-map .fkmap { max-width: 112px; } .card-map figcaption { display: none; } }
