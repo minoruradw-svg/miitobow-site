@@ -31,6 +31,8 @@ textarea{min-height:5.5rem;resize:vertical}
 .opts label{display:flex;align-items:center;gap:.7rem;min-height:3.1rem;padding:.5rem .9rem;border:2px solid var(--line);border-radius:.9rem;background:var(--cream);cursor:pointer;font-weight:700}
 .opts input{width:1.2rem;height:1.2rem;accent-color:var(--g);flex:none}
 .opts label:has(input:checked){background:var(--g2);border-color:var(--g)}
+.reflinks{margin:.2rem 0 .6rem;padding-left:1.2rem}
+.reflinks a{display:inline-block;min-height:2.4rem;padding:.2rem 0;font-weight:700}
 .err{color:var(--red);font-weight:700;font-size:.88rem;margin:.3rem 0 0}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:3.3rem;border:0;border-radius:999px;background:var(--g);color:#fff;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;margin:1rem 0}
 .btn[disabled]{opacity:.55;cursor:wait}
@@ -73,7 +75,7 @@ textarea{min-height:5.5rem;resize:vertical}
 <div class="field"><label class="l" for="must_words">必ず入れたい言葉・内容</label><textarea id="must_words" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="ng_words">入れてほしくない表現</label><textarea id="ng_words" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="assets_urls">写真・ロゴの置き場所（共有URL）</label><p class="hint">1行に1つ。Googleドライブなどの共有リンクを入れてください。メールへの添付でも大丈夫です。</p><textarea id="assets_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-assets_urls" role="alert"></p></div>
-<div class="field"><label class="l" for="ref_urls">参考にしたいページ</label><p class="hint">1行に1つ</p><textarea id="ref_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-ref_urls" role="alert"></p></div>
+<div class="field"><label class="l" for="ref_urls">参考にしたいページ</label><p class="hint">1行に1つ。まだ無い方は、下のギャラリーから探せます（外部サイトが、新しいタブで開きます）。</p><ul class="reflinks"><li><a href="https://sankoudesign.com/" target="_blank" rel="noopener noreferrer">SANKOU!（Webデザインのギャラリー）</a></li><li><a href="https://webdesignclip.com/" target="_blank" rel="noopener noreferrer">Web Design Clip（日本のWebデザインのギャラリー）</a></li><li><a href="https://muuuuu.org/" target="_blank" rel="noopener noreferrer">MUUUUU.ORG（Webデザインのギャラリー）</a></li></ul><textarea id="ref_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-ref_urls" role="alert"></p></div>
 <div class="field"><span class="l" id="pp-l">公開先の希望</span><div class="opts" role="radiogroup" aria-labelledby="pp-l" id="publish_pref">
 <label><input type="radio" name="pp" value="おまかせしたい">おまかせしたい</label>
 <label><input type="radio" name="pp" value="すでに公開先（サーバー等）がある">すでに公開先（サーバー等）がある</label>

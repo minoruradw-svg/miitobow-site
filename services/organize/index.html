@@ -44,6 +44,10 @@ h2{font-size:1.15rem;margin:1.4rem 0 .4rem}
 .opts label:has(input:checked):after{content:"選択中";margin-left:auto;font-size:.72rem;background:var(--g);color:#fff;border-radius:999px;padding:0 .6rem;white-space:nowrap}
 input[type=text],input[type=url],input[type=email],textarea{width:100%;font:inherit;color:var(--ink);padding:.7rem .8rem;border:2px solid var(--line);border-radius:.8rem;background:#fff}
 textarea{min-height:6rem;resize:vertical}
+.reflinks{margin-top:.8rem;border-top:1px dashed var(--line);padding-top:.6rem}
+.reflinks ul{margin:.2rem 0 0;padding-left:1.2rem}
+.reflinks li{margin:.1rem 0}
+.reflinks a{display:inline-block;min-height:2.4rem;padding:.2rem 0;font-weight:700}
 .count{text-align:right;font-size:.78rem;color:#6b8288}
 .err{color:var(--red);font-weight:700;font-size:.88rem;margin:.3rem 0 0}
 .row{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:space-between;margin-top:.6rem}
@@ -188,7 +192,7 @@ var Q={
   {k:"copy",l:"文章の用意",t:"ページの文章は、どうしたいですか？",type:"choice",opts:[O("自分で用意できる"),O("素案はある"),O("おまかせしたい"),O("分からない",1)]},
   {k:"tone",l:"デザインの方向性",t:"雰囲気は、近いのはどれですか？",type:"choice",opts:[O("明るい・やさしい"),O("落ち着いた・信頼感"),O("かっこいい・シャープ"),O("まだ決まっていない",1)]},
   {k:"assets",l:"お持ちのもの",t:"お持ちのものを教えてください。",h:"当てはまるものを、いくつでも",type:"multi",opts:ASSETS.map(function(x){return O(x)}).concat([O("ドメイン・公開先がある")])},
-  {k:"ref",l:"参考URL",t:"参考にしているサイトはありますか？",h:"URLがあれば。あとで拝見します",type:"url"},
+  {k:"ref",l:"参考URL",t:"参考にしているサイトはありますか？",h:"URLがあれば。あとで拝見します",type:"url",links:[["SANKOU!（Webデザインのギャラリー）","https://sankoudesign.com/"],["Web Design Clip（日本のWebデザインのギャラリー）","https://webdesignclip.com/"],["MUUUUU.ORG（Webデザインのギャラリー）","https://muuuuu.org/"]]},
   BUDGET,TIMEQ],
  tool:[
   {k:"problem",l:"解決したいこと",t:"何を解決したいですか？",h:"例：計算が面倒／チェックを忘れる",type:"text"},
@@ -300,6 +304,8 @@ function render(){
     if(extra.length){var pv=document.createElement("div");pv.className="notice";pv.textContent="いまの答え：「"+extra.join("、")+"」（このまま「次へ」で残ります。選び直すと置き換わります）";card.appendChild(pv)}
   }
   if(q.note){var nt=document.createElement("div");nt.className="notice";nt.textContent=q.note;card.appendChild(nt)}
+  if(q.links){var lb=document.createElement("div");lb.className="reflinks";var lh=document.createElement("p");lh.className="hint";lh.textContent="まだ見つかっていない方へ：デザインの参考になるギャラリーです（外部サイトが、新しいタブで開きます）。気に入ったページのURLを、上の欄に貼ってください。";lb.appendChild(lh);
+    var ul=document.createElement("ul");q.links.forEach(function(x){var li=document.createElement("li");var a=document.createElement("a");a.href=x[1];a.target="_blank";a.rel="noopener noreferrer";a.textContent=x[0];li.appendChild(a);ul.appendChild(li)});lb.appendChild(ul);card.appendChild(lb)}
   card.appendChild(err);
   var nx=document.createElement("button");nx.className="btn";nx.type="button";nx.id="go-next";nx.textContent=st.idx===n-1?"まとめる":"次へ";nx.onclick=next;card.appendChild(nx);
   $("go-back").textContent=st.idx===0?"← 分野を選び直す":"← ひとつ前へ";
