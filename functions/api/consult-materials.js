@@ -6,7 +6,7 @@
 // 鍵：受付ごとに、推測できない長いランダム文字列を作る。保存するのは「ハッシュ」だけ（保存棚が漏れても鍵は分からない）。
 //     リンクの鍵は、URLの「#」より後ろに入れる（サーバーのログ・Refererに残らない）。
 // 保存先：相談の受付データ（consult:r:<ID>）の中。約6か月で自動的に消える（consult.js と同じ）。
-// 現在の対象：紹介ページ・LP（kind=lp）だけ。ほかの分野は、実際の相談を見て質問を足す。
+// 現在の対象：紹介ページ・LP（kind=lp）とコスプレ小道具・フィギュア（kind=prop）。ほかの分野は、実際の相談を見て足す。
 // 個人情報（メール）は、お客様側の画面には返さない。ログに内容を出さない。
 
 import { denyIfBadPin } from "./board/_lib.js";
@@ -17,14 +17,23 @@ const RATE_MAX = 40;                         // 同じ接続元から1時間に4
 const RATE_TTL = 3600;
 const ID_RE = /^C-\d{8}-[0-9a-f]{6}$/;
 const TOKEN_RE = /^[0-9a-f]{64}$/;
-// 受け付ける欄と、それぞれの最大文字数（これ以外の欄は捨てる）
-const FIELDS = {
-  service_name: 100, offer_detail: 3000, features: 2000, evidence: 2000, price_info: 600, schedule: 600,
-  cta_url: 300, must_words: 600, ng_words: 600, assets_urls: 1200, ref_urls: 1200, publish_pref: 600, extra: 2000,
+// 分野ごとに、受け付ける欄と最大文字数（これ以外の欄は捨てる）。url=1つのURL／urls=1行に1つのURL
+const SCHEMAS = {
+  lp: {
+    service_name: { max: 100 }, offer_detail: { max: 3000 }, features: { max: 2000 }, evidence: { max: 2000 },
+    price_info: { max: 600 }, schedule: { max: 600 }, cta_url: { max: 300, url: true }, must_words: { max: 600 },
+    ng_words: { max: 600 }, assets_urls: { max: 1200, urls: true }, ref_urls: { max: 1200, urls: true },
+    publish_pref: { max: 600 }, extra: { max: 2000 },
+  },
+  // コスプレ小道具・フィギュア。住所・電話番号の欄は作らない（受け渡しが決まってからメールで聞く）
+  prop: {
+    item_name: { max: 200 }, rights_status: { max: 200 }, rights_source: { max: 1000 },
+    ref_images_urls: { max: 1500, urls: true }, ref_notes: { max: 1500 }, size_detail: { max: 600 },
+    usage: { max: 600 }, finish_pref: { max: 200 }, colors: { max: 800 }, parts_pref: { max: 800 },
+    extras: { max: 600 }, deadline: { max: 300 }, must_words: { max: 1500 }, ng_words: { max: 1000 }, extra: { max: 2000 },
+  },
 };
-const URL_FIELDS = new Set(["cta_url"]);
-const URL_LIST_FIELDS = new Set(["assets_urls", "ref_urls"]);
-const KINDS_OK = new Set(["lp"]);
+const KINDS_OK = new Set(Object.keys(SCHEMAS));
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
@@ -109,18 +118,19 @@ export async function onRequestPost({ request, env }) {
   const input = b.materials && typeof b.materials === "object" ? b.materials : {};
   const fields = {};
   const errors = {};
-  for (const [k, max] of Object.entries(FIELDS)) {
-    const v = clean(input[k], max);
+  const schema = SCHEMAS[rec.kind] || {};
+  for (const [k, def] of Object.entries(schema)) {
+    const v = clean(input[k], def.max);
     if (!v) continue;
-    if (URL_FIELDS.has(k) && !validUrl(v)) { errors[k] = "URLは http:// または https:// で始まる形式で入力してください。"; continue; }
-    if (URL_LIST_FIELDS.has(k)) {
+    if (def.url && !validUrl(v)) { errors[k] = "URLは http:// または https:// で始まる形式で入力してください。"; continue; }
+    if (def.urls) {
       const bad = v.split(/\s+/).filter((x) => x && !validUrl(x));
       if (bad.length) { errors[k] = "URLは、1行に1つ、http:// または https:// で始まる形式で入力してください。"; continue; }
     }
     fields[k] = v;
   }
   if (Object.keys(errors).length) return json({ error: "validation", fields: errors }, 400);
-  if (!Object.keys(fields).length) return json({ error: "validation", fields: { offer_detail: "1つ以上、入力してください。" } }, 400);
+  if (!Object.keys(fields).length) return json({ error: "validation", fields: { all: "1つ以上、入力してください。" } }, 400);
 
   const first = !rec.materials;
   rec.materials = { at: new Date().toISOString(), count: ((rec.materials && rec.materials.count) || 0) + 1, fields };

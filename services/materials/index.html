@@ -25,6 +25,7 @@ h1{font-family:"Shippori Mincho B1",serif;font-size:clamp(1.5rem,6.6vw,2.1rem);l
 .field{margin:1.1rem 0}
 .field label.l,.field .l{display:block;font-weight:700;margin-bottom:.2rem}
 .hint{font-size:.85rem;color:#5a7a82;margin:.1rem 0 .4rem}
+.sec-t{font-weight:700;font-size:1.02rem;margin:0 0 .2rem}
 input[type=text],input[type=url],textarea{width:100%;font:inherit;color:var(--ink);padding:.7rem .8rem;border:2px solid var(--line);border-radius:.8rem;background:#fff}
 textarea{min-height:5.5rem;resize:vertical}
 .opts{display:flex;flex-direction:column;gap:.5rem}
@@ -63,11 +64,15 @@ textarea{min-height:5.5rem;resize:vertical}
 <section id="v-form" hidden>
 <h1 tabindex="-1">制作の材料を、<br>教えてください。</h1>
 <p><span id="who"></span>分かる範囲で大丈夫です。空欄は飛ばしてください。</p>
-<div class="notice"><b>ここに書いていただいたことだけを、使います。</b>実績・数字・お客様の声など、事実でないものは、こちらで作りません。無い場合は、空欄で大丈夫です。</div>
+<div class="notice" id="n-lp"><b>ここに書いていただいたことだけを、使います。</b>実績・数字・お客様の声など、事実でないものは、こちらで作りません。無い場合は、空欄で大丈夫です。</div>
+<div class="notice" id="n-prop" hidden><b>ここに書いていただいたことだけを、使います。</b>権利を確認できないものは、お受けできない場合があります（判断はこちらで行います）。<b>住所・電話番号は、ここでは入力しないでください。</b>受け渡しが決まってから、メールでお聞きします。</div>
 
 <details class="card" open><summary><b>いただいた相談の内容</b></summary><div class="brief" id="brief"></div></details>
 
 <form id="f" novalidate>
+
+<!-- 紹介ページ・LP -->
+<div id="k-lp">
 <div class="card">
 <div class="field"><label class="l" for="service_name">商品・サービスの名前</label><input type="text" id="service_name" maxlength="100"></div>
 <div class="field"><label class="l" for="offer_detail">提供する内容を、くわしく</label><p class="hint">何ができるか・どんな人向けか・どんな流れか</p><textarea id="offer_detail" maxlength="3000"></textarea></div>
@@ -82,12 +87,50 @@ textarea{min-height:5.5rem;resize:vertical}
 <div class="field"><label class="l" for="ng_words">入れてほしくない表現</label><textarea id="ng_words" maxlength="600"></textarea></div>
 <div class="field"><label class="l" for="assets_urls">写真・ロゴの置き場所（共有URL）</label><p class="hint">1行に1つ。Googleドライブなどの共有リンクを入れてください。メールへの添付でも大丈夫です。</p><textarea id="assets_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-assets_urls" role="alert"></p></div>
 <div class="field"><label class="l" for="ref_urls">参考にしたいページ</label><p class="hint">1行に1つ。まだ無い方は下のギャラリーから探せます（外部サイトが新しいタブで開きます）。気に入ったデザインがあればページのURLを下の欄に貼ってください。</p><p class="hint" style="font-weight:700">参考は雰囲気や構成の方向性を知るためのものです。同じ作りをお約束するものではありません。内容と範囲を見てできることをお伝えします。</p><div class="refcards"><a class="refcard" href="https://sankoudesign.com/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>SANKOU!｜Webデザインのギャラリー</b><small>Webサイト・LPのデザインの参考を、まとめて見られるギャラリー。</small><div class="rc-u">https://sankoudesign.com/</div></div><div class="rc-i" style="background:#2f2827;color:#fff">SANKOU!</div></a><a class="refcard" href="https://webdesignclip.com/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>Web Design Clip｜日本のWebデザインのギャラリー</b><small>日本のおしゃれなWebサイトを、たくさん見られるギャラリー。</small><div class="rc-u">https://webdesignclip.com/</div></div><div class="rc-i" style="background:#333;color:#fff">Web Design Clip</div></a><a class="refcard" href="https://muuuuu.org/" target="_blank" rel="noopener noreferrer"><div class="rc-t"><b>MUUUUU.ORG｜Webデザインのギャラリー</b><small>すぐれたデザインのWebサイトを、毎日ひとつ紹介するギャラリー。</small><div class="rc-u">https://muuuuu.org/</div></div><div class="rc-i" style="background:#1f6a80;color:#fff">MUUUUU.ORG</div></a></div><textarea id="ref_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-ref_urls" role="alert"></p></div>
-<div class="field"><span class="l" id="pp-l">公開先の希望</span><div class="opts" role="radiogroup" aria-labelledby="pp-l" id="publish_pref">
+<div class="field"><span class="l" id="pp-l">公開先の希望</span><div class="opts" role="radiogroup" aria-labelledby="pp-l">
 <label><input type="radio" name="pp" value="おまかせしたい">おまかせしたい</label>
 <label><input type="radio" name="pp" value="すでに公開先（サーバー等）がある">すでに公開先（サーバー等）がある</label>
 <label><input type="radio" name="pp" value="分からない・相談したい">分からない・相談したい</label></div></div>
 <div class="field"><label class="l" for="extra">ほかに伝えたいこと</label><textarea id="extra" maxlength="2000"></textarea></div>
 </div>
+</div>
+
+<!-- コスプレ小道具・フィギュア -->
+<div id="k-prop" hidden>
+<div class="card">
+<p class="sec-t">作りたいもの</p>
+<div class="field"><label class="l" for="p_item_name">作りたいもの・作品名</label><input type="text" id="p_item_name" maxlength="200"></div>
+<div class="field"><label class="l" for="p_usage">使う場面</label><p class="hint">例：撮影で手に持つ／イベントで着ける／飾る</p><textarea id="p_usage" maxlength="600"></textarea></div>
+<div class="field"><label class="l" for="p_size_detail">希望の大きさ</label><p class="hint">いちばん長い辺の目安と、分かれば各部の寸法</p><textarea id="p_size_detail" maxlength="600"></textarea></div>
+<div class="field"><span class="l" id="pf-l">仕上がり</span><div class="opts" role="radiogroup" aria-labelledby="pf-l">
+<label><input type="radio" name="p_finish" value="未塗装キット">未塗装キット（研磨・塗装・最終組立は自分で）</label>
+<label><input type="radio" name="p_finish" value="基本塗装・組立済み">基本塗装・組立済み</label>
+<label><input type="radio" name="p_finish" value="相談したい">相談したい</label></div></div>
+<div class="field"><label class="l" for="p_colors">色・塗り分け</label><textarea id="p_colors" maxlength="800"></textarea></div>
+<div class="field"><label class="l" for="p_parts_pref">つなぎ方・分け方の希望</label><p class="hint">ネジで留める・取り外せる、など。分からなければ空欄で大丈夫です。</p><textarea id="p_parts_pref" maxlength="800"></textarea></div>
+<div class="field"><label class="l" for="p_extras">電飾・動く部分の有無</label><textarea id="p_extras" maxlength="600"></textarea></div>
+<div class="field"><label class="l" for="p_deadline">希望の時期・期限</label><p class="hint">イベントの日など</p><input type="text" id="p_deadline" maxlength="300"></div>
+</div>
+<div class="card">
+<p class="sec-t">権利について</p>
+<p class="hint">オリジナル作品や、制作・販売の許諾を確認できるものが対象です。確認できないものは、お受けできません。</p>
+<div class="field"><span class="l" id="pr-l">どれに近いですか？</span><div class="opts" role="radiogroup" aria-labelledby="pr-l">
+<label><input type="radio" name="p_rights" value="オリジナル">オリジナル</label>
+<label><input type="radio" name="p_rights" value="原作・既存のキャラクターがあり、許諾の確認ができている">原作・既存のキャラクターがあり、許諾の確認ができている</label>
+<label><input type="radio" name="p_rights" value="原作・既存のキャラクターがあり、許諾の確認はこれから">原作・既存のキャラクターがあり、許諾の確認はこれから</label>
+<label><input type="radio" name="p_rights" value="分からない">分からない</label></div></div>
+<div class="field"><label class="l" for="p_rights_source">原作名・権利者・許諾の根拠</label><p class="hint">分かる範囲で。許諾が書かれたページや書類があれば、そのURLも。</p><textarea id="p_rights_source" maxlength="1000"></textarea></div>
+</div>
+<div class="card">
+<p class="sec-t">参考画像</p>
+<div class="field"><label class="l" for="p_ref_images_urls">参考画像の置き場所（共有URL）</label><p class="hint">1行に1つ。正面・横・背面など、複数の向きがあると、形を決めやすくなります。Googleドライブなどの共有リンクを入れてください。メールへの添付でも大丈夫です。</p><textarea id="p_ref_images_urls" maxlength="1500" placeholder="https://"></textarea><p class="err" id="e-p_ref_images_urls" role="alert"></p></div>
+<div class="field"><label class="l" for="p_ref_notes">画像の補足</label><p class="hint">どこを再現したいか・画像にない部分はどうするか</p><textarea id="p_ref_notes" maxlength="1500"></textarea></div>
+<div class="field"><label class="l" for="p_must_words">こだわりたい点</label><textarea id="p_must_words" maxlength="1500"></textarea></div>
+<div class="field"><label class="l" for="p_ng_words">避けたい点</label><textarea id="p_ng_words" maxlength="1000"></textarea></div>
+<div class="field"><label class="l" for="p_extra">ほかに伝えたいこと</label><textarea id="p_extra" maxlength="2000"></textarea></div>
+</div>
+</div>
+
 <div class="hp" aria-hidden="true"><label>この欄は空のままにしてください<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="err" id="e-all" role="alert"></p>
 <button class="btn" id="go" type="submit">この内容で送る</button>
@@ -111,21 +154,29 @@ var qp=new URLSearchParams(location.search);
 var id=qp.get("id")||"";
 var tm=(location.hash||"").match(/^#t=([0-9a-f]{64})$/);
 var token=tm?tm[1]:"";
-var KEYS=["service_name","offer_detail","features","evidence","price_info","schedule","cta_url","must_words","ng_words","assets_urls","ref_urls","extra"];
+// 分野ごとの欄：APIの項目名 → 画面の部品のid（radio は別扱い）
+var SPEC={
+  lp:{text:["service_name","offer_detail","features","evidence","price_info","schedule","cta_url","must_words","ng_words","assets_urls","ref_urls","extra"],radios:{publish_pref:"pp"},pre:"",errs:["cta_url","assets_urls","ref_urls"]},
+  prop:{text:["item_name","usage","size_detail","colors","parts_pref","extras","deadline","rights_source","ref_images_urls","ref_notes","must_words","ng_words","extra"],radios:{finish_pref:"p_finish",rights_status:"p_rights"},pre:"p_",errs:["ref_images_urls"]}
+};
+var kind="lp";
 var DRAFT="miitobow_materials_"+id;
+function eid(k){return SPEC[kind].pre+k}
 function show(v){["v-load","v-bad","v-form","v-done"].forEach(function(x){$(x).hidden=(x!==v)});window.scrollTo(0,0);var h=$(v).querySelector("h1");if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true})}}
-function setPP(v){[].forEach.call(document.querySelectorAll("input[name=pp]"),function(r){r.checked=(r.value===v)})}
-function getPP(){var c=document.querySelector("input[name=pp]:checked");return c?c.value:""}
-function fill(m){KEYS.forEach(function(k){if(m[k]!==undefined)$(k).value=m[k]});if(m.publish_pref)setPP(m.publish_pref)}
-function readAll(){var o={};KEYS.forEach(function(k){o[k]=$(k).value});o.publish_pref=getPP();return o}
+function setRadio(name,v){[].forEach.call(document.querySelectorAll("input[name="+name+"]"),function(r){r.checked=(r.value===v)})}
+function getRadio(name){var c=document.querySelector("input[name="+name+"]:checked");return c?c.value:""}
+function fill(m){var S=SPEC[kind];S.text.forEach(function(k){if(m[k]!==undefined)$(eid(k)).value=m[k]});Object.keys(S.radios).forEach(function(k){if(m[k])setRadio(S.radios[k],m[k])})}
+function readAll(){var S=SPEC[kind],o={};S.text.forEach(function(k){o[k]=$(eid(k)).value});Object.keys(S.radios).forEach(function(k){o[k]=getRadio(S.radios[k])});return o}
 function saveDraft(){try{sessionStorage.setItem(DRAFT,JSON.stringify(readAll()))}catch(e){}}
 function loadDraft(){try{var r=sessionStorage.getItem(DRAFT);return r?JSON.parse(r):null}catch(e){return null}}
+function setKind(k){kind=SPEC[k]?k:"lp";$("k-lp").hidden=(kind!=="lp");$("k-prop").hidden=(kind!=="prop");$("n-lp").hidden=(kind!=="lp");$("n-prop").hidden=(kind!=="prop")}
 if(!/^C-\d{8}-[0-9a-f]{6}$/.test(id)||!token){show("v-bad")}
 else{
   fetch(API+"?id="+encodeURIComponent(id),{headers:{"X-Materials-Token":token}})
   .then(function(r){return r.json().then(function(j){return {s:r.status,j:j}})})
   .then(function(x){
     if(!x.j||!x.j.ok){show("v-bad");return}
+    setKind(x.j.kind);
     $("brief").textContent=x.j.brief||"（相談の内容は、ありません）";
     $("who").textContent=x.j.name?(x.j.name+"さん、"):"";
     fill(x.j.materials||{});
@@ -137,7 +188,7 @@ $("f").addEventListener("input",saveDraft);$("f").addEventListener("change",save
 var busy=false;
 $("f").addEventListener("submit",function(e){
   e.preventDefault();if(busy)return;
-  ["cta_url","assets_urls","ref_urls","all"].forEach(function(k){var el=$("e-"+k);if(el)el.textContent=""});
+  SPEC[kind].errs.map(eid).concat(["all"]).forEach(function(k){var el=$("e-"+k);if(el)el.textContent=""});
   var m=readAll();var any=Object.keys(m).some(function(k){return String(m[k]).trim()!==""});
   if(!any){$("e-all").textContent="1つ以上、入力してください。";return}
   busy=true;$("go").disabled=true;$("go").textContent="送信しています…";
@@ -146,7 +197,7 @@ $("f").addEventListener("submit",function(e){
   .then(function(x){
     busy=false;$("go").disabled=false;$("go").textContent="この内容で送る";
     if(x.j&&x.j.ok){try{sessionStorage.removeItem(DRAFT)}catch(e){}show("v-done");return}
-    if(x.s===400&&x.j&&x.j.fields){Object.keys(x.j.fields).forEach(function(k){var el=$("e-"+k);if(el)el.textContent=x.j.fields[k];else $("e-all").textContent=x.j.fields[k]});var f=document.querySelector(".err:not(:empty)");if(f)f.scrollIntoView({block:"center"});return}
+    if(x.s===400&&x.j&&x.j.fields){Object.keys(x.j.fields).forEach(function(k){var el=$("e-"+eid(k))||$("e-"+k);if(el)el.textContent=x.j.fields[k];else $("e-all").textContent=x.j.fields[k]});var f=document.querySelector(".err:not(:empty)");if(f)f.scrollIntoView({block:"center"});return}
     if(x.s===404){show("v-bad");return}
     if(x.s===429){$("e-all").textContent="送信が続いたため、いったん止めています。時間をおいて、もう一度お試しください。";return}
     $("e-all").textContent="送信を確認できませんでした。入力内容はそのまま残しています。時間をおいて再度お試しください。";
