@@ -2616,4 +2616,9 @@
     <loc>https://miitobow.com/papakue/</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://miitobow.com/articles/research-elecblanket</loc>
+    <lastmod>2026-11-11</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>
