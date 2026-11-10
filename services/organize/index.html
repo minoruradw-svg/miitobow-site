@@ -309,7 +309,7 @@ function render(){
     if(extra.length){var pv=document.createElement("div");pv.className="notice";pv.textContent="いまの答え：「"+extra.join("、")+"」（このまま「次へ」で残ります。選び直すと置き換わります）";card.appendChild(pv)}
   }
   if(q.note){var nt=document.createElement("div");nt.className="notice";nt.textContent=q.note;card.appendChild(nt)}
-  if(q.links){var lb=document.createElement("div");lb.className="reflinks";var lh=document.createElement("p");lh.className="hint";lh.textContent="まだ見つかっていない方へ：デザインの参考になるギャラリーです（外部サイトが、新しいタブで開きます）。気に入ったページのURLを、上の欄に貼ってください。";lb.appendChild(lh);
+  if(q.links){var lb=document.createElement("div");lb.className="reflinks";var lh=document.createElement("p");lh.className="hint";lh.textContent="まだ見つかっていない方へ：デザインの参考になるギャラリーです（外部サイトが新しいタブで開きます）。気に入ったデザインがあればページのURLを上の欄に貼ってください。";lb.appendChild(lh);
     var box=document.createElement("div");box.className="refcards";
     q.links.forEach(function(x){var a=document.createElement("a");a.className="refcard";a.href=x.u;a.target="_blank";a.rel="noopener noreferrer";
       var tx=document.createElement("div");tx.className="rc-t";var b=document.createElement("b");b.textContent=x.t;var d=document.createElement("small");d.textContent=x.d;var u=document.createElement("div");u.className="rc-u";u.textContent=x.u;tx.appendChild(b);tx.appendChild(d);tx.appendChild(u);
