@@ -47,7 +47,8 @@ function validUrl(s) {
   try { const u = new URL(s); return u.protocol === "http:" || u.protocol === "https:"; } catch (e) { return false; }
 }
 
-async function notifyLine(env, rec) {
+// LINEへ1通送る共通の処理（1日の上限つき）。戻り値＝sent / failed / unconfigured / capped
+export async function sendLine(env, text) {
   if (!env.LINE_TOKEN) return "unconfigured";
   // 1日の通知回数の上限（日付ごとのカウンタ。2日で消える）
   const day = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10).replace(/-/g, "");
@@ -56,7 +57,6 @@ async function notifyLine(env, rec) {
   try { n = parseInt((await env.MIITOBOW_BOARD.get(ckey)) || "0", 10) || 0; } catch (e) { n = 0; }
   if (n >= NOTIFY_DAILY_CAP) return "capped";
   try { await env.MIITOBOW_BOARD.put(ckey, String(n + 1), { expirationTtl: 172800 }); } catch (e) { /* 数えられなくても続行 */ }
-  const text = `【新しいWeb制作の相談】${NL}受付ID：${rec.id}${NL}相談の種類：${KINDS[rec.kind]}${NL}経路：${SOURCES[rec.source] || SOURCES.form}${NL}（内容は秘書セッションで確認できます）`;
   // 宛先：LINE_ADMIN_TO（運営者のユーザーID等）があれば、その宛先だけに送る。無ければ、既存のGoogleフォーム通知と同じ「友だち全員」への配信。
   const push = !!env.LINE_ADMIN_TO;
   const url = push ? "https://api.line.me/v2/bot/message/push" : "https://api.line.me/v2/bot/message/broadcast";
@@ -71,6 +71,11 @@ async function notifyLine(env, rec) {
   } catch (e) {
     return "failed";
   }
+}
+
+async function notifyLine(env, rec) {
+  const text = `【新しいWeb制作の相談】${NL}受付ID：${rec.id}${NL}相談の種類：${KINDS[rec.kind]}${NL}経路：${SOURCES[rec.source] || SOURCES.form}${NL}（内容は秘書セッションで確認できます）`;
+  return sendLine(env, text);
 }
 
 export async function onRequestPost({ request, env }) {
@@ -141,6 +146,7 @@ export async function onRequestGet({ request, env }) {
       const st = await notifyLine(env, rec);
       if (st !== rec.notify) { rec.notify = st; await env.MIITOBOW_BOARD.put(k.name, JSON.stringify(rec), { expirationTtl: RETENTION_TTL }); }
     }
+    if (rec.mat) rec.mat = { created_at: rec.mat.created_at, opened_at: rec.mat.opened_at || null };   // 材料フォームの鍵(ハッシュ)は一覧に出さない
     out.push(rec);
   }
   out.sort((a, b) => (a.at < b.at ? 1 : -1));
