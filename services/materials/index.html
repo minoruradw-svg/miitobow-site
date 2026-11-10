@@ -65,6 +65,7 @@ textarea{min-height:5.5rem;resize:vertical}
 <h1 tabindex="-1">制作の材料を、<br>教えてください。</h1>
 <p><span id="who"></span>分かる範囲で大丈夫です。空欄は飛ばしてください。</p>
 <div class="notice" id="n-lp"><b>ここに書いていただいたことだけを、使います。</b>実績・数字・お客様の声など、事実でないものは、こちらで作りません。無い場合は、空欄で大丈夫です。</div>
+<div class="notice" id="n-tool" hidden><b>ここに書いていただいたことだけを、使います。</b>個人情報の取り扱い・ログイン・決済が必要なものは、お受けできない場合があります（判断はこちらで行います）。決まっていないところは、空欄で大丈夫です。<b>「計算の決まりごと」と「入力と結果の例」</b>があると、正確に作れます。</div>
 <div class="notice" id="n-prop" hidden><b>ここに書いていただいたことだけを、使います。</b>権利を確認できないものは、お受けできない場合があります（判断はこちらで行います）。<b>住所・電話番号は、ここでは入力しないでください。</b>受け渡しが決まってから、メールでお聞きします。</div>
 
 <details class="card" open><summary><b>いただいた相談の内容</b></summary><div class="brief" id="brief"></div></details>
@@ -131,6 +132,49 @@ textarea{min-height:5.5rem;resize:vertical}
 </div>
 </div>
 
+<!-- 小さなWebツール・試作品 -->
+<div id="k-tool" hidden>
+<div class="card">
+<p class="sec-t">何を作るか</p>
+<div class="field"><label class="l" for="t_tool_name">ツールの名前（仮でOK）</label><input type="text" id="t_tool_name" maxlength="150"></div>
+<div class="field"><label class="l" for="t_purpose">解決したいこと・目的を、くわしく</label><textarea id="t_purpose" maxlength="2000"></textarea></div>
+<div class="field"><label class="l" for="t_users">使う人・使う場面</label><textarea id="t_users" maxlength="1000"></textarea></div>
+<div class="field"><span class="l" id="td-l">主に使う端末</span><div class="opts" role="radiogroup" aria-labelledby="td-l">
+<label><input type="radio" name="t_dev" value="スマホが中心">スマホが中心</label>
+<label><input type="radio" name="t_dev" value="パソコンが中心">パソコンが中心</label>
+<label><input type="radio" name="t_dev" value="どちらも使う">どちらも使う</label></div></div>
+</div>
+<div class="card">
+<p class="sec-t">入力と結果</p>
+<div class="field"><label class="l" for="t_inputs">入力する項目</label><p class="hint">項目の名前・種類（数字・文字・選ぶ）・必ず必要か、を1つずつ。</p><textarea id="t_inputs" maxlength="2500"></textarea></div>
+<div class="field"><label class="l" for="t_outputs">結果の出し方</label><p class="hint">何が・どんな形で表示されるか（数字・一覧・メッセージなど）</p><textarea id="t_outputs" maxlength="2000"></textarea></div>
+<div class="field"><label class="l" for="t_rules">計算・判定の決まりごと</label><p class="hint">計算式・条件・基準の表など。いちばん大事な部分です。分かる範囲で。</p><textarea id="t_rules" maxlength="3000"></textarea></div>
+<div class="field"><label class="l" for="t_examples">入力と結果の例（3つほど）</label><p class="hint">「これを入れたら、こう出てほしい」を、実際の数字や言葉で。動作の確認に使います。</p><textarea id="t_examples" maxlength="3000"></textarea></div>
+<div class="field"><label class="l" for="t_screen_idea">画面のイメージ</label><p class="hint">手書きの説明でOKです。近いツールがあれば、下の「参考にしたいツール」にURLを。</p><textarea id="t_screen_idea" maxlength="1500"></textarea></div>
+</div>
+<div class="card">
+<p class="sec-t">データの扱い</p>
+<p class="hint">個人情報の取り扱い・ログイン・決済が必要なものは、お受けできない場合があります。</p>
+<div class="field"><span class="l" id="tdd-l">入力された内容は？</span><div class="opts" role="radiogroup" aria-labelledby="tdd-l">
+<label><input type="radio" name="t_data" value="保存しない（その場で結果を出すだけ）">保存しない（その場で結果を出すだけ）</label>
+<label><input type="radio" name="t_data" value="保存が必要">保存が必要</label>
+<label><input type="radio" name="t_data" value="分からない">分からない</label></div></div>
+<div class="field"><label class="l" for="t_data_notes">ログイン・決済・個人情報について</label><p class="hint">必要になりそうなものがあれば。無ければ空欄でOKです。</p><textarea id="t_data_notes" maxlength="1000"></textarea></div>
+</div>
+<div class="card">
+<div class="field"><label class="l" for="t_ref_urls">参考にしたいツール・ページ</label><p class="hint">1行に1つ。</p><textarea id="t_ref_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-t_ref_urls" role="alert"></p></div>
+<div class="field"><label class="l" for="t_assets_urls">資料・画像の置き場所（共有URL）</label><p class="hint">1行に1つ。Googleドライブなどの共有リンクを入れてください。メールへの添付でも大丈夫です。</p><textarea id="t_assets_urls" maxlength="1200" placeholder="https://"></textarea><p class="err" id="e-t_assets_urls" role="alert"></p></div>
+<div class="field"><span class="l" id="tp-l">公開先の希望</span><div class="opts" role="radiogroup" aria-labelledby="tp-l">
+<label><input type="radio" name="t_pub" value="おまかせしたい">おまかせしたい</label>
+<label><input type="radio" name="t_pub" value="すでに公開先（サーバー等）がある">すでに公開先（サーバー等）がある</label>
+<label><input type="radio" name="t_pub" value="分からない・相談したい">分からない・相談したい</label></div></div>
+<div class="field"><label class="l" for="t_deadline">希望の時期・期限</label><input type="text" id="t_deadline" maxlength="300"></div>
+<div class="field"><label class="l" for="t_must_words">必ず入れたい機能・表示</label><textarea id="t_must_words" maxlength="1500"></textarea></div>
+<div class="field"><label class="l" for="t_ng_words">入れたくないもの</label><textarea id="t_ng_words" maxlength="1000"></textarea></div>
+<div class="field"><label class="l" for="t_extra">ほかに伝えたいこと</label><textarea id="t_extra" maxlength="2000"></textarea></div>
+</div>
+</div>
+
 <div class="hp" aria-hidden="true"><label>この欄は空のままにしてください<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
 <p class="err" id="e-all" role="alert"></p>
 <button class="btn" id="go" type="submit">この内容で送る</button>
@@ -157,6 +201,7 @@ var token=tm?tm[1]:"";
 // 分野ごとの欄：APIの項目名 → 画面の部品のid（radio は別扱い）
 var SPEC={
   lp:{text:["service_name","offer_detail","features","evidence","price_info","schedule","cta_url","must_words","ng_words","assets_urls","ref_urls","extra"],radios:{publish_pref:"pp"},pre:"",errs:["cta_url","assets_urls","ref_urls"]},
+  tool:{text:["tool_name","purpose","users","inputs","outputs","rules","examples","screen_idea","data_notes","deadline","ref_urls","assets_urls","must_words","ng_words","extra"],radios:{devices:"t_dev",data_handling:"t_data",publish_pref:"t_pub"},pre:"t_",errs:["ref_urls","assets_urls"]},
   prop:{text:["item_name","usage","size_detail","colors","parts_pref","extras","deadline","rights_source","ref_images_urls","ref_notes","must_words","ng_words","extra"],radios:{finish_pref:"p_finish",rights_status:"p_rights"},pre:"p_",errs:["ref_images_urls"]}
 };
 var kind="lp";
@@ -169,7 +214,7 @@ function fill(m){var S=SPEC[kind];S.text.forEach(function(k){if(m[k]!==undefined
 function readAll(){var S=SPEC[kind],o={};S.text.forEach(function(k){o[k]=$(eid(k)).value});Object.keys(S.radios).forEach(function(k){o[k]=getRadio(S.radios[k])});return o}
 function saveDraft(){try{sessionStorage.setItem(DRAFT,JSON.stringify(readAll()))}catch(e){}}
 function loadDraft(){try{var r=sessionStorage.getItem(DRAFT);return r?JSON.parse(r):null}catch(e){return null}}
-function setKind(k){kind=SPEC[k]?k:"lp";$("k-lp").hidden=(kind!=="lp");$("k-prop").hidden=(kind!=="prop");$("n-lp").hidden=(kind!=="lp");$("n-prop").hidden=(kind!=="prop")}
+function setKind(k){kind=SPEC[k]?k:"lp";["lp","prop","tool"].forEach(function(x){$("k-"+x).hidden=(kind!==x);$("n-"+x).hidden=(kind!==x)})}
 if(!/^C-\d{8}-[0-9a-f]{6}$/.test(id)||!token){show("v-bad")}
 else{
   fetch(API+"?id="+encodeURIComponent(id),{headers:{"X-Materials-Token":token}})

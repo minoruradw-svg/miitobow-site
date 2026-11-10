@@ -6,7 +6,7 @@
 // 鍵：受付ごとに、推測できない長いランダム文字列を作る。保存するのは「ハッシュ」だけ（保存棚が漏れても鍵は分からない）。
 //     リンクの鍵は、URLの「#」より後ろに入れる（サーバーのログ・Refererに残らない）。
 // 保存先：相談の受付データ（consult:r:<ID>）の中。約6か月で自動的に消える（consult.js と同じ）。
-// 現在の対象：紹介ページ・LP（kind=lp）とコスプレ小道具・フィギュア（kind=prop）。ほかの分野は、実際の相談を見て足す。
+// 現在の対象：紹介ページ・LP（kind=lp）・コスプレ小道具・フィギュア（kind=prop）・小さなWebツール（kind=tool）。「まだ決まっていない」は、分野が決まってから。
 // 個人情報（メール）は、お客様側の画面には返さない。ログに内容を出さない。
 
 import { denyIfBadPin } from "./board/_lib.js";
@@ -31,6 +31,15 @@ const SCHEMAS = {
     ref_images_urls: { max: 1500, urls: true }, ref_notes: { max: 1500 }, size_detail: { max: 600 },
     usage: { max: 600 }, finish_pref: { max: 200 }, colors: { max: 800 }, parts_pref: { max: 800 },
     extras: { max: 600 }, deadline: { max: 300 }, must_words: { max: 1500 }, ng_words: { max: 1000 }, extra: { max: 2000 },
+  },
+  // 小さなWebツール・試作品。「計算・判定の決まりごと」と「入力と結果の例」が、正確に作るための要。
+  // 個人情報・ログイン・決済が絡むものは、受けられない場合がある（判断は運営者。画面では断定しない）。
+  tool: {
+    tool_name: { max: 150 }, purpose: { max: 2000 }, users: { max: 1000 }, inputs: { max: 2500 },
+    outputs: { max: 2000 }, rules: { max: 3000 }, examples: { max: 3000 }, screen_idea: { max: 1500 },
+    devices: { max: 200 }, data_handling: { max: 200 }, data_notes: { max: 1000 }, publish_pref: { max: 600 },
+    deadline: { max: 300 }, ref_urls: { max: 1200, urls: true }, assets_urls: { max: 1200, urls: true },
+    must_words: { max: 1500 }, ng_words: { max: 1000 }, extra: { max: 2000 },
   },
 };
 const KINDS_OK = new Set(Object.keys(SCHEMAS));
