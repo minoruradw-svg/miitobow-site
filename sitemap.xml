@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://miitobow.com/</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://miitobow.com/why</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -17,32 +17,32 @@
   </url>
   <url>
     <loc>https://miitobow.com/made</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://miitobow.com/room/</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://miitobow.com/support</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://miitobow.com/android</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://miitobow.com/android-en</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://miitobow.com/android-ko</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.4</priority>
   </url>
   <url>
@@ -1041,6 +1041,7 @@
   </url>
   <url>
     <loc>https://miitobow.com/game/</loc>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.4</priority>
   </url>
   <url>
@@ -2602,18 +2603,22 @@
   </url>
   <url>
     <loc>https://miitobow.com/start/</loc>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://miitobow.com/services/</loc>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://miitobow.com/windows/</loc>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://miitobow.com/papakue/</loc>
+    <lastmod>2026-11-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
