@@ -850,5 +850,16 @@
     "url": "https://miitobow.com/articles/research-elecblanket",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-elecblanket/theme.png"
+  },
+  {
+    "id": "gearcontainer",
+    "title": "ギアコンテナ",
+    "category": "camp",
+    "model": "gearcontainer",
+    "summary": "35候補を調査して選ぶ5商品",
+    "content": "キャンプ道具をまとめて運ぶ・積むためのギアコンテナ・収納ボックスを35候補調査。容量だけでなく、座れる耐荷重・雨の書き方・しまい方まで確認し、使い方が重複しない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-gearcontainer",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-gearcontainer/theme.png"
   }
 ]
