@@ -33,6 +33,9 @@
   .home-link:hover { text-decoration:underline; }
   .list-section { max-width:1700px; margin:56px auto 0; }
   .list-heading { font-size:15px; font-weight:700; color:#555; margin-bottom:14px; }
+  .list-more { margin:-4px 0 14px; font-size:14px; }
+  .list-more a { color:#2E7D4F; font-weight:700; }
+  @media (prefers-color-scheme: dark) { .list-more a { color:#8fd0a8; } }
   .list-tools { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:16px; }
   .list-search {
     flex:1 1 220px; min-width:0; max-width:320px;
@@ -101,6 +104,7 @@
 <iframe class="room-3d" src="/miitobow-research/?embed=1" title="ミートボーの調査部屋（3D）" loading="lazy"></iframe>
 <div class="list-section">
 <p class="list-heading">記事の一覧</p>
+<p class="list-more"><a href="/research/">サムネイルつきの「商品調査一覧」ページで探す →</a></p>
 <div class="list-tools">
   <input class="list-search" id="list-search" type="search" placeholder="商品名で探す" aria-label="商品名で探す">
   <div class="list-filters" role="group" aria-label="カテゴリで絞り込み">

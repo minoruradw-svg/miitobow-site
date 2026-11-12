@@ -58,6 +58,7 @@ STATIC_PAGES = [
     ("/game/", "game/index.html", "0.4"),
     ("/bus/", "bus/index.html", "0.5"),
     ("/start/", "start/index.html", "0.7"),
+    ("/research/", "research/index.html", "0.7"),
     ("/services/", "services/index.html", "0.7"),
     ("/windows/", "windows/index.html", "0.7"),
     ("/papakue/", "papakue/index.html", "0.7"),
