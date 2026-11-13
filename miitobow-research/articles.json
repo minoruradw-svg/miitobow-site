@@ -861,5 +861,16 @@
     "url": "https://miitobow.com/articles/research-gearcontainer",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-gearcontainer/theme.png"
+  },
+  {
+    "id": "yutanpo",
+    "title": "湯たんぽ",
+    "category": "life",
+    "model": "yutanpo",
+    "summary": "20候補を調査して選んだ5商品",
+    "content": "お湯を入れるタイプ・電子レンジ・充電式、素材もさまざまな湯たんぽの比較記事に挙がった20候補を調査。素材・容量・大きさ・使い方を確認し、重ならない5商品を比較しました。",
+    "url": "https://miitobow.com/articles/research-yutanpo",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-yutanpo/theme.png"
   }
 ]
