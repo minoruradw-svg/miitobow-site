@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#f8f9fb">
+<title>リンク集</title>
+<style>
+:root{
+  --bg:#f8f9fb; --panel:#ffffff; --ink:#221f1b; --ink-soft:#6b6459; --ink-faint:#9c9488;
+  --lime:#6fae2f; --lime-bright:#86d93e; --forest:#3e7a57; --forest-deep:#2c5a40;
+  --line:rgba(34,31,27,.12); --chip:#eef3e6; --chip-on:#3e7a57; --err:#c4414d;
+  --shadow:rgba(44,90,64,.22);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#14171a; --panel:#1d2226; --ink:#f1ede6; --ink-soft:#b3aa9b; --ink-faint:#8b8478;
+    --line:rgba(255,255,255,.13); --chip:#232b22; --chip-on:#6fae2f; --shadow:rgba(0,0,0,.5); --err:#ff7a85; --theme:#14171a}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,system-ui,sans-serif;line-height:1.7;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+[hidden]{display:none!important}
+
+/* ---- 入口（パスワード） ---- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px 18px}
+.gate-card{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px 22px 24px;box-shadow:0 1px 0 var(--line),0 18px 40px -22px var(--shadow)}
+.gate h1{font-size:1.15rem;font-weight:800;letter-spacing:.04em;margin-bottom:18px;text-align:center}
+.field{display:block;width:100%;font-size:16px;min-height:50px;padding:0 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);outline:none}
+.field:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(111,174,47,.25)}
+.remember{display:flex;align-items:center;gap:10px;margin:14px 2px 0;font-size:.9rem;color:var(--ink-soft);min-height:44px}
+.remember input{width:20px;height:20px;accent-color:var(--forest)}
+.err{color:var(--err);font-size:.9rem;min-height:1.4em;margin:6px 2px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border:0;border-radius:999px;font:inherit;font-weight:800;font-size:1rem;color:#fff;cursor:pointer;text-decoration:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,.18),rgba(255,255,255,0) 40%),var(--forest);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),0 3px 0 var(--forest-deep),0 10px 20px -8px var(--shadow)}
+.btn:active{transform:translateY(2px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 1px 0 var(--forest-deep),0 6px 12px -8px var(--shadow)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.gate .btn{width:100%;margin-top:12px}
+
+/* ---- 一覧 ---- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 6px}
+.top h1{font-size:1.25rem;font-weight:800;letter-spacing:.03em}
+.lock{min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
+.search{margin:10px 0 12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{min-height:40px;padding:0 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:inherit;font-size:.88rem;font-weight:700;cursor:pointer}
+.chip small{color:var(--ink-faint);font-weight:700;margin-left:4px}
+.chips.tags{margin:-6px 0 14px}
+.chips.tags .chip{min-height:34px;font-size:.8rem;background:transparent}
+.chips.tags .chip[aria-pressed="true"]{background:var(--chip-on);border-color:var(--chip-on);color:#fff}
+.chip[aria-pressed="true"]{background:var(--chip-on);border-color:var(--chip-on);color:#fff}
+.chip[aria-pressed="true"] small{color:rgba(255,255,255,.8)}
+.count{font-size:.82rem;color:var(--ink-faint);margin:0 2px 10px}
+.cards{display:grid;gap:12px;padding-bottom:48px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 0 var(--line)}
+.card .cat{font-size:.74rem;font-weight:800;letter-spacing:.06em;color:var(--forest)}
+.card h2{font-size:1.02rem;line-height:1.5;font-weight:800}
+.card p{font-size:.9rem;color:var(--ink-soft)}
+.card .meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:6px}
+.card .host{font-size:.8rem;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.card .btn{min-height:44px;padding:0 20px;font-size:.92rem;flex:none}
+.empty{padding:30px 0;color:var(--ink-faint);text-align:center}
+@media (min-width:720px){.cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<main class="gate" id="gate">
+  <form class="gate-card" id="gform" autocomplete="on">
+    <h1>リンク集</h1>
+    <input class="field" id="pw" type="password" name="password" autocomplete="current-password" placeholder="パスワード" aria-label="パスワード" required>
+    <label class="remember"><input type="checkbox" id="rem" checked>この端末で覚える</label>
+    <p class="err" id="err" role="alert"></p>
+    <button class="btn" id="go" type="submit">ひらく</button>
+  </form>
+</main>
+
+<div id="app" hidden>
+  <div class="wrap">
+    <div class="top"><h1>参考サイト</h1><button class="lock" id="lock" type="button">ロック</button></div>
+    <input class="field search" id="q" type="search" placeholder="さがす" aria-label="さがす" autocomplete="off">
+    <div class="chips" id="chips"></div>
+    <div class="chips tags" id="tags" hidden></div>
+    <p class="count" id="count"></p>
+    <div class="cards" id="cards"></div>
+  </div>
+</div>
+
+<script id="payload" type="application/json">{"v":1,"iter":600000,"salt":"J4xf5tFqqHPkMkyJ7ycqWw==","iv":"NA0H6UgODFce1nlF","ct":"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","kid":"18afe3b8"}</script>
+<script>
+(function(){
+  "use strict";
+  var P = JSON.parse(document.getElementById("payload").textContent);
+  var KEY = "mf.k." + (P.kid || "0");
+  var $ = function(id){ return document.getElementById(id); };
+  var data = null, cat = "すべて", tag = "すべて";
+
+  function b64d(s){ var b = atob(s), u = new Uint8Array(b.length); for (var i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+  function b64e(u){ var s=""; for (var i=0;i<u.length;i++) s+=String.fromCharCode(u[i]); return btoa(s); }
+  function store(k, v){ try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){} }
+  function load(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+
+  async function deriveKey(pw){
+    var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({name:"PBKDF2", salt:b64d(P.salt), iterations:P.iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, true, ["decrypt"]);
+  }
+  async function decrypt(key){
+    var buf = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64d(P.iv)}, key, b64d(P.ct));
+    return JSON.parse(new TextDecoder().decode(buf));
+  }
+
+  function host(u){ try { return new URL(u).hostname.replace(/^www\./,""); } catch(e){ return u; } }
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+  function render(){
+    var q = $("q").value.trim().toLowerCase();
+    var sites = data.sites.slice().sort(function(a,b){ return (b.added||"").localeCompare(a.added||""); });
+    var chips = $("chips"); chips.textContent = "";
+    var catsOf = function(s){ return s.categories || (s.category ? [s.category] : []); };
+    var counts = {}; sites.forEach(function(s){ catsOf(s).forEach(function(c){ counts[c] = (counts[c]||0)+1; }); });
+    var cats = ["すべて"].concat((data.categories||[]).filter(function(c){ return counts[c]; }));
+    Object.keys(counts).forEach(function(c){ if (cats.indexOf(c) < 0) cats.push(c); });
+    cats.forEach(function(c){
+      var b = el("button","chip",c); b.type="button"; b.setAttribute("aria-pressed", String(c===cat));
+      var n = c==="すべて" ? sites.length : counts[c]; var sm = el("small",null,String(n)); b.appendChild(sm);
+      b.addEventListener("click", function(){ cat=c; tag="すべて"; render(); });
+      chips.appendChild(b);
+    });
+    var inCat = sites.filter(function(s){ return cat === "すべて" || catsOf(s).indexOf(cat) >= 0; });
+    var tc = {}; inCat.forEach(function(s){ (s.tags||[]).forEach(function(g){ tc[g]=(tc[g]||0)+1; }); });
+    var tnames = Object.keys(tc);
+    var tbox = $("tags"); tbox.textContent = "";
+    if (cat !== "すべて" && tnames.length > 1) {
+      tbox.hidden = false;
+      ["すべて"].concat(tnames).forEach(function(g){
+        var b = el("button","chip",g); b.type="button"; b.setAttribute("aria-pressed", String(g===tag));
+        b.addEventListener("click", function(){ tag=g; render(); });
+        tbox.appendChild(b);
+      });
+    } else { tbox.hidden = true; tag = "すべて"; }
+    var list = inCat.filter(function(s){
+      if (tag !== "すべて" && (s.tags||[]).indexOf(tag) < 0) return false;
+      if (!q) return true;
+      return (s.title+" "+(s.note||"")+" "+s.url+" "+catsOf(s).join(" ")+" "+(s.tags||[]).join(" ")).toLowerCase().indexOf(q) >= 0;
+    });
+    $("count").textContent = list.length + " 件";
+    var box = $("cards"); box.textContent = "";
+    if (!list.length) { box.appendChild(el("p","empty","見つかりません")); return; }
+    list.forEach(function(s){
+      var c = el("article","card");
+      c.appendChild(el("div","cat",catsOf(s).concat(s.tags||[]).filter(function(v,i,arr){return arr.indexOf(v)===i;}).join(" ・ ")));
+      c.appendChild(el("h2",null,s.title));
+      if (s.note) c.appendChild(el("p",null,s.note));
+      var m = el("div","meta"); m.appendChild(el("span","host",host(s.url)));
+      var a = el("a","btn","ひらく"); a.href = s.url; a.target="_blank"; a.rel="noopener noreferrer"; a.setAttribute("aria-label", s.title+" をひらく");
+      m.appendChild(a); c.appendChild(m); box.appendChild(c);
+    });
+  }
+
+  function show(d){ data = d; $("gate").hidden = true; $("app").hidden = false; document.title = "参考サイト"; render(); }
+
+  $("q").addEventListener("input", render);
+  $("lock").addEventListener("click", function(){ store(KEY, null); location.reload(); });
+
+  $("gform").addEventListener("submit", async function(ev){
+    ev.preventDefault();
+    var btn = $("go"), err = $("err"); err.textContent = ""; btn.disabled = true; btn.textContent = "確認中…";
+    try {
+      var key = await deriveKey($("pw").value);
+      var d = await decrypt(key);
+      if ($("rem").checked) { var raw = await crypto.subtle.exportKey("raw", key); store(KEY, b64e(new Uint8Array(raw))); }
+      $("pw").value = "";
+      show(d);
+    } catch(e){
+      err.textContent = "パスワードが違います";
+      btn.disabled = false; btn.textContent = "ひらく";
+    }
+  });
+
+  (async function(){
+    var saved = load(KEY);
+    if (!saved || !(window.crypto && crypto.subtle)) return;
+    try {
+      var key = await crypto.subtle.importKey("raw", b64d(saved), {name:"AES-GCM"}, false, ["decrypt"]);
+      show(await decrypt(key));
+    } catch(e){ store(KEY, null); }
+  })();
+
+  window.__plain = P.plain || null;
+  if (P.plain) { show(P.plain); }
+})();
+</script>
+</body>
+</html>
