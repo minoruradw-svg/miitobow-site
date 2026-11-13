@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>일본 전국 버스 지도 | 버스 정류장·노선을 지도로 | miitobow</title>
+<meta name="description" content="한국어 지도는 1개 도도부현의 6개 지역에서 시험 제공 중이에요(그 밖의 지역은 일본어·영어). 정류장을 누르면 그곳을 지나는 노선이 나와요. 비공식이며 개인이 만들었어요.">
+<link rel="canonical" href="https://miitobow.com/bus/ko/">
+<link rel="alternate" hreflang="ja" href="https://miitobow.com/bus/">
+<link rel="alternate" hreflang="en" href="https://miitobow.com/bus/en/">
+<link rel="alternate" hreflang="ko" href="https://miitobow.com/bus/ko/">
+<link rel="alternate" hreflang="x-default" href="https://miitobow.com/bus/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:title" content="일본 전국 버스 지도 | 버스 정류장·노선을 지도로 | miitobow">
+<meta property="og:description" content="한국어 지도는 1개 도도부현의 6개 지역에서 시험 제공 중이에요(그 밖의 지역은 일본어·영어). 정류장을 누르면 그곳을 지나는 노선이 나와요. 비공식이며 개인이 만들었어요.">
+<meta property="og:url" content="https://miitobow.com/bus/ko/">
+<meta property="og:image" content="https://miitobow.com/bus/assets/og-busmap.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/bus/bus-icon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"일본 전국 버스 지도 | 버스 정류장·노선을 지도로 | miitobow","url":"https://miitobow.com/bus/ko/","inLanguage":"ko","mainEntity":{"@type":"ItemList","numberOfItems":1,"itemListElement":[{"@type":"ListItem","position":1,"name":"후쿠오카현","url":"https://miitobow.com/bus/ko/fukuoka/"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #f6f9f4; --surface: #ffffff; --surface-soft: #eef3ea; --ink: #1f2b20; --ink-soft: #55655a; --accent-dark: #3a5d22; --brand: #6fae2f; --brand-soft: rgba(111,174,47,.18); --border: #dde6d8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #12180f; --surface: #1b2317; --surface-soft: #212b1c; --ink: #eaf1e5; --ink-soft: #a7b8a2; --accent-dark: #b4e68f; --brand: #82c455; --brand-soft: rgba(130,196,85,.22); --border: #2b3625; } }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+.head { font-family: "M PLUS Rounded 1c","Hiragino Sans",sans-serif; font-weight: 900; letter-spacing: .02em; }
+.site { display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 6px max(16px, env(safe-area-inset-left)); background: var(--surface); border-bottom: 1px solid var(--border); font-size: 14px; }
+.site a { color: var(--ink); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.site .cur { color: var(--ink-soft); }
+.site .made { margin-left: auto; }
+main { max-width: 960px; margin: 0 auto; padding: 20px 16px 40px; }
+h1 { font-size: clamp(28px, 6vw, 40px); margin: 0 0 8px; line-height: 1.25; }
+h2 { font-size: 18px; margin: 32px 0 10px; }
+.lead { margin: 0 0 16px; color: var(--ink-soft); text-wrap: pretty; word-break: auto-phrase; }
+.hero-img { margin: 0; background: var(--surface-soft); border-bottom: 1px solid var(--border); }   /* 左右いっぱい(隙間なし)・ヘッダー直下 */
+.hero-img img { display: block; width: 100%; height: auto; }   /* 画面の幅に合わせて拡大縮小。切らない・左右に隙間を作らない */
+.hero-img .ph { display: grid; place-items: center; min-height: 200px; color: var(--ink-soft); }
+.card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 0 0 12px; }
+.card h3 { margin: 0 0 4px; font-size: 20px; }
+.card p { margin: 4px 0; }
+.card .meta { color: var(--ink-soft); font-size: 14px; }
+.card-in { display: grid; gap: 12px; }
+.card-map { margin: 0; }
+.fkmap { display: block; width: 100%; max-width: 190px; height: auto; margin: 0 auto; }
+.fkmap .base { fill: var(--surface-soft); stroke: var(--border); stroke-width: .6; stroke-linejoin: round; }
+.fkmap .hl { fill: var(--brand); stroke: var(--accent-dark); stroke-width: .8; stroke-linejoin: round; }
+.fkmap .part { fill: var(--brand-soft); stroke: var(--brand); stroke-width: .6; stroke-linejoin: round; }
+.card-map figcaption { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+@media (min-width: 640px) { .card-in { grid-template-columns: 1fr 190px; gap: 20px; align-items: center; } }
+.card.soon { background: var(--surface-soft); color: var(--ink-soft); border-style: dashed; }
+.btn { --sh: 36, 72, 16; position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 26px; margin-top: 10px; border-radius: 999px; border: 0; color: #fff; font-weight: 700; letter-spacing: .04em; text-decoration: none; text-shadow: 0 1px 1px rgba(var(--sh), .55);
+  /* まとデザイン(button-depth)：光は上から。上3分の1に光沢→土台の緑。影は黒でなく、緑を濃くした色 */
+  background: linear-gradient(to bottom, rgba(255,255,255,.24), rgba(255,255,255,0) 40%), linear-gradient(to bottom, #4d8a21, #336a16);
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,.6), inset -2px -4px 8px rgba(255,255,255,.16), 0 3px 0 #285512, 0 14px 22px -8px rgba(var(--sh), .45); }
+.card .btn::after { content: "→"; font-weight: 700; }
+.btn:hover { transform: translateY(-1px); background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0) 40%), linear-gradient(to bottom, #559427, #3a751b); color: #fff; }
+.btn:active { transform: translateY(2px); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.4), 0 1px 0 #285512, 0 5px 10px -6px rgba(var(--sh), .5); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { --sh: 8, 20, 4; color: #12180f; text-shadow: 0 1px 0 rgba(255,255,255,.35); background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0) 40%), linear-gradient(to bottom, #94d466, #6fb340); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.55), inset -2px -4px 8px rgba(255,255,255,.2), 0 3px 0 #3f7020, 0 14px 22px -8px rgba(var(--sh), .6); } :root:not([data-theme="light"]) .btn:hover { color: #12180f; } }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--surface-soft); color: var(--ink-soft); border: 1px solid var(--border); }
+.blk { margin: 14px 0 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 4px; padding: 0; list-style: none; }
+.pref, .muni { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 700; text-decoration: none; }
+.pref small, .muni small { font-weight: 400; color: var(--ink-soft); font-size: 12px; }
+a.pref, a.muni { border-color: var(--brand); box-shadow: 0 2px 0 rgba(58,93,34,.22); }
+a.pref:active, a.muni:active { transform: translateY(1px); box-shadow: 0 0 0 rgba(58,93,34,0); }
+a.pref:hover, a.muni:hover { background: var(--brand-soft); transform: translateY(-1px); }
+.pref--soon { background: var(--surface-soft); color: var(--ink-soft); border-style: dashed; font-weight: 400; }
+details { margin: 12px 0; }
+summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: 700; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "▸"; color: var(--accent-dark); transition: transform .15s; }
+details[open] > summary::before { transform: rotate(90deg); }
+.note { margin-top: 28px; padding: 14px 16px; border-radius: 12px; background: var(--surface-soft); color: var(--ink-soft); font-size: 13px; }
+footer { max-width: 960px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px; color: var(--ink-soft); }
+@media (prefers-reduced-motion: no-preference) { .btn, .pref, .muni { transition: background .15s, transform .12s, box-shadow .12s; } }
+/* ---- 2026-11-09 LP化：ホームは「画像のLPだけ」。ボタンを押すと都道府県の一覧が現れる。PCは横長の画像、スマホは縦長の画像 ---- */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.lp { max-width: none; margin: 0; padding: 0; }   /* 横長の画像は、画面の幅いっぱいに（左右に余白を作らない） */
+.lp > * { min-width: 0; }
+.lp-fig { margin: 0; position: relative; }
+.lp-fig img { display: block; width: 100%; height: auto; }
+.lp-hit { position: absolute; display: block; border-radius: 999px; }
+.lp-hit-pc { display: none; }
+.lp-hit:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+@media (min-width: 900px) { .lp-hit-sp { display: none; } .lp-hit-pc { display: block; } }
+.g-pref[hidden] { display: none; }
+.g-pref { padding: 28px 16px 0; scroll-margin-top: 12px; }
+.g-panel { max-width: 960px; margin: 0 auto; }
+.g-intro { padding: 0 0 8px; }
+.tagline { margin: 0 0 8px; font-size: 20px; font-weight: 700; }
+.quick-h { margin: 12px 0 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+.facts { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); font-weight: 700; font-size: 15px; }
+.facts .nb { display: inline-block; margin-right: 10px; }
+.facts small { display: block; margin-top: 4px; font-weight: 400; font-size: 12px; color: var(--ink-soft); }
+.visitors { margin: 16px 0 0; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--brand); background: var(--surface); }
+.visitors h2 { margin: 0 0 6px; font-size: 17px; }
+.visitors ul { margin: 0; padding-left: 20px; }
+.visitors li { margin: 4px 0; font-size: 14px; }
+.visitors a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.g-pref .head { margin-top: 22px; }
+.g-note { max-width: 960px; margin: 0 auto; padding: 8px 16px 0; }
+/* 県ページ：スマホでもミニ地図を右上に小さく置いて、カードを短くする */
+.pref-sum { margin: 0 0 14px; font-weight: 700; color: var(--ink-soft); }
+@media (max-width: 639px) { .card h3 { font-size: 17px; text-wrap: balance; word-break: auto-phrase; } .card-in { grid-template-columns: minmax(0, 1fr) 112px; gap: 12px; align-items: start; } .card-map .fkmap { max-width: 112px; } .card-map figcaption { display: none; } }
+.site .lang { margin-left: auto; min-width: 44px; justify-content: center; padding: 0 10px; border: 2px solid var(--border); border-radius: 12px; }
+.site .lang + .made { margin-left: 8px; }
+.tip { margin: 0 0 16px; font-size: 14px; color: var(--ink-soft); }
+.site .langm { margin-left: auto; }
+.site .langm + .made { margin-left: 8px; }
+  .langm { position: relative; flex: none; }
+  .langm > summary { list-style: none; display: inline-flex; align-items: center; justify-content: center; min-height: 40px; min-width: 44px; padding: 0 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .langm > summary::-webkit-details-marker { display: none; }
+  .langm[open] > summary, .langm > summary:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .langm .langl { position: absolute; z-index: 1100; top: calc(100% + 4px); left: 0; display: flex; flex-direction: column; gap: 4px; padding: 6px; min-width: 120px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  .langm .langl a.lang { justify-content: flex-start; }
+  .langm.lpc, .langm.lsp { border: 0; padding: 0; min-height: 0; background: none; }
+  .langm.lsp .langl, .site .langm .langl { left: auto; right: 0; }
+  html[lang="ko"] body { font-family: "Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Nanum Gothic",system-ui,sans-serif; word-break: keep-all; overflow-wrap: break-word; }
+  html[lang="ko"] .head { font-family: "M PLUS Rounded 1c","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Nanum Gothic",sans-serif; }
+  html[lang="ko"] [lang="ja"], html[lang="ko"] .ja { font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif; word-break: normal; }
+  html[lang="ko"] .lang, html[lang="ko"] .langm > summary { font-family: inherit; }
+</style>
+</head>
+<body>
+<header class="site"><a href="/">miitobow</a> <span aria-hidden="true">›</span> <span class="cur" aria-current="page">버스 지도</span><details class="langm"><summary aria-label="언어"><span lang="ko">한국어</span></summary><div class="langl"><a class="lang" href="/bus/" hreflang="ja" lang="ja">日本語</a><a class="lang" href="/bus/en/" hreflang="en" lang="en">English</a></div></details><a class="made" href="/made.html">작품</a></header>
+<main class="lp"><h1 class="sr-only">일본 전국 버스 지도: 정류장과 노선을 지도로</h1><figure class="lp-fig hero-img g-fv"><picture><source media="(min-width: 900px)" srcset="/bus/assets/lp/lp-ko-fv-wide-v1.webp" width="1659" height="948"><img src="/bus/assets/lp/lp-ko-fv-v1.webp" width="948" height="1659" alt="miitobow 버스 지도. 미니어처 스타일로 찍은 일본 역 앞 광장의 항공사진과 「다음 버스는 어디로 갈까?」라는 문구. 47개 도도부현의 무료 버스 지도(한국어는 후쿠오카현만 시험 제공, 영어·일본어는 전국 지원, AI 생성 이미지)" fetchpriority="high"></picture><a class="lp-hit lp-hit-sp" href="#pref" aria-label="도도부현 선택(목록으로 이동)" style="left:8%;width:84%;top:86%;height:7%"></a><a class="lp-hit lp-hit-pc" href="#pref" aria-label="도도부현 선택(목록으로 이동)" style="left:3%;width:42%;top:74%;height:14%"></a></figure><figure class="lp-fig g-offer"><picture><source media="(min-width: 900px)" srcset="/bus/assets/lp/lp-ko-offer-wide-v1.webp" width="1659" height="948"><img src="/bus/assets/lp/lp-ko-offer-v2.webp" width="948" height="1659" alt="내가 탈 버스를 지도에서 찾아보세요. 네 장의 카드: 정류장 누르기, 노선 고르기, 장소 검색, 한국어·영어·일본어" loading="lazy" decoding="async"></picture></figure><figure class="lp-fig g-detail"><picture><source media="(min-width: 900px)" srcset="/bus/assets/lp/lp-ko-detail-wide-v1.webp" width="1659" height="948"><img src="/bus/assets/lp/lp-ko-detail-v1.webp" width="948" height="1659" alt="고르고, 누르고, 따라가기. 다섯 단계: 도도부현 선택, 지역 지도 열기, 정류장 누르기, 노선 고르기, 정류장을 순서대로 보기. 승차 전에 공식 시간표와 요금을 확인하세요" loading="lazy" decoding="async"></picture></figure><figure class="lp-fig g-cta"><picture><source media="(min-width: 900px)" srcset="/bus/assets/lp/lp-ko-cta-wide-v1.webp" width="1659" height="948"><img src="/bus/assets/lp/lp-ko-cta-v1.webp" width="948" height="1659" alt="여행지의 버스도, 집 근처의 버스도. 역 앞 광장의 노란 버스와 정류장 옆에서 손을 흔드는 마스코트(AI 생성 이미지)" loading="lazy" decoding="async"></picture><a class="lp-hit lp-hit-sp" href="#pref" aria-label="도도부현 선택(목록으로 이동)" style="left:8%;width:84%;top:86%;height:7%"></a><a class="lp-hit lp-hit-pc" href="#pref" aria-label="도도부현 선택(목록으로 이동)" style="left:3%;width:39%;top:64%;height:16%"></a></figure><section class="g-pref" id="pref" hidden><div class="g-panel"><section class="g-intro"><p class="tagline head">일본 전국의 버스 정류장을 지도에서.</p><p class="lead">1개 도도부현을 다루는 지역별 지도 6개. 정류장을 누르면 그곳을 지나는 노선이 나와요. 비공식이며 개인이 만들었어요.</p><p class="quick-h">주요 도시</p><ul class="chips"><li><a class="pref" href="/bus/ko/fukuoka/fukuoka-city/">후쿠오카</a></li></ul><p class="facts"><span class="nb">지도 6개</span><span class="nb">정류장 9,053개</span><span class="nb">노선 1,089개</span><small>모든 지도의 합계입니다(지도 경계 부근은 두 번 셈). 이 사이트 데이터상의 수이며 실시간 운행 정보가 아닙니다.</small></p><aside class="visitors"><h2 class="head">일본 버스가 처음이신가요?</h2><ul><li>정류장 이름은 한글로 표시하고, 표지판의 일본어 이름을 함께 보여줘요. 「≈」는 자동 변환이라 확인되지 않은 표기예요.</li><li>정류장 이름을 일본어로 크게 화면에 띄워 운전기사님이나 직원에게 보여줄 수 있어요.</li><li>관광지와 맛집에서 정류장을 찾을 수 있어요.</li><li><a href="/bus/ko/how-to-ride/">일본 버스 타는 법(일반 안내) ›</a></li></ul></aside></section><h2 class="head">도도부현별</h2><p class="lead">도도부현을 고르면 지역별 버스 지도를 열 수 있어요. 비공식이며 개인이 만들었어요.</p><p class="tip">「일본어만」으로 표시된 도도부현은 아직 일본어 지도만 있어요.</p><p class="blk">홋카이도·도호쿠</p><ul class="chips"><li><a class="pref" href="/bus/hokkaido/" hreflang="ja">홋카이도<small>일본어만</small></a></li><li><a class="pref" href="/bus/aomori/" hreflang="ja">아오모리현<small>일본어만</small></a></li><li><a class="pref" href="/bus/iwate/" hreflang="ja">이와테현<small>일본어만</small></a></li><li><a class="pref" href="/bus/miyagi/" hreflang="ja">미야기현<small>일본어만</small></a></li><li><a class="pref" href="/bus/akita/" hreflang="ja">아키타현<small>일본어만</small></a></li><li><a class="pref" href="/bus/yamagata/" hreflang="ja">야마가타현<small>일본어만</small></a></li><li><a class="pref" href="/bus/fukushima/" hreflang="ja">후쿠시마현<small>일본어만</small></a></li></ul><p class="blk">간토</p><ul class="chips"><li><a class="pref" href="/bus/ibaraki/" hreflang="ja">이바라키현<small>일본어만</small></a></li><li><a class="pref" href="/bus/tochigi/" hreflang="ja">도치기현<small>일본어만</small></a></li><li><a class="pref" href="/bus/gunma/" hreflang="ja">군마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/saitama/" hreflang="ja">사이타마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/chiba/" hreflang="ja">지바현<small>일본어만</small></a></li><li><a class="pref" href="/bus/tokyo/" hreflang="ja">도쿄도<small>일본어만</small></a></li><li><a class="pref" href="/bus/kanagawa/" hreflang="ja">가나가와현<small>일본어만</small></a></li></ul><p class="blk">주부</p><ul class="chips"><li><a class="pref" href="/bus/niigata/" hreflang="ja">니가타현<small>일본어만</small></a></li><li><a class="pref" href="/bus/toyama/" hreflang="ja">도야마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/ishikawa/" hreflang="ja">이시카와현<small>일본어만</small></a></li><li><a class="pref" href="/bus/fukui/" hreflang="ja">후쿠이현<small>일본어만</small></a></li><li><a class="pref" href="/bus/yamanashi/" hreflang="ja">야마나시현<small>일본어만</small></a></li><li><a class="pref" href="/bus/nagano/" hreflang="ja">나가노현<small>일본어만</small></a></li><li><a class="pref" href="/bus/gifu/" hreflang="ja">기후현<small>일본어만</small></a></li><li><a class="pref" href="/bus/shizuoka/" hreflang="ja">시즈오카현<small>일본어만</small></a></li><li><a class="pref" href="/bus/aichi/" hreflang="ja">아이치현<small>일본어만</small></a></li></ul><p class="blk">긴키</p><ul class="chips"><li><a class="pref" href="/bus/mie/" hreflang="ja">미에현<small>일본어만</small></a></li><li><a class="pref" href="/bus/shiga/" hreflang="ja">시가현<small>일본어만</small></a></li><li><a class="pref" href="/bus/kyoto/" hreflang="ja">교토부<small>일본어만</small></a></li><li><a class="pref" href="/bus/osaka/" hreflang="ja">오사카부<small>일본어만</small></a></li><li><a class="pref" href="/bus/hyogo/" hreflang="ja">효고현<small>일본어만</small></a></li><li><a class="pref" href="/bus/nara/" hreflang="ja">나라현<small>일본어만</small></a></li><li><a class="pref" href="/bus/wakayama/" hreflang="ja">와카야마현<small>일본어만</small></a></li></ul><p class="blk">주고쿠</p><ul class="chips"><li><a class="pref" href="/bus/tottori/" hreflang="ja">돗토리현<small>일본어만</small></a></li><li><a class="pref" href="/bus/shimane/" hreflang="ja">시마네현<small>일본어만</small></a></li><li><a class="pref" href="/bus/okayama/" hreflang="ja">오카야마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/hiroshima/" hreflang="ja">히로시마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/yamaguchi/" hreflang="ja">야마구치현<small>일본어만</small></a></li></ul><p class="blk">시코쿠</p><ul class="chips"><li><a class="pref" href="/bus/tokushima/" hreflang="ja">도쿠시마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/kagawa/" hreflang="ja">가가와현<small>일본어만</small></a></li><li><a class="pref" href="/bus/ehime/" hreflang="ja">에히메현<small>일본어만</small></a></li><li><a class="pref" href="/bus/kochi/" hreflang="ja">고치현<small>일본어만</small></a></li></ul><p class="blk">규슈·오키나와</p><ul class="chips"><li><a class="pref" href="/bus/ko/fukuoka/">후쿠오카현<small>지도 6개</small></a></li><li><a class="pref" href="/bus/saga/" hreflang="ja">사가현<small>일본어만</small></a></li><li><a class="pref" href="/bus/nagasaki/" hreflang="ja">나가사키현<small>일본어만</small></a></li><li><a class="pref" href="/bus/kumamoto/" hreflang="ja">구마모토현<small>일본어만</small></a></li><li><a class="pref" href="/bus/oita/" hreflang="ja">오이타현<small>일본어만</small></a></li><li><a class="pref" href="/bus/miyazaki/" hreflang="ja">미야자키현<small>일본어만</small></a></li><li><a class="pref" href="/bus/kagoshima/" hreflang="ja">가고시마현<small>일본어만</small></a></li><li><a class="pref" href="/bus/okinawa/" hreflang="ja">오키나와현<small>일본어만</small></a></li></ul></div></section><div class="g-note"><div class="note">이 페이지는 개인이 취미로 만든 <b>비공식</b> 페이지이며, 어떤 의미로도 공식이 아닙니다. 출처와 면책 사항은 각 지도의 「이 페이지에 대해」에 있습니다. 데이터는 국토교통성 국토수치정보(2022년도) 등을 가공한 것으로, 현재 운행과 다를 수 있습니다. 승차 전에는 운영사의 공식 정보를 확인해 주세요.</div></div></main><footer><a href="/">miitobow.com</a></footer>
+<noscript><style>#pref[hidden]{display:block}</style></noscript>
+<script>(function(){var p=document.getElementById('pref');if(!p)return;
+function show(go){p.hidden=false;if(go){var r=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;p.scrollIntoView({behavior:r?'auto':'smooth',block:'start'});var h=p.querySelector('h2');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href="#pref"]');if(!a)return;e.preventDefault();show(true);try{history.replaceState(null,'','#pref');}catch(x){}});
+if(location.hash==='#pref')show(false);
+window.addEventListener('hashchange',function(){if(location.hash==='#pref')show(true);});})();</script>
+</body>
+</html>
