@@ -307,7 +307,7 @@ a{color:var(--article-link)}
 
 </head>
 <body>
-<a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a>
+<!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
 <div class="wrap">
 <header class="article-opening">
 <p class="situation">スキレットとダッチオーブンの違いが分からず、手入れや重さで後悔したくない人へ</p>
@@ -474,7 +474,7 @@ a{color:var(--article-link)}
   <a class="related-card" href="/articles/research-camptable"><img src="/articles/research-camptable/theme.png" alt="キャンプテーブル" loading="lazy"><span>キャンプテーブル</span></a>
   <a class="related-card" href="/articles/research-coolerbox"><img src="/articles/research-coolerbox/theme.png" alt="クーラーボックス" loading="lazy"><span>クーラーボックス</span></a>
 </div>
-<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">&hellip;</span>本）</a>
+<!--rr:art-hub:A--><template data-rr><a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">&hellip;</span>本）</a></template><!--/rr:art-hub:A--><!--rr:art-hub:B--><a class="related-hub-link" href="/research/">ミートボーの調査で他の記事も見る（全<span id="related-hub-count">…</span>本）</a><!--/rr:art-hub:B-->
 <script>(function(){var el=document.getElementById('related-hub-count');if(!el)return;fetch('/miitobow-research/articles.json').then(function(r){return r.json();}).then(function(list){if(Array.isArray(list)&&list.length){el.textContent=list.length;}}).catch(function(){});})();</script>
 
 <p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>

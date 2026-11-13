@@ -307,7 +307,7 @@ a{color:var(--article-link)}
 
 </head>
 <body>
-<a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a>
+<!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
 <div class="wrap">
 <header class="article-opening">
 <p class="situation">デスクやテーブルに置ける冷蔵庫を探していて、冷えない・うるさいで後悔したくない人へ</p>
@@ -467,7 +467,7 @@ a{color:var(--article-link)}
   <a class="related-card" href="/articles/research-humidifier"><img src="/articles/research-humidifier/theme.png" alt="卓上加湿器" loading="lazy"><span>卓上加湿器</span></a>
   <a class="related-card" href="/articles/research-deskrack"><img src="/articles/research-deskrack/theme.png" alt="デスク上収納ラック" loading="lazy"><span>デスク上収納ラック</span></a>
 </div>
-<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">&hellip;</span>本）</a>
+<!--rr:art-hub:A--><template data-rr><a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">&hellip;</span>本）</a></template><!--/rr:art-hub:A--><!--rr:art-hub:B--><a class="related-hub-link" href="/research/">ミートボーの調査で他の記事も見る（全<span id="related-hub-count">…</span>本）</a><!--/rr:art-hub:B-->
 <script>(function(){var el=document.getElementById('related-hub-count');if(!el)return;fetch('/miitobow-research/articles.json').then(function(r){return r.json();}).then(function(list){if(Array.isArray(list)&&list.length){el.textContent=list.length;}}).catch(function(){});})();</script>
 
 <h2>出典</h2>

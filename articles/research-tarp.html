@@ -301,7 +301,7 @@ a{color:var(--article-link)}
 </style>
 </head>
 <body>
-<a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a>
+<!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
 <div class="wrap">
 
 
@@ -499,7 +499,7 @@ a{color:var(--article-link)}
   <a class="related-card" href="/articles/research-firepit"><img src="/articles/research-firepit/theme.png" alt="焚火台" loading="lazy"><span>焚火台</span></a>
   <a class="related-card" href="/articles/research-coolerbox"><img src="/articles/research-coolerbox/theme.png" alt="クーラーボックス" loading="lazy"><span>クーラーボックス</span></a>
 </div>
-<a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">…</span>本）</a>
+<!--rr:art-hub:A--><template data-rr><a class="related-hub-link" href="/articles/research-room">ミートボーの調査部屋で他の記事も見る（全<span id="related-hub-count">…</span>本）</a></template><!--/rr:art-hub:A--><!--rr:art-hub:B--><a class="related-hub-link" href="/research/">ミートボーの調査で他の記事も見る（全<span id="related-hub-count">…</span>本）</a><!--/rr:art-hub:B-->
 <script>(function(){var el=document.getElementById('related-hub-count');if(!el)return;fetch('/miitobow-research/articles.json').then(function(r){return r.json();}).then(function(list){if(Array.isArray(list)&&list.length){el.textContent=list.length;}}).catch(function(){});})();</script>
 
 <h2>出典</h2>
