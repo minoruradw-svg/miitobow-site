@@ -872,5 +872,16 @@
     "url": "https://miitobow.com/articles/research-yutanpo",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-yutanpo/theme.png"
+  },
+  {
+    "id": "rechargeable-warmer",
+    "title": "充電式カイロ",
+    "category": "life",
+    "model": "rechargeablewarmer",
+    "summary": "5商品を比べて分かった使用時間の見方",
+    "content": "充電式カイロの使用時間は、室温25℃や5℃の環境、低温や高温のモードなど、測った条件が商品ごとに違います。Amazonの商品ページとメーカー公式ページで仕様を確認し、形や使い方が重ならない5商品を比べました。",
+    "url": "https://miitobow.com/articles/research-rechargeable-warmer",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-rechargeable-warmer/theme.png"
   }
 ]
