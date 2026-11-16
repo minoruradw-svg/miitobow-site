@@ -1,10 +1,14 @@
 // DELETE /api/board/<id>  -> 該当の投稿を削除。X-Board-Pin必須。
-// PATCH  /api/board/<id>  -> 投稿にカテゴリーを1件追加 { categoryId }。X-Board-Pin必須。
+// PATCH  /api/board/<id>  -> { categoryId }=カテゴリーを1件追加／{ removeCategoryId }=カテゴリーを1件外す／
+//                            { title, text }=題名・本文の編集。X-Board-Pin必須。
 //
 // ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
 import { loadIndex, saveIndex, rebuildCache, denyIfBadPin } from "./_lib.js";
+
+const MAX_TEXT_LENGTH = 20000; // index.jsと同じ値
+const MAX_TITLE_LENGTH = 200;  // index.jsと同じ値
 
 
 async function findPost(env, id, index) {
@@ -32,8 +36,31 @@ export async function onRequestPatch({ request, env, params }) {
     });
   }
   const categoryId = typeof body.categoryId === "string" ? body.categoryId.trim() : "";
-  if (!categoryId) {
-    return new Response(JSON.stringify({ error: "invalid_category", message: "カテゴリーが指定されていません" }), {
+  const removeCategoryId = typeof body.removeCategoryId === "string" ? body.removeCategoryId.trim() : "";
+  const hasTitle = Object.prototype.hasOwnProperty.call(body, "title");
+  const hasText = Object.prototype.hasOwnProperty.call(body, "text");
+  if (!categoryId && !removeCategoryId && !hasTitle && !hasText) {
+    return new Response(JSON.stringify({ error: "invalid_body", message: "変更する内容が指定されていません" }), {
+      status: 400,
+      headers: { "content-type": "application/json" },
+    });
+  }
+  const newTitle = hasTitle ? (typeof body.title === "string" ? body.title.trim() : null) : undefined;
+  const newText = hasText ? (typeof body.text === "string" ? body.text.trim() : null) : undefined;
+  if (newTitle === null || newText === null) {
+    return new Response(JSON.stringify({ error: "invalid_body", message: "題名・本文は文字で指定してください" }), {
+      status: 400,
+      headers: { "content-type": "application/json" },
+    });
+  }
+  if (newTitle !== undefined && newTitle.length > MAX_TITLE_LENGTH) {
+    return new Response(JSON.stringify({ error: "invalid_title", message: `題名は${MAX_TITLE_LENGTH}文字までです（${newTitle.length}文字）` }), {
+      status: 400,
+      headers: { "content-type": "application/json" },
+    });
+  }
+  if (newText !== undefined && newText.length > MAX_TEXT_LENGTH) {
+    return new Response(JSON.stringify({ error: "invalid_text", message: `1件あたり${MAX_TEXT_LENGTH}文字までです（${newText.length}文字）` }), {
       status: 400,
       headers: { "content-type": "application/json" },
     });
@@ -49,8 +76,20 @@ export async function onRequestPatch({ request, env, params }) {
   }
   const post = found.post;
   const categories = Array.isArray(post.categories) ? post.categories : [];
-  if (!categories.includes(categoryId)) categories.push(categoryId);
-  post.categories = categories;
+  if (categoryId && !categories.includes(categoryId)) categories.push(categoryId);
+  post.categories = removeCategoryId ? categories.filter((c) => c !== removeCategoryId) : categories;
+  if (newTitle !== undefined) {
+    if (newTitle) post.title = newTitle; else delete post.title;
+  }
+  if (newText !== undefined) post.text = newText;
+  // 空の投稿（題名も本文も画像も動画も無い）にはさせない
+  const hasMedia = (Array.isArray(post.images) && post.images.length > 0) || !!post.image || !!post.video;
+  if (!post.title && !post.text && !hasMedia) {
+    return new Response(JSON.stringify({ error: "invalid_text", message: "題名か本文のどちらかは入れてください" }), {
+      status: 400,
+      headers: { "content-type": "application/json" },
+    });
+  }
   await env.MIITOBOW_BOARD.put(found.key, JSON.stringify(post));
   await rebuildCache(env, index);
   return new Response(JSON.stringify(post), {

@@ -11,6 +11,7 @@ const DEFAULT_CATEGORIES = [
   { id: "prompt", name: "プロンプト" },
   { id: "image", name: "画像" },
   { id: "memo", name: "メモ" },
+  { id: "video", name: "動画" },
 ];
 
 
@@ -22,7 +23,13 @@ async function loadCategories(env) {
   }
   try {
     const list = JSON.parse(raw);
-    return Array.isArray(list) ? list : DEFAULT_CATEGORIES.slice();
+    if (!Array.isArray(list)) return DEFAULT_CATEGORIES.slice();
+    // 動画の投稿には自動で id「video」が付くのに、昔の掲示板には「動画」カテゴリーが無く英語のまま出ていた。無ければ1回だけ足す。
+    if (!list.some((c) => c && c.id === "video")) {
+      list.push({ id: "video", name: "動画" });
+      await env.MIITOBOW_BOARD.put(META_KEY, JSON.stringify(list));
+    }
+    return list;
   } catch (e) {
     return DEFAULT_CATEGORIES.slice();
   }
@@ -58,7 +65,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const list = await loadCategories(env);
-  const dup = list.find((c) => c.name.toLowerCase() === name.toLowerCase());
+  const dup = list.find((c) => !c.deleted && c.name.toLowerCase() === name.toLowerCase());
   if (dup) {
     return new Response(
       JSON.stringify({ error: "duplicate", message: "そのカテゴリーは既にあります", category: dup }),

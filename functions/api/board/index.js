@@ -5,7 +5,7 @@
 // ⚠️ post:キーの一覧はKVのlist()を毎回叩かず、_lib.jsの索引キー(board:index)で管理する
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex, loadCache, rebuildCache, denyIfBadPin } from "./_lib.js";
+import { loadIndex, saveIndex, loadCache, rebuildCache, denyIfBadPin, CACHE_KEY } from "./_lib.js";
 
 // バグ等による無限投稿・容量肥大を防ぐための上限（KV無料枠：保存1GB・書き込み1日1000件に対し、
 // 十分すぎるほど余裕を持たせた値。個人用メモとして通常使う分には絶対に到達しない）。
@@ -121,16 +121,49 @@ async function trimOldVideos(env, index) {
   }
 }
 
+// 文字列の短いハッシュ（ETag用。変わったかどうかの判定にだけ使う）
+function etagOf(str) {
+  let h1 = 0x811c9dc5, h2 = 5381;
+  for (let i = 0; i < str.length; i++) {
+    const c = str.charCodeAt(i);
+    h1 ^= c; h1 = Math.imul(h1, 0x01000193);
+    h2 = (Math.imul(h2, 33) + c) | 0;
+  }
+  return '"' + (h1 >>> 0).toString(36) + (h2 >>> 0).toString(36) + "-" + str.length.toString(36) + '"';
+}
+
 export async function onRequestGet({ request, env }) {
   const denied = await denyIfBadPin(request, env);
   if (denied) return denied;
-  const index = await loadIndex(env);
   // 一覧取得はキャッシュ1本のgetだけで完結させる（board.htmlの15秒間隔ポーリングと組み合わさって
   // 投稿ごとに毎回get()していた頃に読み取り回数が線形に増え続けた事故の恒久対策）。
-  const valid = await loadCache(env, index);
-  return new Response(JSON.stringify(valid), {
-    headers: { "content-type": "application/json" },
-  });
+  // 第2段階：キャッシュがあれば索引は読まない（読み取り3回→2回）。キャッシュが無い/壊れている時だけ索引から再構築する。
+  let body = null;
+  const raw = await env.MIITOBOW_BOARD.get(CACHE_KEY);
+  if (raw !== null) {
+    try {
+      if (Array.isArray(JSON.parse(raw))) body = raw;
+    } catch (e) {
+      body = null;
+    }
+  }
+  if (body === null) {
+    const index = await loadIndex(env);
+    body = JSON.stringify(await loadCache(env, index));
+  }
+  // 変わっていなければ中身を返さない（304）。ブラウザは自動でIf-None-Matchを付けて確かめる
+  const etag = etagOf(body);
+  const headers = {
+    "content-type": "application/json",
+    "X-Board-Api": "2",           // 投稿の編集・カテゴリーを外す/消す に対応していることを画面へ知らせる
+    "ETag": etag,
+    "Cache-Control": "private, no-cache",
+    "Vary": "X-Board-Pin",
+  };
+  if (request.headers.get("If-None-Match") === etag) {
+    return new Response(null, { status: 304, headers });
+  }
+  return new Response(body, { headers });
 }
 
 export async function onRequestPost({ request, env }) {
