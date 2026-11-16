@@ -1347,7 +1347,8 @@
     UI_KEY: "miitobow-board-ui", // 検索・絞り込みの保存キー（localStorage）
     IMAGE_KEEP: 20,           // 保存しておく画像の枚数（サーバー側の上限と同じ値。これを超えた古い画像は自動で消える）
     VIDEO_KEEP: 5,            // 保存しておく動画の本数（同上）
-    WIDE_MIN: 1024            // この幅(px)以上は「左に一覧・右に中身」の2画面にする
+    WIDE_MIN: 1024,           // この幅(px)以上は「左に一覧・右に中身」の2画面にする
+    AUTO_OPEN_COUNT: 3        // 新しい順に、この件数ぶんの投稿を、最初から本文までひらいておく（0なら全部とじる）
   };
   var SORTS = [["new", "新しい順"], ["old", "古い順"], ["title", "題名順"]];
   var SORT_LABEL = { "new": "新しい順", "old": "古い順", "title": "題名順" };
@@ -2130,15 +2131,32 @@
   }
 
   // ===================== 一覧の描画（第1段階） =====================
-  var openIds = {};      // いまひらいている投稿のid（描き直しても保つ）。狭い画面で使う
+  var openState = {};    // 狭い画面：ユーザーが自分でひらいた(true)／とじた(false)投稿のid。ここに無い投稿は「新しい3件ならひらく」の規則に従う（描き直しても保つ）
   var selectedId = null; // 選んでいる投稿のid。PCの2画面（1024px以上）で使う
+  var selectedByUser = false; // 選んだのがユーザー自身か（falseなら「いちばん新しい投稿」を自動で出している）
+  var lastCondKey = null;     // 検索・カテゴリー・期間・並び順の組み合わせ（変わったら自動選択をやり直す）
+  var currentAutoOpen = {};   // いまの一覧で「最初からひらく」新しいN件のid
+  // 新しい順に、最初からひらく件数ぶんのidを返す（並び順が「古い順・題名順」でも、ひらくのは新しい投稿）
+  function computeAutoOpen(list) {
+    var s = {};
+    if (CONFIG.AUTO_OPEN_COUNT > 0) {
+      list.slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); })
+        .slice(0, CONFIG.AUTO_OPEN_COUNT).forEach(function (p) { s[p.id] = true; });
+    }
+    return s;
+  }
+  function newestOf(list) {
+    var best = null;
+    list.forEach(function (p) { if (!best || (p.createdAt || 0) > (best.createdAt || 0)) best = p; });
+    return best;
+  }
   var lastDetailSig = "";
   var lastViewKey = null;
   var currentFiltered = [];
 
   var wideMQ = window.matchMedia("(min-width: " + CONFIG.WIDE_MIN + "px)");
   function isWide() { return wideMQ.matches; }
-  function onWideChange() { selectedId = null; lastDetailSig = ""; updateTopbarH(); refreshList(true); }
+  function onWideChange() { selectedId = null; selectedByUser = false; lastDetailSig = ""; updateTopbarH(); refreshList(true); }
   if (wideMQ.addEventListener) wideMQ.addEventListener("change", onWideChange); else if (wideMQ.addListener) wideMQ.addListener(onWideChange);
   // 固定の左の欄・右の中身が、上の固定バーの下から始まるよう、バーの高さをCSS変数に渡す
   function updateTopbarH() {
@@ -2520,7 +2538,7 @@
     var wasLocalAdd = localAdds.some(function (p) { return p.id === id; });
     localAdds = localAdds.filter(function (p) { return p.id !== id; });
     localDeletes.push(id);
-    delete openIds[id];
+    delete openState[id];
     refreshList(true);
     fetch("/api/board/" + encodeURIComponent(id), {
       method: "DELETE",
@@ -2669,9 +2687,10 @@
 
     // ひらく／とじる（ひらいた時に初めて中身と画像を作る）
     var bodyEl = null;
-    function setOpen(open) {
-      if (isWide()) { if (open) selectPost(id); return; }   // PCの2画面では、右の欄に出す
-      if (open) openIds[id] = true; else delete openIds[id];
+    // auto＝「新しい3件は最初からひらく」の自動のひらき。ユーザー自身の操作(auto未指定)だけを覚える
+    function setOpen(open, auto) {
+      if (isWide()) { if (open && !auto) selectPost(id, true); return; }   // PCの2画面では、右の欄に出す
+      if (!auto) openState[id] = open;
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       card.classList.toggle("open", open);
       if (open && !bodyEl) {
@@ -2684,14 +2703,18 @@
       }
     }
     card.__setOpen = setOpen;
-    toggle.addEventListener("click", function () { if (isWide()) selectPost(id); else setOpen(!openIds[id]); });
-    if (!isWide() && openIds[id]) setOpen(true);
+    toggle.addEventListener("click", function () { if (isWide()) selectPost(id, true); else setOpen(!card.classList.contains("open")); });
+    if (!isWide()) {
+      var want = Object.prototype.hasOwnProperty.call(openState, id) ? openState[id] : !!currentAutoOpen[id];
+      if (want) setOpen(true, true);
+    }
     return card;
   }
 
   // --- PCの2画面：選んだ投稿を右の欄に出す ---
-  function selectPost(id) {
+  function selectPost(id, byUser) {
     selectedId = id;
+    selectedByUser = !!byUser;
     Array.prototype.forEach.call(postsEl.children, function (card) {
       var on = card.getAttribute("data-id") === id;
       card.classList.toggle("selected", on);
@@ -2748,8 +2771,34 @@
     renderList(all, filtered);
   }
 
+  // 描き直す前に「画面の上端にいちばん近い行」の場所を覚え、描き直したあとに同じ行が同じ位置に来るよう戻す（新着で一覧が伸びても、読んでいる所が飛ばない）
+  var fabIgnoreUntil = 0;   // 一覧の描き直しの直後は、ブラウザの自動の位置合わせによるスクロールで、スマホの「＋」ボタンを隠さない（時刻 ms）
+  function captureScrollAnchor() {
+    if (window.pageYOffset < 80) return null;   // 一番上にいる時は、新着がそのまま見えてよいので何もしない
+    var top = topbarEl ? topbarEl.getBoundingClientRect().bottom : 0;
+    var cards = postsEl.children;
+    for (var i = 0; i < cards.length; i++) {
+      var r = cards[i].getBoundingClientRect();
+      if (r.bottom > top + 4) return { id: cards[i].getAttribute("data-id"), top: r.top };
+    }
+    return null;
+  }
+  function restoreScrollAnchor(a) {
+    if (!a) return;
+    var cards = postsEl.children;
+    for (var i = 0; i < cards.length; i++) {
+      if (cards[i].getAttribute("data-id") === a.id) {
+        var d = cards[i].getBoundingClientRect().top - a.top;
+        if (Math.abs(d) > 1) window.scrollBy(0, d);
+        return;
+      }
+    }
+  }
+
   function renderList(all, filtered) {
     var tokens = viewState.tokens;
+    var anchor = captureScrollAnchor();
+    if (anchor) fabIgnoreUntil = performance.now() + 1500;
     postsEl.innerHTML = "";
     countEl.textContent = all.length ? (filtersActive() ? filtered.length + "/" + all.length + "件" : all.length + "件") : "";
     renderFilterChips();
@@ -2767,10 +2816,25 @@
       return;
     }
 
+    // 新しい3件を最初からひらく（狭い画面）／いちばん新しい投稿を右の欄に出す（PCの2画面）。ユーザーが触った状態が優先
+    currentAutoOpen = computeAutoOpen(filtered);
+    var condKey = [viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.sort].join("|");
+    var condChanged = condKey !== lastCondKey;
+    lastCondKey = condKey;
+    if (isWide()) {
+      var stillThere = !!selectedId && filtered.some(function (p) { return p.id === selectedId; });
+      if (!stillThere || (condChanged && !selectedByUser)) {
+        var nb = newestOf(filtered);
+        selectedId = nb ? nb.id : null;
+        selectedByUser = false;
+      }
+    }
+
     var shown = filtered.slice(0, viewState.limit);
     var frag = document.createDocumentFragment();
     shown.forEach(function (d) { frag.appendChild(buildPostCard(d, tokens)); });
     postsEl.appendChild(frag);
+    restoreScrollAnchor(anchor);
 
     renderDetail();
     var rest = filtered.length - shown.length;
@@ -3060,7 +3124,7 @@
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
       if (y < 80 || y < lastY - 4) fabBtn.classList.remove("away");
-      else if (y > lastY + 8) fabBtn.classList.add("away");
+      else if (y > lastY + 8 && performance.now() >= fabIgnoreUntil) fabBtn.classList.add("away");   // 描き直し直後の自動の位置合わせでは隠さない（上へ戻した時に出すのは、いつでも）
       lastY = y;
     }, { passive: true });
 
