@@ -305,20 +305,251 @@ a{color:var(--article-link)}
 }
 </style>
 
-</head>
+<style id="mt-responsive">
+/* mt-responsive v1 (2026-11-17) : タブレット幅の左端そろえ／大画面の比例拡大。既存のデザインは変えない */
+/* 1) タブレット(701〜1099px)：見出しと本文の左端をそろえる（以前は最大約120pxずれていた） */
+@media (min-width:701px) and (max-width:1099px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+  .wrap > .compare-img{width:auto;max-width:min(960px,calc(100% - 48px));margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+}
+/* 1b) 中画面（1500〜2199px）：左右の余白が大きく空かないよう、中身(枠1120px)が画面の約77%になる比率で連続的に拡大する（20px刻み）。1840pxで1.26に達し、2200pxの既存段(1.26)と段差なくつながる。高さ800px未満では拡大しない */
+@media (min-width:1500px) and (min-height:800px){body{zoom:1.031}}
+@media (min-width:1520px) and (min-height:800px){body{zoom:1.045}}
+@media (min-width:1540px) and (min-height:800px){body{zoom:1.059}}
+@media (min-width:1560px) and (min-height:800px){body{zoom:1.073}}
+@media (min-width:1580px) and (min-height:800px){body{zoom:1.086}}
+@media (min-width:1600px) and (min-height:800px){body{zoom:1.1}}
+@media (min-width:1620px) and (min-height:800px){body{zoom:1.114}}
+@media (min-width:1640px) and (min-height:800px){body{zoom:1.127}}
+@media (min-width:1660px) and (min-height:800px){body{zoom:1.141}}
+@media (min-width:1680px) and (min-height:800px){body{zoom:1.155}}
+@media (min-width:1700px) and (min-height:800px){body{zoom:1.169}}
+@media (min-width:1720px) and (min-height:800px){body{zoom:1.183}}
+@media (min-width:1740px) and (min-height:800px){body{zoom:1.196}}
+@media (min-width:1760px) and (min-height:800px){body{zoom:1.21}}
+@media (min-width:1780px) and (min-height:800px){body{zoom:1.224}}
+@media (min-width:1800px) and (min-height:800px){body{zoom:1.238}}
+@media (min-width:1820px) and (min-height:800px){body{zoom:1.251}}
+@media (min-width:1840px) and (min-height:800px){body{zoom:1.26}}
+/* 1c) 本文の段落・箇条書き（記事の直下）：1200px以上は、枠の幅いっぱい(最大1120px)まで使い、文字は20pxにして1行を約55字に保つ（以前は最大800px固定で、枠の右約3割が空いていた）。2200px以上は別の設計(下)なので対象外 */
+@media (min-width:1200px) and (max-width:2199px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:min(1120px,calc(100% - 80px))}
+  .wrap > p,.wrap > ul,.wrap > ol{font-size:20px;line-height:1.95}
+}
+/* 2) 大画面（2200px以上）：画面の大きさに合わせて、レイアウトと文字を同じ比率で大きくする。中身が画面の約6割を保つ。1920px以下は今のまま。高さが800px未満の画面では拡大しない */
+@media (min-width:2200px) and (min-height:800px){body{zoom:1.26}}
+@media (min-width:2400px) and (min-height:800px){body{zoom:1.37}}
+@media (min-width:2600px) and (min-height:800px){body{zoom:1.49}}
+@media (min-width:2800px) and (min-height:800px){body{zoom:1.6}}
+@media (min-width:3000px) and (min-height:800px){body{zoom:1.71}}
+@media (min-width:3200px) and (min-height:800px){body{zoom:1.83}}
+@media (min-width:3400px) and (min-height:800px){body{zoom:1.94}}
+@media (min-width:3600px) and (min-height:800px){body{zoom:2.06}}
+@media (min-width:3800px) and (min-height:800px){body{zoom:2.17}}
+/* 3) スマホ：比較表の画像をタップで拡大できる */
+@media (max-width:700px){.compare-img{cursor:zoom-in}}
+.mt-zoom-hint{display:none;text-align:center;font-size:12.5px;color:#6b7a70;margin:-4px 0 8px}
+@media (max-width:700px){.mt-zoom-hint{display:block}}
+.mt-lightbox{position:fixed;inset:0;z-index:99999;background:rgba(10,18,13,.92);overflow:auto;-webkit-overflow-scrolling:touch;display:none}
+.mt-lightbox.is-open{display:block}
+.mt-lightbox img{display:block;width:max(900px,220%);max-width:none;margin:56px 12px 40px;border-radius:8px;background:#fff}
+.mt-lightbox button{position:fixed;top:10px;right:10px;z-index:2;min-width:44px;min-height:44px;border:0;border-radius:22px;padding:0 16px;font:600 15px/1 system-ui,sans-serif;background:#fff;color:#1d3a25;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+</style>
+<style id="mt-design">
+/* mt-design：記事デザインの「豪華・楽しい」共通ブロック（2026-11-17・全記事で共通）。本文・リンク・tag・アンカーは触らず、見た目だけを足す。
+   mato-button-depth（ボタンの立体＝上から光・影は背景/主色を濃くした色）／mato-ornaments（理由が言えるかざりだけ）／mato-text-effects（飾るのは1か所・影は黒にしない）
+   lp-compの考え方（ファーストビューは大きなタイトル＋主役の絵・レイヤーと余白）を、実記事に当てはめた。 */
+:root{
+  --mt-hero-a:#f3eefb;--mt-hero-b:#fceee6;--mt-hero-glow:#ffd9bf;
+  --mt-green:#407f25;--mt-green-d:#2f6a1c;--mt-green-shadow:46,96,28;
+  --mt-ink:#243f2d;
+  --mt-p1:#e6efe0;--mt-p2:#e3edf7;--mt-p3:#ece6f6;--mt-p4:#f7ecd9;--mt-p5:#f4e4e6;
+  --mt-p1d:#5c8a4a;--mt-p2d:#4d7aa8;--mt-p3d:#7b64a8;--mt-p4d:#b08436;--mt-p5d:#a85c68;
+}
+/* ---------- ファーストビュー ---------- */
+/* 入口は.wrap（画面いっぱいの幅）にそろえて全幅にし、中身は左右の余白で1120pxの枠に戻す（vwを使わない＝画面の拡大(zoom)があっても横にはみ出さない） */
+.wrap>.article-opening{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr;gap:0;width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;
+  padding:clamp(28px,4vw,64px) max(24px,calc((100% - 1120px)/2)) clamp(28px,4vw,56px)!important}
+@media(min-width:1100px){.wrap>.article-opening{padding-left:max(40px,calc((100% - 1120px)/2))!important;padding-right:max(40px,calc((100% - 1120px)/2))!important}}
+/* 全幅の背景（理由：記事の主役＝テーマ画像の夕焼け色を、入口全体に広げて世界観を作る） */
+.article-opening:before{content:"";position:absolute;z-index:-1;inset:0;background:
+  radial-gradient(1100px 620px at 60% 78%,var(--mt-hero-glow),transparent 70%),
+  linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(248,249,251,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 56px);mask-image:linear-gradient(180deg,transparent 0,#000 56px)}
+.article-opening .mt-hero{display:block;width:100%;height:auto;border-radius:28px;
+  -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 82%,transparent 100%);
+  filter:drop-shadow(0 18px 28px rgba(196,120,78,.28));margin:0 0 clamp(12px,3vw,24px)}
+.article-opening .situation{display:inline-flex;align-items:center;gap:8px;justify-self:start;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(64,127,37,.22);box-shadow:0 6px 18px rgba(var(--mt-green-shadow),.12);color:#2f6a1c;font-weight:700;font-size:13px;line-height:1.6;margin-bottom:18px}
+.article-opening .situation:before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:linear-gradient(180deg,#8fcb55,#407f25);box-shadow:0 0 0 4px rgba(111,174,47,.18)}
+.article-opening h1{font-size:clamp(32px,4vw,58px);line-height:1.28;letter-spacing:-.04em;color:var(--mt-ink);text-shadow:0 1px 0 rgba(255,255,255,.7),0 10px 30px rgba(255,205,170,.45);margin-bottom:22px}
+.article-opening .opening-summary{font-size:clamp(15px,1.15vw,19px);color:#4d5a50}
+/* CTAボタン（mato-button-depth：上から光・上端ハイライト・上の光沢・下の反射光・主色を濃くした影・厚みの段） */
+.opening-cta,.buy-link,.pick-amazon{position:relative;border:0!important;border-radius:999px!important;color:#fff!important;font-weight:800;letter-spacing:.02em;text-shadow:0 1px 0 rgba(20,60,10,.35);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%),linear-gradient(180deg,#58a233 0%,var(--mt-green) 55%,var(--mt-green-d) 100%)!important;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(255,255,255,.18),0 4px 0 #285a17,0 10px 22px rgba(var(--mt-green-shadow),.32)!important;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
+.opening-cta{justify-self:start;padding:16px 26px!important;gap:20px;margin-top:4px}
+.opening-cta span[aria-hidden]{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.opening-cta:hover,.buy-link:hover,.pick-amazon:hover{transform:translateY(-2px);filter:saturate(1.08);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -3px 6px rgba(255,255,255,.2),0 6px 0 #285a17,0 16px 28px rgba(var(--mt-green-shadow),.36)!important}
+.opening-cta:active,.buy-link:active,.pick-amazon:active{transform:translateY(3px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 1px 0 #285a17,0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+.buy-link{padding-left:22px!important;padding-right:22px!important}
+@media(min-width:900px){
+  /* 入口＝見出し・説明・ボタンの下に、テーマ画像を「画面の左右の端から端まで」全幅で置く（切らない・歪めない・角丸なし）。
+     全幅にするため、入口の左右の余白(padding)をやめ、3本の列で作る：左の余白 | 本文の枠(最大1120px) | 右の余白。
+     画像は1列目〜最後の列にまたがる＝入口(＝画面)いっぱい。vwを使わない（画面の拡大(zoom)やスクロールバーで横にはみ出さないため）。 */
+  .wrap>.article-opening{padding-left:0!important;padding-right:0!important;padding-bottom:0!important;align-content:start;
+    grid-template-columns:minmax(40px,1fr) minmax(0,1120px) minmax(40px,1fr);grid-template-areas:none;grid-template-rows:none}
+  .article-opening .situation{grid-area:auto;grid-column:2;grid-row:1}
+  .article-opening h1{grid-area:auto;grid-column:2;grid-row:2}
+  .article-opening .opening-summary{grid-area:auto;grid-column:2;grid-row:3;max-width:820px}
+  .article-opening .opening-cta{grid-area:auto;grid-column:2;grid-row:4;justify-self:start}
+  .article-opening .mt-picture{grid-area:auto;grid-column:1/-1;grid-row:5;margin:clamp(32px,3.2vw,48px) 0 0;position:relative;overflow:hidden;isolation:isolate;background:#1d1a17}
+  /* 画像が高くなりすぎる超ワイドでは、高さを880pxで止め、画像は切らずに中央へ（contain）。左右の余った所は、同じ画像をぼかして敷いて自然に延長する */
+  .article-opening .mt-picture:before{content:"";position:absolute;inset:-30px;z-index:-1;background:var(--mt-wide) center/cover no-repeat;filter:blur(26px) saturate(1.08) brightness(.92)}
+  .article-opening .mt-hero{display:block;width:100%;height:auto;max-height:880px;object-fit:contain;margin:0;border-radius:0;-webkit-mask-image:none;mask-image:none;animation:none!important;box-shadow:none;filter:none}
+}
+@media(max-width:899px){.article-opening .mt-picture{order:-1;max-width:560px;margin-inline:auto;display:block}}
+.article-opening .mt-picture{display:block}
+@media(min-width:1100px){
+  /* 見出しを左・説明とボタンを右に並べて、右側を空けない（本文の枠の中で2列） */
+  .wrap>.article-opening{grid-template-columns:minmax(40px,1fr) minmax(0,600px) 48px minmax(0,472px) minmax(40px,1fr)}
+  .article-opening .situation{grid-column:2/5}
+  .article-opening h1{grid-column:2;grid-row:2/4;margin-bottom:0;align-self:center}
+  .article-opening .opening-summary{grid-column:4;grid-row:2;align-self:end;margin:0 0 6px;max-width:none}
+  .article-opening .opening-cta{grid-column:4;grid-row:3;align-self:start;margin-top:22px}
+  .article-opening .mt-picture{grid-row:4}
+}
+/* マスコットがゆっくり浮く（理由：入口に「生きている」感じを足す。動きは小さく・動きを減らす設定では止める） */
+@keyframes mt-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.article-opening .mt-hero{animation:mt-float 7s ease-in-out infinite}
+/* 安心の帯とバッジ */
+.stat-badges span{display:inline-flex;align-items:center;gap:6px;background:#fff!important;border:1px solid rgba(64,127,37,.2);box-shadow:0 6px 16px rgba(var(--mt-green-shadow),.1);font-weight:700}
+.stat-badges span:before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--mt-green);color:#fff;font-size:10px;line-height:1}
+/* ---------- 目的ナビ（5つのカード） ---------- */
+.purpose-links a{background:#fff!important;border:1px solid rgba(0,0,0,.06)!important;border-top:4px solid var(--mt-pd,#5c8a4a)!important;border-radius:16px!important;box-shadow:0 10px 24px rgba(60,90,50,.1);transition:transform .2s ease,box-shadow .2s ease}
+.purpose-links a:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(60,90,50,.18)}
+.purpose-links a:nth-child(1){--mt-pd:var(--mt-p2d)}.purpose-links a:nth-child(2){--mt-pd:var(--mt-p1d)}.purpose-links a:nth-child(3){--mt-pd:var(--mt-p3d)}.purpose-links a:nth-child(4){--mt-pd:var(--mt-p4d)}.purpose-links a:nth-child(5){--mt-pd:var(--mt-p5d)}
+.purpose-number{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--mt-pd,#5c8a4a);color:#fff!important;font-weight:800;letter-spacing:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+/* ---------- 結論カルーセル ---------- */
+.wrap>.pick-carousel{background:linear-gradient(160deg,#fff 0%,#f1f6ea 100%)!important;border:1px solid rgba(64,127,37,.16)!important;border-radius:28px!important;box-shadow:0 24px 50px rgba(60,90,50,.14)!important}
+.pick-product{border-radius:20px!important;box-shadow:0 12px 30px rgba(120,110,90,.16)}
+.pick-controls button{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 8px rgba(60,90,50,.12);background:#fff!important}
+.pick-controls button[aria-current="true"]{background:linear-gradient(180deg,#58a233,var(--mt-green-d))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+/* ---------- 商品ごとの色（5色。理由：商品を見分ける目印。価格帯順の並びなので、色は優劣を表さない） ---------- */
+.product-feature.mt-c1{--mt-t:var(--mt-p2);--mt-d:var(--mt-p2d)}
+.product-feature.mt-c2{--mt-t:var(--mt-p1);--mt-d:var(--mt-p1d)}
+.product-feature.mt-c3{--mt-t:var(--mt-p3);--mt-d:var(--mt-p3d)}
+.product-feature.mt-c4{--mt-t:var(--mt-p4);--mt-d:var(--mt-p4d)}
+.product-feature.mt-c5{--mt-t:var(--mt-p5);--mt-d:var(--mt-p5d)}
+.product-stage{background:linear-gradient(135deg,#fff 0%,var(--mt-t,#f0f6e8) 100%)!important}
+.product-stage:after{background:linear-gradient(90deg,var(--mt-t,#f0f6e8) 0%,color-mix(in srgb,var(--mt-t,#f0f6e8) 96%,transparent) 28%,color-mix(in srgb,var(--mt-t,#f0f6e8) 70%,transparent) 44%,transparent 64%)!important}
+.product-stage>.product-img{filter:drop-shadow(0 22px 26px rgba(120,100,80,.25))}
+.product-index{color:var(--mt-d,#466750)!important}
+.product-index:before{content:"";display:inline-block;width:28px;height:2px;margin-right:10px;vertical-align:middle;background:var(--mt-d,#466750);border-radius:2px}
+.product-copy .price-badge{background:linear-gradient(180deg,color-mix(in srgb,var(--mt-d,#407f25) 88%,#fff),var(--mt-d,#407f25))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 10px color-mix(in srgb,var(--mt-d,#407f25) 40%,transparent);text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.product-details .fit-box .col{border-radius:16px;box-shadow:0 8px 22px rgba(60,90,50,.08)}
+.review-voice{border-radius:18px;box-shadow:0 8px 22px rgba(140,110,70,.1)}
+.faq-item{border-radius:14px;box-shadow:0 6px 16px rgba(60,90,50,.07)}
+.compare-img{border-radius:18px;box-shadow:0 16px 36px rgba(60,90,50,.14)}
+/* 見出しの目印（理由：長い記事で節の始まりを目で追えるように） */
+.wrap>h2:before{content:"";display:inline-block;width:6px;height:.95em;margin-right:12px;vertical-align:-.1em;border-radius:3px;background:linear-gradient(180deg,#8fcb55,var(--mt-green))}
+/* ---------- スクロールで、ふわっと出る（JSが動く時だけ。動きを減らす設定では止める） ---------- */
+.mt-js .mt-r{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.mt-js .mt-r.mt-in{opacity:1;transform:none}
+/* ---------- ダーク ---------- */
+@media(prefers-color-scheme:dark){
+  :root{--mt-hero-a:#2a2236;--mt-hero-b:#2b2420;--mt-hero-glow:#6b4a3a;--mt-ink:#edf4e9}
+  .article-opening:before{background:radial-gradient(1100px 620px at 60% 78%,rgba(150,95,70,.55),transparent 70%),linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(27,33,25,0) 100%)}
+  .article-opening .situation{background:rgba(255,255,255,.08);border-color:rgba(181,214,142,.3);color:#cfe8b3}
+  .article-opening h1{text-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .article-opening .opening-summary{color:#d4dccf}
+  .stat-badges span{background:#27331f!important;color:#cfe8b3!important;border-color:rgba(181,214,142,.25)}
+  .purpose-links a{background:#242b21!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  .wrap>.pick-carousel{background:linear-gradient(160deg,#27301f 0%,#1f291c 100%)!important;border-color:rgba(181,214,142,.2)!important}
+  .pick-controls button{background:#2a3626!important}
+  .product-stage{background:linear-gradient(135deg,#232a21 0%,#1d241b 100%)!important}
+  .product-stage:after{background:linear-gradient(90deg,#1d241b 0%,rgba(29,36,27,.96) 28%,rgba(29,36,27,.7) 44%,transparent 64%)!important}
+  .product-index{color:#b5d68e!important}.product-index:before{background:#b5d68e}
+  .compare-img,.review-voice,.faq-item,.product-details .fit-box .col{box-shadow:0 10px 24px rgba(0,0,0,.28)}
+}
+/* ---------- スマホ ---------- */
+@media(max-width:700px){
+  .article-opening h1{font-size:clamp(30px,9vw,44px)}
+  .opening-cta{width:100%;justify-content:space-between}
+  .wrap>.pick-carousel{border-radius:20px!important}
+  .product-stage{background:var(--mt-t,#f0f6e8)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .article-opening .mt-hero{animation:none}
+  .mt-js .mt-r{opacity:1!important;transform:none!important;transition:none!important}
+  .opening-cta,.buy-link,.pick-amazon,.purpose-links a{transition:none}
+}
+
+/* ---------- 超ワイド（画面幅2200px以上）：入口を画面いっぱいに使う ----------
+   理由：本文の枠(1120px)にそろえたままだと、左右が大きく空く。入口は「読む場所」ではなく「入る場所」なので、文字も絵も色も、画面の端近くまで広げる。
+   足し算より、配置と大きさで直す。1440・1920・スマホは変えない。 */
+@media(min-width:2200px){
+  .wrap>.article-opening{min-height:0;grid-template-columns:9% minmax(0,1.2fr) 4% minmax(0,1fr) 9%}
+  .article-opening h1{font-size:76px}
+  .article-opening .opening-summary{font-size:22px;max-width:none}
+  .article-opening .mt-picture{margin-top:56px}
+  /* 夕焼けの光が、部屋の左右にも差している表現（左のラベンダーと右のピーチの、ぼかした大きな円。主役の絵より目立たせない） */
+  .article-opening:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+    radial-gradient(circle 560px at 9% 42%,rgba(214,196,246,.55),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(255,196,150,.48),transparent 70%)}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .article-opening:after{background:
+    radial-gradient(circle 560px at 9% 42%,rgba(120,92,170,.5),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(170,100,70,.42),transparent 70%)}
+}
+
+/* ---------- 超ワイド（2200px以上）：本文まわりも画面の約82%まで広げ、左右の余白は色つきの帯にする ----------
+   割合(%)で指定する理由：画面の拡大(zoom)がかかっても、割合は同じ比率で効くので二重に広がらない。
+   段落だけは読める長さ(約76文字)で止め、そのかわり左右の帯に色を置いて「何もない白」にしない。 */
+@media(min-width:2200px){
+  .wrap{position:relative;isolation:isolate}
+  .wrap:before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 0,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 4.5%,rgba(255,255,255,0) 9%,rgba(255,255,255,0) 91%,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px)}
+  .wrap > :is(.purpose-nav,.pick-carousel,.compare-img){width:82%!important;max-width:none!important;margin-left:9%!important;margin-right:9%!important}
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:76em!important;margin-left:9%!important;margin-right:auto!important}
+  body > .home-link,.home-link{max-width:none!important;margin-left:9%!important;padding-left:0!important}
+  .wrap > .pick-carousel{margin-bottom:64px}
+  /* 入口の背景は、上端・下端ともページの背景色へなだらかに溶けて消える（理由：帯が急に切れると水平の境目が見える） */
+  .article-opening:before,.article-opening:after{-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%)}
+  .product-overlay,.product-details{width:82%!important;max-width:none!important}
+  .product-stage > .product-img{right:9%!important;width:min(780px,40%)!important}
+  .product-copy{width:50%;max-width:700px}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .wrap:before{background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 0,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 4.5%,rgba(0,0,0,0) 9%,rgba(0,0,0,0) 91%,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 100%)}
+}
+
+/* 入口に同じ絵（表紙）が出るので、本文の下にあった同じ表紙バナーは出さない（理由：同じ場面が2回続くのを避ける。表紙そのものは入口に残る） */
+.wrap>img.theme-img{display:none}
+
+/* 見出しの折り返しを均等に（理由：「、」「。」「？」が1文字だけ次の行に落ちるのを防ぐ。文字は飾らない） */
+.article-opening h1{text-wrap:balance}
+.article-opening .opening-summary{text-wrap:pretty}
+/* ---- この記事の色（絵から作った入口の背景色） ---- */
+:root{--mt-hero-a:#f4f1e9;--mt-hero-b:#efe8db;--mt-hero-glow:#e6d5bf}
+@media(prefers-color-scheme:dark){:root{--mt-hero-a:#4b4932;--mt-hero-b:#3a361d;--mt-hero-glow:#625031}}
+</style>
+<style id="mt-list">.mt-list{margin:.5em 0 1.1em 1.3em;padding:0;line-height:1.9;color:inherit}.mt-list li{margin:.25em 0;padding-left:.1em}</style></head>
 <body>
 <!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
 <div class="wrap">
 <header class="article-opening">
+<picture class="mt-picture" style="--mt-wide:url(research-outdoorwagon/hero-wide.webp)"><source media="(min-width:900px)" srcset="research-outdoorwagon/hero-wide.webp" width="1600" height="900"><img class="mt-hero" src="research-outdoorwagon/hero.webp" width="1280" height="720" alt="ミートボーと、アウトドアワゴンのイメージ" fetchpriority="high" decoding="async"></picture>
 <p class="situation">アウトドアワゴンを選べず、サイズや重さで買って後悔したくない人へ</p>
 <h1>そのアウトドアワゴン、<br>耐荷重と容量だけで選んでいませんか？</h1>
 <p class="opening-summary">容量・耐荷重・重さ・タイヤ・電動アシストまで、アウトドアワゴン23候補を調査。使い方が重複しない5商品を比較しました。</p>
 <a class="opening-cta" href="#purpose-picks">自分に合うアウトドアワゴンを探す <span aria-hidden="true">&darr;</span></a>
 </header>
-<img class="theme-img" src="research-outdoorwagon/theme.png" alt="アウトドアワゴンを23候補調べて分かった、後悔しない1台">
+<img class="theme-img" src="research-outdoorwagon/theme.png" alt="アウトドアワゴンを23候補調べて分かった、後悔しない1台" loading="lazy" decoding="async">
 <p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
 
-<p class="article-lead">23候補から、使い方の違う5商品に絞りました。まずは気になる1つへ。向いている人・向いていない人と、低評価レビューもまとめています。</p>
+<p class="article-lead">23候補から、使い方の違う5商品に絞りました。まずは気になる1つへ。</p><p class="article-lead">向いている人・向いていない人と、低評価レビューもまとめています。</p>
 
 <div class="stat-badges">
   <span>23候補を調査</span>
@@ -326,13 +557,13 @@ a{color:var(--article-link)}
   <span>低評価レビューも確認済み</span>
 </div><nav id="purpose-picks" class="purpose-nav" aria-label="目的別の商品目次"><div class="purpose-heading"><h2>目的から選ぶ</h2><span>気になる商品へ、そのまま移動</span></div><div class="purpose-links"><a href="#mini-light"><span class="purpose-number">01</span><strong>軽くて小さく、普段も使いたい</strong><span class="purpose-product">HIKENTURE キャリーワゴン 超軽量4kg</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#xl-250l"><span class="purpose-number">02</span><strong>荷物が多く、長いものも運ぶ</strong><span class="purpose-product">DABADA キャリーワゴン 250L</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#standard-folding"><span class="purpose-number">03</span><strong>迷ったら、定番の標準サイズ</strong><span class="purpose-product">コールマン アウトドアワゴンNX</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#wide-tire"><span class="purpose-number">04</span><strong>砂利や芝生で、重い荷物を</strong><span class="purpose-product">WAQ アウトドアワゴン DX</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#electric-assist"><span class="purpose-number">05</span><strong>坂道や長い距離を、電動で</strong><span class="purpose-product">Outisan 電動キャリーワゴン e-Wagon Air</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a></div></nav><section class="conclusion-box pick-carousel" id="quick-picks" aria-label="目的別のおすすめ5商品" aria-roledescription="カルーセル"><div class="pick-header"><h2>結論から先に言うと：</h2><p>大きさ・耐荷重・重さ・電動か手引きか、何を優先するかで1つを。</p></div><div class="pick-track" tabindex="0" aria-label="商品スライド。左右キーでも切り替えできます"><article class="pick-slide" aria-label="1 / 5：HIKENTURE キャリーワゴン 超軽量4kg"><div class="pick-copy"><span class="pick-number">01 / 05</span><p class="pick-reason">軽くて小さいワゴンを、普段も使いたいなら</p><h3>HIKENTURE キャリーワゴン 超軽量4kg</h3><a class="pick-detail" href="#mini-light">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-outdoorwagon/01_hikenture-mini.jpg" alt="HIKENTURE キャリーワゴン 超軽量4kg" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0DMDQT5J2?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="HIKENTURE キャリーワゴン 超軽量4kgをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="2 / 5：DABADA キャリーワゴン 250L"><div class="pick-copy"><span class="pick-number">02 / 05</span><p class="pick-reason">荷物が多く、長いものもまとめて運ぶなら</p><h3>DABADA キャリーワゴン 250L</h3><a class="pick-detail" href="#xl-250l">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-outdoorwagon/02_dabada-250l.jpg" alt="DABADA キャリーワゴン 250L" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0DKFBP92H?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="DABADA キャリーワゴン 250LをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="3 / 5：コールマン アウトドアワゴンNX"><div class="pick-copy"><span class="pick-number">03 / 05</span><p class="pick-reason">迷ったら、定番メーカーの標準サイズなら</p><h3>コールマン アウトドアワゴンNX</h3><a class="pick-detail" href="#standard-folding">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-outdoorwagon/03_coleman-nx.jpg" alt="コールマン アウトドアワゴンNX" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0FX2ZMG3M?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="コールマン アウトドアワゴンNXをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="4 / 5：WAQ アウトドアワゴン DX"><div class="pick-copy"><span class="pick-number">04 / 05</span><p class="pick-reason">砂利や芝生の上で、重い荷物を運ぶなら</p><h3>WAQ アウトドアワゴン DX</h3><a class="pick-detail" href="#wide-tire">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-outdoorwagon/04_waq-dx.jpg" alt="WAQ アウトドアワゴン DX" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0FJRNWZ96?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="WAQ アウトドアワゴン DXをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="5 / 5：Outisan 電動キャリーワゴン e-Wagon Air"><div class="pick-copy"><span class="pick-number">05 / 05</span><p class="pick-reason">坂道や長い距離を、電動で楽に運ぶなら</p><h3>Outisan 電動キャリーワゴン e-Wagon Air</h3><a class="pick-detail" href="#electric-assist">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-outdoorwagon/05_outisan-air.jpg" alt="Outisan 電動キャリーワゴン e-Wagon Air" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0FDWH7PSH?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="Outisan 電動キャリーワゴン e-Wagon AirをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article></div><div class="pick-controls" hidden><button type="button" class="pick-prev" aria-label="前の商品">&larr;</button><div class="pick-dots"><button type="button" data-pick="0" aria-label="HIKENTURE キャリーワゴン 超軽量4kgを表示" aria-current="true">01</button><button type="button" data-pick="1" aria-label="DABADA キャリーワゴン 250Lを表示">02</button><button type="button" data-pick="2" aria-label="コールマン アウトドアワゴンNXを表示">03</button><button type="button" data-pick="3" aria-label="WAQ アウトドアワゴン DXを表示">04</button><button type="button" data-pick="4" aria-label="Outisan 電動キャリーワゴン e-Wagon Airを表示">05</button></div><button type="button" class="pick-next" aria-label="次の商品">&rarr;</button></div><p class="pick-hint">横にスワイプして、5商品を見比べる</p></section><h2>選び方の基準は3つ</h2>
 <p>調べてわかったのは、基準は3つでした。</p>
-<p>1つ目は「容量と、収納サイズ」。CAMP HACKは、容量の目安を、日帰りやデイキャンプは100L未満、ソロ・デュオは100〜119L、グループ・ファミリーは120L以上としています。今回の5商品は、荷台容量が約69Lのものから、最大300Lまで広げられるものまでありました。車に積むなら、収納サイズ（約L44×W17×H47cmから、約40×56×64cmまで）も見ておきたいところです。</p>
-<p>2つ目は「耐荷重と、タイヤ」。CAMP HACKは、多くの製品が100kg以上あるので、よほど重い荷物を運ぶ予定がなければ気にしすぎなくてよい、大型タイヤは砂利道や段差に強い、としています。今回の5商品の耐荷重は、100kgから200kgまででした。ただし、書き方が「静耐荷重」「本体耐荷重」「静止耐荷重」など商品ごとに違い、電動のOutisanは静止時150kg・走行時75kgと、2つの数字があります。</p>
-<p>3つ目は「重さ」。本体の重さは、約4kgから約18kgまで、約4.5倍の差がありました。ワゴンは荷物を載せて引きますが、車に積むときは、本体を持ち上げることになります。</p>
+<p>1つ目は「容量と、収納サイズ」。CAMP HACKは、容量の目安を、日帰りやデイキャンプは100L未満、ソロ・デュオは100〜119L、グループ・ファミリーは120L以上としています。</p><p>今回の5商品は、荷台容量が約69Lのものから、最大300Lまで広げられるものまでありました。</p><p>車に積むなら、収納サイズ（約L44×W17×H47cmから、約40×56×64cmまで）も見ておきたいところです。</p>
+<p>2つ目は「耐荷重と、タイヤ」。CAMP HACKは、多くの製品が100kg以上あるので、よほど重い荷物を運ぶ予定がなければ気にしすぎなくてよい、大型タイヤは砂利道や段差に強い、としています。</p><p>今回の5商品の耐荷重は、100kgから200kgまででした。</p><p>ただし、書き方が「静耐荷重」「本体耐荷重」「静止耐荷重」など商品ごとに違い、電動のOutisanは静止時150kg・走行時75kgと、2つの数字があります。</p>
+<p>3つ目は「重さ」。本体の重さは、約4kgから約18kgまで、約4.5倍の差がありました。</p><p>ワゴンは荷物を載せて引きますが、車に積むときは、本体を持ち上げることになります。</p>
 
 <h2>比較表</h2>
 <img class="compare-img" src="research-outdoorwagon/compare.png" alt="アウトドアワゴン5商品の価格帯・容量とサイズ・重さと収納サイズ・耐荷重・向く使い方の比較表">
-<p class="compare-cap">価格帯・容量とサイズ・重さと収納サイズ・耐荷重・向く使い方の比較（価格帯は、調査時点のAmazon出品価格の順に付けた目安です。価格は変動が大きく、商品ごとに差があります。手で引くタイプと電動を同じ表に並べています）</p>
+<p class="compare-cap">価格帯・容量とサイズ・重さと収納サイズ・耐荷重・向く使い方の比較です。価格帯は、調査時点のAmazon出品価格の順に付けた目安です。</p><p class="compare-cap">価格は変動が大きく、商品ごとに差があります。手で引くタイプと電動を同じ表に並べています。</p>
 <div class="compare-recap">
   <h3>HIKENTURE キャリーワゴン 超軽量4kg</h3>
   <ul><li>最安クラス</li><li>荷台容量約69L・内寸約L64×W36×H30cm</li><li>約4kg、収納時約L44×W17×H47cm</li><li>静耐荷重100kg</li></ul>
@@ -346,7 +577,7 @@ a{color:var(--article-link)}
   <ul><li>最上位</li><li>160〜300L・使用時約98×56×106cm</li><li>約18kg、折りたたみ時約40×56×64cm</li><li>静止時150kg・走行時75kgまで</li></ul>
 </div>
 
-<section class="product-feature" id="mini-light" aria-labelledby="mini-light-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/01_hikenture-mini.jpg" alt="HIKENTURE キャリーワゴン 超軽量4kg"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 01</span><h2 class="product-situation" id="mini-light-title">車の荷物が少なめで、<br>軽くて小さいワゴンがほしい人へ</h2><div class="product-name-row"><p class="product-name">HIKENTURE キャリーワゴン 超軽量4kg（ミニ）</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>HIKENTUREのキャリーワゴンは、軽くて小さいワゴンを、ゴミ出しや買い物からキャンプまで使いたい人に最もおすすめの1台です。重さは約4kg、静耐荷重は100kgで、荷台容量は約69L（内寸約L64×W36×H30cm）です（Amazon商品ページの表記）。</p><p>収納サイズは約L44×W17×H47cmで、折りたたんでも自立します。強化スチール合金フレームに300D高密度オックスフォード生地で、荷台カバーは取り外して洗えます。荷台の上まで積み上げた場合は、最大約120L相当とされています（自社測定値）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DMDQT5J2?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="mini-light" aria-labelledby="mini-light-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/01_hikenture-mini.jpg" alt="HIKENTURE キャリーワゴン 超軽量4kg"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 01</span><h2 class="product-situation" id="mini-light-title">車の荷物が少なめで、<br>軽くて小さいワゴンがほしい人へ</h2><div class="product-name-row"><p class="product-name">HIKENTURE キャリーワゴン 超軽量4kg（ミニ）</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>HIKENTUREのキャリーワゴンは、軽くて小さいワゴンを、ゴミ出しや買い物からキャンプまで使いたい人に最もおすすめの1台です。</p><p>重さは約4kg、静耐荷重は100kgで、荷台容量は約69L（内寸約L64×W36×H30cm）です（Amazon商品ページの表記）。</p><p>収納サイズは約L44×W17×H47cmで、折りたたんでも自立します。強化スチール合金フレームに300D高密度オックスフォード生地で、荷台カバーは取り外して洗えます。</p><p>荷台の上まで積み上げた場合は、最大約120L相当とされています（自社測定値）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DMDQT5J2?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>車のトランクが小さく、収納サイズを抑えたい人</li><li>ゴミ出しや買い物にも、普段使いしたい人</li><li>ソロやデュオで、荷物がそれほど多くない人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>大きなクーラーボックスやテントを一度に運びたい人（荷台容量は約69L）</li><li>車輪のロックがほしい人（Amazonのレビューに、ロック機構が無いという声）</li><li>引く音が気になる人（レビューに、タイヤがプラスチック製でやや音がするという声）</li></ul></div>
 </div>
@@ -362,7 +593,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0DMDQT5J2?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="xl-250l" aria-labelledby="xl-250l-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/02_dabada-250l.jpg" alt="DABADA キャリーワゴン 250L"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 02</span><h2 class="product-situation" id="xl-250l-title">荷物が多くて、<br>テントも長いものも一度に運びたい人へ</h2><div class="product-name-row"><p class="product-name">DABADA キャリーワゴン 250L 耐荷重200kg</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>DABADAのキャリーワゴンは、荷物が多く、一度にまとめて運びたい人に最もおすすめの1台です。容量は250L、本体耐荷重は約200kgです（Amazon商品ページの表記）。</p><p>使用時のサイズは約幅95×奥行58×高さ78cm（ハンドル最長）、収納時は幅33×奥行23×高さ69cmで、重さは約13kgです。大型タイヤでストッパー付き、自立式で、サイドの収納には、テントなどの長いものを積めます。付属品は収納袋と底敷板です。本体はスチール、カバーはポリエステルです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DKFBP92H?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="xl-250l" aria-labelledby="xl-250l-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/02_dabada-250l.jpg" alt="DABADA キャリーワゴン 250L"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 02</span><h2 class="product-situation" id="xl-250l-title">荷物が多くて、<br>テントも長いものも一度に運びたい人へ</h2><div class="product-name-row"><p class="product-name">DABADA キャリーワゴン 250L 耐荷重200kg</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>DABADAのキャリーワゴンは、荷物が多く、一度にまとめて運びたい人に最もおすすめの1台です。容量は250L、本体耐荷重は約200kgです（Amazon商品ページの表記）。</p><p>使用時のサイズは約幅95×奥行58×高さ78cm（ハンドル最長）、収納時は幅33×奥行23×高さ69cmで、重さは約13kgです。</p><p>大型タイヤでストッパー付き、自立式で、サイドの収納には、テントなどの長いものを積めます。付属品は収納袋と底敷板です。</p><p>本体はスチール、カバーはポリエステルです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DKFBP92H?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>家族やグループで、荷物が多い人</li><li>テントなど長いものも、一緒に運びたい人</li><li>重い荷物（本体耐荷重は約200kg）を運びたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>持ち上げて車に積むのが大変な人（約13kg。Amazonのレビューに、とにかく重いという声）</li><li>カバーの耐久性が気になる人（レビューに、収納カバーが破れた、ファスナーが弱いという声）</li><li>軽さを優先する人（約13kg）</li></ul></div>
 </div>
@@ -378,11 +609,11 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0DKFBP92H?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="standard-folding" aria-labelledby="standard-folding-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/03_coleman-nx.jpg" alt="コールマン アウトドアワゴンNX"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 03</span><h2 class="product-situation" id="standard-folding-title">迷ったら、定番メーカーの<br>標準サイズを選びたい人へ</h2><div class="product-name-row"><p class="product-name">コールマン アウトドアワゴンNX（2230841・ライトグレー）</p><span class="price-badge">標準</span></div><div class="trust-line"><p>コールマンのアウトドアワゴンNXは、定番メーカーの標準サイズのワゴンを、無理なく使いたい人に最もおすすめの1台です。使用時のサイズは約104×51×98cm、重さは約9.3kg、耐荷重は約100kgです（BE-PAL・アルペンのプレスリリース）。</p><p>収納時は約26×40×62cm、荷台は約83×42×33cmです（BE-PAL）。ストッパー付きタイヤ、握りやすいオーバルハンドル、被せるだけの収納ケース、フック付きラバーバンドが付きます（Amazon商品ページの表記）。シートはポリエステル、フレームはスチールです。容量（L）の表記は確認できませんでした。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FX2ZMG3M?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="standard-folding" aria-labelledby="standard-folding-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/03_coleman-nx.jpg" alt="コールマン アウトドアワゴンNX"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 03</span><h2 class="product-situation" id="standard-folding-title">迷ったら、定番メーカーの<br>標準サイズを選びたい人へ</h2><div class="product-name-row"><p class="product-name">コールマン アウトドアワゴンNX（2230841・ライトグレー）</p><span class="price-badge">標準</span></div><div class="trust-line"><p>コールマンのアウトドアワゴンNXは、定番メーカーの標準サイズのワゴンを、無理なく使いたい人に最もおすすめの1台です。</p><p>使用時のサイズは約104×51×98cm、重さは約9.3kg、耐荷重は約100kgです（BE-PAL・アルペンのプレスリリース）。</p><p>収納時は約26×40×62cm、荷台は約83×42×33cmです（BE-PAL）。</p><p>ストッパー付きタイヤ、握りやすいオーバルハンドル、被せるだけの収納ケース、フック付きラバーバンドが付きます（Amazon商品ページの表記）。シートはポリエステル、フレームはスチールです。</p><p>容量（L）の表記は確認できませんでした。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FX2ZMG3M?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>初めてのワゴンを、定番メーカーで選びたい人</li><li>車に積みやすい収納サイズ（約26×40×62cm）にしたい人</li><li>握りやすいハンドルで、毎回の移動を楽にしたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>容量や耐荷重を最優先する人（耐荷重は約100kg）</li><li>砂地や悪路を走りたい人（今回確認した範囲では、ワイドタイヤの記載はありません）</li><li>容量を数字で比べたい人（容量（L）の表記を確認できませんでした）</li></ul></div>
 </div>
-<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">約9.3kgで、収納時は約26×40×62cm。耐荷重約100kgを確保した、車に積みやすい標準サイズです。Amazonの評価は5商品で最も高い4.6でした（48件）。</span></p></div></section>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">約9.3kgで、収納時は約26×40×62cm。耐荷重約100kgを確保した、車に積みやすい標準サイズです。</p><p class="conclusion-line">Amazonの評価は5商品で最も高い4.6でした（48件）。</span></p></div></section>
 <div class="review-voice">
   <b>低評価レビューを調べました</b>
   Amazonのレビューは、今回確認できた範囲では★4の1件（丈夫でコンパクトに畳めて便利、という内容）のみで、★1〜★3の投稿は見当たりませんでした。2025年モデルで評価の件数が48件と少ないため、購入前に最新のレビューを確認してください。
@@ -394,7 +625,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0FX2ZMG3M?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="wide-tire" aria-labelledby="wide-tire-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/04_waq-dx.jpg" alt="WAQ アウトドアワゴン DX"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 04</span><h2 class="product-situation" id="wide-tire-title">砂利や芝生の上でも、<br>重い荷物をしっかり運びたい人へ</h2><div class="product-name-row"><p class="product-name">WAQ アウトドアワゴン DX</p><span class="price-badge">上位</span></div><div class="trust-line"><p>WAQのアウトドアワゴンDXは、砂利や芝生のサイトで、重い荷物を運びたい人に最もおすすめの1台です。静止耐荷重は最大200kgで、容量は106Lから178Lに広げられます（メーカーのプレスリリース）。</p><p>使用時のサイズは約86×48×55〜70cm、収納時は約36×22×70cm、重さは約12.66kgです。広幅のPUタイヤは全輪をワンタッチで取り外せ、前輪には足踏み式のブレーキが付きます（プレスリリース）。Amazonの商品ページは、タイヤ幅を9.5cmとしています。フレームはスチール、シートはキャンバス生地で、天板は別売りです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FJRNWZ96?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="wide-tire" aria-labelledby="wide-tire-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/04_waq-dx.jpg" alt="WAQ アウトドアワゴン DX"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 04</span><h2 class="product-situation" id="wide-tire-title">砂利や芝生の上でも、<br>重い荷物をしっかり運びたい人へ</h2><div class="product-name-row"><p class="product-name">WAQ アウトドアワゴン DX</p><span class="price-badge">上位</span></div><div class="trust-line"><p>WAQのアウトドアワゴンDXは、砂利や芝生のサイトで、重い荷物を運びたい人に最もおすすめの1台です。静止耐荷重は最大200kgで、容量は106Lから178Lに広げられます（メーカーのプレスリリース）。</p><p>使用時のサイズは約86×48×55〜70cm、収納時は約36×22×70cm、重さは約12.66kgです。</p><p>広幅のPUタイヤは全輪をワンタッチで取り外せ、前輪には足踏み式のブレーキが付きます（プレスリリース）。Amazonの商品ページは、タイヤ幅を9.5cmとしています。</p><p>フレームはスチール、シートはキャンバス生地で、天板は別売りです。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FJRNWZ96?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>砂利や芝生のキャンプ場で、重い荷物を運ぶ人</li><li>タイヤを外して、荷物を入れたまま車に積みたい人</li><li>坂のあるサイトで、ブレーキを使いたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>手頃な価格で試したい人（5商品の中で上位の価格帯）</li><li>軽さを優先する人（約12.66kg）</li><li>タイヤの素材にこだわる人（Amazonのレビューに、ゴム製ならよかったという声）</li></ul></div>
 </div>
@@ -410,11 +641,11 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0FJRNWZ96?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="electric-assist" aria-labelledby="electric-assist-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/05_outisan-air.jpg" alt="Outisan 電動キャリーワゴン e-Wagon Air"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 05</span><h2 class="product-situation" id="electric-assist-title">坂道や長い距離を、<br>電動アシストで楽に運びたい人へ</h2><div class="product-name-row"><p class="product-name">Outisan 電動キャリーワゴン e-Wagon Air</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>Outisanのe-Wagon Airは、坂道や長い距離を、電動アシストで楽に運びたい人に最もおすすめの1台です。静止時の耐荷重は150kg、走行時は75kgまでで、1回の充電で最長15km走行できます（Amazon商品ページの表記）。</p><p>使用時のサイズは約98×56×106cm、折りたたみ時は約40×56×64cm、重さは約18kgです（Motor Fan・釣りハックの紹介記事）。容量は160Lから300Lまで拡張でき、バッテリー（135Wh）はワンタッチで着脱できます。防水構造で、12か月保証が付きます（Amazon商品ページの表記）。バッテリーが切れても、手で引くカートとして使えます（釣りハック）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FDWH7PSH?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="electric-assist" aria-labelledby="electric-assist-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-outdoorwagon/05_outisan-air.jpg" alt="Outisan 電動キャリーワゴン e-Wagon Air"><div class="product-overlay"><div class="product-copy"><span class="product-index">OUTDOOR WAGON / 05</span><h2 class="product-situation" id="electric-assist-title">坂道や長い距離を、<br>電動アシストで楽に運びたい人へ</h2><div class="product-name-row"><p class="product-name">Outisan 電動キャリーワゴン e-Wagon Air</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>Outisanのe-Wagon Airは、坂道や長い距離を、電動アシストで楽に運びたい人に最もおすすめの1台です。</p><p>静止時の耐荷重は150kg、走行時は75kgまでで、1回の充電で最長15km走行できます（Amazon商品ページの表記）。</p><p>使用時のサイズは約98×56×106cm、折りたたみ時は約40×56×64cm、重さは約18kgです（Motor Fan・釣りハックの紹介記事）。</p><p>容量は160Lから300Lまで拡張でき、バッテリー（135Wh）はワンタッチで着脱できます。防水構造で、12か月保証が付きます（Amazon商品ページの表記）。</p><p>バッテリーが切れても、手で引くカートとして使えます（釣りハック）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0FDWH7PSH?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>坂道のあるキャンプ場で、重い荷物を運ぶ人</li><li>駐車場からサイトまで遠く、長く引く人</li><li>手で引く腕や腰の負担を、減らしたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>手頃な価格で試したい人（5商品の中で最上位の価格帯）</li><li>車に積むとき、持ち上げたくない人（約18kg。紹介記事にも、積み込みには力が要るとあります）</li><li>走行中も重い荷物を載せたい人（走行時の耐荷重は75kgまで）</li><li>安全面の口コミを重く見る人（Amazonのレビューに、急発進で足を踏まれたという声）</li></ul></div>
 </div>
-<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">電動アシストで、坂道や長い距離が楽になります。一方で、約18kgの重さと、走行時75kgの上限があります。手で引くワゴンでは足りない人が、検討する1台です。</span></p></div></section>
+<p class="conclusion-line"><span class="decision-label">選ぶ決め手</span><span class="decision-text">電動アシストで、坂道や長い距離が楽になります。一方で、約18kgの重さと、走行時75kgの上限があります。</p><p class="conclusion-line">手で引くワゴンでは足りない人が、検討する1台です。</span></p></div></section>
 <div class="review-voice">
   <b>低評価レビューを調べました</b>
   Amazonのレビューには、★1で、急発進・急加速が何度もあり、タイヤに足を踏まれて怪我をしたという投稿がありました（サポート対応への不満も書かれています）。★4には、商品説明では子供も乗せられる、150kgを積んでも楽に動くと読めるのに、同封の説明書には、子供を乗せるのは危険、荷物を載せたら75kgとあり、混乱したという投稿があります。個別の投稿の真偽までは確認できません。購入前に、説明書の注意と、静止時・走行時の耐荷重の違いを確認してください。
@@ -427,39 +658,39 @@ a{color:var(--article-link)}
 
 
 <details class="research-method" id="research-method"><summary>23候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>アウトドアワゴンは、容量・耐荷重・重さ・タイヤ・収納方式の違いが大きく、「思ったより重い」「車に積めない」「砂利で動かない」というギャップが起きやすい道具です。正直どれを選べばいいのか迷います。</p>
-<p>なので今回、キャンプで使うキャリーワゴン（アウトドアワゴン）の仕様を調べて比較しました。各商品ごとに、向いてる人・向いてない人も調べているので、自分に合う1つを探してみてください。ショッピングカートや台車は対象にしていません。</p>
+<p>なので今回、キャンプで使うキャリーワゴン（アウトドアワゴン）の仕様を調べて比較しました。各商品ごとに、向いてる人・向いてない人も調べているので、自分に合う1つを探してみてください。</p><p>ショッピングカートや台車は対象にしていません。</p>
 
 <h2>23候補から5つに絞り込みました</h2>
-<p>Amazonの商品ページと、メーカーのプレスリリース、紹介記事を中心に調べました。今回はコールマン アウトドアワゴンNX・コールマン アウトドアワゴンマックス・DOD ペリーワゴン・DOD キャリーワゴン150L・DOD 軽量キャリーワゴン 縦型スリム38L・WAQ アウトドアワゴンDX・ロゴス チェアfor2 キャリーカート・ロゴス ROSY ラゲージキャリー・ロゴス お荷物満載キャリー・クイックキャンプ キャリーカート120L・山善 ドデカ盛ワゴン・キャプテンスタッグ CS 収束型4輪キャリー・FIELDOOR ワイルドマルチキャリー スマートタフ・FIELDOOR キャリーワゴン ミニ47L・ニュートラルアウトドア オフロードキャリアワゴンII・DABADA キャリーワゴン250L・グレゴリー アルパカギアワゴン・BougeRV ECW lite・ライシン アウトドアワゴン Eシリーズ・HIKENTURE キャリーワゴン 超軽量4kg・Outisan e-Wagon Air・DABADA 電動アウトドアワゴン・THORR 電動キャリーの23候補を調べ、使い方が重複しないよう5商品に絞りました。</p>
-<p>採用したのは、HIKENTURE（軽くて小さい）、DABADA 250L（大容量・長いものも積める）、コールマン NX（定番の標準サイズ）、WAQ DX（ワイドタイヤ・静止耐荷重200kg）、Outisan e-Wagon Air（電動アシスト）の5つです。</p>
-<p>見送ったのは、採用した商品と使い方が重なるものです。標準サイズでは、DOD ペリーワゴン（約8.8kg・130L・最大積載約100kg・評価4.5・59件）がNXと重なります。ペリーはNXより軽く、容量も明記されていますが、NXは評価4.6と最も高く、収納時の寸法も小さいため、NXを選びました。軽さや容量の明記を重視する人は、ペリーも候補になります。コールマン アウトドアワゴンマックス（約11.5kg・耐荷重100kg・評価4.4・260件）は、ワイドタイヤで、同じブランドのNXと、悪路枠のWAQ DX（静止耐荷重200kg）の両方と重なりました。ロゴス ROSY ラゲージキャリー（約8.5kg・88L・評価4.3・201件）とキャプテンスタッグ CS 収束型（約10.8kg・耐荷重約80kg・評価4.2・267件）も、標準サイズの枠で重なり、耐荷重や容量でNXを上回る点が確認できませんでした。</p>
-<p>悪路・大径タイヤの枠では、クイックキャンプ 120L（21cm径の大型ホイール・静止耐荷重100kg・評価4.4・992件）とFIELDOOR スマートタフ（約12kg・耐荷重150kg・評価4.4・152件）が重なります。評価の件数ではクイックキャンプが上でしたが、耐荷重とブレーキ、全輪のワンタッチ着脱がそろうWAQ DXを選びました。FIELDOORは、調査時点でAmazonの在庫が「残り1点」でした。</p>
-<p>大容量の枠では、DOD キャリーワゴン150L（約14kg・最大積載100kg・評価4.3・1,793件）とライシン Eシリーズ（約13.2kg・耐荷重124kg・120〜230L・評価4.4・81件）が重なります。DABADAは、250L・本体耐荷重約200kg・評価4.2（579件）で、容量と耐荷重の両方で上回ったため選びました。小型の枠では、FIELDOOR ミニ47L（約5.3kg・耐荷重120kg・評価4.0・16件）が、HIKENTURE（約4kg・約69L・評価4.2・483件）と重なり、評価の件数が少ないため見送りました。</p>
-<p>電動の枠では、THORR 電動キャリー（耐荷重100kg・評価4.0・31件）と、BougeRV ECW lite（評価5.0ですが1件のみ）、DABADA 電動（本体耐荷重約60kg・評価4.0で1件のみ）があります。Outisan e-Wagon Airは、評価4.4（18件）で、静止時150kg・走行時75kgと耐荷重の条件がはっきり書かれていたため選びました。ただし、評価の件数は多くありません。</p>
-<p>ほかに、ロゴス チェアfor2 キャリーカート（ベンチ兼用・約15.1kg・耐荷重約140kg・評価3.4・6件）は、ベンチにもなる点が独特ですが、評価が低く件数も少ないため見送りました。ロゴス お荷物満載キャリー（約8.6kg・120L・評価4.4・9件）、ニュートラルアウトドア オフロードキャリアワゴンII（約11.8kg・耐荷重80kg・評価4.7・5件）、グレゴリー アルパカギアワゴン（評価5.0・2件）、DOD 軽量キャリーワゴン 縦型スリム38L（約1.6kg・評価4.5・2件）、山善 ドデカ盛ワゴン（耐荷重80kg・評価5.0・2件）は、評価の件数が少なく、判断材料が足りませんでした。山善は、調査時点で在庫の表示を確認できませんでした。なお、クイックキャンプ ワイドホイールのASINのひとつは、本体ではなくレインカバー単品だったため、使いませんでした。</p>
+<p>Amazonの商品ページと、メーカーのプレスリリース、紹介記事を中心に調べました。今回調べたのは、次の23候補です。</p><ul class="mt-list"><li>コールマン アウトドアワゴンNX</li><li>コールマン アウトドアワゴンマックス</li><li>DOD ペリーワゴン</li><li>DOD キャリーワゴン150L</li><li>DOD 軽量キャリーワゴン 縦型スリム38L</li><li>WAQ アウトドアワゴンDX</li><li>ロゴス チェアfor2 キャリーカート</li><li>ロゴス ROSY ラゲージキャリー</li><li>ロゴス お荷物満載キャリー</li><li>クイックキャンプ キャリーカート120L</li><li>山善 ドデカ盛ワゴン</li><li>キャプテンスタッグ CS 収束型4輪キャリー</li><li>FIELDOOR ワイルドマルチキャリー スマートタフ</li><li>FIELDOOR キャリーワゴン ミニ47L</li><li>ニュートラルアウトドア オフロードキャリアワゴンII</li><li>DABADA キャリーワゴン250L</li><li>グレゴリー アルパカギアワゴン</li><li>BougeRV ECW lite</li><li>ライシン アウトドアワゴン Eシリーズ</li><li>HIKENTURE キャリーワゴン 超軽量4kg</li><li>Outisan e-Wagon Air</li><li>DABADA 電動アウトドアワゴン</li><li>THORR 電動キャリー</li></ul><p>使い方が重複しないよう5商品に絞りました。</p>
+<p>採用したのは、次の5つです。</p><ul class="mt-list"><li>HIKENTURE（軽くて小さい）</li><li>DABADA 250L（大容量・長いものも積める）</li><li>コールマン NX（定番の標準サイズ）</li><li>WAQ DX（ワイドタイヤ・静止耐荷重200kg）</li><li>Outisan e-Wagon Air（電動アシスト）</li></ul>
+<p>見送ったのは、採用した商品と使い方が重なるものです。標準サイズでは、DOD ペリーワゴン（約8.8kg・130L・最大積載約100kg・評価4.5・59件）がNXと重なります。</p><p>ペリーはNXより軽く、容量も明記されていますが、NXは評価4.6と最も高く、収納時の寸法も小さいため、NXを選びました。軽さや容量の明記を重視する人は、ペリーも候補になります。</p><p>コールマン アウトドアワゴンマックス（約11.5kg・耐荷重100kg・評価4.4・260件）は、ワイドタイヤです。</p><p>同じブランドのNXと、悪路枠のWAQ DX（静止耐荷重200kg）の両方と重なりました。標準サイズの枠で重なったのは、次の商品です。</p><ul class="mt-list"><li>ロゴス ROSY ラゲージキャリー（約8.5kg・88L・評価4.3・201件）</li><li>キャプテンスタッグ CS 収束型（約10.8kg・耐荷重約80kg・評価4.2・267件）</li></ul><p>耐荷重や容量でNXを上回る点は確認できませんでした。</p>
+<p>悪路・大径タイヤの枠で重なったのは、次の商品です。</p><ul class="mt-list"><li>クイックキャンプ 120L（21cm径の大型ホイール・静止耐荷重100kg・評価4.4・992件）</li><li>FIELDOOR スマートタフ（約12kg・耐荷重150kg・評価4.4・152件）</li></ul><p>評価の件数ではクイックキャンプが上でしたが、耐荷重とブレーキ、全輪のワンタッチ着脱がそろうWAQ DXを選びました。FIELDOORは、調査時点でAmazonの在庫が「残り1点」でした。</p>
+<p>大容量の枠で重なったのは、次の商品です。</p><ul class="mt-list"><li>DOD キャリーワゴン150L（約14kg・最大積載100kg・評価4.3・1,793件）</li><li>ライシン Eシリーズ（約13.2kg・耐荷重124kg・120〜230L・評価4.4・81件）</li></ul><p>DABADAは、250L・本体耐荷重約200kg・評価4.2（579件）で、容量と耐荷重の両方で上回ったため選びました。</p><p>小型の枠では、FIELDOOR ミニ47L（約5.3kg・耐荷重120kg・評価4.0・16件）が、HIKENTURE（約4kg・約69L・評価4.2・483件）と重なりました。</p><p>評価の件数が少ないため見送りました。</p>
+<p>電動の枠では、次の商品があります。THORR 電動キャリー（耐荷重100kg・評価4.0・31件）です。</p><p>BougeRV ECW lite（評価5.0ですが1件のみ）、DABADA 電動（本体耐荷重約60kg・評価4.0で1件のみ）もあります。</p><p>Outisan e-Wagon Airは、評価4.4（18件）で、静止時150kg・走行時75kgと耐荷重の条件がはっきり書かれていたため選びました。ただし、評価の件数は多くありません。</p>
+<p>ほかに、ロゴス チェアfor2 キャリーカート（ベンチ兼用・約15.1kg・耐荷重約140kg・評価3.4・6件）は、ベンチにもなる点が独特です。評価が低く件数も少ないため見送りました。</p><p>評価の件数が少なく、判断材料が足りなかったのは、次の商品です。</p><ul class="mt-list"><li>ロゴス お荷物満載キャリー（約8.6kg・120L・評価4.4・9件）</li><li>ニュートラルアウトドア オフロードキャリアワゴンII（約11.8kg・耐荷重80kg・評価4.7・5件）</li><li>グレゴリー アルパカギアワゴン（評価5.0・2件）</li><li>DOD 軽量キャリーワゴン 縦型スリム38L（約1.6kg・評価4.5・2件）</li><li>山善 ドデカ盛ワゴン（耐荷重80kg・評価5.0・2件）</li></ul><p>山善は、調査時点で在庫の表示を確認できませんでした。なお、クイックキャンプ ワイドホイールのASINのひとつは、本体ではなくレインカバー単品だったため、使いませんでした。</p>
 
 <h2>低評価の商品も見ました</h2>
-<p>5商品それぞれについて、Amazon商品ページに載っている★1〜★4のレビューを確認しました。個別レビューの真偽までは検証できないため、確認できた範囲の傾向としてまとめています。WebSearchでは、各商品の低評価を独立して検証した記事までは見つかりませんでした。</p>
-<p>確認できた指摘は、HIKENTUREのタイヤ素材・ロック機構・ハンドルのぐらつき、DABADAの重さとカバーの耐久性、WAQ DXのタイヤ素材（1件）とオプション品の不具合（1件）、Outisanの急発進による怪我の報告（1件）と説明書との食い違い（1件）です。コールマンNXは、今回確認できた範囲では★1〜★3の投稿が見当たりませんでした。</p>
+<p>5商品それぞれについて、Amazon商品ページに載っている★1〜★4のレビューを確認しました。個別レビューの真偽までは検証できないため、確認できた範囲の傾向としてまとめています。</p><p>WebSearchでは、各商品の低評価を独立して検証した記事までは見つかりませんでした。</p>
+<p>確認できた指摘は、次のとおりです。</p><ul class="mt-list"><li>HIKENTUREは、タイヤ素材・ロック機構・ハンドルのぐらつきです</li><li>DABADAは、重さとカバーの耐久性です</li><li>WAQ DXは、タイヤ素材（1件）とオプション品の不具合（1件）です</li><li>Outisanは、急発進による怪我の報告（1件）と説明書との食い違い（1件）です</li></ul><p>コールマンNXは、今回確認できた範囲では★1〜★3の投稿が見当たりませんでした。</p>
 
 </div></details>
 
 <h2>調べてみて驚いたこと</h2>
-<p>調査中、重さの差に驚きました。今回の5商品は、約4kgから約18kgまで、約4.5倍の差があります。耐荷重の数字が大きくても、車に積むときは本体を持ち上げるので、軽さは別の基準になります。</p>
-<p>また、耐荷重の書き方が商品ごとに違いました。「静耐荷重」（HIKENTURE）、「本体耐荷重」（DABADA）、「耐荷重」（コールマン）、「静止耐荷重」（WAQ）、「静止時と走行時」（Outisan）です。数字だけを並べても、同じ条件とは限りません。電動のOutisanは、静止時150kgに対して、走行時は75kgまでです。</p>
-<p>さらに、価格帯にも非常に大きな幅があり、特に電動は手で引くタイプと別の価格帯でした。この記事では金額を載せず、相対的な目安で示しています。購入前に、Amazonの販売元と価格を確認してください。</p>
+<p>調査中、重さの差に驚きました。今回の5商品は、約4kgから約18kgまで、約4.5倍の差があります。</p><p>耐荷重の数字が大きくても、車に積むときは本体を持ち上げるので、軽さは別の基準になります。</p>
+<p>また、耐荷重の書き方が商品ごとに違いました。具体的には、次のとおりです。</p><ul class="mt-list"><li>「静耐荷重」（HIKENTURE）</li><li>「本体耐荷重」（DABADA）</li><li>「耐荷重」（コールマン）</li><li>「静止耐荷重」（WAQ）</li><li>「静止時と走行時」（Outisan）</li></ul><p>数字だけを並べても、同じ条件とは限りません。</p><p>電動のOutisanは、静止時150kgに対して、走行時は75kgまでです。</p>
+<p>さらに、価格帯にも非常に大きな幅があり、特に電動は手で引くタイプと別の価格帯でした。この記事では金額を載せず、相対的な目安で示しています。</p><p>購入前に、Amazonの販売元と価格を確認してください。</p>
 <p>つまり、数字の大きさだけでなく、何を、どこまで、誰が運ぶかで選ぶのが大事だと分かりました。</p>
 
 <h2>迷ったらこれ</h2>
 <img class="product-img" src="research-outdoorwagon/03_coleman-nx.jpg" alt="コールマン アウトドアワゴンNX">
-<p>ここまで読んでも迷ったら、約9.3kgで、収納時は約26×40×62cm、耐荷重約100kgの標準サイズで、Amazonの評価が5商品で最も高いコールマン アウトドアワゴンNXが、一番外しにくいと考えます（評価は4.6、48件）。重い荷物や砂利道が中心なら、WAQ DXも選択肢です。</p>
+<p>ここまで読んでも迷ったら、コールマン アウトドアワゴンNXが、一番外しにくいと考えます。約9.3kgで、収納時は約26×40×62cm、耐荷重約100kgの標準サイズです。</p><p>Amazonの評価が5商品で最も高い商品です（評価は4.6、48件）。重い荷物や砂利道が中心なら、WAQ DXも選択肢です。</p>
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0FX2ZMG3M?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 <h2>よくある質問</h2>
-<div class="faq-item"><p>Q. アウトドアワゴンは何Lを選べばいいですか。<br>A. CAMP HACKは、日帰りやデイキャンプは100L未満、ソロ・デュオは100〜119L、グループ・ファミリーは120L以上を目安としています。今回の5商品は、荷台容量が約69L（HIKENTURE）、250L（DABADA）、106〜178L（WAQ）、160〜300L（Outisan）で、コールマンNXは容量（L）の表記を確認できませんでした。</p></div>
-<div class="faq-item"><p>Q. 耐荷重は大きいほどよいですか。<br>A. CAMP HACKは、多くの製品が100kg以上あるので、よほど重い荷物を運ぶ予定がなければ気にしすぎなくてよい、としています。今回の5商品は100kgから200kgでした。ただし、静止時の数字と、走行時の数字は別です。Outisanは、静止時150kg、走行時75kgまでとされています。</p></div>
-<div class="faq-item"><p>Q. 車に積みやすいのはどれですか。<br>A. 収納サイズは、HIKENTUREが約L44×W17×H47cm、コールマンNXが約26×40×62cm、DABADAが33×23×69cm、WAQが約36×22×70cm、Outisanが約40×56×64cmです。WAQは、全輪をワンタッチで取り外せます。重さは約4kgから約18kgまで差があるため、持ち上げられるかも合わせて確認してください。</p></div>
-<div class="faq-item"><p>Q. 電動のワゴンは、坂道でどれくらい楽ですか。<br>A. 今回の調査では、体感の評価までは確認できませんでした。Outisanは、メーカー表記で静止時150kg・走行時75kgまでで、紹介記事（釣りハック）には、急な坂道では積載重量の上限が75kgに下がる、とあります。重さは約18kgで、バッテリーが切れても、手で引くカートとして使えます。</p></div>
+<div class="faq-item"><p>Q. アウトドアワゴンは何Lを選べばいいですか。<br>A. CAMP HACKは、日帰りやデイキャンプは100L未満、ソロ・デュオは100〜119L、グループ・ファミリーは120L以上を目安としています。</p><p>今回の5商品は、荷台容量が約69L（HIKENTURE）、250L（DABADA）、106〜178L（WAQ）、160〜300L（Outisan）です。コールマンNXは、容量（L）の表記を確認できませんでした。</p></div>
+<div class="faq-item"><p>Q. 耐荷重は大きいほどよいですか。<br>A. CAMP HACKは、多くの製品が100kg以上あるので、よほど重い荷物を運ぶ予定がなければ気にしすぎなくてよい、としています。今回の5商品は100kgから200kgでした。</p><p>ただし、静止時の数字と、走行時の数字は別です。Outisanは、静止時150kg、走行時75kgまでとされています。</p></div>
+<div class="faq-item"><p>Q. 車に積みやすいのはどれですか。<br>A. 収納サイズは、HIKENTUREが約L44×W17×H47cm、コールマンNXが約26×40×62cmです。DABADAが33×23×69cm、WAQが約36×22×70cm、Outisanが約40×56×64cmです。</p><p>WAQは、全輪をワンタッチで取り外せます。重さは約4kgから約18kgまで差があるため、持ち上げられるかも合わせて確認してください。</p></div>
+<div class="faq-item"><p>Q. 電動のワゴンは、坂道でどれくらい楽ですか。<br>A. 今回の調査では、体感の評価までは確認できませんでした。</p><p>Outisanは、メーカー表記で静止時150kg・走行時75kgまでで、紹介記事（釣りハック）には、急な坂道では積載重量の上限が75kgに下がる、とあります。</p><p>重さは約18kgで、バッテリーが切れても、手で引くカートとして使えます。</p></div>
 
 <h2>こんな記事も書いてます</h2>
 <div class="related-grid">
@@ -549,4 +780,67 @@ a{color:var(--article-link)}
  window.addEventListener('resize',()=>{track.scrollTo({left:current*track.clientWidth,behavior:'instant'});update();});
  root.querySelector('.pick-controls').hidden=false;update();
 })();</script>
+<script id="mt-responsive-js">
+(function(){try{
+  var img=document.querySelector('.compare-img'); if(!img||img.dataset.mtZoom) return; img.dataset.mtZoom='1';
+  var hint=document.createElement('p'); hint.className='mt-zoom-hint'; hint.textContent='表をタップすると、大きく見られます';
+  img.parentNode.insertBefore(hint,img.nextSibling);
+  var box=document.createElement('div'); box.className='mt-lightbox'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','比較表の拡大');
+  var big=document.createElement('img'); big.alt=img.alt||'比較表'; big.src=img.currentSrc||img.src;
+  var close=document.createElement('button'); close.type='button'; close.textContent='閉じる';
+  box.appendChild(close); box.appendChild(big); document.body.appendChild(box);
+  function open(){ if(!window.matchMedia('(max-width:700px)').matches) return; box.classList.add('is-open'); box.scrollTop=0; box.scrollLeft=0; close.focus(); }
+  function shut(){ box.classList.remove('is-open'); img.focus&&img.focus({preventScroll:true}); }
+  img.addEventListener('click',open); close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&box.classList.contains('is-open')) shut(); });
+}catch(e){}})();
+</script>
+<script id="mt-design-js">
+(function(){
+  /* 入口の見出しは、既存のスクリプトが1文字ずつ<span class="chair-char">に分ける。そのままだと「。」や「ー」だけが次の行に落ちたり、カタカナの語が途中で切れる。
+     句読点・長音・小さい「ッャュョ」は前の文字と、カタカナ/英数字の連なりは1つの塊にして、塊の途中では折り返さない（見た目と文字は変えない）。 */
+  var JOIN_PREV='、。，．？！）」』】〕…ー・ッャュョァィゥェォっゃゅょぁぃぅぇぉ';
+  var WORD=/[ァ-ヶー・A-Za-z0-9０-９Ａ-Ｚａ-ｚ]/;
+  function group(){
+    try{
+      var h=document.querySelector('.article-opening h1'); if(!h)return;
+      var nodes=[].slice.call(h.childNodes), run=[], prevText='', hira=false;
+      function flush(){ if(run.length>1){ var w=document.createElement('span'); w.className='mt-nb'; w.style.whiteSpace='nowrap'; run[0].parentNode.insertBefore(w,run[0]); run.forEach(function(n){w.appendChild(n);}); } run=[]; hira=false; }
+      var KANJI=/[一-龥々〆]/, HIRA=/[ぁ-ん]/;
+      nodes.forEach(function(n){
+        if(!(n.nodeType===1&&n.classList.contains('chair-char'))){ flush(); prevText=''; return; }
+        var t=n.textContent, join=false;
+        if(run.length){
+          if(JOIN_PREV.indexOf(t)!==-1) join=true;
+          else if(WORD.test(t)&&WORD.test(prevText)) join=true;
+          else if(KANJI.test(t)&&KANJI.test(prevText)&&!hira) join=true;
+          else if(HIRA.test(t)&&KANJI.test(prevText)&&!hira) { join=true; hira=true; }   /* 漢字＋送りがな1字 */
+        }
+        if(!join) flush();
+        run.push(n); prevText=t;
+      });
+      flush();
+    }catch(e){}
+  }
+  group();
+  if(document.readyState!=='complete'){ document.addEventListener('DOMContentLoaded',group); window.addEventListener('load',group); }
+  try{ var h1=document.querySelector('.article-opening h1'); if(h1&&window.MutationObserver){ var mo=new MutationObserver(function(){mo.disconnect();group();}); mo.observe(h1,{childList:true}); setTimeout(function(){mo.disconnect();},3000);} }catch(e){}
+})();
+(function(){
+  try{
+    /* 商品ごとの色：出てくる順に5色をふる（JSが動かない時は、既定の緑のまま） */
+    [].slice.call(document.querySelectorAll('.product-feature')).forEach(function(el,i){el.classList.add('mt-c'+((i%5)+1));});
+    var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(rm||!('IntersectionObserver' in window))return;
+    var sel='.purpose-links a,.wrap>.pick-carousel,.compare-img,.compare-recap,.product-copy,.product-details .fit-box .col,.product-details .conclusion-line,.review-voice,.faq-item,.research-method';
+    var els=[].slice.call(document.querySelectorAll(sel));
+    document.documentElement.classList.add('mt-js');
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('mt-in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});
+    els.forEach(function(el){el.classList.add('mt-r');io.observe(el);});
+    /* 安全装置：2.5秒たっても出ていないものは出す（読めなくなる事故を防ぐ） */
+    setTimeout(function(){els.forEach(function(el){el.classList.add('mt-in');});},2500);
+  }catch(e){}
+})();
+</script>
 </body></html>

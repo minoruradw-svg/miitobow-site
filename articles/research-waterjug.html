@@ -305,20 +305,251 @@ a{color:var(--article-link)}
 }
 </style>
 
-</head>
+<style id="mt-responsive">
+/* mt-responsive v1 (2026-11-17) : タブレット幅の左端そろえ／大画面の比例拡大。既存のデザインは変えない */
+/* 1) タブレット(701〜1099px)：見出しと本文の左端をそろえる（以前は最大約120pxずれていた） */
+@media (min-width:701px) and (max-width:1099px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+  .wrap > .compare-img{width:auto;max-width:min(960px,calc(100% - 48px));margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+}
+/* 1b) 中画面（1500〜2199px）：左右の余白が大きく空かないよう、中身(枠1120px)が画面の約77%になる比率で連続的に拡大する（20px刻み）。1840pxで1.26に達し、2200pxの既存段(1.26)と段差なくつながる。高さ800px未満では拡大しない */
+@media (min-width:1500px) and (min-height:800px){body{zoom:1.031}}
+@media (min-width:1520px) and (min-height:800px){body{zoom:1.045}}
+@media (min-width:1540px) and (min-height:800px){body{zoom:1.059}}
+@media (min-width:1560px) and (min-height:800px){body{zoom:1.073}}
+@media (min-width:1580px) and (min-height:800px){body{zoom:1.086}}
+@media (min-width:1600px) and (min-height:800px){body{zoom:1.1}}
+@media (min-width:1620px) and (min-height:800px){body{zoom:1.114}}
+@media (min-width:1640px) and (min-height:800px){body{zoom:1.127}}
+@media (min-width:1660px) and (min-height:800px){body{zoom:1.141}}
+@media (min-width:1680px) and (min-height:800px){body{zoom:1.155}}
+@media (min-width:1700px) and (min-height:800px){body{zoom:1.169}}
+@media (min-width:1720px) and (min-height:800px){body{zoom:1.183}}
+@media (min-width:1740px) and (min-height:800px){body{zoom:1.196}}
+@media (min-width:1760px) and (min-height:800px){body{zoom:1.21}}
+@media (min-width:1780px) and (min-height:800px){body{zoom:1.224}}
+@media (min-width:1800px) and (min-height:800px){body{zoom:1.238}}
+@media (min-width:1820px) and (min-height:800px){body{zoom:1.251}}
+@media (min-width:1840px) and (min-height:800px){body{zoom:1.26}}
+/* 1c) 本文の段落・箇条書き（記事の直下）：1200px以上は、枠の幅いっぱい(最大1120px)まで使い、文字は20pxにして1行を約55字に保つ（以前は最大800px固定で、枠の右約3割が空いていた）。2200px以上は別の設計(下)なので対象外 */
+@media (min-width:1200px) and (max-width:2199px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:min(1120px,calc(100% - 80px))}
+  .wrap > p,.wrap > ul,.wrap > ol{font-size:20px;line-height:1.95}
+}
+/* 2) 大画面（2200px以上）：画面の大きさに合わせて、レイアウトと文字を同じ比率で大きくする。中身が画面の約6割を保つ。1920px以下は今のまま。高さが800px未満の画面では拡大しない */
+@media (min-width:2200px) and (min-height:800px){body{zoom:1.26}}
+@media (min-width:2400px) and (min-height:800px){body{zoom:1.37}}
+@media (min-width:2600px) and (min-height:800px){body{zoom:1.49}}
+@media (min-width:2800px) and (min-height:800px){body{zoom:1.6}}
+@media (min-width:3000px) and (min-height:800px){body{zoom:1.71}}
+@media (min-width:3200px) and (min-height:800px){body{zoom:1.83}}
+@media (min-width:3400px) and (min-height:800px){body{zoom:1.94}}
+@media (min-width:3600px) and (min-height:800px){body{zoom:2.06}}
+@media (min-width:3800px) and (min-height:800px){body{zoom:2.17}}
+/* 3) スマホ：比較表の画像をタップで拡大できる */
+@media (max-width:700px){.compare-img{cursor:zoom-in}}
+.mt-zoom-hint{display:none;text-align:center;font-size:12.5px;color:#6b7a70;margin:-4px 0 8px}
+@media (max-width:700px){.mt-zoom-hint{display:block}}
+.mt-lightbox{position:fixed;inset:0;z-index:99999;background:rgba(10,18,13,.92);overflow:auto;-webkit-overflow-scrolling:touch;display:none}
+.mt-lightbox.is-open{display:block}
+.mt-lightbox img{display:block;width:max(900px,220%);max-width:none;margin:56px 12px 40px;border-radius:8px;background:#fff}
+.mt-lightbox button{position:fixed;top:10px;right:10px;z-index:2;min-width:44px;min-height:44px;border:0;border-radius:22px;padding:0 16px;font:600 15px/1 system-ui,sans-serif;background:#fff;color:#1d3a25;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+</style>
+<style id="mt-design">
+/* mt-design：記事デザインの「豪華・楽しい」共通ブロック（2026-11-17・全記事で共通）。本文・リンク・tag・アンカーは触らず、見た目だけを足す。
+   mato-button-depth（ボタンの立体＝上から光・影は背景/主色を濃くした色）／mato-ornaments（理由が言えるかざりだけ）／mato-text-effects（飾るのは1か所・影は黒にしない）
+   lp-compの考え方（ファーストビューは大きなタイトル＋主役の絵・レイヤーと余白）を、実記事に当てはめた。 */
+:root{
+  --mt-hero-a:#f3eefb;--mt-hero-b:#fceee6;--mt-hero-glow:#ffd9bf;
+  --mt-green:#407f25;--mt-green-d:#2f6a1c;--mt-green-shadow:46,96,28;
+  --mt-ink:#243f2d;
+  --mt-p1:#e6efe0;--mt-p2:#e3edf7;--mt-p3:#ece6f6;--mt-p4:#f7ecd9;--mt-p5:#f4e4e6;
+  --mt-p1d:#5c8a4a;--mt-p2d:#4d7aa8;--mt-p3d:#7b64a8;--mt-p4d:#b08436;--mt-p5d:#a85c68;
+}
+/* ---------- ファーストビュー ---------- */
+/* 入口は.wrap（画面いっぱいの幅）にそろえて全幅にし、中身は左右の余白で1120pxの枠に戻す（vwを使わない＝画面の拡大(zoom)があっても横にはみ出さない） */
+.wrap>.article-opening{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr;gap:0;width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;
+  padding:clamp(28px,4vw,64px) max(24px,calc((100% - 1120px)/2)) clamp(28px,4vw,56px)!important}
+@media(min-width:1100px){.wrap>.article-opening{padding-left:max(40px,calc((100% - 1120px)/2))!important;padding-right:max(40px,calc((100% - 1120px)/2))!important}}
+/* 全幅の背景（理由：記事の主役＝テーマ画像の夕焼け色を、入口全体に広げて世界観を作る） */
+.article-opening:before{content:"";position:absolute;z-index:-1;inset:0;background:
+  radial-gradient(1100px 620px at 60% 78%,var(--mt-hero-glow),transparent 70%),
+  linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(248,249,251,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 56px);mask-image:linear-gradient(180deg,transparent 0,#000 56px)}
+.article-opening .mt-hero{display:block;width:100%;height:auto;border-radius:28px;
+  -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 82%,transparent 100%);
+  filter:drop-shadow(0 18px 28px rgba(196,120,78,.28));margin:0 0 clamp(12px,3vw,24px)}
+.article-opening .situation{display:inline-flex;align-items:center;gap:8px;justify-self:start;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(64,127,37,.22);box-shadow:0 6px 18px rgba(var(--mt-green-shadow),.12);color:#2f6a1c;font-weight:700;font-size:13px;line-height:1.6;margin-bottom:18px}
+.article-opening .situation:before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:linear-gradient(180deg,#8fcb55,#407f25);box-shadow:0 0 0 4px rgba(111,174,47,.18)}
+.article-opening h1{font-size:clamp(32px,4vw,58px);line-height:1.28;letter-spacing:-.04em;color:var(--mt-ink);text-shadow:0 1px 0 rgba(255,255,255,.7),0 10px 30px rgba(255,205,170,.45);margin-bottom:22px}
+.article-opening .opening-summary{font-size:clamp(15px,1.15vw,19px);color:#4d5a50}
+/* CTAボタン（mato-button-depth：上から光・上端ハイライト・上の光沢・下の反射光・主色を濃くした影・厚みの段） */
+.opening-cta,.buy-link,.pick-amazon{position:relative;border:0!important;border-radius:999px!important;color:#fff!important;font-weight:800;letter-spacing:.02em;text-shadow:0 1px 0 rgba(20,60,10,.35);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%),linear-gradient(180deg,#58a233 0%,var(--mt-green) 55%,var(--mt-green-d) 100%)!important;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(255,255,255,.18),0 4px 0 #285a17,0 10px 22px rgba(var(--mt-green-shadow),.32)!important;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
+.opening-cta{justify-self:start;padding:16px 26px!important;gap:20px;margin-top:4px}
+.opening-cta span[aria-hidden]{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.opening-cta:hover,.buy-link:hover,.pick-amazon:hover{transform:translateY(-2px);filter:saturate(1.08);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -3px 6px rgba(255,255,255,.2),0 6px 0 #285a17,0 16px 28px rgba(var(--mt-green-shadow),.36)!important}
+.opening-cta:active,.buy-link:active,.pick-amazon:active{transform:translateY(3px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 1px 0 #285a17,0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+.buy-link{padding-left:22px!important;padding-right:22px!important}
+@media(min-width:900px){
+  /* 入口＝見出し・説明・ボタンの下に、テーマ画像を「画面の左右の端から端まで」全幅で置く（切らない・歪めない・角丸なし）。
+     全幅にするため、入口の左右の余白(padding)をやめ、3本の列で作る：左の余白 | 本文の枠(最大1120px) | 右の余白。
+     画像は1列目〜最後の列にまたがる＝入口(＝画面)いっぱい。vwを使わない（画面の拡大(zoom)やスクロールバーで横にはみ出さないため）。 */
+  .wrap>.article-opening{padding-left:0!important;padding-right:0!important;padding-bottom:0!important;align-content:start;
+    grid-template-columns:minmax(40px,1fr) minmax(0,1120px) minmax(40px,1fr);grid-template-areas:none;grid-template-rows:none}
+  .article-opening .situation{grid-area:auto;grid-column:2;grid-row:1}
+  .article-opening h1{grid-area:auto;grid-column:2;grid-row:2}
+  .article-opening .opening-summary{grid-area:auto;grid-column:2;grid-row:3;max-width:820px}
+  .article-opening .opening-cta{grid-area:auto;grid-column:2;grid-row:4;justify-self:start}
+  .article-opening .mt-picture{grid-area:auto;grid-column:1/-1;grid-row:5;margin:clamp(32px,3.2vw,48px) 0 0;position:relative;overflow:hidden;isolation:isolate;background:#1d1a17}
+  /* 画像が高くなりすぎる超ワイドでは、高さを880pxで止め、画像は切らずに中央へ（contain）。左右の余った所は、同じ画像をぼかして敷いて自然に延長する */
+  .article-opening .mt-picture:before{content:"";position:absolute;inset:-30px;z-index:-1;background:var(--mt-wide) center/cover no-repeat;filter:blur(26px) saturate(1.08) brightness(.92)}
+  .article-opening .mt-hero{display:block;width:100%;height:auto;max-height:880px;object-fit:contain;margin:0;border-radius:0;-webkit-mask-image:none;mask-image:none;animation:none!important;box-shadow:none;filter:none}
+}
+@media(max-width:899px){.article-opening .mt-picture{order:-1;max-width:560px;margin-inline:auto;display:block}}
+.article-opening .mt-picture{display:block}
+@media(min-width:1100px){
+  /* 見出しを左・説明とボタンを右に並べて、右側を空けない（本文の枠の中で2列） */
+  .wrap>.article-opening{grid-template-columns:minmax(40px,1fr) minmax(0,600px) 48px minmax(0,472px) minmax(40px,1fr)}
+  .article-opening .situation{grid-column:2/5}
+  .article-opening h1{grid-column:2;grid-row:2/4;margin-bottom:0;align-self:center}
+  .article-opening .opening-summary{grid-column:4;grid-row:2;align-self:end;margin:0 0 6px;max-width:none}
+  .article-opening .opening-cta{grid-column:4;grid-row:3;align-self:start;margin-top:22px}
+  .article-opening .mt-picture{grid-row:4}
+}
+/* マスコットがゆっくり浮く（理由：入口に「生きている」感じを足す。動きは小さく・動きを減らす設定では止める） */
+@keyframes mt-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.article-opening .mt-hero{animation:mt-float 7s ease-in-out infinite}
+/* 安心の帯とバッジ */
+.stat-badges span{display:inline-flex;align-items:center;gap:6px;background:#fff!important;border:1px solid rgba(64,127,37,.2);box-shadow:0 6px 16px rgba(var(--mt-green-shadow),.1);font-weight:700}
+.stat-badges span:before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--mt-green);color:#fff;font-size:10px;line-height:1}
+/* ---------- 目的ナビ（5つのカード） ---------- */
+.purpose-links a{background:#fff!important;border:1px solid rgba(0,0,0,.06)!important;border-top:4px solid var(--mt-pd,#5c8a4a)!important;border-radius:16px!important;box-shadow:0 10px 24px rgba(60,90,50,.1);transition:transform .2s ease,box-shadow .2s ease}
+.purpose-links a:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(60,90,50,.18)}
+.purpose-links a:nth-child(1){--mt-pd:var(--mt-p2d)}.purpose-links a:nth-child(2){--mt-pd:var(--mt-p1d)}.purpose-links a:nth-child(3){--mt-pd:var(--mt-p3d)}.purpose-links a:nth-child(4){--mt-pd:var(--mt-p4d)}.purpose-links a:nth-child(5){--mt-pd:var(--mt-p5d)}
+.purpose-number{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--mt-pd,#5c8a4a);color:#fff!important;font-weight:800;letter-spacing:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+/* ---------- 結論カルーセル ---------- */
+.wrap>.pick-carousel{background:linear-gradient(160deg,#fff 0%,#f1f6ea 100%)!important;border:1px solid rgba(64,127,37,.16)!important;border-radius:28px!important;box-shadow:0 24px 50px rgba(60,90,50,.14)!important}
+.pick-product{border-radius:20px!important;box-shadow:0 12px 30px rgba(120,110,90,.16)}
+.pick-controls button{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 8px rgba(60,90,50,.12);background:#fff!important}
+.pick-controls button[aria-current="true"]{background:linear-gradient(180deg,#58a233,var(--mt-green-d))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+/* ---------- 商品ごとの色（5色。理由：商品を見分ける目印。価格帯順の並びなので、色は優劣を表さない） ---------- */
+.product-feature.mt-c1{--mt-t:var(--mt-p2);--mt-d:var(--mt-p2d)}
+.product-feature.mt-c2{--mt-t:var(--mt-p1);--mt-d:var(--mt-p1d)}
+.product-feature.mt-c3{--mt-t:var(--mt-p3);--mt-d:var(--mt-p3d)}
+.product-feature.mt-c4{--mt-t:var(--mt-p4);--mt-d:var(--mt-p4d)}
+.product-feature.mt-c5{--mt-t:var(--mt-p5);--mt-d:var(--mt-p5d)}
+.product-stage{background:linear-gradient(135deg,#fff 0%,var(--mt-t,#f0f6e8) 100%)!important}
+.product-stage:after{background:linear-gradient(90deg,var(--mt-t,#f0f6e8) 0%,color-mix(in srgb,var(--mt-t,#f0f6e8) 96%,transparent) 28%,color-mix(in srgb,var(--mt-t,#f0f6e8) 70%,transparent) 44%,transparent 64%)!important}
+.product-stage>.product-img{filter:drop-shadow(0 22px 26px rgba(120,100,80,.25))}
+.product-index{color:var(--mt-d,#466750)!important}
+.product-index:before{content:"";display:inline-block;width:28px;height:2px;margin-right:10px;vertical-align:middle;background:var(--mt-d,#466750);border-radius:2px}
+.product-copy .price-badge{background:linear-gradient(180deg,color-mix(in srgb,var(--mt-d,#407f25) 88%,#fff),var(--mt-d,#407f25))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 10px color-mix(in srgb,var(--mt-d,#407f25) 40%,transparent);text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.product-details .fit-box .col{border-radius:16px;box-shadow:0 8px 22px rgba(60,90,50,.08)}
+.review-voice{border-radius:18px;box-shadow:0 8px 22px rgba(140,110,70,.1)}
+.faq-item{border-radius:14px;box-shadow:0 6px 16px rgba(60,90,50,.07)}
+.compare-img{border-radius:18px;box-shadow:0 16px 36px rgba(60,90,50,.14)}
+/* 見出しの目印（理由：長い記事で節の始まりを目で追えるように） */
+.wrap>h2:before{content:"";display:inline-block;width:6px;height:.95em;margin-right:12px;vertical-align:-.1em;border-radius:3px;background:linear-gradient(180deg,#8fcb55,var(--mt-green))}
+/* ---------- スクロールで、ふわっと出る（JSが動く時だけ。動きを減らす設定では止める） ---------- */
+.mt-js .mt-r{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.mt-js .mt-r.mt-in{opacity:1;transform:none}
+/* ---------- ダーク ---------- */
+@media(prefers-color-scheme:dark){
+  :root{--mt-hero-a:#2a2236;--mt-hero-b:#2b2420;--mt-hero-glow:#6b4a3a;--mt-ink:#edf4e9}
+  .article-opening:before{background:radial-gradient(1100px 620px at 60% 78%,rgba(150,95,70,.55),transparent 70%),linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(27,33,25,0) 100%)}
+  .article-opening .situation{background:rgba(255,255,255,.08);border-color:rgba(181,214,142,.3);color:#cfe8b3}
+  .article-opening h1{text-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .article-opening .opening-summary{color:#d4dccf}
+  .stat-badges span{background:#27331f!important;color:#cfe8b3!important;border-color:rgba(181,214,142,.25)}
+  .purpose-links a{background:#242b21!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  .wrap>.pick-carousel{background:linear-gradient(160deg,#27301f 0%,#1f291c 100%)!important;border-color:rgba(181,214,142,.2)!important}
+  .pick-controls button{background:#2a3626!important}
+  .product-stage{background:linear-gradient(135deg,#232a21 0%,#1d241b 100%)!important}
+  .product-stage:after{background:linear-gradient(90deg,#1d241b 0%,rgba(29,36,27,.96) 28%,rgba(29,36,27,.7) 44%,transparent 64%)!important}
+  .product-index{color:#b5d68e!important}.product-index:before{background:#b5d68e}
+  .compare-img,.review-voice,.faq-item,.product-details .fit-box .col{box-shadow:0 10px 24px rgba(0,0,0,.28)}
+}
+/* ---------- スマホ ---------- */
+@media(max-width:700px){
+  .article-opening h1{font-size:clamp(30px,9vw,44px)}
+  .opening-cta{width:100%;justify-content:space-between}
+  .wrap>.pick-carousel{border-radius:20px!important}
+  .product-stage{background:var(--mt-t,#f0f6e8)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .article-opening .mt-hero{animation:none}
+  .mt-js .mt-r{opacity:1!important;transform:none!important;transition:none!important}
+  .opening-cta,.buy-link,.pick-amazon,.purpose-links a{transition:none}
+}
+
+/* ---------- 超ワイド（画面幅2200px以上）：入口を画面いっぱいに使う ----------
+   理由：本文の枠(1120px)にそろえたままだと、左右が大きく空く。入口は「読む場所」ではなく「入る場所」なので、文字も絵も色も、画面の端近くまで広げる。
+   足し算より、配置と大きさで直す。1440・1920・スマホは変えない。 */
+@media(min-width:2200px){
+  .wrap>.article-opening{min-height:0;grid-template-columns:9% minmax(0,1.2fr) 4% minmax(0,1fr) 9%}
+  .article-opening h1{font-size:76px}
+  .article-opening .opening-summary{font-size:22px;max-width:none}
+  .article-opening .mt-picture{margin-top:56px}
+  /* 夕焼けの光が、部屋の左右にも差している表現（左のラベンダーと右のピーチの、ぼかした大きな円。主役の絵より目立たせない） */
+  .article-opening:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+    radial-gradient(circle 560px at 9% 42%,rgba(214,196,246,.55),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(255,196,150,.48),transparent 70%)}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .article-opening:after{background:
+    radial-gradient(circle 560px at 9% 42%,rgba(120,92,170,.5),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(170,100,70,.42),transparent 70%)}
+}
+
+/* ---------- 超ワイド（2200px以上）：本文まわりも画面の約82%まで広げ、左右の余白は色つきの帯にする ----------
+   割合(%)で指定する理由：画面の拡大(zoom)がかかっても、割合は同じ比率で効くので二重に広がらない。
+   段落だけは読める長さ(約76文字)で止め、そのかわり左右の帯に色を置いて「何もない白」にしない。 */
+@media(min-width:2200px){
+  .wrap{position:relative;isolation:isolate}
+  .wrap:before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 0,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 4.5%,rgba(255,255,255,0) 9%,rgba(255,255,255,0) 91%,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px)}
+  .wrap > :is(.purpose-nav,.pick-carousel,.compare-img){width:82%!important;max-width:none!important;margin-left:9%!important;margin-right:9%!important}
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:76em!important;margin-left:9%!important;margin-right:auto!important}
+  body > .home-link,.home-link{max-width:none!important;margin-left:9%!important;padding-left:0!important}
+  .wrap > .pick-carousel{margin-bottom:64px}
+  /* 入口の背景は、上端・下端ともページの背景色へなだらかに溶けて消える（理由：帯が急に切れると水平の境目が見える） */
+  .article-opening:before,.article-opening:after{-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%)}
+  .product-overlay,.product-details{width:82%!important;max-width:none!important}
+  .product-stage > .product-img{right:9%!important;width:min(780px,40%)!important}
+  .product-copy{width:50%;max-width:700px}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .wrap:before{background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 0,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 4.5%,rgba(0,0,0,0) 9%,rgba(0,0,0,0) 91%,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 100%)}
+}
+
+/* 入口に同じ絵（表紙）が出るので、本文の下にあった同じ表紙バナーは出さない（理由：同じ場面が2回続くのを避ける。表紙そのものは入口に残る） */
+.wrap>img.theme-img{display:none}
+
+/* 見出しの折り返しを均等に（理由：「、」「。」「？」が1文字だけ次の行に落ちるのを防ぐ。文字は飾らない） */
+.article-opening h1{text-wrap:balance}
+.article-opening .opening-summary{text-wrap:pretty}
+/* ---- この記事の色（絵から作った入口の背景色） ---- */
+:root{--mt-hero-a:#f4f2ed;--mt-hero-b:#eee6dc;--mt-hero-glow:#edd8bf}
+@media(prefers-color-scheme:dark){:root{--mt-hero-a:#4b4c3a;--mt-hero-b:#39331e;--mt-hero-glow:#6a5431}}
+</style>
+<style id="mt-list">.mt-list{margin:.5em 0 1.1em 1.3em;padding:0;line-height:1.9;color:inherit}.mt-list li{margin:.25em 0;padding-left:.1em}</style></head>
 <body>
 <!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
 <div class="wrap">
 <header class="article-opening">
+<picture class="mt-picture" style="--mt-wide:url(research-waterjug/hero-wide.webp)"><source media="(min-width:900px)" srcset="research-waterjug/hero-wide.webp" width="1491" height="1055"><img class="mt-hero" src="research-waterjug/hero.webp" width="968" height="771" alt="ミートボーと、ウォータージャグのイメージ" fetchpriority="high" decoding="async"></picture>
 <p class="situation">ウォータージャグを選べず、容量や素材で買って後悔したくない人へ</p>
 <h1>そのウォータージャグ、<br>容量と素材で選んでいますか？</h1>
 <p class="opening-summary">容量・素材・保冷や保温・持ち運びやすさまで、ウォータージャグ19候補を調査。使い方が重複しない5商品を比較しました。</p>
 <a class="opening-cta" href="#purpose-picks">自分に合うウォータージャグを探す <span aria-hidden="true">&darr;</span></a>
 </header>
-<img class="theme-img" src="research-waterjug/theme.png" alt="ウォータージャグを19候補調べて分かった、後悔しない1台">
+<img class="theme-img" src="research-waterjug/theme.png" alt="ウォータージャグを19候補調べて分かった、後悔しない1台" loading="lazy" decoding="async">
 <p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
 
-<p class="article-lead">19候補から、使い方の違う5商品に絞りました。まずは気になる1つへ。向いている人・向いていない人と、低評価レビューもまとめています。</p>
+<p class="article-lead">19候補から、使い方の違う5商品に絞りました。まずは気になる1つへ。</p><p class="article-lead">向いている人・向いていない人と、低評価レビューもまとめています。</p>
 
 <div class="stat-badges">
   <span>19候補を調査</span>
@@ -326,13 +557,13 @@ a{color:var(--article-link)}
   <span>低評価レビューも確認済み</span>
 </div><nav id="purpose-picks" class="purpose-nav" aria-label="目的別の商品目次"><div class="purpose-heading"><h2>目的から選ぶ</h2><span>気になる商品へ、そのまま移動</span></div><div class="purpose-links"><a href="#folding-light"><span class="purpose-number">01</span><strong>かさばらず持ち運びたい</strong><span class="purpose-product">BUNDOK ウォータータンク 10L</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#slim-water-only"><span class="purpose-number">02</span><strong>水専用の頑丈なタンクを</strong><span class="purpose-product">DOD ジミニータンク 10L</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#wheel-20l"><span class="purpose-number">03</span><strong>重い水を転がして運びたい</strong><span class="purpose-product">岩谷マテリアル ウォッシャブルタンク キャスター付 20L</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#cold-ice-jug"><span class="purpose-number">04</span><strong>氷で冷たい飲み物を</strong><span class="purpose-product">スタンレー ウォータージャグ 7.5L</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a><a href="#stainless-vacuum"><span class="purpose-number">05</span><strong>夏も冬も温度を保つ</strong><span class="purpose-product">スノーピーク サーモタンク4700</span><span class="purpose-arrow" aria-hidden="true">&#8599;</span></a></div></nav><section class="conclusion-box pick-carousel" id="quick-picks" aria-label="目的別のおすすめ5商品" aria-roledescription="カルーセル"><div class="pick-header"><h2>結論から先に言うと：</h2><p>容量・素材・保冷や保温、何を優先するかで1つを。</p></div><div class="pick-track" tabindex="0" aria-label="商品スライド。左右キーでも切り替えできます"><article class="pick-slide" aria-label="1 / 5：BUNDOK ウォータータンク 10L"><div class="pick-copy"><span class="pick-number">01 / 05</span><p class="pick-reason">荷物を増やさずに、水を運びたいなら</p><h3>BUNDOK ウォータータンク 10L</h3><a class="pick-detail" href="#folding-light">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-waterjug/01_bundok-bd355.jpg" alt="BUNDOK ウォータータンク 10L" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0DT3SJQBG?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="BUNDOK ウォータータンク 10LをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="2 / 5：DOD ジミニータンク 10L"><div class="pick-copy"><span class="pick-number">02 / 05</span><p class="pick-reason">水専用の硬質タンクを、スリムに積みたいなら</p><h3>DOD ジミニータンク 10L</h3><a class="pick-detail" href="#slim-water-only">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-waterjug/02_dod-jimini.jpg" alt="DOD ジミニータンク 10L" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B09GK7J77R?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="DOD ジミニータンク 10LをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="3 / 5：岩谷マテリアル ウォッシャブルタンク キャスター付 20L"><div class="pick-copy"><span class="pick-number">03 / 05</span><p class="pick-reason">水場が遠く、20Lをまとめて運ぶなら</p><h3>岩谷マテリアル ウォッシャブルタンク キャスター付 20L</h3><a class="pick-detail" href="#wheel-20l">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-waterjug/03_iwatani-caster.jpg" alt="岩谷マテリアル ウォッシャブルタンク キャスター付 20L" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B015B3TV6E?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="岩谷マテリアル ウォッシャブルタンク キャスター付 20LをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="4 / 5：スタンレー ウォータージャグ 7.5L"><div class="pick-copy"><span class="pick-number">04 / 05</span><p class="pick-reason">氷を入れて、冷たい飲み物を出したいなら</p><h3>スタンレー ウォータージャグ 7.5L</h3><a class="pick-detail" href="#cold-ice-jug">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-waterjug/04_stanley-7-5l.jpg" alt="スタンレー ウォータージャグ 7.5L" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B09SWPQWFH?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="スタンレー ウォータージャグ 7.5LをAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article><article class="pick-slide" aria-label="5 / 5：スノーピーク サーモタンク4700"><div class="pick-copy"><span class="pick-number">05 / 05</span><p class="pick-reason">夏も冬も、飲み物の温度を保ちたいなら</p><h3>スノーピーク サーモタンク4700</h3><a class="pick-detail" href="#stainless-vacuum">向き・不向きも詳しく見る &#8599;</a></div><div class="pick-product"><img src="research-waterjug/05_snowpeak-thermo.jpg" alt="スノーピーク サーモタンク4700" loading="lazy"><a class="pick-amazon" href="https://www.amazon.co.jp/dp/B0B4K5X4CL?tag=miitobow-22" target="_blank" rel="noopener sponsored" aria-label="スノーピーク サーモタンク4700をAmazonで見る">Amazonで見る <span aria-hidden="true">&#8599;</span></a></div></article></div><div class="pick-controls" hidden><button type="button" class="pick-prev" aria-label="前の商品">&larr;</button><div class="pick-dots"><button type="button" data-pick="0" aria-label="BUNDOK ウォータータンク 10Lを表示" aria-current="true">01</button><button type="button" data-pick="1" aria-label="DOD ジミニータンク 10Lを表示">02</button><button type="button" data-pick="2" aria-label="岩谷マテリアル ウォッシャブルタンク キャスター付 20Lを表示">03</button><button type="button" data-pick="3" aria-label="スタンレー ウォータージャグ 7.5Lを表示">04</button><button type="button" data-pick="4" aria-label="スノーピーク サーモタンク4700を表示">05</button></div><button type="button" class="pick-next" aria-label="次の商品">&rarr;</button></div><p class="pick-hint">横にスワイプして、5商品を見比べる</p></section><h2>選び方の基準は3つ</h2>
 <p>調べてわかったのは、基準は3つでした。</p>
-<p>1つ目は「容量とタイプ」。CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。タイプは、硬質は安定して使いやすい一方で収納でかさばり、折りたたみ式は小さくしまえる一方で保冷力はない、と整理されています。今回の5商品は、折りたたみ式の約10L、硬質の約10L、硬質の20L、保冷フォーム入りの7.5L、真空断熱の4.7Lです。</p>
-<p>2つ目は「水専用か、飲み物も入れるか」。DODのジミニータンクは水専用で、熱湯・ジュース・灯油は入れないよう公式に書かれています。一方、スタンレーは商品ページに飲み物を注ぐと書かれ、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。保冷や保温の数値は、スタンレーが8度以下（6時間）、スノーピークが保冷5.8度以下・保温76.5度以上（各10時間）で、いずれもメーカーの試験条件での値です。</p>
-<p>3つ目は「重さと運びやすさ」。空の重さは、約200gから2,450gまで約12倍の差があります。ただし水は1Lで約1kgなので、10Lなら水だけで約10kg、20Lなら約20kgです。満水の状態で運べるか（持ち手・キャスターの有無）も、選ぶ基準になります。</p>
+<p>1つ目は「容量とタイプ」。CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。</p><p>タイプは、硬質は安定して使いやすい一方で収納でかさばり、折りたたみ式は小さくしまえる一方で保冷力はない、と整理されています。</p><p>今回の5商品は、折りたたみ式の約10L、硬質の約10L、硬質の20L、保冷フォーム入りの7.5L、真空断熱の4.7Lです。</p>
+<p>2つ目は「水専用か、飲み物も入れるか」。DODのジミニータンクは水専用で、熱湯・ジュース・灯油は入れないよう公式に書かれています。</p><p>一方、スタンレーは商品ページに飲み物を注ぐと書かれ、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。</p><p>保冷や保温の数値は、スタンレーが8度以下（6時間）、スノーピークが保冷5.8度以下・保温76.5度以上（各10時間）で、いずれもメーカーの試験条件での値です。</p>
+<p>3つ目は「重さと運びやすさ」。空の重さは、約200gから2,450gまで約12倍の差があります。</p><p>ただし水は1Lで約1kgなので、10Lなら水だけで約10kg、20Lなら約20kgです。満水の状態で運べるか（持ち手・キャスターの有無）も、選ぶ基準になります。</p>
 
 <h2>比較表</h2>
 <img class="compare-img" src="research-waterjug/compare.png" alt="ウォータージャグ5商品の価格帯・容量とタイプ・重さと大きさ・保冷と保温・向く使い方の比較表">
-<p class="compare-cap">価格帯・容量とタイプ・重さと大きさ・保冷と保温・向く使い方の比較（価格帯は、調査時点のAmazon出品価格の順に付けた目安です。価格は変動が大きく、容量も商品ごとに違います（約10L・約10L・20L・7.5L・4.7L））</p>
+<p class="compare-cap">価格帯・容量とタイプ・重さと大きさ・保冷と保温・向く使い方の比較です。価格帯は、調査時点のAmazon出品価格の順に付けた目安です。</p><p class="compare-cap">価格は変動が大きく、容量も商品ごとに違います。容量は約10L・約10L・20L・7.5L・4.7Lです。</p>
 <div class="compare-recap">
   <h3>BUNDOK ウォータータンク 10L</h3>
   <ul><li>最安クラス</li><li>約10L・折りたたみ式（ポリエチレン）・コック付き</li><li>約200g、収納時200×200×80mm</li></ul>
@@ -346,7 +577,7 @@ a{color:var(--article-link)}
   <ul><li>最上位</li><li>4.7L・真空断熱ステンレス・保冷5.8度以下／保温76.5度以上（各10時間）</li><li>2,450g、214×232×280mm</li></ul>
 </div>
 
-<section class="product-feature" id="folding-light" aria-labelledby="folding-light-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/01_bundok-bd355.jpg" alt="BUNDOK ウォータータンク 10L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 01</span><h2 class="product-situation" id="folding-light-title">荷物を増やさず、<br>使わない時は小さくしまいたい人へ</h2><div class="product-name-row"><p class="product-name">BUNDOK ウォータータンク 10L BD-355</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>BUNDOKのウォータータンク10L（BD-355）は、荷物を増やさずに水を運びたい人に最もおすすめの1台です。容量は約10Lのコック付きで、折りたたみ式のポリエチレン製です（Amazon商品ページの表記）。</p><p>重さは約200g、使用時のサイズは約225×270×235mm、収納時は200×200×80mmです。保冷や保温の記載は確認できませんでした。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DT3SJQBG?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="folding-light" aria-labelledby="folding-light-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/01_bundok-bd355.jpg" alt="BUNDOK ウォータータンク 10L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 01</span><h2 class="product-situation" id="folding-light-title">荷物を増やさず、<br>使わない時は小さくしまいたい人へ</h2><div class="product-name-row"><p class="product-name">BUNDOK ウォータータンク 10L BD-355</p><span class="price-badge">最安クラス</span></div><div class="trust-line"><p>BUNDOKのウォータータンク10L（BD-355）は、荷物を増やさずに水を運びたい人に最もおすすめの1台です。</p><p>容量は約10Lのコック付きで、折りたたみ式のポリエチレン製です（Amazon商品ページの表記）。</p><p>重さは約200g、使用時のサイズは約225×270×235mm、収納時は200×200×80mmです。保冷や保温の記載は確認できませんでした。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0DT3SJQBG?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>使わない時は、小さくしまいたい人</li><li>予備の水タンクを、車に積んでおきたい人</li><li>まず手頃に、水タンクを試したい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>氷を入れて飲み物を冷やしたい人（保冷の記載はありません）</li><li>水が少なくなっても安定して置きたい人（Amazonのレビューに、水が減ると蛇口をひねるたびに本体が動くという声）</li><li>口が広くて、中をしっかり洗いたい人（レビューに、口が狭くて掃除しにくいという声）</li></ul></div>
 </div>
@@ -362,7 +593,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0DT3SJQBG?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="slim-water-only" aria-labelledby="slim-water-only-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/02_dod-jimini.jpg" alt="DOD ジミニータンク 10L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 02</span><h2 class="product-situation" id="slim-water-only-title">水専用の頑丈なタンクを、<br>スリムに積みたい人へ</h2><div class="product-name-row"><p class="product-name">DOD ジミニータンク 10L（WT3-863）</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>DODのジミニータンク10Lは、水専用の頑丈なタンクを、スリムに積みたい人に最もおすすめの1台です。容量は約10Lで、公式は4〜5人家族の1泊キャンプに向く容量としています。食品衛生法に適合し、飲料水を入れればそのまま飲めます（メーカー公式）。</p><p>サイズは約W13×D31×H34cm、重さは約850gです。タンクはポリエチレン、フタと蛇口はポリプロピレンで、開口部は直径約7.5cmです。レバーを下向きに固定すると水を出し続けられます。水を出すときは、上部のフタを少し緩めて使います（メーカー公式）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B09GK7J77R?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="slim-water-only" aria-labelledby="slim-water-only-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/02_dod-jimini.jpg" alt="DOD ジミニータンク 10L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 02</span><h2 class="product-situation" id="slim-water-only-title">水専用の頑丈なタンクを、<br>スリムに積みたい人へ</h2><div class="product-name-row"><p class="product-name">DOD ジミニータンク 10L（WT3-863）</p><span class="price-badge">手頃</span></div><div class="trust-line"><p>DODのジミニータンク10Lは、水専用の頑丈なタンクを、スリムに積みたい人に最もおすすめの1台です。容量は約10Lで、公式は4〜5人家族の1泊キャンプに向く容量としています。</p><p>食品衛生法に適合し、飲料水を入れればそのまま飲めます（メーカー公式）。</p><p>サイズは約W13×D31×H34cm、重さは約850gです。タンクはポリエチレン、フタと蛇口はポリプロピレンで、開口部は直径約7.5cmです。</p><p>レバーを下向きに固定すると水を出し続けられます。水を出すときは、上部のフタを少し緩めて使います（メーカー公式）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B09GK7J77R?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>4〜5人家族の1泊キャンプで、水を使う人</li><li>幅13cmのスリムなタンクを、すき間に積みたい人</li><li>手洗いや食器洗いで、水を出し続けたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>熱湯やジュースも入れたい人（水専用で、熱湯・ジュース・灯油は入れないよう公式に記載）</li><li>軽さを優先する人（折りたたみ式の約200gに対して、約850g）</li><li>氷で飲み物を冷やしたい人（保冷の記載はありません）</li></ul></div>
 </div>
@@ -378,7 +609,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B09GK7J77R?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="wheel-20l" aria-labelledby="wheel-20l-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/03_iwatani-caster.jpg" alt="岩谷マテリアル ウォッシャブルタンク キャスター付 20L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 03</span><h2 class="product-situation" id="wheel-20l-title">水場が遠くて、<br>重い水を転がして運びたい人へ</h2><div class="product-name-row"><p class="product-name">岩谷マテリアル ウォッシャブルタンク キャスター付 20L（レバー式コック付）</p><span class="price-badge">標準</span></div><div class="trust-line"><p>岩谷マテリアルのウォッシャブルタンク キャスター付 20Lは、満水で重くなる水を、転がして運びたい人に最もおすすめの1台です。容量は20Lで、レバー式コックが付き、本体はポリエチレン、部品はポリプロピレン製です（Amazon商品ページの表記）。</p><p>間口×奥行×高さは440×250×330mmです。重さは、今回確認した商品ページに記載がなく、確認できませんでした。保冷や保温の記載もありません。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B015B3TV6E?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="wheel-20l" aria-labelledby="wheel-20l-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/03_iwatani-caster.jpg" alt="岩谷マテリアル ウォッシャブルタンク キャスター付 20L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 03</span><h2 class="product-situation" id="wheel-20l-title">水場が遠くて、<br>重い水を転がして運びたい人へ</h2><div class="product-name-row"><p class="product-name">岩谷マテリアル ウォッシャブルタンク キャスター付 20L（レバー式コック付）</p><span class="price-badge">標準</span></div><div class="trust-line"><p>岩谷マテリアルのウォッシャブルタンク キャスター付 20Lは、満水で重くなる水を、転がして運びたい人に最もおすすめの1台です。</p><p>容量は20Lで、レバー式コックが付き、本体はポリエチレン、部品はポリプロピレン製です（Amazon商品ページの表記）。</p><p>間口×奥行×高さは440×250×330mmです。重さは、今回確認した商品ページに記載がなく、確認できませんでした。</p><p>保冷や保温の記載もありません。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B015B3TV6E?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>水場が遠く、20Lの水を運ぶのが大変な人</li><li>大人数や連泊で、水をまとめて持ち込みたい人</li><li>断水時の給水にも使えるタンクがほしい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>軽さやコンパクトさを優先する人（硬質の20Lで、収納でかさばる）</li><li>空気圧でポンプを動かす用途に使いたい人（レビューに、大きい方の栓から空気が漏れるという声）</li><li>氷で飲み物を冷やしたい人（保冷の記載はありません）</li></ul></div>
 </div>
@@ -394,7 +625,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B015B3TV6E?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="cold-ice-jug" aria-labelledby="cold-ice-jug-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/04_stanley-7-5l.jpg" alt="スタンレー ウォータージャグ 7.5L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 04</span><h2 class="product-situation" id="cold-ice-jug-title">氷を入れて、<br>冷たい飲み物を出したい人へ</h2><div class="product-name-row"><p class="product-name">スタンレー アドベンチャー ウォータージャグ 7.5L（10-01938）</p><span class="price-badge">上位</span></div><div class="trust-line"><p>スタンレーのアドベンチャー ウォータージャグ 7.5Lは、氷を入れて冷たい飲み物を出したい人に最もおすすめの1台です。容量は7.5Lで、保冷フォーム入り、保冷効力は8度以下（6時間）です（Amazon商品ページの表記。BE-PALも同じ数値を載せています）。</p><p>サイズは297×297×343mm、重さは1,973gです。本体の内外とフタはポリプロピレン、注ぎ口はポリプロピレン・ナイロン・ステンレス鋼で、片手のプッシュ式です。栓は取り外してお手入れできます（Amazon商品ページの表記）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B09SWPQWFH?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="cold-ice-jug" aria-labelledby="cold-ice-jug-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/04_stanley-7-5l.jpg" alt="スタンレー ウォータージャグ 7.5L"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 04</span><h2 class="product-situation" id="cold-ice-jug-title">氷を入れて、<br>冷たい飲み物を出したい人へ</h2><div class="product-name-row"><p class="product-name">スタンレー アドベンチャー ウォータージャグ 7.5L（10-01938）</p><span class="price-badge">上位</span></div><div class="trust-line"><p>スタンレーのアドベンチャー ウォータージャグ 7.5Lは、氷を入れて冷たい飲み物を出したい人に最もおすすめの1台です。</p><p>容量は7.5Lで、保冷フォーム入り、保冷効力は8度以下（6時間）です（Amazon商品ページの表記。BE-PALも同じ数値を載せています）。</p><p>サイズは297×297×343mm、重さは1,973gです。本体の内外とフタはポリプロピレン、注ぎ口はポリプロピレン・ナイロン・ステンレス鋼で、片手のプッシュ式です。</p><p>栓は取り外してお手入れできます（Amazon商品ページの表記）。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B09SWPQWFH?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>大人数のキャンプや部活で、冷たい飲み物を出す人</li><li>氷を入れて、冷たさを長く保ちたい人</li><li>栓を外して、パーツごとに洗いたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>手頃な価格で試したい人（5商品の中で上位の価格帯）</li><li>軽さやコンパクトさを優先する人（1,973gで、折りたためない）</li><li>温かい飲み物を保温したい人（確認できたのは保冷効力のみ）</li></ul></div>
 </div>
@@ -410,7 +641,7 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B09SWPQWFH?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<section class="product-feature" id="stainless-vacuum" aria-labelledby="stainless-vacuum-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/05_snowpeak-thermo.jpg" alt="スノーピーク サーモタンク4700"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 05</span><h2 class="product-situation" id="stainless-vacuum-title">夏は冷たく、冬は温かく、<br>同じジャグで温度を保ちたい人へ</h2><div class="product-name-row"><p class="product-name">スノーピーク サーモタンク4700（TW-550）</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>スノーピークのサーモタンク4700は、夏も冬も飲み物の温度を保ちたい人に最もおすすめの1台です。容量は4,700mlの真空断熱タンクで、保冷は5.8度以下（10時間）、保温は76.5度以上（10時間）です（メーカー公式。試験条件付きの数値）。</p><p>サイズは214×232×280mm、重さは2,450gです。本体はステンレスと竹集成材で、ワンタッチダイヤル栓により、本体を横向きに寝かせて置くこともできます。公式は、ビールだけでなく、ウォーターサーバーとしても使えるとしています。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0B4K5X4CL?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
+<section class="product-feature" id="stainless-vacuum" aria-labelledby="stainless-vacuum-title"><div class="product-stage"><img class="product-img" loading="lazy" src="research-waterjug/05_snowpeak-thermo.jpg" alt="スノーピーク サーモタンク4700"><div class="product-overlay"><div class="product-copy"><span class="product-index">WATER JUG / 05</span><h2 class="product-situation" id="stainless-vacuum-title">夏は冷たく、冬は温かく、<br>同じジャグで温度を保ちたい人へ</h2><div class="product-name-row"><p class="product-name">スノーピーク サーモタンク4700（TW-550）</p><span class="price-badge">最上位</span></div><div class="trust-line"><p>スノーピークのサーモタンク4700は、夏も冬も飲み物の温度を保ちたい人に最もおすすめの1台です。</p><p>容量は4,700mlの真空断熱タンクで、保冷は5.8度以下（10時間）、保温は76.5度以上（10時間）です（メーカー公式。試験条件付きの数値）。</p><p>サイズは214×232×280mm、重さは2,450gです。本体はステンレスと竹集成材で、ワンタッチダイヤル栓により、本体を横向きに寝かせて置くこともできます。</p><p>公式は、ビールだけでなく、ウォーターサーバーとしても使えるとしています。</p></div><a class="buy-link" href="https://www.amazon.co.jp/dp/B0B4K5X4CL?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a></div></div></div><div class="product-details"><div class="fit-box">
   <div class="col good"><b>向いてる人</b><ul><li>夏は冷たく、冬は温かく、同じジャグを使いたい人</li><li>少人数のキャンプで、飲み物の温度を長く保ちたい人</li><li>素材や見た目にもこだわりたい人</li></ul></div>
   <div class="col bad"><b>向いてない人</b><ul><li>手頃な価格で試したい人（5商品の中で最上位の価格帯）</li><li>軽さを優先する人（2,450gで、5商品の中で最も重い）</li><li>大人数分をまとめて入れたい人（4.7Lで、5商品の中で最も小さい）</li></ul></div>
 </div>
@@ -426,38 +657,38 @@ a{color:var(--article-link)}
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0B4K5X4CL?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 
-<details class="research-method" id="research-method"><summary>19候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>ウォータージャグは、容量・素材・保冷の有無・運びやすさの違いが大きく、「思ったより重い」「氷を入れても冷たくならない」「かさばって積めない」というギャップが起きやすい道具です。正直どれを選べばいいのか迷います。</p>
-<p>なので今回、キャンプで使う蛇口付きのウォータージャグ・水タンクの仕様を調べて比較しました。各商品ごとに、向いてる人・向いてない人も調べているので、自分に合う1つを探してみてください。蛇口のない水筒や、浄水器は対象にしていません。</p>
+<details class="research-method" id="research-method"><summary>19候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>ウォータージャグは、容量・素材・保冷の有無・運びやすさの違いが大きい道具です。「思ったより重い」「氷を入れても冷たくならない」「かさばって積めない」というギャップが起きやすくなります。</p><p>正直どれを選べばいいのか迷います。</p>
+<p>なので今回、キャンプで使う蛇口付きのウォータージャグ・水タンクの仕様を調べて比較しました。各商品ごとに、向いてる人・向いてない人も調べているので、自分に合う1つを探してみてください。</p><p>蛇口のない水筒や、浄水器は対象にしていません。</p>
 
 <h2>19候補から5つに絞り込みました</h2>
-<p>Amazonの商品ページと、メーカー公式ページを中心に調べました。今回はBUNDOK ウォータータンク10L・DOD ジミニータンク10L・岩谷マテリアル ウォッシャブルタンク キャスター付20L・スタンレー ウォータージャグ7.5L・スノーピーク サーモタンク4700・タンゲ化学工業 ASNT 20L・ピーコック ウォータージャグ8.1L・コールマン スチールベルトジャグ・ロゴス 抗菌広口水コン16・ロゴス シンクになるウォーターコンテナ10L・キャプテンスタッグ オアシス10L・イグルー 400S 12L・イグルー 18.9L（5ガロン）・山善 YWT-10・CNOC VECTO・TS MDタンク20L・キャプテンスタッグ ボルディ・FUTUREFOX 10L・BUNDOK フォールディングジャグ7Lの19候補を調べ、使い方が重複しないよう5商品に絞りました。</p>
-<p>採用したのはBUNDOK ウォータータンク10L（折りたたみ式）、DOD ジミニータンク10L（水専用の硬質タンク）、岩谷マテリアル キャスター付20L（運びやすさ）、スタンレー ウォータージャグ7.5L（氷で冷やす保冷ジャグ）、スノーピーク サーモタンク4700（保冷も保温もできるステンレス）の5つです。</p>
-<p>見送ったのは、採用した商品と使い方が重なるものです。折りたたみ式では、ロゴス 抗菌広口水コン16（16L・約400g・広口）、ロゴス シンクになるウォーターコンテナ10L（約220g・折りたたむとシンクにもなる）、キャプテンスタッグ オアシス10L（約120g）、山善 YWT-10（10L）、FUTUREFOX 10L、BUNDOK フォールディングジャグ7Lがあります。キャプテンスタッグ オアシスは約120gでBUNDOKより軽い一方、Amazonの評価は3.7でした。ロゴスの2商品はAmazonの評価が3.0で、シンクになる方はレビューが6件と少なく、評価の判断材料が足りませんでした。山善・FUTUREFOX・BUNDOK 7Lは評価が3.9〜4.1で、4.4のBUNDOK 10L（BD-355）を選びました。</p>
-<p>キャスター付き20Lでは、タンゲ化学工業 ASNT 20L（日本製・1.8kg・UV仕様）が重なります。ASNTは重さが確認できた一方、Amazonの評価は4.1（79件）で、岩谷マテリアルの4.4（153件）より低く、レビューには、キャスターが小さく、道によっては蛇口に砂が付いたり、水が出なくなったりしたという声がありました。TS MDタンク20L（評価4.3・452件）はキャスターなしの20Lで、商品ページのスペックがサイズと材質のみでした。</p>
-<p>保冷ジャグでは、ピーコック ウォータージャグ8.1L（保冷9度以下・保温72度以上が各6時間・1.6kg・日本製）が有力です。スタンレーより軽く、保温もできますが、保冷も保温も使える枠はスノーピークにしました。保温を重視する人は、ピーコックも候補になります。イグルー 400S 12L（2.2kg）は、保冷の数値を商品ページで確認できませんでした。イグルー 18.9L（5ガロン）は、商品ページに「日本未発売 アジア限定モデル」とあり、国内の流通が少ないと書かれていたため見送りました。</p>
-<p>コールマン スチールベルトジャグ（約4.9L・1.4kg・ステンレス）は、スノーピークとステンレスの枠が重なり、調査時点でAmazonの在庫が1点だけでした。CNOC VECTOは、今回確認できた容量が1Lと2Lで、蛇口もなく、ジャグというより水を運ぶ袋に近いため用途が違うと判断しました。キャプテンスタッグ ボルディ（5L・10L・20L）は、同じタイトルのASINが複数あり、調べたASINがすべて5Lの表示だったため、10L・20Lの商品ページを特定できず見送りました。</p>
+<p>Amazonの商品ページと、メーカー公式ページを中心に調べました。今回調べたのは、次の19候補です。</p><ul class="mt-list"><li>BUNDOK ウォータータンク10L</li><li>DOD ジミニータンク10L</li><li>岩谷マテリアル ウォッシャブルタンク キャスター付20L</li><li>スタンレー ウォータージャグ7.5L</li><li>スノーピーク サーモタンク4700</li><li>タンゲ化学工業 ASNT 20L</li><li>ピーコック ウォータージャグ8.1L</li><li>コールマン スチールベルトジャグ</li><li>ロゴス 抗菌広口水コン16</li><li>ロゴス シンクになるウォーターコンテナ10L</li><li>キャプテンスタッグ オアシス10L</li><li>イグルー 400S 12L</li><li>イグルー 18.9L（5ガロン）</li><li>山善 YWT-10</li><li>CNOC VECTO</li><li>TS MDタンク20L</li><li>キャプテンスタッグ ボルディ</li><li>FUTUREFOX 10L</li><li>BUNDOK フォールディングジャグ7L</li></ul><p>使い方が重複しないよう5商品に絞りました。</p>
+<p>採用したのは、次の5つです。</p><ul class="mt-list"><li>BUNDOK ウォータータンク10L（折りたたみ式）</li><li>DOD ジミニータンク10L（水専用の硬質タンク）</li><li>岩谷マテリアル キャスター付20L（運びやすさ）</li><li>スタンレー ウォータージャグ7.5L（氷で冷やす保冷ジャグ）</li><li>スノーピーク サーモタンク4700（保冷も保温もできるステンレス）</li></ul>
+<p>見送ったのは、採用した商品と使い方が重なるものです。折りたたみ式では、次の商品があります。</p><ul class="mt-list"><li>ロゴス 抗菌広口水コン16（16L・約400g・広口）</li><li>ロゴス シンクになるウォーターコンテナ10L（約220g・折りたたむとシンクにもなる）</li></ul><p>キャプテンスタッグ オアシス10L（約120g）、山善 YWT-10（10L）、FUTUREFOX 10L、BUNDOK フォールディングジャグ7Lもあります。</p><p>キャプテンスタッグ オアシスは約120gでBUNDOKより軽い一方、Amazonの評価は3.7でした。</p><p>ロゴスの2商品はAmazonの評価が3.0で、シンクになる方はレビューが6件と少なく、評価の判断材料が足りませんでした。</p><p>山善・FUTUREFOX・BUNDOK 7Lは評価が3.9〜4.1で、4.4のBUNDOK 10L（BD-355）を選びました。</p>
+<p>キャスター付き20Lでは、タンゲ化学工業 ASNT 20L（日本製・1.8kg・UV仕様）が重なります。ASNTは、重さが確認できました。</p><p>一方、Amazonの評価は4.1（79件）で、岩谷マテリアルの4.4（153件）より低いです。</p><p>レビューには、キャスターが小さく、道によっては蛇口に砂が付いたり、水が出なくなったりしたという声がありました。</p><p>TS MDタンク20L（評価4.3・452件）はキャスターなしの20Lで、商品ページのスペックがサイズと材質のみでした。</p>
+<p>保冷ジャグでは、ピーコック ウォータージャグ8.1L（保冷9度以下・保温72度以上が各6時間・1.6kg・日本製）が有力です。</p><p>スタンレーより軽く、保温もできますが、保冷も保温も使える枠はスノーピークにしました。保温を重視する人は、ピーコックも候補になります。</p><p>イグルー 400S 12L（2.2kg）は、保冷の数値を商品ページで確認できませんでした。</p><p>イグルー 18.9L（5ガロン）は、商品ページに「日本未発売 アジア限定モデル」とあり、国内の流通が少ないと書かれていたため見送りました。</p>
+<p>コールマン スチールベルトジャグ（約4.9L・1.4kg・ステンレス）は、スノーピークとステンレスの枠が重なり、調査時点でAmazonの在庫が1点だけでした。</p><p>CNOC VECTOは、今回確認できた容量が1Lと2Lで、蛇口もなく、ジャグというより水を運ぶ袋に近いため用途が違うと判断しました。</p><p>キャプテンスタッグ ボルディ（5L・10L・20L）は、見送りました。同じタイトルのASINが複数あり、調べたASINがすべて5Lの表示だったため、10L・20Lの商品ページを特定できませんでした。</p>
 
 <h2>低評価の商品も見ました</h2>
-<p>5商品それぞれについて、Amazon商品ページに載っている★1〜★4のレビューを確認しました。個別レビューの真偽までは検証できないため、確認できた範囲の傾向としてまとめています。WebSearchでは、各商品の低評価を独立して検証した記事までは見つかりませんでした。</p>
-<p>確認できた指摘は、BUNDOKの口の狭さと、水が減ったときの本体のぐらつき・水の勢いの弱さ、DODの重さと取っ手の小ささ、岩谷マテリアルの栓からの空気漏れ（1件）、スタンレーの水漏れと栓まわりのこぼれ、スノーピークの横置き時の使い勝手と不良品の疑い（1件）です。</p>
+<p>5商品それぞれについて、Amazon商品ページに載っている★1〜★4のレビューを確認しました。個別レビューの真偽までは検証できないため、確認できた範囲の傾向としてまとめています。</p><p>WebSearchでは、各商品の低評価を独立して検証した記事までは見つかりませんでした。</p>
+<p>確認できた指摘は、次のとおりです。</p><ul class="mt-list"><li>BUNDOKは、口の狭さと、水が減ったときの本体のぐらつき・水の勢いの弱さです</li><li>DODは、重さと取っ手の小ささです</li><li>岩谷マテリアルは、栓からの空気漏れです（1件）</li><li>スタンレーは、水漏れと栓まわりのこぼれです</li><li>スノーピークは、横置き時の使い勝手と不良品の疑いです（1件）</li></ul>
 
 </div></details>
 
 <h2>調べてみて驚いたこと</h2>
-<p>調査中、容量の目安が意外と小さいことに驚きました。CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。今回の5商品の容量は4.7Lから20Lまで約4倍の差があり、大きければ安心とは限りませんでした。</p>
-<p>また、空の重さは約200gから2,450gまで約12倍の差がありますが、水は1Lで約1kgなので、10Lを入れれば水だけで約10kgになります。本体の軽さより、満水で運べるかを考える方が現実的でした。価格帯にも非常に大きな幅があったため、この記事では金額を載せず、相対的な目安で示しています。購入前に、Amazonの販売元と価格を確認してください。</p>
-<p>さらに、同じ「ウォータージャグ」でも、水専用のタンクと、飲み物を入れるジャグでは使い方が違いました。DODは公式が水専用（熱湯・ジュース・灯油は入れない）としています。一方、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。</p>
+<p>調査中、容量の目安が意外と小さいことに驚きました。CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。</p><p>今回の5商品の容量は4.7Lから20Lまで約4倍の差があり、大きければ安心とは限りませんでした。</p>
+<p>また、空の重さは約200gから2,450gまで約12倍の差があります。水は1Lで約1kgなので、10Lを入れれば水だけで約10kgになります。</p><p>本体の軽さより、満水で運べるかを考える方が現実的でした。価格帯にも非常に大きな幅があったため、この記事では金額を載せず、相対的な目安で示しています。</p><p>購入前に、Amazonの販売元と価格を確認してください。</p>
+<p>さらに、同じ「ウォータージャグ」でも、水専用のタンクと、飲み物を入れるジャグでは使い方が違いました。DODは公式が水専用（熱湯・ジュース・灯油は入れない）としています。</p><p>一方、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。</p>
 <p>つまり、容量の大きさだけでなく、何を入れて、どこまで運ぶかで選ぶのが大事だと分かりました。</p>
 
 <h2>迷ったらこれ</h2>
 <img class="product-img" src="research-waterjug/02_dod-jimini.jpg" alt="DOD ジミニータンク 10L">
-<p>ここまで読んでも迷ったら、水専用で飲料水OKの表記があり、レバー固定ができ、幅13cmのスリムなDOD ジミニータンク10Lが、一番外しにくいと考えます。Amazonの評価は4.5でした。氷で飲み物を冷やしたいなら、スタンレーも選択肢です。</p>
+<p>ここまで読んでも迷ったら、水専用で飲料水OKの表記があり、レバー固定ができ、幅13cmのスリムなDOD ジミニータンク10Lが、一番外しにくいと考えます。Amazonの評価は4.5でした。</p><p>氷で飲み物を冷やしたいなら、スタンレーも選択肢です。</p>
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B09GK7J77R?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">&rarr;</span></a>
 
 <h2>よくある質問</h2>
-<div class="faq-item"><p>Q. ウォータージャグは何リットルを選べばいいですか。<br>A. CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。今回の5商品は、約10Lが2つ（BUNDOK・DOD）、20L、7.5L、4.7Lです。20Lは水だけで約20kgになるので、運び方（キャスターの有無）も合わせて考えてください。</p></div>
-<div class="faq-item"><p>Q. 飲み物（お茶やジュース）を入れても大丈夫ですか。<br>A. 商品ごとに違います。DODは水専用で、熱湯・ジュース・灯油は入れないよう公式に書かれています。スタンレーは商品ページに飲み物を注ぐと書かれ、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。BUNDOKと岩谷マテリアルは、飲み物を入れてよいかの記載を確認できませんでした。</p></div>
-<div class="faq-item"><p>Q. 保冷や保温ができるのはどの商品ですか。<br>A. 数値を確認できたのは、保冷がスタンレー（8度以下・6時間）とスノーピーク（5.8度以下・10時間）、保温がスノーピーク（76.5度以上・10時間）です。数値は、メーカーの試験条件での値です。ほかの3商品は、保冷・保温の記載を確認できませんでした。</p></div>
+<div class="faq-item"><p>Q. ウォータージャグは何リットルを選べばいいですか。<br>A. CAMP HACKは、家族4人の1泊2日で8〜10L、水場が近いキャンプ場なら2〜4Lでも足りるとしています。</p><p>今回の5商品は、約10Lが2つ（BUNDOK・DOD）、20L、7.5L、4.7Lです。20Lは水だけで約20kgになるので、運び方（キャスターの有無）も合わせて考えてください。</p></div>
+<div class="faq-item"><p>Q. 飲み物（お茶やジュース）を入れても大丈夫ですか。<br>A. 商品ごとに違います。DODは水専用で、熱湯・ジュース・灯油は入れないよう公式に書かれています。</p><p>スタンレーは商品ページに飲み物を注ぐと書かれ、スノーピークは公式がビールやウォーターサーバーとしての利用を挙げています。</p><p>BUNDOKと岩谷マテリアルは、飲み物を入れてよいかの記載を確認できませんでした。</p></div>
+<div class="faq-item"><p>Q. 保冷や保温ができるのはどの商品ですか。<br>A. 数値を確認できたのは、保冷がスタンレー（8度以下・6時間）とスノーピーク（5.8度以下・10時間）、保温がスノーピーク（76.5度以上・10時間）です。数値は、メーカーの試験条件での値です。</p><p>ほかの3商品は、保冷・保温の記載を確認できませんでした。</p></div>
 <div class="faq-item"><p>Q. DODのジミニータンクは、水が出にくくなりませんか。<br>A. DODの公式は、水を出すときは上部のフタを少し緩めた状態で使うよう案内しています。Amazonのレビューにも、水の出が悪くなったときはフタを緩めれば問題なく出る、という投稿が複数ありました。</p></div>
 
 <h2>こんな記事も書いてます</h2>
@@ -546,4 +777,67 @@ a{color:var(--article-link)}
  window.addEventListener('resize',()=>{track.scrollTo({left:current*track.clientWidth,behavior:'instant'});update();});
  root.querySelector('.pick-controls').hidden=false;update();
 })();</script>
+<script id="mt-responsive-js">
+(function(){try{
+  var img=document.querySelector('.compare-img'); if(!img||img.dataset.mtZoom) return; img.dataset.mtZoom='1';
+  var hint=document.createElement('p'); hint.className='mt-zoom-hint'; hint.textContent='表をタップすると、大きく見られます';
+  img.parentNode.insertBefore(hint,img.nextSibling);
+  var box=document.createElement('div'); box.className='mt-lightbox'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','比較表の拡大');
+  var big=document.createElement('img'); big.alt=img.alt||'比較表'; big.src=img.currentSrc||img.src;
+  var close=document.createElement('button'); close.type='button'; close.textContent='閉じる';
+  box.appendChild(close); box.appendChild(big); document.body.appendChild(box);
+  function open(){ if(!window.matchMedia('(max-width:700px)').matches) return; box.classList.add('is-open'); box.scrollTop=0; box.scrollLeft=0; close.focus(); }
+  function shut(){ box.classList.remove('is-open'); img.focus&&img.focus({preventScroll:true}); }
+  img.addEventListener('click',open); close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&box.classList.contains('is-open')) shut(); });
+}catch(e){}})();
+</script>
+<script id="mt-design-js">
+(function(){
+  /* 入口の見出しは、既存のスクリプトが1文字ずつ<span class="chair-char">に分ける。そのままだと「。」や「ー」だけが次の行に落ちたり、カタカナの語が途中で切れる。
+     句読点・長音・小さい「ッャュョ」は前の文字と、カタカナ/英数字の連なりは1つの塊にして、塊の途中では折り返さない（見た目と文字は変えない）。 */
+  var JOIN_PREV='、。，．？！）」』】〕…ー・ッャュョァィゥェォっゃゅょぁぃぅぇぉ';
+  var WORD=/[ァ-ヶー・A-Za-z0-9０-９Ａ-Ｚａ-ｚ]/;
+  function group(){
+    try{
+      var h=document.querySelector('.article-opening h1'); if(!h)return;
+      var nodes=[].slice.call(h.childNodes), run=[], prevText='', hira=false;
+      function flush(){ if(run.length>1){ var w=document.createElement('span'); w.className='mt-nb'; w.style.whiteSpace='nowrap'; run[0].parentNode.insertBefore(w,run[0]); run.forEach(function(n){w.appendChild(n);}); } run=[]; hira=false; }
+      var KANJI=/[一-龥々〆]/, HIRA=/[ぁ-ん]/;
+      nodes.forEach(function(n){
+        if(!(n.nodeType===1&&n.classList.contains('chair-char'))){ flush(); prevText=''; return; }
+        var t=n.textContent, join=false;
+        if(run.length){
+          if(JOIN_PREV.indexOf(t)!==-1) join=true;
+          else if(WORD.test(t)&&WORD.test(prevText)) join=true;
+          else if(KANJI.test(t)&&KANJI.test(prevText)&&!hira) join=true;
+          else if(HIRA.test(t)&&KANJI.test(prevText)&&!hira) { join=true; hira=true; }   /* 漢字＋送りがな1字 */
+        }
+        if(!join) flush();
+        run.push(n); prevText=t;
+      });
+      flush();
+    }catch(e){}
+  }
+  group();
+  if(document.readyState!=='complete'){ document.addEventListener('DOMContentLoaded',group); window.addEventListener('load',group); }
+  try{ var h1=document.querySelector('.article-opening h1'); if(h1&&window.MutationObserver){ var mo=new MutationObserver(function(){mo.disconnect();group();}); mo.observe(h1,{childList:true}); setTimeout(function(){mo.disconnect();},3000);} }catch(e){}
+})();
+(function(){
+  try{
+    /* 商品ごとの色：出てくる順に5色をふる（JSが動かない時は、既定の緑のまま） */
+    [].slice.call(document.querySelectorAll('.product-feature')).forEach(function(el,i){el.classList.add('mt-c'+((i%5)+1));});
+    var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(rm||!('IntersectionObserver' in window))return;
+    var sel='.purpose-links a,.wrap>.pick-carousel,.compare-img,.compare-recap,.product-copy,.product-details .fit-box .col,.product-details .conclusion-line,.review-voice,.faq-item,.research-method';
+    var els=[].slice.call(document.querySelectorAll(sel));
+    document.documentElement.classList.add('mt-js');
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('mt-in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});
+    els.forEach(function(el){el.classList.add('mt-r');io.observe(el);});
+    /* 安全装置：2.5秒たっても出ていないものは出す（読めなくなる事故を防ぐ） */
+    setTimeout(function(){els.forEach(function(el){el.classList.add('mt-in');});},2500);
+  }catch(e){}
+})();
+</script>
 </body></html>

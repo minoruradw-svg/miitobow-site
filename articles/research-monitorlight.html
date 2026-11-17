@@ -303,6 +303,236 @@ a{color:var(--article-link)}
   .pick-copy h3{font-size:clamp(24px,2.3vw,34px);overflow-wrap:break-word;word-break:keep-all}
 }
 </style>
+<style id="mt-responsive">
+/* mt-responsive v1 (2026-11-17) : タブレット幅の左端そろえ／大画面の比例拡大。既存のデザインは変えない */
+/* 1) タブレット(701〜1099px)：見出しと本文の左端をそろえる（以前は最大約120pxずれていた） */
+@media (min-width:701px) and (max-width:1099px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+  .wrap > .compare-img{width:auto;max-width:min(960px,calc(100% - 48px));margin-left:calc((100% - min(960px, 100% - 48px))/2);margin-right:auto}
+}
+/* 1b) 中画面（1500〜2199px）：左右の余白が大きく空かないよう、中身(枠1120px)が画面の約77%になる比率で連続的に拡大する（20px刻み）。1840pxで1.26に達し、2200pxの既存段(1.26)と段差なくつながる。高さ800px未満では拡大しない */
+@media (min-width:1500px) and (min-height:800px){body{zoom:1.031}}
+@media (min-width:1520px) and (min-height:800px){body{zoom:1.045}}
+@media (min-width:1540px) and (min-height:800px){body{zoom:1.059}}
+@media (min-width:1560px) and (min-height:800px){body{zoom:1.073}}
+@media (min-width:1580px) and (min-height:800px){body{zoom:1.086}}
+@media (min-width:1600px) and (min-height:800px){body{zoom:1.1}}
+@media (min-width:1620px) and (min-height:800px){body{zoom:1.114}}
+@media (min-width:1640px) and (min-height:800px){body{zoom:1.127}}
+@media (min-width:1660px) and (min-height:800px){body{zoom:1.141}}
+@media (min-width:1680px) and (min-height:800px){body{zoom:1.155}}
+@media (min-width:1700px) and (min-height:800px){body{zoom:1.169}}
+@media (min-width:1720px) and (min-height:800px){body{zoom:1.183}}
+@media (min-width:1740px) and (min-height:800px){body{zoom:1.196}}
+@media (min-width:1760px) and (min-height:800px){body{zoom:1.21}}
+@media (min-width:1780px) and (min-height:800px){body{zoom:1.224}}
+@media (min-width:1800px) and (min-height:800px){body{zoom:1.238}}
+@media (min-width:1820px) and (min-height:800px){body{zoom:1.251}}
+@media (min-width:1840px) and (min-height:800px){body{zoom:1.26}}
+/* 1c) 本文の段落・箇条書き（記事の直下）：1200px以上は、枠の幅いっぱい(最大1120px)まで使い、文字は20pxにして1行を約55字に保つ（以前は最大800px固定で、枠の右約3割が空いていた）。2200px以上は別の設計(下)なので対象外 */
+@media (min-width:1200px) and (max-width:2199px){
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:min(1120px,calc(100% - 80px))}
+  .wrap > p,.wrap > ul,.wrap > ol{font-size:20px;line-height:1.95}
+}
+/* 2) 大画面（2200px以上）：画面の大きさに合わせて、レイアウトと文字を同じ比率で大きくする。中身が画面の約6割を保つ。1920px以下は今のまま。高さが800px未満の画面では拡大しない */
+@media (min-width:2200px) and (min-height:800px){body{zoom:1.26}}
+@media (min-width:2400px) and (min-height:800px){body{zoom:1.37}}
+@media (min-width:2600px) and (min-height:800px){body{zoom:1.49}}
+@media (min-width:2800px) and (min-height:800px){body{zoom:1.6}}
+@media (min-width:3000px) and (min-height:800px){body{zoom:1.71}}
+@media (min-width:3200px) and (min-height:800px){body{zoom:1.83}}
+@media (min-width:3400px) and (min-height:800px){body{zoom:1.94}}
+@media (min-width:3600px) and (min-height:800px){body{zoom:2.06}}
+@media (min-width:3800px) and (min-height:800px){body{zoom:2.17}}
+/* 3) スマホ：比較表の画像をタップで拡大できる */
+@media (max-width:700px){.compare-img{cursor:zoom-in}}
+.mt-zoom-hint{display:none;text-align:center;font-size:12.5px;color:#6b7a70;margin:-4px 0 8px}
+@media (max-width:700px){.mt-zoom-hint{display:block}}
+.mt-lightbox{position:fixed;inset:0;z-index:99999;background:rgba(10,18,13,.92);overflow:auto;-webkit-overflow-scrolling:touch;display:none}
+.mt-lightbox.is-open{display:block}
+.mt-lightbox img{display:block;width:max(900px,220%);max-width:none;margin:56px 12px 40px;border-radius:8px;background:#fff}
+.mt-lightbox button{position:fixed;top:10px;right:10px;z-index:2;min-width:44px;min-height:44px;border:0;border-radius:22px;padding:0 16px;font:600 15px/1 system-ui,sans-serif;background:#fff;color:#1d3a25;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+</style>
+<style id="mt-design">
+/* mt-design：記事デザインの「豪華・楽しい」共通ブロック（2026-11-17・全記事で共通）。本文・リンク・tag・アンカーは触らず、見た目だけを足す。
+   mato-button-depth（ボタンの立体＝上から光・影は背景/主色を濃くした色）／mato-ornaments（理由が言えるかざりだけ）／mato-text-effects（飾るのは1か所・影は黒にしない）
+   lp-compの考え方（ファーストビューは大きなタイトル＋主役の絵・レイヤーと余白）を、実記事に当てはめた。 */
+:root{
+  --mt-hero-a:#f3eefb;--mt-hero-b:#fceee6;--mt-hero-glow:#ffd9bf;
+  --mt-green:#407f25;--mt-green-d:#2f6a1c;--mt-green-shadow:46,96,28;
+  --mt-ink:#243f2d;
+  --mt-p1:#e6efe0;--mt-p2:#e3edf7;--mt-p3:#ece6f6;--mt-p4:#f7ecd9;--mt-p5:#f4e4e6;
+  --mt-p1d:#5c8a4a;--mt-p2d:#4d7aa8;--mt-p3d:#7b64a8;--mt-p4d:#b08436;--mt-p5d:#a85c68;
+}
+/* ---------- ファーストビュー ---------- */
+/* 入口は.wrap（画面いっぱいの幅）にそろえて全幅にし、中身は左右の余白で1120pxの枠に戻す（vwを使わない＝画面の拡大(zoom)があっても横にはみ出さない） */
+.wrap>.article-opening{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr;gap:0;width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;
+  padding:clamp(28px,4vw,64px) max(24px,calc((100% - 1120px)/2)) clamp(28px,4vw,56px)!important}
+@media(min-width:1100px){.wrap>.article-opening{padding-left:max(40px,calc((100% - 1120px)/2))!important;padding-right:max(40px,calc((100% - 1120px)/2))!important}}
+/* 全幅の背景（理由：記事の主役＝テーマ画像の夕焼け色を、入口全体に広げて世界観を作る） */
+.article-opening:before{content:"";position:absolute;z-index:-1;inset:0;background:
+  radial-gradient(1100px 620px at 60% 78%,var(--mt-hero-glow),transparent 70%),
+  linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(248,249,251,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 56px);mask-image:linear-gradient(180deg,transparent 0,#000 56px)}
+.article-opening .mt-hero{display:block;width:100%;height:auto;border-radius:28px;
+  -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 82%,transparent 100%);
+  filter:drop-shadow(0 18px 28px rgba(196,120,78,.28));margin:0 0 clamp(12px,3vw,24px)}
+.article-opening .situation{display:inline-flex;align-items:center;gap:8px;justify-self:start;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(64,127,37,.22);box-shadow:0 6px 18px rgba(var(--mt-green-shadow),.12);color:#2f6a1c;font-weight:700;font-size:13px;line-height:1.6;margin-bottom:18px}
+.article-opening .situation:before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:linear-gradient(180deg,#8fcb55,#407f25);box-shadow:0 0 0 4px rgba(111,174,47,.18)}
+.article-opening h1{font-size:clamp(32px,4vw,58px);line-height:1.28;letter-spacing:-.04em;color:var(--mt-ink);text-shadow:0 1px 0 rgba(255,255,255,.7),0 10px 30px rgba(255,205,170,.45);margin-bottom:22px}
+.article-opening .opening-summary{font-size:clamp(15px,1.15vw,19px);color:#4d5a50}
+/* CTAボタン（mato-button-depth：上から光・上端ハイライト・上の光沢・下の反射光・主色を濃くした影・厚みの段） */
+.opening-cta,.buy-link,.pick-amazon{position:relative;border:0!important;border-radius:999px!important;color:#fff!important;font-weight:800;letter-spacing:.02em;text-shadow:0 1px 0 rgba(20,60,10,.35);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%),linear-gradient(180deg,#58a233 0%,var(--mt-green) 55%,var(--mt-green-d) 100%)!important;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(255,255,255,.18),0 4px 0 #285a17,0 10px 22px rgba(var(--mt-green-shadow),.32)!important;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
+.opening-cta{justify-self:start;padding:16px 26px!important;gap:20px;margin-top:4px}
+.opening-cta span[aria-hidden]{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.opening-cta:hover,.buy-link:hover,.pick-amazon:hover{transform:translateY(-2px);filter:saturate(1.08);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -3px 6px rgba(255,255,255,.2),0 6px 0 #285a17,0 16px 28px rgba(var(--mt-green-shadow),.36)!important}
+.opening-cta:active,.buy-link:active,.pick-amazon:active{transform:translateY(3px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 1px 0 #285a17,0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+.buy-link{padding-left:22px!important;padding-right:22px!important}
+@media(min-width:900px){
+  /* 入口＝見出し・説明・ボタンの下に、テーマ画像を「画面の左右の端から端まで」全幅で置く（切らない・歪めない・角丸なし）。
+     全幅にするため、入口の左右の余白(padding)をやめ、3本の列で作る：左の余白 | 本文の枠(最大1120px) | 右の余白。
+     画像は1列目〜最後の列にまたがる＝入口(＝画面)いっぱい。vwを使わない（画面の拡大(zoom)やスクロールバーで横にはみ出さないため）。 */
+  .wrap>.article-opening{padding-left:0!important;padding-right:0!important;padding-bottom:0!important;align-content:start;
+    grid-template-columns:minmax(40px,1fr) minmax(0,1120px) minmax(40px,1fr);grid-template-areas:none;grid-template-rows:none}
+  .article-opening .situation{grid-area:auto;grid-column:2;grid-row:1}
+  .article-opening h1{grid-area:auto;grid-column:2;grid-row:2}
+  .article-opening .opening-summary{grid-area:auto;grid-column:2;grid-row:3;max-width:820px}
+  .article-opening .opening-cta{grid-area:auto;grid-column:2;grid-row:4;justify-self:start}
+  .article-opening .mt-picture{grid-area:auto;grid-column:1/-1;grid-row:5;margin:clamp(32px,3.2vw,48px) 0 0;position:relative;overflow:hidden;isolation:isolate;background:#1d1a17}
+  /* 画像が高くなりすぎる超ワイドでは、高さを880pxで止め、画像は切らずに中央へ（contain）。左右の余った所は、同じ画像をぼかして敷いて自然に延長する */
+  .article-opening .mt-picture:before{content:"";position:absolute;inset:-30px;z-index:-1;background:var(--mt-wide) center/cover no-repeat;filter:blur(26px) saturate(1.08) brightness(.92)}
+  .article-opening .mt-hero{display:block;width:100%;height:auto;max-height:880px;object-fit:contain;margin:0;border-radius:0;-webkit-mask-image:none;mask-image:none;animation:none!important;box-shadow:none;filter:none}
+}
+@media(max-width:899px){.article-opening .mt-picture{order:-1;max-width:560px;margin-inline:auto;display:block}}
+.article-opening .mt-picture{display:block}
+@media(min-width:1100px){
+  /* 見出しを左・説明とボタンを右に並べて、右側を空けない（本文の枠の中で2列） */
+  .wrap>.article-opening{grid-template-columns:minmax(40px,1fr) minmax(0,600px) 48px minmax(0,472px) minmax(40px,1fr)}
+  .article-opening .situation{grid-column:2/5}
+  .article-opening h1{grid-column:2;grid-row:2/4;margin-bottom:0;align-self:center}
+  .article-opening .opening-summary{grid-column:4;grid-row:2;align-self:end;margin:0 0 6px;max-width:none}
+  .article-opening .opening-cta{grid-column:4;grid-row:3;align-self:start;margin-top:22px}
+  .article-opening .mt-picture{grid-row:4}
+}
+/* マスコットがゆっくり浮く（理由：入口に「生きている」感じを足す。動きは小さく・動きを減らす設定では止める） */
+@keyframes mt-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.article-opening .mt-hero{animation:mt-float 7s ease-in-out infinite}
+/* 安心の帯とバッジ */
+.stat-badges span{display:inline-flex;align-items:center;gap:6px;background:#fff!important;border:1px solid rgba(64,127,37,.2);box-shadow:0 6px 16px rgba(var(--mt-green-shadow),.1);font-weight:700}
+.stat-badges span:before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--mt-green);color:#fff;font-size:10px;line-height:1}
+/* ---------- 目的ナビ（5つのカード） ---------- */
+.purpose-links a{background:#fff!important;border:1px solid rgba(0,0,0,.06)!important;border-top:4px solid var(--mt-pd,#5c8a4a)!important;border-radius:16px!important;box-shadow:0 10px 24px rgba(60,90,50,.1);transition:transform .2s ease,box-shadow .2s ease}
+.purpose-links a:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(60,90,50,.18)}
+.purpose-links a:nth-child(1){--mt-pd:var(--mt-p2d)}.purpose-links a:nth-child(2){--mt-pd:var(--mt-p1d)}.purpose-links a:nth-child(3){--mt-pd:var(--mt-p3d)}.purpose-links a:nth-child(4){--mt-pd:var(--mt-p4d)}.purpose-links a:nth-child(5){--mt-pd:var(--mt-p5d)}
+.purpose-number{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--mt-pd,#5c8a4a);color:#fff!important;font-weight:800;letter-spacing:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+/* ---------- 結論カルーセル ---------- */
+.wrap>.pick-carousel{background:linear-gradient(160deg,#fff 0%,#f1f6ea 100%)!important;border:1px solid rgba(64,127,37,.16)!important;border-radius:28px!important;box-shadow:0 24px 50px rgba(60,90,50,.14)!important}
+.pick-product{border-radius:20px!important;box-shadow:0 12px 30px rgba(120,110,90,.16)}
+.pick-controls button{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 8px rgba(60,90,50,.12);background:#fff!important}
+.pick-controls button[aria-current="true"]{background:linear-gradient(180deg,#58a233,var(--mt-green-d))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 10px rgba(var(--mt-green-shadow),.3)!important}
+/* ---------- 商品ごとの色（5色。理由：商品を見分ける目印。価格帯順の並びなので、色は優劣を表さない） ---------- */
+.product-feature.mt-c1{--mt-t:var(--mt-p2);--mt-d:var(--mt-p2d)}
+.product-feature.mt-c2{--mt-t:var(--mt-p1);--mt-d:var(--mt-p1d)}
+.product-feature.mt-c3{--mt-t:var(--mt-p3);--mt-d:var(--mt-p3d)}
+.product-feature.mt-c4{--mt-t:var(--mt-p4);--mt-d:var(--mt-p4d)}
+.product-feature.mt-c5{--mt-t:var(--mt-p5);--mt-d:var(--mt-p5d)}
+.product-stage{background:linear-gradient(135deg,#fff 0%,var(--mt-t,#f0f6e8) 100%)!important}
+.product-stage:after{background:linear-gradient(90deg,var(--mt-t,#f0f6e8) 0%,color-mix(in srgb,var(--mt-t,#f0f6e8) 96%,transparent) 28%,color-mix(in srgb,var(--mt-t,#f0f6e8) 70%,transparent) 44%,transparent 64%)!important}
+.product-stage>.product-img{filter:drop-shadow(0 22px 26px rgba(120,100,80,.25))}
+.product-index{color:var(--mt-d,#466750)!important}
+.product-index:before{content:"";display:inline-block;width:28px;height:2px;margin-right:10px;vertical-align:middle;background:var(--mt-d,#466750);border-radius:2px}
+.product-copy .price-badge{background:linear-gradient(180deg,color-mix(in srgb,var(--mt-d,#407f25) 88%,#fff),var(--mt-d,#407f25))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 10px color-mix(in srgb,var(--mt-d,#407f25) 40%,transparent);text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.product-details .fit-box .col{border-radius:16px;box-shadow:0 8px 22px rgba(60,90,50,.08)}
+.review-voice{border-radius:18px;box-shadow:0 8px 22px rgba(140,110,70,.1)}
+.faq-item{border-radius:14px;box-shadow:0 6px 16px rgba(60,90,50,.07)}
+.compare-img{border-radius:18px;box-shadow:0 16px 36px rgba(60,90,50,.14)}
+/* 見出しの目印（理由：長い記事で節の始まりを目で追えるように） */
+.wrap>h2:before{content:"";display:inline-block;width:6px;height:.95em;margin-right:12px;vertical-align:-.1em;border-radius:3px;background:linear-gradient(180deg,#8fcb55,var(--mt-green))}
+/* ---------- スクロールで、ふわっと出る（JSが動く時だけ。動きを減らす設定では止める） ---------- */
+.mt-js .mt-r{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.mt-js .mt-r.mt-in{opacity:1;transform:none}
+/* ---------- ダーク ---------- */
+@media(prefers-color-scheme:dark){
+  :root{--mt-hero-a:#2a2236;--mt-hero-b:#2b2420;--mt-hero-glow:#6b4a3a;--mt-ink:#edf4e9}
+  .article-opening:before{background:radial-gradient(1100px 620px at 60% 78%,rgba(150,95,70,.55),transparent 70%),linear-gradient(180deg,var(--mt-hero-a) 0%,var(--mt-hero-b) 72%,rgba(27,33,25,0) 100%)}
+  .article-opening .situation{background:rgba(255,255,255,.08);border-color:rgba(181,214,142,.3);color:#cfe8b3}
+  .article-opening h1{text-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .article-opening .opening-summary{color:#d4dccf}
+  .stat-badges span{background:#27331f!important;color:#cfe8b3!important;border-color:rgba(181,214,142,.25)}
+  .purpose-links a{background:#242b21!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  .wrap>.pick-carousel{background:linear-gradient(160deg,#27301f 0%,#1f291c 100%)!important;border-color:rgba(181,214,142,.2)!important}
+  .pick-controls button{background:#2a3626!important}
+  .product-stage{background:linear-gradient(135deg,#232a21 0%,#1d241b 100%)!important}
+  .product-stage:after{background:linear-gradient(90deg,#1d241b 0%,rgba(29,36,27,.96) 28%,rgba(29,36,27,.7) 44%,transparent 64%)!important}
+  .product-index{color:#b5d68e!important}.product-index:before{background:#b5d68e}
+  .compare-img,.review-voice,.faq-item,.product-details .fit-box .col{box-shadow:0 10px 24px rgba(0,0,0,.28)}
+}
+/* ---------- スマホ ---------- */
+@media(max-width:700px){
+  .article-opening h1{font-size:clamp(30px,9vw,44px)}
+  .opening-cta{width:100%;justify-content:space-between}
+  .wrap>.pick-carousel{border-radius:20px!important}
+  .product-stage{background:var(--mt-t,#f0f6e8)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .article-opening .mt-hero{animation:none}
+  .mt-js .mt-r{opacity:1!important;transform:none!important;transition:none!important}
+  .opening-cta,.buy-link,.pick-amazon,.purpose-links a{transition:none}
+}
+
+/* ---------- 超ワイド（画面幅2200px以上）：入口を画面いっぱいに使う ----------
+   理由：本文の枠(1120px)にそろえたままだと、左右が大きく空く。入口は「読む場所」ではなく「入る場所」なので、文字も絵も色も、画面の端近くまで広げる。
+   足し算より、配置と大きさで直す。1440・1920・スマホは変えない。 */
+@media(min-width:2200px){
+  .wrap>.article-opening{min-height:0;grid-template-columns:9% minmax(0,1.2fr) 4% minmax(0,1fr) 9%}
+  .article-opening h1{font-size:76px}
+  .article-opening .opening-summary{font-size:22px;max-width:none}
+  .article-opening .mt-picture{margin-top:56px}
+  /* 夕焼けの光が、部屋の左右にも差している表現（左のラベンダーと右のピーチの、ぼかした大きな円。主役の絵より目立たせない） */
+  .article-opening:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+    radial-gradient(circle 560px at 9% 42%,rgba(214,196,246,.55),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(255,196,150,.48),transparent 70%)}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .article-opening:after{background:
+    radial-gradient(circle 560px at 9% 42%,rgba(120,92,170,.5),transparent 70%),
+    radial-gradient(circle 640px at 93% 88%,rgba(170,100,70,.42),transparent 70%)}
+}
+
+/* ---------- 超ワイド（2200px以上）：本文まわりも画面の約82%まで広げ、左右の余白は色つきの帯にする ----------
+   割合(%)で指定する理由：画面の拡大(zoom)がかかっても、割合は同じ比率で効くので二重に広がらない。
+   段落だけは読める長さ(約76文字)で止め、そのかわり左右の帯に色を置いて「何もない白」にしない。 */
+@media(min-width:2200px){
+  .wrap{position:relative;isolation:isolate}
+  .wrap:before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 0,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 4.5%,rgba(255,255,255,0) 9%,rgba(255,255,255,0) 91%,color-mix(in srgb,var(--mt-hero-b) 80%,#fff) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#fff) 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.4) 120px,#000 360px)}
+  .wrap > :is(.purpose-nav,.pick-carousel,.compare-img){width:82%!important;max-width:none!important;margin-left:9%!important;margin-right:9%!important}
+  .wrap > :not(.product-feature):not(.theme-img):not(.article-opening):not(.purpose-nav):not(.pick-carousel):not(.compare-img){max-width:76em!important;margin-left:9%!important;margin-right:auto!important}
+  body > .home-link,.home-link{max-width:none!important;margin-left:9%!important;padding-left:0!important}
+  .wrap > .pick-carousel{margin-bottom:64px}
+  /* 入口の背景は、上端・下端ともページの背景色へなだらかに溶けて消える（理由：帯が急に切れると水平の境目が見える） */
+  .article-opening:before,.article-opening:after{-webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%);mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.35) 70px,#000 190px,#000 calc(100% - 230px),rgba(0,0,0,.4) calc(100% - 90px),transparent 100%)}
+  .product-overlay,.product-details{width:82%!important;max-width:none!important}
+  .product-stage > .product-img{right:9%!important;width:min(780px,40%)!important}
+  .product-copy{width:50%;max-width:700px}
+}
+@media(min-width:2200px) and (prefers-color-scheme:dark){
+  .wrap:before{background:linear-gradient(90deg,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 0,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 4.5%,rgba(0,0,0,0) 9%,rgba(0,0,0,0) 91%,color-mix(in srgb,var(--mt-hero-b) 100%,#000) 95.5%,color-mix(in srgb,var(--mt-hero-a) 100%,#000) 100%)}
+}
+
+/* 入口に同じ絵（表紙）が出るので、本文の下にあった同じ表紙バナーは出さない（理由：同じ場面が2回続くのを避ける。表紙そのものは入口に残る） */
+.wrap>img.theme-img{display:none}
+
+/* 見出しの折り返しを均等に（理由：「、」「。」「？」が1文字だけ次の行に落ちるのを防ぐ。文字は飾らない） */
+.article-opening h1{text-wrap:balance}
+.article-opening .opening-summary{text-wrap:pretty}
+/* ---- この記事の色（絵から作った入口の背景色） ---- */
+:root{--mt-hero-a:#d7dae1;--mt-hero-b:#e3ddd8;--mt-hero-glow:#c5b6ad}
+@media(prefers-color-scheme:dark){:root{--mt-hero-a:#182225;--mt-hero-b:#2b281a;--mt-hero-glow:#3a2d1c}}
+</style>
 </head>
 <body>
 <!--rr:art-home:A--><template data-rr><a class="home-link" href="/articles/research-room">&larr; ミートボーの調査部屋に戻る</a></template><!--/rr:art-home:A--><!--rr:art-home:B--><a class="home-link" href="/research/">&larr; ミートボーの調査に戻る</a><!--/rr:art-home:B-->
@@ -311,15 +541,16 @@ a{color:var(--article-link)}
 
 
 <header class="article-opening">
+<picture class="mt-picture" style="--mt-wide:url(research-monitorlight/hero-wide.webp)"><source media="(min-width:900px)" srcset="research-monitorlight/hero-wide.webp" width="1600" height="900"><img class="mt-hero" src="research-monitorlight/hero.webp" width="1280" height="720" alt="ミートボーと、モニターライトのイメージ" fetchpriority="high" decoding="async"></picture>
 <p class="situation">デスクライトだと手元は明るいのに画面まわりが暗いままの人へ</p>
 <h1>その画面、<br>暗くない？</h1>
 <p class="opening-summary">モニターライト17候補を調査。価格・演色性・対応厚み・調光調色から、選び方の違う5商品を比較しました。</p>
 <a class="opening-cta" href="#purpose-picks">自分に合うライトを探す <span aria-hidden="true">↓</span></a>
 </header>
-<img class="theme-img" src="research-monitorlight/theme.png" alt="モニターライトを17候補調べて分かった、あなたに合う1台">
+<img class="theme-img" src="research-monitorlight/theme.png" alt="モニターライトを17候補調べて分かった、あなたに合う1台" loading="lazy" decoding="async">
 <p class="pr-note">この記事はAmazonアソシエイト・プログラムの参加者として、紹介料を得る場合があります（PR）。仕様は調査時点の情報です。</p>
 
-<p class="article-lead">17候補から、選び方の違う5商品に絞りました。まずは気になる1台へ。向いている人・向いていない人と、低評価レビューもまとめています。</p>
+<p class="article-lead">17候補から、選び方の違う5商品に絞りました。まずは気になる1台へ。</p><p class="article-lead">向いている人・向いていない人と、低評価レビューもまとめています。</p>
 
 <div class="stat-badges">
   <span>17候補を調査</span>
@@ -461,12 +692,12 @@ a{color:var(--article-link)}
 
 <details class="research-method"><summary>17候補をどう絞った？ 調査の経緯を見る</summary><div class="research-content"><p>在宅ワークが増えて、私も画面とにらめっこする時間が増えました。</p>
 <p>デスクライトだと、手元は明るいのに画面まわりは暗いままでした。</p>
-<p>種類が多すぎて、正直迷います。なので今回、メーカー公式サイトとマイベスト、価格.comで調査。低評価や評価に疑いのある商品も含めて計17候補から5商品まで絞り込みました。</p>
+<p>種類が多すぎて、正直迷います。なので今回、メーカー公式サイトとマイベスト、価格.comで調査。</p><p>低評価や評価に疑いのある商品も含めて計17候補から5商品まで絞り込みました。</p>
 <p>各商品ごとに、向いてる人・向いてない人も調べているので、自分に合ったモニターライトを探してみてください。</p>
 
 <h2>17候補から5つに絞り込みました</h2>
 <p>今回、メーカー公式サイトとマイベスト、価格.comで調査を行いました。下記、17候補です。</p>
-<p>BenQ3機種、Quntis3機種、Xiaomi2機種、サンワサプライ2機種、山善、ELECOM、JAPANNEXT2機種、AXIS LIGHT、EXARM、Philips Hue。</p>
+<p>BenQ3機種、Quntis3機種、Xiaomi2機種、サンワサプライ2機種、山善。ELECOM、JAPANNEXT2機種、AXIS LIGHT、EXARM、Philips Hue。</p>
 <p>この中から、5つに絞りました。</p>
 <p>BenQのScreenBar無印とHalo2は、ScreenBar Proと役割が重なるため見送りました。</p>
 <p>Quntisの廉価モデル2機種も、RGBバックライト付きの上位モデルと役割が重なるため見送りました。</p>
@@ -488,7 +719,7 @@ a{color:var(--article-link)}
 <p>SHAYAKU・Baseus・WESTBERRYの3ブランドは、カテゴリ平均と比べてレビュー件数が不自然に多いことが共通していました。</p>
 <p>Mybrightは件数ではなく、平均星評価の低さが気になる点でした。</p>
 
-<p>※2026-10-02追記：山善(YAMAZEN) YML-A05(B)（色違いASIN含め在庫切れ）が入手できなくなっていたため、同じ国内メーカーのエルパ(ELPA) EML-DP01(CG)に差し替えました。調光・調色の段階数は旧商品（10段階／6段階）より少なめ（3段階／3段階）です。</p>
+<p>※2026-10-02追記：山善(YAMAZEN) YML-A05(B)（色違いASIN含め在庫切れ）が入手できなくなっていました。</p><p>そのため、同じ国内メーカーのエルパ(ELPA) EML-DP01(CG)に差し替えました。調光・調色の段階数は旧商品（10段階／6段階）より少なめ（3段階／3段階）です。</p>
 
 </div></details>
 <h2>調べてみて驚いたこと</h2>
@@ -504,7 +735,7 @@ a{color:var(--article-link)}
 
 <h2>迷ったらこれ</h2>
 <img class="product-img" src="research-monitorlight/05_benq.jpg" alt="BenQ ScreenBar Pro">
-<p>ここまで読んでもまだ迷ったら、5商品の中で唯一、0.43cmの薄型から6.5cmの曲面モニターまで対応するBenQ ScreenBar Proが最初の1台におすすめです。</p>
+<p>ここまで読んでもまだ迷ったら、BenQ ScreenBar Proが最初の1台におすすめです。5商品の中で唯一、0.43cmの薄型から6.5cmの曲面モニターまで対応します。</p>
 <p>演色性Ra95以上で映り込みも抑えられ、自動点灯・消灯センサーも付いているので、モニターを買い替えても使い続けやすい、外しにくい選択です。</p>
 <a class="buy-link" href="https://www.amazon.co.jp/dp/B0CZ9P1QW9?tag=miitobow-22" target="_blank" rel="noopener sponsored">Amazonで見る<span class="arrow">→</span></a>
 
@@ -610,4 +841,67 @@ a{color:var(--article-link)}
  window.addEventListener('resize',()=>{track.scrollTo({left:current*track.clientWidth,behavior:'instant'});update();});
  root.querySelector('.pick-controls').hidden=false;update();
 })();</script>
+<script id="mt-responsive-js">
+(function(){try{
+  var img=document.querySelector('.compare-img'); if(!img||img.dataset.mtZoom) return; img.dataset.mtZoom='1';
+  var hint=document.createElement('p'); hint.className='mt-zoom-hint'; hint.textContent='表をタップすると、大きく見られます';
+  img.parentNode.insertBefore(hint,img.nextSibling);
+  var box=document.createElement('div'); box.className='mt-lightbox'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','比較表の拡大');
+  var big=document.createElement('img'); big.alt=img.alt||'比較表'; big.src=img.currentSrc||img.src;
+  var close=document.createElement('button'); close.type='button'; close.textContent='閉じる';
+  box.appendChild(close); box.appendChild(big); document.body.appendChild(box);
+  function open(){ if(!window.matchMedia('(max-width:700px)').matches) return; box.classList.add('is-open'); box.scrollTop=0; box.scrollLeft=0; close.focus(); }
+  function shut(){ box.classList.remove('is-open'); img.focus&&img.focus({preventScroll:true}); }
+  img.addEventListener('click',open); close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&box.classList.contains('is-open')) shut(); });
+}catch(e){}})();
+</script>
+<script id="mt-design-js">
+(function(){
+  /* 入口の見出しは、既存のスクリプトが1文字ずつ<span class="chair-char">に分ける。そのままだと「。」や「ー」だけが次の行に落ちたり、カタカナの語が途中で切れる。
+     句読点・長音・小さい「ッャュョ」は前の文字と、カタカナ/英数字の連なりは1つの塊にして、塊の途中では折り返さない（見た目と文字は変えない）。 */
+  var JOIN_PREV='、。，．？！）」』】〕…ー・ッャュョァィゥェォっゃゅょぁぃぅぇぉ';
+  var WORD=/[ァ-ヶー・A-Za-z0-9０-９Ａ-Ｚａ-ｚ]/;
+  function group(){
+    try{
+      var h=document.querySelector('.article-opening h1'); if(!h)return;
+      var nodes=[].slice.call(h.childNodes), run=[], prevText='', hira=false;
+      function flush(){ if(run.length>1){ var w=document.createElement('span'); w.className='mt-nb'; w.style.whiteSpace='nowrap'; run[0].parentNode.insertBefore(w,run[0]); run.forEach(function(n){w.appendChild(n);}); } run=[]; hira=false; }
+      var KANJI=/[一-龥々〆]/, HIRA=/[ぁ-ん]/;
+      nodes.forEach(function(n){
+        if(!(n.nodeType===1&&n.classList.contains('chair-char'))){ flush(); prevText=''; return; }
+        var t=n.textContent, join=false;
+        if(run.length){
+          if(JOIN_PREV.indexOf(t)!==-1) join=true;
+          else if(WORD.test(t)&&WORD.test(prevText)) join=true;
+          else if(KANJI.test(t)&&KANJI.test(prevText)&&!hira) join=true;
+          else if(HIRA.test(t)&&KANJI.test(prevText)&&!hira) { join=true; hira=true; }   /* 漢字＋送りがな1字 */
+        }
+        if(!join) flush();
+        run.push(n); prevText=t;
+      });
+      flush();
+    }catch(e){}
+  }
+  group();
+  if(document.readyState!=='complete'){ document.addEventListener('DOMContentLoaded',group); window.addEventListener('load',group); }
+  try{ var h1=document.querySelector('.article-opening h1'); if(h1&&window.MutationObserver){ var mo=new MutationObserver(function(){mo.disconnect();group();}); mo.observe(h1,{childList:true}); setTimeout(function(){mo.disconnect();},3000);} }catch(e){}
+})();
+(function(){
+  try{
+    /* 商品ごとの色：出てくる順に5色をふる（JSが動かない時は、既定の緑のまま） */
+    [].slice.call(document.querySelectorAll('.product-feature')).forEach(function(el,i){el.classList.add('mt-c'+((i%5)+1));});
+    var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(rm||!('IntersectionObserver' in window))return;
+    var sel='.purpose-links a,.wrap>.pick-carousel,.compare-img,.compare-recap,.product-copy,.product-details .fit-box .col,.product-details .conclusion-line,.review-voice,.faq-item,.research-method';
+    var els=[].slice.call(document.querySelectorAll(sel));
+    document.documentElement.classList.add('mt-js');
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('mt-in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});
+    els.forEach(function(el){el.classList.add('mt-r');io.observe(el);});
+    /* 安全装置：2.5秒たっても出ていないものは出す（読めなくなる事故を防ぐ） */
+    setTimeout(function(){els.forEach(function(el){el.classList.add('mt-in');});},2500);
+  }catch(e){}
+})();
+</script>
 </body></html>
