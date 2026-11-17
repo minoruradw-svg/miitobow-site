@@ -31,7 +31,7 @@ def url_of(path):
 
 
 def from_git(rev_range):
-    out = subprocess.run(["git", "diff", "--name-only", "--diff-filter=AM", rev_range], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout
+    out = subprocess.run(["git", "diff", "--name-only", "--diff-filter=AM", *rev_range.split()], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout
     return sorted({url_of(p) for p in out.splitlines() if p.endswith(".html") and not p.startswith(("preview/", "tools/"))})
 
 
