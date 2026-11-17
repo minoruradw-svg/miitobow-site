@@ -1399,7 +1399,7 @@
     });
   }
 
-  // --- カテゴリー絞り込み（複数選んだら「どれか1つでも当てはまる」） ---
+  // --- カテゴリー絞り込み（1つだけ選ぶ。古い保存値などで複数入っていても「どれか1つでも当てはまる」で動く） ---
   function applyCategoryFilter(posts) {
     if (!activeFilterIds.length) return posts;
     return posts.filter(function (p) {
@@ -1597,8 +1597,8 @@
     ids.forEach(function (id) {
       var active = activeFilterIds.indexOf(id) !== -1;
       container.appendChild(makeFilterChip(categoryName(id), counts[id] || 0, active, function () {
-        if (activeFilterIds.indexOf(id) === -1) activeFilterIds.push(id);
-        else activeFilterIds = activeFilterIds.filter(function (x) { return x !== id; });
+        // 1つだけ選ぶ形：押したものに切り替わる。選んでいるものをもう一度押すと解除（すべてに戻る）
+        activeFilterIds = (activeFilterIds.length === 1 && activeFilterIds[0] === id) ? [] : [id];
         onFilterChanged();
       }));
     });
@@ -2485,6 +2485,8 @@
       var b = (isWide() ? detailEl : card).querySelector(".add-category-btn");
       if (b) b.click();
     });
+    if (imageCount(data)) addItem(imageCount(data) > 1 ? "⬇ 画像をまとめて保存" : "⬇ 画像を保存", false, function () { saveAllImages(data, function () {}); });
+    if (data.video) addItem("⬇ 動画を保存", false, function () { saveVideoOf(data, function () {}); });
     if (canEdit()) addItem("✎ 題名・本文を編集", false, function () { startEdit(data); });
     addItem("🗑 削除", true, function () { confirmDeletePost(data); });
     document.body.appendChild(m);
@@ -2649,13 +2651,13 @@
       primary.setAttribute("aria-label", "題名をコピー");
       primary.addEventListener("click", function (e) { e.stopPropagation(); doCopy(data.title, primary, "✓"); });
     } else if (imageCount(data)) {
-      primary.textContent = "保存";
-      primary.setAttribute("aria-label", "画像を保存");
+      // 画像だけの投稿も、行のボタンは「コピー」（1枚目の画像をコピー）。保存は「⋯」の中
+      primary.textContent = "コピー";
+      primary.setAttribute("aria-label", imageCount(data) > 1 ? "画像（1枚目）をコピー" : "画像をコピー");
       primary.addEventListener("click", function (e) {
         e.stopPropagation();
-        primary.disabled = true;
-        primary.textContent = "…";
-        saveAllImages(data, function () { primary.disabled = false; primary.textContent = "保存"; });
+        var first = data.image ? Promise.resolve(data.image) : getImageBlobUrl((data.images || [])[0]);
+        copyImagePromise(first.then(urlToBlob), primary, "miitobow-board-" + (data.createdAt || Date.now()) + ".png");
       });
     } else if (data.video) {
       primary.textContent = "保存";
