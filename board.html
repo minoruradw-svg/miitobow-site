@@ -245,11 +245,17 @@
     cursor: pointer; font-family: inherit;
   }
   .add-category-btn:hover { color: var(--accent-dark); border-color: var(--accent); background: var(--accent-glow); }
+  /* 2026-11-20：投稿カードは overflow:hidden なので、カードの下へはみ出す形だと候補の一覧が切られて選べなかった（スマホ・PCとも）。
+     画面に固定して、上寄りの中央に出す（キーボードが出ても隠れない）。 */
   .add-category-popup {
-    position: absolute; right: 0; top: calc(100% + 4px); z-index: 6; width: 220px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.14); padding: 8px;
+    position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 76px); z-index: 60;
+    width: min(92vw, 360px); max-height: 70vh; overflow-y: auto;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.22); padding: 10px;
   }
+  @media (min-width: 720px) { .add-category-popup { top: 132px; } }   /* PCは固定ヘッダー(約104px)の下に出す */
+  .add-category-popup input { font-size: 16px; padding: 9px 10px; }
+  .add-category-popup .category-suggestion-item { min-height: 44px; }
   .add-category-popup input {
     width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px;
     padding: 6px 8px; font-size: 0.82rem; font-family: inherit; background: var(--surface-soft); color: var(--ink);
@@ -613,7 +619,7 @@
         <span class="count" id="count"></span>
         <span class="net-note" id="net-note" hidden>⚠ 更新できません</span>
         <div class="topbar-right">
-          <button class="top-btn primary pc-only" id="open-composer" type="button">＋ 投稿</button>
+          <button class="top-btn primary" id="open-composer" type="button" aria-label="投稿を書く">＋ 投稿</button>
           <button class="top-btn" id="refresh-btn" type="button" aria-label="更新">⟳<span class="lbl"> 更新</span></button>
           <button class="top-btn" id="top-menu-btn" type="button" aria-label="その他のメニュー" aria-haspopup="true">⋯</button>
           <div class="menu-pop abs" id="top-menu" hidden>
