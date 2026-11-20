@@ -2697,8 +2697,9 @@
     var bodyEl = null;
     // auto＝「新しい3件は最初からひらく」の自動のひらき。ユーザー自身の操作(auto未指定)だけを覚える
     function setOpen(open, auto) {
-      if (isWide()) { if (open && !auto) selectPost(id, true); return; }   // PCの2画面では、右の欄に出す
-      if (!auto) openState[id] = open;
+      // PCの2画面：ユーザーが選んだ時は右の欄に出す。「新しい3件を最初から」の自動のひらき(auto)だけは、左の一覧の中でひらく
+      if (isWide() && !auto) { if (open) selectPost(id, true); return; }
+      if (!auto && !isWide()) openState[id] = open;
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       card.classList.toggle("open", open);
       if (open && !bodyEl) {
@@ -2712,7 +2713,9 @@
     }
     card.__setOpen = setOpen;
     toggle.addEventListener("click", function () { if (isWide()) selectPost(id, true); else setOpen(!card.classList.contains("open")); });
-    if (!isWide()) {
+    if (isWide()) {
+      if (currentAutoOpen[id]) setOpen(true, true);   // PCも、新しい3件は左の一覧の中で最初からひらく（右の欄は、行を押した時に出る）
+    } else {
       var want = Object.prototype.hasOwnProperty.call(openState, id) ? openState[id] : !!currentAutoOpen[id];
       if (want) setOpen(true, true);
     }
@@ -2831,11 +2834,7 @@
     lastCondKey = condKey;
     if (isWide()) {
       var stillThere = !!selectedId && filtered.some(function (p) { return p.id === selectedId; });
-      if (!stillThere || (condChanged && !selectedByUser)) {
-        var nb = newestOf(filtered);
-        selectedId = nb ? nb.id : null;
-        selectedByUser = false;
-      }
+      if (!stillThere) { selectedId = null; selectedByUser = false; }   // 右の欄は、行を押した時だけ出す（自動では選ばない）
     }
 
     var shown = filtered.slice(0, viewState.limit);
