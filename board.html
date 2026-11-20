@@ -2382,11 +2382,23 @@
   }
   // 指定の投稿へ移る（PC＝右の欄に出す／狭い画面＝その行をひらいて見える所へ）
   function gotoPost(id) {
-    var inList = currentFiltered.some(function (p) { return p.id === id; });
-    if (!inList) { showToast("一覧に出ていません（絞り込みか「もっと見る」の先にあります）", 3200); return; }
+    var idxOf = function () { for (var i = 0; i < currentFiltered.length; i++) if (currentFiltered[i].id === id) return i; return -1; };
+    var idx = idxOf();
+    if (idx < 0) {
+      // 絞り込み（カテゴリー・検索・期間）で外れている → 絞り込みを解除して出す（続きは親と別カテゴリーのことが多い）
+      if (!postById(id)) { showToast("その投稿は見つかりません", 3000); return; }
+      clearAllFilters();
+      idx = idxOf();
+      if (idx < 0) { showToast("その投稿は一覧に出せませんでした", 3000); return; }
+      showToast("絞り込みを解除して表示しました", 2600);
+    }
+    if (idx >= viewState.limit) {   // 「もっと見る」の先 → そこまで広げる
+      viewState.limit = (Math.floor(idx / CONFIG.PAGE_SIZE) + 1) * CONFIG.PAGE_SIZE;
+      refreshList(true);
+    }
     if (isWide()) { selectPost(id, true); return; }
     var card = postsEl.querySelector('.post[data-id="' + String(id).replace(/"/g, "") + '"]');
-    if (!card) { showToast("一覧に出ていません（「もっと見る」の先にあります）", 3200); return; }
+    if (!card) { showToast("一覧に出ていません", 3200); return; }
     if (card.__setOpen && !card.classList.contains("open")) card.__setOpen(true);
     card.scrollIntoView({ block: "center", behavior: "smooth" });
   }
