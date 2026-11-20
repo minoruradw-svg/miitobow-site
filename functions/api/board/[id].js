@@ -5,7 +5,7 @@
 // ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
 
-import { loadIndex, saveIndex, rebuildCache, denyIfBadPin } from "./_lib.js";
+import { loadIndex, saveIndex, rebuildCache, loadCache, denyIfBadPin } from "./_lib.js";
 
 const MAX_TEXT_LENGTH = 20000; // index.jsと同じ値
 const MAX_TITLE_LENGTH = 200;  // index.jsと同じ値
@@ -112,6 +112,21 @@ export async function onRequestDelete({ request, env, params }) {
       await env.MIITOBOW_BOARD.delete(`vid:${found.post.video}`);
     }
     await env.MIITOBOW_BOARD.delete(found.key);
+    // この投稿の「続き」は消さずに残し、ひも付け(parentId)だけ外す（独立した投稿に戻る）
+    const cache = await loadCache(env, index);
+    for (const child of cache) {
+      if (child && child.parentId === params.id) {
+        const ce = index.find((e) => e.id === child.id);
+        if (!ce) continue;
+        const craw = await env.MIITOBOW_BOARD.get(ce.key);
+        if (!craw) continue;
+        try {
+          const cp = JSON.parse(craw);
+          delete cp.parentId;
+          await env.MIITOBOW_BOARD.put(ce.key, JSON.stringify(cp));
+        } catch (e) { /* 壊れた投稿は触らない */ }
+      }
+    }
     const newIndex = index.filter((e) => e.id !== params.id);
     await saveIndex(env, newIndex);
     await rebuildCache(env, newIndex);

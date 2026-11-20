@@ -437,6 +437,10 @@
   .post-meta { font-size: 0.74rem; color: var(--ink-soft); display: flex; gap: 8px; overflow: hidden; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .post-meta .m-cat { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .post-meta .m-time { flex: none; }
+  .post-meta .m-reply { flex: none; color: var(--accent-dark); font-weight: 700; }
+  .post-related { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 10px; padding: 8px 10px; background: var(--accent-glow); border-radius: 10px; max-width: 100%; }
+  .post-related .related-head { font-size: 0.74rem; font-weight: 700; color: var(--ink-soft); }
+  .post-related .related-link { background: none; border: none; padding: 4px 0; font: inherit; font-size: 0.86rem; color: var(--accent-dark); text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; max-width: 100%; overflow-wrap: anywhere; }
   .post-quick { display: flex; align-items: center; gap: 2px; padding: 0 8px 0 0; flex: none; }
   .q-btn {
     min-height: 40px; min-width: 40px; padding: 0 12px; border-radius: 999px; background: var(--surface-soft);
@@ -2361,11 +2365,68 @@
     }
     return head;
   }
+  // --- 続き（親子のひも付け） ---
+  function postById(id) {
+    var f = null;
+    (lastAllPosts || []).forEach(function (p) { if (p.id === id) f = p; });
+    return f;
+  }
+  function childrenOf(data) {
+    return (lastAllPosts || []).filter(function (p) { return p.parentId === data.id; })
+      .sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });   // 古い→新しい（続きの順）
+  }
+  // 詳細の描き直し判定用：この投稿の親の題名と、続きの一覧が変わったら変わる文字列
+  function relatedSig(d) {
+    var par = d.parentId ? postById(d.parentId) : null;
+    return (par ? displayTitle(par) : "") + "|" + childrenOf(d).map(function (c) { return c.id + ":" + displayTitle(c); }).join(",");
+  }
+  // 指定の投稿へ移る（PC＝右の欄に出す／狭い画面＝その行をひらいて見える所へ）
+  function gotoPost(id) {
+    var inList = currentFiltered.some(function (p) { return p.id === id; });
+    if (!inList) { showToast("一覧に出ていません（絞り込みか「もっと見る」の先にあります）", 3200); return; }
+    if (isWide()) { selectPost(id, true); return; }
+    var card = postsEl.querySelector('.post[data-id="' + String(id).replace(/"/g, "") + '"]');
+    if (!card) { showToast("一覧に出ていません（「もっと見る」の先にあります）", 3200); return; }
+    if (card.__setOpen && !card.classList.contains("open")) card.__setOpen(true);
+    card.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+  function buildRelated(data) {
+    var par = data.parentId ? postById(data.parentId) : null;
+    var kids = childrenOf(data);
+    if (!par && !kids.length) return null;
+    var box = document.createElement("div");
+    box.className = "post-related";
+    if (par) {
+      var up = document.createElement("button");
+      up.type = "button";
+      up.className = "related-link";
+      up.textContent = "↩ 続き元：" + displayTitle(par);
+      up.addEventListener("click", function () { gotoPost(par.id); });
+      box.appendChild(up);
+    }
+    if (kids.length) {
+      var h = document.createElement("div");
+      h.className = "related-head";
+      h.textContent = "続き " + kids.length + "件";
+      box.appendChild(h);
+      kids.forEach(function (c) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "related-link";
+        b.textContent = "↪ " + displayTitle(c) + "（" + fmtShort(c.createdAt || 0) + "）";
+        b.addEventListener("click", function () { gotoPost(c.id); });
+        box.appendChild(b);
+      });
+    }
+    return box;
+  }
   function buildBody(data, tokens, opts) {
     opts = opts || {};
     var body = document.createElement("div");
     body.className = "post-body";
     if (opts.wide) body.appendChild(buildDetailHead(data));
+    var rel = buildRelated(data);
+    if (rel) body.appendChild(rel);
 
     var grid = buildImageGrid(data);
     if (grid) body.appendChild(grid);
@@ -2445,6 +2506,12 @@
     }
     var saveAll = buildSaveAllButton(data);
     if (saveAll) actions.appendChild(saveAll);
+    var replyBtn = document.createElement("button");
+    replyBtn.type = "button";
+    replyBtn.className = "btn-ghost";
+    replyBtn.textContent = "↪ 続きを書く";
+    replyBtn.addEventListener("click", function () { startReply(data); });
+    actions.appendChild(replyBtn);
     actions.appendChild(buildAddCategoryWidget(data));
     body.appendChild(actions);
 
@@ -2622,6 +2689,12 @@
 
     var meta = document.createElement("div");
     meta.className = "post-meta";
+    if (data.parentId) {
+      var mr = document.createElement("span");
+      mr.className = "m-reply";
+      mr.textContent = "↪ 続き";
+      meta.appendChild(mr);
+    }
     var cats = postCats(data);
     if (cats.length) {
       var mc = document.createElement("span");
@@ -2751,7 +2824,7 @@
       }
       return;
     }
-    var sig = postSig(d) + "|" + viewState.q + "|" + allCategories.length + "|" + apiLevel;
+    var sig = postSig(d) + "|" + viewState.q + "|" + allCategories.length + "|" + apiLevel + "|" + relatedSig(d);
     if (sig === lastDetailSig) return;   // 自動更新で中身が変わっていなければ描き直さない（文字の選択やスクロールを保つ）
     lastDetailSig = sig;
     detailEl.innerHTML = "";
@@ -2763,7 +2836,7 @@
   function postSig(p) {
     var cats = Array.isArray(p.categories) ? p.categories.join(",") : "";
     var t = p.text || "";
-    return p.id + ":" + (p.title || "") + ":" + t.length + ":" + t.slice(0, 12) + ":" + t.slice(-12) + ":" + cats + ":" + imageCount(p) + ":" + (p.video ? 1 : 0);
+    return p.id + ":" + (p.title || "") + ":" + t.length + ":" + t.slice(0, 12) + ":" + t.slice(-12) + ":" + cats + ":" + imageCount(p) + ":" + (p.video ? 1 : 0) + ":" + (p.parentId || "");
   }
   // 30秒ごとの自動更新で、中身が変わっていなければ描き直さない（ひらいた投稿・選択・スクロールを保つ）
   function refreshList(force) {
@@ -2922,6 +2995,7 @@
     var categories = selectedCategoryIds.slice();
     var body = { text: text };
     if (title) body.title = title;
+    if (replyToId) body.parentId = replyToId;
     if (images.length) body.images = images;
     if (video) body.video = video;
     if (categories.length) body.categories = categories;
@@ -2976,6 +3050,24 @@
     openComposer();
     var rowToggle = postsEl.querySelector('.post[data-id="' + String(data.id).replace(/"/g, "") + '"] .post-toggle');
     if (rowToggle) layerOpeners.composer = rowToggle;
+  }
+  // 「続きを書く」：親（大元）の投稿にひも付けて投稿する。題名は空でもよい
+  var replyToId = null;
+  function startReply(data) {
+    if (editingId !== null) return;
+    var rootId = data.parentId && postById(data.parentId) ? data.parentId : data.id;
+    var root = postById(rootId) || data;
+    replyToId = rootId;
+    var t = displayTitle(root);
+    if (t.length > 11) t = t.slice(0, 11) + "…";
+    document.getElementById("composer-head-text").textContent = "続き：" + t;
+    hint.textContent = "";
+    openComposer();
+  }
+  function endReplyMode() {
+    if (replyToId === null) return;
+    replyToId = null;
+    if (editingId === null) document.getElementById("composer-head-text").textContent = "新しい投稿";
   }
   function endEditMode() {
     if (editingId === null) return;
@@ -3054,6 +3146,7 @@
   }
   function closeComposer() {
     endEditMode();
+    endReplyMode();
     composerModal.hidden = true;
     document.body.classList.remove("composer-open");
     document.body.style.overflow = "";

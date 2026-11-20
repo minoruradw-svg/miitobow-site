@@ -241,6 +241,24 @@ export async function onRequestPost({ request, env }) {
     );
   }
 
+  // 「続き」＝親の投稿にひも付ける（parentId）。親が存在しなければ拒否。親自身が続きなら、その親（大元）にひも付ける（1段だけ）
+  let parentId = null;
+  if (typeof body.parentId === "string" && body.parentId.trim()) {
+    const pe = index.find((e) => e.id === body.parentId.trim());
+    let parent = null;
+    if (pe) {
+      const praw = await env.MIITOBOW_BOARD.get(pe.key);
+      if (praw) { try { parent = JSON.parse(praw); } catch (e) { parent = null; } }
+    }
+    if (!parent) {
+      return new Response(
+        JSON.stringify({ error: "invalid_parent", message: "続きの元の投稿が見つかりません（削除された可能性があります）" }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+    parentId = parent.parentId && index.some((e) => e.id === parent.parentId) ? parent.parentId : parent.id;
+  }
+
   const imageIds = [];
   for (const dataUrl of rawImages) {
     const mimeMatch = /^data:(image\/[a-zA-Z0-9.+-]+);base64,/.exec(dataUrl);
@@ -274,6 +292,7 @@ export async function onRequestPost({ request, env }) {
   const id = crypto.randomUUID();
   const post = { id, text, createdAt };
   if (title) post.title = title;
+  if (parentId) post.parentId = parentId;
   if (imageIds.length) post.images = imageIds;
   if (videoId) post.video = videoId;
   if (categories.length) post.categories = categories;
