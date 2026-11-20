@@ -243,6 +243,7 @@ export async function onRequestPost({ request, env }) {
 
   // 「続き」＝親の投稿にひも付ける（parentId）。親が存在しなければ拒否。親自身が続きなら、その親（大元）にひも付ける（1段だけ）
   let parentId = null;
+  let parentCats = [];   // 続きは親のカテゴリーを引き継ぐ（絞り込み中でも続きが一覧に並ぶように）
   if (typeof body.parentId === "string" && body.parentId.trim()) {
     const pe = index.find((e) => e.id === body.parentId.trim());
     let parent = null;
@@ -255,6 +256,9 @@ export async function onRequestPost({ request, env }) {
         JSON.stringify({ error: "invalid_parent", message: "続きの元の投稿が見つかりません（削除された可能性があります）" }),
         { status: 400, headers: { "content-type": "application/json" } }
       );
+    }
+    if (Array.isArray(parent.categories)) {
+      parentCats = parent.categories.filter((c) => typeof c === "string" && c !== "image" && c !== "video");
     }
     parentId = parent.parentId && index.some((e) => e.id === parent.parentId) ? parent.parentId : parent.id;
   }
@@ -280,7 +284,7 @@ export async function onRequestPost({ request, env }) {
 
   // 画像を貼った投稿には「画像」カテゴリー(id: image)、動画を貼った投稿には「動画」カテゴリー
   // (id: video)を自動付与する（クライアント側でも自動選択するが、念のためサーバー側でも保証する）。
-  const categories = Array.from(new Set(rawCategories));
+  const categories = Array.from(new Set(rawCategories.concat(parentCats))).slice(0, 20);
   if (imageIds.length && !categories.includes("image")) {
     categories.push("image");
   }
