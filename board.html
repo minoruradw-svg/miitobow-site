@@ -2390,9 +2390,11 @@
     if (card.__setOpen && !card.classList.contains("open")) card.__setOpen(true);
     card.scrollIntoView({ block: "center", behavior: "smooth" });
   }
-  function buildRelated(data) {
+  function buildRelated(data, part) {   // part: "up"＝続き元（上）／"down"＝続き一覧（いちばん下）
     var par = data.parentId ? postById(data.parentId) : null;
     var kids = childrenOf(data);
+    if (part === "up") kids = [];
+    if (part === "down") par = null;
     if (!par && !kids.length) return null;
     var box = document.createElement("div");
     box.className = "post-related";
@@ -2425,7 +2427,7 @@
     var body = document.createElement("div");
     body.className = "post-body";
     if (opts.wide) body.appendChild(buildDetailHead(data));
-    var rel = buildRelated(data);
+    var rel = buildRelated(data, "up");
     if (rel) body.appendChild(rel);
 
     var grid = buildImageGrid(data);
@@ -2519,6 +2521,8 @@
     t.className = "post-body-time";
     t.textContent = fmtTime(data.createdAt || 0);
     body.appendChild(t);
+    var relDown = buildRelated(data, "down");   // 続きは、いちばん下
+    if (relDown) { relDown.style.marginTop = "10px"; relDown.style.marginBottom = "0"; body.appendChild(relDown); }
     return body;
   }
   // 長い本文は12行で切り、「全部見る」を出す（実際に切れている時だけ）
