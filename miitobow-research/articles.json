@@ -894,5 +894,16 @@
     "url": "https://miitobow.com/articles/research-kirumoufu",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-kirumoufu/theme.png"
+  },
+  {
+    "id": "dockingstation",
+    "title": "USB-Cドッキングステーション",
+    "category": "desk",
+    "model": "dockingstation",
+    "summary": "映像ポートと給電で選ぶ5商品",
+    "content": "ドッキングステーションは、ポートの数が同じでも、映像を出せるポートや、電力を供給できるポートが商品ごとに違います。Amazonの商品ページで仕様を確認し、形や使い方が重ならない5商品を比べました。",
+    "url": "https://miitobow.com/articles/research-dockingstation",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-dockingstation/theme.png"
   }
 ]
