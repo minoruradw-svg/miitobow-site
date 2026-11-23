@@ -905,5 +905,16 @@
     "url": "https://miitobow.com/articles/research-dockingstation",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-dockingstation/theme.png"
+  },
+  {
+    "id": "ncheadphones",
+    "title": "ノイズキャンセリングヘッドホン",
+    "category": "desk",
+    "model": "ncheadphones",
+    "summary": "再生時間の条件で選ぶ5商品",
+    "content": "ノイズキャンセリング付きヘッドホンの再生時間は、ノイズキャンセリングをオンにした時間か、オフにした時間かで、商品ごとに書き方が違います。Amazonの商品ページとメーカー公式ページで仕様を確認し、つなぎ方や使い方が重ならない5商品を比べました。",
+    "url": "https://miitobow.com/articles/research-ncheadphones",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-ncheadphones/theme.png"
   }
 ]
