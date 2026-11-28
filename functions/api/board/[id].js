@@ -1,6 +1,6 @@
 // DELETE /api/board/<id>  -> 該当の投稿を削除。X-Board-Pin必須。
 // PATCH  /api/board/<id>  -> { categoryId }=カテゴリーを1件追加／{ removeCategoryId }=カテゴリーを1件外す／
-//                            { title, text }=題名・本文の編集。X-Board-Pin必須。
+//                            { title, text }=題名・本文の編集／{ hidden: true|false }=一覧で「非表示」にする・やめる。X-Board-Pin必須。
 //
 // ⚠️ idからの検索はKVのlist()を使わず、_lib.jsの索引キー(board:index)で引く
 // （2026-09-10、list()の1日1,000回無料枠を掲示板だけで超過した事故の恒久対策）。
@@ -39,7 +39,8 @@ export async function onRequestPatch({ request, env, params }) {
   const removeCategoryId = typeof body.removeCategoryId === "string" ? body.removeCategoryId.trim() : "";
   const hasTitle = Object.prototype.hasOwnProperty.call(body, "title");
   const hasText = Object.prototype.hasOwnProperty.call(body, "text");
-  if (!categoryId && !removeCategoryId && !hasTitle && !hasText) {
+  const hasHidden = typeof body.hidden === "boolean";
+  if (!categoryId && !removeCategoryId && !hasTitle && !hasText && !hasHidden) {
     return new Response(JSON.stringify({ error: "invalid_body", message: "変更する内容が指定されていません" }), {
       status: 400,
       headers: { "content-type": "application/json" },
@@ -82,6 +83,7 @@ export async function onRequestPatch({ request, env, params }) {
     if (newTitle) post.title = newTitle; else delete post.title;
   }
   if (newText !== undefined) post.text = newText;
+  if (hasHidden) { if (body.hidden) post.hidden = true; else delete post.hidden; }
   // 空の投稿（題名も本文も画像も動画も無い）にはさせない
   const hasMedia = (Array.isArray(post.images) && post.images.length > 0) || !!post.image || !!post.video;
   if (!post.title && !post.text && !hasMedia) {

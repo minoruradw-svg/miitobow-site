@@ -630,7 +630,10 @@
   .tile-info { padding: 8px 10px 9px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .tile-title { font-weight: 700; font-size: 0.86rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; }
   .tile-meta { font-size: 0.7rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
-  .post.tile.hit { border-color: var(--accent); }
+  .post.masked { background: var(--surface-soft); }
+  .post.masked .post-title-line { color: var(--ink-soft); font-weight: 600; }
+  .post.masked .tile-thumb { background: var(--surface-soft); }
+  .post.masked .tile-title { color: var(--ink-soft); font-weight: 600; }
   .tile-modal { position: fixed; inset: 0; z-index: 35; background: rgba(10, 14, 8, 0.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
   .tile-modal[hidden] { display: none !important; }
   .tile-box { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 16px 16px 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); overscroll-behavior: contain; }
@@ -1100,8 +1103,9 @@
   var categoryManagePanel = document.getElementById("category-manage-panel");
   var allCategories = []; // [{id, name}]
   var deletedCats = {};   // 消したカテゴリーのid（投稿に古いidが残っていても出さない）
-  var apiLevel = 1;       // サーバーが X-Board-Api: 2 以上を返したら、投稿の編集・カテゴリーを外す/消す を使える
+  var apiLevel = 1;       // サーバーが X-Board-Api: 2 以上を返したら、投稿の編集・カテゴリーを外す/消す を使える（3 以上なら「非表示」も）
   function canEdit() { return apiLevel >= 2; }
+  function canHide() { return apiLevel >= 3; }   // 「非表示」は、保存側が X-Board-Api: 3 以上の時だけ
   var localEdits = {};    // 保存直後で、サーバーの一覧にまだ反映されていない編集
   var editingId = null, draftStash = null;
   var selectedCategoryIds = []; // 投稿フォームで選択中
@@ -1463,6 +1467,9 @@
   var SORTS = [["new", "新しい順"], ["old", "古い順"], ["title", "題名順"]];
   var SORT_LABEL = { "new": "新しい順", "old": "古い順", "title": "題名順" };
 
+  // 「非表示」の投稿：題名・画像・本文を出さず「非表示」とだけ見せる。押すと見える（見た分は、ページを開き直すと、また隠れる＝メモリ上だけで覚える）
+  var revealed = {};
+  function isMasked(d) { return !!d.hidden && !revealed[d.id]; }
   // 種類で絞る（文字だけ＝画像・動画を省く）／見せ方（リスト・パネル）
   var KINDS = [["all", "すべて"], ["text", "📝 文字だけ"], ["image", "🖼 画像あり"], ["video", "🎥 動画あり"]];
   var KIND_LABEL = { all: "すべて", text: "文字だけ", image: "画像あり", video: "動画あり" };
@@ -1507,6 +1514,7 @@
     var tokens = viewState.tokens;
     if (!tokens.length) return posts;
     return posts.filter(function (p) {
+      if (isMasked(p)) return false;   // 隠している投稿は、文字では見つからない（中身が漏れないように）
       var hay = postHay(p) + "\n" + postCatHay(p);
       for (var i = 0; i < tokens.length; i++) { if (hay.indexOf(tokens[i]) === -1) return false; }
       return true;
@@ -2704,6 +2712,26 @@
     replyBtn.addEventListener("click", function () { startReply(data); });
     actions.appendChild(replyBtn);
     actions.appendChild(buildAddCategoryWidget(data));
+    if (canHide()) {
+      var hideBtn = document.createElement("button");
+      hideBtn.type = "button";
+      hideBtn.className = "btn-ghost";
+      if (data.hidden) {
+        hideBtn.textContent = "🙈 また隠す";
+        hideBtn.addEventListener("click", function () { delete revealed[data.id]; if (tileOpenId === data.id) closeTile(); refreshList(true); });
+        actions.appendChild(hideBtn);
+        var unhideBtn = document.createElement("button");
+        unhideBtn.type = "button";
+        unhideBtn.className = "btn-ghost";
+        unhideBtn.textContent = "👁 非表示をやめる";
+        unhideBtn.addEventListener("click", function () { setHidden(data, false); });
+        actions.appendChild(unhideBtn);
+      } else {
+        hideBtn.textContent = "🙈 非表示にする";
+        hideBtn.addEventListener("click", function () { setHidden(data, true); });
+        actions.appendChild(hideBtn);
+      }
+    }
     body.appendChild(actions);
 
     var t = document.createElement("div");
@@ -2746,6 +2774,16 @@
       });
       m.appendChild(it);
     }
+    if (isMasked(data)) {
+      addItem("👁 見る", false, function () { revealPost(data.id); });
+      addItem("👁 非表示をやめる", false, function () { setHidden(data, false); });
+      addItem("🗑 削除", true, function () { confirmDeletePost(data); });
+      return placeRowMenu(m, anchor);
+    }
+    if (canHide()) {
+      if (data.hidden) addItem("🙈 また隠す", false, function () { delete revealed[data.id]; if (tileOpenId === data.id) closeTile(); refreshList(true); });
+      else addItem("🙈 非表示にする", false, function () { setHidden(data, true); });
+    }
     addItem("＋ カテゴリーを追加", false, function () {
       card.__setOpen(true);
       var b = (isWide() ? detailEl : card).querySelector(".add-category-btn");
@@ -2755,6 +2793,9 @@
     if (data.video) addItem("⬇ 動画を保存", false, function () { saveVideoOf(data, function () {}); });
     if (canEdit()) addItem("✎ 題名・本文を編集", false, function () { startEdit(data); });
     addItem("🗑 削除", true, function () { confirmDeletePost(data); });
+    placeRowMenu(m, anchor);
+  }
+  function placeRowMenu(m, anchor) {
     document.body.appendChild(m);
     var r = anchor.getBoundingClientRect();
     var w = m.offsetWidth, h = m.offsetHeight;
@@ -2823,10 +2864,38 @@
   }
 
   // --- 行（カード）1枚 ---
+  var MASK_TITLE = "非表示（押すと見えます）";
+  // 隠している投稿を見えるようにする（このページを開いている間だけ。開き直すと、また隠れる）。見えた投稿はそのままひらく
+  function revealPost(id) {
+    revealed[id] = true;
+    if (viewState.view === "grid") { refreshList(true); var d = postById(id); if (d) openTile(d, viewState.tokens); return; }
+    if (isWide()) { selectedId = id; selectedByUser = true; refreshList(true); return; }
+    openState[id] = true;
+    refreshList(true);
+  }
+  // 投稿を「非表示」にする／やめる（保存側にも覚えさせる＝パソコンとスマホで共通）
+  function setHidden(data, on) {
+    fetch("/api/board/" + encodeURIComponent(data.id), {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-Board-Pin": currentPin },
+      body: JSON.stringify({ hidden: on }),
+    })
+      .then(function (res) { if (!res.ok) throw new Error("failed"); return res.json(); })
+      .then(function (updated) {
+        localEdits[data.id] = Object.assign({}, localEdits[data.id], { hidden: !!updated.hidden, __t: Date.now() });
+        delete revealed[data.id];   // 隠す時も、やめる時も、見えた状態は解除（次の描画で素直に反映）
+        if (tileOpenId === data.id) closeTile();
+        if (selectedId === data.id && on) { selectedId = null; selectedByUser = false; }
+        refreshList(true);
+        showToast(on ? "非表示にしました" : "非表示をやめました");
+      })
+      .catch(function () { showToast("できませんでした。通信を確かめてください", 3200); });
+  }
   function buildPostCard(data, tokens) {
     var id = data.id;
+    var masked = isMasked(data);
     var card = document.createElement("article");
-    card.className = "post";
+    card.className = "post" + (masked ? " masked" : "");
     card.setAttribute("data-id", id);
 
     var row = document.createElement("div");
@@ -2847,15 +2916,15 @@
     var kind = document.createElement("span");
     kind.className = "post-kind";
     kind.setAttribute("aria-hidden", "true");
-    kind.textContent = kindIcon(data);
+    kind.textContent = masked ? "🙈" : kindIcon(data);
     toggle.appendChild(kind);
 
     var main = document.createElement("div");
     main.className = "post-main";
     var titleLine = document.createElement("div");
     titleLine.className = "post-title-line";
-    var titleText = displayTitle(data);
-    appendHighlighted(titleLine, titleText, tokens);
+    var titleText = masked ? MASK_TITLE : displayTitle(data);
+    if (masked) titleLine.textContent = titleText; else appendHighlighted(titleLine, titleText, tokens);
     main.appendChild(titleLine);
 
     // 検索で本文に当たった時は、当たった所の前後を1行出す（題名に当たっていれば出さない）
@@ -2888,7 +2957,7 @@
       mr.textContent = "↪ 続き";
       meta.appendChild(mr);
     }
-    var cats = postCats(data);
+    var cats = masked ? [] : postCats(data);   // 隠している間は、カテゴリー名も出さない
     if (cats.length) {
       var mc = document.createElement("span");
       mc.className = "m-cat";
@@ -2914,7 +2983,9 @@
     var primary = document.createElement("button");
     primary.type = "button";
     primary.className = "q-btn";
-    if (data.text) {
+    if (masked) {
+      primary = null;   // 隠している間は、行からコピー・保存はできない（見てから）
+    } else if (data.text) {
       primary.textContent = "コピー";
       primary.setAttribute("aria-label", "本文をコピー");
       primary.addEventListener("click", function (e) { e.stopPropagation(); doCopy(data.text, primary, "✓"); });
@@ -2978,8 +3049,13 @@
       }
     }
     card.__setOpen = setOpen;
-    toggle.addEventListener("click", function () { if (isWide()) selectPost(id, true); else setOpen(!card.classList.contains("open")); });
-    if (isWide()) {
+    toggle.addEventListener("click", function () {
+      if (masked) { revealPost(id); return; }   // 「非表示」を押すと、全部出てくる
+      if (isWide()) selectPost(id, true); else setOpen(!card.classList.contains("open"));
+    });
+    if (masked) {
+      // 何もひらかない
+    } else if (isWide()) {
       if (currentAutoOpen[id]) setOpen(true, true);   // PCも、新しい3件は左の一覧の中で最初からひらく（右の欄は、行を押した時に出る）
     } else {
       var want = Object.prototype.hasOwnProperty.call(openState, id) ? openState[id] : !!currentAutoOpen[id];
@@ -3004,7 +3080,7 @@
   function renderDetail() {
     if (!isWide() || viewState.view === "grid") { detailEl.innerHTML = ""; lastDetailSig = ""; return; }
     var d = null;
-    if (selectedId) currentFiltered.forEach(function (p) { if (p.id === selectedId) d = p; });
+    if (selectedId) currentFiltered.forEach(function (p) { if (p.id === selectedId && !isMasked(p)) d = p; });
     if (!d) {
       selectedId = null;
       if (lastDetailSig !== "empty") {
@@ -3029,7 +3105,7 @@
   function postSig(p) {
     var cats = Array.isArray(p.categories) ? p.categories.join(",") : "";
     var t = p.text || "";
-    return p.id + ":" + (p.title || "") + ":" + t.length + ":" + t.slice(0, 12) + ":" + t.slice(-12) + ":" + cats + ":" + imageCount(p) + ":" + (p.video ? 1 : 0) + ":" + (p.parentId || "");
+    return p.id + ":" + (p.title || "") + ":" + t.length + ":" + t.slice(0, 12) + ":" + t.slice(-12) + ":" + cats + ":" + imageCount(p) + ":" + (p.video ? 1 : 0) + ":" + (p.parentId || "") + ":" + (p.hidden ? (revealed[p.id] ? "r" : "h") : "");
   }
   // 30秒ごとの自動更新で、中身が変わっていなければ描き直さない（ひらいた投稿・選択・スクロールを保つ）
   function refreshList(force) {
@@ -3040,7 +3116,7 @@
     currentFiltered = filtered;
     var key = [
       postsLoaded ? 1 : 0, postsLoadFailed ? 1 : 0, all.map(postSig).join("¦"), JSON.stringify(allCategories),
-      viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.limit, viewState.sort, viewState.kind, viewState.view, apiLevel,
+      viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.limit, viewState.sort, viewState.kind, viewState.view, apiLevel, Object.keys(revealed).join(","),
       JSON.stringify(deletedCats)
     ].join("||");
     if (!force && key === lastViewKey) return;
@@ -3090,19 +3166,22 @@
     thumbIO.observe(img);
   }
   function buildTile(data, tokens) {
+    var masked = isMasked(data);
     var card = document.createElement("article");
-    card.className = "post tile";
+    card.className = "post tile" + (masked ? " masked" : "");
     card.setAttribute("data-id", data.id);
     var btn = document.createElement("button");
     btn.type = "button";
     btn.className = "post-toggle tile-btn";
-    var title = displayTitle(data);
-    var n = imageCount(data);
+    var title = masked ? MASK_TITLE : displayTitle(data);
+    var n = masked ? 0 : imageCount(data);
     btn.setAttribute("aria-label", title + "（開く）");
 
     var th = document.createElement("div");
     th.className = "tile-thumb";
-    if (n) {
+    if (masked) {
+      var mk = document.createElement("span"); mk.className = "tile-emoji"; mk.textContent = "🙈"; th.appendChild(mk);
+    } else if (n) {
       var im = document.createElement("img");
       im.alt = "";
       im.decoding = "async";
@@ -3131,19 +3210,19 @@
     info.className = "tile-info";
     var tt = document.createElement("div");
     tt.className = "tile-title";
-    appendHighlighted(tt, title, tokens);
+    if (masked) tt.textContent = title; else appendHighlighted(tt, title, tokens);
     info.appendChild(tt);
     var meta = document.createElement("div");
     meta.className = "tile-meta";
-    var cats = postCats(data);
+    var cats = masked ? [] : postCats(data);
     var bits = [];
-    if (data.parentId) bits.push("↪続き");
+    if (data.parentId && !masked) bits.push("↪続き");
     if (cats.length) bits.push(categoryName(cats[0]) + (cats.length > 1 ? " +" + (cats.length - 1) : ""));
     bits.push(fmtShort(data.createdAt || 0));
     meta.textContent = bits.join("・");
     info.appendChild(meta);
     btn.appendChild(info);
-    btn.addEventListener("click", function () { openTile(data, tokens, btn); });
+    btn.addEventListener("click", function () { if (masked) revealPost(data.id); else openTile(data, tokens, btn); });
     var hw = document.createElement("h2");
     hw.className = "post-h";
     hw.appendChild(btn);
@@ -3619,6 +3698,7 @@
     var d = null;
     currentFiltered.forEach(function (p) { if (p.id === id) d = p; });
     if (!d) return;
+    if (isMasked(d)) { showToast("非表示の投稿です。押して見えるようにしてから、コピーしてください"); return; }
     var txt = d.text || d.title;
     if (!txt) { showToast("この投稿には、コピーできる文章がありません"); return; }
     var btn = card ? card.querySelector(".q-btn") : null;

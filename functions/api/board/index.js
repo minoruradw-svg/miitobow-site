@@ -155,7 +155,7 @@ export async function onRequestGet({ request, env }) {
   const etag = etagOf(body);
   const headers = {
     "content-type": "application/json",
-    "X-Board-Api": "2",           // 投稿の編集・カテゴリーを外す/消す に対応していることを画面へ知らせる
+    "X-Board-Api": "3",           // 2＝投稿の編集・カテゴリーを外す/消す／3＝「非表示」の投稿（hidden）に対応していることを画面へ知らせる
     "ETag": etag,
     "Cache-Control": "private, no-cache",
     "Vary": "X-Board-Pin",
