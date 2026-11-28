@@ -1772,7 +1772,7 @@
     fillFilterChips(sideCatsEl, ids, counts);              // PC(1024px以上)：左の欄にたてならび
     updateCatCollapse();
   }
-  // タグ欄：ふだんは2行まで。はみ出す時だけ「▾ 全部」を出し、押すと全部ひらく
+  // タグ欄：ふだんは1行。はみ出す時だけ「▾ 全部」を出し、押すと全部ひらく
   var catExpanded = false;
   function updateCatCollapse() {
     var chips = categoryFilterChipsEl;
@@ -1781,7 +1781,7 @@
     categoryFilterBar.classList.toggle("expanded", catExpanded);
     var first = chips.firstElementChild;
     if (!catExpanded && first && first.offsetHeight) {
-      var cap = first.offsetHeight * 2 + 6;
+      var cap = first.offsetHeight;   // ふだんは1行（上部固定を高くしすぎない）。はみ出す分は「▾ 全部」で開く
       if (chips.scrollHeight > cap + 2) { chips.style.maxHeight = cap + "px"; catToggle.hidden = false; }
       else catToggle.hidden = true;
     } else if (catExpanded) {
