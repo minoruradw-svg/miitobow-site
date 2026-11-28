@@ -590,6 +590,59 @@
     .composer-close, .lightbox-close { width: 44px; height: 44px; }
     .category-manage-row button { min-height: 44px; }
   }
+
+  /* ===================== 第3段階：パネル表示・種類の絞り込み・タグの折り返し（2026-11-29） ===================== */
+  /* タグ：スマホでも横にすべらせず、折り返して並べる。ふだんは2行まで、「▾ 全部」で全部ひらく */
+  .category-filter-bar { display: flex; flex-direction: row; align-items: flex-start; gap: 6px; }
+  .category-filter-chips { flex: 1; min-width: 0; flex-wrap: wrap; overflow-x: visible; overflow-y: hidden; padding-bottom: 0; }
+  .category-filter-bar.expanded .category-filter-chips { max-height: 46vh; overflow-y: auto; overscroll-behavior: contain; }
+  .cat-toggle {
+    flex: none; min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--accent);
+    background: var(--surface); color: var(--accent-dark); font-size: 0.78rem; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap;
+  }
+  .cat-toggle:hover { background: var(--accent-glow); }
+  @media (pointer: coarse), (max-width: 719px) { .cat-toggle { min-height: 44px; } }
+  .view-panel { width: 280px; }
+  .view-panel .seg button { flex: 0 1 auto; }
+
+  /* パネル表示：1画面にタイルをずらっと並べる（リンク集と同じ考え方） */
+  .posts.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .posts.grid .post { border-radius: 12px; }
+  .posts.grid .post-row { display: block; }
+  .posts.grid .post-h { display: block; }
+  .tile-btn {
+    display: flex; flex-direction: column; align-items: stretch; width: 100%; padding: 0; background: transparent;
+    color: var(--ink); text-align: left; font-family: inherit; cursor: pointer; border: none; min-height: 0; gap: 0;
+  }
+  .tile-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 12px; }
+  .tile-thumb {
+    position: relative; aspect-ratio: 4 / 3; background: var(--surface-soft); overflow: hidden; display: flex;
+    align-items: center; justify-content: center; border-bottom: 1px solid var(--border);
+  }
+  .tile-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile-thumb .tile-emoji { font-size: 2.2rem; line-height: 1; }
+  .tile-thumb.video { background: #1d2a22; }
+  .tile-thumb .tile-badge {
+    position: absolute; right: 6px; bottom: 6px; background: rgba(24, 41, 35, 0.78); color: #fff; font-size: 0.7rem;
+    font-weight: 700; border-radius: 999px; padding: 2px 8px; font-variant-numeric: tabular-nums;
+  }
+  .tile-thumb .tile-text { position: absolute; inset: 0; padding: 8px 10px; font-size: 0.74rem; line-height: 1.55; color: var(--ink-soft); text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; word-break: break-word; }
+  .tile-info { padding: 8px 10px 9px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .tile-title { font-weight: 700; font-size: 0.86rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; }
+  .tile-meta { font-size: 0.7rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+  .post.tile.hit { border-color: var(--accent); }
+  .tile-modal { position: fixed; inset: 0; z-index: 35; background: rgba(10, 14, 8, 0.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .tile-modal[hidden] { display: none !important; }
+  .tile-box { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 16px 16px 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); overscroll-behavior: contain; }
+  .tile-close { position: sticky; top: 0; float: right; z-index: 2; margin: 0 0 6px 8px; }
+  .tile-box .post-body { border-top: none; padding: 0; }
+  .tile-box .detail-head { padding-top: 4px; }
+  @media (min-width: 720px) { .posts.grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; } }
+  @media (min-width: 1024px) {
+    main.grid-mode { grid-template-columns: 210px minmax(0, 1fr); }
+    main.grid-mode .detail { display: none; }
+    main.grid-mode .post-title-line { white-space: normal; }
+  }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a605107326c34038b1f102869faccfd7"}'></script><!-- End Cloudflare Web Analytics --></head>
 <body>
@@ -655,6 +708,15 @@
             <label class="date-filter-field"><span>開始日</span><input type="date" id="date-filter-from"></label>
             <label class="date-filter-field"><span>終了日</span><input type="date" id="date-filter-to"></label>
             <button class="date-filter-clear" id="date-filter-clear" type="button" hidden>期間を解除</button>
+          </div>
+        </div>
+        <div class="period-wrap">
+          <button class="top-btn" id="view-btn" type="button" aria-label="表示と並び順" aria-haspopup="true">▦<span class="lbl"> 表示</span></button>
+          <div class="period-panel view-panel" id="view-panel" hidden>
+            <div class="panel-label" id="view-label">見せ方</div>
+            <div class="seg" id="view-seg" role="group" aria-labelledby="view-label"></div>
+            <div class="panel-label" id="kind-label">種類で絞る</div>
+            <div class="seg" id="kind-seg" role="group" aria-labelledby="kind-label"></div>
             <div class="panel-label" id="sort-label-pop">並び順</div>
             <div class="seg" id="sort-seg-pop" role="group" aria-labelledby="sort-label-pop"></div>
           </div>
@@ -662,6 +724,7 @@
       </div>
       <div class="category-filter-bar" id="category-filter-bar" hidden>
         <div class="category-filter-chips" id="category-filter-chips"></div>
+        <button class="cat-toggle" id="cat-toggle" type="button" aria-expanded="false" hidden>▾ 全部</button>
       </div>
     </div>
   </div>
@@ -727,6 +790,13 @@
 </div>
 
 <button class="fab" id="fab-post" type="button" aria-label="投稿を書く">＋</button>
+<div class="tile-modal" id="tile-modal" hidden role="dialog" aria-modal="true" aria-label="投稿の中身">
+  <div class="tile-box">
+    <button class="composer-close tile-close" id="tile-close" type="button" aria-label="閉じる">✕</button>
+    <div id="tile-body"></div>
+  </div>
+</div>
+
 <div class="help-modal" id="help-modal" hidden role="dialog" aria-modal="true" aria-labelledby="help-title">
   <div class="help-box">
     <h2 id="help-title">キーボード操作</h2>
@@ -999,6 +1069,15 @@
   var dateFilterClear = document.getElementById("date-filter-clear");
   var searchInput = document.getElementById("search-input");
   var searchClear = document.getElementById("search-clear");
+  var viewBtn = document.getElementById("view-btn");
+  var viewPanel = document.getElementById("view-panel");
+  var viewSeg = document.getElementById("view-seg");
+  var kindSeg = document.getElementById("kind-seg");
+  var catToggle = document.getElementById("cat-toggle");
+  var tileModal = document.getElementById("tile-modal");
+  var tileBody = document.getElementById("tile-body");
+  var tileClose = document.getElementById("tile-close");
+  var mainEl = document.getElementById("main");
   var periodBtn = document.getElementById("period-btn");
   var periodPanel = document.getElementById("period-panel");
   var filterStatusEl = document.getElementById("filter-status");
@@ -1384,7 +1463,11 @@
   var SORTS = [["new", "新しい順"], ["old", "古い順"], ["title", "題名順"]];
   var SORT_LABEL = { "new": "新しい順", "old": "古い順", "title": "題名順" };
 
-  var viewState = { q: "", tokens: [], limit: CONFIG.PAGE_SIZE, sort: "new" };
+  // 種類で絞る（文字だけ＝画像・動画を省く）／見せ方（リスト・パネル）
+  var KINDS = [["all", "すべて"], ["text", "📝 文字だけ"], ["image", "🖼 画像あり"], ["video", "🎥 動画あり"]];
+  var KIND_LABEL = { all: "すべて", text: "文字だけ", image: "画像あり", video: "動画あり" };
+  var VIEWS = [["list", "☰ リスト"], ["grid", "▦ パネル"]];
+  var viewState = { q: "", tokens: [], limit: CONFIG.PAGE_SIZE, sort: "new", kind: "all", view: "list" };
   var lastAllPosts = [];
   var postsLoaded = false;
   var postsLoadFailed = false;
@@ -1474,18 +1557,29 @@
     }
     return a;
   }
+  function applyKindFilter(posts) {
+    var k = viewState.kind;
+    if (k === "all") return posts;
+    return posts.filter(function (p) {
+      var hasImg = imageCount(p) > 0, hasVid = !!p.video;
+      if (k === "text") return !hasImg && !hasVid;
+      if (k === "image") return hasImg;
+      return hasVid;
+    });
+  }
   function applyAllFilters(posts) {
-    return applySort(applySearchFilter(applyDateFilter(applyCategoryFilter(posts))));
+    return applySort(applySearchFilter(applyKindFilter(applyDateFilter(applyCategoryFilter(posts)))));
   }
   function filtersActive() {
-    return !!(viewState.tokens.length || activeFilterIds.length || dateFilterFrom.value || dateFilterTo.value);
+    return !!(viewState.tokens.length || activeFilterIds.length || dateFilterFrom.value || dateFilterTo.value || viewState.kind !== "all");
   }
 
   // --- 絞り込み状態の保存・復元（localStorage。使えない環境でも動く） ---
   function persistUi() {
     try {
       localStorage.setItem(CONFIG.UI_KEY, JSON.stringify({
-        q: viewState.q, cats: activeFilterIds, from: dateFilterFrom.value, to: dateFilterTo.value, sort: viewState.sort
+        q: viewState.q, cats: activeFilterIds, from: dateFilterFrom.value, to: dateFilterTo.value, sort: viewState.sort,
+        kind: viewState.kind, view: viewState.view
       }));
     } catch (e) {}
     writeHash();
@@ -1498,6 +1592,8 @@
     if (dateFilterFrom.value) parts.push("from=" + dateFilterFrom.value);
     if (dateFilterTo.value) parts.push("to=" + dateFilterTo.value);
     if (viewState.sort !== "new") parts.push("sort=" + viewState.sort);
+    if (viewState.kind !== "all") parts.push("kind=" + viewState.kind);
+    if (viewState.view !== "list") parts.push("view=" + viewState.view);
     return parts.join("&");
   }
   function writeHash() {
@@ -1518,13 +1614,15 @@
       if (i < 1) return;
       try { map[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1)); any = true; } catch (e) {}
     });
-    if (!any || !("q" in map || "cat" in map || "from" in map || "to" in map || "sort" in map)) return false;
+    if (!any || !("q" in map || "cat" in map || "from" in map || "to" in map || "sort" in map || "kind" in map || "view" in map)) return false;
     var q = typeof map.q === "string" ? map.q : "";
     searchInput.value = q; viewState.q = q.trim(); viewState.tokens = tokenize(viewState.q);
     activeFilterIds = map.cat ? map.cat.split(",").filter(Boolean) : [];
     dateFilterFrom.value = /^\d{4}-\d{2}-\d{2}$/.test(map.from || "") ? map.from : "";
     dateFilterTo.value = /^\d{4}-\d{2}-\d{2}$/.test(map.to || "") ? map.to : "";
     viewState.sort = SORT_LABEL[map.sort] ? map.sort : "new";
+    viewState.kind = KIND_LABEL[map.kind] ? map.kind : "all";
+    if ("view" in map) viewState.view = map.view === "grid" ? "grid" : "list";   // 見せ方は好みなので、#に無ければ保存済みのまま
     searchClear.hidden = !searchInput.value;
     updatePeriodButton();
     renderSortControls();
@@ -1540,6 +1638,8 @@
       if (typeof s.from === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.from)) dateFilterFrom.value = s.from;
       if (typeof s.to === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.to)) dateFilterTo.value = s.to;
       if (typeof s.sort === "string" && SORT_LABEL[s.sort]) viewState.sort = s.sort;
+      if (typeof s.kind === "string" && KIND_LABEL[s.kind]) viewState.kind = s.kind;
+      if (s.view === "grid") viewState.view = "grid";
     } catch (e) {}
     searchClear.hidden = !searchInput.value;
     updatePeriodButton();
@@ -1560,6 +1660,7 @@
   }
 
   function onFilterChanged() {
+    catExpanded = false;   // タグを選んだら、ひらいていた欄はとじて結果を見せる
     viewState.limit = CONFIG.PAGE_SIZE;
     persistUi();
     refreshList(true);
@@ -1570,21 +1671,40 @@
     renderSortControls();
     onFilterChanged();
   }
-  function renderSortControls() {
-    [sortSegPop, sortSegSide].forEach(function (c) {
-      if (!c) return;
-      c.innerHTML = "";
-      SORTS.forEach(function (sv) {
-        var b = document.createElement("button");
-        b.type = "button";
-        b.textContent = sv[1];
-        b.setAttribute("aria-pressed", viewState.sort === sv[0] ? "true" : "false");
-        b.addEventListener("click", function () { setSort(sv[0]); });
-        c.appendChild(b);
-      });
+  function setKind(v) {
+    if (!KIND_LABEL[v] || v === viewState.kind) return;
+    viewState.kind = v;
+    renderSortControls();
+    onFilterChanged();
+  }
+  function setView(v) {
+    if ((v !== "list" && v !== "grid") || v === viewState.view) return;
+    viewState.view = v;
+    renderSortControls();
+    onFilterChanged();
+  }
+  function fillSeg(c, defs, cur, onPick) {
+    if (!c) return;
+    c.innerHTML = "";
+    defs.forEach(function (sv) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = sv[1];
+      b.setAttribute("aria-pressed", cur === sv[0] ? "true" : "false");
+      b.addEventListener("click", function () { onPick(sv[0]); });
+      c.appendChild(b);
     });
   }
+  function renderSortControls() {
+    [sortSegPop, sortSegSide].forEach(function (c) { fillSeg(c, SORTS, viewState.sort, setSort); });
+    fillSeg(kindSeg, KINDS, viewState.kind, setKind);
+    fillSeg(viewSeg, VIEWS, viewState.view, setView);
+    // 「表示」ボタン：ふだんと違う設定のとき色をつけて知らせる
+    viewBtn.classList.toggle("set", viewState.view !== "list" || viewState.kind !== "all" || viewState.sort !== "new");
+  }
   function clearAllFilters() {
+    viewState.kind = "all";
+    renderSortControls();
     activeFilterIds = [];
     searchInput.value = "";
     searchClear.hidden = true;
@@ -1643,9 +1763,35 @@
     Object.keys(counts).forEach(function (id) { if (ids.indexOf(id) === -1) ids.push(id); });
     categoryFilterBar.hidden = ids.length === 0;
     if (!ids.length) return;
-    fillFilterChips(categoryFilterChipsEl, ids, counts);   // 狭い画面：検索欄の下に横ならび
+    // 狭い画面：折り返して並べる。選んでいるタグは、閉じていても見えるよう先頭に寄せる
+    // 件数0のタグは最後へ（開いた時に、使えるタグが先に見える）
+    var rest = ids.filter(function (id) { return activeFilterIds.indexOf(id) === -1; });
+    var narrowIds = activeFilterIds.filter(function (id) { return ids.indexOf(id) !== -1; })
+      .concat(rest.filter(function (id) { return (counts[id] || 0) > 0; }), rest.filter(function (id) { return !(counts[id] || 0); }));
+    fillFilterChips(categoryFilterChipsEl, narrowIds, counts);
     fillFilterChips(sideCatsEl, ids, counts);              // PC(1024px以上)：左の欄にたてならび
+    updateCatCollapse();
   }
+  // タグ欄：ふだんは2行まで。はみ出す時だけ「▾ 全部」を出し、押すと全部ひらく
+  var catExpanded = false;
+  function updateCatCollapse() {
+    var chips = categoryFilterChipsEl;
+    if (categoryFilterBar.hidden) return;
+    chips.style.maxHeight = "";
+    categoryFilterBar.classList.toggle("expanded", catExpanded);
+    var first = chips.firstElementChild;
+    if (!catExpanded && first && first.offsetHeight) {
+      var cap = first.offsetHeight * 2 + 6;
+      if (chips.scrollHeight > cap + 2) { chips.style.maxHeight = cap + "px"; catToggle.hidden = false; }
+      else catToggle.hidden = true;
+    } else if (catExpanded) {
+      catToggle.hidden = false;
+    }
+    catToggle.textContent = catExpanded ? "▴ とじる" : "▾ 全部";
+    catToggle.setAttribute("aria-expanded", catExpanded ? "true" : "false");
+  }
+  catToggle.addEventListener("click", function () { catExpanded = !catExpanded; updateCatCollapse(); });
+  window.addEventListener("resize", function () { if (!catExpanded) updateCatCollapse(); });
 
   // --- 「いま何で絞っているか」の1行 ---
   function makeStatusChip(label, onRemove) {
@@ -1684,6 +1830,9 @@
         dateFilterFrom.value = ""; dateFilterTo.value = ""; updatePeriodButton();
         onFilterChanged();
       }));
+    }
+    if (viewState.kind !== "all") {
+      filterStatusEl.appendChild(makeStatusChip("種類: " + KIND_LABEL[viewState.kind], function () { setKind("all"); }));
     }
     if (viewState.sort !== "new") {
       filterStatusEl.appendChild(makeStatusChip("並び: " + SORT_LABEL[viewState.sort], function () { setSort("new"); }));
@@ -1729,7 +1878,13 @@
   }
   periodBtn.addEventListener("click", function (e) {
     e.stopPropagation();
+    viewPanel.hidden = true;
     periodPanel.hidden = !periodPanel.hidden;
+  });
+  viewBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    periodPanel.hidden = true;
+    viewPanel.hidden = !viewPanel.hidden;
   });
   Array.prototype.forEach.call(periodPanel.querySelectorAll(".period-quick button"), function (b) {
     b.addEventListener("click", function () {
@@ -2417,6 +2572,7 @@
       viewState.limit = (Math.floor(idx / CONFIG.PAGE_SIZE) + 1) * CONFIG.PAGE_SIZE;
       refreshList(true);
     }
+    if (viewState.view === "grid") { openTile(postById(id), viewState.tokens); return; }   // パネル表示：中身の窓を出す
     if (isWide()) { selectPost(id, true); return; }
     var card = postsEl.querySelector('.post[data-id="' + String(id).replace(/"/g, "") + '"]');
     if (!card) { showToast("一覧に出ていません", 3200); return; }
@@ -2846,7 +3002,7 @@
     renderDetail();
   }
   function renderDetail() {
-    if (!isWide()) { detailEl.innerHTML = ""; lastDetailSig = ""; return; }
+    if (!isWide() || viewState.view === "grid") { detailEl.innerHTML = ""; lastDetailSig = ""; return; }
     var d = null;
     if (selectedId) currentFiltered.forEach(function (p) { if (p.id === selectedId) d = p; });
     if (!d) {
@@ -2884,7 +3040,7 @@
     currentFiltered = filtered;
     var key = [
       postsLoaded ? 1 : 0, postsLoadFailed ? 1 : 0, all.map(postSig).join("¦"), JSON.stringify(allCategories),
-      viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.limit, viewState.sort, apiLevel,
+      viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.limit, viewState.sort, viewState.kind, viewState.view, apiLevel,
       JSON.stringify(deletedCats)
     ].join("||");
     if (!force && key === lastViewKey) return;
@@ -2916,10 +3072,129 @@
     }
   }
 
+  // ===================== パネル表示（タイルをずらっと並べる） =====================
+  var thumbIO = null;
+  function loadThumb(img) {
+    var imgId = img.getAttribute("data-img");
+    if (!imgId) return;
+    img.removeAttribute("data-img");
+    getImageBlobUrl(imgId).then(function (u) { img.src = u; }).catch(function () { img.replaceWith(document.createTextNode("🖼")); });
+  }
+  function observeThumb(img) {
+    if (!("IntersectionObserver" in window)) { loadThumb(img); return; }
+    if (!thumbIO) {
+      thumbIO = new IntersectionObserver(function (es) {
+        es.forEach(function (en) { if (en.isIntersecting) { thumbIO.unobserve(en.target); loadThumb(en.target); } });
+      }, { rootMargin: "300px" });
+    }
+    thumbIO.observe(img);
+  }
+  function buildTile(data, tokens) {
+    var card = document.createElement("article");
+    card.className = "post tile";
+    card.setAttribute("data-id", data.id);
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "post-toggle tile-btn";
+    var title = displayTitle(data);
+    var n = imageCount(data);
+    btn.setAttribute("aria-label", title + "（開く）");
+
+    var th = document.createElement("div");
+    th.className = "tile-thumb";
+    if (n) {
+      var im = document.createElement("img");
+      im.alt = "";
+      im.decoding = "async";
+      if (data.image) im.src = data.image;
+      else { im.setAttribute("data-img", (data.images || [])[0]); observeThumb(im); }
+      th.appendChild(im);
+      if (n > 1) { var bd = document.createElement("span"); bd.className = "tile-badge"; bd.textContent = "🖼 " + n; th.appendChild(bd); }
+      if (data.video) { var bv = document.createElement("span"); bv.className = "tile-badge"; bv.style.right = "auto"; bv.style.left = "6px"; bv.textContent = "🎥"; th.appendChild(bv); }
+    } else if (data.video) {
+      th.classList.add("video");
+      var em = document.createElement("span"); em.className = "tile-emoji"; em.textContent = "▶"; em.style.color = "#fff"; th.appendChild(em);
+    } else {
+      // 文字だけの投稿：本文の出だしを、サムネイルの代わりに見せる
+      var body = (data.text || "").replace(/\s+/g, " ").trim();
+      if (data.title && body) {
+        var tx = document.createElement("div"); tx.className = "tile-text"; tx.textContent = body; th.appendChild(tx);
+      } else {
+        var rest = (data.title ? "" : (data.text || "").split(/\r?\n/).filter(function (s) { return s.trim(); }).slice(1).join(" "));
+        if (rest) { var tx2 = document.createElement("div"); tx2.className = "tile-text"; tx2.textContent = rest; th.appendChild(tx2); }
+        else { var e2 = document.createElement("span"); e2.className = "tile-emoji"; e2.textContent = kindIcon(data); th.appendChild(e2); }
+      }
+    }
+    btn.appendChild(th);
+
+    var info = document.createElement("div");
+    info.className = "tile-info";
+    var tt = document.createElement("div");
+    tt.className = "tile-title";
+    appendHighlighted(tt, title, tokens);
+    info.appendChild(tt);
+    var meta = document.createElement("div");
+    meta.className = "tile-meta";
+    var cats = postCats(data);
+    var bits = [];
+    if (data.parentId) bits.push("↪続き");
+    if (cats.length) bits.push(categoryName(cats[0]) + (cats.length > 1 ? " +" + (cats.length - 1) : ""));
+    bits.push(fmtShort(data.createdAt || 0));
+    meta.textContent = bits.join("・");
+    info.appendChild(meta);
+    btn.appendChild(info);
+    btn.addEventListener("click", function () { openTile(data, tokens, btn); });
+    var hw = document.createElement("h2");
+    hw.className = "post-h";
+    hw.appendChild(btn);
+    var row = document.createElement("div");
+    row.className = "post-row";
+    row.appendChild(hw);
+    card.appendChild(row);
+    card.__setOpen = function () {};
+    return card;
+  }
+  var tileOpenId = null, tileSig = "";
+  function openTile(data, tokens, opener) {
+    if (!data) return;
+    if (tileModal.hidden) layerOpeners.tile = opener || document.activeElement;
+    tileOpenId = data.id;
+    tileSig = postSig(data) + "|" + relatedSig(data);
+    tileBody.innerHTML = "";
+    tileBody.appendChild(buildBody(data, tokens || [], { wide: true }));
+    tileModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    tileModal.querySelector(".tile-box").scrollTop = 0;
+    tileClose.focus();
+  }
+  function closeTile() {
+    tileModal.hidden = true;
+    tileOpenId = null;
+    tileBody.innerHTML = "";
+    document.body.style.overflow = "";
+    restoreOpener("tile");
+  }
+  tileClose.addEventListener("click", closeTile);
+  tileModal.addEventListener("click", function (e) { if (e.target === tileModal) closeTile(); });
+
   function renderList(all, filtered) {
     var tokens = viewState.tokens;
     var anchor = captureScrollAnchor();
     if (anchor) fabIgnoreUntil = performance.now() + 1500;
+    var gridMode = viewState.view === "grid";
+    // 中身の窓をひらいたまま一覧が変わった時：消えた投稿なら閉じ、直された投稿なら中身を作り直す
+    if (tileOpenId && postsLoaded) {
+      var tp = null;
+      all.forEach(function (p) { if (p.id === tileOpenId) tp = p; });
+      if (!tp || !gridMode) closeTile();
+      else if (postSig(tp) + "|" + relatedSig(tp) !== tileSig) {
+        var box = tileModal.querySelector(".tile-box"), st = box.scrollTop;
+        openTile(tp, viewState.tokens);
+        box.scrollTop = st;
+      }
+    }
+    postsEl.classList.toggle("grid", gridMode);
+    mainEl.classList.toggle("grid-mode", gridMode);
     postsEl.innerHTML = "";
     countEl.textContent = all.length ? (filtersActive() ? filtered.length + "/" + all.length + "件" : all.length + "件") : "";
     renderFilterChips();
@@ -2939,7 +3214,7 @@
 
     // 新しい3件を最初からひらく（狭い画面）／いちばん新しい投稿を右の欄に出す（PCの2画面）。ユーザーが触った状態が優先
     currentAutoOpen = computeAutoOpen(filtered);
-    var condKey = [viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.sort].join("|");
+    var condKey = [viewState.q, activeFilterIds.join(","), dateFilterFrom.value, dateFilterTo.value, viewState.sort, viewState.kind, viewState.view].join("|");
     var condChanged = condKey !== lastCondKey;
     lastCondKey = condKey;
     if (isWide()) {
@@ -2949,7 +3224,7 @@
 
     var shown = filtered.slice(0, viewState.limit);
     var frag = document.createDocumentFragment();
-    shown.forEach(function (d) { frag.appendChild(buildPostCard(d, tokens)); });
+    shown.forEach(function (d) { frag.appendChild(gridMode ? buildTile(d, tokens) : buildPostCard(d, tokens)); });
     postsEl.appendChild(frag);
     restoreScrollAnchor(anchor);
 
@@ -3200,7 +3475,9 @@
     if (rowMenuEl) { closeRowMenu(); return true; }
     if (!topMenu.hidden) { topMenu.hidden = true; return true; }
     if (!periodPanel.hidden) { periodPanel.hidden = true; return true; }
+    if (!viewPanel.hidden) { viewPanel.hidden = true; return true; }
     if (!composerModal.hidden) { closeComposer(); return true; }
+    if (!tileModal.hidden) { closeTile(); return true; }
     return false;
   }
 
@@ -3274,6 +3551,7 @@
     document.addEventListener("click", function (e) {
       if (!topMenu.hidden && !topMenu.contains(e.target) && e.target !== topMenuBtn) topMenu.hidden = true;
       if (!periodPanel.hidden && !periodPanel.contains(e.target) && !periodBtn.contains(e.target)) periodPanel.hidden = true;
+      if (!viewPanel.hidden && !viewPanel.contains(e.target) && !viewBtn.contains(e.target)) viewPanel.hidden = true;
       if (rowMenuEl && !rowMenuEl.contains(e.target)) closeRowMenu();
     });
 
@@ -3291,14 +3569,14 @@
       var ae = document.activeElement;
       var tag = (ae && ae.tagName) || "";
       var typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || !!(ae && ae.isContentEditable);
-      var layerOpen = !composerModal.hidden || !!confirmResolve || !helpModal.hidden;
+      var layerOpen = !composerModal.hidden || !!confirmResolve || !helpModal.hidden || !tileModal.hidden;
       if (layerOpen) return;
       if (typing) {
         // 検索欄からは、↓で一覧へ移れる
         if (ae === searchInput && e.key === "ArrowDown") { e.preventDefault(); moveCursor(1); }
         return;
       }
-      if (ae && ae.closest && ae.closest(".menu-pop, .period-panel")) return;
+      if (ae && ae.closest && ae.closest(".menu-pop, .period-panel, .tile-modal")) return;
       if (e.key === "/") { e.preventDefault(); searchInput.focus(); return; }
       if (e.key === "?") { e.preventDefault(); openHelp(); return; }
       if (e.key === "ArrowDown" || e.key === "j") { e.preventDefault(); moveCursor(1); return; }
