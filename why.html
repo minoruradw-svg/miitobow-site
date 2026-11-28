@@ -3271,9 +3271,11 @@
   </div>
   <div class="why-cycle__figure"><img class="why-card__mascot" src="/assets/why/cycle-mascot-5.png" alt=""></div>
 </a>
+    <button type="button" class="why-cycle__arrow why-cycle__arrow--prev" aria-label="前の紹介へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button type="button" class="why-cycle__arrow why-cycle__arrow--next" aria-label="次の紹介へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
   <div class="why-cycle__bars">
-    <span class="why-cycle__bar why-cycle__bar--1"><span class="why-cycle__bar-fill"></span></span><span class="why-cycle__bar why-cycle__bar--2"><span class="why-cycle__bar-fill"></span></span><span class="why-cycle__bar why-cycle__bar--3"><span class="why-cycle__bar-fill"></span></span><span class="why-cycle__bar why-cycle__bar--4"><span class="why-cycle__bar-fill"></span></span><span class="why-cycle__bar why-cycle__bar--5"><span class="why-cycle__bar-fill"></span></span>
+    <button type="button" class="why-cycle__barbtn" aria-label="1つ目を見る"><span class="why-cycle__bar why-cycle__bar--1"><span class="why-cycle__bar-fill"></span></span></button><button type="button" class="why-cycle__barbtn" aria-label="2つ目を見る"><span class="why-cycle__bar why-cycle__bar--2"><span class="why-cycle__bar-fill"></span></span></button><button type="button" class="why-cycle__barbtn" aria-label="3つ目を見る"><span class="why-cycle__bar why-cycle__bar--3"><span class="why-cycle__bar-fill"></span></span></button><button type="button" class="why-cycle__barbtn" aria-label="4つ目を見る"><span class="why-cycle__bar why-cycle__bar--4"><span class="why-cycle__bar-fill"></span></span></button><button type="button" class="why-cycle__barbtn" aria-label="5つ目を見る"><span class="why-cycle__bar why-cycle__bar--5"><span class="why-cycle__bar-fill"></span></span></button>
   </div>
 </section>
 
@@ -3359,7 +3361,78 @@
     .why-cycle__item--5 p { font-size: 0.7rem; white-space: normal; }
     .why-cycle__item--5 .why-cycle__figure { width: 88px; }
   }
+
+  /* ---------- 2026-11-28：時間でも、クリックでも切り替わる（JSがある時だけ。JSが無い時は、上のCSSアニメが従来どおり動く） ---------- */
+  .why-cycle__barbtn { flex: 1 1 0; display: block; padding: 10px 0; margin: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .why-cycle__barbtn:focus-visible { outline: 3px solid var(--forest); outline-offset: 2px; border-radius: 4px; }
+  .why-cycle__barbtn .why-cycle__bar { display: block; width: 100%; }
+  .why-cycle__barbtn:hover .why-cycle__bar { background: var(--lime); opacity: 0.55; }
+  .why-cycle__arrow { display: none; }
+  @keyframes whyCycleFill { from { width: 0%; } to { width: 100%; } }
+  .why-cycle[data-js] .why-cycle__item { animation: none; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+  .why-cycle[data-js] .why-cycle__item.is-active { opacity: 1; pointer-events: auto; }
+  .why-cycle[data-js] .why-cycle__bar-fill { animation: none; width: 0%; }
+  .why-cycle[data-js] .why-cycle__barbtn.is-done .why-cycle__bar-fill { width: 100%; }
+  .why-cycle[data-js] .why-cycle__barbtn.is-active .why-cycle__bar-fill { animation: whyCycleFill var(--why-cycle-dur, 4s) linear forwards; }
+  @media (min-width: 861px) {
+    .why-cycle[data-js] .why-cycle__arrow {
+      display: flex; position: absolute; top: 50%; z-index: 3; width: 40px; height: 40px; margin-top: -20px;
+      align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.88); color: var(--forest); cursor: pointer; padding: 0;
+      box-shadow: 0 4px 14px var(--glass-shadow);
+    }
+    .why-cycle[data-js] .why-cycle__arrow svg { width: 20px; height: 20px; }
+    .why-cycle[data-js] .why-cycle__arrow:hover { background: #fff; }
+    .why-cycle[data-js] .why-cycle__arrow:focus-visible { outline: 3px solid var(--forest); outline-offset: 2px; }
+    .why-cycle__arrow--prev { left: 10px; }
+    .why-cycle__arrow--next { right: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .why-cycle[data-js] .why-cycle__item { transition: none; }
+    .why-cycle[data-js] .why-cycle__item--1:not(.is-active) { opacity: 0 !important; }
+    .why-cycle[data-js] .why-cycle__item.is-active { opacity: 1 !important; }
+    .why-cycle[data-js] .why-cycle__barbtn.is-active .why-cycle__bar-fill { animation: none; width: 100% !important; }
+    .why-cycle[data-js] .why-cycle__barbtn.is-done .why-cycle__bar-fill { width: 100% !important; }
+  }
 </style>
+<script>
+(function () {
+  var root = document.querySelector(".why-cycle");
+  if (!root) return;
+  var items = Array.prototype.slice.call(root.querySelectorAll(".why-cycle__item"));
+  var bars = Array.prototype.slice.call(root.querySelectorAll(".why-cycle__barbtn"));
+  var N = items.length; if (!N || bars.length !== N) return;
+  var DUR = 4000, cur = 0, timer = null;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  root.style.setProperty("--why-cycle-dur", (DUR / 1000) + "s");
+  root.setAttribute("data-js", "1");
+  function restart() { clearTimeout(timer); if (!reduce) timer = setTimeout(function () { show(cur + 1); }, DUR); }
+  function show(i) {
+    cur = ((i % N) + N) % N;
+    items.forEach(function (el, k) {
+      el.classList.toggle("is-active", k === cur);
+      el.setAttribute("aria-hidden", k === cur ? "false" : "true");
+      el.tabIndex = k === cur ? 0 : -1;
+    });
+    bars.forEach(function (b, k) { b.classList.remove("is-active"); b.classList.toggle("is-done", k < cur); if (k === cur) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+    void root.offsetWidth;                       // 進捗バーのアニメを、押した所から最初からやり直す
+    bars[cur].classList.add("is-active");
+    restart();
+  }
+  bars.forEach(function (b, k) { b.addEventListener("click", function () { show(k); }); });
+  var prev = root.querySelector(".why-cycle__arrow--prev"), next = root.querySelector(".why-cycle__arrow--next");
+  if (prev) prev.addEventListener("click", function () { show(cur - 1); });
+  if (next) next.addEventListener("click", function () { show(cur + 1); });
+  // スマホ：左右にスワイプで切り替え（縦スクロールは邪魔しない）
+  var sx = null, sy = null;
+  root.addEventListener("touchstart", function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  root.addEventListener("touchend", function (e) {
+    if (sx === null) return; var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = sy = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(dx < 0 ? cur + 1 : cur - 1);
+  }, { passive: true });
+  show(0);
+})();
+</script>
 
       <div class="link-col">
         <h3 class="glass-chip">SNS</h3>
