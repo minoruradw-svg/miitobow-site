@@ -190,10 +190,13 @@
     padding: 8px 10px; font-size: 0.86rem; font-family: inherit; background: var(--surface-soft);
     color: var(--ink);
   }
+  /* 2026-11-28：候補の一覧は、枠の下へはみ出す形（position:absolute）だと、投稿ウィンドウ（max-height＋スクロール）の下端で
+     見切れて、最後まで選べなかった（スマホ・PCとも）。入力欄のすぐ下に「流れの中」で置き、ウィンドウの方を伸ばしてスクロールさせる。
+     表示した時は scrollIntoView で一覧が見える位置まで動かす（renderSuggestions）。 */
   .category-suggestions {
-    position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 5; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    max-height: 220px; overflow-y: auto; padding: 6px;
+    position: static; margin-top: 4px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    max-height: 200px; overflow-y: auto; overscroll-behavior: contain; padding: 6px;
   }
   .category-suggestion-item {
     display: block; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer;
@@ -1315,6 +1318,15 @@
       categorySuggestionsEl.appendChild(createItem);
     }
     categorySuggestionsEl.hidden = candidates.length === 0 && !(query && !exactMatch);
+    // 一覧が投稿ウィンドウの下に隠れないよう、見える位置までスクロールする
+    if (!categorySuggestionsEl.hidden) {
+      // クリックの最中（押す→離す）に画面が動くと、離した所が別の要素になって一覧が閉じてしまうので、少し待ってから動かす
+      clearTimeout(renderSuggestions._t);
+      renderSuggestions._t = setTimeout(function () {
+        if (categorySuggestionsEl.hidden) return;
+        try { categorySuggestionsEl.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch (e) {}
+      }, 350);
+    }
   }
 
   categorySearchInput.addEventListener("input", renderSuggestions);
@@ -1334,10 +1346,19 @@
       }
     }
   });
+  // 押した場所が入力欄・一覧の中なら、離した時に画面が動いて別の要素の上になっても、一覧を閉じない
+  // （PCは投稿ウィンドウが中央寄せなので、一覧が出て高さが変わると入力欄が動く）
+  var categoryPressInside = false;
+  function markCategoryPress(e) {
+    categoryPressInside = categorySearchInput.contains(e.target) || categorySuggestionsEl.contains(e.target);
+  }
+  document.addEventListener("mousedown", markCategoryPress, true);
+  document.addEventListener("touchstart", markCategoryPress, true);
   document.addEventListener("click", function (e) {
-    if (!categorySearchInput.contains(e.target) && !categorySuggestionsEl.contains(e.target)) {
+    if (!categoryPressInside && !categorySearchInput.contains(e.target) && !categorySuggestionsEl.contains(e.target)) {
       categorySuggestionsEl.hidden = true;
     }
+    categoryPressInside = false;
     document.querySelectorAll(".post-top").forEach(function (wrap) {
       if (!wrap.contains(e.target)) {
         var popup = wrap.querySelector(".add-category-popup");
