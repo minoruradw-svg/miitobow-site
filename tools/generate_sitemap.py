@@ -61,6 +61,7 @@ STATIC_PAGES = [
     ("/research/", "research/index.html", "0.7"),
     ("/services/", "services/index.html", "0.7"),
     ("/windows/", "windows/index.html", "0.7"),
+    ("/tanka/", "tanka/index.html", "0.7"),
     ("/papakue/", "papakue/index.html", "0.7"),
 ]
 

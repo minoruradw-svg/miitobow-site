@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>単価くらべ | miitobow</title>
+<meta name="description" content="容量と価格を入れるだけで、5つまで一度にくらべられる単価計算ツール。洗剤やお米など、似たような商品のどれがお得かすぐ分かります。">
+<link rel="canonical" href="https://miitobow.com/tanka/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="miitobow">
+<meta property="og:title" content="単価くらべ | miitobow">
+<meta property="og:description" content="容量と価格を入れるだけ。5つまで一度にくらべられる、無料の単価計算ツール。">
+<meta property="og:url" content="https://miitobow.com/tanka/">
+<meta property="og:image" content="https://miitobow.com/tanka/images/og-tanka.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="どっちがお得？ ミートボーの単価くらべ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="単価くらべ | miitobow">
+<meta name="twitter:description" content="容量と値段を入れるだけ。5つまでいっぺんにくらべられる、無料の単価くらべ。">
+<meta name="twitter:image" content="https://miitobow.com/tanka/images/og-tanka.jpg">
+<link rel="icon" href="/tanka/tanka-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/tanka/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--base:#F7FAF1;--light:#D4F0A4;--brand:#77D8B1;--deep:#18833F;--ink:#182923;--line:#D7E3CC;--mute:#5B6E64;--white:#fff;--warn:#B3392F}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--base);color:var(--ink);font:16px/1.7 "Zen Kaku Gothic New","Hiragino Sans","Meiryo",system-ui,sans-serif}
+a{color:var(--deep)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{padding:14px 0;border-bottom:1px solid var(--line);background:var(--white)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+header.top a.brand{font-weight:900;text-decoration:none;color:var(--ink);letter-spacing:.02em}
+header.top a.home{font-size:13px;text-decoration:none;color:var(--deep);font-weight:700}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.35;margin:28px 0 8px;font-weight:900}
+.lead{margin:0 0 20px;color:var(--mute)}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:16px}
+.ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}
+.ctl label{font-size:14px;font-weight:700}
+.ctl #kind{flex:1 1 100%}
+select,input{font:inherit;color:var(--ink)}
+select{max-width:100%;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--white)}
+button{font:inherit;cursor:pointer;border-radius:999px;border:1px solid var(--deep);background:var(--white);color:var(--deep);padding:8px 16px;font-weight:700}
+button:hover{background:var(--light)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+button.primary{background:var(--deep);color:var(--white)}
+button.primary:hover{background:#136a32}
+button[disabled]{opacity:.45;cursor:not-allowed}
+.grid{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{position:relative;background:var(--white);border:2px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.card.best{border-color:var(--deep);background:#F1FBE0}
+.card .head{display:flex;align-items:center;gap:8px}
+.badge{flex:none;width:34px;height:34px;border-radius:50%;background:var(--light);color:var(--deep);display:grid;place-items:center;font-weight:900}
+.card.best .badge{background:var(--deep);color:var(--white)}
+.card input.nm{flex:1;min-width:0;border:0;border-bottom:1px dashed var(--line);background:transparent;padding:4px 2px;font-weight:700}
+.card .x{flex:none;border:0;background:transparent;color:var(--mute);padding:4px 8px;font-size:18px;line-height:1}
+.card .x:hover{color:var(--warn);background:transparent}
+.f{display:grid;grid-template-columns:3em minmax(0,1fr);align-items:center;gap:6px}
+.f span{font-size:13px;color:var(--mute);font-weight:700}
+.f .in{display:flex;align-items:center;gap:6px;min-width:0}
+.f input{flex:1 1 0;width:0;min-width:3.2em;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:18px;font-weight:700;text-align:right;background:var(--base)}
+.f small{flex:none;color:var(--mute);font-size:13px}
+.f input.qty{flex:none;width:3em;min-width:0;padding:9px 4px;text-align:center}
+.f small.mul{font-weight:900}
+.res{margin-top:4px;border-top:1px dashed var(--line);padding-top:8px;min-height:3.6em}
+.res .u{font-size:26px;font-weight:900;line-height:1.2}
+.res .u small{font-size:13px;font-weight:700;color:var(--mute);margin-left:4px}
+.res .d{font-size:13px;color:var(--mute)}
+.tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--deep);color:var(--white);font-size:12px;font-weight:900;vertical-align:middle}
+.card.bad .u{color:var(--ink)}
+.rank{display:none;margin:16px 0 0}
+.rank.on{display:block}
+.rank h2{font-size:18px;margin:0 0 8px}
+.win{background:var(--light);border-radius:12px;padding:12px 14px;font-weight:700;margin-bottom:10px}
+.win b{font-size:20px}
+ol.rl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ol.rl li{display:flex;gap:10px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+ol.rl .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--base);border:1px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:900}
+ol.rl li:first-child .n{background:var(--deep);color:var(--white);border-color:var(--deep)}
+ol.rl .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+ol.rl .v{font-weight:900}
+ol.rl .p{color:var(--mute);font-size:13px;min-width:4.5em;text-align:right}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.note{font-size:13px;color:var(--mute);margin:14px 0 0}
+section.how{margin:32px 0}
+section.how h2{font-size:20px;margin:0 0 10px}
+.steps{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:720px){.steps{grid-template-columns:repeat(3,1fr)}}
+.steps div{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.steps b{display:block;color:var(--deep)}
+footer{padding:24px 0 40px;font-size:13px;color:var(--mute);text-align:center}
+
+
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+main{max-width:1600px;margin:0 auto}
+.lp{position:relative;line-height:0}
+.lp img{display:block;width:100%;height:auto}
+.hit{position:absolute;display:block;border-radius:999px;-webkit-tap-highlight-color:transparent}
+.hit:focus-visible{outline:4px solid var(--ink);outline-offset:2px}
+.hit:active{background:rgba(24,131,63,.18)}
+.hit-fv-m{left:5.5%;width:89%;top:87%;height:9%}
+.hit-cta-m{left:4%;width:92%;top:85%;height:12%}
+.hit-fv-w,.hit-cta-w{display:none}
+@media(min-width:900px){
+ .hit-fv-m,.hit-cta-m{display:none}
+ .hit-fv-w{display:block;left:2%;width:41.5%;top:74%;height:17%}
+ .hit-cta-w{display:block;left:2%;width:55%;top:73%;height:20%}
+}
+.tool{padding:28px 0 12px;scroll-margin-top:8px}
+.tool .th{font-size:clamp(22px,4.5vw,30px);margin:0 0 6px;font-weight:900}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="/">miitobow</a><a class="home" href="/">ホームへ</a></div></header>
+
+<main>
+  <h1 class="sr">単価くらべ｜容量と値段を入れるだけ。5つまでくらべられる無料の単価計算ツール</h1>
+
+  <section class="lp" id="fv">
+    <picture><source media="(min-width: 900px)" srcset="images/fv-w.webp" width="1659" height="948"><img src="images/fv-m.webp" width="948" height="1659" alt="どっちがお得？ ミートボーの単価くらべ。容量と値段を入れるだけ。5つまで、いっぺんにくらべられます。無料・登録なし・入力は送信されません。" loading="eager" decoding="async"></picture>
+    <a class="hit hit-fv-m" href="#tool" aria-label="くらべてみる（ツールへ移動）"></a>
+    <a class="hit hit-fv-w" href="#tool" aria-label="くらべてみる（ツールへ移動）"></a>
+  </section>
+
+  <section class="lp" id="pain">
+    <picture><source media="(min-width: 900px)" srcset="images/pain-w.webp" width="1659" height="948"><img src="images/pain-m.webp" width="948" height="1659" alt="こんな経験、ありませんか？ どっちが得か分からない。洗剤A（498円・900g）と洗剤B（598円・1000g）で迷うミートボー。割り算はミートボーにおまかせ。容量と値段を入れるだけ。※数字は例です" loading="lazy" decoding="async"></picture>
+  </section>
+
+  <section class="tool" id="tool">
+    <div class="wrap">
+      <h2 class="th">単価くらべ</h2>
+      <p class="lead">容量と値段を入れるだけ。<b>5つまで</b>いっぺんにくらべます（100g・100枚・10m・1個あたりの値段に直して比べます）。</p>
+  <div class="panel">
+    <div class="ctl">
+      <label for="kind">何でくらべる？</label>
+      <select id="kind" aria-label="くらべるもの">
+        <option value="g" selected>重さ・量（g / ml）</option>
+        <option value="mai">枚数（ティッシュ・ゴミ袋など）</option>
+        <option value="m">長さ（トイレットペーパー・ラップなど）</option>
+        <option value="ko">個数・本数（缶詰・卵など）</option>
+      </select>
+      <button id="add" type="button">＋ 商品をふやす</button>
+      <button id="reset" type="button">すべてリセット</button>
+    </div>
+    <div class="grid" id="grid"></div>
+
+    <div class="rank" id="rank" aria-live="polite">
+      <h2>お得な順</h2>
+      <div class="win" id="win"></div>
+      <ol class="rl" id="rl"></ol>
+    </div>
+    <p class="note">価格は税込か税抜か、どちらかにそろえて入れてください。同じ種類のもの（重さ同士・枚数同士など）をくらべてください。「×つ」は、1つ◯g（◯枚・◯m）のセットが◯つ入りのときだけ変えてください（ふつうは1のままでOK。量は1つぶんを入れます）。</p>
+  </div>
+
+
+  <section class="how">
+    <h2>使い方</h2>
+    <div class="steps">
+      <div><b>① 入れる</b>商品ごとに、容量（g / ml）と価格を入れます。名前は空でもOK。</div>
+      <div><b>② 見る</b>1つあたりの単価が出て、いちばん安いものに「最安」が付きます。</div>
+      <div><b>③ 決める</b>お得な順に並ぶので、迷ったときの決め手になります。</div>
+    </div>
+  </section>
+
+    </div>
+  </section>
+
+  <section class="lp" id="uses">
+    <picture><source media="(min-width: 900px)" srcset="images/uses-w.webp" width="1659" height="948"><img src="images/uses-m.webp" width="948" height="1659" alt="使いどころ。こんな買い物でぜんぶ、くらべられる。洗剤・お米は重さ・量で、ティッシュは枚数で、トイレットペーパーは長さで、缶詰・卵は個数でくらべる。同じ種類のものどうしで、くらべてください。" loading="lazy" decoding="async"></picture>
+  </section>
+
+  <section class="lp" id="cta">
+    <picture><source media="(min-width: 900px)" srcset="images/cta-w.webp" width="1659" height="948"><img src="images/cta-m.webp" width="948" height="1659" alt="さあ、くらべてみよう。無料・登録なし・入力は送信されません。単価くらべを開く。" loading="lazy" decoding="async"></picture>
+    <a class="hit hit-cta-m" href="#tool" aria-label="単価くらべを開く（ツールへ移動）"></a>
+    <a class="hit hit-cta-w" href="#tool" aria-label="単価くらべを開く（ツールへ移動）"></a>
+  </section>
+</main>
+<footer><div class="wrap">入力した内容はこの端末の中だけで計算され、送信されません。 <a href="/">miitobow</a></div></footer>
+
+<script>
+(function(){
+  var MAX=5, MIN=2, KEY="miitobow.tanka.v1";
+  var items=[], kind="g";
+  var KINDS={g:{base:100,u:"g/ml",lab:"100g(ml)",cap:"容量",ph:"例 900"},mai:{base:100,u:"枚",lab:"100枚",cap:"枚数",ph:"例 400"},m:{base:10,u:"m",lab:"10m",cap:"長さ",ph:"例 50"},ko:{base:1,u:"個",lab:"1個",cap:"個数",ph:"例 6"}};
+  function K(){return KINDS[kind];}
+  var base=100;
+  var gridEl=document.getElementById("grid"), kindEl=document.getElementById("kind");
+  var addEl=document.getElementById("add"), resetEl=document.getElementById("reset");
+  var rankEl=document.getElementById("rank"), winEl=document.getElementById("win"), rlEl=document.getElementById("rl");
+  var LET="ABCDE";
+
+  function blank(){return {n:"",c:"",q:"1",p:""};}
+  function load(){
+    try{
+      var s=JSON.parse(localStorage.getItem(KEY)||"null");
+      if(s&&Array.isArray(s.items)&&s.items.length>=MIN&&s.items.length<=MAX){
+        if(KINDS[s.kind])kind=s.kind;
+        items=s.items.map(function(x){return {n:String(x.n||""),c:String(x.c||""),q:String(x.q||"1"),p:String(x.p||"")};});
+        return;
+      }
+    }catch(e){}
+    items=[blank(),blank()];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({items:items,kind:kind}));}catch(e){}}
+  function num(v){var x=parseFloat(String(v).replace(/[,，]/g,"")); return isFinite(x)?x:NaN;}
+  function yen(x){
+    if(x>=100)return Math.round(x*10)/10;
+    return Math.round(x*100)/100;
+  }
+  function fmt(x){return "¥"+yen(x).toLocaleString("ja-JP",{maximumFractionDigits:2});}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function unitLabel(){return K().lab;}
+  function name(i){return (items[i].n||"").trim()||("商品"+LET[i]);}
+
+  function calc(){
+    var out=items.map(function(it){
+      var base=K().base,c=num(it.c),q=(kind==="ko"?1:num(it.q)),p=num(it.p);
+      if(!(c>0&&p>=0&&q>0)||it.p===""||it.c==="")return null;
+      return p/(c*q)*base;
+    });
+    var valid=[];out.forEach(function(v,i){if(v!==null)valid.push({i:i,v:v});});
+    return {out:out,valid:valid};
+  }
+
+  function build(){
+    gridEl.innerHTML="";
+    items.forEach(function(it,i){
+      var d=document.createElement("div");d.className="card";d.id="card"+i;
+      d.innerHTML=
+        '<div class="head"><span class="badge">'+LET[i]+'</span>'+
+        '<input class="nm" type="text" data-k="n" data-i="'+i+'" placeholder="商品'+LET[i]+'（名前は空でもOK）" aria-label="商品'+LET[i]+'の名前" value="'+esc(it.n)+'" maxlength="30">'+
+        (items.length>MIN?'<button class="x" type="button" data-del="'+i+'" aria-label="商品'+LET[i]+'を消す">×</button>':'')+
+        '</div>'+
+        '<label class="f"><span>'+K().cap+'</span><span class="in"><input type="text" inputmode="decimal" data-k="c" data-i="'+i+'" value="'+esc(it.c)+'" placeholder="'+K().ph+'" aria-label="商品'+LET[i]+'の'+K().cap+'（1つぶん）"><small>'+K().u+'</small>'+
+        (kind==="ko"?'':'<small class="mul">×</small><input class="qty" type="text" inputmode="decimal" data-k="q" data-i="'+i+'" value="'+esc(it.q)+'" placeholder="1" aria-label="商品'+LET[i]+'のセット数"><small>つ</small>')+'</span></label>'+
+        '<label class="f"><span>価格</span><span class="in"><input type="text" inputmode="decimal" data-k="p" data-i="'+i+'" value="'+esc(it.p)+'" placeholder="例 498" aria-label="商品'+LET[i]+'の価格"><small>円</small></span></label>'+
+        '<div class="res" id="res'+i+'" aria-live="polite"></div>';
+      gridEl.appendChild(d);
+    });
+    addEl.disabled=items.length>=MAX;
+    update();
+  }
+
+  function update(){
+    var r=calc(), best=null;
+    if(r.valid.length){best=Math.min.apply(null,r.valid.map(function(x){return x.v;}));}
+    var multi=r.valid.length>=2;
+    items.forEach(function(it,i){
+      var card=document.getElementById("card"+i), res=document.getElementById("res"+i), v=r.out[i];
+      if(!card)return;
+      var isBest=multi&&v!==null&&Math.abs(v-best)<1e-9;
+      card.classList.toggle("best",isBest);
+      if(v===null){res.innerHTML='<span class="d">容量と価格を入れてください</span>';return;}
+      var h='<div class="u">'+fmt(v)+'<small>/ '+unitLabel()+'</small>'+(isBest?'<span class="tag">最安</span>':'')+'</div>';
+      if(multi&&!isBest){
+        var diff=v-best,pct=(v/best-1)*100;
+        h+='<div class="d">最安より +'+fmt(diff)+'（+'+(Math.round(pct*10)/10)+'%）</div>';
+      }else if(!multi){h+='<div class="d">もう1つ入れると、くらべられます</div>';}
+      else h+='<div class="d">いちばんお得です</div>';
+      res.innerHTML=h;
+    });
+    // ランキング
+    if(multi){
+      var s=r.valid.slice().sort(function(a,b){return a.v-b.v;});
+      var ties=s.filter(function(x){return Math.abs(x.v-best)<1e-9;});
+      var names=ties.map(function(x){return esc(name(x.i));}).join(" と ");
+      winEl.innerHTML='いちばんお得: <b>'+names+'</b>'+(ties.length>1?'（同じ単価）':'')+'<br><span style="font-weight:400">'+unitLabel()+'あたり '+fmt(best)+'</span>';
+      rlEl.innerHTML=s.map(function(x,k){
+        var p=Math.abs(x.v-best)<1e-9?'最安':'+'+(Math.round((x.v/best-1)*1000)/10)+'%';
+        return '<li><span class="n">'+(k+1)+'</span><span class="nm">'+esc(name(x.i))+'</span><span class="v">'+fmt(x.v)+'</span><span class="p">'+p+'</span></li>';
+      }).join("");
+      rankEl.classList.add("on");
+    }else rankEl.classList.remove("on");
+  }
+
+  gridEl.addEventListener("input",function(e){
+    var t=e.target,i=+t.getAttribute("data-i"),k=t.getAttribute("data-k");
+    if(!k||isNaN(i))return;
+    items[i][k]=t.value;save();update();
+  });
+  gridEl.addEventListener("click",function(e){
+    var b=e.target.closest("[data-del]");if(!b)return;
+    var i=+b.getAttribute("data-del");
+    if(items.length>MIN){items.splice(i,1);save();build();}
+  });
+  addEl.addEventListener("click",function(){
+    if(items.length<MAX){items.push(blank());save();build();
+      var el=gridEl.querySelector("#card"+(items.length-1)+" input[data-k='c']");if(el)el.focus();}
+  });
+  kindEl.addEventListener("change",function(){kind=kindEl.value;save();build();});
+  resetEl.addEventListener("click",function(){items=[blank(),blank()];save();build();});
+
+  load();kindEl.value=kind;build();
+})();
+</script>
+</body>
+</html>
