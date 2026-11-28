@@ -1467,7 +1467,7 @@
   var SORTS = [["new", "新しい順"], ["old", "古い順"], ["title", "題名順"]];
   var SORT_LABEL = { "new": "新しい順", "old": "古い順", "title": "題名順" };
 
-  // 「非表示」の投稿：題名・画像・本文を出さず「非表示」とだけ見せる。押すと見える（見た分は、ページを開き直すと、また隠れる＝メモリ上だけで覚える）
+  // 「非表示」の投稿：題名・画像・本文を出さず「非表示」とだけ見せる。押すと見える（見た分は、中身を閉じる・別の投稿を選ぶと、また隠れる＝メモリ上だけで覚える）
   var revealed = {};
   function isMasked(d) { return !!d.hidden && !revealed[d.id]; }
   // 種類で絞る（文字だけ＝画像・動画を省く）／見せ方（リスト・パネル）
@@ -2865,7 +2865,7 @@
 
   // --- 行（カード）1枚 ---
   var MASK_TITLE = "非表示（押すと見えます）";
-  // 隠している投稿を見えるようにする（このページを開いている間だけ。開き直すと、また隠れる）。見えた投稿はそのままひらく
+  // 隠している投稿を見えるようにする（見ている間だけ。閉じる・別の投稿を選ぶ・ページを開き直すと、また隠れる）。見えた投稿はそのままひらく
   function revealPost(id) {
     revealed[id] = true;
     if (viewState.view === "grid") { refreshList(true); var d = postById(id); if (d) openTile(d, viewState.tokens); return; }
@@ -3037,6 +3037,7 @@
       // PCの2画面：ユーザーが選んだ時は右の欄に出す。「新しい3件を最初から」の自動のひらき(auto)だけは、左の一覧の中でひらく
       if (isWide() && !auto) { if (open) selectPost(id, true); return; }
       if (!auto && !isWide()) openState[id] = open;
+      if (!open && revealed[id]) { delete revealed[id]; setTimeout(function () { refreshList(true); }, 0); }   // 閉じたら、また「非表示」に戻す
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       card.classList.toggle("open", open);
       if (open && !bodyEl) {
@@ -3066,6 +3067,7 @@
 
   // --- PCの2画面：選んだ投稿を右の欄に出す ---
   function selectPost(id, byUser) {
+    if (selectedId && selectedId !== id && revealed[selectedId]) { delete revealed[selectedId]; setTimeout(function () { refreshList(true); }, 0); }   // 別の投稿に移ったら、見ていた投稿はまた「非表示」に戻す
     selectedId = id;
     selectedByUser = !!byUser;
     Array.prototype.forEach.call(postsEl.children, function (card) {
@@ -3247,6 +3249,8 @@
     tileClose.focus();
   }
   function closeTile() {
+    var closedId = tileOpenId;
+    if (closedId && revealed[closedId]) { delete revealed[closedId]; setTimeout(function () { refreshList(true); }, 0); }   // 閉じたら、また「非表示」に戻す
     tileModal.hidden = true;
     tileOpenId = null;
     tileBody.innerHTML = "";
@@ -3298,7 +3302,7 @@
     lastCondKey = condKey;
     if (isWide()) {
       var stillThere = !!selectedId && filtered.some(function (p) { return p.id === selectedId; });
-      if (!stillThere) { selectedId = null; selectedByUser = false; }   // 右の欄は、行を押した時だけ出す（自動では選ばない）
+      if (!stillThere) { if (selectedId && revealed[selectedId]) delete revealed[selectedId]; selectedId = null; selectedByUser = false; }   // 右の欄は、行を押した時だけ出す（自動では選ばない）
     }
 
     var shown = filtered.slice(0, viewState.limit);
