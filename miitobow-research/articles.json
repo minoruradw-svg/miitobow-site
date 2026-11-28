@@ -927,5 +927,16 @@
     "url": "https://miitobow.com/articles/research-messtin",
     "affiliateUrl": "",
     "themeImage": "https://miitobow.com/articles/research-messtin/theme.png"
+  },
+  {
+    "id": "hotsandmaker",
+    "title": "ホットサンドメーカー",
+    "category": "camp",
+    "model": "hotsandmaker",
+    "summary": "熱源と作りの違いで選ぶ5商品",
+    "content": "ホットサンドメーカーは、IH、直火、カセットこんろなど、使える熱源が商品ごとに違います。Amazonの商品ページで仕様を確認し、熱源や形が重ならない5商品を比べました。",
+    "url": "https://miitobow.com/articles/research-hotsandmaker",
+    "affiliateUrl": "",
+    "themeImage": "https://miitobow.com/articles/research-hotsandmaker/theme.png"
   }
 ]
