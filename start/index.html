@@ -120,6 +120,11 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  .sub{margin:0.625rem 0 0;font-size:1.0625rem;text-wrap:balance}
  .apps{background:var(--cream)}
  .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+ .tools{background:#F7EFDF}
+ .tool-grid .appicon{object-fit:cover}
+ .tshot{display:block;width:100%;height:auto;border-radius:1rem;margin:1.25rem 0 1.375rem;border:2px solid var(--g2)}
+ .tcard .sub{margin-bottom:0}
+ .tcard .btn.big{width:100%}
  .st600{position:absolute;top:-2.6rem;right:-1rem;width:clamp(8.5rem,11vw,11rem);height:auto;transform:rotate(4deg);z-index:3;pointer-events:none;filter:drop-shadow(0 0.5rem 0.75rem rgba(0,0,0,.2))}
  .acard{position:relative;background:#fff;border:2px solid var(--g2);border-radius:1.75rem;padding:2.125rem 2.125rem 1.875rem;display:flex;flex-direction:column}
  .acard.pq{background:#FBF6EA;background-image:linear-gradient(#E4EDDB 1px,transparent 1px),linear-gradient(90deg,#E4EDDB 1px,transparent 1px);background-size:1.5rem 1.5rem}
@@ -195,6 +200,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  .c-text em{color:#8FD0A5}
  .c-text p{margin:0.75rem 0 1.375rem}
  .c-text{justify-content:center}
+ .c-more{margin:0.25rem 0 1rem!important;font-size:0.9375rem}.c-more a{color:#8FD0A5;font-weight:700}
  .c-text h2{font-size:clamp(2.125rem,3.7vw,3.75rem);line-height:1.4}
  .c-text>p{font-size:clamp(1rem,1.3vw,1.375rem);line-height:1.9}
  .c-exl{font-weight:700;color:#8FD0A5;margin:0.375rem 0 0!important;font-size:clamp(0.875rem,1.05vw,1.125rem)!important}
@@ -423,6 +429,28 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
  </div>
 </div></section>
 
+<section id="w-tools" class="w-sec tools"><div class="w-in">
+ <div class="sec-head"><span class="chip">ブラウザで使える無料ツール</span><h2><span class="nb">暮らしをちょっぴり</span><span class="nb"><em>便利にする、無料ツール。</em></span></h2><p class="sub">インストールはいりません。ブラウザで開くだけで使えます。</p></div>
+ <div class="app-grid tool-grid">
+  <article class="acard tcard">
+   <div class="app-top"><img src="/tanka/icon-192.png" width="192" height="192" alt="単価くらべのアイコン" class="appicon" loading=lazy decoding="async"><div><p class="mini">ブラウザ・無料・登録なし</p><h3>単価くらべ</h3></div></div>
+   <p class="hl"><span class="nb">どっちがお得か、</span><span class="nb"><em>入れるだけ</em>で分かる。</span></p>
+   <p class="sub">洗剤やお米など、似た商品の容量と値段を入れると、5つまでいっぺんにくらべて、いちばん安いものが分かります。</p>
+   <img class="tshot" src="/tanka/images/og-tanka.jpg" width="1200" height="630" alt="単価くらべ。どっちがお得？ AとBのカードを持つミートボー" loading=lazy decoding="async">
+   <ul class="facts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>無料・登録なし</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>入力は送信されません</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>スマホでもPCでも使える</li></ul>
+   <div class="cta"><div class="btns stack"><a href="/tanka/" class="btn big" data-ev="start_tanka" target="_blank" rel="noopener">単価くらべを使う</a></div></div>
+  </article>
+  <article class="acard tcard">
+   <div class="app-top"><img src="/bus/bus-icon.svg" width="96" height="96" alt="バスマップのアイコン" class="appicon" loading=lazy decoding="async"><div><p class="mini">ブラウザ・無料・非公式</p><h3>バスマップ</h3></div></div>
+   <p class="hl"><span class="nb">このバス停から、</span><span class="nb"><em>どこへ行ける？</em></span></p>
+   <p class="sub">全国47都道府県・153の地域マップ。バス停を押すと、そこを通る系統が分かります。</p>
+   <img class="tshot" src="/bus/assets/og-busmap.jpg" width="1200" height="630" alt="バスマップ。日本の街のバス停とバス路線を地図で見られる" loading=lazy decoding="async">
+   <ul class="facts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>日本語・English対応</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>個人が調べた、非公式の地図</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#4CA468"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>時刻・運賃は公式サイトで確認</li></ul>
+   <div class="cta"><div class="btns stack"><a href="/bus/" class="btn big" data-ev="start_bus" target="_blank" rel="noopener">地図を選ぶ</a></div></div>
+  </article>
+ </div>
+</div></section>
+
 <section id="w-challenge" class="w-sec chal"><div class="w-in">
  <div class="ch-top"><div class="sec-head"><span class="chip">100日チャレンジ</span><h2><span class="nb">「ワクワク」を、</span><span class="nb"><em>100日で、実物に。</em></span></h2>
  <p class="sub"><span class="nb">コスプレイヤーさんの依頼で、</span><span class="nb">実物大の小道具を制作中。</span><span class="nb">途中経過を毎日発信しています。</span></p></div>
@@ -465,6 +493,7 @@ html[data-motion="paused"] .star{opacity:0;animation:none}
   <p>アプリやサービスを紹介するLP制作を中心に、<br>小規模なWebツールの制作もご相談いただけます。</p>
   <p class="c-exl">ご相談の例</p>
   <ul class="c-ex"><li>LP・紹介ページ制作</li><li>小規模Webツール</li><li>試作品づくり</li><li>コスプレ小道具・フィギュア</li></ul>
+  <p class="c-more"><a href="#w-tools">こんなものを作っています（単価くらべ・バスマップ）→</a></p>
   <a href="/services/" class="btn cream big" data-ev="start_services">サービス内容・料金を見る →</a>
   <p class="fine l">※内容によっては、お受けできない場合があります。</p>
   <div class="links"><a href="https://miitobow.com/" class="pill" data-ev="start_home">公式サイト</a><a href="https://www.threads.net/@miitobow" class="pill" target="_blank" rel="noopener" data-ev="start_threads">Threads</a><a href="https://note.com/miitobow_studio" class="pill" target="_blank" rel="noopener" data-ev="start_note">note</a></div>
